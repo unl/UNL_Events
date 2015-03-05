@@ -16,7 +16,6 @@ spl_autoload_register('autoload');
 
 set_include_path(
     __DIR__ . '/src' . PATH_SEPARATOR
-    . __DIR__ . '/backend/src' . PATH_SEPARATOR
     . __DIR__ . '/vendor/php' . PATH_SEPARATOR
     . __DIR__ . '/vendor/unl_submodules/RegExpRouter/src'
 );
@@ -25,7 +24,7 @@ ini_set('display_errors', true);
 error_reporting(E_ALL);
 
 
-UNL\UCBCN\Frontend\Controller::$url = '/workspace/UNL_UCBCN_Frontend/www/';
+UNL\UCBCN\Frontend\Controller::$url = '/';
 
 UNL\UCBCN\ActiveRecord\Database::setDbSettings(
     array(
