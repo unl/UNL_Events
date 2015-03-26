@@ -184,7 +184,7 @@ class Event extends Record
     public static function getById($calendar_id, $event_id)
     {
 
-        return self::getByAnyField(__CLASS__, 'calendar_id', $calendar_id, ' AND event_id = '.(int)$event_id);
+        return self::getByAnyField(__CLASS__, 'calendar_id', $calendar_id, 'event_id = '.(int)$event_id);
 
     }
 

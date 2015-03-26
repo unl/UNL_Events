@@ -299,7 +299,7 @@ class UCBCN
 
         return false;
     }
-    
+
     /**
      * This function returns a object for the user with
      * the given uid.

@@ -2,6 +2,7 @@
 namespace UNL\UCBCN;
 
 use UNL\UCBCN\ActiveRecord\Record;
+use UNL\UCBCN\Events;
 /**
  * Details related to a calendar within the UNL Event Publisher system.
  *
@@ -97,6 +98,10 @@ class Calendar extends Record
                      'uidlastupdated' => 'users:uid');
     }
 
+    public function manageHref() {
+        return "/manager/" . $this->shortname . "/manage/";
+    }
+
     /**
      * Adds a user to the calendar. Grants all permissions to the
      * user for the current calendar.
@@ -153,7 +158,7 @@ class Calendar extends Record
                         'uidcreated'      => $user->uid,
                         'datecreated'     => date('Y-m-d H:i:s'),
                         'datelastupdated' => date('Y-m-d H:i:s'),
-                        'uidlastupdated'  => $user->uid,
+                        'uidl astupdated'  => $user->uid,
                         'status'          => $status);
         if (isset($source)) {
             $values['source'] = $source;
@@ -183,7 +188,19 @@ class Calendar extends Record
             return false;
         }
     }
-    
+
+    /**
+     * Gets events related to this calendar
+     */
+    public function getEvents() {
+        # create options for event listing class
+        $options = array('calendar' => $this->shortname);
+
+        # create new events class. On constructor it will get the stuff
+        $events = new Events($options);
+        return $events;
+    }
+
     /**
      * Finds the subscriptions this calendar has, and processes them.
      *

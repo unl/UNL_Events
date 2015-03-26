@@ -22,8 +22,6 @@ class Auth {
         }
         
         $user = $this->getUser($client->getUsername());
-        
-        print_r($user);
     }
 
     /**

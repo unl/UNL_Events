@@ -25,6 +25,8 @@ require_once __DIR__ . '/../vendor/composer/autoload.php';
 
 use RegExpRouter as RegExpRouter;
 
+error_log('frontend index');
+
 $routes = include __DIR__ . '/../data/routes.php';
 $router = new RegExpRouter\Router(array('baseURL' => Controller::$url));
 $router->setRoutes($routes);
