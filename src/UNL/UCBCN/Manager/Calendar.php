@@ -35,10 +35,9 @@ class Calendar {
     }
 
     public function getCalendars() {
-    	error_log(print_r($_SESSION,1));
     	$username = $_SESSION['__SIMPLECAS']['UID'];
     	$user = User::getByUid($username);
 
-    	return CalendarModel::getManyByAccount_Id($user->account_id);
+    	return $user->getCalendars();
     }
 }

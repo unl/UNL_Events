@@ -2,6 +2,7 @@
 namespace UNL\UCBCN;
 
 use UNL\UCBCN\ActiveRecord\Record;
+use UNL\UCBCN\Calendars;
 /**
  * Table Definition for user
  *
@@ -92,5 +93,12 @@ class User extends Record
     public function __toString()
     {
         return $this->uid;
+    }
+
+    public function getCalendars() {
+        # create options for calendar listing class
+        $options = array('account_id' => $this->account_id);
+        $calendars = new Calendars($options);
+        return $calendars;
     }
 }

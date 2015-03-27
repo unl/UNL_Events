@@ -284,16 +284,6 @@ abstract class Record
 
             return self::getByAnyField($class, $field, $args[0], $whereAdd);
             break;
-        case preg_match('/getManyBy([\w]+)/', $method, $matches):
-            $class    = get_called_class();
-            $field    = strtolower($matches[1]);
-            $whereAdd = null;
-            if (isset($args[1])) {
-                $whereAdd = $args[1];
-            }
-
-            return self::getManyByAnyField($class, $field, $args[0], $whereAdd);
-            break;
         }
         throw new Exception('Invalid static method called.', 500);
     }
@@ -324,39 +314,6 @@ abstract class Record
         $record->synchronizeWithArray($result->fetch_assoc());
 
         return $record;
-    }
-
-    public static function getManyByAnyField($class, $field, $value, $whereAdd = '') {
-        $records = array();
-        $record = new $class;
-
-        if (!empty($whereAdd)) {
-            $whereAdd = $whereAdd . ' AND ';
-        }
-
-        $mysqli = self::getDB();
-        $sql    = 'SELECT * FROM '
-                    . $record->getTable()
-                    . ' WHERE '
-                    . $whereAdd
-                    . $field . ' = "' . $mysqli->escape_string($value) . '"';
-        $result = $mysqli->query($sql);
-
-        if (false === $result) {
-            throw new Exception($mysqli->errno.':'.$mysqli->error, 500);
-        }
-
-        if ($result->num_rows == 0) {
-            return false;
-        }
-
-        while (!empty($row = $result->fetch_assoc())) {
-            $record = new $class;
-            $record->synchronizeWithArray($row);
-            $records[] = $record;
-        }
-
-        return $records;
     }
 
     /**
