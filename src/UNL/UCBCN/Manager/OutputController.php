@@ -97,8 +97,10 @@ class OutputController extends \Savvy
 
     public function setReplacementData($field, $data)
     {
-        foreach ($this->getConfig('filters') as $filter) {
-            $filter[0]->setReplacementData($field, $data);
+        if (is_array($this->getConfig('filters'))) {
+            foreach ($this->getConfig('filters') as $filter) {
+                $filter[0]->setReplacementData($field, $data);
+            }
         }
     }
 

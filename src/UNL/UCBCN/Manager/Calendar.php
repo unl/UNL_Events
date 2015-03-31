@@ -12,6 +12,10 @@ class Calendar {
     public function __construct($options = array()) {
     	$this->options = $options + $this->options;
     	$this->calendar = CalendarModel::getByShortName($this->options['calendar_shortname']);
+
+        if ($this->calendar === FALSE) {
+            throw new \Exception("That calendar could not be found.", 500);
+        }
     }
 
     public function getCategorizedEvents() {
