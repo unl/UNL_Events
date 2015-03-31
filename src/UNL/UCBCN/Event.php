@@ -126,11 +126,11 @@ class Event extends Record
     }
 
     public function getStatusWithCalendar(Calendar $calendar) {
-        $che = CalendarHasEvent::getById($calendar->id, $this->id);
-        if ($che === FALSE) {
+        $calendar_has_event = CalendarHasEvent::getById($calendar->id, $this->id);
+        if ($calendar_has_event === FALSE) {
             return NULL;
         } else {
-            return $che->status;
+            return $calendar_has_event->status;
         }
     }
     

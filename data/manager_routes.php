@@ -10,6 +10,6 @@ $calendar_slash_required = '(' . $calendar . '\/)?';
 $calendar_slash_optional = '(' . $calendar . '(\/)?)?';
 
 $routes['/^(\/)?$/'] = 'UNL\UCBCN\Manager\CalendarList';
-$routes['/^'.$calendar_slash_required.'manage'.'(\/)?'.'$/'] = 'UNL\UCBCN\Manager\Calendar';
+$routes['/^'.$calendar_slash_optional.'$/'] = 'UNL\UCBCN\Manager\Calendar';
 
 return $routes;

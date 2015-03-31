@@ -3,6 +3,7 @@ namespace UNL\UCBCN;
 
 use UNL\UCBCN\ActiveRecord\Record;
 use UNL\UCBCN\Events;
+use UNL\UCBCN\Manager\Controller;
 /**
  * Details related to a calendar within the UNL Event Publisher system.
  *
@@ -98,8 +99,8 @@ class Calendar extends Record
                      'uidlastupdated' => 'users:uid');
     }
 
-    public function manageHref() {
-        return "/manager/" . $this->shortname . "/manage/";
+    public function getManageURL() {
+        return Controller::getURL() . $this->shortname . "/";
     }
 
     /**
@@ -158,7 +159,7 @@ class Calendar extends Record
                         'uidcreated'      => $user->uid,
                         'datecreated'     => date('Y-m-d H:i:s'),
                         'datelastupdated' => date('Y-m-d H:i:s'),
-                        'uidl astupdated'  => $user->uid,
+                        'uidlastupdated'  => $user->uid,
                         'status'          => $status);
         if (isset($source)) {
             $values['source'] = $source;

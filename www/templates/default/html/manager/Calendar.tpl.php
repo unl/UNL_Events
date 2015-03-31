@@ -9,7 +9,7 @@
             <?php if ($calendar->shortname == $context->calendar->shortname) { ?>
                 <div style="background: #CCCCCC;"><?= $calendar->name ?></div>
             <?php } else { ?>
-                <a href="<?= $calendar->manageHref() ?>"><?= $calendar->name ?></a><br>
+                <a href="<?= $calendar->getManageURL() ?>"><?= $calendar->name ?></a><br>
             <?php } ?>
         <?php } ?>
         <a href="#" class="wdn-button wdn-button-brand">+ New Calendar</a>

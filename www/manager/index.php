@@ -22,8 +22,6 @@ $router->setRoutes($routes);
 
 $controller_options = $router->route($_SERVER['REQUEST_URI'], $_GET);
 
-error_log(print_r($controller_options, 1));
-
 $controller = new Controller($controller_options);
 
 $savvy = new OutputController($controller);
