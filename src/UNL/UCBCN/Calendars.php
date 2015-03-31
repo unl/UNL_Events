@@ -26,11 +26,13 @@ class Calendars extends RecordList
     }
 
     public function getSQL() {
-        if (array_key_exists('account_id', $this->options)) {
-            # get all events related to the calendar through a join on calendar has event and calendar.
+        if (array_key_exists('user_id', $this->options)) {
+            # get all calendars related through a join on user_has_permission
             $sql = '
-                SELECT calendar.id FROM calendar
-                WHERE calendar.account_id = ' . self::escapeString($this->options['account_id']) . ';';
+                SELECT DISTINCT calendar.id FROM calendar
+                INNER JOIN user_has_permission ON calendar.id = user_has_permission.calendar_id
+                INNER JOIN user ON user_has_permission.user_uid = user.uid
+                WHERE user.uid = "' . self::escapeString($this->options['user_id']) . '";';
             return $sql;
         } else {
             return parent::getSQL();

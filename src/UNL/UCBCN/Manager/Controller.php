@@ -57,7 +57,8 @@ class Controller {
         return self::$url;
     }
 
-    public function getWebRoot() {
+    public function getWebRoot() 
+    {
         return self::$web_root;
     }
 

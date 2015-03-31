@@ -97,7 +97,7 @@ class User extends Record
 
     public function getCalendars() {
         # create options for calendar listing class
-        $options = array('account_id' => $this->account_id);
+        $options = array('user_id' => $this->uid);
         $calendars = new Calendars($options);
         return $calendars;
     }
