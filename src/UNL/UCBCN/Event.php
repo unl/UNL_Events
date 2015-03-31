@@ -2,6 +2,8 @@
 namespace UNL\UCBCN;
 
 use UNL\UCBCN\ActiveRecord\Record;
+use UNL\UCBCN\Calendar;
+use UNL\UCBCN\Calendar\Event as CalendarHasEvent;
 /**
  * Table Definition for event
  *
@@ -122,6 +124,15 @@ class Event extends Record
                      'uidcreated'        => 'users:uid',
                      'uidlastupdated'    => 'users:uid');
     }
+
+    public function getStatusWithCalendar(Calendar $calendar) {
+        $calendar_has_event = CalendarHasEvent::getById($calendar->id, $this->id);
+        if ($calendar_has_event === FALSE) {
+            return NULL;
+        } else {
+            return $calendar_has_event->status;
+        }
+    }
     
     /**
      * This function processes any posted files,
@@ -141,7 +152,7 @@ class Event extends Record
             $this->imagedata = file_get_contents($_FILES['imagedata']['tmp_name']);
         }
     }
-    
+
     /**
      * Inserts a new event in the database.
      *

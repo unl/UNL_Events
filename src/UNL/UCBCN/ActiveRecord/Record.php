@@ -283,13 +283,12 @@ abstract class Record
             }
 
             return self::getByAnyField($class, $field, $args[0], $whereAdd);
-
+            break;
         }
         throw new Exception('Invalid static method called.', 500);
     }
 
-    public static function getByAnyField($class, $field, $value, $whereAdd = '')
-    {
+    public static function getByAnyField($class, $field, $value, $whereAdd = '') {
         $record = new $class;
 
         if (!empty($whereAdd)) {
