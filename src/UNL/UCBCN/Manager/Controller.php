@@ -45,8 +45,6 @@ class Controller {
 
     public static $url = '/manager/';
 
-    public static $web_root = '/';
-
     /**
      * Get the URL to the manager
      *
@@ -55,11 +53,6 @@ class Controller {
     public function getURL()
     {
         return self::$url;
-    }
-
-    public function getWebRoot() 
-    {
-        return self::$web_root;
     }
 
     /**
