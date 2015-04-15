@@ -3,8 +3,8 @@
     $calendars = $context->getCalendars();
 ?>
 <section class="wdn-grid-set">
-	<div class="wdn-col-one-fourth">
-		<h3>My Calendars</h3>
+    <div class="wdn-col-one-fourth">
+        <h3>My Calendars</h3>
         <?php foreach ($calendars as $calendar) { ?>
             <?php if ($calendar->shortname == $context->calendar->shortname) { ?>
                 <div style="background: #CCCCCC;"><?php echo $calendar->name ?></div>
@@ -13,8 +13,8 @@
             <?php } ?>
         <?php } ?>
         <a href="#" class="wdn-button wdn-button-brand">+ New Calendar</a>
-	</div>
-	<div class="wdn-col-three-fourths">
+    </div>
+    <div class="wdn-col-three-fourths">
         <ul class="wdn_tabs">
             <li><a href="#pending">Pending (<?php echo count($events['pending']); ?>)</a></li>
             <li><a href="#posted">Posted (<?php echo count($events['posted']); ?>)</a></li>
@@ -109,5 +109,5 @@
                 </div>
             </div>
         </div>
-	</div>
+    </div>
 </section>

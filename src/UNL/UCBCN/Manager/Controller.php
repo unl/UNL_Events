@@ -31,7 +31,7 @@ class Controller {
      * @var int
      */
     public static $default_calendar_id = 1;
-
+    
     public function __construct($options = array()) {
         $this->options = $options + $this->options;
 

@@ -11,13 +11,13 @@ use UNL\UCBCN\User;
 
 class CreateEvent 
 {
-	public $options = array();
+    public $options = array();
 
     public $calendar;
 
     public function __construct($options = array()) 
     {
-    	$this->options = $options + $this->options;
+        $this->options = $options + $this->options;
         $this->calendar = CalendarModel::getByShortName($this->options['calendar_shortname']);
 
         if (!empty($_POST)) {
