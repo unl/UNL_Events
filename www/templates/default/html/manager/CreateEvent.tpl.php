@@ -6,9 +6,9 @@
 		<h3>My Calendars</h3>
 	</div>
 	<div class="wdn-col-three-fourths">
-		<?= $calendar->name ?> &gt; Create Event
+		<?php echo $calendar->name ?> &gt; Create Event
 		<div class="wdn-grid-set">
-			<form action="/manager/<?= $calendar->shortname ?>/create/" method="POST">
+			<form action="/manager/<?php echo $calendar->shortname ?>/create/" method="POST">
 	            <div class="wdn-col-two-thirds">
 					<legend>Details</legend>
 					<fieldset>
@@ -24,7 +24,7 @@
 						<label for="type">Type</label>
 						<select id="type" name="type">
 						<?php foreach ($context->getEventTypes() as $type) { ?>
-							<option value="<?= $type->id ?>"><?= $type->name ?></option>
+							<option value="<?php echo $type->id ?>"><?php echo $type->name ?></option>
 						<?php } ?>
 						</select>
 					</fieldset>
@@ -34,7 +34,7 @@
 						<label for="location">Location*</label>
 						<select id="location" name="location">
 						<?php foreach ($context->getLocations() as $location) { ?>
-							<option value="<?= $location->id ?>"><?= $location->name ?></option>
+							<option value="<?php echo $location->id ?>"><?php echo $location->name ?></option>
 						<?php } ?>
 						</select>
 
@@ -46,7 +46,7 @@
 						<select id="start-time-hour" name="start_time_hour">
 							<option value=""></option>
 						<?php for ($i = 1; $i <= 12; $i++) { ?>
-							<option value="<?= $i ?>"><?= $i ?></option>
+							<option value="<?php echo $i ?>"><?php echo $i ?></option>
 						<?php } ?>
 						</select>
 
@@ -77,7 +77,7 @@
 						<select id="end-time-hour" name="end_time_hour">
 							<option value=""></option>
 						<?php for ($i = 1; $i <= 12; $i++) { ?>
-							<option value="<?= $i ?>"><?= $i ?></option>
+							<option value="<?php echo $i ?>"><?php echo $i ?></option>
 						<?php } ?>
 						</select>
 
@@ -120,7 +120,7 @@
 						<select id="recurs-until-time-hour" name="recurs_until_time_hour">
 							<option value=""></option>
 						<?php for ($i = 1; $i <= 12; $i++) { ?>
-							<option value="<?= $i ?>"><?= $i ?></option>
+							<option value="<?php echo $i ?>"><?php echo $i ?></option>
 						<?php } ?>
 						</select>
 
