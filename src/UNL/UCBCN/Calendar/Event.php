@@ -87,32 +87,16 @@ class Event extends Record
      */
     public function insert()
     {
-        $this->datecreated     = date('Y-m-d H:i:s');
+        $this->datecreated = date('Y-m-d H:i:s');
         $this->datelastupdated = date('Y-m-d H:i:s');
-        if (isset($_SESSION['_authsession'])) {
-            $this->uidcreated     = $_SESSION['_authsession']['username'];
-            $this->uidlastupdated = $_SESSION['_authsession']['username'];
-        }
-        $r = parent::insert();
-        if ($r) {
-            // Clean the cache on successful insert.
-            UNL_UCBCN::cleanCache();
-            if (self::processSubscriptions() && $this->status != 'pending') {
-                $event = $this->getLink('event_id');
-                if ($event->approvedforcirculation) {
-                    Subscription::updateSubscribedCalendars($this->calendar_id, $this->event_id);
-                }
-            }
-            //loop though all eventdatetimes for this event, creating facebook events.
-            $eventdatetimes = UNL_UCBCN::factory('eventdatetime');
-            $eventdatetimes->event_id = $this->event_id;
-            $rows = $eventdatetimes->find();
-            while ($eventdatetimes->fetch()) {
-                $facebook = new \UNL\UCBCN\Facebook\Instance($eventdatetimes->id);
-                $facebook->updateEvent();
-            }
-        }
-        return $r;
+
+        $this->uidcreated = $_SESSION['__SIMPLECAS']['UID'];
+        $this->uidlastupdated = $_SESSION['__SIMPLECAS']['UID'];
+        $result = parent::insert();
+
+        # TODO: update subscribed calendars
+
+        return $result;
     }
     
     /**

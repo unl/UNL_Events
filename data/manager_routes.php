@@ -11,5 +11,7 @@ $calendar_slash_optional = '(' . $calendar . '(\/)?)?';
 
 $routes['/^(\/)?$/'] = 'UNL\UCBCN\Manager\CalendarList';
 $routes['/^'.$calendar_slash_optional.'$/'] = 'UNL\UCBCN\Manager\Calendar';
+$routes['/^'.$calendar_slash_required.'create(\/)?$/'] = 'UNL\UCBCN\Manager\CreateEvent';
+
 
 return $routes;

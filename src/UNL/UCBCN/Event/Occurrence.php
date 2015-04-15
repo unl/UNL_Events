@@ -88,8 +88,7 @@ class Occurrence extends Record
     {
         $r = parent::insert();
         if ($r) {
-            UNL_UCBCN::cleanCache();
-            $this->factory('recurringdate')->updateRecurringEvents();
+            $this->getEvent()->insertRecurrences();
         }
         return $r;
     }
@@ -98,27 +97,18 @@ class Occurrence extends Record
     {
         $r = parent::update();
         if ($r) {
-            UNL_UCBCN::cleanCache();
-            $this->factory('recurringdate')->updateRecurringEvents();
+            $this->getEvent()->deleteRecurrences();
+            $this->getEvent()->insertRecurrences();
         }
-        //update a facebook event.
-        $facebook = new \UNL\UCBCN\Facebook\Instance($this->id);
-        $facebook->updateEvent();
         return $r;
     }
     
     public function delete()
     {
-        //delete the facebook event.
-        if ($this->id != null) {
-            $facebook = new \UNL\UCBCN\Facebook\Instance($this->id);
-            $facebook->deleteEvent();
-        }
         //delete the actual event.
         $r = parent::delete();
         if ($r) {
-            UNL_UCBCN::cleanCache();
-            $this->factory('recurringdate')->updateRecurringEvents();
+            $this->getEvent()->deleteRecurrences();
         }
         return $r;
     }

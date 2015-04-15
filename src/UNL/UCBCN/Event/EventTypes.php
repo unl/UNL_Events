@@ -30,10 +30,6 @@ class EventTypes extends RecordList
 {
     function __construct($options = array())
     {
-        if (!isset($options['event_id'])) {
-            throw new UnexpectedValueException('You must pass an event_id', 500);
-        }
-        
         parent::__construct($options);
     }
     
@@ -47,6 +43,10 @@ class EventTypes extends RecordList
     
     public function getSQL()
     {
-        return 'SELECT id FROM event_has_eventtype WHERE event_has_eventtype.event_id = ' . (int)$this->options['event_id'];
+        if (array_key_exists('event_id', $this->options)) {
+            return 'SELECT id FROM event_has_eventtype WHERE event_has_eventtype.event_id = ' . (int)$this->options['event_id'];
+        } else {
+            return 'SELECT id FROM eventtype;';
+        }
     }
 }
