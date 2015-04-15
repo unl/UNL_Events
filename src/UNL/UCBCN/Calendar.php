@@ -4,6 +4,7 @@ namespace UNL\UCBCN;
 use UNL\UCBCN\ActiveRecord\Record;
 use UNL\UCBCN\Events;
 use UNL\UCBCN\Manager\Controller;
+use UNL\UCBCN\Calendar\Event as CalendarHasEvent;
 /**
  * Details related to a calendar within the UNL Event Publisher system.
  *
@@ -100,7 +101,7 @@ class Calendar extends Record
     }
 
     public function getManageURL() {
-        return Controller::getURL() . $this->shortname . "/";
+        return Controller::$url . $this->shortname . "/";
     }
 
     /**
@@ -151,24 +152,23 @@ class Calendar extends Record
      *
      * @return int > 0 on success.
      */
-    public function addEvent(UNL_UCBCN_Event $event,$status, UNL_UCBCN_User $user,$source=null)
+    public function addEvent($event, $status, $user, $source = null)
     {
-        $values = array(
-                        'calendar_id'     => $this->id,
-                        'event_id'        => $event->id,
-                        'uidcreated'      => $user->uid,
-                        'datecreated'     => date('Y-m-d H:i:s'),
-                        'datelastupdated' => date('Y-m-d H:i:s'),
-                        'uidlastupdated'  => $user->uid,
-                        'status'          => $status);
+        $calendar_has_event = new CalendarHasEvent;
+
+        $calendar_has_event->calendar_id = $this->id;
+        $calendar_has_event->event_id = $event->id;
+        $calendar_has_event->uidcreated = $user->uid;
+        $calendar_has_event->datecreated = date('Y-m-d H:i:s');
+        $calendar_has_event->datelastupdated = date('Y-m-d H:i:s');
+        $calendar_has_event->uidlastupdated = $user->uid;
+        $calendar_has_event->status = $status;
+
         if (isset($source)) {
-            $values['source'] = $source;
+            $calendar_has_event->source = $source;
         }
-        $che =& UNL_UCBCN::factory('calendar_has_event');
-        foreach ($values as $mv=>$value) {
-            $che->$mv = $value;
-        }
-        return $che->insert();
+
+        return $calendar_has_event->insert();
     }
     
     /**

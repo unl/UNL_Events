@@ -23,7 +23,7 @@
         <div class="wdn_tabs_content">
             <div id="pending">
                 <div id="pending-toolbar">
-                    <?= $context->calendar->name ?> <a href="#" class="wdn-button wdn-button-brand">+ New Event</a>
+                    <?= $context->calendar->name ?> <a href="/manager/<?= $context->calendar->shortname ?>/create/" class="wdn-button wdn-button-brand">+ New Event</a>
                 </div><br>
                 <div class="wdn-grid-set">
                     <div class="wdn-col-two-thirds">

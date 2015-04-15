@@ -4,6 +4,9 @@ namespace UNL\UCBCN;
 use UNL\UCBCN\ActiveRecord\Record;
 use UNL\UCBCN\Calendar;
 use UNL\UCBCN\Calendar\Event as CalendarHasEvent;
+use UNL\UCBCN\Event\Occurrences;
+use UNL\UCBCN\Event\RecurringDate;
+
 /**
  * Table Definition for event
  *
@@ -59,6 +62,9 @@ class Event extends Record
     public $uidcreated;                      // string(100)
     public $datelastupdated;                 // datetime(19)  binary
     public $uidlastupdated;                  // string(100)
+
+    const ONE_DAY = 86400;
+    const ONE_WEEK = 604800;
 
     public static function getTable()
     {
@@ -153,6 +159,109 @@ class Event extends Record
         }
     }
 
+    public function deleteRecurrences()
+    {
+        $options = array(
+            'event_id' => $this->id,
+            'recurring_only' => true
+        );
+        $event_date_times = new Occurrences($options);
+
+        foreach ($event_date_times as $datetime) {
+            $datetime->delete();
+        }
+
+        return;
+    }
+
+    public function insertRecurrences()
+    {
+        $event_id = (int)($this->id);
+        $new_rows = array();
+
+        $options = array(
+            'event_id' => $this->id,
+            'recurring_only' => true
+        );
+        $event_date_times = new Occurrences($options);
+        foreach ($event_date_times as $datetime) {
+            $start_date = strtotime($datetime->starttime); // Y-m-d H:i:s string -> int
+            $end_date = strtotime($datetime->endtime); // Y-m-d H:i:s string -> int
+            $recurring_type = $datetime->recurringtype;
+            $rec_type_month = $datetime->rectypemonth;
+            $recurs_until = strtotime($datetime->recurs_until); // Y-m-d H:i:s string -> int
+            $k = 0; // this counts the recurrence_id, i.e. which recurrence of the event it is
+            $this_start = $start_date;
+            $this_end = $end_date;
+            $length = $end_date - $start_date;
+            // while the current start time is before recurs until
+            while ($this_start <= $recurs_until) {
+                // insert initial day recurrence for this eventdatetime and recurrence, not ongoing, not unlinked
+                $new_rows[] = array(date('Y-m-d', $this_start), $event_id, $k, 0, 0);
+                // generate more day recurrences for each day of the event, if it is ongoing (i.e., the end date is the next day or later)
+                $next_day = strtotime('midnight tomorrow', $this_start);
+                while ($next_day <= $this_end) {
+                    // add an entry to recurring dates for this eid, the temp date, is ongoing, not unlinked
+                    $new_rows[] = array(date('Y-m-d', $next_day), $event_id, $k, 1, 0);
+                    // increment day
+                    $next_day = $next_day + self::ONE_DAY;
+                }
+                // increment k, which is the recurrence counter (not for the day recurrence, but for the normal recurrence)
+                $k++;
+                // now we move this_start up, based on the recurrence type, and the while loop sees if that is
+                // after the recurs_until
+                if ($recurring_type == 'daily') {
+                    $this_start += self::ONE_DAY;
+                } else if ($recurring_type == 'weekly') {
+                    $this_start += self::ONE_WEEK;
+                } else if ($recurring_type == 'monthly') {
+                    // figure out some preliminary things
+                    $hour_on_start_date = date('H', $start_date);
+                    $minute_on_start_date = date('i', $start_date);
+                    $second_on_start_date = date('s', $start_date);
+                    $next_month_num = (int)(date('n', $this_start)) + 1;
+                    $next_month_year = (int)(date('Y', $this_start));
+                    if ($next_month_num > 12) {
+                        $next_month_num -= 12;
+                        $next_month_year += 1;
+                    }
+                    $days_in_next_month = cal_days_in_month(CAL_GREGORIAN, $next_month_num, $next_month_year);
+                    // now work how to get next month's day
+                    if ($rec_type_month == 'date') {
+                        $day_for_next_month = min($days_in_next_month, (int)(date('j', $start_date)));
+                        $this_start = mktime($hour_on_start_date, $minute_on_start_date, $second_on_start_date, $next_month_num, $day_for_next_month, $next_month_year);
+                    } else if ($rec_type_month == 'lastday') {
+                        $this_start = mktime($hour_on_start_date, $minute_on_start_date, $second_on_start_date, $next_month_num, $days_in_next_month, $next_month_year);
+                    } else { // first, second, third, fourth, or last
+                        $weekday = date('l', $start_date);
+                        $month_name = date('F', strtotime("2015-{$next_month_num}-01"));
+                        $this_start = strtotime("{$rec_type_month} {$weekday} of {$month_name} {$next_month_year}");
+                        $this_start = strtotime(date('Y-m-d', $this_start) . ' ' . $hour_on_start_date . ':' . $minute_on_start_date . ':' . $second_on_start_date);
+                    }
+                } else if ($recurring_type == 'annually' || $recurring_type == 'yearly') { 
+                    $this_start = strtotime('+1 year', $this_start);
+                } else {
+                    // dont want an infinite loop
+                    break;
+                }
+                $this_end = $this_start + $length;
+            }
+        }
+        if (!empty($new_rows)) {
+            foreach ($new_rows as $row) {
+                $recurring_date = new RecurringDate;
+                $recurring_date->recurringdate = $row[0];
+                $recurring_date->event_id = $row[1];
+                $recurring_date->recurrence_id = $row[2];
+                $recurring_date->ongoing = $row[3];
+                $recurring_date->unlinked = $row[4];
+
+                $recurring_date->insert();
+            }
+        }
+        return;
+    }
+
     /**
      * Inserts a new event in the database.
      *
@@ -160,30 +269,15 @@ class Event extends Record
      */
     public function insert()
     {
-        global $_UNL_UCBCN;
-        if (isset($this->consider)) {
-            // The user has checked the 'Please consider this event for the main calendar'
-            $add_to_default = $this->consider;
-            unset($this->consider);
-        } else {
-            $add_to_default = 0;
-        }
         $this->processFileAttachments();
+
         $this->datecreated = date('Y-m-d H:i:s');
         $this->datelastupdated = date('Y-m-d H:i:s');
-        if (isset($_SESSION['_authsession'])) {
-            $this->uidcreated=$_SESSION['_authsession']['username'];
-            $this->uidlastupdated=$_SESSION['_authsession']['username'];
-        }
+
+        $this->uidcreated = $_SESSION['__SIMPLECAS']['UID'];
+        $this->uidlastupdated = $_SESSION['__SIMPLECAS']['UID'];
         $result = parent::insert();
-        if ($result) {
-            // If insert was successful, set a global variable for any child elements to see the event_id foreign key.
-            $GLOBALS['event_id'] = $this->id;
-            if ($add_to_default && isset($_UNL_UCBCN['default_calendar_id'])) {
-                // Add this as a pending event to the default calendar.
-                $this->addToCalendar($_UNL_UCBCN['default_calendar_id'], 'pending', 'checked consider event');
-            }
-        }
+
         return $result;
     }
     
@@ -247,18 +341,23 @@ class Event extends Record
      *
      * @return int|false
      */
-    public function addToCalendar($calendar_id, $status='pending', $sourcemsg = 'unknown')
+    public function addToCalendar($calendar_id, $status='pending', $sourcemsg = null)
     {
-        $values = array(
-                'calendar_id'     => $calendar_id,
-                'event_id'        => $this->id,
-                'uidcreated'      => $_SESSION['_authsession']['username'],
-                'datecreated'     => date('Y-m-d H:i:s'),
-                'datelastupdated' => date('Y-m-d H:i:s'),
-                'uidlastupdated'  => $_SESSION['_authsession']['username'],
-                'status'          => $status,
-                'source'          => $sourcemsg);
-        return UNL_UCBCN::dbInsert('calendar_has_event', $values);
+        $calendar_has_event = new CalendarHasEvent;
+
+        $calendar_has_event->calendar_id = $this->id;
+        $calendar_has_event->event_id = $this->id;
+        $calendar_has_event->uidcreated = $_SESSION['__SIMPLECAS']['UID'];
+        $calendar_has_event->datecreated = date('Y-m-d H:i:s');
+        $calendar_has_event->datelastupdated = date('Y-m-d H:i:s');
+        $calendar_has_event->uidlastupdated = $_SESSION['__SIMPLECAS']['UID'];
+        $calendar_has_event->status = $status;
+
+        if (isset($source)) {
+            $calendar_has_event->source = $source;
+        }
+
+        return $calendar_has_event->insert();
     }
     
     /**
@@ -344,26 +443,6 @@ class Event extends Record
         return $event;
     }
     
-    /**
-     * Converts an associative array generated by UNL_UCBCN_Event::toArray()
-     * back into an object of type UNL_UCBCN_Event. It can also take an object
-     * of type UNL_UCBCN_Event or stdClass as its parameter. This ensures that the
-     * value returned is an object of UNL_UCBCN_Event and not stdClass.
-     * 
-     * @param mixed $event associative array, UNL_UCBCN_Event, or stdClass
-     * to convert to UNL_UCBCN_Event. 
-     * 
-     * @return UNL_UCBCN_Event
-     */
-    public function arrayToEvent($event)
-    {
-        $e = UNL_UCBCN::factory('event');
-        foreach ($event as $key => $value) {
-            $e->$key = $value;
-        }
-        return $e;
-    }
-
     /**
      * Get event_has_eventtype records for this event
      *
