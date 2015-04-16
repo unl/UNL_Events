@@ -31,7 +31,7 @@ class Controller {
      * @var int
      */
     public static $default_calendar_id = 1;
-
+    
     public function __construct($options = array()) {
         $this->options = $options + $this->options;
 
@@ -45,8 +45,6 @@ class Controller {
 
     public static $url = '/manager/';
 
-    public static $web_root = '/';
-
     /**
      * Get the URL to the manager
      *
@@ -55,11 +53,6 @@ class Controller {
     public function getURL()
     {
         return self::$url;
-    }
-
-    public function getWebRoot() 
-    {
-        return self::$web_root;
     }
 
     /**

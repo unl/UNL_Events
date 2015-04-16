@@ -6,7 +6,7 @@ use UNL\UCBCN\User as User;
 
 class Auth {
 
-	protected $options = array();
+    protected $options = array();
     
     public static $directory_url = 'http://directory.unl.edu/';
 
@@ -46,7 +46,7 @@ class Auth {
         return $user;
     }
 
-	public function getClient() {
+    public function getClient() {
         $options = array(
             'hostname' => 'login.unl.edu',
             'port'     => 443,

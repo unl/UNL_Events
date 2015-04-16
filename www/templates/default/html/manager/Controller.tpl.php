@@ -34,8 +34,8 @@ $view_class = str_replace('\\', '_', strtolower($context->options['model']));
     <!-- InstanceEndEditable -->
     <!-- InstanceBeginEditable name="head" -->
     <!-- Place optional header elements here -->
-    <link rel="stylesheet" type="text/css" media="screen" href="<?php echo $controller->getWebRoot() ?>templates/default/html/css/events.css" />
-    <script id="script_main" src="<?php echo $controller->getWebRoot() ?>templates/default/html/js/events.min.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="<?php echo $base_frontend_url ?>templates/default/html/css/events.css" />
+    <script id="script_main" src="<?php echo $base_frontend_url ?>templates/default/html/js/events.min.js"></script>
     <!-- InstanceEndEditable -->
     <!-- InstanceParam name="class" type="text" value="" -->
 </head>

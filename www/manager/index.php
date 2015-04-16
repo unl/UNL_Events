@@ -26,4 +26,6 @@ $controller = new Controller($controller_options);
 
 $savvy = new OutputController($controller);
 $savvy->addGlobal('controller', $controller);
+$savvy->addGlobal('base_manager_url', Controller::$url);
+$savvy->addGlobal('base_frontend_url', \UNL\UCBCN\Frontend\Controller::$url);
 echo $savvy->render($controller);
