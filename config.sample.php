@@ -30,6 +30,6 @@ UNL\UCBCN\ActiveRecord\Database::setDbSettings(
     array(
     'host'     => 'localhost',
     'user'     => 'events',
-    'password' => 'events',
+    'password' => 'password',
     'dbname'   => 'events',
 ));
