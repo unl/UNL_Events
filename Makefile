@@ -43,7 +43,7 @@ $(CSS_OBJ): www/templates/default/html/less/events.less www/templates/default/ht
 	$(LESSC) --clean-css $< $@
 	
 $(LESSC):
-	npm install less
+	npm install less@1.7.5
 
 $(LESS_LIB)/%.less:
 	@mkdir -p $(@D)
