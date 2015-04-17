@@ -4,7 +4,22 @@ UNL Events
 This is the new branch for the manager rewrite of UNL Events. 
 This branch will eventually contain the manager, frontend, and backend, all in one repo.
 
-INSTALL
+INSTALL using vagrant
+---------------------
+1. run `cd vagrant/dev`
+2. run `vagrant up`
+3. Wait for vagrant to install, this can take quite a long time.
+4. The initial install will take place, including the manual tasks outlined below.
+5. Install the sample data set
+
+You will need to load an sql data set.  You can do this by:
+1. copy the .sql file to the project root
+2. run `cd vagrant/dev`
+3. run `vagrant ssh` with the vagrant machine running
+4. once you are ssh'd into the machine, run `cd /var/www/html`
+5. run `mysql -uevents -ppassword events < name-of-your-sql-file.sql`
+
+manual INSTALL
 -------
 1. run `git submodule init`
 2. run `git submodule update`
