@@ -117,4 +117,19 @@ class Auth {
         
         return $info;
     }
+
+    /**
+     * Get the currently logged in user if there is one.
+     * 
+     * @return bool|\UNL\UCBCN\User
+     */
+    public static function getCurrentUser()
+    {
+        if (!isset($_SESSION['__SIMPLECAS']['UID'])) {
+            return false;
+        }
+        
+        $username = $_SESSION['__SIMPLECAS']['UID'];
+        return User::getByUid($username);
+    }
 }
