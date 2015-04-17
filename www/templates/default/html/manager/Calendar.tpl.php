@@ -8,12 +8,16 @@
         <?php foreach ($calendars as $calendar) { ?>
             <?php if ($calendar->shortname == $context->calendar->shortname) { ?>
                 <div style="background: #CCCCCC;"><?php echo $calendar->name ?></div>
-                <a href="<?php echo $calendar->getFrontendURL() ?>">Live Calendar</a>
-                <a href="<?php echo $calendar->getFrontendURL() ?>">Calendar Info</a>
+                <ul>
+                    <li><small><a href="<?php echo $calendar->getFrontendURL() ?>">Live Calendar</a></small></li>
+                    <li><small><a href="<?php echo $calendar->getFrontendURL() ?>">Calendar Info</a></small></li>
+                    <li><small><a href="<?php echo $calendar->getFrontendURL() ?>">Users &amp; Permissions</a></small></li>
+                </ul>
             <?php } else { ?>
                 <a href="<?php echo $calendar->getManageURL() ?>"><?php echo $calendar->name ?></a><br>
             <?php } ?>
         <?php } ?>
+        <br>
         <a href="#" class="wdn-button wdn-button-brand">+ New Calendar</a>
     </div>
     <div class="wdn-col-three-fourths">
