@@ -8,6 +8,8 @@
         <?php foreach ($calendars as $calendar) { ?>
             <?php if ($calendar->shortname == $context->calendar->shortname) { ?>
                 <div style="background: #CCCCCC;"><?php echo $calendar->name ?></div>
+                <a href="<?php echo $calendar->getFrontendURL() ?>">Live Calendar</a>
+                <a href="<?php echo $calendar->getFrontendURL() ?>">Calendar Info</a>
             <?php } else { ?>
                 <a href="<?php echo $calendar->getManageURL() ?>"><?php echo $calendar->name ?></a><br>
             <?php } ?>
@@ -27,46 +29,62 @@
                 </div><br>
                 <?php if (count($events['pending']) == 0) { ?>
                     There are no pending events.
-                <?php } ?>
-                <div class="wdn-grid-set">
-                    <div class="wdn-col-one-sixth">
-                        <input type="checkbox" id="select-all">
+                <?php } else { ?>
+                    <select class="all-pending-event-tools">
+                        <option value="">Bulk Action</option>
+                        <option value="move-to-upcoming">Move to Upcoming</option>
+                        <option value="recommend">Recommend</option>
+                        <option value="delete">Delete</option>
+                    </select>
+                    <div class="wdn-grid-set">
+                        <div class="wdn-col-one-sixth">
+                            <input type="checkbox" id="select-all">
+                        </div>
+                        <div class="wdn-col-one-sixth">
+                            <h6>Title</h6>
+                        </div>
+                        <div class="wdn-col-one-sixth">
+                            <h6>Dates</h6>
+                        </div>
+                        <div class="wdn-col-one-sixth">
+                            <h6>Location</h6>
+                        </div>
                     </div>
-                    <div class="wdn-col-one-sixth">
-                        <h6>Title</h6>
+                    <?php foreach($events['pending'] as $event) { ?>
+                    <div class="wdn-grid-set">
+                        <div class="wdn-col-one-sixth">
+                            <input type="checkbox" class="select-event" data-id="<?php echo $event->id; ?>">
+                        </div>
+                        <div class="wdn-col-one-sixth">
+                            <?php echo $event->title; ?>
+                        </div>
+                        <div class="wdn-col-one-third">
+                            <?php foreach($event->getDateTimes() as $datetime) { ?>
+                                <?php echo date('n/j/y @ h:ia', strtotime($datetime->starttime)); ?>
+                                <?php echo $datetime->getLocation()->name; ?>
+                            <?php } ?>
+                        </div>
+                        <div class="wdn-col-one-third">
+                            <select class="pending-event-tools" data-id="<?php echo $event->id; ?>">
+                                <option value="">Select an Action</option>
+                                <option value="move-to-upcoming">Move to Upcoming</option>
+                                <option value="recommend">Recommend</option>
+                                <option value="delete">Delete</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="wdn-col-one-sixth">
-                        <h6>Dates</h6>
-                    </div>
-                    <div class="wdn-col-one-sixth">
-                        <h6>Location</h6>
-                    </div>
-                </div>
-                <?php foreach($events['pending'] as $event) { ?>
-                <div class="wdn-grid-set">
-                    <div class="wdn-col-one-sixth">
-                        <input type="checkbox" class="select-event" data-id="<?php echo $event->id; ?>">
-                    </div>
-                    <div class="wdn-col-one-sixth">
-                        <?php echo $event->title; ?>
-                    </div>
-                    <div class="wdn-col-one-third">
-                        <?php foreach($event->getDateTimes() as $datetime) { ?>
-
-                        <?php } ?>
-                    </div>
-                </div>
-                <br>
+                    <br>
+                    <?php } ?>
                 <?php } ?>
             </div>
-            <div id="posted">
-                <div id="posted-toolbar">
+            <div id="upcoming">
+                <div id="upcoming-toolbar">
                     <?php echo $context->calendar->name ?> <a href="#" class="wdn-button wdn-button-brand">+ New Event</a>
                 </div><br>
                 <div class="wdn-grid-set">
                     <div class="wdn-col-two-thirds">
                         <?php if (count($events['posted']) == 0) { ?>
-                            There are no posted events.
+                            There are no upcoming events.
                         <?php } ?>
                         <?php foreach($events['posted'] as $event) { ?>
                             <div class="event" style="border: 1px solid black; padding: 5px;">
