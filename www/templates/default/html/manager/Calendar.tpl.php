@@ -11,6 +11,7 @@
                 <ul>
                     <li><small><a href="<?php echo $calendar->getFrontendURL() ?>">Live Calendar</a></small></li>
                     <li><small><a href="<?php echo $calendar->getFrontendURL() ?>">Calendar Info</a></small></li>
+                    <li><small><a href="<?php echo $calendar->getFrontendURL() ?>">Subscriptions</a></small></li>
                     <li><small><a href="<?php echo $calendar->getFrontendURL() ?>">Users &amp; Permissions</a></small></li>
                 </ul>
             <?php } else { ?>
@@ -18,7 +19,10 @@
             <?php } ?>
         <?php } ?>
         <br>
-        <a href="#" class="wdn-button wdn-button-brand">+ New Calendar</a>
+        <a href="#" class="wdn-button wdn-button-brand">+ New Calendar</a><br>
+        <br>
+        <a href="<?php echo $calendar->getFrontendURL() ?>">Account Info</a><br>
+        <a href="<?php echo $calendar->getFrontendURL() ?>">InDesign Tags Export</a><br>
     </div>
     <div class="wdn-col-three-fourths">
         <ul class="wdn_tabs">
