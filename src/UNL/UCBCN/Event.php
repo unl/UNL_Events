@@ -6,6 +6,7 @@ use UNL\UCBCN\Calendar;
 use UNL\UCBCN\Calendar\Event as CalendarHasEvent;
 use UNL\UCBCN\Event\Occurrences;
 use UNL\UCBCN\Event\RecurringDate;
+use UNL\UCBCN\EventListing;
 
 /**
  * Table Definition for event
@@ -129,6 +130,14 @@ class Event extends Record
         return array('listingcontactuid' => 'users:uid',
                      'uidcreated'        => 'users:uid',
                      'uidlastupdated'    => 'users:uid');
+    }
+
+    function getDatetimes() {
+        $options = array(
+            'event_id' => $this->id
+        );
+
+        return new EventListing($options);
     }
 
     public function getStatusWithCalendar(Calendar $calendar) {

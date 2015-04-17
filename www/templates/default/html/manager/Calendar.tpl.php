@@ -25,30 +25,39 @@
                 <div id="pending-toolbar">
                     <?php echo $context->calendar->name ?> <a href="<?php echo $base_manager_url . $context->calendar->shortname ?>/create/" class="wdn-button wdn-button-brand">+ New Event</a>
                 </div><br>
+                <?php if (count($events['pending']) == 0) { ?>
+                    There are no pending events.
+                <?php } ?>
                 <div class="wdn-grid-set">
-                    <div class="wdn-col-two-thirds">
-                        <?php if (count($events['pending']) == 0) { ?>
-                            There are no pending events.
-                        <?php } ?>
-                        <?php foreach($events['pending'] as $event) { ?>
-                            <div class="event" style="border: 1px solid black; padding: 5px;">
-                            <h6 style="display: inline-block;"><?php echo $event->title ?></h6>
-                            <h6 style="float: right;"></h6>
-                            </div>
-                            <br>
-                        <?php } ?>
+                    <div class="wdn-col-one-sixth">
+                        <input type="checkbox" id="select-all">
                     </div>
-                    <div class="wdn-col-one-third">
-                        <div class="calendar-tools" style="text-align: center; background: #CCCCCC;">
-                            <a href="#">Live Calendar</a><br>
-                            <a href="#">Account Info</a><br>
-                            <a href="#">Calendar Info</a><br>
-                            <a href="#">Users &amp; Permissions</a><br>
-                            <a href="#">Subscriptions</a><br>
-                            <a href="#">InDesign Tags Export</a><br>
-                        </div>
+                    <div class="wdn-col-one-sixth">
+                        <h6>Title</h6>
+                    </div>
+                    <div class="wdn-col-one-sixth">
+                        <h6>Dates</h6>
+                    </div>
+                    <div class="wdn-col-one-sixth">
+                        <h6>Location</h6>
                     </div>
                 </div>
+                <?php foreach($events['pending'] as $event) { ?>
+                <div class="wdn-grid-set">
+                    <div class="wdn-col-one-sixth">
+                        <input type="checkbox" class="select-event" data-id="<?php echo $event->id; ?>">
+                    </div>
+                    <div class="wdn-col-one-sixth">
+                        <?php echo $event->title; ?>
+                    </div>
+                    <div class="wdn-col-one-third">
+                        <?php foreach($event->getDateTimes() as $datetime) { ?>
+
+                        <?php } ?>
+                    </div>
+                </div>
+                <br>
+                <?php } ?>
             </div>
             <div id="posted">
                 <div id="posted-toolbar">
@@ -66,16 +75,6 @@
                             </div>
                             <br>
                         <?php } ?>
-                    </div>
-                    <div class="wdn-col-one-third">
-                        <div class="calendar-tools" style="text-align: center; background: #CCCCCC;">
-                            <a href="#">Live Calendar</a><br>
-                            <a href="#">Account Info</a><br>
-                            <a href="#">Calendar Info</a><br>
-                            <a href="#">Users &amp; Permissions</a><br>
-                            <a href="#">Subscriptions</a><br>
-                            <a href="#">InDesign Tags Export</a><br>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -95,16 +94,6 @@
                             </div>
                             <br>
                         <?php } ?>
-                    </div>
-                    <div class="wdn-col-one-third">
-                        <div class="calendar-tools" style="text-align: center; background: #CCCCCC;">
-                            <a href="#">Live Calendar</a><br>
-                            <a href="#">Account Info</a><br>
-                            <a href="#">Calendar Info</a><br>
-                            <a href="#">Users &amp; Permissions</a><br>
-                            <a href="#">Subscriptions</a><br>
-                            <a href="#">InDesign Tags Export</a><br>
-                        </div>
                     </div>
                 </div>
             </div>
