@@ -3,7 +3,8 @@ namespace UNL\UCBCN;
 
 use UNL\UCBCN\ActiveRecord\Record;
 use UNL\UCBCN\Events;
-use UNL\UCBCN\Manager\Controller;
+use UNL\UCBCN\Frontend\Controller as FrontendController;
+use UNL\UCBCN\Manager\Controller as ManagerController;
 use UNL\UCBCN\Calendar\Event as CalendarHasEvent;
 /**
  * Details related to a calendar within the UNL Event Publisher system.
@@ -100,8 +101,12 @@ class Calendar extends Record
                      'uidlastupdated' => 'users:uid');
     }
 
+    public function getFrontendURL() {
+        return FrontendController::$url . '?calendar_id=' . $this->id;
+    }
+
     public function getManageURL() {
-        return Controller::$url . $this->shortname . "/";
+        return ManagerController::$url . $this->shortname . "/";
     }
 
     /**
