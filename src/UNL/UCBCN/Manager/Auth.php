@@ -16,7 +16,12 @@ class Auth {
     public function authenticate() {
         $client = $this->getClient();
         
+        //Handle single log out requests
+        $client->handleSingleLogOut();
+        
+        //require login
         $client->forceAuthentication();
+        
         if (!$client->isAuthenticated()) {
             throw new RuntimeException('Unable to authenticate', 403);
         }
@@ -70,10 +75,10 @@ class Auth {
          * Set up the session cache mapping
          */
         $cache_driver = new \Stash\Driver\FileSystem();
-        //$cache_driver->setOptions(array(
-                //Scope the cache to the current application only.
-        //        'path' => Config::get('CACHE_DIR') . '/simpleCAS_map',
-        //));
+        $cache_driver->setOptions(array(
+            //Scope the cache to the current application only.
+            'path' => __DIR__. '/../../../../tmp/simpleCAS_map',
+        ));
         
         $session_map = new \SimpleCAS_SLOMap($cache_driver);
         
@@ -111,5 +116,20 @@ class Auth {
         }
         
         return $info;
+    }
+
+    /**
+     * Get the currently logged in user if there is one.
+     * 
+     * @return bool|\UNL\UCBCN\User
+     */
+    public static function getCurrentUser()
+    {
+        if (!isset($_SESSION['__SIMPLECAS']['UID'])) {
+            return false;
+        }
+        
+        $username = $_SESSION['__SIMPLECAS']['UID'];
+        return User::getByUid($username);
     }
 }
