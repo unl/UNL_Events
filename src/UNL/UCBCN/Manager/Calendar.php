@@ -39,8 +39,7 @@ class Calendar {
     }
 
     public function getCalendars() {
-        $username = $_SESSION['__SIMPLECAS']['UID'];
-        $user = User::getByUid($username);
+        $user = Auth::getCurrentUser();
 
         return $user->getCalendars();
     }

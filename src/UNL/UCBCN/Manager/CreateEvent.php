@@ -38,8 +38,8 @@ class CreateEvent
 
     public function getLocations()
     {
-        $username = $_SESSION['__SIMPLECAS']['UID'];
-        return new Locations(array('user_id' => $username));
+        $user = Auth::getCurrentUser();
+        return new Locations(array('user_id' => $user->uid));
     }
 
     private function calculateDate($date, $hour, $minute, $am_or_pm) {
@@ -56,8 +56,7 @@ class CreateEvent
 
     private function saveEvent($post_data) 
     {
-        $username = $_SESSION['__SIMPLECAS']['UID'];
-        $user = User::getByUid($username);
+        $user = Auth::getCurrentUser();
 
         $event = new Event();
         $event->title = $post_data['title'];
