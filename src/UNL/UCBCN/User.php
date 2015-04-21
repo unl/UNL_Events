@@ -3,6 +3,8 @@ namespace UNL\UCBCN;
 
 use UNL\UCBCN\ActiveRecord\Record;
 use UNL\UCBCN\Calendars;
+use UNL\UCBCN\Account;
+use UNL\UCBCN\User\Permission;
 /**
  * Table Definition for user
  *
@@ -95,10 +97,33 @@ class User extends Record
         return $this->uid;
     }
 
-    public function getCalendars() {
+    public function getCalendars() 
+    {
         # create options for calendar listing class
         $options = array('user_id' => $this->uid);
         $calendars = new Calendars($options);
         return $calendars;
+    }
+
+    public function getAccount() 
+    {
+        return Account::getByID($this->account_id);
+    }
+
+    public function hasPermission($permission_id, $calendar_id)
+    {
+        return (bool)Permission::getByUser_UID($this->uid, 'calendar_id = ' . 
+            (int)($calendar_id) . ' AND permission_id = ' . (int)($permission_id));
+    }
+
+    public function grantPermission($permission_id, $calendar_id)
+    {
+        $permission = new Permission();
+
+        $permission->permission_id = $permission_id;
+        $permission->user_uid = $this->uid;
+        $permission->calendar_id = $calendar_id;
+
+        $permission->insert();
     }
 }

@@ -10,7 +10,7 @@
                 <div style="background: #CCCCCC;"><?php echo $calendar->name ?></div>
                 <ul>
                     <li><small><a href="<?php echo $calendar->getFrontendURL() ?>">Live Calendar</a></small></li>
-                    <li><small><a href="<?php echo $calendar->getFrontendURL() ?>">Calendar Info</a></small></li>
+                    <li><small><a href="<?php echo $calendar->getEditURL() ?>">Edit Calendar Info</a></small></li>
                     <li><small><a href="<?php echo $calendar->getFrontendURL() ?>">Subscriptions</a></small></li>
                     <li><small><a href="<?php echo $calendar->getFrontendURL() ?>">Users &amp; Permissions</a></small></li>
                 </ul>
@@ -19,7 +19,7 @@
             <?php } ?>
         <?php } ?>
         <br>
-        <a href="#" class="wdn-button wdn-button-brand">+ New Calendar</a><br>
+        <a href="<?php echo $base_manager_url ?>calendar/new" class="wdn-button wdn-button-brand">+ New Calendar</a><br>
         <br>
         <a href="<?php echo $calendar->getFrontendURL() ?>">Account Info</a><br>
         <a href="<?php echo $calendar->getFrontendURL() ?>">InDesign Tags Export</a><br>
@@ -27,7 +27,7 @@
     <div class="wdn-col-three-fourths">
         <ul class="wdn_tabs">
             <li><a href="#pending">Pending (<?php echo count($events['pending']); ?>)</a></li>
-            <li><a href="#posted">Posted (<?php echo count($events['posted']); ?>)</a></li>
+            <li><a href="#upcoming">Upcoming (<?php echo count($events['posted']); ?>)</a></li>
             <li><a href="#archived">Archived (<?php echo count($events['archived']); ?>)</a></li>
         </ul>
         <div class="wdn_tabs_content">
