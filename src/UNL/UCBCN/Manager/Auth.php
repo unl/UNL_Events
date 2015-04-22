@@ -3,6 +3,7 @@
 namespace UNL\UCBCN\Manager;
 use SimpleCAS;
 use UNL\UCBCN\User as User;
+use UNL\UCBCN\Account as Account;
 
 class Auth {
 
@@ -27,6 +28,18 @@ class Auth {
         }
         
         $user = $this->getUser($client->getUsername());
+
+        # check for the account on the user
+        if (!$user->getAccount()) {
+            # create an account if that account doesn't exist
+            $account = new Account;
+            $account->name = ucfirst($user->uid).'\'s Event Publisher';
+            $account->sponsor_id = 1;
+            $account->datecreated = date('Y-m-d H:i:s');
+            $account->datelastupdated = date('Y-m-d H:i:s');
+
+            $account->insert();
+        }
     }
 
     /**
