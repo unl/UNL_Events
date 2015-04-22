@@ -24,7 +24,7 @@ use UNL\UCBCN\ActiveRecord\Record;
  * @license   http://www1.unl.edu/wdn/wiki/Software_License BSD License
  * @link      http://code.google.com/p/unl-event-publisher/
  */
-class User_Permission extends Record
+class Permission extends Record
 {
 
     public $id;                              // int(10)  not_null primary_key unsigned auto_increment
@@ -64,25 +64,6 @@ class User_Permission extends Record
         return array('permission_id' => 'permission:id',
                      'user_uid'      => 'user:uid',
                      'calendar_id'   => 'calendar:id');
-    }
-    
-    function insert()
-    {
-        $check = UNL_UCBCN::factory('user_has_permission');
-        $check->permission_id = $this->permission_id;
-        $check->user_uid = $this->user_uid;
-        if (isset($this->calendar_id)) {
-            $check->calendar_id = $this->calendar_id;
-        } elseif (isset($_SESSION['calendar_id'])) {
-            $check->calendar_id = $this->calendar_id = $_SESSION['calendar_id'];
-        } else {
-            return false;
-        }
-        if (!$check->find()) {
-            return parent::insert();
-        } else {
-            return true;
-        }
     }
     
 }

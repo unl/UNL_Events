@@ -109,6 +109,14 @@ class Calendar extends Record
         return ManagerController::$url . $this->shortname . "/";
     }
 
+    public function getNewURL() {
+        return ManagerController::$url . 'calendar/new/';
+    }
+
+    public function getEditURL() {
+        return ManagerController::$url . $this->shortname . '/edit/';
+    }
+
     /**
      * Adds a user to the calendar. Grants all permissions to the
      * user for the current calendar.
@@ -120,8 +128,8 @@ class Calendar extends Record
         if (isset($this->id)) {
             $permissions = new Permissions();
             foreach ($permissions as $permission) {
-                if (!$user->hasPermission($p->name, $this)) {
-                    $user->grantPermission($this->id, $permission->id);
+                if (!$user->hasPermission($permission->id, $this->id)) {
+                    $user->grantPermission($permission->id, $this->id);
                 }
             }
             return true;

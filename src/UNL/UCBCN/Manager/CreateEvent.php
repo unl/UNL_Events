@@ -21,7 +21,6 @@ class CreateEvent
         $this->calendar = CalendarModel::getByShortName($this->options['calendar_shortname']);
 
         if (!empty($_POST)) {
-            error_log(print_r($_POST,1));
             $this->saveEvent($_POST);
             header('Location: /manager/' . $this->calendar->shortname . '/');
         }
@@ -116,5 +115,6 @@ class CreateEvent
 
         $event_datetime->insert();
 
+        return $event;
     }
 }

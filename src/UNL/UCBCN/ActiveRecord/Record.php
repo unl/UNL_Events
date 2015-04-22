@@ -336,7 +336,7 @@ abstract class Record
     public function synchronizeWithArray($data)
     {
         foreach (get_object_vars($this) as $key=>$default_value) {
-            if (isset($data[$key]) && !empty($data[$key])) {
+            if (isset($data[$key])) {
                 $this->$key = $data[$key];
             }
         }
