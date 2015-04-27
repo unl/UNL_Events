@@ -38,9 +38,4 @@ class Calendar {
         return $categories;
     }
 
-    public function getCalendars() {
-        $user = Auth::getCurrentUser();
-
-        return $user->getCalendars();
-    }
 }

@@ -1,11 +1,6 @@
 <?php
     $calendar = $context->calendar;
 ?>
-<section class="wdn-grid-set">
-    <div class="wdn-col-one-fourth">
-        <h3>My Calendars</h3>
-    </div>
-    <div class="wdn-col-three-fourths">
         <?php echo $calendar->name ?> &gt; Create Event
         <div class="wdn-grid-set">
             <form action="/manager/<?php echo $calendar->shortname ?>/create/" method="POST">
@@ -77,7 +72,7 @@
                         <label for="location-additional-public-info">Additional Public Info</label>
                         <input type="text" id="location-additional-public-info" name="location_additional_public_info">
 
-                        <label for="location-type">Phone</label>
+                        <label for="location-type">Type</label>
                         <input type="text" id="location-type" name="location_type">
 
                         <label for="location-phone">Phone</label>
@@ -259,8 +254,6 @@
                 </div>
             </form>
         </div>
-    </div>
-</section>
 <script type="text/javascript">
 //<![CDATA[
 WDN.initializePlugin('jqueryui', [function () {
