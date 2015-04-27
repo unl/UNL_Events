@@ -3,6 +3,7 @@ namespace UNL\UCBCN\Manager;
 
 use UNL\UCBCN\Calendar as CalendarModel;
 use UNL\UCBCN\Calendar\EventTypes;
+use UNL\UCBCN\Location;
 use UNL\UCBCN\Locations;
 use UNL\UCBCN\Event;
 use UNL\UCBCN\Event\EventType;
@@ -85,7 +86,35 @@ class CreateEvent
         # add the event date time record
         $event_datetime = new Occurrence;
         $event_datetime->event_id = $event->id;
-        $event_datetime->location_id = $post_data['location'];
+
+        # check if this is to use a new location
+        if ($post_data['location'] == 'new') {
+            # create a new location
+            $location = new Location;
+            $location->name = $post_data['location_name'];
+            $location->streetaddress1 = $post_data['location_address_1'];
+            $location->streetaddress2 = $post_data['location_address_2'];
+            $location->room = $post_data['location_room'];
+            $location->city = $post_data['location_city'];
+            $location->state = $post_data['location_state'];
+            $location->zip = $post_data['location_zip'];
+            $location->mapurl = $post_data['location_map_url'];
+            $location->webpageurl = $post_data['location_webpage'];
+            $location->hours = $post_data['location_hours'];
+            $location->directions = $post_data['location_directions'];
+            $location->additionalpublicinfo = $post_data['location_additional_public_info'];
+            $location->type = $post_data['location_type'];
+            $location->phone = $post_data['location_phone'];
+            if (array_key_exists('location_save', $post_data) && $post_data['location_save'] == 'on') {
+                $location->user_id = $user->uid;
+            }
+            $location->standard = 0;
+
+            $location->insert();
+            $event_datetime->location_id = $location->id;
+        } else {
+            $event_datetime->location_id = $post_data['location'];    
+        }
 
         # set the start date and end date
         $event_datetime->starttime = $this->calculateDate($post_data['start_date'], 
