@@ -26,7 +26,7 @@ class Controller {
         'model' => false
     );
 
-    public $calendar;
+    protected $calendar = false;
 
     /**
      * Configurable ID for the base/master calendar
@@ -43,8 +43,6 @@ class Controller {
             if ($this->calendar === FALSE) {
                 throw new \Exception("That calendar could not be found.", 500);
             }
-        } else {
-            $this->calendar = new Calendar;
         }
 
         try {
@@ -178,5 +176,13 @@ class Controller {
         $user = Auth::getCurrentUser();
 
         return $user->getCalendars();
+    }
+
+    /**
+     * @return bool|Calendar
+     */
+    public function getCalendar()
+    {
+        return $this->calendar;
     }
 }

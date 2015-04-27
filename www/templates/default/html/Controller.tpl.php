@@ -44,8 +44,8 @@ $page->leftRandomPromo = '';
 $page->breadcrumbs = '
 <ul>
     <li><a href="http://www.unl.edu/">UNL</a></li>
-    <li><a href="' . $frontend->getURL() .'">MediaHub</a></li>
-    <li>Manage Media</li>
+    <li><a href="' . $frontend->getURL() .'">UNL Events</a></li>
+    <li>Events</li>
 </ul>';
 //$page->navlinks = $savvy->render(null, 'Navigation.tpl.php');
 $savvy->addGlobal('page', $page);
@@ -92,7 +92,6 @@ $page->maincontentarea .= '
     <div class="wdn-band view-' . $view_class . ' band-results">
         <div class="wdn-inner-wrapper">
             ' . $savvy->render($context->output, $template) . '
-            ?>
         </div>
     </div>';
 
