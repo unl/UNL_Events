@@ -36,7 +36,57 @@
                         <?php foreach ($context->getLocations() as $location) { ?>
                             <option value="<?php echo $location->id ?>"><?php echo $location->name ?></option>
                         <?php } ?>
+                            <option value="new">-- New Location --</option>
                         </select>
+
+                        <div id="new-location-fields">
+                        <h6>New Location</h6>
+                        <label for="location-name">Name</label>
+                        <input type="text" id="location-name" name="location_name">
+
+                        <label for="location-address-1">Address</label>
+                        <input type="text" id="location-address-1" name="location_address_1">
+
+                        <label for="location-address-2">Address 2</label>
+                        <input type="text" id="location-address-2" name="location_address_2">
+
+                        <label for="location-room">Room</label>
+                        <input type="text" id="location-room" name="location_room">
+
+                        <label for="location-city">City</label>
+                        <input type="text" id="location-city" name="location_city">
+
+                        <label for="location-state">State</label>
+                        <input type="text" id="location-state" name="location_state">
+
+                        <label for="location-zip">Zip</label>
+                        <input type="text" id="location-zip" name="location_zip">
+
+                        <label for="location-map-url">Map URL</label>
+                        <input type="text" id="location-map-url" name="location_map_url">
+
+                        <label for="location-webpage">Webpage</label>
+                        <input type="text" id="location-webpage" name="location_webpage">
+
+                        <label for="location-hours">Hours</label>
+                        <input type="text" id="location-hours" name="location_hours">
+
+                        <label for="location-directions">Directions</label>
+                        <textarea id="location-directions" name="location_directions"></textarea>
+
+                        <label for="location-additional-public-info">Additional Public Info</label>
+                        <input type="text" id="location-additional-public-info" name="location_additional_public_info">
+
+                        <label for="location-type">Phone</label>
+                        <input type="text" id="location-type" name="location_type">
+
+                        <label for="location-phone">Phone</label>
+                        <input type="text" id="location-phone" name="location_phone">
+
+                        <input type="checkbox" id="location-save" name="location_save"> 
+                        <label for="location-save">Save this location for future events</label>
+
+                        </div>
 
                         <label for="room">Room</label>
                         <input type="text" id="room" name="room" />
