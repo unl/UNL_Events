@@ -18,12 +18,15 @@ namespace UNL\UCBCN\Manager;
 
 use UNL\UCBCN\RuntimeException;
 use UNL\UCBCN\UnexpectedValueException;
+use UNL\UCBCN\Calendar;
 
 class Controller {
     public $options = array(
         'format' => 'html',
         'model' => false
     );
+
+    public $calendar;
 
     /**
      * Configurable ID for the base/master calendar
@@ -34,6 +37,15 @@ class Controller {
     
     public function __construct($options = array()) {
         $this->options = $options + $this->options;
+
+        if (array_key_exists('calendar_shortname', $this->options)) {
+            $this->calendar = Calendar::getByShortName($this->options['calendar_shortname']);
+            if ($this->calendar === FALSE) {
+                throw new \Exception("That calendar could not be found.", 500);
+            }
+        } else {
+            $this->calendar = new Calendar;
+        }
 
         try {
             $this->run();
@@ -160,5 +172,11 @@ class Controller {
             && false !== $exit) {
             exit($exit);
         }
+    }
+
+    public function getCalendars() {
+        $user = Auth::getCurrentUser();
+
+        return $user->getCalendars();
     }
 }
