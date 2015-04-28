@@ -1,10 +1,16 @@
 <?php
 namespace UNL\UCBCN\Calendar;
+use UNL\UCBCN\ActiveRecord\RecordList;
 
-use UNL\UCBCN\Subscriptions;
-
-class Subscribers extends Subscriptions
+class Subscribers extends RecordList
 {
+    public function getDefaultOptions() {
+        return array(
+            'listClass' =>  __CLASS__,
+            'itemClass' => __NAMESPACE__ . '\\Subscription',
+        );
+    }
+    
     function __construct($options = array())
     {
         if (!isset($options['calendar_id'])) {

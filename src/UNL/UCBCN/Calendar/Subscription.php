@@ -2,6 +2,9 @@
 namespace UNL\UCBCN\Calendar;
 
 use UNL\UCBCN\ActiveRecord\Record;
+use UNL\UCBCN\Manager\Controller as ManagerController;
+use UNL\UCBCN\Manager\Auth;
+
 /**
  * Table Definition for subscription
  *
@@ -81,6 +84,14 @@ class Subscription extends Record
                      'uidlastupdated' => 'user:uid');
     }
 
+    public function getNewURL($calendar) {
+        return ManagerController::$url . $calendar->shortname . '/subscriptions/new/';
+    }
+
+    public function getEditURL($calendar) {
+        return ManagerController::$url . $calendar->shortname . '/subscriptions/' . $this->id . '/edit/';
+    }
+
     /**
      * Translates search criteria into calendars.
      *
@@ -103,6 +114,8 @@ class Subscription extends Record
         return $cals;
     }
 
+
+
     /**
      * Inserts a record into the subscription table, and processes the subscription
      * for matching events.
@@ -111,19 +124,11 @@ class Subscription extends Record
      */
     public function insert()
     {
-        global $_UNL_UCBCN;
-        $this->datecreated     = date('Y-m-d H:i:s');
-        $this->datelastupdated = date('Y-m-d H:i:s');
-        if (isset($_SESSION['_authsession'])) {
-            $this->uidcreated     = $_SESSION['_authsession']['username'];
-            $this->uidlastupdated = $_SESSION['_authsession']['username'];
-        }
+        $this->datecreated = date('Y-m-d H:i:s');
+        $this->uidcreated = Auth::getCurrentUser()->uid;
         $result = parent::insert();
         if ($result) {
-            // If insert was successful, process the subscription immediately if the user chose so.
-            if ($this->process()) {
-                // Events were added to the current calendar.
-            }
+            $this->process();
         }
         return $result;
     }
@@ -139,15 +144,10 @@ class Subscription extends Record
     public function update()
     {
         $this->datelastupdated = date('Y-m-d H:i:s');
-        if (isset($_SESSION['_authsession'])) {
-            $this->uidlastupdated = $_SESSION['_authsession']['username'];
-        }
+        $this->uidlastupdated = Auth::getCurrentUser()->uid;
         $result = parent::update();
         if ($result) {
-            // If insert was successful, process the subscription immediately if the user chose so.
-            if ($this->process()) {
-                // Events were added to the current calendar.
-            }
+            $this->process();
         }
         return $result;
     }
@@ -162,29 +162,7 @@ class Subscription extends Record
      */
     public function process($event_id = null)
     {
-        $added = 0;
-        if (isset($this->id) && isset($this->calendar_id)) {
-            $res =& $this->matchingEvents(true, $event_id);
-            if ($res->numRows()) {
-                // There are events to insert, postpone any subscription processing until we're done.
-                $process_subscriptions = Event::processSubscriptions();
-                Event::processSubscriptions(false);
-                $calendar = $this->getLink('calendar_id');
-                $user     = $this->getLink('uidcreated');
-                $status   = $this->getApprovalStatus();
-                while ($row = $res->fetchRow()) {
-                    $e = UNL_UCBCN::factory('event');
-                    if ($e->get($row[0]) && $calendar !== false) {
-                        $calendar->addEvent($e, $status, $user, 'subscription');
-                        $added++;
-                    }
-                }
-                // restore process subscriptions to what it was before.
-                Event::processSubscriptions($process_subscriptions);
-                self::updateSubscribedCalendars($this->calendar_id, $event_id);
-            }
-        }
-        return $added;
+
     }
     
     /**
@@ -215,17 +193,7 @@ class Subscription extends Record
      */
     public function matchingEvents($exclude_existing = true, $event_id = null)
     {
-        $mdb2 =& $this->getDatabaseConnection();
-        $sql  = 'SELECT DISTINCT event.id FROM event,calendar_has_event WHERE calendar_has_event.event_id = event.id
-                 AND ('.$this->searchcriteria.') AND calendar_has_event.status != \'pending\' AND event.approvedforcirculation = 1';
-        if ($exclude_existing) {
-            $sql .= ' AND event.id NOT IN (SELECT DISTINCT event.id FROM event, calendar_has_event AS c2 WHERE c2.calendar_id ='.$this->calendar_id.' AND c2.event_id = event.id)';
-        }
-        if (isset($event_id)) {
-            $sql .= ' AND event.id = '.$event_id;
-        }
-        $res =& $mdb2->query($sql);
-        return $res;
+
     }
     
     /**
@@ -239,14 +207,6 @@ class Subscription extends Record
      */
     public function updateSubscribedCalendars($calendar_id, $event_id = null)
     {
-        $updated       = 0;
-        $subscriptions = new Subscribers(array('calendar_id'=>$calendar_id));
-        foreach ($subscriptions as $subscription) {
-            if ($subscription->process($event_id)) {
-                // Events were added.
-                $updated++;
-            }
-        }
-        return $updated;
+
     }
 }
