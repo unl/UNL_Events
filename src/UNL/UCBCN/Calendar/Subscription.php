@@ -51,23 +51,6 @@ class Subscription extends Record
         return 'subscription';
     }
 
-    function table()
-    {
-        return array(
-            'id'=>129,
-            'calendar_id'=>129,
-            'name'=>2,
-            'automaticapproval'=>145,
-            'timeperiod'=>6,
-            'expirationdate'=>6,
-            'searchcriteria'=>66,
-            'datecreated'=>14,
-            'uidcreated'=>2,
-            'datelastupdated'=>14,
-            'uidlastupdated'=>2,
-        );
-    }
-
     function keys()
     {
         return array(
@@ -75,18 +58,6 @@ class Subscription extends Record
         );
     }
     
-    function sequenceKey()
-    {
-        return array('id',true);
-    }
-    
-    function links()
-    {
-        return array('calendar_id'    => 'calendar:id',
-                     'uidcreated'     => 'user:uid',
-                     'uidlastupdated' => 'user:uid');
-    }
-
     public function getNewURL($calendar) {
         return ManagerController::$url . $calendar->shortname . '/subscriptions/new/';
     }
