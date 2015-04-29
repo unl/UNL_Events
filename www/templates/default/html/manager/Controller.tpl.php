@@ -1,174 +1,74 @@
 <?php
-if (!isset($GLOBALS['unl_template_dependents'])) {
-    $GLOBALS['unl_template_dependents'] = $_SERVER['DOCUMENT_ROOT'];
+UNL_Templates::$options['version'] = 4.0;
+$page = UNL_Templates::factory('Fixed');
+
+$title = '';
+$site_title = 'UNL Events';
+if (!$context->getCalendar()) {
+    $title .= 'Page Not Found - UNL Events';
+} else {
+    $title .= 'UNL';
+    if ($context->getCalendar()->id != UNL\UCBCN\Frontend\Controller::$default_calendar_id) {
+        $title .= ' | '.$context->getCalendar()->name.' ';
+    }
+    $title .= ' | Manger | Events';
+    $site_title = $context->getCalendar()->name . ' Events';
+}
+$view_class = str_replace('\\', '_', strtolower($context->options['model']));
+
+//Document titles
+$page->doctitle     = '<title>' . $title . '</title>';
+$page->titlegraphic = $site_title;
+$page->pagetitle    = '';
+
+//css
+$page->addStyleSheet($base_frontend_url.'templates/default/html/css/events.css');
+
+//javascript
+$page->head .= '<script>var frontend_url = "'.$base_frontend_url.'";</script>' . PHP_EOL;
+$page->head .= '<script>var manager_url = "'.$base_manager_url.'";</script>' . PHP_EOL;
+$page->addScript($base_frontend_url.'templates/default/html/js/events.min.js');
+
+//other
+$page->leftRandomPromo = '';
+$page->breadcrumbs = '
+<ul>
+    <li><a href="http://www.unl.edu/">UNL</a></li>
+    <li><a href="' . $base_frontend_url .'">UNL Events</a></li>
+    <li>Manage Events</li>
+</ul>';
+//$page->navlinks = $savvy->render(null, 'Navigation.tpl.php');
+$savvy->addGlobal('page', $page);
+
+//Render output
+$template = null;
+if ($context->output->getRawObject() instanceof Exception) {
+    $template = 'Exception.tpl.php';
 }
 
-$view_class = str_replace('\\', '_', strtolower($context->options['model']));
-?>
-<!DOCTYPE html>
-<!--[if IEMobile 7 ]><html class="ie iem7"><![endif]-->
-<!--[if lt IE 7 ]><html class="ie ie6" lang="en"><![endif]-->
-<!--[if IE 7 ]><html class="ie ie7" lang="en"><![endif]-->
-<!--[if IE 8 ]><html class="ie ie8" lang="en"><![endif]-->
-<!--[if (gte IE 9)|(gt IEMobile 7) ]><html class="ie" lang="en"><![endif]-->
-<!--[if !(IEMobile) | !(IE)]><!--><html lang="en"><!-- InstanceBegin template="/Templates/fixed.dwt" codeOutsideHTMLIsLocked="false" --><!--<![endif]-->
-<head>
-    <?php include_once $GLOBALS['unl_template_dependents'].'/wdn/templates_4.0/includes/metanfavico.html'; ?>
-    <!--
-        Membership and regular participation in the UNL Web Developer Network
-        is required to use the UNL templates. Visit the WDN site at
-        http://wdn.unl.edu/. Click the WDN Registry link to log in and
-        register your unl.edu site.
-        All UNL template code is the property of the UNL Web Developer Network.
-        The code seen in a source code view is not, and may not be used as, a
-        template. You may not use this code, a reverse-engineered version of
-        this code, or its associated visual presentation in whole or in part to
-        create a derivative work.
-        This message may not be removed from any pages based on the UNL site template.
+$page->maincontentarea = '
+<div class="wdn-band view-' . $view_class . ' band-results">
+    <div class="wdn-inner-wrapper">
+        <section class="wdn-grid-set">
+            <div class="wdn-col-one-fourth">
+                <h3>My Calendars</h3>
+                ' . $savvy->render($context, 'navigation.tpl.php') . '
+            </div>
+            <div class="wdn-col-three-fourths">
+                ' . $savvy->render($context->output, $template) . '
+           </div>
+        </section>
+    </div>
+</div>';
 
-        $Id: fixed.dwt | 252c2891a48c70db689be6d897d4f34768b8258a | Thu Aug 1 15:08:19 2013 -0500 | Kevin Abel  $
-    -->
-    <?php include_once $GLOBALS['unl_template_dependents'].'/wdn/templates_4.0/includes/scriptsandstyles.html'; ?>
-    <!-- InstanceBeginEditable name="doctitle" -->
-    <title>UNL Events Manager</title>
-    <!-- InstanceEndEditable -->
-    <!-- InstanceBeginEditable name="head" -->
-    <!-- Place optional header elements here -->
-    <link rel="stylesheet" type="text/css" media="screen" href="<?php echo $base_frontend_url ?>templates/default/html/css/events.css" />
-    <script id="script_main" src="<?php echo $base_frontend_url ?>templates/default/html/js/events.min.js"></script>
-    <!-- InstanceEndEditable -->
-    <!-- InstanceParam name="class" type="text" value="" -->
-</head>
-<body class="terminal" data-version="4.0">
-<?php include_once $GLOBALS['unl_template_dependents'].'/wdn/templates_4.0/includes/skipnav.html'; ?>
-<div id="wdn_wrapper">
-    <input type="checkbox" id="wdn_menu_toggle" value="Show navigation menu" class="wdn-content-slide wdn-input-driver" />
-    <?php include_once $GLOBALS['unl_template_dependents'].'/wdn/templates_4.0/includes/noscript-padding.html'; ?>
-    <header id="header" role="banner" class="wdn-content-slide wdn-band">
-        <?php include_once $GLOBALS['unl_template_dependents'].'/wdn/templates_4.0/includes/wdnResources.html'; ?>
-        <div class="wdn-inner-wrapper">
-            <?php include_once $GLOBALS['unl_template_dependents'].'/wdn/templates_4.0/includes/logo.html'; ?>
-            <div id="wdn_resources">
-                <?php include_once $GLOBALS['unl_template_dependents'].'/wdn/templates_4.0/includes/idm.html'; ?>
-                <?php include_once $GLOBALS['unl_template_dependents'].'/wdn/templates_4.0/includes/wdnTools.html'; ?>
-            </div>
-            <span id="wdn_institution_title">University of Nebraska&ndash;Lincoln</span>
-        </div>
-        <?php include_once $GLOBALS['unl_template_dependents'].'/wdn/templates_4.0/includes/apps.html'; ?>
-        <div class="wdn-inner-wrapper">
-            <div id="wdn_site_title">
-            </div>
-        </div>
-    </header>
-    <div id="wdn_navigation_bar" role="navigation" class="wdn-band">
-        <nav id="breadcrumbs" class="wdn-inner-wrapper">
-            <!-- WDN: see glossary item 'breadcrumbs' -->
-            <h3 class="wdn_list_descriptor wdn-text-hidden">Breadcrumbs</h3>
-            <!-- InstanceBeginEditable name="breadcrumbs" -->
-            <!-- InstanceEndEditable -->
-        </nav>
-        <div id="wdn_navigation_wrapper">
-            <nav id="navigation" role="navigation" class="wdn-band">
-                <h3 class="wdn_list_descriptor wdn-text-hidden">Navigation</h3>
-                <!-- InstanceBeginEditable name="navlinks" -->
-                <!-- InstanceEndEditable -->
-                <label for="wdn_menu_toggle" class="wdn-icon-menu">Menu</label>
-            </nav>
-        </div>
-    </div>
-    <!-- Navigation Trigger -->
-    <div class="wdn-menu-trigger wdn-content-slide">
-        <label for="wdn_menu_toggle" class="wdn-icon-menu">Menu</label>
-    </div>
-    <!-- End navigation trigger -->
-    <div id="wdn_content_wrapper" role="main" class="wdn-content-slide">
-        <div class="wdn-band">
-            <div class="wdn-inner-wrapper">
-                <div id="pagetitle">
-                    <!-- InstanceBeginEditable name="pagetitle" -->
-                    <!-- InstanceEndEditable -->
-                </div>
-            </div>
-        </div>
-        <div id="maincontent" class="wdn-main">
-            <!--THIS IS THE MAIN CONTENT AREA; WDN: see glossary item 'main content area' -->
-            <!-- InstanceBeginEditable name="maincontentarea" -->
-            <div class="wdn-band view-<?php echo $view_class; ?> band-results">
-                <div class="wdn-inner-wrapper">
-                <section class="wdn-grid-set">
-                    <div class="wdn-col-one-fourth">
-                    <h3>My Calendars</h3>
-                        <?php foreach ($context->getCalendars() as $calendar) { ?>
-                            <?php if ($calendar->shortname == $context->calendar->shortname) { ?>
-                                <div style="background: #CCCCCC;"><?php echo $calendar->name ?></div>
-                                <ul>
-                                    <li><small><a href="<?php echo $calendar->getFrontendURL() ?>">Live Calendar</a></small></li>
-                                    <li><small><a href="<?php echo $calendar->getEditURL() ?>">Edit Calendar Info</a></small></li>
-                                    <li><small><a href="<?php echo $calendar->getFrontendURL() ?>">Subscriptions</a></small></li>
-                                    <li><small><a href="<?php echo $calendar->getFrontendURL() ?>">Users &amp; Permissions</a></small></li>
-                                </ul>
-                            <?php } else { ?>
-                                <a href="<?php echo $calendar->getManageURL() ?>"><?php echo $calendar->name ?></a><br>
-                            <?php } ?>
-                        <?php } ?>
-                        <br>
-                        <a href="<?php echo $base_manager_url ?>calendar/new" class="wdn-button wdn-button-brand">+ New Calendar</a><br>
-                        <br>
-                        <a href="<?php echo $calendar->getFrontendURL() ?>">Account Info</a><br>
-                        <a href="<?php echo $calendar->getFrontendURL() ?>">InDesign Tags Export</a><br>
-                    </div>
-                    <div class="wdn-col-three-fourths">
-                    <?php
-                        $template = null;
-                        if ($context->output->getRawObject() instanceof Exception) {
-                            $template = 'Exception.tpl.php';
-                        }
-                        echo $savvy->render($context->output, $template);
-                    ?>
-                    </div>
-                </div>
-            </div>
-            <!-- InstanceEndEditable -->
-            <!--THIS IS THE END OF THE MAIN CONTENT AREA.-->
-        </div>
-    </div>
-    <div class="wdn-band wdn-content-slide" id="wdn_optional_footer">
-        <div class="wdn-inner-wrapper">
-            <!-- InstanceBeginEditable name="optionalfooter" -->
-            <!-- InstanceEndEditable -->
-        </div>
-    </div>
-    <footer id="footer" role="contentinfo" class="wdn-content-slide">
-        <div class="wdn-band" id="wdn_footer_related">
-            <div class="wdn-inner-wrapper">
-                <!-- InstanceBeginEditable name="leftcollinks" -->
-                <!-- InstanceEndEditable -->
-            </div>
-        </div>
-        <div class="wdn-band">
-            <div class="wdn-inner-wrapper">
-                <div class="footer_col" id="wdn_footer_contact">
-                    <h3>Contact Us</h3>
-                    <div class="wdn-contact-wrapper">
-                        <!-- InstanceBeginEditable name="contactinfo" -->
-                        <!-- InstanceEndEditable -->
-                    </div>
-                </div>
-                <div id="wdn_copyright">
-                    <div class="wdn-footer-text">
-                        <!-- InstanceBeginEditable name="footercontent" -->
-                        Powered by <a href="http://code.google.com/p/unl-event-publisher/">UNL Event Publisher</a>. Yeah, it's open source<br />
-                        &copy; <?php echo date('Y'); ?> University of Nebraska&ndash;Lincoln
-                        <!-- InstanceEndEditable -->
-                        <?php include_once $GLOBALS['unl_template_dependents'].'/wdn/templates_4.0/includes/wdn.html'; ?>
-                    </div>
-                    <?php include_once $GLOBALS['unl_template_dependents'].'/wdn/templates_4.0/includes/logos.html'; ?>
-                </div>
-            </div>
-        </div>
-        <?php include_once $GLOBALS['unl_template_dependents'].'/wdn/templates_4.0/includes/footer_floater.html'; ?>
-    </footer>
-    <?php include_once $GLOBALS['unl_template_dependents'].'/wdn/templates_4.0/includes/noscript.html'; ?>
-</div>
-</body>
-<!-- InstanceEnd --></html>
+
+$page->contactinfo = '
+<p>University of Nebraska&ndash;Lincoln<br />
+1400 R Street<br />
+Lincoln, NE 68588<br />
+402-472-7211</p>';
+$page->footercontent = $page->footercontent = '© '.date('Y').' University of Nebraska–Lincoln · Lincoln, NE 68588 · 402-472-7211<br />
+    The University of Nebraska–Lincoln is an <a href="http://www.unl.edu/equity/">equal opportunity</a> educator and employer.';
+
+//echo everything
+echo $page;
