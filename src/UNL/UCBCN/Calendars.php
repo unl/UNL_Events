@@ -34,6 +34,11 @@ class Calendars extends RecordList
                 INNER JOIN user ON user_has_permission.user_uid = user.uid
                 WHERE user.uid = "' . self::escapeString($this->options['user_id']) . '";';
             return $sql;
+        } else if (array_key_exists('subscription_id', $this->options)) {
+            $sql = '
+                SELECT calendar_id FROM subscription_has_calendar
+                WHERE subscription_id = ' . (int)$this->options['subscription_id'] . ';';
+            return $sql;
         } else {
             return parent::getSQL();
         }

@@ -2,6 +2,9 @@
 namespace UNL\UCBCN\Calendar;
 
 use UNL\UCBCN\ActiveRecord\Record;
+use UNL\UCBCN\Calendar;
+use UNL\UCBCN\Calendars;
+use UNL\UCBCN\Events;
 use UNL\UCBCN\Manager\Controller as ManagerController;
 use UNL\UCBCN\Manager\Auth;
 
@@ -92,29 +95,9 @@ class Subscription extends Record
         return ManagerController::$url . $calendar->shortname . '/subscriptions/' . $this->id . '/edit/';
     }
 
-    /**
-     * Translates search criteria into calendars.
-     *
-     * @param string $searchcriteria Array of calendars to check.
-     *
-     * @return array Array of the calendars which match this criteria.
-     */
-    public function getCalendars($searchcriteria)
-    {
-        $searchcriteria = explode('=', $searchcriteria);
-        $cals           = array();
-        foreach ($searchcriteria as $c) {
-            $calids = array();
-            if (preg_match('/[^\d]*([\d]+)[^\d]*/', $c, $calids)) {
-                if ($calids[1] != 0) {
-                    $cals[] = intval($calids[1]);
-                }
-            }
-        }
-        return $cals;
+    public function getCalendar() {
+        return Calendar::getByID($this->calendar_id);
     }
-
-
 
     /**
      * Inserts a record into the subscription table, and processes the subscription
@@ -127,9 +110,7 @@ class Subscription extends Record
         $this->datecreated = date('Y-m-d H:i:s');
         $this->uidcreated = Auth::getCurrentUser()->uid;
         $result = parent::insert();
-        if ($result) {
-            $this->process();
-        }
+
         return $result;
     }
     
@@ -146,9 +127,7 @@ class Subscription extends Record
         $this->datelastupdated = date('Y-m-d H:i:s');
         $this->uidlastupdated = Auth::getCurrentUser()->uid;
         $result = parent::update();
-        if ($result) {
-            $this->process();
-        }
+
         return $result;
     }
     
@@ -162,7 +141,10 @@ class Subscription extends Record
      */
     public function process($event_id = null)
     {
-
+        $status = $this->getApprovalStatus();
+        foreach ($this->matchingEvents() as $event) {
+            $this->getCalendar()->addEvent($event, $status, Auth::getCurrentUser(), 'subscription');
+        }
     }
     
     /**
@@ -185,15 +167,30 @@ class Subscription extends Record
     
     /**
      * Finds the events matching this subscription.
-     *
-     * @param bool $exclude_existing If existing events on this calendar should be excluded.
-     * @param int  $event_id         Optional parameter for checking an individual event.
-     *
-     * @return MDB2_Result
      */
-    public function matchingEvents($exclude_existing = true, $event_id = null)
+    public function matchingEvents()
     {
+        $calendars = $this->getSubscribedCalendars();
+        $calendar_ids = array();
+        foreach ($calendars as $calendar) {
+            $calendar_ids[] = $calendar->id;
+        }
 
+        error_log(print_r($calendar_ids, 1));
+
+        $options = array(
+            'subscription_calendars' => $calendar_ids,
+            'subscription_calendar' => $this->calendar_id
+        );
+        return new Events($options);
+    }
+
+    public function getSubscribedCalendars()
+    {
+        $options = array(
+            'subscription_id' => $this->id
+        );
+        return new Calendars($options);
     }
     
     /**

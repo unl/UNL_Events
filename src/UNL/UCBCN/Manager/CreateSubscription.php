@@ -67,6 +67,8 @@ class CreateSubscription
             $sub_has_calendar->insert();
         }
 
+        $subscription->process();
+
         return $subscription;
     }
 
