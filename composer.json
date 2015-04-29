@@ -7,7 +7,10 @@
         "misd/linkify": "1.1.*",
         "simple-cas/simple-cas": "dev-master",
         "pear-pear.php.net/HTTP_Request2": "*",
-        "tedivm/stash": "0.12.*"
+        "tedivm/stash": "0.12.*",
+        "unl/php-dwt-parser": "0.9.*",
+        "unl/php-unl-templates": "1.4.*",
+        "unl/unl_cache_lite": "0.1.*"
     },
     "repositories": [
         {
@@ -17,6 +20,18 @@
         {
             "type": "pear",
             "url": "http://pear.php.net"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/unl/phpdwtparser.git"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/unl/phpunltemplates.git"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/unlpear/UNL_Cache_Lite.git"
         }
     ]
 }
