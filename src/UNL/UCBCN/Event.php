@@ -72,47 +72,6 @@ class Event extends Record
         return 'event';
     }
 
-    /**
-     * Returns an associative array of the fields for this table.
-     *
-     * @return array
-     */
-    public function table()
-    {
-        $table = array(
-            'id'=>129,
-            'title'=>130,
-            'subtitle'=>2,
-            'othereventtype'=>2,
-            'description'=>66,
-            'shortdescription'=>2,
-            'refreshments'=>2,
-            'classification'=>2,
-            'approvedforcirculation'=>17,
-            'transparency'=>2,
-            'status'=>2,
-            'privatecomment'=>66,
-            'otherkeywords'=>2,
-            'imagetitle'=>2,
-            'imageurl'=>66,
-            'webpageurl'=>66,
-            'listingcontactuid'=>2,
-            'listingcontactname'=>2,
-            'listingcontactphone'=>2,
-            'listingcontactemail'=>2,
-            'icalendar'=>66,
-            'imagedata'=>66,
-            'imagemime'=>2,
-            'datecreated'=>14,
-            'uidcreated'=>2,
-            'datelastupdated'=>14,
-            'uidlastupdated'=>2
-        );
-
-        return $table;
-
-    }
-
     function keys()
     {
         return array(
@@ -120,18 +79,6 @@ class Event extends Record
         );
     }
     
-    function sequenceKey()
-    {
-        return array('id',true);
-    }
-    
-    function links()
-    {
-        return array('listingcontactuid' => 'users:uid',
-                     'uidcreated'        => 'users:uid',
-                     'uidlastupdated'    => 'users:uid');
-    }
-
     function getDatetimes() {
         $options = array(
             'event_id' => $this->id
@@ -273,19 +220,25 @@ class Event extends Record
 
     /**
      * Inserts a new event in the database.
+     * Optionally may be passed a calendar to immediately add the event to a calendar.
+     * (recommended)
      *
      * @return bool
      */
-    public function insert()
+    public function insert($calendar = null, $source = null)
     {
         $this->processFileAttachments();
 
         $this->datecreated = date('Y-m-d H:i:s');
         $this->datelastupdated = date('Y-m-d H:i:s');
 
-        $this->uidcreated = $_SESSION['__SIMPLECAS']['UID'];
-        $this->uidlastupdated = $_SESSION['__SIMPLECAS']['UID'];
+        $this->uidcreated = Auth::getCurrentUser();
+        $this->uidlastupdated = Auth::getCurrentUser();
         $result = parent::insert();
+
+        if (!empty($calendar)) {
+            $calendar->addEvent($this, 'pending', Auth::getCurrentUser(), $source);
+        }
 
         return $result;
     }

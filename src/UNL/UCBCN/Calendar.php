@@ -160,7 +160,7 @@ class Calendar extends Record
     }
     
     /**
-     * Adds the event to the current calendar.
+     * Adds the event to the current calendar, and updates subscribed calendars with the same event.
      *
      * @param UNL_UCBCN_Event $event
      * @param string          $status posted | pending | archived
@@ -175,17 +175,27 @@ class Calendar extends Record
 
         $calendar_has_event->calendar_id = $this->id;
         $calendar_has_event->event_id = $event->id;
-        $calendar_has_event->uidcreated = $user->uid;
-        $calendar_has_event->datecreated = date('Y-m-d H:i:s');
-        $calendar_has_event->datelastupdated = date('Y-m-d H:i:s');
-        $calendar_has_event->uidlastupdated = $user->uid;
         $calendar_has_event->status = $status;
+        $calendar_has_event->source = $source;
 
-        if (isset($source)) {
-            $calendar_has_event->source = $source;
+        $result = $calendar_has_event->insert();
+
+        if ($result && $event->approvedforcirculation) {
+            # get the subscribed calendars and similarly add the event to them.
+            # we use the insert method instead of reusing addEvent because we do not want an infinite loop
+            foreach ($this->getSubscriptions() as $subscription) {
+                foreach ($subscription->getSubscribedCalendars() as $calendar) {
+                    $calendar_has_event = new CalendarHasEvent;
+
+                    $calendar_has_event->calendar_id = $calendar->id;
+                    $calendar_has_event->event_id = $event->id;
+                    $calendar_has_event->status = $subscription->getApprovalStatus();
+                    $calendar_has_event->source = 'subscription';
+
+                    $calendar_has_event->insert();
+                }   
+            }
         }
-
-        return $calendar_has_event->insert();
     }
     
     /**
@@ -217,6 +227,10 @@ class Calendar extends Record
         # create new events class. On constructor it will get the stuff
         $events = new Events($options);
         return $events;
+    }
+
+    public function getSubscriptions() {
+        return new Calendar\Subscriptions(array('calendar_id'=>$this->id));
     }
 
     /**

@@ -71,10 +71,7 @@ class CreateEvent
 
         $add_to_default = array_key_exists('send_to_main', $post_data) && 
             $post_data['send_to_main'] == 'on';
-        $event->insert();
-
-        # add the event to the calendar we are saving it on
-        $this->calendar->addEvent($event, 'pending', $user, 'create event form');
+        $event->insert($this->calendar, 'create event form');
 
         # add the event type record
         $event_has_type = new EventType;
