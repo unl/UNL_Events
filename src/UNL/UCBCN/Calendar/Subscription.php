@@ -40,7 +40,6 @@ class Subscription extends Record
     public $automaticapproval;               // int(1)  not_null
     public $timeperiod;                      // date(10)  binary
     public $expirationdate;                  // date(10)  binary
-    public $searchcriteria;                  // blob(4294967295)  blob
     public $datecreated;                     // datetime(19)  binary
     public $uidcreated;                      // string(100)
     public $datelastupdated;                 // datetime(19)  binary
@@ -146,8 +145,6 @@ class Subscription extends Record
         foreach ($calendars as $calendar) {
             $calendar_ids[] = $calendar->id;
         }
-
-        error_log(print_r($calendar_ids, 1));
 
         $options = array(
             'subscription_calendars' => $calendar_ids,
