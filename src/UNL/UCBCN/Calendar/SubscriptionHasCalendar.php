@@ -17,30 +17,10 @@ class SubscriptionHasCalendar extends Record
         return 'subscription_has_calendar';
     }
 
-    function table()
-    {
-        return array(
-            'id'=>129,
-            'subscription_id'=>129,
-            'calendar_id'=>129
-        );
-    }
-
     function keys()
     {
         return array(
             'id',
         );
-    }
-    
-    function sequenceKey()
-    {
-        return array('id',true);
-    }
-    
-    function links()
-    {
-        return array('calendar_id'    => 'calendar:id',
-                     'subscription_id'     => 'subscription:id');
     }
 }
