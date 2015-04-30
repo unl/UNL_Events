@@ -2,6 +2,12 @@
 namespace UNL\UCBCN\Calendar;
 
 use UNL\UCBCN\ActiveRecord\Record;
+use UNL\UCBCN\Calendar;
+use UNL\UCBCN\Calendars;
+use UNL\UCBCN\Events;
+use UNL\UCBCN\Manager\Controller as ManagerController;
+use UNL\UCBCN\Manager\Auth;
+
 /**
  * Table Definition for subscription
  *
@@ -34,7 +40,6 @@ class Subscription extends Record
     public $automaticapproval;               // int(1)  not_null
     public $timeperiod;                      // date(10)  binary
     public $expirationdate;                  // date(10)  binary
-    public $searchcriteria;                  // blob(4294967295)  blob
     public $datecreated;                     // datetime(19)  binary
     public $uidcreated;                      // string(100)
     public $datelastupdated;                 // datetime(19)  binary
@@ -45,23 +50,6 @@ class Subscription extends Record
         return 'subscription';
     }
 
-    function table()
-    {
-        return array(
-            'id'=>129,
-            'calendar_id'=>129,
-            'name'=>2,
-            'automaticapproval'=>145,
-            'timeperiod'=>6,
-            'expirationdate'=>6,
-            'searchcriteria'=>66,
-            'datecreated'=>14,
-            'uidcreated'=>2,
-            'datelastupdated'=>14,
-            'uidlastupdated'=>2,
-        );
-    }
-
     function keys()
     {
         return array(
@@ -69,38 +57,17 @@ class Subscription extends Record
         );
     }
     
-    function sequenceKey()
-    {
-        return array('id',true);
-    }
-    
-    function links()
-    {
-        return array('calendar_id'    => 'calendar:id',
-                     'uidcreated'     => 'user:uid',
-                     'uidlastupdated' => 'user:uid');
+    public function getNewURL($calendar) {
+        return ManagerController::$url . $calendar->shortname . '/subscriptions/new/';
     }
 
-    /**
-     * Translates search criteria into calendars.
-     *
-     * @param string $searchcriteria Array of calendars to check.
-     *
-     * @return array Array of the calendars which match this criteria.
-     */
-    public function getCalendars($searchcriteria)
-    {
-        $searchcriteria = explode('=', $searchcriteria);
-        $cals           = array();
-        foreach ($searchcriteria as $c) {
-            $calids = array();
-            if (preg_match('/[^\d]*([\d]+)[^\d]*/', $c, $calids)) {
-                if ($calids[1] != 0) {
-                    $cals[] = intval($calids[1]);
-                }
-            }
-        }
-        return $cals;
+    public function getEditURL() {
+        $calendar = $this->getCalendar();
+        return ManagerController::$url . $calendar->shortname . '/subscriptions/' . $this->id . '/edit/';
+    }
+
+    public function getCalendar() {
+        return Calendar::getByID($this->calendar_id);
     }
 
     /**
@@ -111,20 +78,10 @@ class Subscription extends Record
      */
     public function insert()
     {
-        global $_UNL_UCBCN;
-        $this->datecreated     = date('Y-m-d H:i:s');
-        $this->datelastupdated = date('Y-m-d H:i:s');
-        if (isset($_SESSION['_authsession'])) {
-            $this->uidcreated     = $_SESSION['_authsession']['username'];
-            $this->uidlastupdated = $_SESSION['_authsession']['username'];
-        }
+        $this->datecreated = date('Y-m-d H:i:s');
+        $this->uidcreated = Auth::getCurrentUser()->uid;
         $result = parent::insert();
-        if ($result) {
-            // If insert was successful, process the subscription immediately if the user chose so.
-            if ($this->process()) {
-                // Events were added to the current calendar.
-            }
-        }
+
         return $result;
     }
     
@@ -139,16 +96,9 @@ class Subscription extends Record
     public function update()
     {
         $this->datelastupdated = date('Y-m-d H:i:s');
-        if (isset($_SESSION['_authsession'])) {
-            $this->uidlastupdated = $_SESSION['_authsession']['username'];
-        }
+        $this->uidlastupdated = Auth::getCurrentUser()->uid;
         $result = parent::update();
-        if ($result) {
-            // If insert was successful, process the subscription immediately if the user chose so.
-            if ($this->process()) {
-                // Events were added to the current calendar.
-            }
-        }
+
         return $result;
     }
     
@@ -162,29 +112,10 @@ class Subscription extends Record
      */
     public function process($event_id = null)
     {
-        $added = 0;
-        if (isset($this->id) && isset($this->calendar_id)) {
-            $res =& $this->matchingEvents(true, $event_id);
-            if ($res->numRows()) {
-                // There are events to insert, postpone any subscription processing until we're done.
-                $process_subscriptions = Event::processSubscriptions();
-                Event::processSubscriptions(false);
-                $calendar = $this->getLink('calendar_id');
-                $user     = $this->getLink('uidcreated');
-                $status   = $this->getApprovalStatus();
-                while ($row = $res->fetchRow()) {
-                    $e = UNL_UCBCN::factory('event');
-                    if ($e->get($row[0]) && $calendar !== false) {
-                        $calendar->addEvent($e, $status, $user, 'subscription');
-                        $added++;
-                    }
-                }
-                // restore process subscriptions to what it was before.
-                Event::processSubscriptions($process_subscriptions);
-                self::updateSubscribedCalendars($this->calendar_id, $event_id);
-            }
+        $status = $this->getApprovalStatus();
+        foreach ($this->matchingEvents() as $event) {
+            $this->getCalendar()->addEvent($event, $status, Auth::getCurrentUser(), 'subscription');
         }
-        return $added;
     }
     
     /**
@@ -207,25 +138,28 @@ class Subscription extends Record
     
     /**
      * Finds the events matching this subscription.
-     *
-     * @param bool $exclude_existing If existing events on this calendar should be excluded.
-     * @param int  $event_id         Optional parameter for checking an individual event.
-     *
-     * @return MDB2_Result
      */
-    public function matchingEvents($exclude_existing = true, $event_id = null)
+    public function matchingEvents()
     {
-        $mdb2 =& $this->getDatabaseConnection();
-        $sql  = 'SELECT DISTINCT event.id FROM event,calendar_has_event WHERE calendar_has_event.event_id = event.id
-                 AND ('.$this->searchcriteria.') AND calendar_has_event.status != \'pending\' AND event.approvedforcirculation = 1';
-        if ($exclude_existing) {
-            $sql .= ' AND event.id NOT IN (SELECT DISTINCT event.id FROM event, calendar_has_event AS c2 WHERE c2.calendar_id ='.$this->calendar_id.' AND c2.event_id = event.id)';
+        $calendars = $this->getSubscribedCalendars();
+        $calendar_ids = array();
+        foreach ($calendars as $calendar) {
+            $calendar_ids[] = $calendar->id;
         }
-        if (isset($event_id)) {
-            $sql .= ' AND event.id = '.$event_id;
-        }
-        $res =& $mdb2->query($sql);
-        return $res;
+
+        $options = array(
+            'subscription_calendars' => $calendar_ids,
+            'subscription_calendar' => $this->calendar_id
+        );
+        return new Events($options);
+    }
+
+    public function getSubscribedCalendars()
+    {
+        $options = array(
+            'subscription_id' => $this->id
+        );
+        return new Calendars($options);
     }
     
     /**
@@ -239,14 +173,6 @@ class Subscription extends Record
      */
     public function updateSubscribedCalendars($calendar_id, $event_id = null)
     {
-        $updated       = 0;
-        $subscriptions = new Subscribers(array('calendar_id'=>$calendar_id));
-        foreach ($subscriptions as $subscription) {
-            if ($subscription->process($event_id)) {
-                // Events were added.
-                $updated++;
-            }
-        }
-        return $updated;
+
     }
 }

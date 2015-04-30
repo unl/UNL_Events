@@ -1,9 +1,18 @@
 <?php
 namespace UNL\UCBCN\Calendar;
+use UNL\UCBCN\ActiveRecord\RecordList;
 
-class Subscriptions extends \UNL\UCBCN\Subscriptions
+class Subscriptions extends RecordList
 {
     protected $calendar_id;
+
+    public function getDefaultOptions() {
+        return array(
+            'listClass' =>  __CLASS__,
+            'itemClass' => __NAMESPACE__ . '\\Subscription',
+        );
+    }
+
     function __construct($options = array())
     {
         if (!isset($options['calendar_id'])) {
@@ -14,7 +23,7 @@ class Subscriptions extends \UNL\UCBCN\Subscriptions
 
     function getSQL()
     {
-        $sql = 'SELECT * FROM calendar_has_subscription WHERE calendar_id = '.(int)$this->options['calendar_id']';
+        $sql = 'SELECT id FROM subscription WHERE calendar_id = ' . (int)$this->options['calendar_id'] . ';';
         return $sql;
     }
 }

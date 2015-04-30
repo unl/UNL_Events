@@ -45,7 +45,7 @@
                 <div class="wdn-col-one-third">
                     <?php foreach($event->getDateTimes() as $datetime) { ?>
                         <?php echo date('n/j/y @ h:ia', strtotime($datetime->starttime)); ?>
-                        <?php echo $datetime->getLocation()->name; ?>
+                        <?php if (!empty($location = $datetime->getLocation())) echo $location->name; ?>
                     <?php } ?>
                 </div>
                 <div class="wdn-col-one-third">

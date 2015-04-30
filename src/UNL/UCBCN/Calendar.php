@@ -117,6 +117,10 @@ class Calendar extends Record
         return ManagerController::$url . $this->shortname . '/edit/';
     }
 
+    public function getSubscriptionsURL() {
+        return ManagerController::$url . $this->shortname . '/subscriptions/';
+    }
+
     /**
      * Adds a user to the calendar. Grants all permissions to the
      * user for the current calendar.
