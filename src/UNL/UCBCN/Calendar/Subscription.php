@@ -80,6 +80,8 @@ class Subscription extends Record
     {
         $this->datecreated = date('Y-m-d H:i:s');
         $this->uidcreated = Auth::getCurrentUser()->uid;
+        $this->datelastupdated = date('Y-m-d H:i:s');
+        $this->uidlastupdated = Auth::getCurrentUser()->uid;
         $result = parent::insert();
 
         return $result;
@@ -146,6 +148,8 @@ class Subscription extends Record
         foreach ($calendars as $calendar) {
             $calendar_ids[] = $calendar->id;
         }
+
+        error_log(print_r($calendar_ids, 1));
 
         $options = array(
             'subscription_calendars' => $calendar_ids,

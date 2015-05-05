@@ -7,6 +7,7 @@ use UNL\UCBCN\Calendar\Event as CalendarHasEvent;
 use UNL\UCBCN\Event\Occurrences;
 use UNL\UCBCN\Event\RecurringDate;
 use UNL\UCBCN\EventListing;
+use UNL\UCBCN\Manager\Auth;
 
 /**
  * Table Definition for event

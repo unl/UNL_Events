@@ -6,6 +6,7 @@ use UNL\UCBCN\Events;
 use UNL\UCBCN\Frontend\Controller as FrontendController;
 use UNL\UCBCN\Manager\Controller as ManagerController;
 use UNL\UCBCN\Calendar\Event as CalendarHasEvent;
+use UNL\UCBCN\Calendar\Subscriptions;
 /**
  * Details related to a calendar within the UNL Event Publisher system.
  *
@@ -183,17 +184,18 @@ class Calendar extends Record
         if ($result && $event->approvedforcirculation) {
             # get the subscribed calendars and similarly add the event to them.
             # we use the insert method instead of reusing addEvent because we do not want an infinite loop
-            foreach ($this->getSubscriptions() as $subscription) {
-                foreach ($subscription->getSubscribedCalendars() as $calendar) {
-                    $calendar_has_event = new CalendarHasEvent;
+            foreach ($this->getSubscriptionsToThis() as $subscription) {
+                # it's confusing, but for each subscription which has this calendar as a 
+                # subscribed calendar, take that subscription, find what calendar it is
+                # attached to, and add a calendar_has_event record
+                $calendar_has_event = new CalendarHasEvent;
 
-                    $calendar_has_event->calendar_id = $calendar->id;
-                    $calendar_has_event->event_id = $event->id;
-                    $calendar_has_event->status = $subscription->getApprovalStatus();
-                    $calendar_has_event->source = 'subscription';
+                $calendar_has_event->calendar_id = $subscription->calendar_id;
+                $calendar_has_event->event_id = $event->id;
+                $calendar_has_event->status = $subscription->getApprovalStatus();
+                $calendar_has_event->source = 'subscription';
 
-                    $calendar_has_event->insert();
-                }   
+                $calendar_has_event->insert();
             }
         }
     }
@@ -230,7 +232,11 @@ class Calendar extends Record
     }
 
     public function getSubscriptions() {
-        return new Calendar\Subscriptions(array('calendar_id'=>$this->id));
+        return new Calendar\Subscriptions(array('calendar_id' => $this->id));
+    }
+
+    public function getSubscriptionsToThis() {
+        return new Calendar\Subscriptions(array('subbed_calendar_id' => $this->id));
     }
 
     /**

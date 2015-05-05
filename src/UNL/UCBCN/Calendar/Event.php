@@ -51,9 +51,13 @@ class Event extends Record
         );
     }
     
+    public static function getById($calendar_id, $event_id)
+    {
+        return self::getByAnyField(__CLASS__, 'calendar_id', $calendar_id, 'event_id = '.(int)$event_id);
+    }
+    
     /**
-     * Performs an insert of a calendar_has_event record, and updates any subscribed
-     * calendars.
+     * Performs an insert of a calendar_has_event record
      *
      * @return int ID of the inserted record.
      */
