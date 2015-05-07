@@ -104,6 +104,14 @@ class User extends Record
             (int)($calendar_id) . ' AND permission_id = ' . (int)($permission_id));
     }
 
+    public function getPermissions($calendar_id)
+    {
+        return new Permissions(array(
+            'user_uid' => $this->uid,
+            'calendar_id' => $calendar_id
+        ));
+    }
+
     public function grantPermission($permission_id, $calendar_id)
     {
         $permission = new Permission();
@@ -113,5 +121,15 @@ class User extends Record
         $permission->calendar_id = $calendar_id;
 
         $permission->insert();
+    }
+
+    public function removePermission($permission_id, $calendar_id)
+    {
+        $perm = Permission::getByUser_UID($this->uid, 'calendar_id = ' . 
+            (int)($calendar_id) . ' AND permission_id = ' . (int)($permission_id));
+
+        if ($perm != FALSE) {
+            $perm->delete();
+        }
     }
 }
