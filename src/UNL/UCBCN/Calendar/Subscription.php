@@ -80,6 +80,8 @@ class Subscription extends Record
     {
         $this->datecreated = date('Y-m-d H:i:s');
         $this->uidcreated = Auth::getCurrentUser()->uid;
+        $this->datelastupdated = date('Y-m-d H:i:s');
+        $this->uidlastupdated = Auth::getCurrentUser()->uid;
         $result = parent::insert();
 
         return $result;
@@ -147,6 +149,8 @@ class Subscription extends Record
             $calendar_ids[] = $calendar->id;
         }
 
+        error_log(print_r($calendar_ids, 1));
+
         $options = array(
             'subscription_calendars' => $calendar_ids,
             'subscription_calendar' => $this->calendar_id
@@ -160,19 +164,5 @@ class Subscription extends Record
             'subscription_id' => $this->id
         );
         return new Calendars($options);
-    }
-    
-    /**
-     * This function is called when a calendar has just had an event added. Called
-     * from UNL_UCBCN_Calendar_Event->insert();
-     *
-     * @param int $calendar_id The primary key of the calendar which was updated.
-     * @param int $event_id    Optionally, the id of the event to add.
-     *
-     * @return int Number of calenars updated (if any).
-     */
-    public function updateSubscribedCalendars($calendar_id, $event_id = null)
-    {
-
     }
 }

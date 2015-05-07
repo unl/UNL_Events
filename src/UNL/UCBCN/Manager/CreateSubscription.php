@@ -50,8 +50,6 @@ class CreateSubscription
 
     private function createSubscription($post_data) 
     {
-        error_log(print_r($post_data, 1));
-
         $subscription = new Subscription;
         $subscription->name = $post_data['title'];
         $subscription->automaticapproval = $post_data['auto_approve'] == 'yes' ? 1 : 0;
@@ -67,6 +65,7 @@ class CreateSubscription
             $sub_has_calendar->insert();
         }
 
+        # the subscription will go and get the events from those calendars that are relevant
         $subscription->process();
 
         return $subscription;

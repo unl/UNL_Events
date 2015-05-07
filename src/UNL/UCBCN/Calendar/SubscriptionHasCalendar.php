@@ -4,7 +4,7 @@ namespace UNL\UCBCN\Calendar;
 use UNL\UCBCN\ActiveRecord\Record;
 
 /**
- * Table Definition for subscription
+ * Table Definition for subscription_has_calendar
  */
 class SubscriptionHasCalendar extends Record
 {

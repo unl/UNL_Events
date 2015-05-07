@@ -5,6 +5,8 @@ use UNL\UCBCN\ActiveRecord\Record;
 use UNL\UCBCN\Calendars;
 use UNL\UCBCN\Account;
 use UNL\UCBCN\User\Permission;
+use UNL\UCBCN\Manager\Auth;
+use UNL\UCBCN\Manager\Controller as ManagerController;
 /**
  * Table Definition for user
  *
@@ -45,51 +47,37 @@ class User extends Record
         return 'user';
     }
 
-    function table()
-    {
-        return array(
-            'uid'=>130,
-            'account_id'=>129,
-            'calendar_id'=>1,
-            'accountstatus'=>2,
-            'datecreated'=>14,
-            'uidcreated'=>2,
-            'datelastupdated'=>14,
-            'uidlastupdated'=>2,
-        );
-    }
-
     function keys()
     {
         return array(
             'uid',
         );
     }
-    
-    function sequenceKey()
+
+    public static function getByID($uid) 
     {
-        return array(false, false);
-    }
-    
-    function links()
-    {
-        return array('account_id'     => 'account:id',
-                     'calendar_id'    => 'calendar:id',
-                     'uidcreated'     => 'users:uid',
-                     'uidlastupdated' => 'users:uid');
+        return self::getByUID($uid);
     }
 
-    public function update()
+    public function getEditPermissionsURL($calendar)
     {
-        $this->datelastupdated = date('Y-m-d H:i:s');
-        return parent::update();
+        return ManagerController::$url . $calendar->shortname . "/users/" . $this->uid . "/edit/";
     }
-    
+
     public function insert()
     {
+        $this->uidcreated = Auth::getCurrentUser()->uid;
+        $this->uidlastupdated = Auth::getCurrentUser()->uid;
         $this->datecreated     = date('Y-m-d H:i:s');
         $this->datelastupdated = date('Y-m-d H:i:s');
         return parent::insert();
+    }
+    
+    public function update()
+    {
+        $this->uidlastupdated = Auth::getCurrentUser()->uid;
+        $this->datelastupdated = date('Y-m-d H:i:s');
+        return parent::update();
     }
     
     public function __toString()
@@ -116,6 +104,14 @@ class User extends Record
             (int)($calendar_id) . ' AND permission_id = ' . (int)($permission_id));
     }
 
+    public function getPermissions($calendar_id)
+    {
+        return new Permissions(array(
+            'user_uid' => $this->uid,
+            'calendar_id' => $calendar_id
+        ));
+    }
+
     public function grantPermission($permission_id, $calendar_id)
     {
         $permission = new Permission();
@@ -125,5 +121,15 @@ class User extends Record
         $permission->calendar_id = $calendar_id;
 
         $permission->insert();
+    }
+
+    public function removePermission($permission_id, $calendar_id)
+    {
+        $perm = Permission::getByUser_UID($this->uid, 'calendar_id = ' . 
+            (int)($calendar_id) . ' AND permission_id = ' . (int)($permission_id));
+
+        if ($perm != FALSE) {
+            $perm->delete();
+        }
     }
 }

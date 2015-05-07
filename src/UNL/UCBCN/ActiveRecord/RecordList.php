@@ -37,7 +37,7 @@ abstract class RecordList extends \LimitIterator implements \Countable
         }
 
         if (!isset($this->options['array'])) {
-            //get a lit of all of them by default.
+            //get a list of all of them by default.
             $this->options['array'] = $this->getAllForConstructor();
         }
 

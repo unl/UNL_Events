@@ -21,13 +21,13 @@ class CreateEvent
         $this->options = $options + $this->options;
         $this->calendar = CalendarModel::getByShortName($this->options['calendar_shortname']);
 
+        if ($this->calendar === FALSE) {
+            throw new \Exception("That calendar could not be found.", 500);
+        }
+
         if (!empty($_POST)) {
             $this->saveEvent($_POST);
             header('Location: /manager/' . $this->calendar->shortname . '/');
-        }
-
-        if ($this->calendar === FALSE) {
-            throw new \Exception("That calendar could not be found.", 500);
         }
     }
 
@@ -68,13 +68,11 @@ class CreateEvent
         $event->listingcontactemail = $post_data['contact_email'];
 
         $event->webpageurl = $post_data['website'];
+        $event->approvedforcirculation = $post_data['private_public'] == 'public' ? 1 : 0;
 
         $add_to_default = array_key_exists('send_to_main', $post_data) && 
             $post_data['send_to_main'] == 'on';
-        $event->insert();
-
-        # add the event to the calendar we are saving it on
-        $this->calendar->addEvent($event, 'pending', $user, 'create event form');
+        $result = $event->insert($this->calendar, 'create event form');
 
         # add the event type record
         $event_has_type = new EventType;
