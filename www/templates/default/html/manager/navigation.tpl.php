@@ -5,7 +5,7 @@
             <li><small><a href="<?php echo $calendar->getFrontendURL() ?>">Live Calendar</a></small></li>
             <li><small><a href="<?php echo $calendar->getEditURL() ?>">Edit Calendar Info</a></small></li>
             <li><small><a href="<?php echo $calendar->getSubscriptionsURL() ?>">Subscriptions</a></small></li>
-            <li><small><a href="<?php echo $calendar->getFrontendURL() ?>">Users &amp; Permissions</a></small></li>
+            <li><small><a href="<?php echo $calendar->getUsersURL() ?>">Users &amp; Permissions</a></small></li>
         </ul>
     <?php else: ?>
         <a href="<?php echo $calendar->getManageURL() ?>"><?php echo $calendar->name ?></a><br>
