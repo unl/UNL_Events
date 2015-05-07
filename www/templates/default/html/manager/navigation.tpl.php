@@ -1,6 +1,6 @@
 <?php foreach ($context->getCalendars() as $calendar): ?>
     <?php if ($context->getCalendar() && ($calendar->shortname == $context->getCalendar()->shortname)): ?>
-        <div style="background: #CCCCCC;"><?php echo $calendar->name ?></div>
+        <div style="background: #CCCCCC;"><a href="<?php echo $calendar->getManageURL() ?>"><?php echo $calendar->name ?></a></div>
         <ul>
             <li><small><a href="<?php echo $calendar->getFrontendURL() ?>">Live Calendar</a></small></li>
             <li><small><a href="<?php echo $calendar->getEditURL() ?>">Edit Calendar Info</a></small></li>
