@@ -7,6 +7,7 @@ use UNL\UCBCN\Frontend\Controller as FrontendController;
 use UNL\UCBCN\Manager\Controller as ManagerController;
 use UNL\UCBCN\Calendar\Event as CalendarHasEvent;
 use UNL\UCBCN\Calendar\Subscriptions;
+use UNL\UCBCN\Users;
 /**
  * Details related to a calendar within the UNL Event Publisher system.
  *
@@ -122,12 +123,28 @@ class Calendar extends Record
         return ManagerController::$url . $this->shortname . '/subscriptions/';
     }
 
-    /**
-     * Adds a user to the calendar. Grants all permissions to the
-     * user for the current calendar.
-     *
-     * @param UNL\UCBCN\User $user
-     */
+    public function getUsersURL() {
+        return ManagerController::$url . $this->shortname . '/users/';
+    }
+
+    public function getUsers()
+    {
+        $options = array(
+            'calendar_id' => $this->id
+        );
+
+        return new Users($options);
+    }
+
+    public function getUsersNotOnCalendar()
+    {
+        $options = array(
+            'not_calendar_id' => $this->id
+        );
+
+        return new Users($options);
+    }
+
     public function addUser(User $user)
     {
         if (isset($this->id)) {
@@ -144,12 +161,6 @@ class Calendar extends Record
 
     }
     
-    /**
-     * Removes a user from the current calendar.
-     * Basically removes all permissions for the user on the current calendar.
-     *
-     * @param \UNL\UCBCN\User $user
-     */
     public function removeUser(User $user)
     {
         if (isset($this->id)&&isset($user->uid)) {
