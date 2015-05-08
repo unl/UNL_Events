@@ -35,7 +35,10 @@ $view_class = str_replace('\\', '_', strtolower($context->options['model']));
     <!-- InstanceBeginEditable name="head" -->
     <!-- Place optional header elements here -->
     <link rel="stylesheet" type="text/css" media="screen" href="<?php echo $base_frontend_url ?>templates/default/html/css/events.css" />
-    <script id="script_main" src="<?php echo $base_frontend_url ?>templates/default/html/js/events.min.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="<?php echo $base_frontend_url ?>templates/default/html/css/manager.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="<?php echo $base_frontend_url ?>templates/default/html/css/jquery-ui.min-custom.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+    <script id="script_main" src="<?php echo $base_frontend_url ?>templates/default/html/js/events.min.js"></script>    
     <!-- InstanceEndEditable -->
     <!-- InstanceParam name="class" type="text" value="" -->
 </head>
