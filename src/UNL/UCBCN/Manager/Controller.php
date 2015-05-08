@@ -65,6 +65,11 @@ class Controller {
         return self::$url;
     }
 
+    public static function getEditAccountURL() 
+    {
+        return self::$url . 'account/';
+    }
+
     /**
      * Runs/builds the manager object with the display parameters set.
      * This function will populate all of the output and member variables with the
@@ -178,9 +183,6 @@ class Controller {
         return $user->getCalendars();
     }
 
-    /**
-     * @return bool|Calendar
-     */
     public function getCalendar()
     {
         return $this->calendar;

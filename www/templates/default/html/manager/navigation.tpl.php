@@ -14,5 +14,5 @@
 <br>
 <a href="<?php echo $base_manager_url ?>calendar/new" class="wdn-button wdn-button-brand">+ New Calendar</a><br>
 <br>
-<a href="<?php echo $calendar->getFrontendURL() ?>">Account Info</a><br>
+<a href="<?php echo $context->getEditAccountURL() ?>">Account Info</a><br>
 <a href="<?php echo $calendar->getFrontendURL() ?>">InDesign Tags Export</a><br>
