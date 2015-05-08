@@ -37,33 +37,11 @@ class Permission extends Record
         return 'user_has_permission';
     }
 
-    function table()
-    {
-        return array(
-            'id'=>129,
-            'permission_id'=>129,
-            'user_uid'=>130,
-            'calendar_id'=>129,
-        );
-    }
-
     function keys()
     {
         return array(
             'id',
         );
-    }
-    
-    function sequenceKey()
-    {
-        return array('id',true);
-    }
-    
-    function links()
-    {
-        return array('permission_id' => 'permission:id',
-                     'user_uid'      => 'user:uid',
-                     'calendar_id'   => 'calendar:id');
     }
     
 }

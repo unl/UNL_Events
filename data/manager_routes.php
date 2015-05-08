@@ -11,6 +11,7 @@ $calendar_slash_required = '(' . $calendar . '\/)?';
 $calendar_slash_optional = '(' . $calendar . '(\/)?)?';
 
 $routes['/^(\/)?$/'] = 'UNL\UCBCN\Manager\CalendarList';
+$routes['/^account(\/)?$/'] = 'UNL\UCBCN\Manager\EditAccount';
 $routes['/^'.$calendar_slash_optional.'$/'] = 'UNL\UCBCN\Manager\Calendar';
 $routes['/^'.$calendar_slash_required.'create(\/)?$/'] = 'UNL\UCBCN\Manager\CreateEvent';
 $routes['/^calendar\/new(\/)?$/'] = 'UNL\UCBCN\Manager\CreateCalendar';
@@ -20,5 +21,6 @@ $routes['/^'.$calendar_slash_required.'subscriptions(\/)?$/'] = 'UNL\UCBCN\Manag
 $routes['/^'.$calendar_slash_required.'users(\/)?$/'] = 'UNL\UCBCN\Manager\Users';
 $routes['/^'.$calendar_slash_required.'users\/new(\/)?$/'] = 'UNL\UCBCN\Manager\AddUser';
 $routes['/^'.$calendar_slash_required.'users\/' . $user . '\/edit(\/)?$/'] = 'UNL\UCBCN\Manager\AddUser';
+$routes['/^'.$calendar_slash_required.'users\/' . $user . '\/delete(\/)?$/'] = 'UNL\UCBCN\Manager\DeleteUser';
 
 return $routes;
