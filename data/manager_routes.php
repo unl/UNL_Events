@@ -20,5 +20,6 @@ $routes['/^'.$calendar_slash_required.'subscriptions(\/)?$/'] = 'UNL\UCBCN\Manag
 $routes['/^'.$calendar_slash_required.'users(\/)?$/'] = 'UNL\UCBCN\Manager\Users';
 $routes['/^'.$calendar_slash_required.'users\/new(\/)?$/'] = 'UNL\UCBCN\Manager\AddUser';
 $routes['/^'.$calendar_slash_required.'users\/' . $user . '\/edit(\/)?$/'] = 'UNL\UCBCN\Manager\AddUser';
+$routes['/^'.$calendar_slash_required.'users\/' . $user . '\/delete(\/)?$/'] = 'UNL\UCBCN\Manager\DeleteUser';
 
 return $routes;

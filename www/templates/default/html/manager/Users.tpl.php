@@ -20,7 +20,7 @@ Current Users on this Calendar
 	    <div class="wdn-col-two-thirds" style="text-align: right;">
 	        <a class="wdn-button wdn-button-brand" href="<?php echo $user->getEditPermissionsURL($context->calendar) ?>">Edit Permissions</a>
 	        |
-	        <a class="wdn-button wdn-button-brand" href="#">Remove From Calendar</a>
+	        <a class="wdn-button wdn-button-brand" href="<?php echo $user->getDeletePermissionsURL($context->calendar) ?>">Remove From Calendar</a>
 	    </div>
     </div>
     <?php } ?>
