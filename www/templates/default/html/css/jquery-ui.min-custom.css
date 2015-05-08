@@ -1,0 +1,139 @@
+
+.ui-widget {
+	font-family: "Gotham";
+}
+
+.ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br {
+  border-bottom-right-radius: 0px;
+}
+.ui-corner-all, .ui-corner-bottom, .ui-corner-left, .ui-corner-bl {
+  border-bottom-left-radius: 0px;
+}
+.ui-corner-all, .ui-corner-top, .ui-corner-right, .ui-corner-tr {
+  border-top-right-radius: 0px;
+}
+.ui-corner-all, .ui-corner-top, .ui-corner-left, .ui-corner-tl {
+  border-top-left-radius: 0px;
+}
+
+.ui-datepicker {
+  padding: 0;
+}
+
+.ui-widget-header {
+	border:none;
+	background: #474746;
+	color: #fff;
+	font-family: "Gotham";
+	font-size: .802em;
+	font-weight: 100;
+	padding: .75em;
+}
+
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
+  border: none;
+  font-weight: bold;
+  color: #d00000;
+}
+
+.ui-widget-content {
+	border: none; 
+	background: #f7f7f7;
+}
+
+.ui-datepicker td {
+	border: 1px solid #d5d5d2;
+	padding: 0.5em;
+	text-align: center;
+	font-family: "Gotham";
+	font-size: .75rem;
+	background-color: #fff;
+}
+
+.ui-datepicker td a {
+	color: #d00000;
+}
+
+.ui-datepicker-next {
+	float: right;
+}
+
+.ui-datepicker-next span, .ui-datepicker-prev span {
+	color: #fff;
+	cursor: pointer;
+}
+
+.ui-datepicker-next span:after, .ui-datepicker-prev span:before{
+	color: #fff;
+	font-family: eventicon;
+	font-style: normal;
+	font-weight: 400;
+	speak: none;
+	display: inline-block;
+	text-decoration: inherit;
+	width: 1em;
+	margin-right: .2em;
+	text-align: center;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1em;
+	margin-left: .2em;
+}
+
+.ui-datepicker-prev span:before {
+	content: '\e802';
+}
+
+.ui-datepicker-next span:after {
+	content: '\e803';
+}
+
+.ui-datepicker-prev {
+	float: left;
+}
+.ui-datepicker-title {
+	text-transform: uppercase;
+	text-align: center;
+}
+
+.ui-datepicker-calendar thead tr th {
+	text-transform: uppercase;
+	background-color: #eee;
+	border: 1px solid #ccc;
+	padding: .75em;
+	font-size: .75rem;
+}
+
+.ui-datepicker-calendar tbody tr td:not(.ui-datepicker-other-month) {
+	cursor: pointer;
+}
+
+.ui-datepicker td.ui-datepicker-other-month {
+	background-color: #f7f7f7;
+}
+
+.ui-datepicker-next span, .ui-datepicker-prev span {
+	color: RGBA(255,255,255,0);
+}
+
+.ui-datepicker .ui-datepicker-current-day a, .ui-datepicker .ui-datepicker-today a { color: #fff; }
+
+.ui-datepicker .ui-datepicker-today {
+	background: #d00000;
+}
+
+.ui-datepicker .ui-datepicker-current-day {
+	background-color: #474746;
+}
+#ui-datepicker-div {
+  z-index: 206 !important;
+}
+
+@media (max-width: 480px) {
+	.ui-datepicker {
+		position: fixed !important;
+		top: 2% !important;
+		left: 7.5% !important;
+		width: 85%;
+	}
+}
