@@ -243,6 +243,11 @@ class Event extends Record
 
         return $result;
     }
+
+    public function considerForMainCalendar()
+    {
+        $this->addToCalendar(\UNL\UCBCN::$main_calendar_id, 'pending', 'checked consider event');
+    }
     
     /**
      * Updates the record for this event in the database.
@@ -304,11 +309,11 @@ class Event extends Record
      *
      * @return int|false
      */
-    public function addToCalendar($calendar_id, $status='pending', $sourcemsg = null)
+    public function addToCalendar($calendar_id, $status='pending', $source = null)
     {
         $calendar_has_event = new CalendarHasEvent;
 
-        $calendar_has_event->calendar_id = $this->id;
+        $calendar_has_event->calendar_id = $calendar_id;
         $calendar_has_event->event_id = $this->id;
         $calendar_has_event->uidcreated = $_SESSION['__SIMPLECAS']['UID'];
         $calendar_has_event->datecreated = date('Y-m-d H:i:s');
