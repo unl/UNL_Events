@@ -237,8 +237,13 @@ class Event extends Record
         $this->uidlastupdated = Auth::getCurrentUser();
         $result = parent::insert();
 
+        $status_for_new_event = 'pending';
+        if ($calendar->eventreleasepreference == 1) {
+            $status_for_new_event = 'posted';
+        }
+
         if (!empty($calendar)) {
-            $calendar->addEvent($this, 'pending', Auth::getCurrentUser(), $source);
+            $calendar->addEvent($this, $status_for_new_event, Auth::getCurrentUser(), $source);
         }
 
         return $result;
