@@ -96,6 +96,16 @@ class Event extends Record
             return $calendar_has_event->status;
         }
     }
+
+    public function updateStatusWithCalendar(Calendar $calendar, $status) {
+        $calendar_has_event = CalendarHasEvent::getById($calendar->id, $this->id);
+        if ($calendar_has_event === FALSE) {
+            throw new Exception('Event does not have status with calendar');
+        } else {
+            $calendar_has_event->status = $status;
+            $calendar_has_event->update();
+        }
+    }
     
     /**
      * This function processes any posted files,
