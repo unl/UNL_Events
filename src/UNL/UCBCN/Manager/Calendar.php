@@ -49,13 +49,12 @@ class Calendar {
 
         # check each event to see if it has passed
         foreach ($events as $event) {
-            # we will consider it passed if one datetime is in the past
-            # (this is how the previous system did it)
+            # we will consider it passed if all datetimes are in the past
             $datetimes = $event->getDatetimes();
-            $archive = false;
+            $archive = true;
             foreach ($datetimes as $datetime) {
-                if ($datetime->starttime < date('Y-m-d 00:00:00') && ($datetime->endtime == NULL || $datetime->endtime < date('Y-m-d 00:00:00'))) {
-                    $archive = true;
+                if ($datetime->starttime >= date('Y-m-d 00:00:00') && ($datetime->endtime == NULL || $datetime->endtime >= date('Y-m-d 00:00:00'))) {
+                    $archive = false;
                     break;
                 }
             }
