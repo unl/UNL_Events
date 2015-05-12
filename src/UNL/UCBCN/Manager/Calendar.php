@@ -53,7 +53,7 @@ class Calendar {
             $datetimes = $event->getDatetimes();
             $archive = true;
             foreach ($datetimes as $datetime) {
-                if ($datetime->starttime >= date('Y-m-d 00:00:00') && ($datetime->endtime == NULL || $datetime->endtime >= date('Y-m-d 00:00:00'))) {
+                if ($datetime->starttime >= date('Y-m-d 00:00:00') || ($datetime->endtime != NULL && $datetime->endtime >= date('Y-m-d 00:00:00'))) {
                     $archive = false;
                     break;
                 }
