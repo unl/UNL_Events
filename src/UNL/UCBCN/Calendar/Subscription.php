@@ -66,6 +66,11 @@ class Subscription extends Record
         return ManagerController::$url . $calendar->shortname . '/subscriptions/' . $this->id . '/edit/';
     }
 
+    public function getDeleteURL() {
+        $calendar = $this->getCalendar();
+        return ManagerController::$url . $calendar->shortname . '/subscriptions/' . $this->id . '/delete/';
+    }
+
     public function getCalendar() {
         return Calendar::getByID($this->calendar_id);
     }
