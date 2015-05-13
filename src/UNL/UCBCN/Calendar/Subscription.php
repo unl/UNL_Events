@@ -70,6 +70,14 @@ class Subscription extends Record
         return Calendar::getByID($this->calendar_id);
     }
 
+    public function getSubscribedCalendars()
+    {
+        $options = array(
+            'subscription_id' => $this->id
+        );
+        return new Calendars($options);
+    }
+
     /**
      * Inserts a record into the subscription table, and processes the subscription
      * for matching events.
@@ -135,7 +143,6 @@ class Subscription extends Record
         }
 
         return 'pending';
-
     }
     
     /**
@@ -149,8 +156,6 @@ class Subscription extends Record
             $calendar_ids[] = $calendar->id;
         }
 
-        error_log(print_r($calendar_ids, 1));
-
         $options = array(
             'subscription_calendars' => $calendar_ids,
             'subscription_calendar' => $this->calendar_id
@@ -158,11 +163,4 @@ class Subscription extends Record
         return new Events($options);
     }
 
-    public function getSubscribedCalendars()
-    {
-        $options = array(
-            'subscription_id' => $this->id
-        );
-        return new Calendars($options);
-    }
 }

@@ -37,8 +37,6 @@ class Events extends RecordList
             $sql .= ") AND event.id NOT IN (SELECT DISTINCT event.id FROM event, calendar_has_event AS c2 WHERE c2.calendar_id = " . 
                 $this->options['subscription_calendar'] . " AND c2.event_id = event.id);";
 
-            error_log($sql);
-
             return $sql;
         } else if (array_key_exists('calendar', $this->options)) {
             # get all events related to the calendar through a join on calendar has event and calendar.
