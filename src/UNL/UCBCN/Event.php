@@ -96,6 +96,16 @@ class Event extends Record
             return $calendar_has_event->status;
         }
     }
+
+    public function updateStatusWithCalendar(Calendar $calendar, $status) {
+        $calendar_has_event = CalendarHasEvent::getById($calendar->id, $this->id);
+        if ($calendar_has_event === FALSE) {
+            throw new Exception('Event does not have status with calendar');
+        } else {
+            $calendar_has_event->status = $status;
+            $calendar_has_event->update();
+        }
+    }
     
     /**
      * This function processes any posted files,
@@ -237,11 +247,21 @@ class Event extends Record
         $this->uidlastupdated = Auth::getCurrentUser();
         $result = parent::insert();
 
+        $status_for_new_event = 'pending';
+        if ($calendar->eventreleasepreference == 1) {
+            $status_for_new_event = 'posted';
+        }
+
         if (!empty($calendar)) {
-            $calendar->addEvent($this, 'pending', Auth::getCurrentUser(), $source);
+            $calendar->addEvent($this, $status_for_new_event, Auth::getCurrentUser(), $source);
         }
 
         return $result;
+    }
+
+    public function considerForMainCalendar()
+    {
+        $this->addToCalendar(\UNL\UCBCN::$main_calendar_id, 'pending', 'checked consider event');
     }
     
     /**
@@ -304,11 +324,11 @@ class Event extends Record
      *
      * @return int|false
      */
-    public function addToCalendar($calendar_id, $status='pending', $sourcemsg = null)
+    public function addToCalendar($calendar_id, $status='pending', $source = null)
     {
         $calendar_has_event = new CalendarHasEvent;
 
-        $calendar_has_event->calendar_id = $this->id;
+        $calendar_has_event->calendar_id = $calendar_id;
         $calendar_has_event->event_id = $this->id;
         $calendar_has_event->uidcreated = $_SESSION['__SIMPLECAS']['UID'];
         $calendar_has_event->datecreated = date('Y-m-d H:i:s');

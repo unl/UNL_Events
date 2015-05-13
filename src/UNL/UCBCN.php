@@ -38,11 +38,8 @@ namespace UNL;
  */
 class UCBCN
 {
+    public static $main_calendar_id;
 
-    /**
-     * Default calendar to use throughout the system.
-     * @var int $default_calendar
-     */
     public $default_calendar_id = 1;
 
     protected static $db_settings = array(

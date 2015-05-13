@@ -20,7 +20,7 @@ Current Subscriptions
 	    <div class="wdn-col-two-thirds" style="text-align: right;">
 	        <a class="wdn-button wdn-button-brand" href="<?php echo $subscription->getEditURL() ?>">Edit</a>
 	        |
-	        <a class="wdn-button wdn-button-brand" href="#">Delete</a>
+	        <a class="wdn-button wdn-button-brand" href="<?php echo $subscription->getDeleteURL() ?>">Delete</a>
 	    </div>
     </div>
     <?php } ?>

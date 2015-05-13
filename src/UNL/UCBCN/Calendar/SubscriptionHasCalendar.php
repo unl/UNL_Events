@@ -23,4 +23,8 @@ class SubscriptionHasCalendar extends Record
             'id',
         );
     }
+
+    public static function get($subscription_id, $calendar_id) {
+        return self::getBySubscription_ID($subscription_id, 'calendar_id = ' . (int)($calendar_id));
+    }
 }

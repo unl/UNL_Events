@@ -23,9 +23,8 @@ set_include_path(
 ini_set('display_errors', true);
 error_reporting(E_ALL);
 
-
+UNL\UCBCN::$main_calendar_id = 1;
 UNL\UCBCN\Frontend\Controller::$url = '/';
-
 UNL\UCBCN\ActiveRecord\Database::setDbSettings(
     array(
     'host'     => 'localhost',
