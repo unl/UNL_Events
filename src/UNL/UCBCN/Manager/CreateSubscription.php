@@ -25,13 +25,13 @@ class CreateSubscription
         if (!empty($_POST)) {
             if (array_key_exists('subscription_id', $this->options)) {
                 # we are editing an existing subscription
-                $this->calendar = Calendar::getByShortname($this->options['calendar_shortname']);
+                $this->subscription = Subscription::getById($this->options['subscription_id']);
 
-                if ($this->calendar === FALSE) {
-                    throw new \Exception("That calendar could not be found.", 500);
+                if ($this->subscription == FALSE) {
+                    throw new \Exception("That subscription could not be found.", 500);
                 }
 
-                $this->updateCalendar($_POST);
+                $this->updateSubscription($_POST);
             } else {
                 # we are creating a new subscription
                 $this->subscription = $this->createSubscription($_POST);
@@ -40,7 +40,16 @@ class CreateSubscription
             header('Location: /manager/' . $this->calendar->shortname . '/subscriptions/');
         }
 
-        $this->subscription = new Subscription;
+        if (array_key_exists('subscription_id', $this->options)) {
+            # we are editing an existing subscription
+            $this->subscription = Subscription::getById($this->options['subscription_id']);
+
+            if ($this->subscription == FALSE) {
+                throw new \Exception("That subscription could not be found.", 500);
+            }
+        } else {
+            $this->subscription = new Subscription;
+        }
     }
 
     public function getAvailableCalendars() 
@@ -69,6 +78,42 @@ class CreateSubscription
         $subscription->process();
 
         return $subscription;
+    }
+
+    private function updateSubscription($post_data)
+    {
+        # see what calendars were removed from the subscription first...if they
+        # are not present, remove the record from sub_has_calendar
+        $current_subbed_calendars = $this->subscription->getSubscribedCalendars();
+        $current_subbed_calendars_ids = array();
+        foreach ($current_subbed_calendars as $cal) {
+            $current_subbed_calendars_ids[] = $cal->id;
+        }
+
+        foreach ($current_subbed_calendars_ids as $calendar_id) {
+            if (!in_array($calendar_id, $post_data['calendars'])) {
+                # it has been deleted
+                $record = SubscriptionHasCalendar::get($this->subscription->id, $calendar_id);
+                $record->delete();
+            }
+        }
+
+        # now add calendars that were not already in the subscription
+        foreach ($post_data['calendars'] as $calendar_to_sub_id) {
+            if (!in_array($calendar_to_sub_id, $current_subbed_calendars_ids)) {
+                # add a new record
+                $sub_has_calendar = new SubscriptionHasCalendar;
+                $sub_has_calendar->calendar_id = $calendar_to_sub_id;
+                $sub_has_calendar->subscription_id = $this->subscription->id;
+                $sub_has_calendar->insert();
+            }
+        }
+
+        # process the subscription again. Events that are currently already in there
+        # from the subscription will not be added twice
+        $this->subscription->process();
+
+        return $this->subscription;
     }
 
 }

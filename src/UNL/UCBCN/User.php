@@ -64,6 +64,11 @@ class User extends Record
         return ManagerController::$url . $calendar->shortname . "/users/" . $this->uid . "/edit/";
     }
 
+    public function getDeletePermissionsURL($calendar)
+    {
+        return ManagerController::$url . $calendar->shortname . "/users/" . $this->uid . "/delete/";
+    }
+
     public function insert()
     {
         $this->uidcreated = Auth::getCurrentUser()->uid;

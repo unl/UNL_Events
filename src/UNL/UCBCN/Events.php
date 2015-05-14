@@ -37,8 +37,6 @@ class Events extends RecordList
             $sql .= ") AND event.id NOT IN (SELECT DISTINCT event.id FROM event, calendar_has_event AS c2 WHERE c2.calendar_id = " . 
                 $this->options['subscription_calendar'] . " AND c2.event_id = event.id);";
 
-            error_log($sql);
-
             return $sql;
         } else if (array_key_exists('calendar', $this->options)) {
             # get all events related to the calendar through a join on calendar has event and calendar.
@@ -46,7 +44,12 @@ class Events extends RecordList
                 SELECT event.id FROM event 
                 INNER JOIN calendar_has_event ON event.id = calendar_has_event.event_id
                 INNER JOIN calendar ON calendar_has_event.calendar_id = calendar.id
-                WHERE calendar.shortname = "' . self::escapeString($this->options['calendar']) . '";';
+                WHERE calendar.shortname = "' . self::escapeString($this->options['calendar']) . '"';
+            if (array_key_exists('status', $this->options)) {
+                $sql .= ' AND calendar_has_event.status = "' . self::escapeString($this->options['status']) .'"';
+            }
+
+            $sql .= ';';
             return $sql;
         } else {
             return parent::getSQL();

@@ -1,4 +1,12 @@
-<?php echo $context->calendar->name ?> &gt; Add a Subscription
+<?php 
+    $subbed_calendars = $context->subscription->getSubscribedCalendars();
+    $subbed_calendar_ids = array();
+    foreach ($subbed_calendars as $subbed) {
+        $subbed_calendar_ids[] = $subbed->id;
+    }
+?>
+
+<?php echo $context->calendar->name ?> &gt; <?php echo $context->subscription->id == NULL ? 'Add a Subscription' : 'Edit Subscription' ?>
 
 <div class="wdn-grid-set">
     <form action="<?php echo $context->subscription->id == NULL ? $context->subscription->getNewURL($context->calendar) : $context->subscription->getEditURL($context->calendar) ?>" method="POST">
@@ -10,7 +18,7 @@
                 <label for="calendars">Events Posted to Calendar(s):</label>
                 <select id="calendars" name="calendars[]" multiple="multiple">
                 <?php foreach($context->getAvailableCalendars() as $calendar) { ?>
-                    <option value="<?php echo $calendar->id ?>"><?php echo $calendar->name ?></option>
+                    <option <?php if (in_array($calendar->id, $subbed_calendar_ids)) echo 'selected="selected"'; ?> value="<?php echo $calendar->id ?>"><?php echo $calendar->name ?></option>
                 <?php } ?>
                 </select>
             </fieldset>

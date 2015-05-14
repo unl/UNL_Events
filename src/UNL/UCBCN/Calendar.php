@@ -233,9 +233,13 @@ class Calendar extends Record
     /**
      * Gets events related to this calendar
      */
-    public function getEvents() {
+    public function getEvents($status = 'all') {
         # create options for event listing class
         $options = array('calendar' => $this->shortname);
+
+        if ($status != 'all') {
+            $options['status'] = $status;
+        }
 
         # create new events class. On constructor it will get the stuff
         $events = new Events($options);

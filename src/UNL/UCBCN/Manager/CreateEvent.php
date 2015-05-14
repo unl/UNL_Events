@@ -42,7 +42,8 @@ class CreateEvent
         return new Locations(array('user_id' => $user->uid));
     }
 
-    private function calculateDate($date, $hour, $minute, $am_or_pm) {
+    private function calculateDate($date, $hour, $minute, $am_or_pm)
+    {
         $date = strtotime($date);
         # add hours correctly
         # TODO: handle when this is not entered
@@ -141,6 +142,10 @@ class CreateEvent
         $event_datetime->additionalpublicinfo = $post_data['additional_public_info'];
 
         $event_datetime->insert();
+
+        if (array_key_exists('send_to_main', $post_data) && $post_data['send_to_main'] == 'on') {
+            $event->considerForMainCalendar();
+        }
 
         return $event;
     }

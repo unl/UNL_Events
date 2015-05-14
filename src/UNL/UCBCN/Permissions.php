@@ -19,7 +19,6 @@ class Permissions extends RecordList
     				WHERE user_uid = "' . self::escapeString($this->options['user_uid']) .
     				'" AND calendar_id = ' . (int)($this->options['calendar_id']) . ';';
 
-    		error_log($sql);
     		return $sql;
     	}
 
