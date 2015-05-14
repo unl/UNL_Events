@@ -23,12 +23,15 @@ $page->pagetitle    = '';
 
 //css
 $page->addStyleSheet($base_frontend_url.'templates/default/html/css/events.css');
+$page->addStyleSheet($base_frontend_url.'templates/default/html/css/manager.css');
+$page->addStyleSheet($base_frontend_url.'templates/default/html/css/jquery-ui.min-custom.css');
 
 //javascript
 $page->head .= '<script>var frontend_url = "'.$base_frontend_url.'";</script>' . PHP_EOL;
 $page->head .= '<script>var manager_url = "'.$base_manager_url.'";</script>' . PHP_EOL;
 $page->addScript($base_frontend_url.'templates/default/html/js/events.min.js');
-
+?>
+<?php 
 //other
 $page->leftRandomPromo = '';
 $page->breadcrumbs = '
