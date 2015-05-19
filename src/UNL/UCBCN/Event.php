@@ -8,6 +8,7 @@ use UNL\UCBCN\Event\Occurrences;
 use UNL\UCBCN\Event\RecurringDate;
 use UNL\UCBCN\EventListing;
 use UNL\UCBCN\Manager\Auth;
+use UNL\UCBCN\Manager\Controller;
 
 /**
  * Table Definition for event
@@ -105,6 +106,10 @@ class Event extends Record
             $calendar_has_event->status = $status;
             $calendar_has_event->update();
         }
+    }
+
+    public function getRecommendURL($calendar) {
+        return Controller::$url . $calendar->shortname . '/event/' . $this->id . '/recommend/';
     }
     
     /**

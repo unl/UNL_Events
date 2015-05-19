@@ -49,7 +49,7 @@
                     <?php } ?>
                 </div>
                 <div class="wdn-col-one-third">
-                    <select class="pending-event-tools" data-id="<?php echo $event->id; ?>">
+                    <select class="pending-event-tools" data-id="<?php echo $event->id; ?>" data-recommend-url="<?php echo $event->getRecommendURL($context->calendar) ?>">
                         <option value="">Select an Action</option>
                         <option value="move-to-upcoming">Move to Upcoming</option>
                         <option value="recommend">Recommend</option>
