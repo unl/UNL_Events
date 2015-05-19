@@ -8,6 +8,7 @@ $routes = array();
 $calendar                = '(?P<calendar_shortname>([a-zA-Z-_]([0-9]+)?)+)';
 $user 					 = '(?P<user_uid>([a-zA-Z0-9-_]+))';
 $subscription 			 = '(?P<subscription_id>([0-9]+))';
+$event 			 		 = '(?P<event_id>([0-9]+))';
 $calendar_slash_required = '(' . $calendar . '\/)?';
 $calendar_slash_optional = '(' . $calendar . '(\/)?)?';
 
@@ -25,5 +26,6 @@ $routes['/^'.$calendar_slash_required.'users(\/)?$/'] = 'UNL\UCBCN\Manager\Users
 $routes['/^'.$calendar_slash_required.'users\/new(\/)?$/'] = 'UNL\UCBCN\Manager\AddUser';
 $routes['/^'.$calendar_slash_required.'users\/' . $user . '\/edit(\/)?$/'] = 'UNL\UCBCN\Manager\AddUser';
 $routes['/^'.$calendar_slash_required.'users\/' . $user . '\/delete(\/)?$/'] = 'UNL\UCBCN\Manager\DeleteUser';
+$routes['/^'.$calendar_slash_required.'event\/' . $event . '\/recommend(\/)?$/'] = 'UNL\UCBCN\Manager\Recommend';
 
 return $routes;
