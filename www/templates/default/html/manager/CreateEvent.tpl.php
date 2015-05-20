@@ -37,46 +37,46 @@
                         <div id="new-location-fields">
                         <h6>New Location</h6>
                         <label for="location-name">Name</label>
-                        <input type="text" id="location-name" name="location_name">
+                        <input type="text" id="location-name" name="new_location[name]">
 
                         <label for="location-address-1">Address</label>
-                        <input type="text" id="location-address-1" name="location_address_1">
+                        <input type="text" id="location-address-1" name="new_location[streetaddress1]">
 
                         <label for="location-address-2">Address 2</label>
-                        <input type="text" id="location-address-2" name="location_address_2">
+                        <input type="text" id="location-address-2" name="new_location[streetaddress2]">
 
                         <label for="location-room">Room</label>
-                        <input type="text" id="location-room" name="location_room">
+                        <input type="text" id="location-room" name="new_location[room]">
 
                         <label for="location-city">City</label>
-                        <input type="text" id="location-city" name="location_city">
+                        <input type="text" id="location-city" name="new_location[city]">
 
                         <label for="location-state">State</label>
-                        <input type="text" id="location-state" name="location_state">
+                        <input type="text" id="location-state" name="new_location[state]">
 
                         <label for="location-zip">Zip</label>
-                        <input type="text" id="location-zip" name="location_zip">
+                        <input type="text" id="location-zip" name="new_location[zip]">
 
                         <label for="location-map-url">Map URL</label>
-                        <input type="text" id="location-map-url" name="location_map_url">
+                        <input type="text" id="location-map-url" name="new_location[mapurl]">
 
                         <label for="location-webpage">Webpage</label>
-                        <input type="text" id="location-webpage" name="location_webpage">
+                        <input type="text" id="location-webpage" name="new_location[webpageurl]">
 
                         <label for="location-hours">Hours</label>
-                        <input type="text" id="location-hours" name="location_hours">
+                        <input type="text" id="location-hours" name="new_location[hours]">
 
                         <label for="location-directions">Directions</label>
-                        <textarea id="location-directions" name="location_directions"></textarea>
+                        <textarea id="location-directions" name="new_location[directions]"></textarea>
 
                         <label for="location-additional-public-info">Additional Public Info</label>
-                        <input type="text" id="location-additional-public-info" name="location_additional_public_info">
+                        <input type="text" id="location-additional-public-info" name="new_location[additionalpublicinfo]">
 
                         <label for="location-type">Type</label>
-                        <input type="text" id="location-type" name="location_type">
+                        <input type="text" id="location-type" name="new_location[type]">
 
                         <label for="location-phone">Phone</label>
-                        <input type="text" id="location-phone" name="location_phone">
+                        <input type="text" id="location-phone" name="new_location[phone]">
 
                         <input type="checkbox" id="location-save" name="location_save"> 
                         <label for="location-save">Save this location for future events</label>

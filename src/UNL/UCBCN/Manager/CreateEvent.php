@@ -84,30 +84,11 @@ class CreateEvent implements PostHandlerInterface
         # check if this is to use a new location
         if ($post_data['location'] == 'new') {
             # create a new location
-            $location = new Location;
-            $location->name = $post_data['location_name'];
-            $location->streetaddress1 = $post_data['location_address_1'];
-            $location->streetaddress2 = $post_data['location_address_2'];
-            $location->room = $post_data['location_room'];
-            $location->city = $post_data['location_city'];
-            $location->state = $post_data['location_state'];
-            $location->zip = $post_data['location_zip'];
-            $location->mapurl = $post_data['location_map_url'];
-            $location->webpageurl = $post_data['location_webpage'];
-            $location->hours = $post_data['location_hours'];
-            $location->directions = $post_data['location_directions'];
-            $location->additionalpublicinfo = $post_data['location_additional_public_info'];
-            $location->type = $post_data['location_type'];
-            $location->phone = $post_data['location_phone'];
-            if (array_key_exists('location_save', $post_data) && $post_data['location_save'] == 'on') {
-                $location->user_id = $user->uid;
-            }
-            $location->standard = 0;
-
-            $location->insert();
+            $location = $this->addLocation($post_data, $user);
+            
             $event_datetime->location_id = $location->id;
         } else {
-            $event_datetime->location_id = $post_data['location'];    
+            $event_datetime->location_id = $post_data['location'];
         }
 
         # set the start date and end date
@@ -143,6 +124,47 @@ class CreateEvent implements PostHandlerInterface
         }
 
         return $event;
+    }
+
+    /**
+     * Add a location
+     * 
+     * @param array $post_data
+     * @return Location
+     */
+    protected function addLocation(array $post_data, $user)
+    {
+        $allowed_fields = array(
+            'name',
+            'streetaddress1',
+            'streetaddress2',
+            'room',
+            'city',
+            'state',
+            'zip',
+            'mapurl',
+            'webpageurl',
+            'hours',
+            'directions',
+            'additionalpublicinfo',
+            'type',
+            'phone',
+        );
+
+        $location = new Location;
+
+        foreach ($allowed_fields as $field) {
+            $location->$field = $post_data['new_location'][$field];
+        }
+
+        if (array_key_exists('location_save', $post_data) && $post_data['location_save'] == 'on') {
+            $location->user_id = $user->uid;
+        }
+        $location->standard = 0;
+
+        $location->insert();
+        
+        return $location;
     }
 
     public function handlePost(array $get, array $post, array $files)
