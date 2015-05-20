@@ -30,6 +30,7 @@ $page->addStyleSheet($base_frontend_url.'templates/default/html/css/jquery-ui.mi
 $page->head .= '<script>var frontend_url = "'.$base_frontend_url.'";</script>' . PHP_EOL;
 $page->head .= '<script>var manager_url = "'.$base_manager_url.'";</script>' . PHP_EOL;
 $page->addScript($base_frontend_url.'templates/default/html/js/events.min.js');
+$page->addScript($base_frontend_url.'templates/default/html/js/manager.min.js');
 ?>
 <?php 
 //other

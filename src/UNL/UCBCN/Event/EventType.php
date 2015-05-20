@@ -39,15 +39,6 @@ class EventType extends Record
         return 'event_has_eventtype';
     }
 
-    function table()
-    {
-        return array(
-            'id'=>129,
-            'event_id'=>129,
-            'eventtype_id'=>129,
-        );
-    }
-
     function keys()
     {
         return array(
@@ -55,17 +46,6 @@ class EventType extends Record
         );
     }
     
-    function sequenceKey()
-    {
-        return array('id',true);
-    }
-    
-    function links()
-    {
-        return array('event_id'     => 'event:id',
-                     'eventtype_id' => 'eventtype:id');
-    }
-
     /**
      * Get the event type record (details) for this link
      * 

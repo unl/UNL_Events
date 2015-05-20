@@ -4,10 +4,12 @@ namespace UNL\UCBCN;
 use UNL\UCBCN\ActiveRecord\Record;
 use UNL\UCBCN\Calendar;
 use UNL\UCBCN\Calendar\Event as CalendarHasEvent;
+use UNL\UCBCN\Calendar\EventType;
 use UNL\UCBCN\Event\Occurrences;
 use UNL\UCBCN\Event\RecurringDate;
 use UNL\UCBCN\EventListing;
 use UNL\UCBCN\Manager\Auth;
+use UNL\UCBCN\Manager\Controller;
 
 /**
  * Table Definition for event
@@ -106,14 +108,34 @@ class Event extends Record
             $calendar_has_event->update();
         }
     }
+
+    public function getEditURL($calendar) {
+        return Controller::$url . $calendar->shortname . '/event/' . $this->id . '/edit/';
+    }    
+
+    public function getRecommendURL($calendar) {
+        return Controller::$url . $calendar->shortname . '/event/' . $this->id . '/recommend/';
+    }
+
+    # events will only have one type. But the database allows them to have more, technically.
+    # hence this method is named getFirstType
+    #
+    # returns an EventType
+    public function getFirstType() {
+        $first_type = NULL;
+
+        $types = $this->getEventTypes();
+        foreach($types as $type) {
+            $first_type = $type->getType();
+            break;
+        }
+
+        return $first_type;
+    }
     
     /**
      * This function processes any posted files,
      * sepcifically the images for an event.
-     *
-     * Called from insert() or update().
-     *
-     * @return void
      */
     public function processFileAttachments()
     {
