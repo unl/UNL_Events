@@ -20,8 +20,8 @@ class EditAccount implements PostHandlerInterface
     {
         $allowed_fields = array(
             'name',
-            'address_1',
-            'address_2',
+            'streetaddress1',
+            'streetaddress2',
             'city',
             'state',
             'zip',
