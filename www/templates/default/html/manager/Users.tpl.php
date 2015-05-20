@@ -20,7 +20,10 @@ Current Users on this Calendar
 	    <div class="wdn-col-two-thirds" style="text-align: right;">
 	        <a class="wdn-button wdn-button-brand" href="<?php echo $user->getEditPermissionsURL($context->calendar) ?>">Edit Permissions</a>
 	        |
-	        <a class="wdn-button wdn-button-brand" href="<?php echo $user->getDeletePermissionsURL($context->calendar) ?>">Remove From Calendar</a>
+	        <form method="post" action="<?php echo $user->getDeletePermissionsURL($context->calendar) ?>" class="delete-form">
+                <input type="hidden" name="user_uid" value="<?php echo $user->uid ?>" />
+                <button type="submit">Delete</button>
+            </form>
 	    </div>
     </div>
     <?php } ?>
