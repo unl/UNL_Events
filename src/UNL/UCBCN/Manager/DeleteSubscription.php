@@ -17,13 +17,13 @@ class DeleteSubscription
         $this->calendar = Calendar::getByShortname($this->options['calendar_shortname']);
 
         if ($this->calendar === FALSE) {
-            throw new \Exception("That calendar could not be found.", 500);
+            throw new \Exception("That calendar could not be found.", 404);
         }
 
         $this->subscription = Subscription::getByID($this->options['subscription_id']);
 
         if ($this->subscription === FALSE) {
-            throw new \Exception("That subscription could not be found.", 500);
+            throw new \Exception("That subscription could not be found.", 404);
         }
         
         if (empty($_POST)) {

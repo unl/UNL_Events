@@ -18,13 +18,13 @@ class DeleteUser
         $this->calendar = Calendar::getByShortname($this->options['calendar_shortname']);
 
         if ($this->calendar === FALSE) {
-            throw new \Exception("That calendar could not be found.", 500);
+            throw new \Exception("That calendar could not be found.", 404);
         }
 
         $this->user = User::getByUID($this->options['user_uid']);
 
         if ($this->user === FALSE) {
-            throw new \Exception("That user could not be found.", 500);
+            throw new \Exception("That user could not be found.", 404);
         }
 
         if (empty($_POST)) {
