@@ -34,6 +34,8 @@ class Controller {
      * @var int
      */
     public static $default_calendar_id = 1;
+
+    public static $url = '/manager/';
     
     public function __construct($options = array()) {
         $this->options = $options + $this->options;
@@ -52,8 +54,6 @@ class Controller {
         }
 
     }
-
-    public static $url = '/manager/';
 
     /**
      * Get the URL to the manager
@@ -85,6 +85,25 @@ class Controller {
         } else {
             $this->output = new $this->options['model']($this->options);
         }
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $this->handlePost($this->output);
+        }
+    }
+    
+    protected function handlePost($object)
+    {
+        if (!$object instanceof PostHandlerInterface) {
+            throw new \Exception("The object is not an instance of the PostHandlerInterface", 500);
+        }
+        
+        $result = $object->handlePost($_GET, $_POST, $_FILES);
+        
+        if (is_string($result)) {
+            self::redirect($result);
+        }
+
+        return $result;
     }
 
     /**

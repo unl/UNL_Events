@@ -10,7 +10,7 @@ use UNL\UCBCN\Event\EventType;
 use UNL\UCBCN\Event\Occurrence;
 use UNL\UCBCN\User;
 
-class CreateEvent 
+class CreateEvent implements PostHandlerInterface
 {
     public $options = array();
 
@@ -22,12 +22,7 @@ class CreateEvent
         $this->calendar = CalendarModel::getByShortName($this->options['calendar_shortname']);
 
         if ($this->calendar === FALSE) {
-            throw new \Exception("That calendar could not be found.", 500);
-        }
-
-        if (!empty($_POST)) {
-            $this->saveEvent($_POST);
-            header('Location: /manager/' . $this->calendar->shortname . '/');
+            throw new \Exception("That calendar could not be found.", 404);
         }
     }
 
@@ -148,5 +143,13 @@ class CreateEvent
         }
 
         return $event;
+    }
+
+    public function handlePost(array $get, array $post, array $files)
+    {
+        $this->saveEvent($post);
+        
+        //redirect
+        return '/manager/' . $this->calendar->shortname . '/';
     }
 }

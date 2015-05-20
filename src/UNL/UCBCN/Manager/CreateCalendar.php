@@ -3,7 +3,7 @@ namespace UNL\UCBCN\Manager;
 
 use UNL\UCBCN\Calendar;
 
-class CreateCalendar
+class CreateCalendar implements PostHandlerInterface
 {
     public $options = array();
     public $calendar;
@@ -12,31 +12,12 @@ class CreateCalendar
     {
         $this->options = $options + $this->options;
 
-        # check if we are posting to this controller
-        if (!empty($_POST)) {
-            if (array_key_exists('calendar_shortname', $this->options)) {
-                # we are editing an existing calendar
-                $this->calendar = Calendar::getByShortname($this->options['calendar_shortname']);
-
-                if ($this->calendar === FALSE) {
-                    throw new \Exception("That calendar could not be found.", 500);
-                }
-
-                $this->updateCalendar($_POST);
-            } else {
-                # we are creating a new calendar
-                $this->calendar = $this->createCalendar($_POST);
-            }
-
-            header('Location: /manager/' . $this->calendar->shortname . '/');
-        }
-
         # check if we are looking to edit a calendar
         if (array_key_exists('calendar_shortname', $this->options)) {
             $this->calendar = Calendar::getByShortname($this->options['calendar_shortname']);
 
             if ($this->calendar === FALSE) {
-                throw new \Exception("That calendar could not be found.", 500);
+                throw new \Exception("That calendar could not be found.", 404);
             }
         } else {
             # we are creating a new calendar
@@ -112,5 +93,25 @@ class CreateCalendar
         $calendar->addUser($user);
 
         return $calendar;
+    }
+
+    public function handlePost(array $get, array $post, array $files)
+    {
+        if (array_key_exists('calendar_shortname', $this->options)) {
+            # we are editing an existing calendar
+            $this->calendar = Calendar::getByShortname($this->options['calendar_shortname']);
+
+            if ($this->calendar === FALSE) {
+                throw new \Exception("That calendar could not be found.", 404);
+            }
+
+            $this->updateCalendar($post);
+        } else {
+            # we are creating a new calendar
+            $this->calendar = $this->createCalendar($post);
+        }
+
+        //redirect
+        return '/manager/' . $this->calendar->shortname . '/';
     }
 }

@@ -3,7 +3,7 @@ namespace UNL\UCBCN\Manager;
 
 use UNL\UCBCN\Account;
 
-class EditAccount
+class EditAccount implements PostHandlerInterface
 {
     public $options = array();
     public $account;
@@ -14,11 +14,6 @@ class EditAccount
 
         $user = Auth::getCurrentUser();
         $this->account = $user->getAccount();
-
-        if (!empty($_POST)) {
-            $this->updateAccount($_POST);
-            Controller::redirect(Controller::getEditAccountURL());
-        }
     }
 
     private function updateAccount($post_data)
@@ -37,5 +32,13 @@ class EditAccount
 
         $this->account->datelastupdated = date('Y-m-d H:i:s');
         $this->account->update();
+    }
+
+    public function handlePost(array $get, array $post, array $files)
+    {
+        $this->updateAccount($post);
+        
+        //redirect
+        return Controller::getEditAccountURL();
     }
 }

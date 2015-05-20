@@ -6,7 +6,7 @@ use UNL\UCBCN\Calendars;
 use UNL\UCBCN\Calendar\Subscription;
 use UNL\UCBCN\Calendar\SubscriptionHasCalendar;
 
-class CreateSubscription
+class CreateSubscription implements PostHandlerInterface
 {
     public $options = array();
     public $calendar;
@@ -18,26 +18,7 @@ class CreateSubscription
         $this->calendar = Calendar::getByShortname($this->options['calendar_shortname']);
 
         if ($this->calendar === FALSE) {
-            throw new \Exception("That calendar could not be found.", 500);
-        }
-
-        # check if we are posting to this controller
-        if (!empty($_POST)) {
-            if (array_key_exists('subscription_id', $this->options)) {
-                # we are editing an existing subscription
-                $this->subscription = Subscription::getById($this->options['subscription_id']);
-
-                if ($this->subscription == FALSE) {
-                    throw new \Exception("That subscription could not be found.", 500);
-                }
-
-                $this->updateSubscription($_POST);
-            } else {
-                # we are creating a new subscription
-                $this->subscription = $this->createSubscription($_POST);
-            }
-
-            header('Location: /manager/' . $this->calendar->shortname . '/subscriptions/');
+            throw new \Exception("That calendar could not be found.", 404);
         }
 
         if (array_key_exists('subscription_id', $this->options)) {
@@ -45,7 +26,7 @@ class CreateSubscription
             $this->subscription = Subscription::getById($this->options['subscription_id']);
 
             if ($this->subscription == FALSE) {
-                throw new \Exception("That subscription could not be found.", 500);
+                throw new \Exception("That subscription could not be found.", 404);
             }
         } else {
             $this->subscription = new Subscription;
@@ -116,4 +97,23 @@ class CreateSubscription
         return $this->subscription;
     }
 
+    public function handlePost(array $get, array $post, array $files)
+    {
+        if (array_key_exists('subscription_id', $this->options)) {
+            # we are editing an existing subscription
+            $this->subscription = Subscription::getById($this->options['subscription_id']);
+
+            if ($this->subscription == FALSE) {
+                throw new \Exception("That subscription could not be found.", 404);
+            }
+
+            $this->updateSubscription($post);
+        } else {
+            # we are creating a new subscription
+            $this->subscription = $this->createSubscription($post);
+        }
+
+        //redirect
+        return '/manager/' . $this->calendar->shortname . '/subscriptions/';
+    }
 }
