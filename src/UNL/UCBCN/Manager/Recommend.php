@@ -52,7 +52,7 @@ class Recommend
                 if ($user->hasPermission($pending_permission->id, $calendar_id)) {
                     $calendar->addEvent($this->event, $status, $user, 'recommended');
                 }
-            } else if ($status == 'pending') {
+            } else if ($status == 'posted') {
                 if ($user->hasPermission($posted_permission->id, $calendar_id)) {
                     $calendar->addEvent($this->event, $status, $user, 'recommended');
                 }
