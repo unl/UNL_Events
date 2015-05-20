@@ -4,15 +4,6 @@ require(['jquery', 'wdn', 'modernizr'], function($, WDN, Modernizr) {
 	var $progress = $('<progress>'),
 		mqBp2 = '(min-width: 768px)';
 	
-	$(document).ready(function() {
-		$('.pending-event-tools').change(function () {
-			if ($(this).val() == 'recommend') {
-				// redirect to recommend URL
-				window.location = $(this).attr('data-recommend-url');
-			}
-		});
-	});
-
 	$(function() {
 		var homeUrl = $('link[rel=home]'),
 			mainScript = $('#script_main'),

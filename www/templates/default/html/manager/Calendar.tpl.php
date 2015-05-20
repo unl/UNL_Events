@@ -40,7 +40,7 @@
                     <input type="checkbox" class="select-event" data-id="<?php echo $event->id; ?>">
                 </div>
                 <div class="wdn-col-one-sixth">
-                    <?php echo $event->title; ?>
+                    <a href="<?php echo $event->getEditURL($context->calendar) ?>"><?php echo $event->title; ?></a>
                 </div>
                 <div class="wdn-col-one-third">
                     <?php foreach($event->getDateTimes() as $datetime) { ?>
