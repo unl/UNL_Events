@@ -88,3 +88,7 @@ form legend {
 	margin-top: 0.5em;
 	padding-bottom: 0;
 }
+
+form.delete-form {
+    display: inline;
+}
