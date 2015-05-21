@@ -22,12 +22,12 @@ class EditEvent implements PostHandlerInterface
         $this->options = $options + $this->options;
         $this->calendar = CalendarModel::getByShortName($this->options['calendar_shortname']);
         if ($this->calendar === FALSE) {
-            throw new \Exception("That calendar could not be found.", 500);
+            throw new \Exception("That calendar could not be found.", 404);
         }
 
         $this->event = Event::getByID($this->options['event_id']);
         if ($this->event === FALSE) {
-            throw new \Exception("That event could not be found.", 500);
+            throw new \Exception("That event could not be found.", 404);
         }
 
         $main_calendar = CalendarModel::getByID(Controller::$default_calendar_id);
@@ -37,7 +37,7 @@ class EditEvent implements PostHandlerInterface
     public function handlePost(array $get, array $post, array $files)
     {
         $this->updateEvent($_POST);
-        header('Location: /manager/' . $this->calendar->shortname . '/');
+        return $this->calendar->getManageURL();
     }
 
     public function getEventTypes()

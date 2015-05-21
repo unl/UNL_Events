@@ -111,7 +111,11 @@ class Event extends Record
 
     public function getEditURL($calendar) {
         return Controller::$url . $calendar->shortname . '/event/' . $this->id . '/edit/';
-    }    
+    }
+
+    public function getDeleteURL($calendar) {
+        return Controller::$url . $calendar->shortname . '/event/' . $this->id . '/delete/';
+    }
 
     public function getRecommendURL($calendar) {
         return Controller::$url . $calendar->shortname . '/event/' . $this->id . '/recommend/';
@@ -133,21 +137,6 @@ class Event extends Record
         return $first_type;
     }
     
-    /**
-     * This function processes any posted files,
-     * sepcifically the images for an event.
-     */
-    public function processFileAttachments()
-    {
-        if (isset($_FILES['imagedata'])
-            && is_uploaded_file($_FILES['imagedata']['tmp_name'])
-            && $_FILES['imagedata']['error']==UPLOAD_ERR_OK) {
-            global $_UNL_UCBCN;
-            $this->imagemime = $_FILES['imagedata']['type'];
-            $this->imagedata = file_get_contents($_FILES['imagedata']['tmp_name']);
-        }
-    }
-
     public function deleteRecurrences()
     {
         $options = array(
@@ -260,8 +249,6 @@ class Event extends Record
      */
     public function insert($calendar = null, $source = null)
     {
-        $this->processFileAttachments();
-
         $this->datecreated = date('Y-m-d H:i:s');
         $this->datelastupdated = date('Y-m-d H:i:s');
 
@@ -295,8 +282,6 @@ class Event extends Record
      */
     public function update()
     {
-        $this->processFileAttachments();
-
         $this->uidcreated = Auth::getCurrentUser();
         $this->uidlastupdated = Auth::getCurrentUser();
         $result = parent::update();
