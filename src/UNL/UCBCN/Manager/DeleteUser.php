@@ -6,7 +6,7 @@ use UNL\UCBCN\Calendar;
 use UNL\UCBCN\Permissions;
 use UNL\UCBCN\Manager\Controller;
 
-class DeleteUser
+class DeleteUser implements PostHandlerInterface
 {
     public $options = array();
     public $calendar;
@@ -26,23 +26,15 @@ class DeleteUser
         if ($this->user === FALSE) {
             throw new \Exception("That user could not be found.", 404);
         }
-
-        if (empty($_POST)) {
-            throw new \Exception("Deletion requires a POST request", 400);
-        }
-
-        $this->deleteUser($_POST);
-
-        Controller::redirect($this->calendar->getUsersURL());
     }
-    
-    protected function deleteUser($post_data)
+
+    public function handlePost(array $get, array $post, array $files)
     {
-        if (!isset($post_data['user_uid'])) {
+        if (!isset($post['user_uid'])) {
             throw new \Exception("The user_uid must be set in the post data", 400);
         }
 
-        if ($post_data['user_uid'] != $this->user->uid) {
+        if ($post['user_uid'] != $this->user->uid) {
             throw new \Exception("The user_uid in the post data must match the user_uid in the URL", 400);
         }
 
@@ -50,5 +42,8 @@ class DeleteUser
         foreach ($current_permissions as $permission) {
             $this->user->removePermission($permission->id, $this->calendar->id);
         }
+
+        //Redirect to the user list
+        return $this->calendar->getUsersURL();
     }
 }
