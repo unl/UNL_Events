@@ -4,6 +4,7 @@ namespace UNL\UCBCN;
 use UNL\UCBCN\ActiveRecord\Record;
 use UNL\UCBCN\Calendar;
 use UNL\UCBCN\Calendar\Event as CalendarHasEvent;
+use UNL\UCBCN\Calendar\Events as CalendarHasEvents;
 use UNL\UCBCN\Calendar\EventType;
 use UNL\UCBCN\Event\Occurrences;
 use UNL\UCBCN\Event\RecurringDate;
@@ -91,7 +92,7 @@ class Event extends Record
     }
 
     public function getStatusWithCalendar(Calendar $calendar) {
-        $calendar_has_event = CalendarHasEvent::getById($calendar->id, $this->id);
+        $calendar_has_event = CalendarHasEvent::getByIds($calendar->id, $this->id);
         if ($calendar_has_event === FALSE) {
             return NULL;
         } else {
@@ -100,7 +101,7 @@ class Event extends Record
     }
 
     public function updateStatusWithCalendar(Calendar $calendar, $status) {
-        $calendar_has_event = CalendarHasEvent::getById($calendar->id, $this->id);
+        $calendar_has_event = CalendarHasEvent::getByIds($calendar->id, $this->id);
         if ($calendar_has_event === FALSE) {
             throw new Exception('Event does not have status with calendar');
         } else {
@@ -319,33 +320,28 @@ class Event extends Record
     }
     
     /**
-     * Performs a delete of this event and all child records
-     *
-     * @return bool
+     * 
      */
     public function delete()
     {
-        //get all facebook events for this id and delete them.
-            $events = UNL_UCBCN_Manager::factory('eventdatetime');
-            $events->whereAdd('eventdatetime.event_id = '.$this->id);
-            $number = $events->find();
-            while ($events->fetch()) {
-                $facebook = new \UNL\UCBCN\Facebook\Instance($events->id);
-                $facebook->deleteEvent();
-            }
-          
-        // Delete child elements that would be orphaned.
-        if (ctype_digit($this->id)) {
-            foreach (array('calendar_has_event',
-                           'event_has_keyword',
-                           'eventdatetime',
-                           'event_has_eventtype',
-                           'event_has_sponsor',
-                           'event_isopento_audience',
-                           'event_targets_audience') as $table) {
-                self::getDB()->query('DELETE FROM '.$table.' WHERE event_id = '.$this->id);
-            }
+        # delete all related eventdatetimes
+        $datetimes = $this->getDatetimes();
+        foreach ($datetimes as $record) {
+            $record->delete();
         }
+
+        # delete the event has eventtype record(s)
+        $eventtypes = $this->getEventTypes();
+        foreach ($eventtypes as $record) {
+            $record->delete();
+        }
+
+        # delete all calendar_has_events
+        $calendar_has_events = new CalendarHasEvents(array('event_id' => $this->id));
+        foreach ($calendar_has_events as $record) {
+            $record->delete();
+        }
+
         return parent::delete();
     }
     
