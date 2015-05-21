@@ -293,47 +293,15 @@ class Event extends Record
      *
      * @return bool
      */
-    public function update($do=false)
+    public function update()
     {
-        global $_UNL_UCBCN;
-        $GLOBALS['event_id'] = $this->id;
-        if (isset($this->consider)) {
-            // The user has checked the 'Please consider this event for the main calendar'
-            $add_to_default = $this->consider;
-            unset($this->consider);
-        } else {
-            $add_to_default = 0;
-        }
-        if (is_object($do) && isset($do->consider)) {
-            unset($do->consider);
-        }
-        $this->datelastupdated = date('Y-m-d H:i:s');
-        if (isset($_SESSION['_authsession'])) {
-            $this->uidlastupdated=$_SESSION['_authsession']['username'];
-        }
         $this->processFileAttachments();
-        $res = parent::update();
-        if ($res) {
-            if ($add_to_default && isset($_UNL_UCBCN['default_calendar_id'])) {
-                // Add this as a pending event to the default calendar.
-                $che = UNL_UCBCN::factory('calendar_has_event');
-                $che->calendar_id = $_UNL_UCBCN['default_calendar_id'];
-                $che->event_id = $this->id;
-                if ($che->find()==0) {
-                    $this->addToCalendar($_UNL_UCBCN['default_calendar_id'], 'pending', 'checked consider event');
-                }
-            }
-            //loop though all eventdateandtime instances for this event.
-            $events = UNL_UCBCN_Manager::factory('eventdatetime');
-            $events->whereAdd('eventdatetime.event_id = '.$this->id);
-            $number = $events->find();
-            while ($events->fetch()) {
-                $facebook = new \UNL\UCBCN\Facebook\Instance($events->id);
-                $facebook->updateEvent();
-                
-            }
-        }
-        return $res;
+
+        $this->uidcreated = Auth::getCurrentUser();
+        $this->uidlastupdated = Auth::getCurrentUser();
+        $result = parent::update();
+
+        return $result;
     }
     
     /**
