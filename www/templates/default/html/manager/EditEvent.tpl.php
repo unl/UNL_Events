@@ -23,8 +23,8 @@
 <div class="wdn-grid-set">
     <form action="" method="POST">
         <div class="bp1-wdn-col-two-thirds">
-            <legend>Details</legend>
             <fieldset>
+            	<legend>Details</legend>
                 <label for="title">Title*</label>
                 <input type="text" id="title" name="title" value="<?php echo $event->title; ?>" />
 
@@ -41,13 +41,13 @@
                 <?php } ?>
                 </select>
             </fieldset>
-            <legend>Location, Date, and Time</legend>
             <fieldset>
-            <div>
-            	Dates
+	            <legend>Location, Date, and Time</legend>
+	            <div>
+	            	Dates
 
-            	Location
-            </div>
+	            	Location
+	            </div>
 
             	<?php foreach($event->getDatetimes() as $datetime) { ?>
             	<div>
