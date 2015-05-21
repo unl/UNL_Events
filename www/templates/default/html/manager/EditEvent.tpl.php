@@ -2,7 +2,22 @@
     $calendar = $context->calendar;
     $event = $context->event;
     $event_type = $event->getFirstType();
-	$nf = new NumberFormatter('en_US', NumberFormatter::ORDINAL);
+
+    function ordinal($number) {
+    	$mod = $number % 100;
+    	if ($mod >= 11 && $mod <= 13) {
+    		return $number . 'th';
+    	} else if ($mod % 10 == 1) {
+    		return $number . 'st';
+    	} else if ($mod % 10 == 2) {
+    		return $number . 'nd';
+    	} else if ($mod % 10 == 3) {
+    		return $number . 'rd';
+    	} else {
+    		return $number . 'th';
+    	}
+    }
+
 ?>
 <?php echo $calendar->name ?> &gt; Edit <?php echo $event->title ?>
 <div class="wdn-grid-set">
@@ -54,7 +69,7 @@
 					        		date('n/d/y', strtotime($datetime->starttime)) . 
 					            	' to ' . date('n/d/y', strtotime($datetime->recurs_until));
 				        	} else if ($datetime->rectypemonth == 'date') {
-				        		echo $nf->format(date('d', strtotime($datetime->starttime))) . 
+				        		echo ordinal(date('d', strtotime($datetime->starttime))) . 
 				        			'of each month @ ' . date('g:ia', strtotime($datetime->starttime)) . ' from ' . 
 				        			date('n/d/y', strtotime($datetime->starttime)) . 
 				            		' to ' . date('n/d/y', strtotime($datetime->recurs_until));
