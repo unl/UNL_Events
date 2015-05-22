@@ -30,11 +30,19 @@ class CreateEvent implements PostHandlerInterface
     {
         return new EventTypes(array());
     }
-
-    public function getLocations()
+    
+    public function getUserLocations()
     {
         $user = Auth::getCurrentUser();
         return new Locations(array('user_id' => $user->uid));
+    }
+    
+    public function getStandardLocations($display_order)
+    {
+        return new Locations(array(
+            'standard'      => true,
+            'display_order' => $display_order,
+        ));
     }
 
     private function calculateDate($date, $hour, $minute, $am_or_pm)
