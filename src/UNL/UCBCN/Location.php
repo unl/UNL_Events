@@ -44,6 +44,11 @@ class Location extends Record
     public $type;                            // string(100)
     public $phone;                           // string(50)
     public $standard;                        // int(1)
+    public $user_id;                         // string(255)
+    public $display_order;                   // int(1)
+    
+    const DISPLAY_ORDER_MAIN      = NULL;
+    const DISPLAY_ORDER_EXTENSION = 1;
 
     public static function getTable()
     {
