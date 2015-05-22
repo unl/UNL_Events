@@ -27,7 +27,7 @@
                     <legend>Location, Date, and Time</legend>
                     <fieldset>
                         <label for="location">Location*</label>
-                        <select id="location" name="location">
+                        <select id="location" name="location" class="use-select2">
                         <?php foreach ($context->getLocations() as $location) { ?>
                             <option value="<?php echo $location->id ?>"><?php echo $location->name ?></option>
                         <?php } ?>
