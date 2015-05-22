@@ -17,7 +17,7 @@
                         <textarea id="description" name="description"></textarea>
 
                         <label for="type">Type</label>
-                        <select id="type" name="type">
+                        <select id="type" name="type" class="use-select2">
                         <?php foreach ($context->getEventTypes() as $type) { ?>
                             <option value="<?php echo $type->id ?>"><?php echo $type->name ?></option>
                         <?php } ?>
@@ -27,11 +27,23 @@
                     <legend>Location, Date, and Time</legend>
                     <fieldset>
                         <label for="location">Location*</label>
-                        <select id="location" name="location">
-                        <?php foreach ($context->getLocations() as $location) { ?>
-                            <option value="<?php echo $location->id ?>"><?php echo $location->name ?></option>
-                        <?php } ?>
-                            <option value="new">-- New Location --</option>
+                        <select id="location" name="location" class="use-select2">
+                            <optgroup label="Your saved locations">
+                                <?php foreach ($context->getUserLocations() as $location): ?>
+                                    <option value="<?php echo $location->id ?>"><?php echo $location->name ?></option>
+                                <?php endforeach ?>
+                                <option value="new">-- New Location --</option>
+                            </optgroup>
+                            <optgroup label="UNL Campus locations">
+                                <?php foreach ($context->getStandardLocations(\UNL\UCBCN\Location::DISPLAY_ORDER_MAIN) as $location): ?>
+                                    <option value="<?php echo $location->id ?>"><?php echo $location->name ?></option>
+                                <?php endforeach ?>
+                            </optgroup>
+                            <optgroup label="Extension locations">
+                                <?php foreach ($context->getStandardLocations(\UNL\UCBCN\Location::DISPLAY_ORDER_EXTENSION) as $location): ?>
+                                    <option value="<?php echo $location->id ?>"><?php echo $location->name ?></option>
+                                <?php endforeach ?>
+                            </optgroup>
                         </select>
 
                         <div id="new-location-fields">

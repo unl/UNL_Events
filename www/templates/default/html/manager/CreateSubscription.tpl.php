@@ -16,7 +16,7 @@
                 <input type="text" id="title" name="title" value="<?php echo $context->subscription->name ?>" />
 
                 <label for="calendars">Events Posted to Calendar(s):</label>
-                <select id="calendars" name="calendars[]" multiple="multiple">
+                <select id="calendars" name="calendars[]" multiple="multiple" class="use-select2">
                 <?php foreach($context->getAvailableCalendars() as $calendar) { ?>
                     <option <?php if (in_array($calendar->id, $subbed_calendar_ids)) echo 'selected="selected"'; ?> value="<?php echo $calendar->id ?>"><?php echo $calendar->name ?></option>
                 <?php } ?>
