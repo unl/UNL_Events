@@ -1,4 +1,4 @@
-require([frontend_url + "templates/default/html/js/vendor/select2/js/select2.min.js"], function(select2) {
+require([frontend_url + 'templates/default/html/js/vendor/select2/js/select2.min.js', 'jquery'], function(select2) {
 	WDN.jQuery(".use-select2").select2();
 });
 
