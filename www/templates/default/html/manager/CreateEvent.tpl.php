@@ -17,7 +17,7 @@
                         <textarea id="description" name="description"></textarea>
 
                         <label for="type">Type</label>
-                        <select id="type" name="type">
+                        <select id="type" name="type" class="use-select2">
                         <?php foreach ($context->getEventTypes() as $type) { ?>
                             <option value="<?php echo $type->id ?>"><?php echo $type->name ?></option>
                         <?php } ?>
