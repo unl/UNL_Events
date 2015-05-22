@@ -18,7 +18,7 @@ use UNL\UCBCN\ActiveRecord\Record;
 
 class Locations extends RecordList
 {
-	function __construct($options = array())
+    function __construct($options = array())
     {
         parent::__construct($options);
     }
@@ -31,10 +31,10 @@ class Locations extends RecordList
     }
 
     public function getSQL() {
-    	if (array_key_exists('user_id', $this->options)) {
-    		return 'SELECT id FROM location WHERE standard = 1 OR user_id = "' . $this->options['user_id'] . '" ORDER BY user_id DESC, display_order ASC, name ASC;';
-    	} else {
-    		return parent::getSQL();
-    	}
+        if (array_key_exists('user_id', $this->options)) {
+            return 'SELECT id FROM location WHERE standard = 1 OR user_id = "' . $this->options['user_id'] . '" ORDER BY user_id DESC, display_order ASC, name ASC;';
+        } else {
+            return parent::getSQL();
+        }
     }
 }
