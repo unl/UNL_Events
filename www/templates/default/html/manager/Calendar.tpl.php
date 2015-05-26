@@ -56,6 +56,7 @@
                         <option value="delete">Delete</option>
                     </select>
                 </div>
+                <form id="delete-<?php echo $event->id; ?>" method="POST" action="<?php echo $event->getDeleteURL($context->calendar) ?>" class="delete-form hidden"></form>
             </div>
             <br>
             <?php } ?>
