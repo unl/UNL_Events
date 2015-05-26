@@ -2,6 +2,7 @@
 namespace UNL\UCBCN\Manager;
 
 use UNL\UCBCN\Calendar;
+use UNL\UCBCN\Calendar\Event as CalendarHasEvent;
 use UNL\UCBCN\Event;
 
 class DeleteEvent implements PostHandlerInterface
@@ -27,8 +28,18 @@ class DeleteEvent implements PostHandlerInterface
 
     public function handlePost(array $get, array $post, array $files)
     {
-        $this->event->delete();
-        
+        # get the Calendar Has Event record
+        $calendar_has_event = CalendarHasEvent::getByIDs($this->calendar->id, $this->event->id);
+
+        # check if this is where the event was originally created
+        if ($calendar_has_event->source == 'create event form') {
+            # delete the event from the entire system
+            $this->event->delete();
+        } else {
+            # delete the calendar has event record
+            $calendar_has_event->delete();
+        }
+
         //redirect
         return $this->calendar->getManageURL();
     }
