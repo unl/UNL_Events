@@ -54,6 +54,10 @@ class Calendar extends Record
     public $recommendationswithinaccount;    // int(1)
     public $theme;                           // string(255)
 
+    const STATUS_PENDING  = 'pending';
+    const STATUS_POSTED   = 'posted';
+    const STATUS_ARCHIVED = 'archived';
+    
     public static function getTable()
     {
         return 'calendar';
