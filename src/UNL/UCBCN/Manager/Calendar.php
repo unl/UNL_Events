@@ -7,6 +7,9 @@ use UNL\UCBCN\User;
 class Calendar {
     public $options = array();
 
+    /**
+     * @var \UNL\UCBCN\Calendar
+     */
     public $calendar;
 
     public function __construct($options = array()) {
@@ -24,22 +27,13 @@ class Calendar {
     }
 
     public function getCategorizedEvents() {
-        $events = $this->calendar->getEvents();
-
+        
         $categories = array(
-            'pending' => array(),
-            'posted' => array(),
-            'archived' => array(),
-            'other' => array()
+            'pending'  => $this->calendar->getEvents(CalendarModel::STATUS_PENDING),
+            'posted'   => $this->calendar->getEvents(CalendarModel::STATUS_POSTED),
+            'archived' => $this->calendar->getEvents(CalendarModel::STATUS_ARCHIVED)
         );
-
-        foreach ($events as $event) {
-            $status = $event->getStatusWithCalendar($this->calendar);
-            $key = array_key_exists($status, $categories) ? $status : 'other';
-
-            $categories[$key][] = $event;
-        }
-
+        
         return $categories;
     }
 
