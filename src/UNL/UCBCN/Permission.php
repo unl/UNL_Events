@@ -30,6 +30,8 @@ class Permission extends Record
     public $id;                              // int(10)  not_null primary_key unsigned auto_increment
     public $name;                            // string(100)
     public $description;                     // string(255)
+    
+    const PERMISSION_EVENT_EDIT = 'Event Edit';
 
     public static function getTable()
     {

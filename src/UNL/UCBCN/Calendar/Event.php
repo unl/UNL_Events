@@ -38,6 +38,9 @@ class Event extends Record
     public $uidcreated;                      // string(100)
     public $datelastupdated;                 // datetime(19)  binary
     public $uidlastupdated;                  // string(100)
+    
+    const SOURCE_CREATE_EVENT_FORM      = 'create event form';
+    const SOURCE_CHECKED_CONSIDER_EVENT = 'checked consider event';
 
     public static function getTable()
     {
