@@ -1,45 +1,57 @@
-<select class="all-pending-event-tools">
-    <option value="">Bulk Action</option>
+<label for="bulk_action">Bulk Actions</label>
+<select id="bulk_action" class="all-pending-event-tools">
+    <option value=""></option>
     <option value="move-to-upcoming">Move to Upcoming</option>
     <option value="recommend">Recommend</option>
     <option value="delete">Delete</option>
 </select>
-<div class="wdn-grid-set">
-    <div class="wdn-col-one-sixth">
-        <input type="checkbox" id="select-all">
-    </div>
-    <div class="wdn-col-one-sixth">
-        <h6>Title</h6>
-    </div>
-    <div class="wdn-col-one-sixth">
-        <h6>Dates</h6>
-    </div>
-    <div class="wdn-col-one-sixth">
-        <h6>Location</h6>
-    </div>
-</div>
-<?php foreach($context as $event): ?>
-    
-<div class="wdn-grid-set">
-    <div class="wdn-col-one-sixth">
-        <input type="checkbox" class="select-event" data-id="<?php echo $event->id; ?>">
-    </div>
-    <div class="wdn-col-one-sixth">
-        <a href="<?php echo $event->getEditURL($controller->getCalendar()) ?>"><?php echo $event->title; ?></a>
-    </div>
-    <div class="wdn-col-one-third">
-        <?php foreach($event->getDateTimes() as $datetime) { ?>
-            <?php echo date('n/j/y @ h:ia', strtotime($datetime->starttime)); ?>
-            <?php if (!empty($location = $datetime->getLocation())) echo $location->name; ?>
-        <?php } ?>
-    </div>
-    <div class="wdn-col-one-third">
-        <select class="pending-event-tools" data-id="<?php echo $event->id; ?>" data-recommend-url="<?php echo $event->getRecommendURL($controller->getCalendar()) ?>">
-            <option value="">Select an Action</option>
-            <option value="move-to-upcoming">Move to Upcoming</option>
-            <option value="recommend">Recommend</option>
-            <option value="delete">Delete</option>
-        </select>
-    </div>
-</div>
-<?php endforeach; ?>
+
+<table>
+    <thead>
+        <tr>
+            <th>Select</th>
+            <th>Title</th>
+            <th>Date/Location</th>
+            <th>Options</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach($context as $event): ?>
+            <tr>
+                <td>
+                    <input type="checkbox" id="event_select_<?php echo $event->id ?>" class="select-event" data-id="<?php echo $event->id; ?>">
+                    <label for="event_select_<?php echo $event->id ?>">
+                        Select this event
+                    </label>
+                </td>
+                <td>
+                    <a href="<?php echo $event->getEditURL($controller->getCalendar()) ?>"><?php echo $event->title; ?></a>
+                </td>
+                <td>
+                    <ul>
+                    <?php foreach($event->getDateTimes() as $datetime): ?>
+                        <li>
+                            <?php echo date('n/j/y @ h:ia', strtotime($datetime->starttime)); ?>
+                            at <?php if (!empty($location = $datetime->getLocation())) echo $location->name; ?>
+                         </li>
+                    <?php endforeach; ?>
+                    </ul>
+                </td>
+                <td>
+                    <label for="event_action_<?php echo $event->id ?>"></label>
+                    <select 
+                        id="event_action_<?php echo $event->id ?>"
+                        class="pending-event-tools" 
+                        data-id="<?php echo $event->id; ?>"
+                        data-recommend-url="<?php echo $event->getRecommendURL($controller->getCalendar()) ?>"
+                        >
+                        <option value="">Select an Action</option>
+                        <option value="move-to-upcoming">Move to Upcoming</option>
+                        <option value="recommend">Recommend</option>
+                        <option value="delete">Delete</option>
+                    </select>
+                </td>
+        </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
