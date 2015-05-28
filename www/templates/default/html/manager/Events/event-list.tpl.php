@@ -2,6 +2,7 @@
 <select id="bulk_action" class="all-pending-event-tools">
     <option value=""></option>
     <option value="move-to-upcoming">Move to Upcoming</option>
+    <option value="move-to-upcoming">Move to Pending</option>
     <option value="recommend">Recommend</option>
     <option value="delete">Delete</option>
 </select>
@@ -41,7 +42,7 @@
                     </ul>
                 </td>
                 <td>
-                    <label for="event_action_<?php echo $event->id ?>"></label>
+                    <label for="event_action_<?php echo $event->id ?>">Select an option</label>
                     <select 
                         id="event_action_<?php echo $event->id ?>"
                         class="pending-event-tools" 
@@ -49,7 +50,12 @@
                         data-recommend-url="<?php echo $event->getRecommendURL($controller->getCalendar()) ?>"
                         >
                         <option value="">Select an Action</option>
-                        <option value="move-to-upcoming">Move to Upcoming</option>
+                        <?php if (!$current_calendar_has_event || $current_calendar_has_event->isPending()): ?>
+                            <option value="move-to-upcoming">Move to Upcoming</option>
+                        <?php endif; ?>
+                        <?php if (!$current_calendar_has_event || $current_calendar_has_event->isApproved()): ?>
+                            <option value="move-to-pending">Move to Pending</option>
+                        <?php endif; ?>
                         <option value="recommend">Recommend</option>
                         <?php if ($current_calendar_has_event): ?>
                             <option value="delete">Delete</option>

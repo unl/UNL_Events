@@ -31,7 +31,8 @@ class Permission extends Record
     public $name;                            // string(100)
     public $description;                     // string(255)
     
-    const PERMISSION_EVENT_EDIT = 'Event Edit';
+    const PERMISSION_EVENT_EDIT   = 'Event Edit';
+    const PERMISSION_EVENT_DELETE = 'Event Delete';
 
     public static function getTable()
     {
