@@ -92,3 +92,7 @@ form legend {
 form.delete-form {
     display: inline;
 }
+
+nav.calendars-list > ul {
+	list-style: none;
+}
