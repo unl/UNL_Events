@@ -8,9 +8,6 @@
 </ul>
 <div class="wdn_tabs_content">
     <div id="pending">
-        <div id="pending-toolbar">
-            <?php echo $context->calendar->name ?> <a href="<?php echo $base_manager_url . $context->calendar->shortname ?>/create/" class="wdn-button wdn-button-brand">+ New Event</a>
-        </div>
         <?php if (count($events['pending']) == 0): ?>
             There are no pending events.
         <?php else: ?>
@@ -18,9 +15,6 @@
         <?php endif; ?>
     </div>
     <div id="upcoming">
-        <div id="upcoming-toolbar">
-            <?php echo $context->calendar->name ?> <a href="#" class="wdn-button wdn-button-brand">+ New Event</a>
-        </div>
         <?php if (count($events['posted']) == 0): ?>
             There are no upcoming events.
         <?php else: ?>
@@ -28,9 +22,6 @@
         <?php endif; ?>
     </div>
     <div id="past">
-        <div id="past-toolbar">
-            <?php echo $context->calendar->name ?> <a href="#" class="wdn-button wdn-button-brand">+ New Event</a>
-        </div>
         <?php if (count($events['archived']) == 0): ?>
             There are no past events.
         <?php else: ?>

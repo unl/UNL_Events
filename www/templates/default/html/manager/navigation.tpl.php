@@ -5,6 +5,7 @@
             <a href="<?php echo $calendar->getManageURL() ?>"><?php echo $calendar->name ?></a>
             <ul>
                 <li><a href="<?php echo $calendar->getFrontendURL() ?>">Live Calendar</a></li>
+                <li><a href="<?php echo $base_manager_url . $calendar->shortname ?>/create/">New Event</a></li>
                 <li><a href="<?php echo $calendar->getEditURL() ?>">Edit Calendar Info</a></li>
                 <li><a href="<?php echo $calendar->getSubscriptionsURL() ?>">Subscriptions</a></li>
                 <li><a href="<?php echo $calendar->getUsersURL() ?>">Users &amp; Permissions</a></li>
