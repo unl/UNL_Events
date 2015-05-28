@@ -17,6 +17,9 @@
     </thead>
     <tbody>
         <?php foreach($context as $event): ?>
+            <?php
+            $current_calendar_has_event = $controller->getCalendar()->hasEvent($event->getRawObject());
+            ?>
             <tr>
                 <td>
                     <input type="checkbox" id="event_select_<?php echo $event->id ?>" class="select-event" data-id="<?php echo $event->id; ?>">
@@ -48,8 +51,11 @@
                         <option value="">Select an Action</option>
                         <option value="move-to-upcoming">Move to Upcoming</option>
                         <option value="recommend">Recommend</option>
-                        <option value="delete">Delete</option>
+                        <?php if ($current_calendar_has_event): ?>
+                            <option value="delete">Delete</option>
+                        <?php endif; ?>
                     </select>
+                    <form id="delete-<?php echo $event->id; ?>" method="POST" action="<?php echo $event->getDeleteURL($controller->getCalendar()) ?>" class="delete-form hidden"></form>
                 </td>
         </tr>
         <?php endforeach; ?>
