@@ -17,6 +17,7 @@ $routes['/^account(\/)?$/'] = 'UNL\UCBCN\Manager\EditAccount';
 $routes['/^'.$calendar_slash_optional.'$/'] = 'UNL\UCBCN\Manager\Calendar';
 $routes['/^'.$calendar_slash_required.'create(\/)?$/'] = 'UNL\UCBCN\Manager\CreateEvent';
 $routes['/^'.$calendar_slash_required.'event\/' . $event . '\/edit(\/)?$/'] = 'UNL\UCBCN\Manager\EditEvent';
+$routes['/^'.$calendar_slash_required.'event\/' . $event . '\/delete(\/)?$/'] = 'UNL\UCBCN\Manager\DeleteEvent';
 $routes['/^calendar\/new(\/)?$/'] = 'UNL\UCBCN\Manager\CreateCalendar';
 $routes['/^'.$calendar_slash_required.'edit(\/)?$/'] = 'UNL\UCBCN\Manager\CreateCalendar';
 $routes['/^'.$calendar_slash_required.'subscriptions\/new(\/)?$/'] = 'UNL\UCBCN\Manager\CreateSubscription';
