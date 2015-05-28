@@ -59,6 +59,7 @@ class Events extends RecordList
                     FROM event
                     INNER JOIN eventdatetime ON (eventdatetime.event_id = event.id)
                     WHERE eventdatetime.starttime LIKE "' . date('Y-m-d', $this->escapeString($time)) . '%"
+                        AND event.approvedforcirculation = 1
                     ORDER BY event.title
                 ';
             } else {
@@ -66,6 +67,7 @@ class Events extends RecordList
                     SELECT event.id
                     FROM event
                     WHERE event.title LIKE "%' . $this->escapeString($term) . '%"
+                       AND event.approvedforcirculation = 1
                     ORDER BY event.title
                 ';
                 
