@@ -2,35 +2,30 @@
 namespace UNL\UCBCN\Manager;
 
 use UNL\UCBCN\Calendar as CalendarModel;
-use UNL\UCBCN\Calendar\EventTypes;
-use UNL\UCBCN\Location;
-use UNL\UCBCN\Locations;
 use UNL\UCBCN\Event;
-use UNL\UCBCN\Event\EventType;
+use UNL\UCBCN\Locations;
 use UNL\UCBCN\Event\Occurrence;
-use UNL\UCBCN\User;
 
-class CreateEvent implements PostHandlerInterface
+class AddDatetime implements PostHandlerInterface 
 {
-    public $options = array();
-
+	public $options = array();
     public $calendar;
+    public $event;
 
     public function __construct($options = array()) 
     {
         $this->options = $options + $this->options;
         $this->calendar = CalendarModel::getByShortName($this->options['calendar_shortname']);
-
         if ($this->calendar === FALSE) {
             throw new \Exception("That calendar could not be found.", 404);
         }
+
+        $this->event = Event::getByID($this->options['event_id']);
+        if ($this->event === FALSE) {
+            throw new \Exception("That event could not be found.", 404);
+        }
     }
 
-    public function getEventTypes()
-    {
-        return new EventTypes(array());
-    }
-    
     public function getUserLocations()
     {
         $user = Auth::getCurrentUser();
@@ -58,42 +53,24 @@ class CreateEvent implements PostHandlerInterface
         return date('Y-m-d H:i:s', $date);
     }
 
-    private function saveEvent($post_data) 
+    public function handlePost(array $get, array $post, array $files)
+    {
+    	$this->addDatetime($post);
+        return $this->event->getEditURL($this->calendar);
+    }
+
+    public function addDatetime($post_data) 
     {
         $user = Auth::getCurrentUser();
 
-        $event = new Event();
-        $event->title = $post_data['title'];
-        $event->subtitle = $post_data['subtitle'];
-        $event->description = $post_data['description'];
-
-        $event->listingcontactname = $post_data['contact_name'];
-        $event->listingcontactphone = $post_data['contact_phone'];
-        $event->listingcontactemail = $post_data['contact_email'];
-
-        $event->webpageurl = $post_data['website'];
-        $event->approvedforcirculation = $post_data['private_public'] == 'public' ? 1 : 0;
-
-        $add_to_default = array_key_exists('send_to_main', $post_data) && 
-            $post_data['send_to_main'] == 'on';
-        $result = $event->insert($this->calendar, 'create event form');
-
-        # add the event type record
-        $event_has_type = new EventType;
-        $event_has_type->event_id = $event->id;
-        $event_has_type->eventtype_id = $post_data['type'];
-
-        $event_has_type->insert();
-
         # add the event date time record
         $event_datetime = new Occurrence;
-        $event_datetime->event_id = $event->id;
+        $event_datetime->event_id = $this->event->id;
 
         # check if this is to use a new location
         if ($post_data['location'] == 'new') {
             # create a new location
             $location = $this->addLocation($post_data, $user);
-            
             $event_datetime->location_id = $location->id;
         } else {
             $event_datetime->location_id = $post_data['location'];
@@ -108,6 +85,7 @@ class CreateEvent implements PostHandlerInterface
             $post_data['end_time_hour'], $post_data['end_time_minute'], 
             $post_data['end_time_am_pm']);
 
+        
         if (array_key_exists('recurring', $post_data) && $post_data['recurring'] == 'on') {
             $event_datetime->recurringtype = $post_data['recurring_type'];
             $event_datetime->recurs_until = $this->calculateDate(
@@ -126,59 +104,6 @@ class CreateEvent implements PostHandlerInterface
 
         $event_datetime->insert();
 
-        if (array_key_exists('send_to_main', $post_data) && $post_data['send_to_main'] == 'on') {
-            $event->considerForMainCalendar();
-        }
-
-        return $event;
-    }
-
-    /**
-     * Add a location
-     * 
-     * @param array $post_data
-     * @return Location
-     */
-    protected function addLocation(array $post_data, $user)
-    {
-        $allowed_fields = array(
-            'name',
-            'streetaddress1',
-            'streetaddress2',
-            'room',
-            'city',
-            'state',
-            'zip',
-            'mapurl',
-            'webpageurl',
-            'hours',
-            'directions',
-            'additionalpublicinfo',
-            'type',
-            'phone',
-        );
-
-        $location = new Location;
-
-        foreach ($allowed_fields as $field) {
-            $location->$field = $post_data['new_location'][$field];
-        }
-
-        if (array_key_exists('location_save', $post_data) && $post_data['location_save'] == 'on') {
-            $location->user_id = $user->uid;
-        }
-        $location->standard = 0;
-
-        $location->insert();
-        
-        return $location;
-    }
-
-    public function handlePost(array $get, array $post, array $files)
-    {
-        $this->saveEvent($post);
-        
-        //redirect
-        return '/manager/' . $this->calendar->shortname . '/';
+        return $event_datetime;
     }
 }

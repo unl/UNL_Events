@@ -92,7 +92,7 @@
             	</div>
             	<?php } ?>
             </fieldset>
-			<a class="wdn-button wdn-button-brand">New Location, Date, and Time</a>            
+			<a class="wdn-button wdn-button-brand" href="<?php echo $event->getAddDatetimeURL($context->calendar) ?>">New Location, Date, and/or Time</a>            
         </div>
         <div class="bp1-wdn-col-one-third">
             <div class="visual-island">

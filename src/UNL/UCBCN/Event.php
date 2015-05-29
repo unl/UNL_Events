@@ -114,6 +114,10 @@ class Event extends Record
         return Controller::$url . $calendar->shortname . '/event/' . $this->id . '/edit/';
     }
 
+    public function getAddDatetimeURL($calendar) {
+        return Controller::$url . $calendar->shortname . '/event/' . $this->id . '/datetime/add/';
+    }
+
     public function getDeleteURL($calendar) {
         return Controller::$url . $calendar->shortname . '/event/' . $this->id . '/delete/';
     }
