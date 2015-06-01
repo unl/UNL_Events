@@ -3,17 +3,33 @@
     $event = $context->event;
     $datetime = $context->event_datetime;
 
-    $start_time = strtotime($datetime->starttime);
-    $start_date = date('m/d/Y', $start_time);
-    $start_hour = date('h', $start_time);
-    $start_minute = date('i', $start_time);
-    $start_am_pm = date('a', $start_time);
+    if ($datetime->starttime == NULL) {
+        $start_time = '';
+        $start_date =  '';
+        $start_hour = '';
+        $start_minute = -1;
+        $start_am_pm = '';
+    } else {
+        $start_time = strtotime($datetime->starttime);
+        $start_date = date('m/d/Y', $start_time);
+        $start_hour = date('h', $start_time);
+        $start_minute = date('i', $start_time);
+        $start_am_pm = date('a', $start_time);
+    }
 
-    $end_time = strtotime($datetime->endtime);
-    $end_date = date('m/d/Y', $end_time);
-    $end_hour = date('h', $end_time);
-    $end_minute = date('i', $end_time);
-    $end_am_pm = date('a', $end_time);
+    if ($datetime->endtime == NULL) {
+        $end_time = '';
+        $end_date =  '';
+        $end_hour = '';
+        $end_minute = -1;
+        $end_am_pm = '';
+    } else {
+        $end_time = strtotime($datetime->endtime);
+        $end_date = date('m/d/Y', $end_time);
+        $end_hour = date('h', $end_time);
+        $end_minute = date('i', $end_time);
+        $end_am_pm = date('a', $end_time);
+    }
 
     $recurs_until_date = date('m/d/Y', strtotime($datetime->recurs_until));
 ?>
