@@ -11,6 +11,7 @@ class AddDatetime implements PostHandlerInterface
 	public $options = array();
     public $calendar;
     public $event;
+    public $event_datetime;
 
     public function __construct($options = array()) 
     {
@@ -23,6 +24,18 @@ class AddDatetime implements PostHandlerInterface
         $this->event = Event::getByID($this->options['event_id']);
         if ($this->event === FALSE) {
             throw new \Exception("That event could not be found.", 404);
+        }
+
+        if (array_key_exists('event_datetime_id', $this->options)) {
+            # we are editing an existing datetime
+            $this->event_datetime = Occurrence::getByID($this->options['event_datetime_id']);
+
+            if ($this->event_datetime === FALSE) {
+                throw new \Exception("That datetime could not be found", 404);
+            }
+        } else {
+            # we are adding a new datetime
+            $this->event_datetime = new Occurrence;
         }
     }
 
@@ -55,16 +68,54 @@ class AddDatetime implements PostHandlerInterface
 
     public function handlePost(array $get, array $post, array $files)
     {
-    	$this->addDatetime($post);
+    	$this->editDatetime($this->event_datetime, $post);
         return $this->event->getEditURL($this->calendar);
     }
 
-    public function addDatetime($post_data) 
+     /**
+     * Add a location
+     * 
+     * @param array $post_data
+     * @return Location
+     */
+    protected function addLocation(array $post_data, $user)
+    {
+        $allowed_fields = array(
+            'name',
+            'streetaddress1',
+            'streetaddress2',
+            'room',
+            'city',
+            'state',
+            'zip',
+            'mapurl',
+            'webpageurl',
+            'hours',
+            'directions',
+            'additionalpublicinfo',
+            'type',
+            'phone',
+        );
+
+        $location = new Location;
+
+        foreach ($allowed_fields as $field) {
+            $location->$field = $post_data['new_location'][$field];
+        }
+
+        if (array_key_exists('location_save', $post_data) && $post_data['location_save'] == 'on') {
+            $location->user_id = $user->uid;
+        }
+        $location->standard = 0;
+
+        $location->insert();
+        
+        return $location;
+    }
+
+    public function editDatetime($event_datetime, $post_data) 
     {
         $user = Auth::getCurrentUser();
-
-        # add the event date time record
-        $event_datetime = new Occurrence;
         $event_datetime->event_id = $this->event->id;
 
         # check if this is to use a new location
@@ -102,7 +153,7 @@ class AddDatetime implements PostHandlerInterface
         $event_datetime->directions = $post_data['directions'];
         $event_datetime->additionalpublicinfo = $post_data['additional_public_info'];
 
-        $event_datetime->insert();
+        $event_datetime->save();
 
         return $event_datetime;
     }
