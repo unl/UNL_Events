@@ -88,7 +88,7 @@
 
             		<?php echo $datetime->getLocation()->name ?>
 
-            		<a class="wdn-button wdn-button-brand">Edit</a>
+            		<a href="<?php echo $datetime->getEditURL($context->calendar); ?>" class="wdn-button wdn-button-brand">Edit</a>
             	</div>
             	<?php } ?>
             </fieldset>

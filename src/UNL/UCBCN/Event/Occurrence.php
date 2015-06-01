@@ -4,6 +4,7 @@ namespace UNL\UCBCN\Event;
 use UNL\UCBCN\ActiveRecord\Record;
 use UNL\UCBCN\Event;
 use UNL\UCBCN\Location;
+use UNL\UCBCN\Manager\Controller;
 
 /**
  * Table Definition for eventdatetime
@@ -48,42 +49,18 @@ class Occurrence extends Record
         return 'eventdatetime';
     }
 
-    function table()
-    {
-        return array(
-            'id'=>129,
-            'event_id'=>129,
-            'location_id'=>129,
-            'starttime'=>14,
-            'endtime'=>14,
-            'recurringtype'=>2,
-            'recurs_until'=>14,
-            'rectypemonth'=>2,
-            'room'=>2,
-            'hours'=>2,
-            'directions'=>66,
-            'additionalpublicinfo'=>66,
-        );
-    }
-
     function keys()
     {
         return array(
             'id',
         );
     }
-    
-    function sequenceKey()
-    {
-        return array('id',true);
-    }
-    
-    function links()
-    {
-        return array('event_id'    => 'event:id',
-                     'location_id' => 'location:id');
-    }
 
+    public function getEditURL($calendar)
+    {
+        return Controller::$url . $calendar->shortname . '/event/' . $this->event_id . '/datetime/' . $this->id . '/edit/';
+    }
+    
     public function insert()
     {
         $r = parent::insert();
