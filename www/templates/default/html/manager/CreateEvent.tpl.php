@@ -238,107 +238,12 @@
 
 <script type="text/javascript">
 WDN.initializePlugin('jqueryui', [function() {  
-
     $ = require('jquery');
-
     $('.datepicker').datepicker();
-
     $("LINK[href='//unlcms.unl.edu/wdn/templates_4.0/scripts/plugins/ui/css/jquery-ui.min.css']").remove();
 
-
-    setRecurringOptions = function(pre, togg, post) {
-
-        // get startdate info
-
-        var weekdays = Array("Sunday", "Monday", "Tuesday",
-            "Wednesday", "Thursday", "Friday", "Saturday");
-        var startelem = $("#start-date");
-        var startyear = startelem.val().substring(6, 10);
-        var startmonth = startelem.val().substring(0, 2);
-        var startday = startelem.val().substring(3, 5);
-        var startdate = new Date(startyear, startmonth - 1, startday);
-        var startweekday = weekdays[startdate.getDay()];
-
-        togg = $("#recurs-until-date");
-
-        $recurringType = $("#monthly-group");
-
-        var weekday = weekdays[startdate.getDay()];
-        // get week in month
-        var nth = {
-            "1": "First",
-            "2": "Second",
-            "3": "Third",
-            "4": "Fourth",
-            "5": "Last"
-        };
-        var week = 0;
-        for (var i = 1; i <= startday; i++) {
-            var d = new Date(startyear, startmonth - 1, i);
-            if (weekdays[d.getDay()] == startweekday) {
-                week++;
-
-
-            }
-        }
-        // get total of day in month
-        var total = 0;
-        var i = 1;
-        var d = new Date(startyear, startmonth - 1, 1);
-        while (i == d.getDate()) {
-            if (weekdays[d.getDay()] == weekday) {
-                total++;
-            }
-            d = new Date(startyear, startmonth - 1, ++i);
-        }
-        console.log(total)
-            // get number of days (28, 29, 30, 31) in month
-        var daysinmonth = 28;
-        d = new Date(startyear, startmonth - 1, 28);
-        while (daysinmonth == d.getDate()) {
-            d = new Date(startyear, startmonth - 1, ++daysinmonth);
-        }
-        daysinmonth--;
-        // remove options, if any
-        $recurringType.children(".dynamicRecurring").remove();
-        // populate rectypemonth with appropriate options
-        var op;
-
-        $recurringType.prepend("<option class='dynamicRecurring' value='" + nth[week].toLowerCase() + "'>" + nth[week] + " " + startweekday + " of every month</option>")
-
-        if (week == 4 && total == 4) {
-
-            $recurringType.prepend("<option class='dynamicRecurring' value='last'>" + "Last " + startweekday + " of month</option>")
-
-        }
-
-        if (daysinmonth == startday) {
-
-            $recurringType.prepend("<option class='dynamicRecurring' value='lastday'>Last day of month</option>");
-
-        }
-
-        var text = '';
-
-        if (startday.substr(1) == "1" || startday.substr(1) == "2" || startday.substr(1) == "3") {
-            text = startday + nth[startday.substr(1)].substr(-2) + ' of every month';
-        } else {
-            text = startday + 'th of every month'
-        }
-        if (startday.substr(0, 1) == "0") {
-            text = text.substr(1);
-        }
-
-        $recurringType.prepend("<option class='dynamicRecurring' value='date'>" + text + "</option>");
-
-
-
-    }
-
-
-
-
+    $('#start-date').change(function (change) {
+        setRecurringOptions($(this), $('#monthly-group'));
+    });
 }]);
-
-
 </script>
