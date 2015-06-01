@@ -52,10 +52,10 @@ $page->maincontentarea = '
 <div class="wdn-band view-' . $view_class . ' band-results">
     <div class="wdn-inner-wrapper">
         <section class="wdn-grid-set">
-            <div class="wdn-col-one-fourth">
+            <nav class="calendars-list wdn-col-one-fourth">
                 <h3>My Calendars</h3>
                 ' . $savvy->render($context, 'navigation.tpl.php') . '
-            </div>
+            </nav>
             <div class="wdn-col-three-fourths">
                 ' . $savvy->render($context->output, $template) . '
            </div>

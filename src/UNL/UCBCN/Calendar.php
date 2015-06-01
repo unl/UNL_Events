@@ -54,6 +54,10 @@ class Calendar extends Record
     public $recommendationswithinaccount;    // int(1)
     public $theme;                           // string(255)
 
+    const STATUS_PENDING  = 'pending';
+    const STATUS_POSTED   = 'posted';
+    const STATUS_ARCHIVED = 'archived';
+    
     public static function getTable()
     {
         return 'calendar';
@@ -252,6 +256,15 @@ class Calendar extends Record
 
     public function getSubscriptionsToThis() {
         return new Calendar\Subscriptions(array('subbed_calendar_id' => $this->id));
+    }
+
+    /**
+     * @param Event $event
+     * @return false|CalendarHasEvent
+     */
+    public function hasEvent(Event $event)
+    {
+        return CalendarHasEvent::getByIds($this->id, $event->id);
     }
 
     /**
