@@ -8,6 +8,7 @@ use UNL\UCBCN\Calendar\Events as CalendarHasEvents;
 use UNL\UCBCN\Calendar\EventType;
 use UNL\UCBCN\Event\Occurrences;
 use UNL\UCBCN\Event\RecurringDate;
+use UNL\UCBCN\Event\RecurringDates;
 use UNL\UCBCN\EventListing;
 use UNL\UCBCN\Manager\Auth;
 use UNL\UCBCN\Manager\Controller;
@@ -146,12 +147,12 @@ class Event extends Record
     {
         $options = array(
             'event_id' => $this->id,
-            'recurring_only' => true
+            'linked_only' => TRUE
         );
-        $event_date_times = new Occurrences($options);
+        $recurring_dates = new RecurringDates($options);
 
-        foreach ($event_date_times as $datetime) {
-            $datetime->delete();
+        foreach ($recurring_dates as $recurring_date) {
+            $recurring_date->delete();
         }
 
         return;

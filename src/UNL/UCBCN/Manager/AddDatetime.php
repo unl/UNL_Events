@@ -140,9 +140,7 @@ class AddDatetime implements PostHandlerInterface
         if (array_key_exists('recurring', $post_data) && $post_data['recurring'] == 'on') {
             $event_datetime->recurringtype = $post_data['recurring_type'];
             $event_datetime->recurs_until = $this->calculateDate(
-                $post_data['recurs_until_date'], $post_data['recurs_until_time_hour'], 
-                $post_data['recurs_until_time_minute'], 
-                $post_data['recurs_until_time_am_pm']);
+                $post_data['recurs_until_date'], 11, 59, 'PM');
             if ($event_datetime->recurringtype == 'monthly') {
                 $event_datetime->rectypemonth = $post_data['recurring_monthly_type'];
             }
