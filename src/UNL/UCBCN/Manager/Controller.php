@@ -26,6 +26,9 @@ class Controller {
         'model' => false
     );
 
+    /**
+     * @var false|Calendar
+     */
     protected $calendar = false;
 
     /**
@@ -202,6 +205,9 @@ class Controller {
         return $user->getCalendars();
     }
 
+    /**
+     * @return Calendar
+     */
     public function getCalendar()
     {
         return $this->calendar;

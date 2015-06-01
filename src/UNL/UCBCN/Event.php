@@ -103,7 +103,7 @@ class Event extends Record
     public function updateStatusWithCalendar(Calendar $calendar, $status) {
         $calendar_has_event = CalendarHasEvent::getByIds($calendar->id, $this->id);
         if ($calendar_has_event === FALSE) {
-            throw new Exception('Event does not have status with calendar');
+            throw new \Exception('Event does not have status with calendar');
         } else {
             $calendar_has_event->status = $status;
             $calendar_has_event->update();
@@ -439,5 +439,40 @@ class Event extends Record
     public function getDocuments()
     {
         return new Event\Documents(array('event_id' => $this->id));
+    }
+    
+    /**
+     * Determine if a user can edit this event
+     * 
+     * @param User $user
+     * @return bool
+     */
+    public function userCanEdit(\UNL\UCBCN\User $user)
+    {
+        //Get The origin calendars (the source calendar via the create event form, or if the source was 'checked_consider_event'
+        //In other words, both users of the origin calendar can edit and users of the main calendar can edit the event
+        //This should return at most 2 calendars?
+        $sql = 'SELECT calendar_id
+                FROM calendar_has_event 
+                WHERE 
+                  source IN ("' . CalendarHasEvent::SOURCE_CREATE_EVENT_FORM . '", "' . CalendarHasEvent::SOURCE_CHECKED_CONSIDER_EVENT . '")
+                  AND event_id = ' . (int)$this->id . '
+               ';
+        
+        $db = $this->getDB();
+        
+        if (!$result = $db->query($sql)) {
+            //No origins were found, perhaps orphaned somehow?
+            return false;
+        }
+        
+        while ($row = $result->fetch_assoc()) {
+            //Make sure that the user has edit event permission on this calendar
+            if ($user->hasPermission(Permission::getByName(Permission::PERMISSION_EVENT_EDIT)->id, $row['calendar_id'])) {
+                return true;
+            }
+        }
+        
+        return false;
     }
 }
