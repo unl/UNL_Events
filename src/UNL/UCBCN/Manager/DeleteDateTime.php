@@ -45,7 +45,7 @@ class DeleteDateTime implements PostHandlerInterface
 
         $this->event_datetime->delete();
 
-        //Redirect to the user list
+        // Redirect to the event edit page
         return $this->event->getEditURL($this->calendar);
     }
 }
