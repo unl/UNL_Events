@@ -60,6 +60,11 @@ class Occurrence extends Record
     {
         return Controller::$url . $calendar->shortname . '/event/' . $this->event_id . '/datetime/' . $this->id . '/edit/';
     }
+
+    public function getDeleteURL($calendar)
+    {
+        return Controller::$url . $calendar->shortname . '/event/' . $this->event_id . '/datetime/' . $this->id . '/delete/';
+    }
     
     public function insert()
     {

@@ -33,7 +33,7 @@
 
     $recurs_until_date = date('m/d/Y', strtotime($datetime->recurs_until));
 ?>
-<?php echo $calendar->name ?> &gt; <?php echo $event->title ?> &gt; Add a Location, Date, and Time
+<?php echo $calendar->name ?> &gt; <?php echo $event->title ?> &gt; <?php echo $datetime->id == NULL ? 'Add a Location, Date, and Time' : 'Edit Location, Date, and Time'; ?>
 <form action="" method="POST">
     <fieldset>
         <label for="location">Location*</label>

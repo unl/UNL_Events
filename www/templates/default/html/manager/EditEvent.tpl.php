@@ -20,6 +20,13 @@
 
 ?>
 <?php echo $calendar->name ?> &gt; Edit <?php echo $event->title ?>
+
+<?php foreach($event->getDatetimes() as $datetime) : ?>
+    <form id="delete-datetime-<?php echo $datetime->id; ?>" class="delete-datetime" method="POST" action="<?php echo $datetime->getDeleteURL($context->calendar) ?>" class="delete-form hidden">
+        <input type="hidden" name="event_datetime_id" value="<?php echo $datetime->id ?>" />
+    </form>
+<?php endforeach; ?>
+
 <div class="wdn-grid-set">
     <form action="" method="POST">
         <div class="bp1-wdn-col-two-thirds">
@@ -49,7 +56,7 @@
 	            	Location
 	            </div>
 
-            	<?php foreach($event->getDatetimes() as $datetime) { ?>
+            	<?php foreach($event->getDatetimes() as $datetime) : ?>
             	<div>
             		<?php 
 				    {
@@ -89,8 +96,9 @@
             		<?php echo $datetime->getLocation()->name ?>
 
             		<a href="<?php echo $datetime->getEditURL($context->calendar); ?>" class="wdn-button wdn-button-brand">Edit</a>
+                    <button form="delete-datetime-<?php echo $datetime->id; ?>" type="submit">Delete</button>
             	</div>
-            	<?php } ?>
+            	<?php endforeach; ?>
             </fieldset>
 			<a class="wdn-button wdn-button-brand" href="<?php echo $event->getAddDatetimeURL($context->calendar) ?>">New Location, Date, and/or Time</a>            
         </div>
@@ -138,3 +146,14 @@
         </div>
     </form>
 </div>
+
+<script type="text/javascript">
+require(['jquery'], function($) {
+    $('.delete-datetime').submit(function (submit) {
+        if (!window.confirm('Are you sure you want to delete this location, date, and time?')) {
+            submit.preventDefault();
+        }
+    });
+});
+
+</script>
