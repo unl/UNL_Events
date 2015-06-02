@@ -2,35 +2,43 @@
 namespace UNL\UCBCN\Manager;
 
 use UNL\UCBCN\Calendar as CalendarModel;
-use UNL\UCBCN\Calendar\EventTypes;
-use UNL\UCBCN\Location;
-use UNL\UCBCN\Locations;
 use UNL\UCBCN\Event;
-use UNL\UCBCN\Event\EventType;
+use UNL\UCBCN\Locations;
 use UNL\UCBCN\Event\Occurrence;
-use UNL\UCBCN\User;
 
-class CreateEvent implements PostHandlerInterface
+class AddDatetime implements PostHandlerInterface 
 {
-    public $options = array();
-
+	public $options = array();
     public $calendar;
+    public $event;
+    public $event_datetime;
 
     public function __construct($options = array()) 
     {
         $this->options = $options + $this->options;
         $this->calendar = CalendarModel::getByShortName($this->options['calendar_shortname']);
-
         if ($this->calendar === FALSE) {
             throw new \Exception("That calendar could not be found.", 404);
         }
+
+        $this->event = Event::getByID($this->options['event_id']);
+        if ($this->event === FALSE) {
+            throw new \Exception("That event could not be found.", 404);
+        }
+
+        if (array_key_exists('event_datetime_id', $this->options)) {
+            # we are editing an existing datetime
+            $this->event_datetime = Occurrence::getByID($this->options['event_datetime_id']);
+
+            if ($this->event_datetime === FALSE) {
+                throw new \Exception("That datetime could not be found", 404);
+            }
+        } else {
+            # we are adding a new datetime
+            $this->event_datetime = new Occurrence;
+        }
     }
 
-    public function getEventTypes()
-    {
-        return new EventTypes(array());
-    }
-    
     public function getUserLocations()
     {
         $user = Auth::getCurrentUser();
@@ -58,87 +66,13 @@ class CreateEvent implements PostHandlerInterface
         return date('Y-m-d H:i:s', $date);
     }
 
-    private function saveEvent($post_data) 
+    public function handlePost(array $get, array $post, array $files)
     {
-        $user = Auth::getCurrentUser();
-
-        $event = new Event();
-        $event->title = $post_data['title'];
-        $event->subtitle = $post_data['subtitle'];
-        $event->description = $post_data['description'];
-
-        $event->listingcontactname = $post_data['contact_name'];
-        $event->listingcontactphone = $post_data['contact_phone'];
-        $event->listingcontactemail = $post_data['contact_email'];
-
-        $event->webpageurl = $post_data['website'];
-        $event->approvedforcirculation = $post_data['private_public'] == 'public' ? 1 : 0;
-
-        $add_to_default = array_key_exists('send_to_main', $post_data) && 
-            $post_data['send_to_main'] == 'on';
-        $result = $event->insert($this->calendar, 'create event form');
-
-        # add the event type record
-        $event_has_type = new EventType;
-        $event_has_type->event_id = $event->id;
-        $event_has_type->eventtype_id = $post_data['type'];
-
-        $event_has_type->insert();
-
-        # add the event date time record
-        $event_datetime = new Occurrence;
-        $event_datetime->event_id = $event->id;
-
-        # check if this is to use a new location
-        if ($post_data['location'] == 'new') {
-            # create a new location
-            $location = $this->addLocation($post_data, $user);
-            
-            $event_datetime->location_id = $location->id;
-        } else {
-            $event_datetime->location_id = $post_data['location'];
-        }
-
-        # set the start date and end date
-        $event_datetime->starttime = $this->calculateDate($post_data['start_date'], 
-            $post_data['start_time_hour'], $post_data['start_time_minute'], 
-            $post_data['start_time_am_pm']);
-
-        $event_datetime->endtime = $this->calculateDate($post_data['end_date'], 
-            $post_data['end_time_hour'], $post_data['end_time_minute'], 
-            $post_data['end_time_am_pm']);
-
-        if (array_key_exists('recurring', $post_data) && $post_data['recurring'] == 'on') {
-            $event_datetime->recurringtype = $post_data['recurring_type'];
-            $event_datetime->recurs_until = $this->calculateDate(
-                $post_data['recurs_until_date'], 11, 59, 'PM');
-            if ($event_datetime->recurringtype == 'date' || 
-                $event_datetime->recurringtype == 'lastday' || 
-                $event_datetime->recurringtype == 'first' ||
-                $event_datetime->recurringtype == 'second' ||
-                $event_datetime->recurringtype == 'third'|| 
-                $event_datetime->recurringtype == 'fourth' ||
-                $event_datetime->recurringtype == 'last') {
-                    $event_datetime->rectypemonth = $event_datetime->recurringtype;
-                    $event_datetime->recurringtype = 'monthly';
-            }
-        } else {
-            $event_datetime->recurringtype = 'none';
-        }
-        $event_datetime->room = $post_data['room'];
-        $event_datetime->directions = $post_data['directions'];
-        $event_datetime->additionalpublicinfo = $post_data['additional_public_info'];
-
-        $event_datetime->insert();
-
-        if (array_key_exists('send_to_main', $post_data) && $post_data['send_to_main'] == 'on') {
-            $event->considerForMainCalendar();
-        }
-
-        return $event;
+    	$this->editDatetime($this->event_datetime, $post);
+        return $this->event->getEditURL($this->calendar);
     }
 
-    /**
+     /**
      * Add a location
      * 
      * @param array $post_data
@@ -179,11 +113,53 @@ class CreateEvent implements PostHandlerInterface
         return $location;
     }
 
-    public function handlePost(array $get, array $post, array $files)
+    public function editDatetime($event_datetime, $post_data) 
     {
-        $this->saveEvent($post);
+        $user = Auth::getCurrentUser();
+        $event_datetime->event_id = $this->event->id;
+
+        # check if this is to use a new location
+        if ($post_data['location'] == 'new') {
+            # create a new location
+            $location = $this->addLocation($post_data, $user);
+            $event_datetime->location_id = $location->id;
+        } else {
+            $event_datetime->location_id = $post_data['location'];
+        }
+
+        # set the start date and end date
+        $event_datetime->starttime = $this->calculateDate($post_data['start_date'], 
+            $post_data['start_time_hour'], $post_data['start_time_minute'], 
+            $post_data['start_time_am_pm']);
+
+        $event_datetime->endtime = $this->calculateDate($post_data['end_date'], 
+            $post_data['end_time_hour'], $post_data['end_time_minute'], 
+            $post_data['end_time_am_pm']);
+
         
-        //redirect
-        return '/manager/' . $this->calendar->shortname . '/';
+        if (array_key_exists('recurring', $post_data) && $post_data['recurring'] == 'on') {
+            $event_datetime->recurringtype = $post_data['recurring_type'];
+            $event_datetime->recurs_until = $this->calculateDate(
+                $post_data['recurs_until_date'], 11, 59, 'PM');
+            if ($event_datetime->recurringtype == 'date' || 
+                $event_datetime->recurringtype == 'lastday' || 
+                $event_datetime->recurringtype == 'first' ||
+                $event_datetime->recurringtype == 'second' ||
+                $event_datetime->recurringtype == 'third'|| 
+                $event_datetime->recurringtype == 'fourth' ||
+                $event_datetime->recurringtype == 'last') {
+                    $event_datetime->rectypemonth = $event_datetime->recurringtype;
+                    $event_datetime->recurringtype = 'monthly';
+            }
+        } else {
+            $event_datetime->recurringtype = 'none';
+        }
+        $event_datetime->room = $post_data['room'];
+        $event_datetime->directions = $post_data['directions'];
+        $event_datetime->additionalpublicinfo = $post_data['additional_public_info'];
+
+        $event_datetime->save();
+
+        return $event_datetime;
     }
 }
