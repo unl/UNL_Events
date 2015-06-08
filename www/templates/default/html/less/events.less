@@ -8,6 +8,44 @@
 
 @import "eventicon-embedded.less";
 
+.event-datetimes {
+    font-size: 80%;
+    div {
+        vertical-align: middle;
+    }
+    .edt-header {
+        border-bottom: 2px solid #D5D5D2;
+        margin-bottom: 10px;
+    }
+    .edt-record {
+        background: #D5D5D2;
+        margin-bottom: 10px;
+    }
+    .dates {
+        width: 40%;
+        padding-left: 20px;
+        display: inline-block;
+        &.recurring {
+            padding-left: 40px;
+        }
+    }
+    .location {
+        width: 45%;
+        display: inline-block;
+        &.with-controls {
+            width: 25%;
+        }
+    }
+    .controls {
+        width: 30%;
+        display: inline-block;
+        text-align: right;
+    }
+    .small {
+        font-size: 60%;
+    }
+}
+
 .wp-calendar {
 
     caption {

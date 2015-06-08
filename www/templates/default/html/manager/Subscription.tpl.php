@@ -20,7 +20,7 @@ Current Subscriptions
 	    <div class="wdn-col-two-thirds" style="text-align: right;">
 	        <a class="wdn-button wdn-button-brand" href="<?php echo $subscription->getEditURL() ?>">Edit</a>
 	        |
-	        <form method="post" action="<?php echo $subscription->getDeleteURL() ?>" class="delete-form">
+	        <form method="POST" action="<?php echo $subscription->getDeleteURL() ?>" class="delete-form">
                 <input type="hidden" name="subscription_id" value="<?php echo $subscription->id ?>" />
                 <button type="submit">Delete</button>
             </form>

@@ -48,56 +48,69 @@
                 <?php } ?>
                 </select>
             </fieldset>
-            <fieldset>
+            <fieldset class="event-datetimes">
 	            <legend>Location, Date, and Time</legend>
-	            <div>
-	            	Dates
-
-	            	Location
+	            <div class="edt-header">
+                    <div class="dates">
+	            	  Dates
+                    </div>
+                    <div class="location">
+	            	  Location
+                    </div>
 	            </div>
 
             	<?php foreach($event->getDatetimes() as $datetime) : ?>
-            	<div>
-            		<?php 
-				    {
-				        if ($datetime->recurringtype == 'none') {
-				            echo date('n/d/y @ g:ia', strtotime($datetime->starttime));
-				        } else if ($datetime->recurringtype == 'daily') {
-				            echo 'Daily @ ' . date('g:ia', strtotime($datetime->starttime)) .
-				            	' from ' . date('n/d/y', strtotime($datetime->starttime)) . 
-				            	' to ' . date('n/d/y', strtotime($datetime->recurs_until));
-				        } else if ($datetime->recurringtype == 'weekly') {
-				        	echo 'Weekly @ ' . date('g:ia', strtotime($datetime->starttime)) .
-				            	' from ' . date('n/d/y', strtotime($datetime->starttime)) . 
-				            	' to ' . date('n/d/y', strtotime($datetime->recurs_until));
-				        } else if ($datetime->recurringtype == 'monthly') {
-				        	if ($datetime->rectypemonth == 'last') {
-				        		echo 'Last day of each month @ ' . date('g:ia', strtotime($datetime->starttime)) . ' from ' . 
-					        		date('n/d/y', strtotime($datetime->starttime)) . 
-					            	' to ' . date('n/d/y', strtotime($datetime->recurs_until));
-				        	} else if ($datetime->rectypemonth == 'date') {
-				        		echo ordinal(date('d', strtotime($datetime->starttime))) . 
-				        			'of each month @ ' . date('g:ia', strtotime($datetime->starttime)) . ' from ' . 
-				        			date('n/d/y', strtotime($datetime->starttime)) . 
-				            		' to ' . date('n/d/y', strtotime($datetime->recurs_until));
-				        	} else {
-				        		echo ucwords($datetime->rectypemonth) . date('f') . ' of every month' . 
-				        			' from ' . date('n/d/y', strtotime($datetime->starttime)) . 
-				            		' to ' . date('n/d/y', strtotime($datetime->recurs_until));
-				        	}
-				        } else if ($datetime->recurringtype == 'annually') {
-				        	echo 'Annually @ ' . date('g:ia', strtotime($datetime->starttime)) .
-				            	' from ' . date('n/d/y', strtotime($datetime->starttime)) . 
-				            	' to ' . date('n/d/y', strtotime($datetime->recurs_until));
-				        }
-				    }
-				    ?>
+                	<div class="edt-record">
+                        <div class="dates">
+                    		<?php 
+        				    {
+        				        if ($datetime->recurringtype == 'none') {
+        				            echo date('n/d/y @ g:ia', strtotime($datetime->starttime));
+        				        } else if ($datetime->recurringtype == 'daily' || $datetime->recurringtype == 'weekly' ||
+                                        $datetime->recurringtype == 'annually') {
+        				            echo ucwords($datetime->recurringtype) . ' @ ' . date('g:ia', strtotime($datetime->starttime)) .
+        				            	' from ' . date('n/d/y', strtotime($datetime->starttime)) . 
+        				            	' to ' . date('n/d/y', strtotime($datetime->recurs_until));
+        				        } else if ($datetime->recurringtype == 'monthly') {
+        				        	if ($datetime->rectypemonth == 'lastday') {
+        				        		echo 'Last day of each month @ ' . date('g:ia', strtotime($datetime->starttime)) . 
+                                            ' from ' . date('n/d/y', strtotime($datetime->starttime)) . 
+        					            	' to ' . date('n/d/y', strtotime($datetime->recurs_until));
+        				        	} else if ($datetime->rectypemonth == 'date') {
+        				        		echo ordinal(date('d', strtotime($datetime->starttime))) . 
+        				        			' of each month @ ' . date('g:ia', strtotime($datetime->starttime)) . 
+                                            ' from ' . date('n/d/y', strtotime($datetime->starttime)) . 
+        				            		' to ' . date('n/d/y', strtotime($datetime->recurs_until));
+        				        	} else {
+        				        		echo ucwords($datetime->rectypemonth) . date('f', strtotime($datetime->starttime)) . ' of every month' . 
+        				        			' from ' . date('n/d/y', strtotime($datetime->starttime)) . 
+        				            		' to ' . date('n/d/y', strtotime($datetime->recurs_until));
+        				        	}
+        				        }
+        				    }
+        				    ?>
+                        </div>
+                        <div class="location with-controls">
+                		  <?php echo $datetime->getLocation()->name; ?>
+                        </div>
+                        <div class="controls">
+                    		<a href="<?php echo $datetime->getEditURL($context->calendar); ?>" class="wdn-button wdn-button-brand small">Edit</a>
+                            <button class="small" form="delete-datetime-<?php echo $datetime->id; ?>" type="submit">Delete</button>
+                        </div>
+                	</div>
+                    <?php if ($datetime->recurringtype != 'none') : ?>
+                        <?php foreach ($datetime->getRecurrences() as $row) : ?>
+                            <div class="edt-record">
+                                <div class="dates recurring">
+                                    <?php echo date('n/d/y', strtotime($row[0])) . ' @ ' . date('g:ia', strtotime($datetime->starttime)); ?>
+                                </div>
+                                <div class="controls">
+                                    <a href="<?php echo $datetime->getEditURL($context->calendar); ?>" class="wdn-button wdn-button-brand small">Edit</a>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
 
-            		<?php echo $datetime->getLocation()->name ?>
-
-            		<a href="<?php echo $datetime->getEditURL($context->calendar); ?>" class="wdn-button wdn-button-brand">Edit</a>
-                    <button form="delete-datetime-<?php echo $datetime->id; ?>" type="submit">Delete</button>
-            	</div>
             	<?php endforeach; ?>
             </fieldset>
 			<a class="wdn-button wdn-button-brand" href="<?php echo $event->getAddDatetimeURL($context->calendar) ?>">New Location, Date, and/or Time</a>            
