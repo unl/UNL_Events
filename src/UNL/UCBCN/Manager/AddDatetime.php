@@ -5,6 +5,8 @@ use UNL\UCBCN\Calendar as CalendarModel;
 use UNL\UCBCN\Event;
 use UNL\UCBCN\Locations;
 use UNL\UCBCN\Event\Occurrence;
+use UNL\UCBCN\Event\RecurringDate;
+use UNL\UCBCN\Event\RecurringDates;
 
 class AddDatetime implements PostHandlerInterface 
 {
@@ -33,10 +35,56 @@ class AddDatetime implements PostHandlerInterface
             if ($this->event_datetime === FALSE) {
                 throw new \Exception("That datetime could not be found", 404);
             }
+
+            # now we check for if we are editing a specific recurrence
+            if (array_key_exists('recurrence_id', $this->options)) {
+
+                $recurrence = RecurringDate::getByEventDatetimeIDRecurrenceID($this->event_datetime->id, $this->options['recurrence_id']);
+
+                if ($recurrence === FALSE) {
+                    throw new \Exception("That recurrence could not be found", 404);
+                }
+
+                $temp_event_datetime = $this->event_datetime;
+                $temp_event_datetime->id = NULL;
+
+                # set the start and end time based on the recurring date record
+                $event_length = strtotime($temp_event_datetime->endtime) - strtotime($temp_event_datetime->starttime);
+                $temp_event_datetime->starttime = $recurrence->recurringdate . ' ' . date('H:i:s', strtotime($temp_event_datetime->starttime));
+                $temp_event_datetime->endtime = date('Y-m-d H:i:s', strtotime($temp_event_datetime->starttime) + $event_length);
+
+                $temp_event_datetime->recurringtype = 'none';
+                $temp_event_datetime->rectypemonth = NULL;
+                $temp_event_datetime->recurs_until = NULL;
+
+                $this->event_datetime = $temp_event_datetime;
+            }
+
         } else {
             # we are adding a new datetime
             $this->event_datetime = new Occurrence;
         }
+    }
+
+    public function handlePost(array $get, array $post, array $files)
+    {
+        $this->editDatetime($this->event_datetime, $post);
+        # if we are editing a single recurrence, we need to unlink the current one in the DB
+        # set unlinked on all recurring dates with the recurrence id and event id
+
+        if (array_key_exists('recurrence_id', $this->options)) {
+            $recurring_dates = new RecurringDates(array(
+                'event_datetime_id' => $this->event_datetime->id,
+                'recurrence_id' => $this->options['recurrence_id']
+            ));
+
+            foreach ($recurring_dates as $recurring_date) {
+                $recurring_date->unlinked = TRUE;
+                $recurring_date->save();
+            }
+        }
+
+        return $this->event->getEditURL($this->calendar);
     }
 
     public function getUserLocations()
@@ -64,12 +112,6 @@ class AddDatetime implements PostHandlerInterface
         }
         $date += $hours_to_add * 60 * 60 + (int)($minute) * 60;
         return date('Y-m-d H:i:s', $date);
-    }
-
-    public function handlePost(array $get, array $post, array $files)
-    {
-    	$this->editDatetime($this->event_datetime, $post);
-        return $this->event->getEditURL($this->calendar);
     }
 
      /**

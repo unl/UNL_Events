@@ -99,13 +99,13 @@
                         </div>
                 	</div>
                     <?php if ($datetime->recurringtype != 'none') : ?>
-                        <?php foreach ($datetime->getRecurrences() as $row) : ?>
+                        <?php foreach ($datetime->getRecurrences() as $recurring_date) : ?>
                             <div class="edt-record">
                                 <div class="dates recurring">
-                                    <?php echo date('n/d/y', strtotime($row[0])) . ' @ ' . date('g:ia', strtotime($datetime->starttime)); ?>
+                                    <?php echo date('n/d/y', strtotime($recurring_date->recurringdate)) . ' @ ' . date('g:ia', strtotime($datetime->starttime)); ?>
                                 </div>
-                                <div class="controls">
-                                    <a href="<?php echo $datetime->getEditURL($context->calendar); ?>" class="wdn-button wdn-button-brand small">Edit</a>
+                                <div class="controls recurring">
+                                    <a href="<?php echo $datetime->getEditRecurrenceURL($context->calendar, $recurring_date->recurrence_id); ?>" class="wdn-button wdn-button-brand small edit-edt">Edit</a>
                                 </div>
                             </div>
                         <?php endforeach; ?>
