@@ -164,6 +164,12 @@ class AddDatetime implements PostHandlerInterface
     public function editDatetime($event_datetime, $post_data) 
     {
         $user = Auth::getCurrentUser();
+
+        # make a copy of the original event_datetime coming into this method
+        # we'll need it to check if we have changed the date & it's recurring
+        # to see if we need to revamp the recurrences
+        $datetime_copy = clone $event_datetime;
+
         $event_datetime->event_id = $this->event->id;
 
         # check if this is to use a new location
@@ -207,6 +213,33 @@ class AddDatetime implements PostHandlerInterface
         $event_datetime->additionalpublicinfo = $post_data['additional_public_info'];
 
         $event_datetime->save();
+
+        # if we are editing a datetime, we need to check whether to revamp the recurrences
+        if ($datetime_copy->id != NULL) {
+            # if we are newly recurring
+            if (!$datetime_copy->isRecurring() && $event_datetime->isRecurring()) {
+                $event_datetime->insertRecurrences();
+            # if we are removing recurring completely
+            } else if ($datetime_copy->isRecurring() && !$event_datetime->isRecurring()) {
+                $event_datetime->deleteRecurrences();
+            # if we are recurring before and after the change
+            } else if ($datetime_copy->isRecurring() && $event_datetime->isRecurring()) {
+                # start time, end time, frequency and recurs until must all remain the same
+                # or we wipe it and start over
+
+                error_log(print_r($datetime_copy, 1));
+                error_log(print_r($event_datetime, 1));
+
+                if ($datetime_copy->starttime != $event_datetime->starttime || 
+                        $datetime_copy->endtime != $event_datetime->endtime || 
+                        $datetime_copy->recurringtype != $event_datetime->recurringtype || 
+                        $datetime_copy->rectypemonth != $event_datetime->rectypemonth || 
+                        $datetime_copy->recurs_until != $event_datetime->recurs_until) {
+                    $event_datetime->deleteRecurrences();
+                    $event_datetime->insertRecurrences();
+                }
+            }
+        }
 
         return $event_datetime;
     }

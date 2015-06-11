@@ -28,7 +28,8 @@ require(['jquery', 'wdn', 'modernizr', frontend_url + 'templates/default/html/js
             }
         };
 
-        var setRecurringOptions = function(start_elem, month_group_elem) {
+        // this needs to be global as it gets tapped by the page js
+        setRecurringOptions = function(start_elem, month_group_elem) {
             // get startdate info
             var weekdays = [
                 "Sunday", 

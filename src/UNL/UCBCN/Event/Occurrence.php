@@ -84,7 +84,7 @@ class Occurrence extends Record
 
     public function isRecurring() 
     {
-        return $this->recurringtype != 'none';
+        return $this->recurringtype != 'none' && $this->recurringtype != NULL;
     }
     
     public function insert()
@@ -99,10 +99,6 @@ class Occurrence extends Record
     public function update()
     {
         $r = parent::update();
-        if ($r) {
-            $this->deleteRecurrences();
-            $this->insertRecurrences();
-        }
         return $r;
     }
     
