@@ -33,7 +33,15 @@
 
     $recurs_until_date = date('m/d/Y', strtotime($datetime->recurs_until));
 ?>
-<?php echo $calendar->name ?> &gt; <?php echo $event->title ?> &gt; <?php echo $datetime->id == NULL ? 'Add a Location, Date, and Time' : 'Edit Location, Date, and Time'; ?>
+<?php echo $calendar->name ?> &gt; <?php echo $event->title ?> &gt; 
+<?php 
+if ($context->recurrence_id != NULL) {
+    echo 'Edit a Single Instance from Recurring Event';
+} else {
+    echo $datetime->id == NULL ? 'Add a Location, Date, and Time' : 'Edit Location, Date, and Time'; 
+}
+
+?>
 <form action="" method="POST">
     <fieldset>
         <label for="location">Location*</label>
@@ -167,23 +175,25 @@
             </div>
         </div>
 
-        <div class="section-container">
-            <input <?php if ($datetime->recurringtype != 'none' && $datetime->recurringtype != NULL) echo 'checked="checked"' ?> type="checkbox" name="recurring" id="recurring"> 
-            <label for="recurring">This is a recurring event</label>
-            <div class="recurring-container date-time-select">                        
-                <label for="recurring-type">This event recurs </label>
-                <select id="recurring-type" name="recurring_type">
-                    <option value="daily">Daily</option>
-                    <option value="weekly">Weekly</option>
-                    <optgroup label="Monthly" id="monthly-group">
-                    </optgroup>
-                    <option value="annually">Yearly</option>
-                </select>
-                <label for="recurs-until-date">until </label><br>
-                <span class="wdn-icon-calendar"></span>
-                <input value="<?php if ($datetime->recurringtype != 'none' && $datetime->recurringtype != NULL) echo $recurs_until_date; ?>" id="recurs-until-date" name="recurs_until_date" type="text" class="datepicker" />
+        <?php if ($context->recurrence_id == NULL) : ?>
+            <div class="section-container">
+                <input <?php if ($datetime->recurringtype != 'none' && $datetime->recurringtype != NULL) echo 'checked="checked"' ?> type="checkbox" name="recurring" id="recurring"> 
+                <label for="recurring">This is a recurring event</label>
+                <div class="recurring-container date-time-select">                        
+                    <label for="recurring-type">This event recurs </label>
+                    <select id="recurring-type" name="recurring_type">
+                        <option value="daily">Daily</option>
+                        <option value="weekly">Weekly</option>
+                        <optgroup label="Monthly" id="monthly-group">
+                        </optgroup>
+                        <option value="annually">Yearly</option>
+                    </select>
+                    <label for="recurs-until-date">until </label><br>
+                    <span class="wdn-icon-calendar"></span>
+                    <input value="<?php if ($datetime->recurringtype != 'none' && $datetime->recurringtype != NULL) echo $recurs_until_date; ?>" id="recurs-until-date" name="recurs_until_date" type="text" class="datepicker" />
+                </div>
             </div>
-        </div>
+        <?php endif; ?>
 
         <label for="directions">Directions</label>
         <textarea id="directions" name="directions"><?php echo $datetime->directions; ?></textarea>

@@ -13,12 +13,6 @@ require(['jquery', 'wdn', 'modernizr', frontend_url + 'templates/default/html/js
             }
         });
 
-        $('.edit-edt').click(function (click) {
-            if (!window.confirm('You are editing a single instance of a recurring event, date, and time.')) {
-                click.preventDefault();
-            }
-        });
-
         var ordinal = function(number) {
             var mod = number % 100;
             if (mod >= 11 && mod <= 13) {

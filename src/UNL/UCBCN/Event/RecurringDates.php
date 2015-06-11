@@ -25,16 +25,16 @@ class RecurringDates extends RecordList
     {
         if (array_key_exists('linked_only', $this->options)) {
             return 'SELECT id FROM recurringdate WHERE ' .
-                'event_id = ' . (int)($this->options['event_id']) . ' AND unlinked = FALSE;';
+                'event_id = ' . (int)($this->options['event_id']) . ' AND unlinked = 0;';
         } else if (array_key_exists('event_datetime_id', $this->options)) {
             if (array_key_exists('recurrence_id', $this->options)) {
                 return 'SELECT id FROM recurringdate WHERE ' .
                     'event_datetime_id = ' . (int)($this->options['event_datetime_id']) . 
-                    ' AND recurrence_id = ' . (int)($this->options['recurrence_id']) . ' AND unlinked = FALSE AND ongoing = FALSE ' .
+                    ' AND recurrence_id = ' . (int)($this->options['recurrence_id']) . ' AND unlinked = 0 AND ongoing = 0 ' .
                     'ORDER BY recurrence_id ASC;';
             } else {
                 return 'SELECT id FROM recurringdate WHERE ' .
-                    'event_datetime_id = ' . (int)($this->options['event_datetime_id']) . ' AND unlinked = FALSE AND ongoing = FALSE ' .
+                    'event_datetime_id = ' . (int)($this->options['event_datetime_id']) . ' AND unlinked = 0 AND ongoing = 0 ' .
                     'ORDER BY recurrence_id ASC;';
             }
         } else {

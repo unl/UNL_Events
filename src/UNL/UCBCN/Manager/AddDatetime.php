@@ -14,6 +14,8 @@ class AddDatetime implements PostHandlerInterface
     public $calendar;
     public $event;
     public $event_datetime;
+    public $recurrence_id;
+    public $original_event_datetime_id;
 
     public function __construct($options = array()) 
     {
@@ -36,6 +38,8 @@ class AddDatetime implements PostHandlerInterface
                 throw new \Exception("That datetime could not be found", 404);
             }
 
+            $this->original_event_datetime_id = $this->event_datetime->id;
+
             # now we check for if we are editing a specific recurrence
             if (array_key_exists('recurrence_id', $this->options)) {
 
@@ -44,6 +48,8 @@ class AddDatetime implements PostHandlerInterface
                 if ($recurrence === FALSE) {
                     throw new \Exception("That recurrence could not be found", 404);
                 }
+
+                $this->recurrence_id = $recurrence->recurrence_id;
 
                 $temp_event_datetime = $this->event_datetime;
                 $temp_event_datetime->id = NULL;
@@ -69,17 +75,17 @@ class AddDatetime implements PostHandlerInterface
     public function handlePost(array $get, array $post, array $files)
     {
         $this->editDatetime($this->event_datetime, $post);
+
         # if we are editing a single recurrence, we need to unlink the current one in the DB
         # set unlinked on all recurring dates with the recurrence id and event id
-
         if (array_key_exists('recurrence_id', $this->options)) {
             $recurring_dates = new RecurringDates(array(
-                'event_datetime_id' => $this->event_datetime->id,
+                'event_datetime_id' => $this->original_event_datetime_id,
                 'recurrence_id' => $this->options['recurrence_id']
             ));
 
             foreach ($recurring_dates as $recurring_date) {
-                $recurring_date->unlinked = TRUE;
+                $recurring_date->unlinked = 1;
                 $recurring_date->save();
             }
         }

@@ -99,21 +99,25 @@
                         </div>
                 	</div>
                     <?php if ($datetime->recurringtype != 'none') : ?>
+                    <div>
                         <?php foreach ($datetime->getRecurrences() as $recurring_date) : ?>
-                            <div class="edt-record">
-                                <div class="dates recurring">
-                                    <?php echo date('n/d/y', strtotime($recurring_date->recurringdate)) . ' @ ' . date('g:ia', strtotime($datetime->starttime)); ?>
-                                </div>
-                                <div class="controls recurring">
-                                    <a href="<?php echo $datetime->getEditRecurrenceURL($context->calendar, $recurring_date->recurrence_id); ?>" class="wdn-button wdn-button-brand small edit-edt">Edit</a>
+                            <div class="recurring-record">
+                                <div class="edt-record recurring">
+                                    <div class="dates recurring">
+                                        <?php echo date('n/d/y', strtotime($recurring_date->recurringdate)) . ' @ ' . date('g:ia', strtotime($datetime->starttime)); ?>
+                                    </div>
+                                    <div class="controls recurring">
+                                        <a href="<?php echo $datetime->getEditRecurrenceURL($context->calendar, $recurring_date->recurrence_id); ?>" class="wdn-button wdn-button-brand small edit-recurring-edt">Edit</a>
+                                    </div>
                                 </div>
                             </div>
                         <?php endforeach; ?>
+                    </div>
                     <?php endif; ?>
 
             	<?php endforeach; ?>
             </fieldset>
-			<a class="wdn-button wdn-button-brand" href="<?php echo $event->getAddDatetimeURL($context->calendar) ?>">New Location, Date, and/or Time</a>            
+			<a class="wdn-button wdn-button-brand" href="<?php echo $event->getAddDatetimeURL($context->calendar) ?>">Add Location, Date, and/or Time</a>            
         </div>
         <div class="bp1-wdn-col-one-third">
             <div class="visual-island">
@@ -165,6 +169,12 @@ require(['jquery'], function($) {
     $('.delete-datetime').submit(function (submit) {
         if (!window.confirm('Are you sure you want to delete this location, date, and time?')) {
             submit.preventDefault();
+        }
+    });
+
+    $('.edit-recurring-edt').click(function (click) {
+        if (!window.confirm('You are editing a single instance of a recurring location, date, and time.')) {
+            click.preventDefault();
         }
     });
 });
