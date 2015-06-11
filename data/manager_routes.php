@@ -22,6 +22,7 @@ $routes['/^'.$calendar_slash_required.'event\/' . $event . '\/edit(\/)?$/'] = 'U
 $routes['/^'.$calendar_slash_required.'event\/' . $event . '\/datetime\/add(\/)?$/'] = 'UNL\UCBCN\Manager\AddDateTime';
 $routes['/^'.$calendar_slash_required.'event\/' . $event . '\/datetime\/' . $event_datetime . '\/edit(\/)?$/'] = 'UNL\UCBCN\Manager\AddDateTime';
 $routes['/^'.$calendar_slash_required.'event\/' . $event . '\/datetime\/' . $event_datetime . '\/edit\/recurrence\/' . $recurrence_id . '(\/)?$/'] = 'UNL\UCBCN\Manager\AddDateTime';
+$routes['/^'.$calendar_slash_required.'event\/' . $event . '\/datetime\/' . $event_datetime . '\/delete\/recurrence\/' . $recurrence_id . '(\/)?$/'] = 'UNL\UCBCN\Manager\DeleteRecurrence';
 $routes['/^'.$calendar_slash_required.'event\/' . $event . '\/datetime\/' . $event_datetime . '\/delete(\/)?$/'] = 'UNL\UCBCN\Manager\DeleteDateTime';
 $routes['/^'.$calendar_slash_required.'event\/' . $event . '\/delete(\/)?$/'] = 'UNL\UCBCN\Manager\DeleteEvent';
 $routes['/^calendar\/new(\/)?$/'] = 'UNL\UCBCN\Manager\CreateCalendar';

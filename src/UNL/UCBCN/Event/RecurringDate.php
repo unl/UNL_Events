@@ -48,4 +48,18 @@ class RecurringDate extends Record
     public static function getByEventDatetimeIDRecurrenceID($event_datetime_id, $recurrence_id) {
         return self::getByEvent_Datetime_ID($event_datetime_id, 'ongoing = 0 AND recurrence_id = ' . $recurrence_id);
     }
+
+    public function unlink()
+    {
+        $dates = new RecurringDates(array(
+            'event_datetime_id' => $this->event_datetime_id,
+            'recurrence_id' => $this->recurrence_id,
+            'with_ongoing' => TRUE
+        ));
+
+        foreach ($dates as $date) {
+            $date->unlinked = 1;
+            $date->save();
+        }
+    }
 }

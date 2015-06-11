@@ -25,6 +25,14 @@
     <form id="delete-datetime-<?php echo $datetime->id; ?>" class="delete-datetime" method="POST" action="<?php echo $datetime->getDeleteURL($context->calendar) ?>" class="delete-form hidden">
         <input type="hidden" name="event_datetime_id" value="<?php echo $datetime->id ?>" />
     </form>
+    <?php if ($datetime->recurringtype != 'none') : ?>
+        <?php foreach ($datetime->getRecurrences() as $recurring_date) : ?>
+            <form id="delete-datetime-<?php echo $datetime->id; ?>-recurrence-<?php echo $recurring_date->recurrence_id ?>" class="delete-datetime-recurrence" method="POST" action="<?php echo $datetime->getDeleteRecurrenceURL($context->calendar, $recurring_date->recurrence_id) ?>" class="delete-form hidden">
+                <input type="hidden" name="event_datetime_id" value="<?php echo $datetime->id ?>" />
+                <input type="hidden" name="recurrence_id" value="<?php echo $recurring_date->recurrence_id ?>" />
+            </form>
+        <?php endforeach; ?>
+    <?php endif; ?>
 <?php endforeach; ?>
 
 <div class="wdn-grid-set">
@@ -60,7 +68,7 @@
 	            </div>
 
             	<?php foreach($event->getDatetimes() as $datetime) : ?>
-                	<div class="edt-record">
+                	<div class="edt-record <?php if ($datetime->recurringtype != 'none') echo 'has-recurring' ?>">
                         <div class="dates">
                     		<?php 
         				    {
@@ -108,6 +116,7 @@
                                     </div>
                                     <div class="controls recurring">
                                         <a href="<?php echo $datetime->getEditRecurrenceURL($context->calendar, $recurring_date->recurrence_id); ?>" class="wdn-button wdn-button-brand small edit-recurring-edt">Edit</a>
+                                        <button type="submit" form="delete-datetime-<?php echo $datetime->id ?>-recurrence-<?php echo $recurring_date->recurrence_id ?>" class="small delete-datetime-recurrence">Delete</a>
                                     </div>
                                 </div>
                             </div>
@@ -168,6 +177,12 @@
 require(['jquery'], function($) {
     $('.delete-datetime').submit(function (submit) {
         if (!window.confirm('Are you sure you want to delete this location, date, and time?')) {
+            submit.preventDefault();
+        }
+    });
+
+    $('.delete-datetime-recurrence').submit(function (submit) {
+        if (!window.confirm('Are you sure you want to delete instance of your recurring event? The rest of the recurrences will remain.')) {
             submit.preventDefault();
         }
     });

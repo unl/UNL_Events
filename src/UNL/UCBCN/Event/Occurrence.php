@@ -76,6 +76,16 @@ class Occurrence extends Record
     {
         return Controller::$url . $calendar->shortname . '/event/' . $this->event_id . '/datetime/' . $this->id . '/delete/';
     }
+
+    public function getDeleteRecurrenceURL($calendar, $id)
+    {
+        return Controller::$url . $calendar->shortname . '/event/' . $this->event_id . '/datetime/' . $this->id . '/delete/recurrence/' . $id . '/';
+    }
+
+    public function isRecurring() 
+    {
+        return $this->recurringtype != 'none';
+    }
     
     public function insert()
     {
@@ -104,6 +114,11 @@ class Occurrence extends Record
             $this->deleteRecurrences();
         }
         return $r;
+    }
+
+    public function getRecurrence($recurrence_id)
+    {
+        return RecurringDate::getByEventDatetimeIDRecurrenceID($this->id, $recurrence_id);
     }
 
     public function getRecurrences()
