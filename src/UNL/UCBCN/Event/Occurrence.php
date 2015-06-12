@@ -186,16 +186,19 @@ class Occurrence extends Record
                     $this_start = mktime($hour_on_start_date, $minute_on_start_date, $second_on_start_date, $next_month_num, $day_for_next_month, $next_month_year);
                 } else if ($rec_type_month == 'lastday') {
                     $this_start = mktime($hour_on_start_date, $minute_on_start_date, $second_on_start_date, $next_month_num, $days_in_next_month, $next_month_year);
-                } else { // first, second, third, fourth, or last
+                } else if ($rec_type_month != NULL) { // first, second, third, fourth, or last
                     $weekday = date('l', $start_date);
                     $month_name = date('F', strtotime("2015-{$next_month_num}-01"));
                     $this_start = strtotime("{$rec_type_month} {$weekday} of {$month_name} {$next_month_year}");
                     $this_start = strtotime(date('Y-m-d', $this_start) . ' ' . $hour_on_start_date . ':' . $minute_on_start_date . ':' . $second_on_start_date);
+                } else {
+                    # don't want an infinite loop
+                    break;
                 }
             } else if ($recurring_type == 'annually' || $recurring_type == 'yearly') { 
                 $this_start = strtotime('+1 year', $this_start);
             } else {
-                // dont want an infinite loop
+                # don't want an infinite loop
                 break;
             }
             $this_end = $this_start + $length;
