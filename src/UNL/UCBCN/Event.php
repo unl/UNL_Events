@@ -181,12 +181,12 @@ class Event extends Record
             // while the current start time is before recurs until
             while ($this_start <= $recurs_until) {
                 // insert initial day recurrence for this eventdatetime and recurrence, not ongoing, not unlinked
-                $new_rows[] = array(date('Y-m-d', $this_start), $event_id, $k, 0, 0);
+                $new_rows[] = array(date('Y-m-d', $this_start), $event_id, $k, 0, 0, $datetime->id);
                 // generate more day recurrences for each day of the event, if it is ongoing (i.e., the end date is the next day or later)
                 $next_day = strtotime('midnight tomorrow', $this_start);
                 while ($next_day <= $this_end) {
                     // add an entry to recurring dates for this eid, the temp date, is ongoing, not unlinked
-                    $new_rows[] = array(date('Y-m-d', $next_day), $event_id, $k, 1, 0);
+                    $new_rows[] = array(date('Y-m-d', $next_day), $event_id, $k, 1, 0, $datetime->id);
                     // increment day
                     $next_day = $next_day + self::ONE_DAY;
                 }
@@ -239,6 +239,7 @@ class Event extends Record
                 $recurring_date->recurrence_id = $row[2];
                 $recurring_date->ongoing = $row[3];
                 $recurring_date->unlinked = $row[4];
+                $recurring_date->event_datetime_id = $row[5];
 
                 $recurring_date->insert();
             }

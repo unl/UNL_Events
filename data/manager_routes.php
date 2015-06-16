@@ -5,11 +5,12 @@
 $routes = array();
 
 // Optional calendar short name, which prefixes all routes
-$calendar = '(?P<calendar_shortname>([a-zA-Z-_]([0-9]+)?)+)';
+$calendar = '(?P<calendar_shortname>([a-zA-Z-_0-9]+)+)';
 $user = '(?P<user_uid>([a-zA-Z0-9-_]+))';
 $subscription = '(?P<subscription_id>([0-9]+))';
 $event = '(?P<event_id>([0-9]+))';
 $event_datetime	= '(?P<event_datetime_id>([0-9]+))';
+$recurrence_id = '(?P<recurrence_id>([0-9]+))';
 $calendar_slash_required = '(' . $calendar . '\/)?';
 $calendar_slash_optional = '(' . $calendar . '(\/)?)?';
 
@@ -20,6 +21,8 @@ $routes['/^'.$calendar_slash_required.'create(\/)?$/'] = 'UNL\UCBCN\Manager\Crea
 $routes['/^'.$calendar_slash_required.'event\/' . $event . '\/edit(\/)?$/'] = 'UNL\UCBCN\Manager\EditEvent';
 $routes['/^'.$calendar_slash_required.'event\/' . $event . '\/datetime\/add(\/)?$/'] = 'UNL\UCBCN\Manager\AddDateTime';
 $routes['/^'.$calendar_slash_required.'event\/' . $event . '\/datetime\/' . $event_datetime . '\/edit(\/)?$/'] = 'UNL\UCBCN\Manager\AddDateTime';
+$routes['/^'.$calendar_slash_required.'event\/' . $event . '\/datetime\/' . $event_datetime . '\/edit\/recurrence\/' . $recurrence_id . '(\/)?$/'] = 'UNL\UCBCN\Manager\AddDateTime';
+$routes['/^'.$calendar_slash_required.'event\/' . $event . '\/datetime\/' . $event_datetime . '\/delete\/recurrence\/' . $recurrence_id . '(\/)?$/'] = 'UNL\UCBCN\Manager\DeleteRecurrence';
 $routes['/^'.$calendar_slash_required.'event\/' . $event . '\/datetime\/' . $event_datetime . '\/delete(\/)?$/'] = 'UNL\UCBCN\Manager\DeleteDateTime';
 $routes['/^'.$calendar_slash_required.'event\/' . $event . '\/delete(\/)?$/'] = 'UNL\UCBCN\Manager\DeleteEvent';
 $routes['/^calendar\/new(\/)?$/'] = 'UNL\UCBCN\Manager\CreateCalendar';

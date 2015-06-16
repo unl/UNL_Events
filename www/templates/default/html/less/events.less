@@ -8,6 +8,64 @@
 
 @import "eventicon-embedded.less";
 
+.event-datetimes {
+    font-size: 80%;
+    div {
+        vertical-align: middle;
+        line-height: 1.4;
+    }
+    .edt-header {
+        border-bottom: 2px solid #D5D5D2;
+    }
+    .recurring-record {
+        border-left: 4px solid #D5D5D2;
+        border-right: 4px solid #D5D5D2;
+        padding-bottom: 10px;
+        &:last-child {
+            padding-bottom: 0px;
+            margin-bottom: 10px;
+        }
+    }
+    .edt-record {
+        background: #D5D5D2;
+        margin-bottom: 15px;
+        margin-top: 15px;
+        padding: 5px 0;
+        &.recurring {
+            margin-left: 10px;
+            margin-right: 10px;
+            margin-bottom: 0px;
+            margin-top: 0px;
+        }
+        &.has-recurring {
+            margin-bottom: 10px;
+        }
+    }
+    .dates {
+        width: 40%;
+        padding-left: 20px;
+        display: inline-block;
+    }
+    .location {
+        width: 45%;
+        display: inline-block;
+        &.with-controls {
+            width: 25%;
+        }
+    }
+    .controls {
+        width: 30%;
+        display: inline-block;
+        text-align: right;
+        &.recurring {
+            width: 55%;
+        }
+    }
+    .small {
+        font-size: 60%;
+    }
+}
+
 .wp-calendar {
 
     caption {
