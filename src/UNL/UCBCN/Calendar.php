@@ -237,7 +237,8 @@ class Calendar extends Record
     /**
      * Gets events related to this calendar
      */
-    public function getEvents($status = 'all') {
+    public function getEvents($status = 'all') 
+    {
         # create options for event listing class
         $options = array('calendar' => $this->shortname);
 
@@ -250,11 +251,13 @@ class Calendar extends Record
         return $events;
     }
 
-    public function getSubscriptions() {
+    public function getSubscriptions() 
+    {
         return new Calendar\Subscriptions(array('calendar_id' => $this->id));
     }
 
-    public function getSubscriptionsToThis() {
+    public function getSubscriptionsToThis() 
+    {
         return new Calendar\Subscriptions(array('subbed_calendar_id' => $this->id));
     }
 

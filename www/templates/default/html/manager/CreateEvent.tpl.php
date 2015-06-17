@@ -101,7 +101,7 @@
 
                         <label for="start-date" >Start Date &amp; Time</label>
                         <div class="date-time-select"><span class="wdn-icon-calendar"></span>
-                            <input id="start-date" onchange="setRecurringOptions()" name="start_date" type="text" class="datepicker" /> @
+                            <input id="start-date" name="start_date" type="text" class="datepicker" /> @
                             <select id="start-time-hour" name="start_time_hour">
                                 <option value=""></option>
                             <?php for ($i = 1; $i <= 12; $i++) { ?>

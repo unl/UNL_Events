@@ -49,7 +49,7 @@ class Events extends RecordList
                 $sql .= ' AND calendar_has_event.status = "' . self::escapeString($this->options['status']) . '"';
             }
 
-            $sql .= ';';
+            $sql .= 'ORDER BY event.id DESC;';
             return $sql;
         } else if (array_key_exists('search_term', $this->options)) {
             $term = $this->options['search_term'];
