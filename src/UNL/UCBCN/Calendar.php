@@ -237,10 +237,14 @@ class Calendar extends Record
     /**
      * Gets events related to this calendar
      */
-    public function getEvents($status = 'all') 
+    public function getEvents($status = 'all', $limit = -1, $offset = 0) 
     {
         # create options for event listing class
-        $options = array('calendar' => $this->shortname);
+        $options = array(
+            'calendar' => $this->shortname,
+            'limit' => $limit,
+            'offset' => $offset
+        );
 
         if ($status != 'all') {
             $options['status'] = $status;

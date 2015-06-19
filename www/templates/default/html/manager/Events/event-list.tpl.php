@@ -98,7 +98,9 @@ WDN.loadCSS(WDN.getTemplateFilePath('css/modules/pagination.css'));
         <ul id="pending-pagination" class="wdn_pagination" data-tab="pending" style="padding-left: 0;">
             <li class="arrow prev"><a href="#" title="Go to the previous page">← prev</a></li>
             <?php for ($i = 1; $i <= count($arrays); $i++): ?>
-                <li class="<?php if ($i==1) echo 'selected';?>" data-page="<?php echo $i ?>">
+                <li class="<?php if ($i==$context->page) echo 'selected';?>" data-page="<?php echo $i ?>">
+                    <?php if ($i <= 3 || $i >= count($arrays) - 2 || $i == $context->page - 1 || 
+                            $i == $context->page - 2 || $i == $context->page + 1 || $i == $context->page + 2): ?>
                     <a style="display: none;" data-page="<?php echo $i ?>" class="link" href="#" title="Go to page <?php echo $i; ?>"><?php echo $i; ?></a>
                     <span style="display: none;" class="number-text"><?php echo $i; ?></span>
                     <span class="ellipsis" style="display: none;">...</span>

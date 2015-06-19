@@ -1,125 +1,149 @@
 <?php
-    $events = $context->getCategorizedEvents();
+    $events = $context->getEvents();
+    $categorized_events = $context->getCategorizedEvents();
+    $total_pages = NULL;
+    switch ($context->tab) {
+        case 'pending':
+            $total_pages = ceil(count($categorized_events['pending']) / 10);
+            break;
+        case 'upcoming':
+            $total_pages = ceil(count($categorized_events['posted']) / 10);
+            break;
+        case 'past':
+            $total_pages = ceil(count($categorized_events['archived']) / 10);
+            break;
+        default:
+            $total_pages = 1;
+    }
 ?>
 <ul class="wdn_tabs">
-    <li><a href="#pending">Pending (<?php echo count($events['pending']); ?>)</a></li>
-    <li><a href="#upcoming">Upcoming (<?php echo count($events['posted']); ?>)</a></li>
-    <li><a href="#past">Past (<?php echo count($events['archived']); ?>)</a></li>
+    <li class="<?php if ($context->tab == 'pending') echo 'selected'; ?>"><a href="<?php echo ($context->tab == 'pending' ? '#pending' : '?tab=pending'); ?>">Pending (<?php echo count($categorized_events['pending']); ?>)</a></li>
+    <li class="<?php if ($context->tab == 'upcoming') echo 'selected'; ?>"><a href="<?php echo ($context->tab == 'upcoming' ? '#upcoming' : '?tab=upcoming'); ?>">Upcoming (<?php echo count($categorized_events['posted']); ?>)</a></li>
+    <li class="<?php if ($context->tab == 'past') echo 'selected'; ?>"><a href="<?php echo ($context->tab == 'past' ? '#past' : '?tab=past'); ?>">Past (<?php echo count($categorized_events['archived']); ?>)</a></li>
 </ul>
 <div class="wdn_tabs_content">
-    <div id="pending">
-        <?php if (count($events['pending']) == 0): ?>
-            There are no pending events.
+    <div id="<?php echo $context->tab; ?>">
+        <?php if (count($events) == 0): ?>
+            There are no <?php echo $context->tab ?> events.
         <?php else: ?>
-            <?php echo $savvy->render($events['pending'], 'Events/event-list.tpl.php') ?>
-        <?php endif; ?>
-    </div>
-    <div id="upcoming">
-        <?php if (count($events['posted']) == 0): ?>
-            There are no upcoming events.
-        <?php else: ?>
-            <?php echo $savvy->render($events['posted'], 'Events/event-list.tpl.php') ?>
-        <?php endif; ?>
-    </div>
-    <div id="past">
-        <?php if (count($events['archived']) == 0): ?>
-            There are no past events.
-        <?php else: ?>
-            <?php echo $savvy->render($events['archived'], 'Events/event-list.tpl.php') ?>
+            <select id="bulk-action" class="bulk-upcoming-event-tools">
+                <option value="">Bulk Actions</option>
+                <option value="move-to-pending">Move to Pending</option>
+                <option value="delete">Delete</option>
+            </select>
+
+            <div class="event-page">
+                <table class="event-list">
+                    <thead>
+                        <tr>
+                            <th class="center">Select</th>
+                            <th>Title</th>
+                            <th>Date/Location</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach($events as $event): ?>
+                            <tr>
+                                <td class="center">
+                                    <input type="checkbox" id="select-event-<?php echo $event->id ?>" class="select-event" data-id="<?php echo $event->id; ?>">
+                                </td>
+                                <td>
+                                    <a href="<?php echo $event->getEditURL($controller->getCalendar()) ?>"><?php echo $event->title; ?></a>
+                                </td>
+                                <td>
+                                    <ul>
+                                    <?php $datetimes = $event->getDateTimes(); ?>
+                                    <?php $count = 0; ?>
+                                    <?php foreach($datetimes as $datetime): ?>
+                                        <li>
+                                            <?php if (++$count <= 3) : ?>
+                                            <?php 
+                                            {
+                                                if ($datetime->recurringtype == 'none') {
+                                                    echo date('n/d/y @ g:ia', strtotime($datetime->starttime));
+                                                } else if ($datetime->recurringtype == 'daily' || $datetime->recurringtype == 'weekly' ||
+                                                        $datetime->recurringtype == 'annually') {
+                                                    echo ucwords($datetime->recurringtype) . ' @ ' . date('g:ia', strtotime($datetime->starttime)) .
+                                                        ': ' . date('n/d/y', strtotime($datetime->starttime)) . 
+                                                        ' - ' . date('n/d/y', strtotime($datetime->recurs_until));
+                                                } else if ($datetime->recurringtype == 'monthly') {
+                                                    if ($datetime->rectypemonth == 'lastday') {
+                                                        echo 'Last day of each month @ ' . date('g:ia', strtotime($datetime->starttime)) . 
+                                                            ': ' . date('n/d/y', strtotime($datetime->starttime)) . 
+                                                            ' - ' . date('n/d/y', strtotime($datetime->recurs_until));
+                                                    } else if ($datetime->rectypemonth == 'date') {
+                                                        echo ordinal(date('d', strtotime($datetime->starttime))) . 
+                                                            ' of each month @ ' . date('g:ia', strtotime($datetime->starttime)) . 
+                                                            ': ' . date('n/d/y', strtotime($datetime->starttime)) . 
+                                                            ' - ' . date('n/d/y', strtotime($datetime->recurs_until));
+                                                    } else {
+                                                        echo ucwords($datetime->rectypemonth) . date('f', strtotime($datetime->starttime)) . ' of every month' . 
+                                                            ': ' . date('n/d/y', strtotime($datetime->starttime)) . 
+                                                            ' - ' . date('n/d/y', strtotime($datetime->recurs_until));
+                                                    }
+                                                }
+                                            }
+                                            ?><br>
+                                            <?php if (!empty($location = $datetime->getLocation())) echo $location->name; ?>
+                                            <?php else : ?>
+                                                ...and <?php echo (count($datetimes) - 3); ?> more
+                                            <?php break; ?>
+                                            <?php endif; ?>
+                                        </li>
+                                    <?php endforeach; ?>
+                                    </ul>
+                                </td>
+                                <td>
+                                    <select 
+                                        id="event-action-<?php echo $event->id ?>"
+                                        class="upcoming-event-tools" 
+                                        data-id="<?php echo $event->id; ?>"
+                                        data-recommend-url="<?php echo $event->getRecommendURL($controller->getCalendar()) ?>"
+                                        >
+                                            <option value="">Select an Action</option>
+                                            <option value="move-to-pending">Move to Pending</option>
+                                            <option value="recommend">Recommend</option>
+                                            <option value="delete">Delete</option>
+                                    </select>
+                                    <form id="delete-<?php echo $event->id; ?>" method="POST" action="<?php echo $event->getDeleteURL($controller->getCalendar()) ?>" class="delete-form hidden"></form>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+
+            <script type="text/javascript">
+            WDN.loadCSS(WDN.getTemplateFilePath('css/modules/pagination.css'));
+            </script>
+            <div style="text-align: center;">
+                <div style="display: inline-block;">
+                    <ul id="pending-pagination" class="wdn_pagination" data-tab="pending" style="padding-left: 0;">
+                        <?php if($context->page != 1): ?>
+                            <li class="arrow prev"><a href="?tab=<?php echo $context->tab?>&amp;page=<?php echo $context->page - 1 ?>" title="Go to the previous page">← prev</a></li>
+                        <?php endif; ?>
+                        <?php $before_ellipsis_shown = FALSE; $after_ellipsis_shown = FALSE; ?>
+                        <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                                <?php if ($i == $context->page): ?>
+                                    <li class="selected"><span><?php echo $i; ?></span></li>
+                                <?php elseif ($i <= 3 || $i >= $total_pages - 2 || $i == $context->page - 1 || 
+                                            $i == $context->page - 2 || $i == $context->page + 1 || $i == $context->page + 2): ?>
+                                    <li><a href="?tab=<?php echo $context->tab?>&amp;page=<?php echo $i ?>" title="Go to page <?php echo $i; ?>"><?php echo $i; ?></a></li>
+                                <?php elseif ($i < $context->page && !$before_ellipsis_shown): ?>
+                                    <li><span class="ellipsis">...</span></li>
+                                    <?php $before_ellipsis_shown = TRUE; ?>
+                                <?php elseif ($i > $context->page && !$after_ellipsis_shown): ?>
+                                    <li><span class="ellipsis">...</span></li>
+                                    <?php $after_ellipsis_shown = TRUE; ?>
+                                <?php endif; ?>
+                        <?php endfor; ?>
+                        <?php if($context->page != $total_pages): ?>
+                            <li class="arrow next"><a href="?tab=<?php echo $context->tab?>&amp;page=<?php echo $context->page + 1 ?>" title="Go to the next page">next →</a></li>
+                        <?php endif; ?>
+                    </ul>
+                </div>
+            </div>
         <?php endif; ?>
     </div>
 </div>
-
-<script type="text/javascript">
-require(['jquery'], function($) {
-    var current_page = 1;
-    var total_pages = new Map();
-    total_pages.set('pending', parseInt(<?php echo ceil(count($events['pending'])/10); ?>));
-    total_pages.set('upcoming', parseInt(<?php echo ceil(count($events['posted'])/10); ?>));
-    total_pages.set('past', parseInt(<?php echo ceil(count($events['archived'])/10); ?>));
-
-
-    var switchToPage = function(tab, new_page) {
-        var before_ellipsis_shown = false;
-        var after_ellipsis_shown = false;
-
-        // show the appropriate page
-        $('#' + tab + ' .event-page[data-page-num=' + current_page + ']').hide();
-        $('#' + tab + ' .event-page[data-page-num=' + new_page + ']').show();
-
-        // show just the span with the page number for the new page
-        $('#' + tab + '-pagination li[data-page=' + new_page + ']').show();
-        $('#' + tab + '-pagination li[data-page=' + new_page + ']').addClass('selected');
-        $('#' + tab + '-pagination li[data-page=' + new_page + '] .link').hide();
-        $('#' + tab + '-pagination li[data-page=' + new_page + '] .number-text').show();
-        $('#' + tab + '-pagination li[data-page=' + new_page + '] .ellipsis').hide();
-
-        // hide and show the appropriate pagination links
-        for (var i = 1; i <= total_pages.get(tab); i++) {
-            // we will always show 1-3 and total-2 - total
-            // we will show 2 to each side of the new page
-            if (i == new_page) {
-                 // already processed, do nothing
-            } else if ((i >= new_page - 2 && i <= new_page - 1) || (i >= new_page + 1 && i <= new_page + 2) ||
-                    i <= 3 || i >= total_pages.get(tab) - 2) {
-                // this is a shown page link
-                $('#' + tab + '-pagination li[data-page=' + i + ']').show();
-                $('#' + tab + '-pagination li[data-page=' + i + ']').removeClass('selected');
-                $('#' + tab + '-pagination li[data-page=' + i + '] .link').show();
-                $('#' + tab + '-pagination li[data-page=' + i + '] .number-text').hide();
-                $('#' + tab + '-pagination li[data-page=' + i + '] .ellipsis').hide();
-            } else if (i < new_page && !before_ellipsis_shown) {
-                // show the ellipsis here
-                $('#' + tab + '-pagination li[data-page=' + i + ']').show();
-                $('#' + tab + '-pagination li[data-page=' + i + ']').remove('selected');
-                $('#' + tab + '-pagination li[data-page=' + i + '] .link').hide();
-                $('#' + tab + '-pagination li[data-page=' + i + '] .number-text').hide();
-                $('#' + tab + '-pagination li[data-page=' + i + '] .ellipsis').show();
-                before_ellipsis_shown = true;
-            } else if (i > new_page && !after_ellipsis_shown) {
-                // show the ellipsis here
-                $('#' + tab + '-pagination li[data-page=' + i + ']').show();
-                $('#' + tab + '-pagination li[data-page=' + i + ']').remove('selected');
-                $('#' + tab + '-pagination li[data-page=' + i + '] .link').hide();
-                $('#' + tab + '-pagination li[data-page=' + i + '] .number-text').hide();
-                $('#' + tab + '-pagination li[data-page=' + i + '] .ellipsis').show();
-                after_ellipsis_shown = true;
-            } else {
-                // do not show anything
-                // show the ellipsis here
-                $('#' + tab + '-pagination li[data-page=' + i + ']').hide();
-            }
-        }
-
-        current_page = new_page;
-    };
-
-    $('.wdn_pagination .link').click(function (click) {
-        click.preventDefault();
-        var new_page = parseInt($(this).attr('data-page'));
-        var tab = $(this).closest('.wdn_pagination').attr('data-tab');
-
-        switchToPage(tab, new_page);
-    });
-
-    $('.wdn_pagination .prev a').click(function (click) {
-        click.preventDefault();
-        var tab = $(this).closest('.wdn_pagination').attr('data-tab');
-        var new_page = current_page != 1 ? current_page - 1 : total_pages.get(tab);
-
-        switchToPage(tab, new_page);
-    });
-
-    $('.wdn_pagination .next a').click(function (click) {
-        click.preventDefault();
-        var tab = $(this).closest('.wdn_pagination').attr('data-tab');
-        var new_page = current_page != total_pages.get(tab) ? current_page + 1 : 1;
-
-        switchToPage(tab, new_page);
-    });
-
-    switchToPage('pending', 1);
-    switchToPage('upcoming', 1);
-    switchToPage('past', 1);
-});
-</script>
