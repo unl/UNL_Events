@@ -26,9 +26,13 @@
         <?php if (count($events) == 0): ?>
             There are no <?php echo $context->tab ?> events.
         <?php else: ?>
-            <select id="bulk-action" class="bulk-upcoming-event-tools">
+            <select id="bulk-action">
                 <option value="">Bulk Actions</option>
-                <option value="move-to-pending">Move to Pending</option>
+                <?php if ($context->tab == 'pending'): ?>
+                    <option value="move-to-upcoming">Move to Upcoming</option>
+                <?php else: ?>
+                    <option value="move-to-pending">Move to Pending</option>
+                <?php endif; ?>
                 <option value="delete">Delete</option>
             </select>
 
@@ -58,35 +62,35 @@
                                     <?php foreach($datetimes as $datetime): ?>
                                         <li>
                                             <?php if (++$count <= 3) : ?>
-                                            <?php 
-                                            {
-                                                if ($datetime->recurringtype == 'none') {
-                                                    echo date('n/d/y @ g:ia', strtotime($datetime->starttime));
-                                                } else if ($datetime->recurringtype == 'daily' || $datetime->recurringtype == 'weekly' ||
-                                                        $datetime->recurringtype == 'annually') {
-                                                    echo ucwords($datetime->recurringtype) . ' @ ' . date('g:ia', strtotime($datetime->starttime)) .
-                                                        ': ' . date('n/d/y', strtotime($datetime->starttime)) . 
-                                                        ' - ' . date('n/d/y', strtotime($datetime->recurs_until));
-                                                } else if ($datetime->recurringtype == 'monthly') {
-                                                    if ($datetime->rectypemonth == 'lastday') {
-                                                        echo 'Last day of each month @ ' . date('g:ia', strtotime($datetime->starttime)) . 
+                                                <?php 
+                                                {
+                                                    if ($datetime->recurringtype == 'none') {
+                                                        echo date('n/d/y @ g:ia', strtotime($datetime->starttime));
+                                                    } else if ($datetime->recurringtype == 'daily' || $datetime->recurringtype == 'weekly' ||
+                                                            $datetime->recurringtype == 'annually') {
+                                                        echo ucwords($datetime->recurringtype) . ' @ ' . date('g:ia', strtotime($datetime->starttime)) .
                                                             ': ' . date('n/d/y', strtotime($datetime->starttime)) . 
                                                             ' - ' . date('n/d/y', strtotime($datetime->recurs_until));
-                                                    } else if ($datetime->rectypemonth == 'date') {
-                                                        echo ordinal(date('d', strtotime($datetime->starttime))) . 
-                                                            ' of each month @ ' . date('g:ia', strtotime($datetime->starttime)) . 
-                                                            ': ' . date('n/d/y', strtotime($datetime->starttime)) . 
-                                                            ' - ' . date('n/d/y', strtotime($datetime->recurs_until));
-                                                    } else {
-                                                        echo ucwords($datetime->rectypemonth) . date('f', strtotime($datetime->starttime)) . ' of every month' . 
-                                                            ': ' . date('n/d/y', strtotime($datetime->starttime)) . 
-                                                            ' - ' . date('n/d/y', strtotime($datetime->recurs_until));
+                                                    } else if ($datetime->recurringtype == 'monthly') {
+                                                        if ($datetime->rectypemonth == 'lastday') {
+                                                            echo 'Last day of each month @ ' . date('g:ia', strtotime($datetime->starttime)) . 
+                                                                ': ' . date('n/d/y', strtotime($datetime->starttime)) . 
+                                                                ' - ' . date('n/d/y', strtotime($datetime->recurs_until));
+                                                        } else if ($datetime->rectypemonth == 'date') {
+                                                            echo ordinal(date('d', strtotime($datetime->starttime))) . 
+                                                                ' of each month @ ' . date('g:ia', strtotime($datetime->starttime)) . 
+                                                                ': ' . date('n/d/y', strtotime($datetime->starttime)) . 
+                                                                ' - ' . date('n/d/y', strtotime($datetime->recurs_until));
+                                                        } else {
+                                                            echo ucwords($datetime->rectypemonth) . date('f', strtotime($datetime->starttime)) . ' of every month' . 
+                                                                ': ' . date('n/d/y', strtotime($datetime->starttime)) . 
+                                                                ' - ' . date('n/d/y', strtotime($datetime->recurs_until));
+                                                        }
                                                     }
                                                 }
-                                            }
-                                            ?><br>
-                                            <?php if (!empty($location = $datetime->getLocation())) echo $location->name; ?>
-                                            <?php else : ?>
+                                                ?><br>
+                                                <?php if (!empty($location = $datetime->getLocation())) echo $location->name; ?>
+                                            <?php else: ?>
                                                 ...and <?php echo (count($datetimes) - 3); ?> more
                                             <?php break; ?>
                                             <?php endif; ?>
@@ -102,7 +106,11 @@
                                         data-recommend-url="<?php echo $event->getRecommendURL($controller->getCalendar()) ?>"
                                         >
                                             <option value="">Select an Action</option>
-                                            <option value="move-to-pending">Move to Pending</option>
+                                            <?php if ($context->tab == 'pending'): ?>
+                                                <option value="move-to-upcoming">Move to Upcoming</option>
+                                            <?php else: ?>
+                                                <option value="move-to-pending">Move to Pending</option>
+                                            <?php endif; ?>
                                             <option value="recommend">Recommend</option>
                                             <option value="delete">Delete</option>
                                     </select>

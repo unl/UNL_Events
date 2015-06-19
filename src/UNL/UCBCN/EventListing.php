@@ -40,8 +40,7 @@ class EventListing extends RecordList
     {
         if (array_key_exists('event_id', $this->options)) {
             return 'SELECT id FROM eventdatetime WHERE event_id = ' . 
-            (int)($this->options['event_id']) . 
-            (array_key_exists('limit', $this->options) && $this->options['limit'] >= 0 ? ' LIMIT ' . $this->options['limit'] : '') . ';';
+            (int)($this->options['event_id']) . ';';
         } else {
             return parent::getSQL();
         }

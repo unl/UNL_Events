@@ -84,11 +84,12 @@ class Event extends Record
         );
     }
     
-    function getDatetimes($limit = -1) 
+    function getDatetimes($limit = -1, $offset = 0) 
     {
         $options = array(
             'event_id' => $this->id,
-            'limit' => $limit
+            'limit' => $limit,
+            'offset' => $offset
         );
 
         return new EventListing($options);
