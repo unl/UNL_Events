@@ -46,7 +46,7 @@
                             </optgroup>
                         </select>
 
-                        <div id="new-location-fields">
+                        <div id="new-location-fields" style="display: none;">
                         <h6>New Location</h6>
                         <label for="location-name">Name</label>
                         <input type="text" id="location-name" name="new_location[name]">
@@ -244,6 +244,14 @@ WDN.initializePlugin('jqueryui', [function() {
 
     $('#start-date').change(function (change) {
         setRecurringOptions($(this), $('#monthly-group'));
+    });
+
+    $('#location').change(function (change) {
+        if ($(this).val() == 'new') {
+            $('#new-location-fields').show();
+        } else {
+            $('#new-location-fields').hide();
+        }
     });
 }]);
 </script>

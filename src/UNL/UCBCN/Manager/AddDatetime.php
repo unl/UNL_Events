@@ -3,6 +3,7 @@ namespace UNL\UCBCN\Manager;
 
 use UNL\UCBCN\Calendar as CalendarModel;
 use UNL\UCBCN\Event;
+use UNL\UCBCN\Location;
 use UNL\UCBCN\Locations;
 use UNL\UCBCN\Event\Occurrence;
 use UNL\UCBCN\Event\RecurringDate;

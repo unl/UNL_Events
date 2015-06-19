@@ -46,23 +46,24 @@ if ($context->recurrence_id != NULL) {
     <fieldset>
         <label for="location">Location*</label>
         <select id="location" name="location" class="use-select2">
+            <?php if ($datetime->id != NULL): ?>
+            <optgroup label="Current location">
+                <option selected="selected" value="<?php echo $datetime->location_id ?>"><?php echo $datetime->getLocation()->name; ?></option>
+            <?php endif; ?>
             <optgroup label="Your saved locations">
                 <?php foreach ($context->getUserLocations() as $location): ?>
-                    <option <?php if ($datetime->location_id == $location->id) echo 'selected="selected"'; ?> 
-                    value="<?php echo $location->id ?>"><?php echo $location->name ?></option>
+                    <option value="<?php echo $location->id ?>"><?php echo $location->name ?></option>
                 <?php endforeach ?>
                 <option value="new">-- New Location --</option>
             </optgroup>
             <optgroup label="UNL Campus locations">
                 <?php foreach ($context->getStandardLocations(\UNL\UCBCN\Location::DISPLAY_ORDER_MAIN) as $location): ?>
-                    <option <?php if ($datetime->location_id == $location->id) echo 'selected="selected"'; ?> 
-                    value="<?php echo $location->id ?>"><?php echo $location->name ?></option>
+                    <option value="<?php echo $location->id ?>"><?php echo $location->name ?></option>
                 <?php endforeach ?>
             </optgroup>
             <optgroup label="Extension locations">
                 <?php foreach ($context->getStandardLocations(\UNL\UCBCN\Location::DISPLAY_ORDER_EXTENSION) as $location): ?>
-                    <option <?php if ($datetime->location_id == $location->id) echo 'selected="selected"'; ?> 
-                    value="<?php echo $location->id ?>"><?php echo $location->name ?></option>
+                    <option value="<?php echo $location->id ?>"><?php echo $location->name ?></option>
                 <?php endforeach ?>
             </optgroup>
         </select>
