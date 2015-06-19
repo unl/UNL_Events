@@ -72,8 +72,6 @@ class Events extends RecordList
                        AND event.approvedforcirculation = 1
                     ORDER BY event.title
                 ';
-                
-                //TODO handle limits for pagination
             }
             
             return $sql;

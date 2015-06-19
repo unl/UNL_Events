@@ -11,6 +11,7 @@ class Search
     public $calendar;
     public $search_term;
     public $events;
+    public $page;
 
     public function __construct($options = array())
     {
@@ -21,9 +22,19 @@ class Search
             throw new \Exception("That calendar could not be found.", 404);
         }
 
+        if (array_key_exists('page', $_GET) && is_numeric($_GET['page']) && $_GET['page'] >= 1) {
+            $this->page = $_GET['page'];
+        } else {
+            $this->page = 1;
+        }
+
         if (array_key_exists('search_term', $this->options)) {
             $this->search_term = $this->options['search_term'];
-            $this->events = new Events(array('search_term'=>$this->search_term));
+            $this->events = new Events(array(
+                'search_term' => $this->search_term,
+                'limit' => 10,
+                'offset' => ($this->page - 1) * 10
+            ));
         }
     }
 }
