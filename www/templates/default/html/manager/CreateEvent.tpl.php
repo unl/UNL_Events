@@ -46,7 +46,7 @@
                             </optgroup>
                         </select>
 
-                        <div id="new-location-fields">
+                        <div id="new-location-fields" style="display: none;">
                         <h6>New Location</h6>
                         <label for="location-name">Name</label>
                         <input type="text" id="location-name" name="new_location[name]">
@@ -101,7 +101,7 @@
 
                         <label for="start-date" >Start Date &amp; Time</label>
                         <div class="date-time-select"><span class="wdn-icon-calendar"></span>
-                            <input id="start-date" onchange="setRecurringOptions()" name="start_date" type="text" class="datepicker" /> @
+                            <input id="start-date" name="start_date" type="text" class="datepicker" /> @
                             <select id="start-time-hour" name="start_time_hour">
                                 <option value=""></option>
                             <?php for ($i = 1; $i <= 12; $i++) { ?>
@@ -244,6 +244,14 @@ WDN.initializePlugin('jqueryui', [function() {
 
     $('#start-date').change(function (change) {
         setRecurringOptions($(this), $('#monthly-group'));
+    });
+
+    $('#location').change(function (change) {
+        if ($(this).val() == 'new') {
+            $('#new-location-fields').show();
+        } else {
+            $('#new-location-fields').hide();
+        }
     });
 }]);
 </script>

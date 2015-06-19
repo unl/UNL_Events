@@ -16,6 +16,7 @@ class EditEvent implements PostHandlerInterface
     public $calendar;
     public $event;
     public $on_main_calendar;
+    public $page;
 
     public function __construct($options = array()) 
     {
@@ -28,6 +29,12 @@ class EditEvent implements PostHandlerInterface
         $this->event = Event::getByID($this->options['event_id']);
         if ($this->event === FALSE) {
             throw new \Exception("That event could not be found.", 404);
+        }
+
+        if (array_key_exists('page', $_GET) && is_numeric($_GET['page']) && $_GET['page'] >= 1) {
+            $this->page = $_GET['page'];
+        } else {
+            $this->page = 1;
         }
 
         $main_calendar = CalendarModel::getByID(Controller::$default_calendar_id);

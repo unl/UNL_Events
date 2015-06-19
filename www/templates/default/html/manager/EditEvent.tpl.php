@@ -3,6 +3,8 @@
     $event = $context->event;
     $event_type = $event->getFirstType();
 
+    $total_pages = ceil(count($event->getDatetimes()) / 5);
+
     function ordinal($number) {
     	$mod = $number % 100;
     	if ($mod >= 11 && $mod <= 13) {
@@ -68,7 +70,7 @@
                     </div>
 	            </div>
 
-            	<?php foreach($event->getDatetimes() as $datetime) : ?>
+            	<?php foreach($event->getDatetimes(5, ($context->page - 1)*5) as $datetime) : ?>
                 	<div class="edt-record <?php if ($datetime->recurringtype != 'none') echo 'has-recurring' ?>">
                         <div class="dates">
                     		<?php 
@@ -126,6 +128,39 @@
                     <?php endif; ?>
 
             	<?php endforeach; ?>
+
+                <?php if ($total_pages > 1): ?>
+                <script type="text/javascript">
+                WDN.loadCSS(WDN.getTemplateFilePath('css/modules/pagination.css'));
+                </script>
+                <div style="text-align: center;">
+                    <div style="display: inline-block;">
+                        <ul id="pending-pagination" class="wdn_pagination" data-tab="pending" style="padding-left: 0;">
+                            <?php if($context->page != 1): ?>
+                                <li class="arrow prev"><a href="?page=<?php echo $context->page - 1 ?>" title="Go to the previous page">← prev</a></li>
+                            <?php endif; ?>
+                            <?php $before_ellipsis_shown = FALSE; $after_ellipsis_shown = FALSE; ?>
+                            <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                                    <?php if ($i == $context->page): ?>
+                                        <li class="selected"><span><?php echo $i; ?></span></li>
+                                    <?php elseif ($i <= 3 || $i >= $total_pages - 2 || $i == $context->page - 1 || 
+                                                $i == $context->page - 2 || $i == $context->page + 1 || $i == $context->page + 2): ?>
+                                        <li><a href="?page=<?php echo $i ?>" title="Go to page <?php echo $i; ?>"><?php echo $i; ?></a></li>
+                                    <?php elseif ($i < $context->page && !$before_ellipsis_shown): ?>
+                                        <li><span class="ellipsis">...</span></li>
+                                        <?php $before_ellipsis_shown = TRUE; ?>
+                                    <?php elseif ($i > $context->page && !$after_ellipsis_shown): ?>
+                                        <li><span class="ellipsis">...</span></li>
+                                        <?php $after_ellipsis_shown = TRUE; ?>
+                                    <?php endif; ?>
+                            <?php endfor; ?>
+                            <?php if($context->page != $total_pages): ?>
+                                <li class="arrow next"><a href="?page=<?php echo $context->page + 1 ?>" title="Go to the next page">next →</a></li>
+                            <?php endif; ?>
+                        </ul>
+                    </div>
+                </div>
+            <?php endif; ?>
             </fieldset>
 			<a class="wdn-button wdn-button-brand" href="<?php echo $event->getAddDatetimeURL($context->calendar) ?>">Add Location, Date, and/or Time</a>            
         </div>

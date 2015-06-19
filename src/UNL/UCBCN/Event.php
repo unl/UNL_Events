@@ -84,15 +84,19 @@ class Event extends Record
         );
     }
     
-    function getDatetimes() {
+    function getDatetimes($limit = -1, $offset = 0) 
+    {
         $options = array(
-            'event_id' => $this->id
+            'event_id' => $this->id,
+            'limit' => $limit,
+            'offset' => $offset
         );
 
         return new EventListing($options);
     }
 
-    public function getStatusWithCalendar(Calendar $calendar) {
+    public function getStatusWithCalendar(Calendar $calendar) 
+    {
         $calendar_has_event = CalendarHasEvent::getByIds($calendar->id, $this->id);
         if ($calendar_has_event === FALSE) {
             return NULL;
@@ -101,7 +105,8 @@ class Event extends Record
         }
     }
 
-    public function updateStatusWithCalendar(Calendar $calendar, $status) {
+    public function updateStatusWithCalendar(Calendar $calendar, $status) 
+    {
         $calendar_has_event = CalendarHasEvent::getByIds($calendar->id, $this->id);
         if ($calendar_has_event === FALSE) {
             throw new \Exception('Event does not have status with calendar');

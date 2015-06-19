@@ -49,7 +49,9 @@ class Events extends RecordList
                 $sql .= ' AND calendar_has_event.status = "' . self::escapeString($this->options['status']) . '"';
             }
 
+            $sql .= ' ORDER BY event.id DESC';
             $sql .= ';';
+
             return $sql;
         } else if (array_key_exists('search_term', $this->options)) {
             $term = $this->options['search_term'];
@@ -70,8 +72,6 @@ class Events extends RecordList
                        AND event.approvedforcirculation = 1
                     ORDER BY event.title
                 ';
-                
-                //TODO handle limits for pagination
             }
             
             return $sql;
