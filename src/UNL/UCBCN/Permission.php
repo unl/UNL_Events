@@ -30,6 +30,7 @@ class Permission extends Record
     public $id;                              // int(10)  not_null primary_key unsigned auto_increment
     public $name;                            // string(100)
     public $description;                     // string(255)
+    public $standard;
     
     const PERMISSION_EVENT_EDIT   = 'Event Edit';
     const PERMISSION_EVENT_DELETE = 'Event Delete';

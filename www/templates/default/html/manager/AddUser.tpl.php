@@ -16,7 +16,8 @@
 
             <?php foreach ($context->getAllPermissions() as $permission) { ?>
                 <input
-                <?php if ($context->user != NULL && $context->user->hasPermission($permission->id, $context->calendar->id)) echo 'checked="checked"'; ?>
+                <?php if (($context->user != NULL && $context->user->hasPermission($permission->id, $context->calendar->id)) ||
+                    ($context->user == NULL && $permission->standard)) echo 'checked="checked"'; ?>
                  type="checkbox" name="permission_<?php echo $permission->id ?>" id="permission-<?php echo $permission->id ?>"> 
                 <label for="permission-<?php echo $permission->id ?>"><?php echo $permission->description ?></label>
                 <br>
