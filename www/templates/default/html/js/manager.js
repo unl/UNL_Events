@@ -2,7 +2,7 @@ require(['jquery', 'wdn', 'modernizr', frontend_url + 'templates/default/html/js
     $(document).ready(function() {
         $(".use-select2").select2();
         
-        $('.pending-event-tools').change(function () {
+        $('.pending-event-tools, .upcoming-event-tools, .past-event-tools').change(function () {
             if ($(this).val() == 'recommend') {
                 // redirect to recommend URL
                 window.location = $(this).attr('data-recommend-url');
@@ -10,6 +10,12 @@ require(['jquery', 'wdn', 'modernizr', frontend_url + 'templates/default/html/js
                 if (window.confirm('Are you sure you want to delete this event?')) {
                     $('#delete-' + $(this).attr('data-id')).submit();
                 }
+            } else if ($(this).val() == 'move-to-upcoming') {
+                $('#move-target-' + $(this).attr('data-id')).val('upcoming');
+                $('#move-' + $(this).attr('data-id')).submit();
+            } else if ($(this).val() == 'move-to-pending') {
+                $('#move-target-' + $(this).attr('data-id')).val('pending');
+                $('#move-' + $(this).attr('data-id')).submit();
             }
         });
 

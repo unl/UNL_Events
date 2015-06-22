@@ -19,6 +19,7 @@ $routes['/^account(\/)?$/'] = 'UNL\UCBCN\Manager\EditAccount';
 $routes['/^'.$calendar_slash_optional.'$/'] = 'UNL\UCBCN\Manager\Calendar';
 $routes['/^'.$calendar_slash_required.'create(\/)?$/'] = 'UNL\UCBCN\Manager\CreateEvent';
 $routes['/^'.$calendar_slash_required.'event\/' . $event . '\/edit(\/)?$/'] = 'UNL\UCBCN\Manager\EditEvent';
+$routes['/^'.$calendar_slash_required.'event\/' . $event . '\/move(\/)?$/'] = 'UNL\UCBCN\Manager\MoveEvent';
 $routes['/^'.$calendar_slash_required.'event\/' . $event . '\/datetime\/add(\/)?$/'] = 'UNL\UCBCN\Manager\AddDateTime';
 $routes['/^'.$calendar_slash_required.'event\/' . $event . '\/datetime\/' . $event_datetime . '\/edit(\/)?$/'] = 'UNL\UCBCN\Manager\AddDateTime';
 $routes['/^'.$calendar_slash_required.'event\/' . $event . '\/datetime\/' . $event_datetime . '\/edit\/recurrence\/' . $recurrence_id . '(\/)?$/'] = 'UNL\UCBCN\Manager\AddDateTime';

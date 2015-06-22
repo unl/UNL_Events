@@ -26,7 +26,7 @@
         <?php if (count($events) == 0): ?>
             There are no <?php echo $context->tab ?> events.
         <?php else: ?>
-            <select id="bulk-action">
+            <select id="bulk-action" class="bulk-<?php echo $context->tab; ?>-event-tools">
                 <option value="">Bulk Actions</option>
                 <?php if ($context->tab == 'pending'): ?>
                     <option value="move-to-upcoming">Move to Upcoming</option>
@@ -101,7 +101,7 @@
                                 <td>
                                     <select 
                                         id="event-action-<?php echo $event->id ?>"
-                                        class="upcoming-event-tools" 
+                                        class="<?php echo $context->tab ?>-event-tools" 
                                         data-id="<?php echo $event->id; ?>"
                                         data-recommend-url="<?php echo $event->getRecommendURL($controller->getCalendar()) ?>"
                                         >
@@ -114,6 +114,10 @@
                                             <option value="recommend">Recommend</option>
                                             <option value="delete">Delete</option>
                                     </select>
+                                    <form id="move-<?php echo $event->id; ?>" method="POST" action="<?php echo $event->getMoveURL($controller->getCalendar()) ?>" class="delete-form hidden">
+                                    <input type="text" name="new_status" id="move-target-<?php echo $event->id; ?>">
+                                    <input type="text" name="event_id" value="<?php echo $event->id ?>">
+                                    </form>
                                     <form id="delete-<?php echo $event->id; ?>" method="POST" action="<?php echo $event->getDeleteURL($controller->getCalendar()) ?>" class="delete-form hidden"></form>
                                 </td>
                             </tr>

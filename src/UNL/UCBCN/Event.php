@@ -132,6 +132,10 @@ class Event extends Record
         return Controller::$url . $calendar->shortname . '/event/' . $this->id . '/recommend/';
     }
 
+    public function getMoveURL($calendar) {
+        return Controller::$url . $calendar->shortname . '/event/' . $this->id . '/move/';
+    }
+
     # events will only have one type. But the database allows them to have more, technically.
     # hence this method is named getFirstType
     #
