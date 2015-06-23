@@ -35,6 +35,10 @@
                 <?php endif; ?>
                 <option value="delete">Delete</option>
             </select>
+            <form id="bulk-action-form" method="POST" action="<?php echo $context->calendar->getBulkActionURL() ?>" class="delete-form hidden">
+            <input type="text" id="bulk-action-ids" name="ids">
+            <input type="text" id="bulk-action-action" name="action">
+            </form>
 
             <div class="event-page">
                 <table class="event-list">

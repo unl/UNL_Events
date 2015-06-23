@@ -1,7 +1,37 @@
 require(['jquery', 'wdn', 'modernizr', frontend_url + 'templates/default/html/js/vendor/select2/js/select2.min.js'], function($, WDN, Modernizr) {
     $(document).ready(function() {
         $(".use-select2").select2();
-        
+
+        $('#bulk-action').change(function () {
+            var ids = [];
+
+            // find ids of all events that are checked
+            $('.select-event').each(function() {
+                if ($(this).is(':checked')) {
+                    ids.push(parseInt($(this).attr('data-id')));
+                }
+            });
+
+            $('#bulk-action-ids').val(ids.join(','));
+            $('#bulk-action-action').val($(this).val());
+
+            var confirm_string = null;
+            if ($(this).val() == 'delete') {
+                confirm_string = 'Are you sure you want to delete these ' + ids.length.toString() + ' events?';
+            } else if ($(this).val() == 'move-to-upcoming') {
+                confirm_string = 'Are you sure to move these ' + ids.length.toString() + ' events to "Upcoming"?';
+            } else if ($(this).val() == 'move-to-pending') {
+                confirm_string = 'Are you sure to move these ' + ids.length.toString() + ' events to "Pending"?';
+            } else {
+                // do nothing
+                return;
+            }
+
+            if (window.confirm(confirm_string)) {
+                $('#bulk-action-form').submit();
+            }
+        });
+
         $('.pending-event-tools, .upcoming-event-tools, .past-event-tools').change(function () {
             if ($(this).val() == 'recommend') {
                 // redirect to recommend URL
