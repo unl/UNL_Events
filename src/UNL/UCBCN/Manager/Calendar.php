@@ -3,6 +3,7 @@ namespace UNL\UCBCN\Manager;
 
 use UNL\UCBCN\Calendar as CalendarModel;
 use UNL\UCBCN\User;
+use UNL\UCBCN\Permission;
 
 class Calendar {
     public $options = array();
@@ -19,7 +20,7 @@ class Calendar {
         $this->calendar = CalendarModel::getByShortName($this->options['calendar_shortname']);
 
         if ($this->calendar === FALSE) {
-            throw new \Exception("That calendar could not be found.", 500);
+            throw new \Exception("That calendar could not be found.", 404);
         }
 
         # this function will currently run every time the page is loaded. In the future, it would be better

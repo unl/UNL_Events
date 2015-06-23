@@ -2,6 +2,7 @@
 namespace UNL\UCBCN\Manager;
 
 use UNL\UCBCN\Calendar;
+use UNL\UCBCN\Permission;
 use UNL\UCBCN\Calendars;
 use UNL\UCBCN\Calendar\Subscription;
 use UNL\UCBCN\Calendar\SubscriptionHasCalendar;
@@ -19,6 +20,11 @@ class CreateSubscription implements PostHandlerInterface
 
         if ($this->calendar === FALSE) {
             throw new \Exception("That calendar could not be found.", 404);
+        }
+
+        $user = Auth::getCurrentUser();
+        if (!$user->hasPermission(Permission::CALENDAR_EDIT_SUBSCRIPTIONS_ID, $this->calendar->id)) {
+            throw new \Exception("You do not have permission to edit subscriptions on this calendar.", 403);
         }
 
         if (array_key_exists('subscription_id', $this->options)) {

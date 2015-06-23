@@ -19,6 +19,7 @@ namespace UNL\UCBCN\Manager;
 use UNL\UCBCN\RuntimeException;
 use UNL\UCBCN\UnexpectedValueException;
 use UNL\UCBCN\Calendar;
+use UNL\UCBCN\Permission;
 
 class Controller {
     public $options = array(

@@ -2,6 +2,7 @@
 namespace UNL\UCBCN\Manager;
 
 use UNL\UCBCN\Calendar;
+use UNL\UCBCN\Permission;
 
 class CreateCalendar implements PostHandlerInterface
 {
@@ -18,6 +19,11 @@ class CreateCalendar implements PostHandlerInterface
 
             if ($this->calendar === FALSE) {
                 throw new \Exception("That calendar could not be found.", 404);
+            }
+
+            $user = Auth::getCurrentUser();
+            if (!$user->hasPermission(Permission::CALENDAR_EDIT_ID, $this->calendar->id)) {
+                throw new \Exception("You do not have permission to edit the details of this calendar.", 403);
             }
         } else {
             # we are creating a new calendar

@@ -19,13 +19,18 @@ class Recommend
         $this->calendar = Calendar::getByShortname($this->options['calendar_shortname']);
 
         if ($this->calendar === FALSE) {
-            throw new \Exception("That calendar could not be found.", 500);
+            throw new \Exception("That calendar could not be found.", 404);
+        }
+
+        $user = Auth::getCurrentUser();
+        if (!$user->hasPermission(Permission::EVENT_RECOMMEND_ID, $this->calendar->id)) {
+            throw new \Exception("You do not have permission to recommend events on this calendar.", 403);
         }
 
         $this->event = Event::getByID($this->options['event_id']);
 
         if ($this->event === FALSE) {
-            throw new \Exception("That event could not be found.", 500);
+            throw new \Exception("That event could not be found.", 404);
         }
 
         if (!empty($_POST)) {

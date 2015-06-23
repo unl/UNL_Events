@@ -4,6 +4,7 @@ namespace UNL\UCBCN\Manager;
 use UNL\UCBCN\Calendar;
 use UNL\UCBCN\Calendar\Event as CalendarHasEvent;
 use UNL\UCBCN\Event;
+use UNL\UCBCN\Permission;
 
 class DeleteEvent implements PostHandlerInterface
 {
@@ -19,11 +20,15 @@ class DeleteEvent implements PostHandlerInterface
             throw new \Exception("That calendar could not be found.", 404);
         }
 
+        $user = Auth::getCurrentUser();
+        if (!$user->hasPermission(Permission::EVENT_DELETE_ID, $this->calendar->id)) {
+            throw new \Exception("You do not have permission to delete events on this calendar.", 403);
+        }
+
         $this->event = Event::getByID($this->options['event_id']);
         if ($this->event === FALSE) {
             throw new \Exception("That event could not be found.", 404);
         }
-
     }
 
     public function handlePost(array $get, array $post, array $files)

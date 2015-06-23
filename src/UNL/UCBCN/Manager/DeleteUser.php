@@ -3,6 +3,7 @@ namespace UNL\UCBCN\Manager;
 
 use UNL\UCBCN\User;
 use UNL\UCBCN\Calendar;
+use UNL\UCBCN\Permission;
 use UNL\UCBCN\Permissions;
 use UNL\UCBCN\Manager\Controller;
 
@@ -19,6 +20,11 @@ class DeleteUser implements PostHandlerInterface
 
         if ($this->calendar === FALSE) {
             throw new \Exception("That calendar could not be found.", 404);
+        }
+
+        $user = Auth::getCurrentUser();
+        if (!$user->hasPermission(Permission::CALENDAR_EDIT_PERMISSIONS_ID, $this->calendar->id)) {
+            throw new \Exception("You do not have permission to edit user permissions on this calendar.", 403);
         }
 
         $this->user = User::getByUID($this->options['user_uid']);
