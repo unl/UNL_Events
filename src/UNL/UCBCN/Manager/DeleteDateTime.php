@@ -5,6 +5,7 @@ use UNL\UCBCN\User;
 use UNL\UCBCN\Calendar;
 use UNL\UCBCN\Event;
 use UNL\UCBCN\Event\Occurrence;
+use UNL\UCBCN\Permission;
 
 class DeleteDateTime implements PostHandlerInterface
 {
@@ -19,6 +20,11 @@ class DeleteDateTime implements PostHandlerInterface
         $this->calendar = Calendar::getByShortName($this->options['calendar_shortname']);
         if ($this->calendar === FALSE) {
             throw new \Exception("That calendar could not be found.", 404);
+        }
+
+        $user = Auth::getCurrentUser();
+        if (!$user->hasPermission(Permission::EVENT_EDIT_ID, $this->calendar->id)) {
+            throw new \Exception("You do not have permission to edit events on this calendar.", 403);
         }
 
         $this->event = Event::getByID($this->options['event_id']);

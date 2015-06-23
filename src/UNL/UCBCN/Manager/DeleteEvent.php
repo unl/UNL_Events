@@ -21,7 +21,7 @@ class DeleteEvent implements PostHandlerInterface
         }
 
         $user = Auth::getCurrentUser();
-        if (!$user->hasPermission(Permission::EVENT_DELETE, $this->calendar->id)) {
+        if (!$user->hasPermission(Permission::EVENT_DELETE_ID, $this->calendar->id)) {
             throw new \Exception("You do not have permission to delete events on this calendar.", 403);
         }
 

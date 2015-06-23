@@ -27,14 +27,14 @@ class EditEvent implements PostHandlerInterface
             throw new \Exception("That calendar could not be found.", 404);
         }
 
+        $user = Auth::getCurrentUser();
+        if (!$user->hasPermission(Permission::EVENT_EDIT_ID, $this->calendar->id)) {
+            throw new \Exception("You do not have permission to edit events on this calendar.", 403);
+        }
+
         $this->event = Event::getByID($this->options['event_id']);
         if ($this->event === FALSE) {
             throw new \Exception("That event could not be found.", 404);
-        }
-
-        $user = Auth::getCurrentUser();
-        if (!$user->hasPermission(Permission::EVENT_EDIT, $this->calendar->id)) {
-            throw new \Exception("You do not have permission to edit events on this calendar.", 403);
         }
 
         if (array_key_exists('page', $_GET) && is_numeric($_GET['page']) && $_GET['page'] >= 1) {

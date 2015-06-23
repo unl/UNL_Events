@@ -23,8 +23,8 @@ class Recommend
         }
 
         $user = Auth::getCurrentUser();
-        if (!$user->hasPermission(Permission::EVENT_RECOMMEND, $this->calendar->id)) {
-            throw new \Exception("You do not have permission to edit events on this calendar.", 403);
+        if (!$user->hasPermission(Permission::EVENT_RECOMMEND_ID, $this->calendar->id)) {
+            throw new \Exception("You do not have permission to recommend events on this calendar.", 403);
         }
 
         $this->event = Event::getByID($this->options['event_id']);
