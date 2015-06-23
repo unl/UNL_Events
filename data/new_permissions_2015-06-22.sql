@@ -61,9 +61,10 @@ UNLOCK TABLES;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 
-# remove all unused permissions
-DELETE FROM user_has_permission WHERE permission_id NOT IN (SELECT id FROM permission);
-
 # add Create Event permission to all users/calendars that have any permissions
 INSERT INTO user_has_permission (user_uid, calendar_id, permission_id)
 SELECT DISTINCT user_uid, calendar_id, 25 FROM user_has_permission;
+
+# remove all unused permissions
+DELETE FROM user_has_permission WHERE permission_id NOT IN (SELECT id FROM permission);
+
