@@ -5,6 +5,7 @@ use UNL\UCBCN\Calendar as CalendarModel;
 use UNL\UCBCN\Event;
 use UNL\UCBCN\Location;
 use UNL\UCBCN\Locations;
+use UNL\UCBCN\Permission;
 use UNL\UCBCN\Event\Occurrence;
 use UNL\UCBCN\Event\RecurringDate;
 use UNL\UCBCN\Event\RecurringDates;

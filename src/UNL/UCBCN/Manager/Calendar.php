@@ -3,6 +3,7 @@ namespace UNL\UCBCN\Manager;
 
 use UNL\UCBCN\Calendar as CalendarModel;
 use UNL\UCBCN\User;
+use UNL\UCBCN\Permission;
 
 class Calendar {
     public $options = array();
@@ -19,7 +20,7 @@ class Calendar {
         $this->calendar = CalendarModel::getByShortName($this->options['calendar_shortname']);
 
         if ($this->calendar === FALSE) {
-            throw new \Exception("That calendar could not be found.", 500);
+            throw new \Exception("That calendar could not be found.", 404);
         }
 
         # this function will currently run every time the page is loaded. In the future, it would be better
@@ -50,6 +51,20 @@ class Calendar {
         );
 
         return $categories;
+    }
+
+    public function hasPermission($permission_description) 
+    {
+        switch ($permission_description) {
+            case 'Delete Event':
+                return Auth::getCurrentUser()->hasPermission(Permission::EVENT_DELETE_ID, $this->calendar->id);
+                break;
+            case 'Edit Event':
+                return Auth::getCurrentUser()->hasPermission(Permission::EVENT_EDIT_ID, $this->calendar->id);
+                break;
+            default:
+                return FALSE;
+        }
     }
 
     public function getEvents() 

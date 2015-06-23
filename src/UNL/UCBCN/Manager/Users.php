@@ -2,6 +2,7 @@
 namespace UNL\UCBCN\Manager;
 
 use UNL\UCBCN\Calendar;
+use UNL\UCBCN\Permission;
 
 class Users
 {

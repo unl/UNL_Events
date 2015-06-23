@@ -5,6 +5,7 @@ use UNL\UCBCN\Calendar as CalendarModel;
 use UNL\UCBCN\Calendar\EventTypes;
 use UNL\UCBCN\Location;
 use UNL\UCBCN\Locations;
+use UNL\UCBCN\Permission;
 use UNL\UCBCN\Event;
 use UNL\UCBCN\Event\EventType;
 use UNL\UCBCN\Event\Occurrence;
@@ -29,6 +30,11 @@ class EditEvent implements PostHandlerInterface
         $this->event = Event::getByID($this->options['event_id']);
         if ($this->event === FALSE) {
             throw new \Exception("That event could not be found.", 404);
+        }
+
+        $user = Auth::getCurrentUser();
+        if (!$user->hasPermission(Permission::EVENT_EDIT, $this->calendar->id)) {
+            throw new \Exception("You do not have permission to edit events on this calendar.", 403);
         }
 
         if (array_key_exists('page', $_GET) && is_numeric($_GET['page']) && $_GET['page'] >= 1) {

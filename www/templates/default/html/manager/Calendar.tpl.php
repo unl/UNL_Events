@@ -33,7 +33,10 @@
                 <?php else: ?>
                     <option value="move-to-pending">Move to Pending</option>
                 <?php endif; ?>
-                <option value="delete">Delete</option>
+
+                <?php if ($context->hasPermission('Delete Event')): ?>
+                    <option value="delete">Delete</option>
+                <?php endif; ?>
             </select>
             <form id="bulk-action-form" method="POST" action="<?php echo $context->calendar->getBulkActionURL() ?>" class="delete-form hidden">
             <input type="text" id="bulk-action-ids" name="ids">
@@ -57,7 +60,13 @@
                                     <input type="checkbox" id="select-event-<?php echo $event->id ?>" class="select-event" data-id="<?php echo $event->id; ?>">
                                 </td>
                                 <td>
-                                    <a href="<?php echo $event->getEditURL($controller->getCalendar()) ?>"><?php echo $event->title; ?></a>
+                                    <?php if ($context->hasPermission('Edit Event')): ?>
+                                        <a href="<?php echo $event->getEditURL($controller->getCalendar()) ?>">
+                                        <?php echo $event->title; ?>
+                                        </a>
+                                    <?php else: ?>
+                                        <?php echo $event->title; ?>
+                                    <?php endif; ?>
                                 </td>
                                 <td>
                                     <ul>
@@ -116,7 +125,10 @@
                                                 <option value="move-to-pending">Move to Pending</option>
                                             <?php endif; ?>
                                             <option value="recommend">Recommend</option>
-                                            <option value="delete">Delete</option>
+
+                                            <?php if ($context->hasPermission('Delete Event')): ?>
+                                                <option value="delete">Delete</option>
+                                            <?php endif; ?>
                                     </select>
                                     <form id="move-<?php echo $event->id; ?>" method="POST" action="<?php echo $event->getMoveURL($controller->getCalendar()) ?>" class="delete-form hidden">
                                     <input type="text" name="new_status" id="move-target-<?php echo $event->id; ?>">
