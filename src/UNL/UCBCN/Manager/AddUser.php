@@ -21,6 +21,11 @@ class AddUser implements PostHandlerInterface
             throw new \Exception("That calendar could not be found.", 404);
         }
 
+        $user = Auth::getCurrentUser();
+        if (!$user->hasPermission(Permission::CALENDAR_EDIT_PERMISSIONS_ID, $this->calendar->id)) {
+            throw new \Exception("You do not have permission to edit user permissions on this calendar.", 403);
+        }
+
         # check if we are looking to edit a user's permissions
         if (array_key_exists('user_uid', $this->options)) {
             $this->user = User::getByUID($this->options['user_uid']);

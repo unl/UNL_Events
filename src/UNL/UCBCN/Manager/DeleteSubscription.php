@@ -20,6 +20,11 @@ class DeleteSubscription implements PostHandlerInterface
             throw new \Exception("That calendar could not be found.", 404);
         }
 
+        $user = Auth::getCurrentUser();
+        if (!$user->hasPermission(Permission::CALENDAR_EDIT_SUBSCRIPTIONS_ID, $this->calendar->id)) {
+            throw new \Exception("You do not have permission to edit subscriptions on this calendar.", 403);
+        }
+
         $this->subscription = Subscription::getByID($this->options['subscription_id']);
 
         if ($this->subscription === FALSE) {

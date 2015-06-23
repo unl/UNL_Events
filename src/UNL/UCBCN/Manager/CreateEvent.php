@@ -9,11 +9,11 @@ use UNL\UCBCN\Event;
 use UNL\UCBCN\Event\EventType;
 use UNL\UCBCN\Event\Occurrence;
 use UNL\UCBCN\User;
+use UNL\UCBCN\Permission;
 
 class CreateEvent implements PostHandlerInterface
 {
     public $options = array();
-
     public $calendar;
 
     public function __construct($options = array()) 
@@ -23,6 +23,11 @@ class CreateEvent implements PostHandlerInterface
 
         if ($this->calendar === FALSE) {
             throw new \Exception("That calendar could not be found.", 404);
+        }
+
+        $user = Auth::getCurrentUser();
+        if (!$user->hasPermission(Permission::EVENT_CREATE_ID, $this->calendar->id)) {
+            throw new \Exception("You do not have permission to create an event on this calendar.", 403);
         }
     }
 
