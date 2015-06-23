@@ -206,26 +206,6 @@ class Controller {
         return $user->getCalendars();
     }
 
-    public function hasPermission($permission_description, $calendar_id) 
-    {
-        switch ($permission_description) {
-            case 'Create Event':
-                return Auth::getCurrentUser()->hasPermission(Permission::EVENT_CREATE_ID, $calendar_id);
-                break;
-            case 'Edit Calendar':
-                return Auth::getCurrentUser()->hasPermission(Permission::CALENDAR_EDIT_ID, $calendar_id);
-                break;
-            case 'Edit Subscriptions':
-                return Auth::getCurrentUser()->hasPermission(Permission::CALENDAR_EDIT_SUBSCRIPTIONS_ID, $calendar_id);
-                break;
-            case 'Edit Permissions':
-                return Auth::getCurrentUser()->hasPermission(Permission::CALENDAR_EDIT_PERMISSIONS_ID, $calendar_id);
-                break;
-            default:
-                return FALSE;
-        }
-    }
-
     /**
      * @return Calendar
      */

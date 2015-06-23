@@ -1,4 +1,5 @@
-<?php
+<?php 
+    $user = \UNL\UCBCN\Manager\Auth::getCurrentUser();
     $events = $context->getEvents();
     $categorized_events = $context->getCategorizedEvents();
     $total_pages = NULL;
@@ -28,9 +29,9 @@
         <?php else: ?>
             <select id="bulk-action" class="bulk-<?php echo $context->tab; ?>-event-tools">
                 <option value="">Bulk Actions</option>
-                <?php if ($context->tab == 'pending' && $context->hasPermission('Move to Upcoming')): ?>
+                <?php if ($context->tab == 'pending' && $user->hasPermission(\UNL\UCBCN\Permission::EVENT_MOVE_TO_UPCOMING_ID, $context->calendar->id)): ?>
                     <option value="move-to-upcoming">Move to Upcoming</option>
-                <?php elseif ($context->hasPermission('Move to Pending')): ?>
+                <?php elseif ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_MOVE_TO_PENDING_ID, $context->calendar->id)): ?>
                     <option value="move-to-pending">Move to Pending</option>
                 <?php endif; ?>
 
@@ -60,7 +61,7 @@
                                     <input type="checkbox" id="select-event-<?php echo $event->id ?>" class="select-event" data-id="<?php echo $event->id; ?>">
                                 </td>
                                 <td>
-                                    <?php if ($context->hasPermission('Edit Event')): ?>
+                                    <?php if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_EDIT_ID, $context->calendar->id)): ?>
                                         <a href="<?php echo $event->getEditURL($controller->getCalendar()) ?>">
                                         <?php echo $event->title; ?>
                                         </a>
@@ -119,17 +120,17 @@
                                         data-recommend-url="<?php echo $event->getRecommendURL($controller->getCalendar()) ?>"
                                         >
                                             <option value="">Select an Action</option>
-                                            <?php if ($context->tab == 'pending' && $context->hasPermission('Move to Upcoming')): ?>
+                                            <?php if ($context->tab == 'pending' && $user->hasPermission(\UNL\UCBCN\Permission::EVENT_MOVE_TO_UPCOMING_ID, $context->calendar->id)): ?>
                                                 <option value="move-to-upcoming">Move to Upcoming</option>
-                                            <?php elseif ($context->hasPermission('Move to Pending')): ?>
+                                            <?php elseif ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_MOVE_TO_PENDING_ID, $context->calendar->id)): ?>
                                                 <option value="move-to-pending">Move to Pending</option>
                                             <?php endif; ?>
 
-                                            <?php if ($context->hasPermission('Delete Event')): ?>
+                                            <?php if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_RECOMMEND_ID, $context->calendar->id)): ?>
                                                 <option value="recommend">Recommend</option>
                                             <?php endif; ?>
 
-                                            <?php if ($context->hasPermission('Delete Event')): ?>
+                                            <?php if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_DELETE_ID, $context->calendar->id)): ?>
                                                 <option value="delete">Delete</option>
                                             <?php endif; ?>
                                     </select>

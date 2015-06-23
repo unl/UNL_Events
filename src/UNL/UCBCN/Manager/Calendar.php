@@ -53,29 +53,6 @@ class Calendar {
         return $categories;
     }
 
-    public function hasPermission($permission_description) 
-    {
-        switch ($permission_description) {
-            case 'Delete Event':
-                return Auth::getCurrentUser()->hasPermission(Permission::EVENT_DELETE_ID, $this->calendar->id);
-                break;
-            case 'Edit Event':
-                return Auth::getCurrentUser()->hasPermission(Permission::EVENT_EDIT_ID, $this->calendar->id);
-                break;
-            case 'Recommend Event':
-                return Auth::getCurrentUser()->hasPermission(Permission::EVENT_RECOMMEND_ID, $this->calendar->id);
-                break;
-            case 'Move to Upcoming':
-                return Auth::getCurrentUser()->hasPermission(Permission::EVENT_MOVE_TO_UPCOMING_ID, $this->calendar->id);
-                break;
-            case 'Move to Pending':
-                return Auth::getCurrentUser()->hasPermission(Permission::EVENT_MOVE_TO_PENDING_ID, $this->calendar->id);
-                break;
-            default:
-                return FALSE;
-        }
-    }
-
     public function getEvents() 
     {
         $events = NULL;
