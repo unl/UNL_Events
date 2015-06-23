@@ -124,7 +124,10 @@
                                             <?php else: ?>
                                                 <option value="move-to-pending">Move to Pending</option>
                                             <?php endif; ?>
-                                            <option value="recommend">Recommend</option>
+
+                                            <?php if ($context->hasPermission('Delete Event')): ?>
+                                                <option value="recommend">Recommend</option>
+                                            <?php endif; ?>
 
                                             <?php if ($context->hasPermission('Delete Event')): ?>
                                                 <option value="delete">Delete</option>

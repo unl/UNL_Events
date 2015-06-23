@@ -62,6 +62,9 @@ class Calendar {
             case 'Edit Event':
                 return Auth::getCurrentUser()->hasPermission(Permission::EVENT_EDIT_ID, $this->calendar->id);
                 break;
+            case 'Recommend Event':
+                return Auth::getCurrentUser()->hasPermission(Permission::EVENT_RECOMMEND_ID, $this->calendar->id);
+                break;
             default:
                 return FALSE;
         }
