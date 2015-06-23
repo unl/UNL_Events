@@ -4,6 +4,7 @@ namespace UNL\UCBCN\Manager;
 use UNL\UCBCN\Calendar;
 use UNL\UCBCN\Calendar\Event as CalendarHasEvent;
 use UNL\UCBCN\Event;
+use UNL\UCBCN\Permission;
 
 class MoveEvent implements PostHandlerInterface
 {
@@ -42,8 +43,16 @@ class MoveEvent implements PostHandlerInterface
         }
 
         if ($post['new_status'] == 'pending') {
+            $user = Auth::getCurrentUser();
+            if (!$user->hasPermission(Permission::EVENT_MOVE_TO_PENDING_ID, $this->calendar->id)) {
+                throw new \Exception("You do not have permission to move events to pending on this calendar.", 403);
+            }
             $calendar_has_event->status = CalendarHasEvent::STATUS_PENDING;
         } else if  ($post['new_status'] == 'upcoming') {
+            $user = Auth::getCurrentUser();
+            if (!$user->hasPermission(Permission::EVENT_MOVE_TO_UPCOMING_ID, $this->calendar->id)) {
+                throw new \Exception("You do not have permission to move events to upcoming on this calendar.", 403);
+            }
             $calendar_has_event->status = CalendarHasEvent::STATUS_POSTED;
         } else {
             throw new \Exception("Invalid status for event.", 400);

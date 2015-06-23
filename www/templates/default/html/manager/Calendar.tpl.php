@@ -28,9 +28,9 @@
         <?php else: ?>
             <select id="bulk-action" class="bulk-<?php echo $context->tab; ?>-event-tools">
                 <option value="">Bulk Actions</option>
-                <?php if ($context->tab == 'pending'): ?>
+                <?php if ($context->tab == 'pending' && $context->hasPermission('Move to Upcoming')): ?>
                     <option value="move-to-upcoming">Move to Upcoming</option>
-                <?php else: ?>
+                <?php elseif ($context->hasPermission('Move to Pending')): ?>
                     <option value="move-to-pending">Move to Pending</option>
                 <?php endif; ?>
 
@@ -119,9 +119,9 @@
                                         data-recommend-url="<?php echo $event->getRecommendURL($controller->getCalendar()) ?>"
                                         >
                                             <option value="">Select an Action</option>
-                                            <?php if ($context->tab == 'pending'): ?>
+                                            <?php if ($context->tab == 'pending' && $context->hasPermission('Move to Upcoming')): ?>
                                                 <option value="move-to-upcoming">Move to Upcoming</option>
-                                            <?php else: ?>
+                                            <?php elseif ($context->hasPermission('Move to Pending')): ?>
                                                 <option value="move-to-pending">Move to Pending</option>
                                             <?php endif; ?>
 
