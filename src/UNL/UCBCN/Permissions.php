@@ -13,7 +13,8 @@ class Permissions extends RecordList
         );
     }
 
-    public function getSQL() {
+    public function getSQL() 
+    {
     	if (array_key_exists('user_uid', $this->options) && array_key_exists('calendar_id', $this->options)) {
     		$sql = 'SELECT permission_id FROM user_has_permission
     				WHERE user_uid = "' . self::escapeString($this->options['user_uid']) .
@@ -23,5 +24,10 @@ class Permissions extends RecordList
     	}
 
     	return parent::getSQL();
+    }
+
+    public function getOrderByClause()
+    {
+        return 'ORDER BY description';
     }
 }

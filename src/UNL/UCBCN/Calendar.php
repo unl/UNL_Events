@@ -63,31 +63,6 @@ class Calendar extends Record
         return 'calendar';
     }
 
-    function table()
-    {
-        return array(
-            'id'=>129,
-            'account_id'=>129,
-            'name'=>2,
-            'shortname'=>2,
-            'website'=>2,
-            'eventreleasepreference'=>2,
-            'calendardaterange'=>1,
-            'formatcalendardata'=>66,
-            'uploadedcss'=>66,
-            'uploadedxsl'=>66,
-            'emaillists'=>66,
-            'calendarstatus'=>2,
-            'datecreated'=>14,
-            'uidcreated'=>2,
-            'datelastupdated'=>14,
-            'uidlastupdated'=>2,
-            'externalforms'=>2,
-            'recommendationswithinaccount'=>17,
-        	'theme'=>2,
-        );
-    }
-
     function keys()
     {
         return array(
@@ -95,18 +70,6 @@ class Calendar extends Record
         );
     }
     
-    function sequenceKey()
-    {
-        return array('id',true);
-    }
-    
-    function links()
-    {
-        return array('account_id'     => 'account:id',
-                     'uidcreated'     => 'users:uid',
-                     'uidlastupdated' => 'users:uid');
-    }
-
     public function getFrontendURL() {
         return FrontendController::$url . '?calendar_id=' . $this->id;
     }
@@ -129,6 +92,10 @@ class Calendar extends Record
 
     public function getUsersURL() {
         return ManagerController::$url . $this->shortname . '/users/';
+    }
+
+    public function getBulkActionURL() {
+        return $this->getManageURL() . 'bulk/';
     }
 
     public function getUsers()
