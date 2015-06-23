@@ -31,7 +31,7 @@
                 <option value="">Bulk Actions</option>
                 <?php if ($context->tab == 'pending' && $user->hasPermission(\UNL\UCBCN\Permission::EVENT_MOVE_TO_UPCOMING_ID, $context->calendar->id)): ?>
                     <option value="move-to-upcoming">Move to Upcoming</option>
-                <?php elseif ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_MOVE_TO_PENDING_ID, $context->calendar->id)): ?>
+                <?php elseif ($context->tab != 'pending' && $user->hasPermission(\UNL\UCBCN\Permission::EVENT_MOVE_TO_PENDING_ID, $context->calendar->id)): ?>
                     <option value="move-to-pending">Move to Pending</option>
                 <?php endif; ?>
 
@@ -122,7 +122,7 @@
                                             <option value="">Select an Action</option>
                                             <?php if ($context->tab == 'pending' && $user->hasPermission(\UNL\UCBCN\Permission::EVENT_MOVE_TO_UPCOMING_ID, $context->calendar->id)): ?>
                                                 <option value="move-to-upcoming">Move to Upcoming</option>
-                                            <?php elseif ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_MOVE_TO_PENDING_ID, $context->calendar->id)): ?>
+                                            <?php elseif ($context->tab != 'pending' && $user->hasPermission(\UNL\UCBCN\Permission::EVENT_MOVE_TO_PENDING_ID, $context->calendar->id)): ?>
                                                 <option value="move-to-pending">Move to Pending</option>
                                             <?php endif; ?>
 
