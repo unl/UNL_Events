@@ -113,7 +113,7 @@ class Controller {
         }
         
         $result = $object->handlePost($_GET, $_POST, $_FILES);
-        
+
         if (is_string($result)) {
             self::redirect($result);
         }

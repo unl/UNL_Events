@@ -45,12 +45,18 @@ class CreateCalendar extends PostHandler
             $this->flashNotice('success', 'Calendar Updated', 'Your calendar "' . $this->calendar->name . '" has been updated.');
         } else {
             # we are creating a new calendar
-            $this->calendar = $this->createCalendar($post);
+            try {
+                $this->calendar = $this->createCalendar($post);    
+            } catch (ValidationException $e) {
+                $this->flashNotice('failure', 'Sorry! We couldn\'t create your calendar', $e->getMessage());
+                return Controller::$url . 'calendar/new/';
+            }
+            
             $this->flashNotice('success', 'Calendar Created', 'Your calendar "' . $this->calendar->name . '" has been created.');
         }
 
-        //redirect
-        return '/manager/' . $this->calendar->shortname . '/';
+        # redirect
+        return $this->calendar->getManageURL();
     }
 
     private function updateCalendar($post_data)
@@ -92,6 +98,22 @@ class CreateCalendar extends PostHandler
         $calendar = new Calendar;
         $calendar->account_id = $account->id;
         $calendar->name = $post_data['name'];
+
+        # name and shortname are required
+        if (empty($post_data['name']) || empty($post_data['shortname'])) {
+            throw new ValidationException('Calendar name and shortname are required.');
+        }
+
+        # check that the shortname will match the regex it needs to
+        if (!preg_match('/^[a-zA-Z-_0-9]+$/', $post_data['shortname'])) {
+            throw new ValidationException('Calendar shortnames must contain only letters, numbers, dashes, and underscores.');
+        }
+
+        # check if this shortname is already being used
+        if (Calendar::getByShortname($post_data['shortname']) != NULL) {
+            throw new ValidationException('That shortname is already in use.');
+        }
+
         $calendar->shortname = $post_data['shortname'];
         $calendar->website = $post_data['website'];
         switch ($post_data['event_release_preference']) {

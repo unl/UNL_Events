@@ -5,7 +5,7 @@ $page = UNL_Templates::factory('Fixed');
 $title = '';
 $site_title = 'UNL Events';
 if (!$context->getCalendar()) {
-    $title .= 'Page Not Found - UNL Events';
+    $title .= 'UNL Events';
 } else {
     $title .= 'UNL';
     if ($context->getCalendar()->id != UNL\UCBCN\Frontend\Controller::$default_calendar_id) {
