@@ -32,10 +32,6 @@ class Recommend extends PostHandler
         if ($this->event === FALSE) {
             throw new \Exception("That event could not be found.", 404);
         }
-
-        if (!empty($_POST)) {
-            
-        }
     }
 
     public function handlePost($get, $post, $files)
@@ -67,7 +63,7 @@ class Recommend extends PostHandler
 
             
         }
-        $this->flashNotice('success', 'Events Recommended', 'The marked events have been recommended to other calendars.');
+        $this->flashNotice(NOTICE_LEVEL_SUCCESS, 'Events Recommended', 'The marked events have been recommended to other calendars.');
     }
 
     public function getRecommendableCalendars()

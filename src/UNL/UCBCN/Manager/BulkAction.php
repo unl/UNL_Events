@@ -40,7 +40,7 @@ class BulkAction extends PostHandler
                     $calendar_has_event->save();
                 }
             }
-            $this->flashNotice('success', 'Events Moved To Upcoming', count($ids) . ' events have been set to "upcoming" status. They will automatically move to "past" after the event.');
+            $this->flashNotice(NOTICE_LEVEL_SUCCESS, 'Events Moved To Upcoming', count($ids) . ' events have been set to "upcoming" status. They will automatically move to "past" after the event.');
         } else if ($action == 'move-to-pending') {
             $user = Auth::getCurrentUser();
             if (!$user->hasPermission(Permission::EVENT_MOVE_TO_PENDING_ID, $this->calendar->id)) {
@@ -55,7 +55,7 @@ class BulkAction extends PostHandler
                     $calendar_has_event->save();
                 }
             }
-            $this->flashNotice('success', 'Events Moved To Pending', count($ids) . ' events have been moved to the "pending" tab.');
+            $this->flashNotice(NOTICE_LEVEL_SUCCESS, 'Events Moved To Pending', count($ids) . ' events have been moved to the "pending" tab.');
         } else if ($action == 'delete') {
             $user = Auth::getCurrentUser();
             if (!$user->hasPermission(Permission::EVENT_DELETE_ID, $this->calendar->id)) {
@@ -69,7 +69,7 @@ class BulkAction extends PostHandler
                     $calendar_has_event->delete();
                 }
             }
-            $this->flashNotice('success', 'Events Deleted', count($ids) . ' have been deleted.');
+            $this->flashNotice(NOTICE_LEVEL_SUCCESS, 'Events Deleted', count($ids) . ' have been deleted.');
         } else {
             throw new \Exception("Invalid bulk action.", 400);
         }

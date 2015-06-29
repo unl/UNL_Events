@@ -42,17 +42,17 @@ class CreateCalendar extends PostHandler
             }
 
             $this->updateCalendar($post);
-            $this->flashNotice('success', 'Calendar Updated', 'Your calendar "' . $this->calendar->name . '" has been updated.');
+            $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Calendar Updated', 'Your calendar "' . $this->calendar->name . '" has been updated.');
         } else {
             # we are creating a new calendar
             try {
                 $this->calendar = $this->createCalendar($post);    
             } catch (ValidationException $e) {
-                $this->flashNotice('failure', 'Sorry! We couldn\'t create your calendar', $e->getMessage());
+                $this->flashNotice(parent::NOTICE_LEVEL_ERROR, 'Sorry! We couldn\'t create your calendar', $e->getMessage());
                 return Controller::$url . 'calendar/new/';
             }
             
-            $this->flashNotice('success', 'Calendar Created', 'Your calendar "' . $this->calendar->name . '" has been created.');
+            $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Calendar Created', 'Your calendar "' . $this->calendar->name . '" has been created.');
         }
 
         # redirect

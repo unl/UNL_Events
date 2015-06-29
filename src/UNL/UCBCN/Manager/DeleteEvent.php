@@ -40,11 +40,11 @@ class DeleteEvent extends PostHandler
         if ($calendar_has_event->source == 'create event form') {
             # delete the event from the entire system
             $this->event->delete();
-            $this->flashNotice('success', 'Event Deleted', 'The event ' . $this->event->title . ' has been removed from the system.');
+            $this->flashNotice(NOTICE_LEVEL_SUCCESS, 'Event Deleted', 'The event ' . $this->event->title . ' has been removed from the system.');
         } else {
             # delete the calendar has event record
             $calendar_has_event->delete();
-            $this->flashNotice('success', 'Event Deleted', 'The event ' . $this->event->title . ' has been removed from your calendar.');
+            $this->flashNotice(NOTICE_LEVEL_SUCCESS, 'Event Deleted', 'The event ' . $this->event->title . ' has been removed from your calendar.');
         }
 
         //redirect

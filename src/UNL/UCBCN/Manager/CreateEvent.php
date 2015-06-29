@@ -34,7 +34,7 @@ class CreateEvent extends PostHandler
     public function handlePost(array $get, array $post, array $files)
     {
         $new_event = $this->saveEvent($post);
-        $this->flashNotice('success', 'Event Created', 'Your event "' . $new_event->title . '"" has been created.');
+        $this->flashNotice(NOTICE_LEVEL_SUCCESS, 'Event Created', 'Your event "' . $new_event->title . '"" has been created.');
 
         # redirect
         return '/manager/' . $this->calendar->shortname . '/';

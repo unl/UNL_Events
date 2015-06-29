@@ -50,7 +50,7 @@ class DeleteSubscription extends PostHandler
 
         $this->subscription->delete();
         
-        $this->flashNotice('success', 'Subscription Deleted', 'The subscription "' . $this->subscription->name . '" has been deleted.');
+        $this->flashNotice(NOTICE_LEVEL_SUCCESS, 'Subscription Deleted', 'The subscription "' . $this->subscription->name . '" has been deleted.');
         //redirect
         return $this->calendar->getSubscriptionsURL();
     }

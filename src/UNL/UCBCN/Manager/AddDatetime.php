@@ -97,7 +97,7 @@ class AddDatetime extends PostHandler
             }
         }
 
-        $this->flashNotice('success', 'Location/Date/Time Added', 'Another location, date, and time has been added.');
+        $this->flashNotice(NOTICE_LEVEL_SUCCESS, 'Location/Date/Time Added', 'Another location, date, and time has been added.');
         return $this->event->getEditURL($this->calendar);
     }
 

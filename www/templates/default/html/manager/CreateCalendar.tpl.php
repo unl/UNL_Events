@@ -1,4 +1,4 @@
-<form action="<?php echo $context->calendar->id == NULL ? $context->calendar->getNewURL() : $context->calendar->getEditURL() ?>" method="POST">
+<form id="create-calendar-form" action="<?php echo $context->calendar->id == NULL ? $context->calendar->getNewURL() : $context->calendar->getEditURL() ?>" method="POST">
     <fieldset>
         <label for="name">Name*</label>
         <input type="text" id="name" name="name" value="<?php echo $context->calendar->name ?>" />
@@ -28,3 +28,17 @@
         <?php echo $context->calendar->id == NULL ? 'Create Calendar' : 'Save Calendar' ?>
     </button>
 </form>
+
+<script type="text/javascript">
+require(['jquery'], function($) {
+    $('#create-calendar-form').submit(function (submit) {
+        if ($('#name').val().trim() == '' || $('#shortname').val().trim() == '') {
+            notifier.failure('Sorry! We couldn\'t create your calendar', 'Name and shortname are required.');
+            submit.preventDefault();
+        } else if (!($('#shortname').val().trim().match(/^[a-zA-Z-_0-9]+$/))) {
+            notifier.failure('Sorry! We couldn\'t create your calendar', 'Calendar shortnames must contain only letters, numbers, dashes, and underscores.');
+            submit.preventDefault();
+        }
+    });
+});
+</script>

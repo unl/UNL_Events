@@ -49,7 +49,7 @@ class DeleteUser extends PostHandler
             $this->user->removePermission($permission->id, $this->calendar->id);
         }
 
-        $this->flashNotice('success', 'User Removed', 'All permissions for user "' . $this->user->uid . '" have been removed.');
+        $this->flashNotice(NOTICE_LEVEL_SUCCESS, 'User Removed', 'All permissions for user "' . $this->user->uid . '" have been removed.');
         //Redirect to the user list
         return $this->calendar->getUsersURL();
     }

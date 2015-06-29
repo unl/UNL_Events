@@ -71,7 +71,7 @@ require(['jquery', 'wdn', 'modernizr', frontend_url + 'templates/default/html/js
                 $('#notice .message-content').html(message);
                 $('#notice').fadeIn();
 
-                window.location.hash = 'notice';
+                window.scrollTo(0,0);
             },
             info: function(header, message) {
                 $('#notice').removeClass('affirm').removeClass('negate').removeClass('alert');
@@ -79,7 +79,7 @@ require(['jquery', 'wdn', 'modernizr', frontend_url + 'templates/default/html/js
                 $('#notice .message-content').html(message);
                 $('#notice').fadeIn();
 
-                window.location.hash = 'notice';
+                window.scrollTo(0,0);
             },
             success: function(header, message) {
                 $('#notice').addClass('affirm').removeClass('negate').removeClass('alert');
@@ -87,7 +87,7 @@ require(['jquery', 'wdn', 'modernizr', frontend_url + 'templates/default/html/js
                 $('#notice .message-content').html(message);
                 $('#notice').fadeIn();
 
-                window.location.hash = 'notice';
+                window.scrollTo(0,0);
             }
         };
 

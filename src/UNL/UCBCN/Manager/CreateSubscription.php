@@ -50,11 +50,11 @@ class CreateSubscription implements PostHandlerInterface
             }
 
             $this->updateSubscription($post);
-            $this->flashNotice('success', 'Subscription Updated', 'Your subscription "' . $this->subscription->name . '" has been updated.');
+            $this->flashNotice(NOTICE_LEVEL_SUCCESS, 'Subscription Updated', 'Your subscription "' . $this->subscription->name . '" has been updated.');
         } else {
             # we are creating a new subscription
             $this->subscription = $this->createSubscription($post);
-            $this->flashNotice('success', 'Subscription Created', 'Your subscription "' . $this->subscription->name . '" has been created.');
+            $this->flashNotice(NOTICE_LEVEL_SUCCESS, 'Subscription Created', 'Your subscription "' . $this->subscription->name . '" has been created.');
         }
 
         //redirect

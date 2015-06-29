@@ -71,7 +71,7 @@ class DeleteRecurrence extends PostHandler
 
         $this->recurrence->unlink();
 
-        $this->flashNotice('success', 'Recurrence Deleted', 'A recurrence of a recurring location/date/time from this event has been removed.');
+        $this->flashNotice(NOTICE_LEVEL_SUCCESS, 'Recurrence Deleted', 'A recurrence of a recurring location/date/time from this event has been removed.');
         // Redirect to the event edit page
         return $this->event->getEditURL($this->calendar);
     }

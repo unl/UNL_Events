@@ -48,7 +48,7 @@ class EditAccount extends PostHandler
     {
         $this->updateAccount($post);
         
-        $this->flashNotice('success', 'Account Updated', 'Your UNL Events account has been updated.');
+        $this->flashNotice(NOTICE_LEVEL_SUCCESS, 'Account Updated', 'Your UNL Events account has been updated.');
         //redirect
         return Controller::getEditAccountURL();
     }
