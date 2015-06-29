@@ -8,7 +8,7 @@ use UNL\UCBCN\Event\Occurrence;
 use UNL\UCBCN\Event\RecurringDate;
 use UNL\UCBCN\Permission;
 
-class DeleteRecurrence implements PostHandlerInterface
+class DeleteRecurrence extends PostHandler
 {
     public $options = array();
     public $calendar;
@@ -71,6 +71,7 @@ class DeleteRecurrence implements PostHandlerInterface
 
         $this->recurrence->unlink();
 
+        $this->flashNotice('success', 'Recurrence Deleted', 'A recurrence of a recurring location/date/time from this event has been removed.');
         // Redirect to the event edit page
         return $this->event->getEditURL($this->calendar);
     }

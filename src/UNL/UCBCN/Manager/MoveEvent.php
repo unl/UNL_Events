@@ -6,7 +6,7 @@ use UNL\UCBCN\Calendar\Event as CalendarHasEvent;
 use UNL\UCBCN\Event;
 use UNL\UCBCN\Permission;
 
-class MoveEvent implements PostHandlerInterface
+class MoveEvent extends PostHandler
 {
     public $options = array();
     public $calendar;
@@ -48,18 +48,22 @@ class MoveEvent implements PostHandlerInterface
                 throw new \Exception("You do not have permission to move events to pending on this calendar.", 403);
             }
             $calendar_has_event->status = CalendarHasEvent::STATUS_PENDING;
-        } else if  ($post['new_status'] == 'upcoming') {
+
+            $calendar_has_event->save();
+            $this->flashNotice('success', 'Event Moved To Pending', $this->event->title . ' has been set to "pending" status.');
+        } else if ($post['new_status'] == 'upcoming') {
             $user = Auth::getCurrentUser();
             if (!$user->hasPermission(Permission::EVENT_MOVE_TO_UPCOMING_ID, $this->calendar->id)) {
                 throw new \Exception("You do not have permission to move events to upcoming on this calendar.", 403);
             }
             $calendar_has_event->status = CalendarHasEvent::STATUS_POSTED;
+
+            $calendar_has_event->save();
+            $this->flashNotice('success', 'Event Moved To Upcoming', $this->event->title . ' has been set to "upcoming" status. It will automatically move to "past" after the event.');
         } else {
             throw new \Exception("Invalid status for event.", 400);
         }
         
-        $calendar_has_event->save();
-
         //redirect
         return $this->calendar->getManageURL();
     }

@@ -10,7 +10,7 @@ use UNL\UCBCN\Event\Occurrence;
 use UNL\UCBCN\Event\RecurringDate;
 use UNL\UCBCN\Event\RecurringDates;
 
-class AddDatetime implements PostHandlerInterface 
+class AddDatetime extends PostHandler
 {
 	public $options = array();
     public $calendar;
@@ -97,6 +97,7 @@ class AddDatetime implements PostHandlerInterface
             }
         }
 
+        $this->flashNotice('success', 'Location/Date/Time Added', 'Another location, date, and time has been added.');
         return $this->event->getEditURL($this->calendar);
     }
 

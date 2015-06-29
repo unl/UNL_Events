@@ -64,6 +64,33 @@ require(['jquery', 'wdn', 'modernizr', frontend_url + 'templates/default/html/js
             }
         };
 
+        notifier = {
+            failure: function(header, message) {
+                $('#notice').removeClass('affirm').addClass('negate').removeClass('alert');
+                $('#notice h4').text(header);
+                $('#notice .message-content').html(message);
+                $('#notice').fadeIn();
+
+                window.location.hash = 'notice';
+            },
+            info: function(header, message) {
+                $('#notice').removeClass('affirm').removeClass('negate').removeClass('alert');
+                $('#notice h4').text(header);
+                $('#notice .message-content').html(message);
+                $('#notice').fadeIn();
+
+                window.location.hash = 'notice';
+            },
+            success: function(header, message) {
+                $('#notice').addClass('affirm').removeClass('negate').removeClass('alert');
+                $('#notice h4').text(header);
+                $('#notice .message-content').html(message);
+                $('#notice').fadeIn();
+
+                window.location.hash = 'notice';
+            }
+        };
+
         // this needs to be global as it gets tapped by the page js
         setRecurringOptions = function(start_elem, month_group_elem) {
             // get startdate info

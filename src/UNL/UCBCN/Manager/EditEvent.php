@@ -11,7 +11,7 @@ use UNL\UCBCN\Event\EventType;
 use UNL\UCBCN\Event\Occurrence;
 use UNL\UCBCN\User;
 
-class EditEvent implements PostHandlerInterface
+class EditEvent extends PostHandler
 {
     public $options = array();
     public $calendar;
@@ -50,6 +50,8 @@ class EditEvent implements PostHandlerInterface
     public function handlePost(array $get, array $post, array $files)
     {
         $this->updateEvent($_POST);
+
+        $this->flashNotice('success', 'Event Updated', 'The event "' . $this->event->name . '" has been updated.');
         return $this->calendar->getManageURL();
     }
 

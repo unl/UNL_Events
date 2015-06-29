@@ -11,7 +11,7 @@ use UNL\UCBCN\Event\Occurrence;
 use UNL\UCBCN\User;
 use UNL\UCBCN\Permission;
 
-class CreateEvent implements PostHandlerInterface
+class CreateEvent extends PostHandler
 {
     public $options = array();
     public $calendar;
@@ -31,6 +31,15 @@ class CreateEvent implements PostHandlerInterface
         }
     }
 
+    public function handlePost(array $get, array $post, array $files)
+    {
+        $new_event = $this->saveEvent($post);
+        $this->flashNotice('success', 'Event Created', 'Your event "' . $new_event->title . '"" has been created.');
+
+        # redirect
+        return '/manager/' . $this->calendar->shortname . '/';
+    }
+
     public function getEventTypes()
     {
         return new EventTypes(array());
@@ -45,7 +54,7 @@ class CreateEvent implements PostHandlerInterface
     public function getStandardLocations($display_order)
     {
         return new Locations(array(
-            'standard'      => true,
+            'standard' => true,
             'display_order' => $display_order,
         ));
     }
@@ -182,13 +191,5 @@ class CreateEvent implements PostHandlerInterface
         $location->insert();
         
         return $location;
-    }
-
-    public function handlePost(array $get, array $post, array $files)
-    {
-        $this->saveEvent($post);
-        
-        //redirect
-        return '/manager/' . $this->calendar->shortname . '/';
     }
 }

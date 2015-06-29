@@ -94,11 +94,22 @@ class Controller {
             $this->handlePost($this->output);
         }
     }
+
+    public function getNotice()
+    {
+        if (isset($_SESSION['flash_notice'])) {
+            $notice = $_SESSION['flash_notice'];
+            unset($_SESSION['flash_notice']);
+            return $notice;
+        } else {
+            return NULL;
+        }
+    }
     
     protected function handlePost($object)
     {
-        if (!$object instanceof PostHandlerInterface) {
-            throw new \Exception("The object is not an instance of the PostHandlerInterface", 500);
+        if (!$object instanceof PostHandler) {
+            throw new \Exception("The object is not an instance of the PostHandler", 500);
         }
         
         $result = $object->handlePost($_GET, $_POST, $_FILES);

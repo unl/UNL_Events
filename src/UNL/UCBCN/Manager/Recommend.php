@@ -7,7 +7,7 @@ use UNL\UCBCN\Manager\Auth;
 use UNL\UCBCN\Event;
 use UNL\UCBCN\Permission;
 
-class Recommend
+class Recommend extends PostHandler
 {
     public $options = array();
     public $calendar;
@@ -34,12 +34,14 @@ class Recommend
         }
 
         if (!empty($_POST)) {
-            $this->recommendEvent($_POST);
-
-            Controller::redirect($this->calendar->getManageURL());
+            
         }
+    }
 
-        $user = Auth::getCurrentUser();
+    public function handlePost($get, $post, $files)
+    {
+        $this->recommendEvent($post);
+        return $this->calendar->getManageURL();
     }
 
     private function recommendEvent($post_data)
@@ -65,6 +67,7 @@ class Recommend
 
             
         }
+        $this->flashNotice('success', 'Events Recommended', 'The marked events have been recommended to other calendars.');
     }
 
     public function getRecommendableCalendars()

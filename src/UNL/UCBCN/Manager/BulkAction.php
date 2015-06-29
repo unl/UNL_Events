@@ -6,7 +6,7 @@ use UNL\UCBCN\Calendar\Event as CalendarHasEvent;
 use UNL\UCBCN\Event;
 use UNL\UCBCN\Permission;
 
-class BulkAction implements PostHandlerInterface
+class BulkAction extends PostHandler
 {
     public $options = array();
     public $calendar;
@@ -40,12 +40,13 @@ class BulkAction implements PostHandlerInterface
                     $calendar_has_event->save();
                 }
             }
+            $this->flashNotice('success', 'Events Moved To Upcoming', count($ids) . ' events have been set to "upcoming" status. They will automatically move to "past" after the event.');
         } else if ($action == 'move-to-pending') {
             $user = Auth::getCurrentUser();
             if (!$user->hasPermission(Permission::EVENT_MOVE_TO_PENDING_ID, $this->calendar->id)) {
                 throw new \Exception("You do not have permission to move events to pending on this calendar.", 403);
             }
-            
+
             foreach ($ids as $id) {
                 $calendar_has_event = CalendarHasEvent::getByIDs($this->calendar->id, $id);
 
@@ -54,6 +55,7 @@ class BulkAction implements PostHandlerInterface
                     $calendar_has_event->save();
                 }
             }
+            $this->flashNotice('success', 'Events Moved To Pending', count($ids) . ' events have been moved to the "pending" tab.');
         } else if ($action == 'delete') {
             $user = Auth::getCurrentUser();
             if (!$user->hasPermission(Permission::EVENT_DELETE_ID, $this->calendar->id)) {
@@ -67,6 +69,7 @@ class BulkAction implements PostHandlerInterface
                     $calendar_has_event->delete();
                 }
             }
+            $this->flashNotice('success', 'Events Deleted', count($ids) . ' have been deleted.');
         } else {
             throw new \Exception("Invalid bulk action.", 400);
         }

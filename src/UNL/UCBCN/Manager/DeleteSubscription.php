@@ -6,7 +6,7 @@ use UNL\UCBCN\Permission;
 use UNL\UCBCN\Calendar\Subscription;
 use UNL\UCBCN\Calendar\SubscriptionHasCalendar;
 
-class DeleteSubscription implements PostHandlerInterface
+class DeleteSubscription extends PostHandler
 {
     public $options = array();
     public $calendar;
@@ -50,6 +50,7 @@ class DeleteSubscription implements PostHandlerInterface
 
         $this->subscription->delete();
         
+        $this->flashNotice('success', 'Subscription Deleted', 'The subscription "' . $this->subscription->name . '" has been deleted.');
         //redirect
         return $this->calendar->getSubscriptionsURL();
     }

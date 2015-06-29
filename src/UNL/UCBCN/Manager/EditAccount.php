@@ -3,7 +3,7 @@ namespace UNL\UCBCN\Manager;
 
 use UNL\UCBCN\Account;
 
-class EditAccount implements PostHandlerInterface
+class EditAccount extends PostHandler
 {
     public $options = array();
     public $account;
@@ -48,6 +48,7 @@ class EditAccount implements PostHandlerInterface
     {
         $this->updateAccount($post);
         
+        $this->flashNotice('success', 'Account Updated', 'Your UNL Events account has been updated.');
         //redirect
         return Controller::getEditAccountURL();
     }

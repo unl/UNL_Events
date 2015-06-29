@@ -30,6 +30,7 @@ $page->addStyleSheet($base_frontend_url.'templates/default/html/js/vendor/select
 //javascript
 $page->head .= '<script>var frontend_url = "'.$base_frontend_url.'";</script>' . PHP_EOL;
 $page->head .= '<script>var manager_url = "'.$base_manager_url.'";</script>' . PHP_EOL;
+$page->head .= '<script type="text/javascript">WDN.initializePlugin("notice");</script>' . PHP_EOL;
 
 //other
 $page->leftRandomPromo = '';
@@ -57,7 +58,42 @@ $page->maincontentarea = '
                 ' . $savvy->render($context, 'navigation.tpl.php') . '
             </nav>
             <div class="wdn-col-three-fourths">
-                ' . $savvy->render($context->output, $template) . '
+';
+if (($notice = $context->getNotice()) != NULL) {
+    $class = '';
+    switch ($notice['level']) {
+        case 'success':
+            $class = 'affirm';
+            break;
+        case 'failure':
+            $class = 'negate';
+            break;
+    }
+    $page->maincontentarea .= '
+                <div id="notice" class="wdn_notice ' . $class . '">
+                    <div class="close">
+                    <a href="#" title="Close this notice">Close this notice</a>
+                    </div>
+                    <div class="message">
+                    <h4>' . $notice['header'] . '</h4>
+                    <div class="message-content">' . $notice['messageHTML'] . '</div>
+                    </div>
+                </div>
+    ';
+} else {
+    $page->maincontentarea .= '
+                <div id="notice" class="wdn_notice" style="display: none;">
+                    <div class="close">
+                    <a href="#" title="Close this notice">Close this notice</a>
+                    </div>
+                    <div class="message">
+                    <h4></h4>
+                    <div class="message-content"></div>
+                    </div>
+                </div>
+    ';
+}
+$page->maincontentarea .= $savvy->render($context->output, $template) . '
            </div>
         </section>
     </div>

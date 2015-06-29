@@ -7,7 +7,7 @@ use UNL\UCBCN\Permission;
 use UNL\UCBCN\Permissions;
 use UNL\UCBCN\Manager\Controller;
 
-class DeleteUser implements PostHandlerInterface
+class DeleteUser extends PostHandler
 {
     public $options = array();
     public $calendar;
@@ -49,6 +49,7 @@ class DeleteUser implements PostHandlerInterface
             $this->user->removePermission($permission->id, $this->calendar->id);
         }
 
+        $this->flashNotice('success', 'User Removed', 'All permissions for user "' . $this->user->uid . '" have been removed.');
         //Redirect to the user list
         return $this->calendar->getUsersURL();
     }
