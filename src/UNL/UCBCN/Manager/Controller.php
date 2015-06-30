@@ -16,8 +16,6 @@
  */
 namespace UNL\UCBCN\Manager;
 
-use UNL\UCBCN\RuntimeException;
-use UNL\UCBCN\UnexpectedValueException;
 use UNL\UCBCN\Calendar;
 use UNL\UCBCN\Permission;
 
@@ -45,14 +43,13 @@ class Controller {
         $this->options = $options + $this->options;
 
         if (array_key_exists('calendar_shortname', $this->options)) {
-            $this->calendar = Calendar::getByShortName($this->options['calendar_shortname']);
-            if ($this->calendar === FALSE) {
-                throw new \Exception("That calendar could not be found.", 500);
-            }
+            $this->calendar = Calendar::getByShortname($this->options['calendar_shortname']);
         }
 
         try {
             $this->run();
+        } catch (ValidationException $e) {
+            http_response_code(400);
         } catch (\Exception $e) {
             $this->output = $e;
         }

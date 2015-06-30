@@ -1,9 +1,9 @@
-<form id="create-calendar-form" action="<?php echo $context->calendar->id == NULL ? $context->calendar->getNewURL() : $context->calendar->getEditURL() ?>" method="POST">
+<form id="create-calendar-form" action="" method="POST">
     <fieldset>
-        <label for="name">Name*</label>
+        <label for="name"><span class="required">*</span> Name</label>
         <input type="text" id="name" name="name" value="<?php echo $context->calendar->name ?>" />
 
-        <label for="shortname">Shortname*</label>
+        <label for="shortname"><span class="required">*</span> Shortname</label>
         <input type="text" id="shortname" name="shortname" value="<?php echo $context->calendar->shortname ?>" />
 
         <label for="website">Website</label>
@@ -32,10 +32,10 @@
 <script type="text/javascript">
 require(['jquery'], function($) {
     $('#create-calendar-form').submit(function (submit) {
-        if ($('#name').val().trim() == '' || $('#shortname').val().trim() == '') {
+        if ($('#name').val() == '' || $('#shortname').val() == '') {
             notifier.failure('Sorry! We couldn\'t create your calendar', 'Name and shortname are required.');
             submit.preventDefault();
-        } else if (!($('#shortname').val().trim().match(/^[a-zA-Z-_0-9]+$/))) {
+        } else if (!($('#shortname').val().match(/^[a-zA-Z-_0-9]+$/))) {
             notifier.failure('Sorry! We couldn\'t create your calendar', 'Calendar shortnames must contain only letters, numbers, dashes, and underscores.');
             submit.preventDefault();
         }

@@ -21,6 +21,7 @@ class CreateCalendar extends PostHandler
                 throw new \Exception("That calendar could not be found.", 404);
             }
 
+            # check permissions to edit this calendar's details
             $user = Auth::getCurrentUser();
             if (!$user->hasPermission(Permission::CALENDAR_EDIT_ID, $this->calendar->id)) {
                 throw new \Exception("You do not have permission to edit the details of this calendar.", 403);
@@ -33,23 +34,23 @@ class CreateCalendar extends PostHandler
 
     public function handlePost(array $get, array $post, array $files)
     {
-        if (array_key_exists('calendar_shortname', $this->options)) {
-            # we are editing an existing calendar
-            $this->calendar = Calendar::getByShortname($this->options['calendar_shortname']);
-
-            if ($this->calendar === FALSE) {
-                throw new \Exception("That calendar could not be found.", 404);
+        if ($this->calendar->id != NULL) {
+            # updating a current calendar
+            try {
+                $this->updateCalendar($post);
+            } catch (ValidationException $e) {
+                $this->flashNotice(parent::NOTICE_LEVEL_ERROR, 'Sorry! We couldn\'t update your calendar', $e->getMessage());
+                throw $e;
             }
 
-            $this->updateCalendar($post);
             $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Calendar Updated', 'Your calendar "' . $this->calendar->name . '" has been updated.');
         } else {
             # we are creating a new calendar
             try {
-                $this->calendar = $this->createCalendar($post);    
+                $this->createCalendar($post);    
             } catch (ValidationException $e) {
                 $this->flashNotice(parent::NOTICE_LEVEL_ERROR, 'Sorry! We couldn\'t create your calendar', $e->getMessage());
-                return Controller::$url . 'calendar/new/';
+                throw $e;
             }
             
             $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Calendar Created', 'Your calendar "' . $this->calendar->name . '" has been created.');
@@ -59,10 +60,10 @@ class CreateCalendar extends PostHandler
         return $this->calendar->getManageURL();
     }
 
-    private function updateCalendar($post_data)
+    # this function takes the post and turns it into the calendar data
+    # used in create/update functions just to put the data in.
+    private function setCalendarData($post_data)
     {
-        $user = Auth::getCurrentUser();
-
         $this->calendar->name = $post_data['name'];
         $this->calendar->shortname = $post_data['shortname'];
         $this->calendar->website = $post_data['website'];
@@ -83,22 +84,11 @@ class CreateCalendar extends PostHandler
         $this->calendar->emaillists = $post_data['email_lists'];
         $this->calendar->recommendationswithinaccount = array_key_exists('recommend_within_account', $post_data) && 
             $post_data['recommend_within_account'] == 'on' ? 1 : 0;
-
-        $this->calendar->datelastupdated = date('Y-m-d H:i:s');
-        $this->calendar->uidlastupdated = $user->uid;
-
-        $this->calendar->update();
     }
 
-    private function createCalendar($post_data) 
+    # this function looks at the posted calendar data to ensure its integrity
+    private function validateCalendarData($post_data)
     {
-        $user = Auth::getCurrentUser();
-        $account = $user->getAccount();
-
-        $calendar = new Calendar;
-        $calendar->account_id = $account->id;
-        $calendar->name = $post_data['name'];
-
         # name and shortname are required
         if (empty($post_data['name']) || empty($post_data['shortname'])) {
             throw new ValidationException('Calendar name and shortname are required.');
@@ -110,38 +100,38 @@ class CreateCalendar extends PostHandler
         }
 
         # check if this shortname is already being used
-        if (Calendar::getByShortname($post_data['shortname']) != NULL) {
+        if (($server_cal = Calendar::getByShortname($post_data['shortname'])) != NULL && $server_cal->id != $this->calendar->id) {
             throw new ValidationException('That shortname is already in use.');
         }
+    }
 
-        $calendar->shortname = $post_data['shortname'];
-        $calendar->website = $post_data['website'];
-        switch ($post_data['event_release_preference']) {
-            case '':
-                $calendar->eventreleasepreference = NULL;
-                break;
-            case 'immediate':
-                $calendar->eventreleasepreference = 1;
-                break;
-            case 'pending':
-                $calendar->eventreleasepreference = 0;
-                break;
-            default:
-                $calendar->eventreleasepreference = NULL;
-        }
+    private function createCalendar($post_data) 
+    {
+        $user = Auth::getCurrentUser();
+        $account = $user->getAccount();
 
-        $calendar->emaillists = $post_data['email_lists'];
-        $calendar->recommendationswithinaccount = array_key_exists('recommend_within_account', $post_data) && 
-            $post_data['recommend_within_account'] == 'on' ? 1 : 0;
+        $this->setCalendarData($post_data);
+        $this->validateCalendarData($post_data);
+        $this->calendar->account_id = $account->id;
 
-        $calendar->datecreated = date('Y-m-d H:i:s');
-        $calendar->uidcreated = $user->uid;
-        $calendar->datelastupdated = date('Y-m-d H:i:s');
-        $calendar->uidlastupdated = $user->uid;
+        $this->calendar->datecreated = date('Y-m-d H:i:s');
+        $this->calendar->uidcreated = $user->uid;
+        $this->calendar->datelastupdated = date('Y-m-d H:i:s');
+        $this->calendar->uidlastupdated = $user->uid;
 
-        $calendar->insert();
-        $calendar->addUser($user);
+        $this->calendar->insert();
+        $this->calendar->addUser($user);
+    }
 
-        return $calendar;
+    private function updateCalendar($post_data)
+    {
+        $user = Auth::getCurrentUser();
+
+        $this->setCalendarData($post_data);
+        $this->validateCalendarData($post_data);
+        $this->calendar->datelastupdated = date('Y-m-d H:i:s');
+        $this->calendar->uidlastupdated = $user->uid;
+
+        $this->calendar->update();
     }
 }
