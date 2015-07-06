@@ -51,8 +51,8 @@ class EditEvent extends PostHandler
     {
         $this->updateEvent($_POST);
 
-        $this->flashNotice(NOTICE_LEVEL_SUCCESS, 'Event Updated', 'The event "' . $this->event->name . '" has been updated.');
-        return $this->calendar->getManageURL();
+        $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Event Updated', 'The event "' . $this->event->title . '" has been updated.');
+        return $this->event->getEditURL($this->calendar);
     }
 
     public function getEventTypes()

@@ -39,7 +39,7 @@ class CreateCalendar extends PostHandler
             try {
                 $this->updateCalendar($post);
             } catch (ValidationException $e) {
-                $this->flashNotice(parent::NOTICE_LEVEL_ERROR, 'Sorry! We couldn\'t update your calendar', $e->getMessage());
+                $this->flashNotice(parent::NOTICE_LEVEL_ALERT, 'Sorry! We couldn\'t update your calendar', $e->getMessage());
                 throw $e;
             }
 
@@ -49,7 +49,7 @@ class CreateCalendar extends PostHandler
             try {
                 $this->createCalendar($post);    
             } catch (ValidationException $e) {
-                $this->flashNotice(parent::NOTICE_LEVEL_ERROR, 'Sorry! We couldn\'t create your calendar', $e->getMessage());
+                $this->flashNotice(parent::NOTICE_LEVEL_ALERT, 'Sorry! We couldn\'t create your calendar', $e->getMessage());
                 throw $e;
             }
             

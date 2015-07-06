@@ -33,10 +33,17 @@
 require(['jquery'], function($) {
     $('#create-calendar-form').submit(function (submit) {
         if ($('#name').val() == '' || $('#shortname').val() == '') {
-            notifier.failure('Sorry! We couldn\'t create your calendar', 'Name and shortname are required.');
+            if ($('#name').val() == '') {
+                notifier.mark_input_invalid($('#name'));
+            }
+            if ($('#shortname').val() == '') {
+                notifier.mark_input_invalid($('#shortname'));
+            }
+            notifier.alert('Sorry! We couldn\'t create your calendar', 'Name and shortname are required.');
             submit.preventDefault();
         } else if (!($('#shortname').val().match(/^[a-zA-Z-_0-9]+$/))) {
-            notifier.failure('Sorry! We couldn\'t create your calendar', 'Calendar shortnames must contain only letters, numbers, dashes, and underscores.');
+            notifier.mark_input_invalid($('#shortname'));
+            notifier.alert('Sorry! We couldn\'t create your calendar', 'Calendar shortnames must contain only letters, numbers, dashes, and underscores.');
             submit.preventDefault();
         }
     });

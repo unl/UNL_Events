@@ -40,7 +40,7 @@ $page->breadcrumbs = '
     <li><a href="' . $base_frontend_url .'">UNL Events</a></li>
     <li>Manage Events</li>
 </ul>';
-//$page->navlinks = $savvy->render(null, 'Navigation.tpl.php');
+//$page->navlinks = $savvy->render($context, 'Navigation.tpl.php');
 $savvy->addGlobal('page', $page);
 
 //Render output
@@ -68,6 +68,9 @@ if (($notice = $context->getNotice()) != NULL) {
         case 'failure':
             $class = 'negate';
             break;
+        case 'alert':
+            $class = 'alert';
+            break;
     }
     $page->maincontentarea .= '
                 <div id="notice" class="wdn_notice ' . $class . '">
@@ -76,7 +79,7 @@ if (($notice = $context->getNotice()) != NULL) {
                     </div>
                     <div class="message">
                     <h4>' . $notice['header'] . '</h4>
-                    <div class="message-content">' . $notice['messageHTML'] . '</div>
+                    <div class="message-content"><ul><li>' . html_entity_decode($notice['messageHTML']) . '</li></ul></div>
                     </div>
                 </div>
     ';

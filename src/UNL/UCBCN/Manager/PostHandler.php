@@ -6,6 +6,7 @@ class PostHandler
     const NOTICE_LEVEL_SUCCESS = 'success';
     const NOTICE_LEVEL_INFO = 'info';
     const NOTICE_LEVEL_ERROR = 'failure';
+    const NOTICE_LEVEL_ALERT = 'alert';
 
     public function handlePost(array $get, array $post, array $files)
     {
