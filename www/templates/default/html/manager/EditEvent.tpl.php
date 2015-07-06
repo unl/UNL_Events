@@ -39,11 +39,11 @@
 <?php endforeach; ?>
 
 <div class="wdn-grid-set">
-    <form action="" method="POST">
+    <form id="edit-event-form" action="" method="POST">
         <div class="bp1-wdn-col-two-thirds">
             <fieldset>
             	<legend>Details</legend>
-                <label for="title">Title*</label>
+                <label for="title"><span class="required">*</span> Title</label>
                 <input type="text" id="title" name="title" value="<?php echo $event->title; ?>" />
 
                 <label for="subtitle">Subtitle</label>
@@ -226,6 +226,15 @@ require(['jquery'], function($) {
     $('.edit-recurring-edt').click(function (click) {
         if (!window.confirm('You are editing a single instance of a recurring location, date, and time.')) {
             click.preventDefault();
+        }
+    });
+
+    $('#edit-event-form').submit(function (submit) {
+        // validate required fields
+        if ($('#title').val() == '') {
+            notifier.mark_input_invalid($('#title'));
+            notifier.alert('Sorry! We couldn\'t edit your event', '<a href="#title">Title</a> is required.');
+            submit.preventDefault();
         }
     });
 });

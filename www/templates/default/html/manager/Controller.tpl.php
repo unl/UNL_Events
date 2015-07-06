@@ -79,7 +79,7 @@ if (($notice = $context->getNotice()) != NULL) {
                     </div>
                     <div class="message">
                     <h4>' . $notice['header'] . '</h4>
-                    <div class="message-content"><ul><li>' . html_entity_decode($notice['messageHTML']) . '</li></ul></div>
+                    <div class="message-content">' . html_entity_decode($notice['messageHTML']) . '</div>
                     </div>
                 </div>
     ';

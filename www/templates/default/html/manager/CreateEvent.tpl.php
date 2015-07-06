@@ -334,10 +334,10 @@ require(['jquery'], function ($) {
             notifier.mark_input_invalid($('#location-name'));
             errors.push('You must give your new location a <a href="#location-name">name</a>.');
         }
-        
+
         if (errors.length > 0) {
             submit.preventDefault();
-            notifier.alert('Sorry! We couldn\'t create your calendar', '<ul><li>' + errors.join('</li><li>') + '</li></ul>');
+            notifier.alert('Sorry! We couldn\'t create your event', '<ul><li>' + errors.join('</li><li>') + '</li></ul>');
         }
     });
 });
