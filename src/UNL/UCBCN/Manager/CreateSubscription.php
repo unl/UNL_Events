@@ -7,7 +7,7 @@ use UNL\UCBCN\Calendars;
 use UNL\UCBCN\Calendar\Subscription;
 use UNL\UCBCN\Calendar\SubscriptionHasCalendar;
 
-class CreateSubscription implements PostHandlerInterface
+class CreateSubscription extends PostHandler
 {
     public $options = array();
     public $calendar;
@@ -50,11 +50,11 @@ class CreateSubscription implements PostHandlerInterface
             }
 
             $this->updateSubscription($post);
-            $this->flashNotice(NOTICE_LEVEL_SUCCESS, 'Subscription Updated', 'Your subscription "' . $this->subscription->name . '" has been updated.');
+            $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Subscription Updated', 'Your subscription "' . $this->subscription->name . '" has been updated.');
         } else {
             # we are creating a new subscription
             $this->subscription = $this->createSubscription($post);
-            $this->flashNotice(NOTICE_LEVEL_SUCCESS, 'Subscription Created', 'Your subscription "' . $this->subscription->name . '" has been created.');
+            $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Subscription Created', 'Your subscription "' . $this->subscription->name . '" has been created.');
         }
 
         //redirect
