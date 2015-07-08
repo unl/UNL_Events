@@ -68,6 +68,11 @@ class CreateEvent extends PostHandler
 
     private function validateEventData($post_data) 
     {
+        # title, start date, location are required
+        if (empty($post_data['title']) || empty($post_data['location']) || empty($post_data['start_date'])) {
+            throw new ValidationException('<a href="#title">Title</a>, <a href="#location">location</a>, and <a href="#start-date">start date</a> are required.');
+        }
+
         # end date must be after start date
         $start_date = $this->calculateDate($post_data['start_date'], 
             $post_data['start_time_hour'], $post_data['start_time_minute'], 

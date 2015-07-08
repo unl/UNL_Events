@@ -81,7 +81,13 @@ class AddDatetime extends PostHandler
 
     public function handlePost(array $get, array $post, array $files)
     {
-        $this->editDatetime($this->event_datetime, $post);
+        $new = $this->event_datetime->id == NULL;
+        try {
+            $this->editDatetime($post);
+        } catch (ValidationException $e) {
+            $this->flashNotice(parent::NOTICE_LEVEL_ALERT, 'Sorry! We couldn\'t ' . ($new ? 'create' : 'update') . ' this location/date/time', $e->getMessage());
+            throw $e;
+        }
 
         # if we are editing a single recurrence, we need to unlink the current one in the DB
         # set unlinked on all recurring dates with the recurrence id and event id
@@ -96,8 +102,11 @@ class AddDatetime extends PostHandler
                 $recurring_date->save();
             }
         }
-
-        $this->flashNotice(NOTICE_LEVEL_SUCCESS, 'Location/Date/Time Added', 'Another location, date, and time has been added.');
+        if ($new) {
+            $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Location/Date/Time Added', 'Another location, date, and time has been added.');
+        } else {
+            $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Location/Date/Time Updated', 'Your location, date, and time has been updated.');
+        }
         return $this->event->getEditURL($this->calendar);
     }
 
@@ -110,16 +119,20 @@ class AddDatetime extends PostHandler
     public function getStandardLocations($display_order)
     {
         return new Locations(array(
-            'standard'      => true,
+            'standard' => true,
             'display_order' => $display_order,
         ));
     }
 
     private function calculateDate($date, $hour, $minute, $am_or_pm)
     {
+        # defaults if NULL is passed in
+        $hour = $hour == NULL ? 0 : $hour;
+        $minute = $minute == NULL ? 0 : $minute;
+        $am_or_pm = $am_or_pm == NULL ? 'am' : $am_or_pm;
+
         $date = strtotime($date);
         # add hours correctly
-        # TODO: handle when this is not entered
         $hours_to_add = (int)($hour) % 12;
         if ($am_or_pm == 'pm') {
             $hours_to_add += 12;
@@ -169,86 +182,127 @@ class AddDatetime extends PostHandler
         return $location;
     }
 
-    public function editDatetime($event_datetime, $post_data) 
+    private function setDatetimeData($post_data)
+    {
+        # set the start date and end date
+        $this->event_datetime->starttime = $this->calculateDate($post_data['start_date'], 
+            $post_data['start_time_hour'], $post_data['start_time_minute'], 
+            $post_data['start_time_am_pm']);
+
+        $this->event_datetime->endtime = $this->calculateDate($post_data['end_date'], 
+            $post_data['end_time_hour'], $post_data['end_time_minute'], 
+            $post_data['end_time_am_pm']);
+
+        
+        if (array_key_exists('recurring', $post_data) && $post_data['recurring'] == 'on') {
+            $this->event_datetime->recurringtype = $post_data['recurring_type'];
+            $this->event_datetime->recurs_until = $this->calculateDate(
+                $post_data['recurs_until_date'], 11, 59, 'pm');
+            if ($this->event_datetime->recurringtype == 'date' || 
+                $this->event_datetime->recurringtype == 'lastday' || 
+                $this->event_datetime->recurringtype == 'first' ||
+                $this->event_datetime->recurringtype == 'second' ||
+                $this->event_datetime->recurringtype == 'third'|| 
+                $this->event_datetime->recurringtype == 'fourth' ||
+                $this->event_datetime->recurringtype == 'last') {
+                    $this->event_datetime->rectypemonth = $this->event_datetime->recurringtype;
+                    $this->event_datetime->recurringtype = 'monthly';
+            }
+        } else {
+            $this->event_datetime->recurringtype = 'none';
+        }
+        $this->event_datetime->room = $post_data['room'];
+        $this->event_datetime->directions = $post_data['directions'];
+        $this->event_datetime->additionalpublicinfo = $post_data['additional_public_info'];
+    }
+
+    private function validateDatetimeData($post_data)
+    {
+        # start date, location are required
+        if (empty($post_data['location']) || empty($post_data['start_date'])) {
+            throw new ValidationException('<a href="#location">Location</a> and <a href="#start-date">start date</a> are required.');
+        }
+
+        # end date must be after start date
+        $start_date = $this->calculateDate($post_data['start_date'], 
+            $post_data['start_time_hour'], $post_data['start_time_minute'], 
+            $post_data['start_time_am_pm']);
+
+        $end_date = $this->calculateDate($post_data['end_date'], 
+            $post_data['end_time_hour'], $post_data['end_time_minute'], 
+            $post_data['end_time_am_pm']);
+
+        if ($start_date > $end_date) {
+            throw new ValidationException('Your <a href="#end-date">end date/time</a> must be on or after the <a href="#start-date">start date/time</a>.');
+        }
+
+        # check that recurring events have recurring type and correct recurs until date
+        if (array_key_exists('recurring', $post_data) && $post_data['recurring'] == 'on') {
+            if (empty($post_data['recurring_type']) || empty($post_data['recurs_until_date'])) {
+                throw new ValidationException('Recurring events require a <a href="#recurring-type">recurring type</a> and <a href="#recurs-until-date">date</a> that they recur until.');
+            }
+
+            $recurs_until = $this->calculateDate($post_data['recurs_until_date'], 11, 59, 'PM');
+            if ($start_date > $recurs_until) {
+                throw new ValidationException('The <a href="#recurs-until-date">"recurs until date"</a> must be on or after the start date.');
+            }
+        }
+
+        # check that a new location has a name
+        if ($post_data['location'] == 'new' && empty($post_data['new_location']['name'])) {
+            throw new ValidationException('You must give your new location a <a href="#location-name">name</a>.');
+        }
+    }
+
+    public function editDatetime($post_data) 
     {
         $user = Auth::getCurrentUser();
 
         # make a copy of the original event_datetime coming into this method
         # we'll need it to check if we have changed the date & it's recurring
         # to see if we need to revamp the recurrences
-        $datetime_copy = clone $event_datetime;
+        $datetime_copy = clone $this->event_datetime;
 
-        $event_datetime->event_id = $this->event->id;
+        $this->event_datetime->event_id = $this->event->id;
 
         # check if this is to use a new location
         if ($post_data['location'] == 'new') {
             # create a new location
             $location = $this->addLocation($post_data, $user);
-            $event_datetime->location_id = $location->id;
+            $this->event_datetime->location_id = $location->id;
         } else {
-            $event_datetime->location_id = $post_data['location'];
+            $this->event_datetime->location_id = $post_data['location'];
         }
 
-        # set the start date and end date
-        $event_datetime->starttime = $this->calculateDate($post_data['start_date'], 
-            $post_data['start_time_hour'], $post_data['start_time_minute'], 
-            $post_data['start_time_am_pm']);
+        $this->setDatetimeData($post_data);
+        $this->validateDatetimeData($post_data);
 
-        $event_datetime->endtime = $this->calculateDate($post_data['end_date'], 
-            $post_data['end_time_hour'], $post_data['end_time_minute'], 
-            $post_data['end_time_am_pm']);
-
-        
-        if (array_key_exists('recurring', $post_data) && $post_data['recurring'] == 'on') {
-            $event_datetime->recurringtype = $post_data['recurring_type'];
-            $event_datetime->recurs_until = $this->calculateDate(
-                $post_data['recurs_until_date'], 11, 59, 'PM');
-            if ($event_datetime->recurringtype == 'date' || 
-                $event_datetime->recurringtype == 'lastday' || 
-                $event_datetime->recurringtype == 'first' ||
-                $event_datetime->recurringtype == 'second' ||
-                $event_datetime->recurringtype == 'third'|| 
-                $event_datetime->recurringtype == 'fourth' ||
-                $event_datetime->recurringtype == 'last') {
-                    $event_datetime->rectypemonth = $event_datetime->recurringtype;
-                    $event_datetime->recurringtype = 'monthly';
-            }
-        } else {
-            $event_datetime->recurringtype = 'none';
-        }
-        $event_datetime->room = $post_data['room'];
-        $event_datetime->directions = $post_data['directions'];
-        $event_datetime->additionalpublicinfo = $post_data['additional_public_info'];
-
-        $event_datetime->save();
+        $this->event_datetime->save();
 
         # if we are editing a datetime, we need to check whether to revamp the recurrences
         if ($datetime_copy->id != NULL) {
             # if we are newly recurring
-            if (!$datetime_copy->isRecurring() && $event_datetime->isRecurring()) {
-                $event_datetime->insertRecurrences();
+            if (!$datetime_copy->isRecurring() && $this->event_datetime->isRecurring()) {
+                $this->event_datetime->insertRecurrences();
             # if we are removing recurring completely
-            } else if ($datetime_copy->isRecurring() && !$event_datetime->isRecurring()) {
-                $event_datetime->deleteRecurrences();
+            } else if ($datetime_copy->isRecurring() && !$this->event_datetime->isRecurring()) {
+                $this->event_datetime->deleteRecurrences();
             # if we are recurring before and after the change
-            } else if ($datetime_copy->isRecurring() && $event_datetime->isRecurring()) {
+            } else if ($datetime_copy->isRecurring() && $this->event_datetime->isRecurring()) {
                 # start time, end time, frequency and recurs until must all remain the same
                 # or we wipe it and start over
 
-                error_log(print_r($datetime_copy, 1));
-                error_log(print_r($event_datetime, 1));
-
-                if ($datetime_copy->starttime != $event_datetime->starttime || 
-                        $datetime_copy->endtime != $event_datetime->endtime || 
-                        $datetime_copy->recurringtype != $event_datetime->recurringtype || 
-                        $datetime_copy->rectypemonth != $event_datetime->rectypemonth || 
-                        $datetime_copy->recurs_until != $event_datetime->recurs_until) {
-                    $event_datetime->deleteRecurrences();
-                    $event_datetime->insertRecurrences();
+                if ($datetime_copy->starttime != $this->event_datetime->starttime || 
+                        $datetime_copy->endtime != $this->event_datetime->endtime || 
+                        $datetime_copy->recurringtype != $this->event_datetime->recurringtype || 
+                        $datetime_copy->rectypemonth != $this->event_datetime->rectypemonth || 
+                        $datetime_copy->recurs_until != $this->event_datetime->recurs_until) {
+                    $this->event_datetime->deleteRecurrences();
+                    $this->event_datetime->insertRecurrences();
                 }
             }
         }
 
-        return $event_datetime;
+        return $this->event_datetime;
     }
 }

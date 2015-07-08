@@ -8,7 +8,7 @@
         $start_date =  '';
         $start_hour = '';
         $start_minute = -1;
-        $start_am_pm = '';
+        $start_am_pm = 'am';
     } else {
         $start_time = strtotime($datetime->starttime);
         $start_date = date('m/d/Y', $start_time);
@@ -22,7 +22,7 @@
         $end_date =  '';
         $end_hour = '';
         $end_minute = -1;
-        $end_am_pm = '';
+        $end_am_pm = 'am';
     } else {
         $end_time = strtotime($datetime->endtime);
         $end_date = date('m/d/Y', $end_time);
@@ -42,9 +42,9 @@ if ($context->recurrence_id != NULL) {
 }
 
 ?>
-<form action="" method="POST">
+<form id="add-datetime-form" action="" method="POST">
     <fieldset>
-        <label for="location">Location*</label>
+        <label for="location"><span class="required">*</span> Location</label>
         <select id="location" name="location" class="use-select2">
             <?php if ($datetime->id != NULL): ?>
             <optgroup label="Current location">
@@ -53,24 +53,24 @@ if ($context->recurrence_id != NULL) {
             <optgroup label="Your saved locations">
                 <?php foreach ($context->getUserLocations() as $location): ?>
                     <option value="<?php echo $location->id ?>"><?php echo $location->name ?></option>
-                <?php endforeach ?>
+                <?php endforeach; ?>
                 <option value="new">-- New Location --</option>
             </optgroup>
             <optgroup label="UNL Campus locations">
                 <?php foreach ($context->getStandardLocations(\UNL\UCBCN\Location::DISPLAY_ORDER_MAIN) as $location): ?>
                     <option value="<?php echo $location->id ?>"><?php echo $location->name ?></option>
-                <?php endforeach ?>
+                <?php endforeach; ?>
             </optgroup>
             <optgroup label="Extension locations">
                 <?php foreach ($context->getStandardLocations(\UNL\UCBCN\Location::DISPLAY_ORDER_EXTENSION) as $location): ?>
                     <option value="<?php echo $location->id ?>"><?php echo $location->name ?></option>
-                <?php endforeach ?>
+                <?php endforeach; ?>
             </optgroup>
         </select>
 
         <div id="new-location-fields" style="display: none;">
             <h6>New Location</h6>
-            <label for="location-name">Name</label>
+            <label for="location-name"><span class="required">*</span> Name</label>
             <input type="text" id="location-name" name="new_location[name]">
 
             <label for="location-address-1">Address</label>
@@ -120,7 +120,7 @@ if ($context->recurrence_id != NULL) {
         <input type="text" id="room" name="room" />
 
 
-        <label for="start-date" >Start Date &amp; Time</label>
+        <label for="start-date" ><span class="required">*</span> Start Date &amp; Time</label>
         <div class="date-time-select"><span class="wdn-icon-calendar"></span>
             <input id="start-date" value="<?php echo $start_date; ?>" 
                 name="start_date" type="text" class="datepicker" /> @
@@ -224,16 +224,94 @@ WDN.initializePlugin('jqueryui', [function() {
     $('#start-date').change(function (change) {
         setRecurringOptions($(this), $('#monthly-group'));
     });
+
+    $('#add-datetime-form').submit(function (submit) {
+        errors = [];
+
+        // validate required fields
+        if ($('#location').val() == '' || $('#start-date').val() == '') {
+            if ($('#location').val() == '') {
+                notifier.mark_input_invalid($('#location'));
+            }
+            if ($('#start-date').val() == '') {
+                notifier.mark_input_invalid($('#start-date'));
+            }
+            errors.push('<a href="#location">Location</a> and <a href="#start-date">start date</a> are required.');
+        }
+
+        var start = new Date($('#start-date').val());
+        if ($('#start-date').val() != '') {
+            // validate end date is after start date and the time is afterward accordingly
+            if ($('#end-date').val() != '') {
+                var end = new Date($('#end-date').val());
+
+                // translate times from inputs. Blank hour = 12, blank minute = 0, blank am/pm = am
+                var start_am_pm = $('#start-time-am-pm-pm').is(':checked') ? 'pm' : 'am';
+                var start_hour = $('#start-time-hour').val() != '' ? parseInt($('#start-time-hour').val()) % 12 : 0;
+                start_hour = start_am_pm == 'pm' ? start_hour + 12 : start_hour;
+                var start_minute = $('#start-time-minute').val() != '' ? parseInt($('#start-time-minute').val()) : 0;
+                start.setHours(start_hour);
+                start.setMinutes(start_minute);
+
+                var end_am_pm = $('#end-time-am-pm-pm').is(':checked') ? 'pm' : 'am';
+                var end_hour = $('#end-time-hour').val() != '' ? parseInt($('#end-time-hour').val()) % 12 : 0;
+                end_hour = end_am_pm == 'pm' ? end_hour + 12 : end_hour;
+                var end_minute = $('#end-time-minute').val() != '' ? parseInt($('#end-time-minute').val()) : 0;
+                end.setHours(end_hour);
+                end.setMinutes(end_minute);
+
+                if (start > end) {
+                    notifier.mark_input_invalid($('#end-date'));
+                    errors.push('Your <a href="#end-date">end date/time</a> must be on or after the <a href="#start-date">start date/time</a>.');
+                }
+            }
+        }
+
+        // if recurring is checked, there must be a recurring type and the recurs_until date must be on
+        // or after the start date
+        if ($('#start-date').val() != '') {
+            if ($('#recurring').is(':checked')) {
+                if ($('#recurring-type').val() == '' || $('#recurs-until-date').val() == '') {
+                    if ($('#recurring-type').val() == '') {
+                        notifier.mark_input_invalid($('#recurring-type'));
+                    }
+                    if ($('#recurs-until-date').val() == '') {
+                        notifier.mark_input_invalid($('#recurs-until-date'));
+                    }
+                    errors.push('Recurring events require a <a href="#recurring-type">recurring type</a> and <a href="#recurs-until-date">date</a> that they recur until.');
+                }
+
+                // check that the recurs until date is on or after the start date
+                start.setHours(0);
+                start.setMinutes(0);
+                var until = new Date($('#recurs-until-date').val());
+
+                if (start > until) {
+                    notifier.mark_input_invalid($('#recurs-until-date'));
+                    errors.push('The <a href="#recurs-until-date">"recurs until date"</a> must be on or after the start date.');
+                }
+            }
+        }
+
+        // new locations must have a name
+        if ($('#location').val() == 'new' && $('#location-name').val() == '') {
+            notifier.mark_input_invalid($('#location-name'));
+            errors.push('You must give your new location a <a href="#location-name">name</a>.');
+        }
+
+        if (errors.length > 0) {
+            submit.preventDefault();
+            notifier.alert('Sorry! We couldn\'t create your event', '<ul><li>' + errors.join('</li><li>') + '</li></ul>');
+        }
+    });
 }]);
 </script>
 
 <?php if ($datetime->recurringtype != 'none' && $datetime->recurringtype != NULL): ?>
 <script type="text/javascript">
-WDN.initializePlugin('jqueryui', [function() {  
-    $ = require('jquery');
-
+require(['jquery'], function ($) {
     setRecurringOptions($('#start-date'), $('#monthly-group'));
     $('#recurring-type').val('<?php echo $datetime->recurringtype ?>');
-}]);
+});
 </script>
 <?php endif; ?>
