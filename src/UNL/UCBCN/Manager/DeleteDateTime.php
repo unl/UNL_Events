@@ -7,7 +7,7 @@ use UNL\UCBCN\Event;
 use UNL\UCBCN\Event\Occurrence;
 use UNL\UCBCN\Permission;
 
-class DeleteDateTime implements PostHandlerInterface
+class DeleteDateTime extends PostHandler
 {
     public $options = array();
     public $calendar;
@@ -50,6 +50,8 @@ class DeleteDateTime implements PostHandlerInterface
         }
 
         $this->event_datetime->delete();
+
+        $this->flashNotice(NOTICE_LEVEL_SUCCESS, 'Location/Date/Time Deleted', 'A location/date/time for your event ' . $this->event->title . ' has been deleted.');
 
         // Redirect to the event edit page
         return $this->event->getEditURL($this->calendar);

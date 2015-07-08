@@ -7,7 +7,7 @@ use UNL\UCBCN\Permission;
 use UNL\UCBCN\Permissions;
 use UNL\UCBCN\Manager\Controller;
 
-class AddUser implements PostHandlerInterface
+class AddUser extends PostHandler
 {
     public $options = array();
     public $calendar;
@@ -38,6 +38,23 @@ class AddUser implements PostHandlerInterface
             # we are adding a new user to the calendar
             $this->user = NULL;
         }
+    }
+
+    public function handlePost(array $get, array $post, array $files)
+    {
+        // check if we are looking to edit a user's permissions
+        if (array_key_exists('user_uid', $this->options)) {
+            $this->user = User::getByUID($this->options['user_uid']);
+            $this->updateUser($post);
+            $this->flashNotice(NOTICE_LEVEL_SUCCESS, 'User Permissions Updated', 'User "' . $this->user->uid . '"\'s permissions have been updated.');
+        } else {
+            # we are adding a new user
+            $this->user = $this->addUser($post);
+            $this->flashNotice(NOTICE_LEVEL_SUCCESS, 'User Added', 'User "' . $this->user->uid . '" has been added to the calendar with the permissions you have specified.');
+        }
+
+        //redirect
+        return $this->calendar->getUsersURL();
     }
 
     public function getAvailableUsers()
@@ -90,20 +107,5 @@ class AddUser implements PostHandlerInterface
         }
 
         return $this->user;
-    }
-
-    public function handlePost(array $get, array $post, array $files)
-    {
-        // check if we are looking to edit a user's permissions
-        if (array_key_exists('user_uid', $this->options)) {
-            $this->user = User::getByUID($this->options['user_uid']);
-            $this->updateUser($post);
-        } else {
-            # we are adding a new user
-            $this->user = $this->addUser($post);
-        }
-
-        //redirect
-        return $this->calendar->getUsersURL();
     }
 }

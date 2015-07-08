@@ -11,10 +11,12 @@ use UNL\UCBCN\Event\Occurrence;
 use UNL\UCBCN\User;
 use UNL\UCBCN\Permission;
 
-class CreateEvent implements PostHandlerInterface
+class CreateEvent extends PostHandler
 {
     public $options = array();
     public $calendar;
+    public $event;
+    public $post;
 
     public function __construct($options = array()) 
     {
@@ -29,29 +31,86 @@ class CreateEvent implements PostHandlerInterface
         if (!$user->hasPermission(Permission::EVENT_CREATE_ID, $this->calendar->id)) {
             throw new \Exception("You do not have permission to create an event on this calendar.", 403);
         }
+
+        $this->event = new Event;
     }
 
-    public function getEventTypes()
+    public function handlePost(array $get, array $post, array $files)
     {
-        return new EventTypes(array());
+        try {
+            $new_event = $this->createEvent($post);
+        } catch (ValidationException $e) {
+            $this->flashNotice(parent::NOTICE_LEVEL_ALERT, 'Sorry! We couldn\'t create your event', $e->getMessage());
+            throw $e;
+        }
+        $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Event Created', 'Your event "' . $new_event->title . '"" has been created.');
+
+        # redirect
+        return '/manager/' . $this->calendar->shortname . '/';
     }
-    
-    public function getUserLocations()
+
+    private function setEventData($post_data) 
     {
-        $user = Auth::getCurrentUser();
-        return new Locations(array('user_id' => $user->uid));
+        $this->event->title = $post_data['title'];
+        $this->event->subtitle = $post_data['subtitle'];
+        $this->event->description = $post_data['description'];
+
+        $this->event->listingcontactname = $post_data['contact_name'];
+        $this->event->listingcontactphone = $post_data['contact_phone'];
+        $this->event->listingcontactemail = $post_data['contact_email'];
+
+        $this->event->webpageurl = $post_data['website'];
+        $this->event->approvedforcirculation = $post_data['private_public'] == 'public' ? 1 : 0;
+
+        # for extraneous data aside from the event (location, type, etc)
+        $this->post = $post_data;
     }
-    
-    public function getStandardLocations($display_order)
+
+    private function validateEventData($post_data) 
     {
-        return new Locations(array(
-            'standard'      => true,
-            'display_order' => $display_order,
-        ));
+        # title, start date, location are required
+        if (empty($post_data['title']) || empty($post_data['location']) || empty($post_data['start_date'])) {
+            throw new ValidationException('<a href="#title">Title</a>, <a href="#location">location</a>, and <a href="#start-date">start date</a> are required.');
+        }
+
+        # end date must be after start date
+        $start_date = $this->calculateDate($post_data['start_date'], 
+            $post_data['start_time_hour'], $post_data['start_time_minute'], 
+            $post_data['start_time_am_pm']);
+
+        $end_date = $this->calculateDate($post_data['end_date'], 
+            $post_data['end_time_hour'], $post_data['end_time_minute'], 
+            $post_data['end_time_am_pm']);
+
+        if ($start_date > $end_date) {
+            throw new ValidationException('Your <a href="#end-date">end date/time</a> must be on or after the <a href="#start-date">start date/time</a>.');
+        }
+
+        # check that recurring events have recurring type and correct recurs until date
+        if (array_key_exists('recurring', $post_data) && $post_data['recurring'] == 'on') {
+            if (empty($post_data['recurring_type']) || empty($post_data['recurs_until_date'])) {
+                throw new ValidationException('Recurring events require a <a href="#recurring-type">recurring type</a> and <a href="#recurs-until-date">date</a> that they recur until.');
+            }
+
+            $recurs_until = $this->calculateDate($post_data['recurs_until_date'], 11, 59, 'PM');
+            if ($start_date > $recurs_until) {
+                throw new ValidationException('The <a href="#recurs-until-date">"recurs until date"</a> must be on or after the start date.');
+            }
+        }
+
+        # check that a new location has a name
+        if ($post_data['location'] == 'new' && empty($post_data['new_location']['name'])) {
+            throw new ValidationException('You must give your new location a <a href="#location-name">name</a>.');
+        }
     }
 
     private function calculateDate($date, $hour, $minute, $am_or_pm)
     {
+        # defaults if NULL is passed in
+        $hour = $hour == NULL ? 0 : $hour;
+        $minute = $minute == NULL ? 0 : $minute;
+        $am_or_pm = $am_or_pm == NULL ? 'am' : $am_or_pm;
+
         $date = strtotime($date);
         # add hours correctly
         # TODO: handle when this is not entered
@@ -63,36 +122,27 @@ class CreateEvent implements PostHandlerInterface
         return date('Y-m-d H:i:s', $date);
     }
 
-    private function saveEvent($post_data) 
+    private function createEvent($post_data) 
     {
         $user = Auth::getCurrentUser();
 
-        $event = new Event();
-        $event->title = $post_data['title'];
-        $event->subtitle = $post_data['subtitle'];
-        $event->description = $post_data['description'];
+        # by setting and then validating, we allow the event on the form to have the entered data
+        # so if the validation fails, the form shows with the entered data
+        $this->setEventData($post_data);
+        $this->validateEventData($post_data);
 
-        $event->listingcontactname = $post_data['contact_name'];
-        $event->listingcontactphone = $post_data['contact_phone'];
-        $event->listingcontactemail = $post_data['contact_email'];
-
-        $event->webpageurl = $post_data['website'];
-        $event->approvedforcirculation = $post_data['private_public'] == 'public' ? 1 : 0;
-
-        $add_to_default = array_key_exists('send_to_main', $post_data) && 
-            $post_data['send_to_main'] == 'on';
-        $result = $event->insert($this->calendar, 'create event form');
+        $result = $this->event->insert($this->calendar, 'create event form');
 
         # add the event type record
         $event_has_type = new EventType;
-        $event_has_type->event_id = $event->id;
+        $event_has_type->event_id = $this->event->id;
         $event_has_type->eventtype_id = $post_data['type'];
 
         $event_has_type->insert();
 
         # add the event date time record
         $event_datetime = new Occurrence;
-        $event_datetime->event_id = $event->id;
+        $event_datetime->event_id = $this->event->id;
 
         # check if this is to use a new location
         if ($post_data['location'] == 'new') {
@@ -137,10 +187,10 @@ class CreateEvent implements PostHandlerInterface
         $event_datetime->insert();
 
         if (array_key_exists('send_to_main', $post_data) && $post_data['send_to_main'] == 'on') {
-            $event->considerForMainCalendar();
+            $this->event->considerForMainCalendar();
         }
 
-        return $event;
+        return $this->event;
     }
 
     /**
@@ -184,11 +234,22 @@ class CreateEvent implements PostHandlerInterface
         return $location;
     }
 
-    public function handlePost(array $get, array $post, array $files)
+    public function getEventTypes()
     {
-        $this->saveEvent($post);
-        
-        //redirect
-        return '/manager/' . $this->calendar->shortname . '/';
+        return new EventTypes(array());
+    }
+    
+    public function getUserLocations()
+    {
+        $user = Auth::getCurrentUser();
+        return new Locations(array('user_id' => $user->uid));
+    }
+    
+    public function getStandardLocations($display_order)
+    {
+        return new Locations(array(
+            'standard' => true,
+            'display_order' => $display_order,
+        ));
     }
 }

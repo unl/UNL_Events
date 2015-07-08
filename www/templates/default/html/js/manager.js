@@ -1,5 +1,9 @@
 require(['jquery', 'wdn', 'modernizr', frontend_url + 'templates/default/html/js/vendor/select2/js/select2.min.js'], function($, WDN, Modernizr) {
     $(document).ready(function() {
+        $('form').on('change blur', 'input', function() {
+            $(this).removeClass('validation-failed');
+        });
+
         $(".use-select2").select2();
 
         $('#bulk-action').change(function () {
@@ -61,6 +65,44 @@ require(['jquery', 'wdn', 'modernizr', frontend_url + 'templates/default/html/js
                 return number + 'rd';
             } else {
                 return number + 'th';
+            }
+        };
+
+        notifier = {
+            mark_input_invalid: function(input) {
+                input.addClass('validation-failed');
+            },
+            failure: function(header, message) {
+                $('#notice').removeClass('affirm').addClass('negate').removeClass('alert');
+                $('#notice h4').text(header);
+                $('#notice .message-content').html(message);
+                $('#notice').fadeIn();
+
+                window.scrollTo(0,0);
+            },
+            info: function(header, message) {
+                $('#notice').removeClass('affirm').removeClass('negate').removeClass('alert');
+                $('#notice h4').text(header);
+                $('#notice .message-content').html(message);
+                $('#notice').fadeIn();
+
+                window.scrollTo(0,0);
+            },
+            success: function(header, message) {
+                $('#notice').addClass('affirm').removeClass('negate').removeClass('alert');
+                $('#notice h4').text(header);
+                $('#notice .message-content').html(message);
+                $('#notice').fadeIn();
+
+                window.scrollTo(0,0);
+            },
+            alert: function(header, message) {
+                $('#notice').removeClass('affirm').removeClass('negate').addClass('alert');
+                $('#notice h4').text(header);
+                $('#notice .message-content').html(message);
+                $('#notice').fadeIn();
+
+                window.scrollTo(0,0);
             }
         };
 

@@ -11,7 +11,7 @@ use UNL\UCBCN\Event\EventType;
 use UNL\UCBCN\Event\Occurrence;
 use UNL\UCBCN\User;
 
-class EditEvent implements PostHandlerInterface
+class EditEvent extends PostHandler
 {
     public $options = array();
     public $calendar;
@@ -49,8 +49,15 @@ class EditEvent implements PostHandlerInterface
 
     public function handlePost(array $get, array $post, array $files)
     {
-        $this->updateEvent($_POST);
-        return $this->calendar->getManageURL();
+        try {
+            $this->updateEvent($_POST);
+        } catch (ValidationException $e) {
+            $this->flashNotice(parent::NOTICE_LEVEL_ALERT, 'Sorry! We couldn\'t edit your event', $e->getMessage());
+            throw $e;
+        }
+
+        $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Event Updated', 'The event "' . $this->event->title . '" has been updated.');
+        return $this->event->getEditURL($this->calendar);
     }
 
     public function getEventTypes()
@@ -64,7 +71,7 @@ class EditEvent implements PostHandlerInterface
         return new Locations(array('user_id' => $user->uid));
     }
 
-    private function updateEvent($post_data) 
+    private function setEventData($post_data)
     {
         $this->event->title = $post_data['title'];
         $this->event->subtitle = $post_data['subtitle'];
@@ -76,6 +83,20 @@ class EditEvent implements PostHandlerInterface
 
         $this->event->webpageurl = $post_data['website'];
         $this->event->approvedforcirculation = $post_data['private_public'] == 'public' ? 1 : 0;
+    }
+
+    private function validateEventData($post_data)
+    {
+        # title required
+        if (empty($post_data['title'])) {
+            throw new ValidationException('<a href="#title">Title</a> is required.');
+        }
+    }
+
+    private function updateEvent($post_data) 
+    {
+        $this->setEventData($post_data);
+        $this->validateEventData($post_data);
         $result = $this->event->update();
 
         # update the event type record

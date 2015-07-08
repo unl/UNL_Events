@@ -7,7 +7,7 @@ use UNL\UCBCN\Calendars;
 use UNL\UCBCN\Calendar\Subscription;
 use UNL\UCBCN\Calendar\SubscriptionHasCalendar;
 
-class CreateSubscription implements PostHandlerInterface
+class CreateSubscription extends PostHandler
 {
     public $options = array();
     public $calendar;
@@ -37,6 +37,28 @@ class CreateSubscription implements PostHandlerInterface
         } else {
             $this->subscription = new Subscription;
         }
+    }
+
+    public function handlePost(array $get, array $post, array $files)
+    {
+        if (array_key_exists('subscription_id', $this->options)) {
+            # we are editing an existing subscription
+            $this->subscription = Subscription::getById($this->options['subscription_id']);
+
+            if ($this->subscription == FALSE) {
+                throw new \Exception("That subscription could not be found.", 404);
+            }
+
+            $this->updateSubscription($post);
+            $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Subscription Updated', 'Your subscription "' . $this->subscription->name . '" has been updated.');
+        } else {
+            # we are creating a new subscription
+            $this->subscription = $this->createSubscription($post);
+            $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Subscription Created', 'Your subscription "' . $this->subscription->name . '" has been created.');
+        }
+
+        //redirect
+        return '/manager/' . $this->calendar->shortname . '/subscriptions/';
     }
 
     public function getAvailableCalendars() 
@@ -101,25 +123,5 @@ class CreateSubscription implements PostHandlerInterface
         $this->subscription->process();
 
         return $this->subscription;
-    }
-
-    public function handlePost(array $get, array $post, array $files)
-    {
-        if (array_key_exists('subscription_id', $this->options)) {
-            # we are editing an existing subscription
-            $this->subscription = Subscription::getById($this->options['subscription_id']);
-
-            if ($this->subscription == FALSE) {
-                throw new \Exception("That subscription could not be found.", 404);
-            }
-
-            $this->updateSubscription($post);
-        } else {
-            # we are creating a new subscription
-            $this->subscription = $this->createSubscription($post);
-        }
-
-        //redirect
-        return '/manager/' . $this->calendar->shortname . '/subscriptions/';
     }
 }
