@@ -11,6 +11,7 @@
     $crumbs->crumbs = array(
         "Events Manager" => "/manager",
         $context->calendar->name => $context->calendar->getManageURL(),
+        "Subscriptions" => $context->calendar->getSubscriptionsURL(),
         ($context->subscription->id == NULL ? 'Add a Subscription' : 'Edit Subscription') => NULL
     );
     echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
