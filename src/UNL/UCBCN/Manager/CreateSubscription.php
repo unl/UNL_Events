@@ -70,6 +70,9 @@ class CreateSubscription extends PostHandler
     {
         $subscription = new Subscription;
         $subscription->name = $post_data['title'];
+        if (empty(trim($subscription->name))) {
+            $subscription->name = 'Subscription: ' . count($post_data['calendars']) . ' Calendar' . (count($post_data['calendars']) == 1 ? '' : 's');
+        }
         $subscription->automaticapproval = $post_data['auto_approve'] == 'yes' ? 1 : 0;
         $subscription->calendar_id = $this->calendar->id;
 
@@ -91,6 +94,11 @@ class CreateSubscription extends PostHandler
 
     private function updateSubscription($post_data)
     {
+        $this->subscription->name = $post_data['title'];
+        if (empty(trim($this->subscription->name))) {
+            $this->subscription->name = 'Subscription: ' . count($post_data['calendars']) . ' Calendar' . (count($post_data['calendars']) == 1 ? '' : 's');
+        }
+
         # see what calendars were removed from the subscription first...if they
         # are not present, remove the record from sub_has_calendar
         $current_subbed_calendars = $this->subscription->getSubscribedCalendars();
@@ -117,6 +125,8 @@ class CreateSubscription extends PostHandler
                 $sub_has_calendar->insert();
             }
         }
+
+        $this->subscription->save();
 
         # process the subscription again. Events that are currently already in there
         # from the subscription will not be added twice

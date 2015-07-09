@@ -54,7 +54,6 @@ $page->maincontentarea = '
     <div class="wdn-inner-wrapper">
         <section class="wdn-grid-set">
             <nav class="calendars-list wdn-col-one-fourth">
-                <h3>My Calendars</h3>
                 ' . $savvy->render($context, 'navigation.tpl.php') . '
             </nav>
             <div class="wdn-col-three-fourths">

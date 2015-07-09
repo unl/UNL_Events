@@ -193,7 +193,7 @@
         <div class="bp1-wdn-col-one-third">
             <div class="visual-island">
                 <div class="vi-header">
-                    Sharing
+                    <label>Sharing</label>
                 </div>
                 <p>
                     <input type="radio" value="private" name="private_public" id="sharing-private" <?php if ($post['private_public'] != 'public') echo 'checked="checked"'; ?>> 
@@ -211,7 +211,7 @@
 
             <div class="visual-island">
                 <div class="vi-header">
-                    Contact Info
+                    <label>Contact Info</label>
                 </div>
 
                 <p>
