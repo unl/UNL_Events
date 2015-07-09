@@ -20,7 +20,7 @@
             <?php } ?>
             </select>
         <?php } else { ?>
-            <h4><?php echo $context->user->uid ?></h4>
+            <label>Editing for User:</label><br><strong><?php echo $context->user->uid ?></strong>
         <?php } ?>
         <br><br>
         <label>Permissions</label><br>
