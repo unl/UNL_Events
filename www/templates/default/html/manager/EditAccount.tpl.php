@@ -1,3 +1,13 @@
+<?php
+    $crumbs = new stdClass;
+    $crumbs->crumbs = array(
+        "Events Manager" => "/manager",
+        "Edit Account Info" => NULL
+    );
+    echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
+?>
+<h3>Edit Account Info</h3>
+
 <form action="" method="POST">
     <fieldset>
         <label for="name">Account Name</label>

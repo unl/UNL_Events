@@ -33,15 +33,26 @@
 
     $recurs_until_date = date('m/d/Y', strtotime($datetime->recurs_until));
 ?>
-<?php echo $calendar->name ?> &gt; <?php echo $event->title ?> &gt; 
-<?php 
-if ($context->recurrence_id != NULL) {
-    echo 'Edit a Single Instance from Recurring Event';
-} else {
-    echo $datetime->id == NULL ? 'Add a Location, Date, and Time' : 'Edit Location, Date, and Time'; 
-}
+<?php
+    $last_crumb = NULL;
+    if ($context->recurrence_id != NULL) {
+        $last_crumb = 'Edit a Single Instance from Recurring Event';
+    } else {
+        $last_crumb = $datetime->id == NULL ? 'Add a Location, Date, and Time' : 'Edit Location, Date, and Time'; 
+    }
 
+    $crumbs = new stdClass;
+    $crumbs->crumbs = array(
+        "Events Manager" => "/manager",
+        $context->calendar->name => $context->calendar->getManageURL(),
+        'Edit "' . $event->title . '"' => $event->getEditURL($context->calendar),
+        $last_crumb => NULL
+    );
+    echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
 ?>
+<h3>
+<?php echo $last_crumb ?>
+</h3>
 <form id="add-datetime-form" action="" method="POST">
     <fieldset>
         <label for="location"><span class="required">*</span> Location</label>
@@ -190,7 +201,7 @@ if ($context->recurrence_id != NULL) {
                         <option value="annually">Yearly</option>
                     </select>
                     <label for="recurs-until-date">until </label><br>
-                    <span class="wdn-icon-calendar"></span>
+                    <span class="wdn-icon-calendar" style="top: .4em"></span>
                     <input value="<?php if ($datetime->recurringtype != 'none' && $datetime->recurringtype != NULL) echo $recurs_until_date; ?>" id="recurs-until-date" name="recurs_until_date" type="text" class="datepicker" />
                 </div>
             </div>
