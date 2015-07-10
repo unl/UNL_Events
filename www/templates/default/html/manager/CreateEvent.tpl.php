@@ -3,11 +3,20 @@
     $event = $context->event;
     $post = $context->post;
 ?>
-<?php echo $calendar->name ?> &gt; Create Event
+<?php
+    $crumbs = new stdClass;
+    $crumbs->crumbs = array(
+        "Events Manager" => "/manager",
+        $context->calendar->name => $context->calendar->getManageURL(),
+        "Create Event" => NULL
+    );
+    echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
+?>
+<br>
 <div class="wdn-grid-set">
     <form id="create-event-form" action="" method="POST">
         <div class="bp1-wdn-col-two-thirds">
-            <legend>Details</legend>
+            <legend style="margin-top: 0">Event Details</legend>
             <fieldset>
                 <label for="title"><span class="required">*</span> Title</label>
                 <input type="text" id="title" name="title" value="<?php echo $event->title; ?>" />
@@ -27,7 +36,7 @@
             </fieldset>
 
             <fieldset>
-            <legend>Location, Date, and Time</legend>
+            <legend style="font-size: 1.6em">Location, Date, and Time</legend>
                 <label for="location"><span class="required">*</span> Location</label>
                 <select id="location" name="location" class="use-select2">
                     <optgroup label="Your saved locations">
@@ -176,7 +185,7 @@
                             <option value="annually">Yearly</option>
                         </select>
                         <label for="recurs-until-date">until </label><br>
-                        <span class="wdn-icon-calendar"></span>
+                        <span style="top: .4em" class="wdn-icon-calendar"></span>
                         <input value="<?php echo $post['recurs_until_date']; ?>" id="recurs-until-date" name="recurs_until_date" type="text" class="datepicker" />
                     </div>
                 </div>
@@ -193,7 +202,7 @@
         <div class="bp1-wdn-col-one-third">
             <div class="visual-island">
                 <div class="vi-header">
-                    Sharing
+                    <label>Sharing</label>
                 </div>
                 <p>
                     <input type="radio" value="private" name="private_public" id="sharing-private" <?php if ($post['private_public'] != 'public') echo 'checked="checked"'; ?>> 
@@ -211,7 +220,7 @@
 
             <div class="visual-island">
                 <div class="vi-header">
-                    Contact Info
+                    <label>Contact Info</label>
                 </div>
 
                 <p>

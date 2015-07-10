@@ -17,6 +17,15 @@
             $total_pages = 1;
     }
 ?>
+<?php
+    $crumbs = new stdClass;
+    $crumbs->crumbs = array(
+        "Events Manager" => "/manager",
+        $context->calendar->name => NULL
+    );
+    echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
+?>
+<br>
 <ul class="wdn_tabs">
     <li class="<?php if ($context->tab == 'pending') echo 'selected'; ?>"><a href="<?php echo ($context->tab == 'pending' ? '#pending' : '?tab=pending'); ?>">Pending (<?php echo count($categorized_events['pending']); ?>)</a></li>
     <li class="<?php if ($context->tab == 'upcoming') echo 'selected'; ?>"><a href="<?php echo ($context->tab == 'upcoming' ? '#upcoming' : '?tab=upcoming'); ?>">Upcoming (<?php echo count($categorized_events['posted']); ?>)</a></li>

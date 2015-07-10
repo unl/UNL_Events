@@ -6,13 +6,23 @@
     }
 ?>
 
-<?php echo $context->calendar->name ?> &gt; <?php echo $context->subscription->id == NULL ? 'Add a Subscription' : 'Edit Subscription' ?>
+<?php
+    $crumbs = new stdClass;
+    $crumbs->crumbs = array(
+        "Events Manager" => "/manager",
+        $context->calendar->name => $context->calendar->getManageURL(),
+        "Subscriptions" => $context->calendar->getSubscriptionsURL(),
+        ($context->subscription->id == NULL ? 'Add a Subscription' : 'Edit Subscription') => NULL
+    );
+    echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
+?>
 
 <div class="wdn-grid-set">
     <form action="<?php echo $context->subscription->id == NULL ? $context->subscription->getNewURL($context->calendar) : $context->subscription->getEditURL($context->calendar) ?>" method="POST">
         <div class="wdn-col-two-thirds">
+            <h3><?php echo $context->subscription->id == NULL ? 'Add a Subscription' : 'Edit Subscription' ?></h3>
             <fieldset>
-                <label for="title">Title*</label>
+                <label for="title">Title</label>
                 <input type="text" id="title" name="title" value="<?php echo $context->subscription->name ?>" />
 
                 <label for="calendars">Events Posted to Calendar(s):</label>
@@ -28,18 +38,18 @@
             </button>
         </div>
         <div class="wdn-col-one-third">
+            <br>
             <div class="visual-island">
-                Automatically approve events?
-                <ol> 
-                    <li> 
-                        <input type="radio" value="no" name="auto_approve" id="auto-approve-no" checked="checked"> 
-                        <label for="auto-approve-no">No (send to pending)</label> 
-                    </li> 
-                    <li> 
-                        <input type="radio" value="yes" name="auto_approve" id="auto-approve-yes"> 
-                        <label for="sharing-public">Yes (send to upcoming)</label> 
-                    </li> 
-                </ol>
+                <p>
+                    <label>Automatically approve events?</label>
+                    <br>
+                    <br>
+                    <input type="radio" value="no" name="auto_approve" id="auto-approve-no" checked="checked"> 
+                    <label for="auto-approve-no">No (send to pending)</label> 
+                    <br>
+                    <input type="radio" value="yes" name="auto_approve" id="auto-approve-yes"> 
+                    <label for="auto-approve-yes">Yes (send to upcoming)</label> 
+                </p>
             </div>
         </div>
     </form>

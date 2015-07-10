@@ -21,8 +21,16 @@
     }
 
 ?>
-
-<?php echo $calendar->name ?> &gt; Edit <?php echo $event->title ?>
+<?php
+    $crumbs = new stdClass;
+    $crumbs->crumbs = array(
+        "Events Manager" => "/manager",
+        $context->calendar->name => $context->calendar->getManageURL(),
+        'Edit "' . $event->title . '"' => NULL
+    );
+    echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
+?>
+<br>
 
 <?php foreach($event->getDatetimes() as $datetime) : ?>
     <form id="delete-datetime-<?php echo $datetime->id; ?>" class="delete-datetime" method="POST" action="<?php echo $datetime->getDeleteURL($context->calendar) ?>" class="delete-form hidden">
@@ -41,8 +49,8 @@
 <div class="wdn-grid-set">
     <form id="edit-event-form" action="" method="POST">
         <div class="bp1-wdn-col-two-thirds">
-            <fieldset>
-            	<legend>Details</legend>
+            <fieldset style="margin-top: 0">
+            	<legend style="margin-top: 0">Event Details</legend>
                 <label for="title"><span class="required">*</span> Title</label>
                 <input type="text" id="title" name="title" value="<?php echo $event->title; ?>" />
 
@@ -58,9 +66,14 @@
                     <option <?php if ($event_type->id == $type->id) echo 'selected="selected"'; ?> value="<?php echo $type->id ?>"><?php echo $type->name ?></option>
                 <?php } ?>
                 </select>
+                <br><br>
+                <div>
+                    <button class="wdn-button wdn-button-brand wdn-pull-left" type="submit">Save Event</button>
+                </div>
             </fieldset>
             <fieldset class="event-datetimes">
 	            <legend>Location, Date, and Time</legend>
+                <a class="wdn-button wdn-button-brand" href="<?php echo $event->getAddDatetimeURL($context->calendar) ?>">Add Location, Date, and/or Time</a><br><br>
 	            <div class="edt-header">
                     <div class="dates">
 	            	  Dates
@@ -162,12 +175,11 @@
                 </div>
             <?php endif; ?>
             </fieldset>
-			<a class="wdn-button wdn-button-brand" href="<?php echo $event->getAddDatetimeURL($context->calendar) ?>">Add Location, Date, and/or Time</a>            
         </div>
         <div class="bp1-wdn-col-one-third">
             <div class="visual-island">
                 <div class="vi-header">
-                    Sharing
+                    <label>Sharing</label>
                 </div>
                 <p>
                     <input <?php if (!$event->approvedforcirculation) echo 'checked="checked"' ?> type="radio" value="private" name="private_public" id="sharing-private"> 
@@ -185,7 +197,7 @@
 
             <div class="visual-island">
                 <div class="vi-header">
-                    Contact Info
+                    <label>Contact Info</label>
                 </div>
 
                 <p>
@@ -202,9 +214,6 @@
                     <input value="<?php echo $event->webpageurl; ?>" type="text" id="website" name="website" />
                 </p>
             </div>
-        </div>
-        <div class="bp1-wdn-col-two-thirds">
-            <button class="wdn-button wdn-button-brand wdn-pull-left" type="submit">Save Event</button>
         </div>
     </form>
 </div>

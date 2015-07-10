@@ -71,7 +71,7 @@ class Calendar extends Record
     }
     
     public function getFrontendURL() {
-        return FrontendController::$url . '?calendar_id=' . $this->id;
+        return FrontendController::$url . $this->shortname . "/";
     }
 
     public function getManageURL() {

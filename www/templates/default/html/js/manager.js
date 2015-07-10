@@ -131,7 +131,12 @@ require(['jquery', 'wdn', 'modernizr', frontend_url + 'templates/default/html/js
                 "2": "Second",
                 "3": "Third",
                 "4": "Fourth",
-                "5": "Last"
+                "5": "Last",
+                1: "First",
+                2: "Second",
+                3: "Third",
+                4: "Fourth",
+                5: "Last"
             };
 
             // get number of days (28, 29, 30, 31) in month
@@ -158,7 +163,9 @@ require(['jquery', 'wdn', 'modernizr', frontend_url + 'templates/default/html/js
             month_group_elem.children(".dynamicRecurring").remove();
             // populate rectypemonth with appropriate options
 
-            month_group_elem.prepend("<option class='dynamicRecurring' value='" + nth[week].toLowerCase() + "'>" + nth[week] + " " + start_weekday + " of every month</option>")
+            if (nth[week] != undefined) {
+                month_group_elem.prepend("<option class='dynamicRecurring' value='" + nth[week].toLowerCase() + "'>" + nth[week] + " " + start_weekday + " of every month</option>")
+            }
 
             if (week == 4 && total_weeks == 4) {
                 month_group_elem.prepend("<option class='dynamicRecurring' value='last'>" + "Last " + start_weekday + " of every month</option>")

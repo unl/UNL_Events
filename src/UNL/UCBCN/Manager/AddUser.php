@@ -46,11 +46,11 @@ class AddUser extends PostHandler
         if (array_key_exists('user_uid', $this->options)) {
             $this->user = User::getByUID($this->options['user_uid']);
             $this->updateUser($post);
-            $this->flashNotice(NOTICE_LEVEL_SUCCESS, 'User Permissions Updated', 'User "' . $this->user->uid . '"\'s permissions have been updated.');
+            $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'User Permissions Updated', 'User "' . $this->user->uid . '"\'s permissions have been updated.');
         } else {
             # we are adding a new user
             $this->user = $this->addUser($post);
-            $this->flashNotice(NOTICE_LEVEL_SUCCESS, 'User Added', 'User "' . $this->user->uid . '" has been added to the calendar with the permissions you have specified.');
+            $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'User Added', 'User "' . $this->user->uid . '" has been added to the calendar with the permissions you have specified.');
         }
 
         //redirect
