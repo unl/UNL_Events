@@ -16,6 +16,8 @@
     echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
 ?>
 
+<h3><?php echo ($context->calendar->id == NULL ? 'Create Calendar' : 'Edit ' . $context->calendar->name); ?></h3>
+
 <form id="create-calendar-form" action="" method="POST">
     <fieldset>
         <label for="name"><span class="required">*</span> Name</label>

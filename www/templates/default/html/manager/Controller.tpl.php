@@ -52,11 +52,8 @@ if ($context->output->getRawObject() instanceof Exception) {
 $page->maincontentarea = '
 <div class="wdn-band view-' . $view_class . ' band-results">
     <div class="wdn-inner-wrapper">
-        <section class="wdn-grid-set">
-            <nav class="calendars-list wdn-col-one-fourth">
-                ' . $savvy->render($context, 'navigation.tpl.php') . '
-            </nav>
-            <div class="wdn-col-three-fourths">
+        <section class="wdn-grid-set reverse">
+            <div class="bp2-wdn-col-three-fourths">
 ';
 if (($notice = $context->getNotice()) != NULL) {
     $class = '';
@@ -96,7 +93,11 @@ if (($notice = $context->getNotice()) != NULL) {
     ';
 }
 $page->maincontentarea .= $savvy->render($context->output, $template) . '
-           </div>
+            <br>
+            </div>
+            <nav class="calendars-list bp2-wdn-col-one-fourth">
+                ' . $savvy->render($context, 'navigation.tpl.php') . '
+            </nav>
         </section>
     </div>
 </div>

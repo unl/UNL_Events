@@ -39,7 +39,7 @@
         <a href="<?php echo $context->getEditAccountURL() ?>">Account Info</a>
     </li>
     <li>
-        <a href="/help">Get Help!</a>
+        <a target="_blank" href="http://www.github.com/unl/UNL_UCBCN_System/wiki">Get Help!</a>
     </li>
 </ul>
 </div>

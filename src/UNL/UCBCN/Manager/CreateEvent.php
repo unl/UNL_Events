@@ -43,7 +43,7 @@ class CreateEvent extends PostHandler
             $this->flashNotice(parent::NOTICE_LEVEL_ALERT, 'Sorry! We couldn\'t create your event', $e->getMessage());
             throw $e;
         }
-        $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Event Created', 'Your event "' . $new_event->title . '"" has been created.');
+        $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Event Created', 'Your event "' . $new_event->title . '" has been created.');
 
         # redirect
         return '/manager/' . $this->calendar->shortname . '/';
