@@ -15,7 +15,7 @@
 <br>
 <div class="wdn-grid-set">
     <form id="create-event-form" action="" method="POST">
-        <div class="bp1-wdn-col-two-thirds">
+        <div class="bp3-wdn-col-two-thirds">
             <legend style="margin-top: 0">Event Details</legend>
             <fieldset>
                 <label for="title"><span class="required">*</span> Title</label>
@@ -199,7 +199,7 @@
 
         </div>
 
-        <div class="bp1-wdn-col-one-third">
+        <div class="bp3-wdn-col-one-third">
             <div class="visual-island">
                 <div class="vi-header">
                     <label>Sharing</label>

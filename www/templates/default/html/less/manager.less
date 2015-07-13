@@ -149,16 +149,30 @@ form.delete-form {
 	.medium-hidden {
 		display: none;
 	}
+
+	.medium-block {
+		display: block !important;
+	}
+
+	.date-time-select {
+		input {
+		    width: 100%;
+		}
+		select {
+		    width: 30%;
+		    text-align: center;
+		}
+	}
 }
 
 /* for mobile-ish sizes */
 @media (max-width: 479px) {
-	.small-block {
-		display: block !important;
-	}
-
 	.small-hidden {
 		display: none;
+	}
+
+	.small-block {
+		display: block !important;
 	}
 
 	.small-center {
@@ -173,13 +187,4 @@ form.delete-form {
 		word-break: break-word;
 	}
 
-	.date-time-select {
-		input {
-		    width: 100%;
-		}
-		select {
-		    width: 30%;
-		    text-align: center;
-		}
-	}
 }

@@ -48,7 +48,7 @@
 
 <div class="wdn-grid-set">
     <form id="edit-event-form" action="" method="POST">
-        <div class="bp1-wdn-col-two-thirds">
+        <div class="bp3-wdn-col-two-thirds">
             <fieldset style="margin-top: 0">
             	<legend style="margin-top: 0">Event Details</legend>
                 <label for="title"><span class="required">*</span> Title</label>
@@ -172,7 +172,7 @@
             <?php endif; ?>
             </fieldset>
         </div>
-        <div class="bp1-wdn-col-one-third">
+        <div class="bp3-wdn-col-one-third">
             <div class="visual-island">
                 <div class="vi-header">
                     <label>Sharing</label>
