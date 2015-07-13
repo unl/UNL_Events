@@ -56,7 +56,7 @@
 <form id="add-datetime-form" action="" method="POST">
     <fieldset>
         <label for="location"><span class="required">*</span> Location</label>
-        <select id="location" name="location" class="use-select2">
+        <select id="location" name="location" class="use-select2" style="width: 100%;">
             <?php if ($datetime->id != NULL): ?>
             <optgroup label="Current location">
                 <option selected="selected" value="<?php echo $datetime->location_id ?>"><?php echo $datetime->getLocation()->name; ?></option>
@@ -134,7 +134,7 @@
         <label for="start-date" ><span class="required">*</span> Start Date &amp; Time</label>
         <div class="date-time-select"><span class="wdn-icon-calendar"></span>
             <input id="start-date" value="<?php echo $start_date; ?>" 
-                name="start_date" type="text" class="datepicker" /> @
+                name="start_date" type="text" class="datepicker" /><br class="hidden small-block"> @
             <select id="start-time-hour" name="start_time_hour">
                 <option value=""></option>
             <?php for ($i = 1; $i <= 12; $i++) { ?>
@@ -162,7 +162,7 @@
         <label for="end-date">End Date &amp; Time (Optional)</label>
         <div class="date-time-select"><span class="wdn-icon-calendar"></span>
             <input id="end-date" value="<?php echo $end_date; ?>"
-                name="end_date" type="text" class="datepicker" /> @
+                name="end_date" type="text" class="datepicker" /><br class="hidden small-block"> @
             <select id="end-time-hour" name="end_time_hour">
                 <option value=""></option>
             <?php for ($i = 1; $i <= 12; $i++) { ?>
@@ -216,6 +216,7 @@
 
     <button class="wdn-button wdn-button-brand wdn-pull-left" type="submit">Submit</button>
 </form>
+<br>
 
 <script type="text/javascript">
 WDN.initializePlugin('jqueryui', [function() {  

@@ -28,7 +28,7 @@
                 <textarea id="description" name="description"><?php echo $event->description; ?> </textarea>
 
                 <label for="type">Type</label>
-                <select id="type" name="type" class="use-select2">
+                <select id="type" name="type" class="use-select2" style="width: 100%;">
                 <?php foreach ($context->getEventTypes() as $type) { ?>
                     <option <?php if ($post['type'] == $type->id) echo 'selected="selected"' ?> value="<?php echo $type->id ?>"><?php echo $type->name ?></option>
                 <?php } ?>
@@ -38,7 +38,7 @@
             <fieldset>
             <legend style="font-size: 1.6em">Location, Date, and Time</legend>
                 <label for="location"><span class="required">*</span> Location</label>
-                <select id="location" name="location" class="use-select2">
+                <select id="location" name="location" class="use-select2" style="width: 100%;">
                     <optgroup label="Your saved locations">
                         <?php foreach ($context->getUserLocations() as $location): ?>
                             <option <?php if ($post['location'] == $location->id) echo 'selected="selected"' ?> value="<?php echo $location->id ?>"><?php echo $location->name ?></option>
@@ -110,7 +110,7 @@
 
                 <label for="start-date" ><span class="required">*</span> Start Date &amp; Time</label>
                 <div class="date-time-select"><span class="wdn-icon-calendar"></span>
-                    <input id="start-date" name="start_date" type="text" class="datepicker" value="<?php echo $post['start_date']; ?>" /> @
+                    <input id="start-date" name="start_date" type="text" class="datepicker" value="<?php echo $post['start_date']; ?>" /><br class="hidden small-block"> @
                     <select id="start-time-hour" name="start_time_hour">
                         <option value=""></option>
                     <?php for ($i = 1; $i <= 12; $i++) { ?>
@@ -142,7 +142,7 @@
 
                 <label for="end-date">End Date &amp; Time (Optional)</label>
                 <div class="date-time-select"><span class="wdn-icon-calendar"></span>
-                    <input id="end-date" name="end_date" type="text" class="datepicker" value="<?php echo $post['end_date']; ?>" /> @
+                    <input id="end-date" name="end_date" type="text" class="datepicker" value="<?php echo $post['end_date']; ?>" /><br class="hidden small-block"> @
                     <select id="end-time-hour" name="end_time_hour">
                         <option value=""></option>
                     <?php for ($i = 1; $i <= 12; $i++) { ?>

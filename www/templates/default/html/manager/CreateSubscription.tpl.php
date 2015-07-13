@@ -18,26 +18,22 @@
 ?>
 
 <div class="wdn-grid-set">
-    <form action="<?php echo $context->subscription->id == NULL ? $context->subscription->getNewURL($context->calendar) : $context->subscription->getEditURL($context->calendar) ?>" method="POST">
-        <div class="wdn-col-two-thirds">
+    <form id="add-subscription" action="<?php echo $context->subscription->id == NULL ? $context->subscription->getNewURL($context->calendar) : $context->subscription->getEditURL($context->calendar) ?>" method="POST">
+        <div class="bp2-wdn-col-two-thirds">
             <h3><?php echo $context->subscription->id == NULL ? 'Add a Subscription' : 'Edit Subscription' ?></h3>
             <fieldset>
                 <label for="title">Title</label>
                 <input type="text" id="title" name="title" value="<?php echo $context->subscription->name ?>" />
 
                 <label for="calendars">Events Posted to Calendar(s):</label>
-                <select id="calendars" name="calendars[]" multiple="multiple" class="use-select2">
+                <select id="calendars" name="calendars[]" multiple="multiple" class="use-select2" style="width: 100%;">
                 <?php foreach($context->getAvailableCalendars() as $calendar): ?>
                     <option <?php if (in_array($calendar->id, $subbed_calendar_ids)) echo 'selected="selected"'; ?> value="<?php echo $calendar->id ?>"><?php echo $calendar->name ?></option>
                 <?php endforeach; ?>
                 </select>
             </fieldset>
-
-            <button class="wdn-button wdn-button-brand" type="submit">
-                <?php echo $context->subscription->id == NULL ? 'Add Subscription' : 'Save Subscription' ?>
-            </button>
         </div>
-        <div class="wdn-col-one-third">
+        <div class="bp2-wdn-col-one-third">
             <br>
             <div class="visual-island">
                 <p>
@@ -54,3 +50,7 @@
         </div>
     </form>
 </div>
+<button class="wdn-button wdn-button-brand" form="add-subscription" type="submit">
+    <?php echo $context->subscription->id == NULL ? 'Add Subscription' : 'Save Subscription' ?>
+</button>
+<br>

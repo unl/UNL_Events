@@ -25,9 +25,9 @@
 			<td>
 	        	<?php echo $user->uid; ?>
 	    	</td>
-	    	<td>
+	    	<td class="small-center">
 		        <a class="wdn-button wdn-button-brand" href="<?php echo $user->getEditPermissionsURL($context->calendar) ?>">Edit Permissions</a>
-		        |
+		        <span class="small-hidden">|</span><br class="hidden small-block" /><br class="hidden small-block" />
 		        <form method="post" action="<?php echo $user->getDeletePermissionsURL($context->calendar) ?>" class="delete-form">
 	                <input type="hidden" name="user_uid" value="<?php echo $user->uid ?>" />
 	                <button type="submit">Remove</button>
@@ -42,4 +42,4 @@
 
 <a href="<?php echo $base_manager_url . $context->calendar->shortname ?>/users/new/" 
 	class="wdn-button wdn-button-brand">Add User
-</a>
+</a><br>

@@ -66,10 +66,6 @@
                     <option <?php if ($event_type->id == $type->id) echo 'selected="selected"'; ?> value="<?php echo $type->id ?>"><?php echo $type->name ?></option>
                 <?php } ?>
                 </select>
-                <br><br>
-                <div>
-                    <button class="wdn-button wdn-button-brand wdn-pull-left" type="submit">Save Event</button>
-                </div>
             </fieldset>
             <fieldset class="event-datetimes">
 	            <legend>Location, Date, and Time</legend>
@@ -217,6 +213,10 @@
         </div>
     </form>
 </div>
+
+<div>
+    <button class="wdn-button wdn-button-brand wdn-pull-left" type="submit">Save Event</button>
+</div><br>
 
 <script type="text/javascript">
 require(['jquery'], function($) {

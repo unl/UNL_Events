@@ -1,53 +1,60 @@
-<?php echo $context->calendar->name ?> &gt; Recommend <?php echo $context->event->title; ?>
-
-<div class="wdn-grid-set">
-    <form action="" method="POST">
-        <div class="wdn-col-full">
-            <fieldset>
-                <div class="wdn-grid-set">
-                    <div class="wdn-col-one-half">
-                        &nbsp;
-                    </div>
-                    <div class="wdn-col-one-fourth">
-                        Pending
-                    </div>
-                    <div class="wdn-col-one-fourth">
-                        Approved
-                    </div>
-                </div>
-
-                <?php foreach($context->getRecommendableCalendars() as $id => $arr) { ?>
-                    <div class="wdn-grid-set">
-                        <?php $calendar = $arr['calendar']; ?>
-                        <div class="wdn-col-one-half">
-                            <?php echo $calendar->name; ?>
-                        </div>
-                        <div class="wdn-col-one-fourth">
-                        <?php if ($arr['status'] == 'pending') { ?>
-                            X
-                        <?php } else if ($arr['can_pending']) { ?>
-                            <input type="radio" name="calendar_<?php echo $calendar->id ?>" value="pending">
-                        <?php } else { ?>
-                            &nbsp;
-                        <?php } ?>
-                        </div>
-
-                        <div class="wdn-col-one-fourth">
-                        <?php if ($arr['status'] == 'posted' || $arr['status'] == 'archived') { ?>
-                            X
-                        <?php } else if ($arr['can_posted']) { ?>
-                            <input type="radio" name="calendar_<?php echo $calendar->id ?>" value="posted">
-                        <?php } else { ?>
-                            &nbsp;
-                        <?php } ?>
-                        </div>
-                    </div>
+<?php
+    $crumbs = new stdClass;
+    $crumbs->crumbs = array(
+        "Events Manager" => "/manager",
+        $context->calendar->name => $context->calendar->getManageURL(),
+        'Recommend ' . $context->event->title => NULL
+    );
+    echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
+?>
+<h3>
+<?php echo 'Recommend ' . $context->event->title; ?>
+</h3>
+<form action="" method="POST">
+    <table class="recommend-list">
+        <thead>
+            <th>
+                &nbsp;
+            </th>
+            <th class="center">
+                Pending
+            </th>
+            <th class="center">
+                Approved
+            </th>
+        </thead>
+        <tbody>
+        <?php foreach($context->getRecommendableCalendars() as $id => $arr): ?>
+            <tr>
+                <?php $calendar = $arr['calendar']; ?>
+                <td style="word-break: break-word;">
+                    <?php echo $calendar->name; ?>
+                </td>
+                <td class="center">
+                <?php if ($arr['status'] == 'pending') { ?>
+                    <img src="<?php echo $base_frontend_url ?>templates/default/html/images/checkmark-16.png">
+                <?php } else if ($arr['can_pending']) { ?>
+                    <input type="radio" name="calendar_<?php echo $calendar->id ?>" value="pending">
+                <?php } else { ?>
+                    &nbsp;
                 <?php } ?>
-            </fieldset>
+                </td>
 
-            <button class="wdn-button wdn-button-brand" type="submit">
-                Submit
-            </button>
-        </div>
-    </form>
-</div>
+                <td class="center">
+                <?php if ($arr['status'] == 'posted' || $arr['status'] == 'archived') { ?>
+                    <img src="<?php echo $base_frontend_url ?>templates/default/html/images/checkmark-16.png">
+                <?php } else if ($arr['can_posted']) { ?>
+                    <input type="radio" name="calendar_<?php echo $calendar->id ?>" value="posted">
+                <?php } else { ?>
+                    &nbsp;
+                <?php } ?>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+    <br>
+    <button class="wdn-button wdn-button-brand" type="submit">
+        Submit
+    </button>
+</form>

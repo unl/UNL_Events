@@ -26,9 +26,9 @@
 				<td>
 		        	<?php echo $subscription->name; ?>
 				</td>
-				<td>
+				<td class="small-center">
 			        <a class="wdn-button wdn-button-brand" href="<?php echo $subscription->getEditURL() ?>">Edit</a>
-			        |
+			        <span class="small-hidden">|</span><br class="hidden small-block"><br class="hidden small-block">
 			        <form method="POST" action="<?php echo $subscription->getDeleteURL() ?>" class="delete-form">
 		                <input type="hidden" name="subscription_id" value="<?php echo $subscription->id ?>" />
 		                <button type="submit">Delete</button>
@@ -45,3 +45,4 @@
 <a href="<?php echo $base_manager_url . $context->calendar->shortname ?>/subscriptions/new/" 
 	class="wdn-button wdn-button-brand">+ Add a Subscription
 </a>
+<br>
