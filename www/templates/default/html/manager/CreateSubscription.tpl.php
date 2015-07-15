@@ -16,11 +16,10 @@
     );
     echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
 ?>
-
-<div class="wdn-grid-set">
-    <form id="add-subscription" action="<?php echo $context->subscription->id == NULL ? $context->subscription->getNewURL($context->calendar) : $context->subscription->getEditURL($context->calendar) ?>" method="POST">
+<h1 class="wdn-brand"><?php echo $context->subscription->id == NULL ? 'Add a Subscription' : 'Edit Subscription' ?></h1>
+<form id="add-subscription" action="<?php echo $context->subscription->id == NULL ? $context->subscription->getNewURL($context->calendar) : $context->subscription->getEditURL($context->calendar) ?>" method="POST">
+    <div class="wdn-grid-set" class="clearfix">
         <div class="bp2-wdn-col-two-thirds">
-            <h1 class="wdn-brand"><?php echo $context->subscription->id == NULL ? 'Add a Subscription' : 'Edit Subscription' ?></h1>
             <fieldset>
                 <label for="title">Title</label>
                 <input type="text" id="title" name="title" value="<?php echo $context->subscription->name ?>" />
@@ -48,9 +47,10 @@
                 </p>
             </div>
         </div>
-    </form>
-</div>
-<button class="wdn-button wdn-button-brand" form="add-subscription" type="submit">
-    <?php echo $context->subscription->id == NULL ? 'Add Subscription' : 'Save Subscription' ?>
-</button>
+    </div>
+    <button class="wdn-button wdn-button-brand" form="add-subscription" type="submit">
+        <?php echo $context->subscription->id == NULL ? 'Add Subscription' : 'Save Subscription' ?>
+    </button>
+</form>
+
 <br>

@@ -51,7 +51,7 @@ class DeleteDateTime extends PostHandler
 
         $this->event_datetime->delete();
 
-        $this->flashNotice(NOTICE_LEVEL_SUCCESS, 'Location/Date/Time Deleted', 'A location/date/time for your event ' . $this->event->title . ' has been deleted.');
+        $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Location/Date/Time Deleted', 'A location/date/time for your event ' . $this->event->title . ' has been deleted.');
 
         // Redirect to the event edit page
         return $this->event->getEditURL($this->calendar);

@@ -9,6 +9,11 @@
 ?>
 
 <?php if (count($context->getSubscriptions()) > 0): ?>
+<?php foreach($context->getSubscriptions() as $subscription): ?>
+<form id="delete-subscription-<?php echo $subscription->id ?>" method="POST" action="<?php echo $subscription->getDeleteURL() ?>" class="delete-form">
+    <input type="hidden" name="subscription_id" value="<?php echo $subscription->id ?>" />
+</form>
+<?php endforeach; ?>
 <h1 class="wdn-brand">
 	Current Subscriptions
 </h1>
@@ -26,13 +31,10 @@
 				<td>
 		        	<?php echo $subscription->name; ?>
 				</td>
-				<td class="small-center">
+				<td class="small-center table-actions">
 			        <a class="wdn-button wdn-button-brand" href="<?php echo $subscription->getEditURL() ?>">Edit</a>
 			        <span class="small-hidden">|</span><br class="hidden small-block"><br class="hidden small-block">
-			        <form method="POST" action="<?php echo $subscription->getDeleteURL() ?>" class="delete-form">
-		                <input type="hidden" name="subscription_id" value="<?php echo $subscription->id ?>" />
-		                <button type="submit">Delete</button>
-		            </form>
+		            <button class="wdn-button wdn-button-triad" form="delete-subscription-<?php echo $subscription->id ?>" type="submit">Delete</button>
 				</td>
 			</tr>
 	    <?php endforeach; ?>

@@ -25,7 +25,7 @@
 			<td>
 	        	<?php echo $user->uid; ?>
 	    	</td>
-	    	<td class="small-center">
+	    	<td class="small-center table-actions">
 		        <a class="wdn-button wdn-button-brand" href="<?php echo $user->getEditPermissionsURL($context->calendar) ?>">Edit Permissions</a>
 		        <span class="small-hidden">|</span><br class="hidden small-block" /><br class="hidden small-block" />
 		        <form method="post" action="<?php echo $user->getDeletePermissionsURL($context->calendar) ?>" class="delete-form">

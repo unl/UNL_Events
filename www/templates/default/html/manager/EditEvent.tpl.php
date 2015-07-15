@@ -46,8 +46,8 @@
     <?php endif; ?>
 <?php endforeach; ?>
 
-<div class="wdn-grid-set">
-    <form id="edit-event-form" action="" method="POST">
+<form id="edit-event-form" action="" method="POST" class="clearfix">
+    <div class="wdn-grid-set">
         <div class="bp3-wdn-col-two-thirds">
             <fieldset style="margin-top: 0">
             	<legend style="margin-top: 0">Event Details</legend>
@@ -211,12 +211,10 @@
                 </p>
             </div>
         </div>
-    </form>
-</div>
-
-<div>
+    </div>
     <button class="wdn-button wdn-button-brand wdn-pull-left" type="submit">Save Event</button>
-</div><br>
+</form>
+<br>
 
 <script type="text/javascript">
 require(['jquery'], function($) {
