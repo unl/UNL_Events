@@ -63,7 +63,7 @@
                 <label for="type">Type</label>
                 <select id="type" name="type">
                 <?php foreach ($context->getEventTypes() as $type) { ?>
-                    <option <?php if ($event_type->id == $type->id) echo 'selected="selected"'; ?> value="<?php echo $type->id ?>"><?php echo $type->name ?></option>
+                    <option <?php if ($event_type != NULL && $event_type->id == $type->id) echo 'selected="selected"'; ?> value="<?php echo $type->id ?>"><?php echo $type->name ?></option>
                 <?php } ?>
                 </select>
             </fieldset>

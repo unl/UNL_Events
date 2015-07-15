@@ -42,9 +42,13 @@
 	</table>
 </div>
 <br>
+<?php else: ?>
+	<br>
+	<label>There are currently no subscriptions on this calendar.</label>
+	<br>
 <?php endif; ?>
 
-<a href="<?php echo $base_manager_url . $context->calendar->shortname ?>/subscriptions/new/" 
-	class="wdn-button wdn-button-brand">+ Add a Subscription
-</a>
 <br>
+<a href="<?php echo $base_manager_url . $context->calendar->shortname ?>/subscriptions/new/" 
+	class="wdn-button wdn-button-brand">Add Subscription
+</a>

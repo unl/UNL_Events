@@ -101,8 +101,18 @@ class EditEvent extends PostHandler
 
         # update the event type record
         $event_has_type = EventType::getByEvent_ID($this->event->id);
-        $event_has_type->eventtype_id = $post_data['type'];
-        $event_has_type->update();
+
+        if ($event_has_type !== FALSE) {
+            $event_has_type->eventtype_id = $post_data['type'];
+            $event_has_type->update();
+        } else {
+            # create the type
+            $event_has_type = new EventType;
+            $event_has_type->event_id = $this->event->id;
+            $event_has_type->eventtype_id = $post_data['type'];
+
+            $event_has_type->insert();
+        }
 
         # send to main calendar if selected and not already on main calendar
         # and box is checked
