@@ -35,8 +35,8 @@
                 </select>
             </fieldset>
 
-            <fieldset>
             <legend style="font-size: 1.6em">Location, Date, and Time</legend>
+            <fieldset>
                 <label for="location"><span class="required">*</span> Location</label>
                 <select id="location" name="location" class="use-select2" style="width: 100%;">
                     <optgroup label="Your saved locations">
