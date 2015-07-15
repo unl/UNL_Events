@@ -6,7 +6,7 @@
 	float: right;
 }
 
-.toolbox,.visual-island {
+.toolbox, .visual-island {
     background: #f9f8f5;
     margin-bottom: 1em;
     word-break: break-word;
@@ -87,10 +87,8 @@ legend {
 
 #breadcrumbs {
 	background: #474746;
-	padding-left: 1rem;
-	padding-top: 0;
-	padding-right: 0;
-	padding-bottom: 0;
+	padding: 0 1rem;
+	border-top: 1px solid #d5d5d2;
 	width: auto;
 	ul {
 		padding: .5em 0;
@@ -98,13 +96,13 @@ legend {
 	}
 	li {
 		color: #fff;
+		&:after {
+			vertical-align: bottom;
+		}
 	}
 	a {
 		color: #fff;
 		border-bottom: 0;
-		&:hover {
-			color: #fff;
-		}
 	}
 }
 
@@ -144,10 +142,7 @@ legend {
 }
 
 
-form.delete-form {
-    display: inline;
-}
-form {
+.events-manager form {
 	padding: 1em;
 
 	fieldset {
@@ -159,9 +154,17 @@ form {
 	    font-size: 2em;
 	    margin-top: 0.5em;
 	    padding-bottom: 0;
-
+	}
+	&.delete-form {
+	    display: inline;
+	    padding: 0;
 	}
 }
+
+#wdn_navigation_bar {
+	display: none;
+}
+
 /* for mobile-tablet-ish sizes */
 @media (max-width: 767px) {
 	.wdn_tabs li {

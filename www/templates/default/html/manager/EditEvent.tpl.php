@@ -33,12 +33,12 @@
 <br>
 
 <?php foreach($event->getDatetimes() as $datetime) : ?>
-    <form id="delete-datetime-<?php echo $datetime->id; ?>" class="delete-datetime" method="POST" action="<?php echo $datetime->getDeleteURL($context->calendar) ?>" class="delete-form hidden">
+    <form id="delete-datetime-<?php echo $datetime->id; ?>" class="delete-datetime delete-form" method="POST" action="<?php echo $datetime->getDeleteURL($context->calendar) ?>" class="delete-form hidden">
         <input type="hidden" name="event_datetime_id" value="<?php echo $datetime->id ?>" />
     </form>
     <?php if ($datetime->recurringtype != 'none') : ?>
         <?php foreach ($datetime->getRecurrences() as $recurring_date) : ?>
-            <form id="delete-datetime-<?php echo $datetime->id; ?>-recurrence-<?php echo $recurring_date->recurrence_id ?>" class="delete-datetime-recurrence" method="POST" action="<?php echo $datetime->getDeleteRecurrenceURL($context->calendar, $recurring_date->recurrence_id) ?>" class="delete-form hidden">
+            <form id="delete-datetime-<?php echo $datetime->id; ?>-recurrence-<?php echo $recurring_date->recurrence_id ?>" class="delete-datetime-recurrence delete-form" method="POST" action="<?php echo $datetime->getDeleteRecurrenceURL($context->calendar, $recurring_date->recurrence_id) ?>" class="delete-form hidden">
                 <input type="hidden" name="event_datetime_id" value="<?php echo $datetime->id ?>" />
                 <input type="hidden" name="recurrence_id" value="<?php echo $recurring_date->recurrence_id ?>" />
             </form>

@@ -11,8 +11,8 @@ if (!$context->getCalendar()) {
     if ($context->getCalendar()->id != UNL\UCBCN\Frontend\Controller::$default_calendar_id) {
         $title .= ' | '.$context->getCalendar()->name.' ';
     }
-    $title .= ' | Manger | Events';
-    $site_title = $context->getCalendar()->name . ' Events';
+    $title .= ' | Manager | Events';
+    $site_title = $context->getCalendar()->name . ' Events Manager';
 }
 $view_class = str_replace('\\', '_', strtolower($context->options['model']));
 
@@ -34,12 +34,6 @@ $page->head .= '<script type="text/javascript">WDN.initializePlugin("notice");</
 
 //other
 $page->leftRandomPromo = '';
-$page->breadcrumbs = '
-<ul>
-    <li><a href="http://www.unl.edu/">UNL</a></li>
-    <li><a href="' . $base_frontend_url .'">UNL Events</a></li>
-    <li>Manage Events</li>
-</ul>';
 //$page->navlinks = $savvy->render($context, 'Navigation.tpl.php');
 $savvy->addGlobal('page', $page);
 
@@ -50,7 +44,7 @@ if ($context->output->getRawObject() instanceof Exception) {
 }
 
 $page->maincontentarea = '
-<div class="wdn-band view-' . $view_class . ' band-results">
+<div class="wdn-band view-' . $view_class . ' events-manager">
     <div class="wdn-inner-wrapper">
         <section class="wdn-grid-set reverse">
             <div class="bp2-wdn-col-three-fourths">

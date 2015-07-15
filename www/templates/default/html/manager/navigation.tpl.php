@@ -5,7 +5,7 @@
 
 <?php if ($calendar != NULL): ?>
 <div class="toolbox">
-    <h3 class="wdn-brand"><?php echo $calendar->name; ?></h3>
+    <h3><?php echo $calendar->name; ?></h3>
     <div class="tools">
         <ul>
             <li><a href="<?php echo $calendar->getManageURL() ?>">Manage Calendar</a></li>
@@ -32,7 +32,7 @@
 <?php endif; ?>
 
 <div class="toolbox">
-    <h3 class="wdn-brand">Tools</h3>
+    <h3>Tools</h3>
     <div class="tools">
         <ul>
             <li>
@@ -49,7 +49,7 @@
 </div>
 
 <div class="toolbox">
-    <h3 class="wdn-brand">Your Calendars</h3>
+    <h3>Your Calendars</h3>
     <div class="tools">
         <ul>
             <?php foreach ($context->getCalendars() as $calendar): ?>

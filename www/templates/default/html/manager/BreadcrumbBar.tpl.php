@@ -8,7 +8,7 @@
 			<?php if ($url != NULL): ?>
 				<a href="<?php echo $url; ?>"><?php echo $text ?></a>
 			<?php else: ?>
-				<?php echo $text ?>
+				<a><?php echo $text ?></a>
 			<?php endif; ?>
 		</li>
 	<?php endforeach; ?>
