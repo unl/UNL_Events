@@ -58,7 +58,7 @@ class Auth {
         if (!$user = User::getByUid($uid)) {
             # create an account for the user
             $account = new Account;
-            $account->name = ucfirst($uid).'\'s Event Publisher';
+            $account->name = $uid . '\'s Event Publisher';
             $account->sponsor_id = 1;
             $account->datecreated = date('Y-m-d H:i:s');
             $account->datelastupdated = date('Y-m-d H:i:s');
@@ -76,7 +76,7 @@ class Auth {
 
             # create a base calendar for this user
             $calendar = new Calendar;
-            $calendar->name = ucfirst($user->uid).'\'s Event Publisher';
+            $calendar->name = $user->uid .'\'s Event Publisher';
             $calendar->shortname = $user->uid;
             $calendar->uidcreated = $user->uid;
             $calendar->uidlastupdated = $user->uid;
