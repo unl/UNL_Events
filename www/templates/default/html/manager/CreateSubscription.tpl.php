@@ -35,7 +35,7 @@
         <div class="bp2-wdn-col-one-third">
             <br>
             <div class="visual-island">
-                <div class="details">
+                <div class="details top-border">
                     <label>Automatically approve events?</label>
                     <br>
                     <br>
