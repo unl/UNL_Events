@@ -19,11 +19,14 @@
     margin-bottom: 1em;
     word-break: break-word;
 	padding: 0 !important;
-	.tools {
+	.tools, .details {
 		padding: 1em;
 		border-left: 1px solid #d5d5d2;
 		border-right: 1px solid #d5d5d2;
 		border-bottom: 1px solid #d5d5d2;
+		&.top-border {
+			border-top: 1px solid #d5d5d2;
+		}
 	}
     h1, h2, h3, h4, h5, h6, .vi-header{
 		display: block;
@@ -59,18 +62,6 @@
 	a, button {
 		vertical-align: middle;
 	}
-}
-
-legend {
-	display: block;
-	font-size: 1.25em !important;
-	margin-bottom: 1em;
-	border-bottom: 1px solid #474746;
-	font-family: "Gotham SSm A","Gotham SSm B",Verdana,"Verdana Ref",Geneva,Tahoma,"Lucida Grande","Lucida Sans Unicode","Lucida Sans","DejaVu Sans","Bitstream Vera Sans","Liberation Sans",sans-serif;
-	width: 100%;
-	text-transform: uppercase;
-	font-weight: 400;
-	font-style: normal;
 }
 
 .date-time-select {
@@ -166,9 +157,9 @@ legend {
 		margin-bottom: 1em;
 	}
 	legend {
-	    font-weight: 300;
-	    font-size: 2em;
+	    font-size: 1.5em;
 	    margin-top: 0.5em;
+	    margin-bottom: 1em;
 	    padding-bottom: 0;
 	}
 	&.delete-form {
@@ -177,6 +168,9 @@ legend {
 	}
 	input {
 	  	word-break: normal;
+	}
+	textarea {
+		resize: vertical;
 	}
 }
 

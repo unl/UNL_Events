@@ -25,7 +25,7 @@
                 <input type="text" id="subtitle" name="subtitle" value="<?php echo $event->subtitle; ?>"  />
 
                 <label for="description">Description</label>
-                <textarea id="description" name="description"><?php echo $event->description; ?> </textarea>
+                <textarea rows="4" id="description" name="description"><?php echo $event->description; ?> </textarea>
 
                 <label for="type">Type</label>
                 <select id="type" name="type" class="use-select2" style="width: 100%;">
@@ -204,7 +204,7 @@
                 <div class="vi-header">
                     <label>Sharing</label>
                 </div>
-                <p>
+                <div class="details">
                     <input type="radio" value="private" name="private_public" id="sharing-private" <?php if ($post['private_public'] != 'public') echo 'checked="checked"'; ?>> 
                     <label for="sharing-private">Private</label> 
                     <br>
@@ -214,8 +214,8 @@
                     <br>
 
                     <input <?php if (isset($post['send_to_main'])) echo 'checked="checked"'; ?> type="checkbox" name="send_to_main" id="send-to-main"> 
-                    <label for="send-to-main">Consider for main calendar</label>
-                </p>
+                    <label for="send-to-main">Consider for main UNL calendar</label>
+                </div>
             </div>
 
             <div class="visual-island">
@@ -223,7 +223,7 @@
                     <label>Contact Info</label>
                 </div>
 
-                <p>
+                <div class="details">
                     <label for="contact-name">Name</label>
                     <input type="text" id="contact-name" name="contact_name" value="<?php echo $post['contact_name'] ?>" />
 
@@ -235,7 +235,7 @@
 
                     <label for="website">Event Website</label>
                     <input type="text" id="website" name="website" value="<?php echo $event->webpageurl ?>" />
-                </p>
+                </div>
             </div>
         </div>
         <div class="bp1-wdn-col-two-thirds">

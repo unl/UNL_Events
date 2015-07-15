@@ -35,7 +35,7 @@
         <div class="bp2-wdn-col-one-third">
             <br>
             <div class="visual-island">
-                <p>
+                <div class="details">
                     <label>Automatically approve events?</label>
                     <br>
                     <br>
@@ -44,7 +44,7 @@
                     <br>
                     <input type="radio" value="yes" name="auto_approve" id="auto-approve-yes"> 
                     <label for="auto-approve-yes">Yes (send to upcoming)</label> 
-                </p>
+                </div>
             </div>
         </div>
     </div>
