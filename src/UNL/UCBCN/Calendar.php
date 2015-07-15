@@ -54,34 +54,13 @@ class Calendar extends Record
     public $recommendationswithinaccount;    // int(1)
     public $theme;                           // string(255)
 
+    const STATUS_PENDING  = 'pending';
+    const STATUS_POSTED   = 'posted';
+    const STATUS_ARCHIVED = 'archived';
+    
     public static function getTable()
     {
         return 'calendar';
-    }
-
-    function table()
-    {
-        return array(
-            'id'=>129,
-            'account_id'=>129,
-            'name'=>2,
-            'shortname'=>2,
-            'website'=>2,
-            'eventreleasepreference'=>2,
-            'calendardaterange'=>1,
-            'formatcalendardata'=>66,
-            'uploadedcss'=>66,
-            'uploadedxsl'=>66,
-            'emaillists'=>66,
-            'calendarstatus'=>2,
-            'datecreated'=>14,
-            'uidcreated'=>2,
-            'datelastupdated'=>14,
-            'uidlastupdated'=>2,
-            'externalforms'=>2,
-            'recommendationswithinaccount'=>17,
-        	'theme'=>2,
-        );
     }
 
     function keys()
@@ -91,20 +70,8 @@ class Calendar extends Record
         );
     }
     
-    function sequenceKey()
-    {
-        return array('id',true);
-    }
-    
-    function links()
-    {
-        return array('account_id'     => 'account:id',
-                     'uidcreated'     => 'users:uid',
-                     'uidlastupdated' => 'users:uid');
-    }
-
     public function getFrontendURL() {
-        return FrontendController::$url . '?calendar_id=' . $this->id;
+        return FrontendController::$url . $this->shortname . "/";
     }
 
     public function getManageURL() {
@@ -125,6 +92,10 @@ class Calendar extends Record
 
     public function getUsersURL() {
         return ManagerController::$url . $this->shortname . '/users/';
+    }
+
+    public function getBulkActionURL() {
+        return $this->getManageURL() . 'bulk/';
     }
 
     public function getUsers()
@@ -233,9 +204,14 @@ class Calendar extends Record
     /**
      * Gets events related to this calendar
      */
-    public function getEvents($status = 'all') {
+    public function getEvents($status = 'all', $limit = -1, $offset = 0) 
+    {
         # create options for event listing class
-        $options = array('calendar' => $this->shortname);
+        $options = array(
+            'calendar' => $this->shortname,
+            'limit' => $limit,
+            'offset' => $offset
+        );
 
         if ($status != 'all') {
             $options['status'] = $status;
@@ -246,12 +222,23 @@ class Calendar extends Record
         return $events;
     }
 
-    public function getSubscriptions() {
+    public function getSubscriptions() 
+    {
         return new Calendar\Subscriptions(array('calendar_id' => $this->id));
     }
 
-    public function getSubscriptionsToThis() {
+    public function getSubscriptionsToThis() 
+    {
         return new Calendar\Subscriptions(array('subbed_calendar_id' => $this->id));
+    }
+
+    /**
+     * @param Event $event
+     * @return false|CalendarHasEvent
+     */
+    public function hasEvent(Event $event)
+    {
+        return CalendarHasEvent::getByIds($this->id, $event->id);
     }
 
     /**

@@ -39,7 +39,8 @@ class EventListing extends RecordList
     public function getSQL() 
     {
         if (array_key_exists('event_id', $this->options)) {
-            return 'SELECT id FROM eventdatetime WHERE event_id = ' . (int)($this->options['event_id']) . ';';
+            return 'SELECT id FROM eventdatetime WHERE event_id = ' . 
+            (int)($this->options['event_id']) . ';';
         } else {
             return parent::getSQL();
         }

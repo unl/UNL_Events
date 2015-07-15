@@ -7,9 +7,6 @@ class Occurrences extends RecordList
 {
     function __construct($options = array())
     {
-        if (!isset($options['event_id'])) {
-            throw new RuntimeException('You must pass an event_id', 500);
-        }
         parent::__construct($options);
     }
 
@@ -26,9 +23,13 @@ class Occurrences extends RecordList
         if (array_key_exists('recurring_only', $this->options)) {
             return 'SELECT id FROM eventdatetime WHERE ' .
                 'event_id = ' . (int)($this->options['event_id']) . ' AND recurringtype != "none";';
-        } else {
+        } else if (array_key_exists('event_id', $this->options)) {
             return 'SELECT id FROM eventdatetime WHERE ' .
                 'event_id = ' . (int)($this->options['event_id']) . ';';
+        } else if (array_key_exists('all_recurring', $this->options)) {
+            return 'SELECT id FROM eventdatetime WHERE recurringtype != "none";';
+        } else {
+            return parent::getSQL();
         }
     }
 }

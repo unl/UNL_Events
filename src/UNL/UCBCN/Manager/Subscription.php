@@ -3,6 +3,7 @@ namespace UNL\UCBCN\Manager;
 
 use UNL\UCBCN\Calendar;
 use UNL\UCBCN\Calendar\Subscriptions as SubscriptionList;
+use UNL\UCBCN\Permission;
 
 class Subscription {
 	public $options = array();
@@ -15,6 +16,11 @@ class Subscription {
 
         if ($this->calendar === FALSE) {
             throw new \Exception("That calendar could not be found.", 500);
+        }
+
+        $user = Auth::getCurrentUser();
+        if (!$user->hasPermission(Permission::CALENDAR_EDIT_SUBSCRIPTIONS_ID, $this->calendar->id)) {
+            throw new \Exception("You do not have permission to edit subscriptions on this calendar.", 403);
         }
     }
 

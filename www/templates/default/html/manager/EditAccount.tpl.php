@@ -1,13 +1,23 @@
+<?php
+    $crumbs = new stdClass;
+    $crumbs->crumbs = array(
+        "Events Manager" => "/manager",
+        "Edit Account Info" => NULL
+    );
+    echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
+?>
+<h1 class="wdn-brand">Edit Account Info</h1>
+
 <form action="" method="POST">
     <fieldset>
         <label for="name">Account Name</label>
         <input type="text" id="name" name="name" value="<?php echo $context->account->name ?>" />
 
         <label for="address-1">Address</label>
-        <input type="text" id="address-1" name="address_1" value="<?php echo $context->account->streetaddress1 ?>" />
+        <input type="text" id="address-1" name="streetaddress1" value="<?php echo $context->account->streetaddress1 ?>" />
 
         <label for="address-2">Address 2</label>
-        <input type="text" id="address-2" name="address_2" value="<?php echo $context->account->streetaddress2 ?>" />
+        <input type="text" id="address-2" name="streetaddress2" value="<?php echo $context->account->streetaddress2 ?>" />
 
         <label for="city">City</label>
         <input type="text" id="city" name="city" value="<?php echo $context->account->city ?>" />

@@ -2,11 +2,12 @@
 namespace UNL\UCBCN\Manager;
 
 use UNL\UCBCN\Calendar;
+use UNL\UCBCN\Permission;
 use UNL\UCBCN\Calendars;
 use UNL\UCBCN\Calendar\Subscription;
 use UNL\UCBCN\Calendar\SubscriptionHasCalendar;
 
-class CreateSubscription
+class CreateSubscription extends PostHandler
 {
     public $options = array();
     public $calendar;
@@ -18,26 +19,12 @@ class CreateSubscription
         $this->calendar = Calendar::getByShortname($this->options['calendar_shortname']);
 
         if ($this->calendar === FALSE) {
-            throw new \Exception("That calendar could not be found.", 500);
+            throw new \Exception("That calendar could not be found.", 404);
         }
 
-        # check if we are posting to this controller
-        if (!empty($_POST)) {
-            if (array_key_exists('subscription_id', $this->options)) {
-                # we are editing an existing subscription
-                $this->subscription = Subscription::getById($this->options['subscription_id']);
-
-                if ($this->subscription == FALSE) {
-                    throw new \Exception("That subscription could not be found.", 500);
-                }
-
-                $this->updateSubscription($_POST);
-            } else {
-                # we are creating a new subscription
-                $this->subscription = $this->createSubscription($_POST);
-            }
-
-            header('Location: /manager/' . $this->calendar->shortname . '/subscriptions/');
+        $user = Auth::getCurrentUser();
+        if (!$user->hasPermission(Permission::CALENDAR_EDIT_SUBSCRIPTIONS_ID, $this->calendar->id)) {
+            throw new \Exception("You do not have permission to edit subscriptions on this calendar.", 403);
         }
 
         if (array_key_exists('subscription_id', $this->options)) {
@@ -45,11 +32,33 @@ class CreateSubscription
             $this->subscription = Subscription::getById($this->options['subscription_id']);
 
             if ($this->subscription == FALSE) {
-                throw new \Exception("That subscription could not be found.", 500);
+                throw new \Exception("That subscription could not be found.", 404);
             }
         } else {
             $this->subscription = new Subscription;
         }
+    }
+
+    public function handlePost(array $get, array $post, array $files)
+    {
+        if (array_key_exists('subscription_id', $this->options)) {
+            # we are editing an existing subscription
+            $this->subscription = Subscription::getById($this->options['subscription_id']);
+
+            if ($this->subscription == FALSE) {
+                throw new \Exception("That subscription could not be found.", 404);
+            }
+
+            $this->updateSubscription($post);
+            $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Subscription Updated', 'Your subscription "' . $this->subscription->name . '" has been updated.');
+        } else {
+            # we are creating a new subscription
+            $this->subscription = $this->createSubscription($post);
+            $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Subscription Created', 'Your subscription "' . $this->subscription->name . '" has been created.');
+        }
+
+        //redirect
+        return '/manager/' . $this->calendar->shortname . '/subscriptions/';
     }
 
     public function getAvailableCalendars() 
@@ -61,6 +70,9 @@ class CreateSubscription
     {
         $subscription = new Subscription;
         $subscription->name = $post_data['title'];
+        if (empty(trim($subscription->name))) {
+            $subscription->name = 'Subscription: ' . count($post_data['calendars']) . ' Calendar' . (count($post_data['calendars']) == 1 ? '' : 's');
+        }
         $subscription->automaticapproval = $post_data['auto_approve'] == 'yes' ? 1 : 0;
         $subscription->calendar_id = $this->calendar->id;
 
@@ -82,6 +94,11 @@ class CreateSubscription
 
     private function updateSubscription($post_data)
     {
+        $this->subscription->name = $post_data['title'];
+        if (empty(trim($this->subscription->name))) {
+            $this->subscription->name = 'Subscription: ' . count($post_data['calendars']) . ' Calendar' . (count($post_data['calendars']) == 1 ? '' : 's');
+        }
+
         # see what calendars were removed from the subscription first...if they
         # are not present, remove the record from sub_has_calendar
         $current_subbed_calendars = $this->subscription->getSubscribedCalendars();
@@ -109,11 +126,12 @@ class CreateSubscription
             }
         }
 
+        $this->subscription->save();
+
         # process the subscription again. Events that are currently already in there
         # from the subscription will not be added twice
         $this->subscription->process();
 
         return $this->subscription;
     }
-
 }

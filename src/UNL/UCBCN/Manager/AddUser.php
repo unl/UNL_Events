@@ -3,10 +3,11 @@ namespace UNL\UCBCN\Manager;
 
 use UNL\UCBCN\User;
 use UNL\UCBCN\Calendar;
+use UNL\UCBCN\Permission;
 use UNL\UCBCN\Permissions;
 use UNL\UCBCN\Manager\Controller;
 
-class AddUser
+class AddUser extends PostHandler
 {
     public $options = array();
     public $calendar;
@@ -18,21 +19,12 @@ class AddUser
         $this->calendar = Calendar::getByShortname($this->options['calendar_shortname']);
 
         if ($this->calendar === FALSE) {
-            throw new \Exception("That calendar could not be found.", 500);
+            throw new \Exception("That calendar could not be found.", 404);
         }
 
-        # check if we are posting to this controller
-        if (!empty($_POST)) {
-            # check if we are looking to edit a user's permissions
-            if (array_key_exists('user_uid', $this->options)) {
-                $this->user = User::getByUID($this->options['user_uid']);
-                $this->updateUser($_POST);
-            } else {
-                # we are adding a new user
-                $this->user = $this->addUser($_POST);
-            }
-
-            Controller::redirect($this->calendar->getUsersURL());
+        $user = Auth::getCurrentUser();
+        if (!$user->hasPermission(Permission::CALENDAR_EDIT_PERMISSIONS_ID, $this->calendar->id)) {
+            throw new \Exception("You do not have permission to edit user permissions on this calendar.", 403);
         }
 
         # check if we are looking to edit a user's permissions
@@ -40,12 +32,29 @@ class AddUser
             $this->user = User::getByUID($this->options['user_uid']);
 
             if ($this->user === FALSE) {
-                throw new \Exception("That user could not be found.", 500);
+                throw new \Exception("That user could not be found.", 404);
             }
         } else {
             # we are adding a new user to the calendar
             $this->user = NULL;
         }
+    }
+
+    public function handlePost(array $get, array $post, array $files)
+    {
+        // check if we are looking to edit a user's permissions
+        if (array_key_exists('user_uid', $this->options)) {
+            $this->user = User::getByUID($this->options['user_uid']);
+            $this->updateUser($post);
+            $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'User Permissions Updated', 'User "' . $this->user->uid . '"\'s permissions have been updated.');
+        } else {
+            # we are adding a new user
+            $this->user = $this->addUser($post);
+            $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'User Added', 'User "' . $this->user->uid . '" has been added to the calendar with the permissions you have specified.');
+        }
+
+        //redirect
+        return $this->calendar->getUsersURL();
     }
 
     public function getAvailableUsers()
@@ -99,5 +108,4 @@ class AddUser
 
         return $this->user;
     }
-
 }

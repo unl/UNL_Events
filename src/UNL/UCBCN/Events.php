@@ -46,10 +46,34 @@ class Events extends RecordList
                 INNER JOIN calendar ON calendar_has_event.calendar_id = calendar.id
                 WHERE calendar.shortname = "' . self::escapeString($this->options['calendar']) . '"';
             if (array_key_exists('status', $this->options)) {
-                $sql .= ' AND calendar_has_event.status = "' . self::escapeString($this->options['status']) .'"';
+                $sql .= ' AND calendar_has_event.status = "' . self::escapeString($this->options['status']) . '"';
             }
 
+            $sql .= ' ORDER BY event.id DESC';
             $sql .= ';';
+
+            return $sql;
+        } else if (array_key_exists('search_term', $this->options)) {
+            $term = $this->options['search_term'];
+            if ($time = strtotime($term)) {
+                $sql = '
+                    SELECT event.id
+                    FROM event
+                    INNER JOIN eventdatetime ON (eventdatetime.event_id = event.id)
+                    WHERE eventdatetime.starttime LIKE "' . date('Y-m-d', $this->escapeString($time)) . '%"
+                        AND event.approvedforcirculation = 1
+                    ORDER BY event.title
+                ';
+            } else {
+                $sql = '
+                    SELECT event.id
+                    FROM event
+                    WHERE event.title LIKE "%' . $this->escapeString($term) . '%"
+                       AND event.approvedforcirculation = 1
+                    ORDER BY event.title
+                ';
+            }
+            
             return $sql;
         } else {
             return parent::getSQL();

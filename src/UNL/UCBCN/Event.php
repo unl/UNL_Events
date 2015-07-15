@@ -4,10 +4,14 @@ namespace UNL\UCBCN;
 use UNL\UCBCN\ActiveRecord\Record;
 use UNL\UCBCN\Calendar;
 use UNL\UCBCN\Calendar\Event as CalendarHasEvent;
+use UNL\UCBCN\Calendar\Events as CalendarHasEvents;
+use UNL\UCBCN\Calendar\EventType;
 use UNL\UCBCN\Event\Occurrences;
 use UNL\UCBCN\Event\RecurringDate;
+use UNL\UCBCN\Event\RecurringDates;
 use UNL\UCBCN\EventListing;
 use UNL\UCBCN\Manager\Auth;
+use UNL\UCBCN\Manager\Controller;
 
 /**
  * Table Definition for event
@@ -80,16 +84,20 @@ class Event extends Record
         );
     }
     
-    function getDatetimes() {
+    function getDatetimes($limit = -1, $offset = 0) 
+    {
         $options = array(
-            'event_id' => $this->id
+            'event_id' => $this->id,
+            'limit' => $limit,
+            'offset' => $offset
         );
 
         return new EventListing($options);
     }
 
-    public function getStatusWithCalendar(Calendar $calendar) {
-        $calendar_has_event = CalendarHasEvent::getById($calendar->id, $this->id);
+    public function getStatusWithCalendar(Calendar $calendar) 
+    {
+        $calendar_has_event = CalendarHasEvent::getByIds($calendar->id, $this->id);
         if ($calendar_has_event === FALSE) {
             return NULL;
         } else {
@@ -97,45 +105,63 @@ class Event extends Record
         }
     }
 
-    public function updateStatusWithCalendar(Calendar $calendar, $status) {
-        $calendar_has_event = CalendarHasEvent::getById($calendar->id, $this->id);
+    public function updateStatusWithCalendar(Calendar $calendar, $status) 
+    {
+        $calendar_has_event = CalendarHasEvent::getByIds($calendar->id, $this->id);
         if ($calendar_has_event === FALSE) {
-            throw new Exception('Event does not have status with calendar');
+            throw new \Exception('Event does not have status with calendar');
         } else {
             $calendar_has_event->status = $status;
             $calendar_has_event->update();
         }
     }
-    
-    /**
-     * This function processes any posted files,
-     * sepcifically the images for an event.
-     *
-     * Called from insert() or update().
-     *
-     * @return void
-     */
-    public function processFileAttachments()
-    {
-        if (isset($_FILES['imagedata'])
-            && is_uploaded_file($_FILES['imagedata']['tmp_name'])
-            && $_FILES['imagedata']['error']==UPLOAD_ERR_OK) {
-            global $_UNL_UCBCN;
-            $this->imagemime = $_FILES['imagedata']['type'];
-            $this->imagedata = file_get_contents($_FILES['imagedata']['tmp_name']);
-        }
+
+    public function getEditURL($calendar) {
+        return Controller::$url . $calendar->shortname . '/event/' . $this->id . '/edit/';
     }
 
+    public function getAddDatetimeURL($calendar) {
+        return Controller::$url . $calendar->shortname . '/event/' . $this->id . '/datetime/add/';
+    }
+
+    public function getDeleteURL($calendar) {
+        return Controller::$url . $calendar->shortname . '/event/' . $this->id . '/delete/';
+    }
+
+    public function getRecommendURL($calendar) {
+        return Controller::$url . $calendar->shortname . '/event/' . $this->id . '/recommend/';
+    }
+
+    public function getMoveURL($calendar) {
+        return Controller::$url . $calendar->shortname . '/event/' . $this->id . '/move/';
+    }
+
+    # events will only have one type. But the database allows them to have more, technically.
+    # hence this method is named getFirstType
+    #
+    # returns an EventType
+    public function getFirstType() {
+        $first_type = NULL;
+
+        $types = $this->getEventTypes();
+        foreach($types as $type) {
+            $first_type = $type->getType();
+            break;
+        }
+
+        return $first_type;
+    }
+    
     public function deleteRecurrences()
     {
         $options = array(
             'event_id' => $this->id,
-            'recurring_only' => true
+            'linked_only' => TRUE
         );
-        $event_date_times = new Occurrences($options);
+        $recurring_dates = new RecurringDates($options);
 
-        foreach ($event_date_times as $datetime) {
-            $datetime->delete();
+        foreach ($recurring_dates as $recurring_date) {
+            $recurring_date->delete();
         }
 
         return;
@@ -164,12 +190,12 @@ class Event extends Record
             // while the current start time is before recurs until
             while ($this_start <= $recurs_until) {
                 // insert initial day recurrence for this eventdatetime and recurrence, not ongoing, not unlinked
-                $new_rows[] = array(date('Y-m-d', $this_start), $event_id, $k, 0, 0);
+                $new_rows[] = array(date('Y-m-d', $this_start), $event_id, $k, 0, 0, $datetime->id);
                 // generate more day recurrences for each day of the event, if it is ongoing (i.e., the end date is the next day or later)
                 $next_day = strtotime('midnight tomorrow', $this_start);
                 while ($next_day <= $this_end) {
                     // add an entry to recurring dates for this eid, the temp date, is ongoing, not unlinked
-                    $new_rows[] = array(date('Y-m-d', $next_day), $event_id, $k, 1, 0);
+                    $new_rows[] = array(date('Y-m-d', $next_day), $event_id, $k, 1, 0, $datetime->id);
                     // increment day
                     $next_day = $next_day + self::ONE_DAY;
                 }
@@ -222,6 +248,7 @@ class Event extends Record
                 $recurring_date->recurrence_id = $row[2];
                 $recurring_date->ongoing = $row[3];
                 $recurring_date->unlinked = $row[4];
+                $recurring_date->event_datetime_id = $row[5];
 
                 $recurring_date->insert();
             }
@@ -238,8 +265,6 @@ class Event extends Record
      */
     public function insert($calendar = null, $source = null)
     {
-        $this->processFileAttachments();
-
         $this->datecreated = date('Y-m-d H:i:s');
         $this->datelastupdated = date('Y-m-d H:i:s');
 
@@ -271,47 +296,13 @@ class Event extends Record
      *
      * @return bool
      */
-    public function update($do=false)
+    public function update()
     {
-        global $_UNL_UCBCN;
-        $GLOBALS['event_id'] = $this->id;
-        if (isset($this->consider)) {
-            // The user has checked the 'Please consider this event for the main calendar'
-            $add_to_default = $this->consider;
-            unset($this->consider);
-        } else {
-            $add_to_default = 0;
-        }
-        if (is_object($do) && isset($do->consider)) {
-            unset($do->consider);
-        }
-        $this->datelastupdated = date('Y-m-d H:i:s');
-        if (isset($_SESSION['_authsession'])) {
-            $this->uidlastupdated=$_SESSION['_authsession']['username'];
-        }
-        $this->processFileAttachments();
-        $res = parent::update();
-        if ($res) {
-            if ($add_to_default && isset($_UNL_UCBCN['default_calendar_id'])) {
-                // Add this as a pending event to the default calendar.
-                $che = UNL_UCBCN::factory('calendar_has_event');
-                $che->calendar_id = $_UNL_UCBCN['default_calendar_id'];
-                $che->event_id = $this->id;
-                if ($che->find()==0) {
-                    $this->addToCalendar($_UNL_UCBCN['default_calendar_id'], 'pending', 'checked consider event');
-                }
-            }
-            //loop though all eventdateandtime instances for this event.
-            $events = UNL_UCBCN_Manager::factory('eventdatetime');
-            $events->whereAdd('eventdatetime.event_id = '.$this->id);
-            $number = $events->find();
-            while ($events->fetch()) {
-                $facebook = new \UNL\UCBCN\Facebook\Instance($events->id);
-                $facebook->updateEvent();
-                
-            }
-        }
-        return $res;
+        $this->uidcreated = Auth::getCurrentUser();
+        $this->uidlastupdated = Auth::getCurrentUser();
+        $result = parent::update();
+
+        return $result;
     }
     
     /**
@@ -344,33 +335,28 @@ class Event extends Record
     }
     
     /**
-     * Performs a delete of this event and all child records
-     *
-     * @return bool
+     * 
      */
     public function delete()
     {
-        //get all facebook events for this id and delete them.
-            $events = UNL_UCBCN_Manager::factory('eventdatetime');
-            $events->whereAdd('eventdatetime.event_id = '.$this->id);
-            $number = $events->find();
-            while ($events->fetch()) {
-                $facebook = new \UNL\UCBCN\Facebook\Instance($events->id);
-                $facebook->deleteEvent();
-            }
-          
-        // Delete child elements that would be orphaned.
-        if (ctype_digit($this->id)) {
-            foreach (array('calendar_has_event',
-                           'event_has_keyword',
-                           'eventdatetime',
-                           'event_has_eventtype',
-                           'event_has_sponsor',
-                           'event_isopento_audience',
-                           'event_targets_audience') as $table) {
-                self::getDB()->query('DELETE FROM '.$table.' WHERE event_id = '.$this->id);
-            }
+        # delete all related eventdatetimes
+        $datetimes = $this->getDatetimes();
+        foreach ($datetimes as $record) {
+            $record->delete();
         }
+
+        # delete the event has eventtype record(s)
+        $eventtypes = $this->getEventTypes();
+        foreach ($eventtypes as $record) {
+            $record->delete();
+        }
+
+        # delete all calendar_has_events
+        $calendar_has_events = new CalendarHasEvents(array('event_id' => $this->id));
+        foreach ($calendar_has_events as $record) {
+            $record->delete();
+        }
+
         return parent::delete();
     }
     
@@ -464,5 +450,40 @@ class Event extends Record
     public function getDocuments()
     {
         return new Event\Documents(array('event_id' => $this->id));
+    }
+    
+    /**
+     * Determine if a user can edit this event
+     * 
+     * @param User $user
+     * @return bool
+     */
+    public function userCanEdit(\UNL\UCBCN\User $user)
+    {
+        //Get The origin calendars (the source calendar via the create event form, or if the source was 'checked_consider_event'
+        //In other words, both users of the origin calendar can edit and users of the main calendar can edit the event
+        //This should return at most 2 calendars?
+        $sql = 'SELECT calendar_id
+                FROM calendar_has_event 
+                WHERE 
+                  source IN ("' . CalendarHasEvent::SOURCE_CREATE_EVENT_FORM . '", "' . CalendarHasEvent::SOURCE_CHECKED_CONSIDER_EVENT . '")
+                  AND event_id = ' . (int)$this->id . '
+               ';
+        
+        $db = $this->getDB();
+        
+        if (!$result = $db->query($sql)) {
+            //No origins were found, perhaps orphaned somehow?
+            return false;
+        }
+        
+        while ($row = $result->fetch_assoc()) {
+            //Make sure that the user has edit event permission on this calendar
+            if ($user->hasPermission(Permission::getByName(Permission::PERMISSION_EVENT_EDIT)->id, $row['calendar_id'])) {
+                return true;
+            }
+        }
+        
+        return false;
     }
 }

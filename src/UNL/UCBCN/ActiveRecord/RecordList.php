@@ -172,4 +172,15 @@ abstract class RecordList extends \LimitIterator implements \Countable
         return count($this->getInnerIterator());
     }
 
+    public function getIDs()
+    {
+        $ids = array();
+        $iterator = $this->getInnerIterator();
+        foreach ($iterator as $key => $value) {
+            $ids[] = $value['id'];
+        }
+
+        return $ids;
+    }
+
 }

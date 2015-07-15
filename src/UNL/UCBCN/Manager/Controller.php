@@ -16,9 +16,8 @@
  */
 namespace UNL\UCBCN\Manager;
 
-use UNL\UCBCN\RuntimeException;
-use UNL\UCBCN\UnexpectedValueException;
 use UNL\UCBCN\Calendar;
+use UNL\UCBCN\Permission;
 
 class Controller {
     public $options = array(
@@ -26,6 +25,9 @@ class Controller {
         'model' => false
     );
 
+    /**
+     * @var false|Calendar
+     */
     protected $calendar = false;
 
     /**
@@ -34,26 +36,25 @@ class Controller {
      * @var int
      */
     public static $default_calendar_id = 1;
+
+    public static $url = '/manager/';
     
     public function __construct($options = array()) {
         $this->options = $options + $this->options;
 
         if (array_key_exists('calendar_shortname', $this->options)) {
-            $this->calendar = Calendar::getByShortName($this->options['calendar_shortname']);
-            if ($this->calendar === FALSE) {
-                throw new \Exception("That calendar could not be found.", 500);
-            }
+            $this->calendar = Calendar::getByShortname($this->options['calendar_shortname']);
         }
 
         try {
             $this->run();
+        } catch (ValidationException $e) {
+            http_response_code(400);
         } catch (\Exception $e) {
             $this->output = $e;
         }
 
     }
-
-    public static $url = '/manager/';
 
     /**
      * Get the URL to the manager
@@ -85,6 +86,36 @@ class Controller {
         } else {
             $this->output = new $this->options['model']($this->options);
         }
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $this->handlePost($this->output);
+        }
+    }
+
+    public function getNotice()
+    {
+        if (isset($_SESSION['flash_notice'])) {
+            $notice = $_SESSION['flash_notice'];
+            unset($_SESSION['flash_notice']);
+            return $notice;
+        } else {
+            return NULL;
+        }
+    }
+    
+    protected function handlePost($object)
+    {
+        if (!$object instanceof PostHandler) {
+            throw new \Exception("The object is not an instance of the PostHandler", 500);
+        }
+        
+        $result = $object->handlePost($_GET, $_POST, $_FILES);
+
+        if (is_string($result)) {
+            self::redirect($result);
+        }
+
+        return $result;
     }
 
     /**
@@ -183,6 +214,9 @@ class Controller {
         return $user->getCalendars();
     }
 
+    /**
+     * @return Calendar
+     */
     public function getCalendar()
     {
         return $this->calendar;

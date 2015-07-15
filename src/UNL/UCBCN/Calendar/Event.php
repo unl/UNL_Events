@@ -38,6 +38,13 @@ class Event extends Record
     public $uidcreated;                      // string(100)
     public $datelastupdated;                 // datetime(19)  binary
     public $uidlastupdated;                  // string(100)
+    
+    const SOURCE_CREATE_EVENT_FORM      = 'create event form';
+    const SOURCE_CHECKED_CONSIDER_EVENT = 'checked consider event';
+    
+    const STATUS_PENDING  = 'pending';
+    const STATUS_POSTED   = 'posted';
+    const STATUS_ARCHIVED = 'archived';
 
     public static function getTable()
     {
@@ -51,7 +58,7 @@ class Event extends Record
         );
     }
     
-    public static function getById($calendar_id, $event_id)
+    public static function getByIds($calendar_id, $event_id)
     {
         return self::getByAnyField(__CLASS__, 'calendar_id', $calendar_id, 'event_id = '.(int)$event_id);
     }
@@ -97,5 +104,26 @@ class Event extends Record
         $r = parent::delete();
 
         return $r;
+    }
+
+    /**
+     * Determine if this event is approved (posted or archived)
+     * 
+     * @return bool
+     */
+    public function isApproved()
+    {
+        return in_array($this->status, array(self::STATUS_POSTED, self::STATUS_ARCHIVED));
+    }
+
+
+    /**
+     * determine if this event is pending
+     * 
+     * @return bool
+     */
+    public function isPending()
+    {
+        return self::STATUS_PENDING == $this->status;
     }
 }
