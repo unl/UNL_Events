@@ -7,9 +7,9 @@
     );
     echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
 ?>
-<h3>
+<h1 class="wdn-brand">
 <?php echo 'Recommend ' . $context->event->title; ?>
-</h3>
+</h1>
 <form action="" method="POST">
     <table class="recommend-list">
         <thead>

@@ -8,9 +8,9 @@
 	echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
 ?>
 
-<h3>
+<h1 class="wdn-brand">
 	Users on this Calendar
-</h3>
+</h1>
 <div>
 	<table>
 		<thead>

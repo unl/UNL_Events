@@ -6,7 +6,7 @@
     );
     echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
 ?>
-<h3>Edit Account Info</h3>
+<h1 class="wdn-brand">Edit Account Info</h1>
 
 <form action="" method="POST">
     <fieldset>

@@ -63,7 +63,7 @@ class Recommend extends PostHandler
 
             
         }
-        $this->flashNotice(NOTICE_LEVEL_SUCCESS, 'Events Recommended', 'The marked events have been recommended to other calendars.');
+        $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Events Recommended', 'The marked events have been recommended to other calendars.');
     }
 
     public function getRecommendableCalendars()

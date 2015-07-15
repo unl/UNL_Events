@@ -9,7 +9,7 @@
     echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
 ?>
 
-<h3><?php echo $context->user == NULL ? 'Add a User' : 'Edit User Permissions' ?></h3>
+<h1 class="wdn-brand"><?php echo $context->user == NULL ? 'Add a User' : 'Edit User Permissions' ?></h1>
 <form action="" method="POST">
     <fieldset>
         <?php if ($context->user == NULL) { ?>

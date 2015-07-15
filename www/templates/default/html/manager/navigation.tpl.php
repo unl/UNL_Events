@@ -45,7 +45,7 @@
 </div>
 
 <div class="toolbox">
-<h3 class="wdn-brand">My Calendars</h3>
+<h3 class="wdn-brand">Your Calendars</h3>
 <ul>
     <?php foreach ($context->getCalendars() as $calendar): ?>
         <li>

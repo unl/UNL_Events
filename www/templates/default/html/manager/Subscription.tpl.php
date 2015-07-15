@@ -9,9 +9,9 @@
 ?>
 
 <?php if (count($context->getSubscriptions()) > 0): ?>
-<h3>
+<h1 class="wdn-brand">
 	Current Subscriptions
-</h3>
+</h1>
 <div>
 	<table>
 		<thead>

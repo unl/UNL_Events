@@ -20,7 +20,7 @@
 <div class="wdn-grid-set">
     <form id="add-subscription" action="<?php echo $context->subscription->id == NULL ? $context->subscription->getNewURL($context->calendar) : $context->subscription->getEditURL($context->calendar) ?>" method="POST">
         <div class="bp2-wdn-col-two-thirds">
-            <h3><?php echo $context->subscription->id == NULL ? 'Add a Subscription' : 'Edit Subscription' ?></h3>
+            <h1 class="wdn-brand"><?php echo $context->subscription->id == NULL ? 'Add a Subscription' : 'Edit Subscription' ?></h1>
             <fieldset>
                 <label for="title">Title</label>
                 <input type="text" id="title" name="title" value="<?php echo $context->subscription->name ?>" />

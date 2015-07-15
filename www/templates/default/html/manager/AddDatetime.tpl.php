@@ -50,9 +50,9 @@
     );
     echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
 ?>
-<h3>
+<h1 class="wdn-brand">
 <?php echo $last_crumb ?>
-</h3>
+</h1>
 <form id="add-datetime-form" action="" method="POST">
     <fieldset>
         <label for="location"><span class="required">*</span> Location</label>
