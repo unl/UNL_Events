@@ -185,9 +185,13 @@
                     <input <?php if ($event->approvedforcirculation) echo 'checked="checked"' ?> type="radio" value="public" name="private_public" id="sharing-public"> 
                     <label for="sharing-public">Public</label> 
                     <br>
-
-                    <input <?php if ($context->on_main_calendar) echo 'checked="checked"'; ?> type="checkbox" name="send_to_main" id="send-to-main"> 
-                    <label for="send-to-main">Consider for main UNL calendar</label>
+                    <?php if ($context->on_main_calendar): ?>
+                        <img src="<?php echo $base_frontend_url ?>templates/default/html/images/checkmark-16.png">
+                        <label>(event has been sent to main UNL calendar for approval)</label>
+                    <?php else: ?>
+                        <input type="checkbox" name="send_to_main" id="send-to-main"> 
+                        <label for="send-to-main">Consider for main UNL calendar</label>
+                    <?php endif; ?>
                 </div>
             </div>
 
