@@ -45,7 +45,7 @@
                         <option value="move-to-pending">Move to Pending</option>
                     <?php endif; ?>
 
-                    <?php if ($context->hasPermission('Delete Event')): ?>
+                    <?php if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_DELETE_ID, $context->calendar->id)): ?>
                         <option value="delete">Delete</option>
                     <?php endif; ?>
                 </select>
@@ -53,7 +53,7 @@
                 <input type="text" id="bulk-action-ids" name="ids">
                 <input type="text" id="bulk-action-action" name="action">
                 </form>
-            </div>
+            </div><br class="medium-hidden">
 
             <div class="event-page">
                 <table class="event-list">
@@ -72,7 +72,7 @@
                                     <input type="checkbox" id="select-event-<?php echo $event->id ?>" class="select-event" data-id="<?php echo $event->id; ?>">
                                 </td>
                                 <td class="small-hidden">
-                                    <?php if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_EDIT_ID, $context->calendar->id)): ?>
+                                    <?php if ($event->getSource($context->calendar->getRawObject()) == 'create event form' && $user->hasPermission(\UNL\UCBCN\Permission::EVENT_EDIT_ID, $context->calendar->id)): ?>
                                         <a href="<?php echo $event->getEditURL($controller->getCalendar()) ?>">
                                         <?php echo $event->title; ?>
                                         </a>
@@ -82,9 +82,13 @@
                                 </td>
                                 <td>
                                     <div class="small-block hidden calendar-event-title">
-                                        <a href="<?php echo $event->getEditURL($controller->getCalendar()) ?>">
-                                        <?php echo $event->title; ?>
-                                        </a>
+                                        <?php if ($event->getSource($context->calendar->getRawObject()) == 'create event form' && $user->hasPermission(\UNL\UCBCN\Permission::EVENT_EDIT_ID, $context->calendar->id)): ?>
+                                            <a href="<?php echo $event->getEditURL($controller->getCalendar()) ?>">
+                                            <?php echo $event->title; ?>
+                                            </a>
+                                        <?php else: ?>
+                                            <?php echo $event->title; ?>
+                                        <?php endif; ?>
                                     </div>
                                     <ul>
                                     <?php $datetimes = $event->getDateTimes(); ?>

@@ -151,6 +151,16 @@ class Event extends Record
 
         return $first_type;
     }
+
+    public function getSource(Calendar $calendar)
+    {
+        $calendar_has_event = CalendarHasEvent::getByIds($calendar->id, $this->id);
+        if ($calendar_has_event != NULL) {
+            return $calendar_has_event->source;
+        } else {
+            return NULL;
+        }
+    }
     
     public function deleteRecurrences()
     {
