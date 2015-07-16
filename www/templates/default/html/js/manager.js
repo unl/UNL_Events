@@ -36,7 +36,7 @@ require(['jquery', 'wdn', 'modernizr', frontend_url + 'templates/default/html/js
             }
         });
 
-        $('.pending-event-tools, .upcoming-event-tools, .past-event-tools').change(function () {
+        $('.pending-event-tools, .upcoming-event-tools, .past-event-tools, .searched-event-tools').change(function () {
             if ($(this).val() == 'recommend') {
                 // redirect to recommend URL
                 window.location = $(this).attr('data-recommend-url');

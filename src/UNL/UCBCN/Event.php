@@ -118,8 +118,27 @@ class Event extends Record
         }
     }
 
-    public function getEditURL($calendar) {
-        return Controller::$url . $calendar->shortname . '/event/' . $this->id . '/edit/';
+    public function getEditURL($calendar = NULL) {
+        $user = Auth::getCurrentUser();
+
+        if ($calendar == NULL) {
+            // get the origin calendar for the event. If the user has editing permissions there,
+            // we will send them to edit it there
+            $origin_calendar = $this->getOriginCalendar();
+            error_log(print_r($origin_calendar,1));
+            if ($this->getStatusWithCalendar($origin_calendar) && $user->hasPermission(Permission::EVENT_EDIT_ID, $origin_calendar->id)) {
+                return Controller::$url . $origin_calendar->shortname . '/event/' . $this->id . '/edit/';
+            }
+
+            // if that doesn't work, try to have the user edit it from main UNL calendar
+            $main_calendar = Calendar::getByID(\UNL\UCBCN::$main_calendar_id);
+            if ($this->getStatusWithCalendar($main_calendar) && $user->hasPermission(Permission::EVENT_EDIT_ID, $main_calendar->id)) {
+                return Controller::$url . $main_calendar->shortname . '/event/' . $this->id . '/edit/';
+            }
+        } else {
+            return Controller::$url . $calendar->shortname . '/event/' . $this->id . '/edit/';    
+        }
+        return NULL;        
     }
 
     public function getAddDatetimeURL($calendar) {
@@ -463,6 +482,15 @@ class Event extends Record
     {
         return new Event\Documents(array('event_id' => $this->id));
     }
+
+    public function getOriginCalendar()
+    {
+        $calendar_has_event = CalendarHasEvent::getByEventIDSource($this->id, 'create event form');
+        if ($calendar_has_event) {
+            return Calendar::getByID($calendar_has_event->calendar_id);
+        }
+        return NULL;
+    }
     
     public function userCanEdit($user = NULL)
     {
@@ -470,20 +498,16 @@ class Event extends Record
             $user = Auth::getCurrentUser();
         }
 
-        // Get The origin calendars (the source calendar via the create event form, or if the source was 'checked_consider_event'
-        // In other words, both users of the origin calendar can edit and users of the main calendar can edit the event
-        // This should return at most 2 calendars
-        $calendars = new Calendars(array(
-            'original_calendars_for_event_id' => $this->id
-        ));
-
-        foreach ($calendars as $calendar) {
-            // Make sure that the user has edit event permission on this calendar
-            if ($user->hasPermission(Permission::EVENT_EDIT_ID, $calendar->id)) {
-                return true;
-            }
+        $origin_calendar = $this->getOriginCalendar();
+        if ($origin_calendar != NULL && $this->getStatusWithCalendar($origin_calendar) && $user->hasPermission(Permission::EVENT_EDIT_ID, $origin_calendar->id)) {
+            return true;
         }
-        
+
+        $main_calendar = Calendar::getByID(\UNL\UCBCN::$main_calendar_id);
+        if ($this->getStatusWithCalendar($main_calendar) && $user->hasPermission(Permission::EVENT_EDIT_ID, $main_calendar->id)) {
+            return true;
+        }
+
         return false;
     }
 }

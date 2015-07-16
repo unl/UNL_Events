@@ -37,6 +37,10 @@ class EditEvent extends PostHandler
             throw new \Exception("That event could not be found.", 404);
         }
 
+        if (!$this->event->userCanEdit()) {
+            throw new \Exception("You do not have permission to edit this event.", 403);
+        }
+
         if (array_key_exists('page', $_GET) && is_numeric($_GET['page']) && $_GET['page'] >= 1) {
             $this->page = $_GET['page'];
         } else {

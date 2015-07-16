@@ -39,7 +39,9 @@ class MoveEvent extends PostHandler
         $calendar_has_event = CalendarHasEvent::getByIDs($this->calendar->id, $this->event->id);
 
         if ($calendar_has_event == FALSE) {
-            throw new \Exception("This calendar does not have that event.", 404);
+            $calendar_has_event = new CalendarHasEvent;
+            $calendar_has_event->calendar_id = $this->calendar->id;
+            $calendar_has_event->event_id = $this->event->id;
         }
 
         if ($post['new_status'] == 'pending') {

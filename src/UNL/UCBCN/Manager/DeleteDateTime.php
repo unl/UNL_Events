@@ -32,6 +32,10 @@ class DeleteDateTime extends PostHandler
             throw new \Exception("That event could not be found.", 404);
         }
 
+        if (!$this->event->userCanEdit()) {
+            throw new \Exception("You do not have permission to edit this event.", 403);
+        }
+
         $this->event_datetime = Occurrence::getByID($this->options['event_datetime_id']);
 
         if ($this->event_datetime === FALSE) {

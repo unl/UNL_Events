@@ -1,6 +1,7 @@
 <?php
 namespace UNL\UCBCN;
 
+use UNL\UCBCN\Manager\Auth;
 use UNL\UCBCN\ActiveRecord\Record;
 use UNL\UCBCN\Events;
 use UNL\UCBCN\Frontend\Controller as FrontendController;
@@ -105,6 +106,22 @@ class Calendar extends Record
         );
 
         return new Users($options);
+    }
+
+    public function hasUser($user = NULL)
+    {
+        if ($user == NULL) {
+            $user = Auth::getCurrentUser();
+        }
+
+        $users = $this->getUsers();
+        foreach ($users as $cal_user) {
+            if ($user->uid == $cal_user->uid) {
+                return TRUE;
+            }
+        }
+
+        return FALSE;
     }
 
     public function getUsersNotOnCalendar()

@@ -15,8 +15,8 @@
             <table class="event-list">
                 <thead>
                     <tr>
-                        <th class="center">Select</th>
                         <th>Title</th>
+                        <th>Original Calendar</th>
                         <th>Date/Location</th>
                         <th>Actions</th>
                     </tr>
@@ -24,11 +24,18 @@
                 <tbody>
                     <?php foreach($context->events as $event): ?>
                         <tr>
-                            <td class="center">
-                                <input type="checkbox" id="select-event-<?php echo $event->id ?>" class="select-event" data-id="<?php echo $event->id; ?>">
+                            <td>
+                                <?php if ($event->userCanEdit()): ?>
+                                    <a href="<?php echo $event->getEditURL() ?>"><?php echo $event->title; ?></a>
+                                <?php else: ?>
+                                    <?php echo $event->title; ?>
+                                <?php endif; ?>
                             </td>
                             <td>
-                                <a href="<?php echo $event->getEditURL($controller->getCalendar()) ?>"><?php echo $event->title; ?></a>
+                                <?php $calendar = $event->getOriginCalendar() ?>
+                                <?php if ($calendar): ?>
+                                    <a href="<?php echo $calendar->getFrontendURL() ?>"><?php echo $calendar->name ?></a>
+                                <?php endif; ?>
                             </td>
                             <td>
                                 <ul>
@@ -74,15 +81,27 @@
                                 </ul>
                             </td>
                             <td>
-                                <select 
-                                    id="event-action-<?php echo $event->id ?>"
-                                    class="upcoming-event-tools" 
-                                    data-id="<?php echo $event->id; ?>"
-                                    data-recommend-url="<?php echo $event->getRecommendURL($controller->getCalendar()) ?>"
-                                    >
-                                        <option value="">Select an Action</option>
-                                </select>
-                                <form id="delete-<?php echo $event->id; ?>" method="POST" action="<?php echo $event->getDeleteURL($controller->getCalendar()) ?>" class="delete-form hidden"></form>
+                                <?php if ($status = $event->getStatusWithCalendar($context->calendar->getRawObject())): ?>
+                                    <strong><?php echo ucwords($status); ?></strong> on <?php echo $context->calendar->name ?>
+                                <?php else: ?>
+                                    <select 
+                                        id="event-action-<?php echo $event->id ?>"
+                                        class="searched-event-tools" 
+                                        data-id="<?php echo $event->id; ?>"
+                                        >
+                                            <option value="">Select an Action</option>
+                                            <?php if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_MOVE_TO_UPCOMING_ID, $context->calendar->id)): ?>
+                                                <option value="move-to-upcoming">Move to Upcoming</option>
+                                            <?php endif; ?>
+                                            <?php if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_MOVE_TO_PENDING_ID, $context->calendar->id)): ?>
+                                                <option value="move-to-pending">Move to Pending</option>
+                                            <?php endif; ?>
+                                    </select>
+                                    <form id="move-<?php echo $event->id; ?>" method="POST" action="<?php echo $event->getMoveURL($context->calendar) ?>" class="delete-form hidden">
+                                    <input type="text" name="new_status" id="move-target-<?php echo $event->id; ?>">
+                                    <input type="text" name="event_id" value="<?php echo $event->id ?>">
+                                    </form>
+                                <?php endif; ?>
                             </td>
                         </tr>
                     <?php endforeach; ?>
