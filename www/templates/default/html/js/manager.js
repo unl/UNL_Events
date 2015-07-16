@@ -53,6 +53,11 @@ require(['jquery', 'wdn', 'modernizr', frontend_url + 'templates/default/html/js
             }
         });
 
+        $('#toggle-search').click(function (click) {
+            click.preventDefault();
+            $('#search-form').slideToggle();
+        });
+
         var ordinal = function(number) {
             var mod = number % 100;
             if (mod >= 11 && mod <= 13) {

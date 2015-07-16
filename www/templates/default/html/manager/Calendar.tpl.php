@@ -23,8 +23,13 @@
         "Events Manager" => "/manager",
         $context->calendar->name => NULL
     );
+    $crumbs->search = TRUE;
     echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
 ?>
+<form id="search-form" action="/manager/<?php echo $context->calendar->shortname; ?>/search" style="display: none;">
+    <label for="events-search">Search</label>
+    <input type="text" name="search_term" id="events-search" />
+</form>
 <br>
 <ul class="wdn_tabs">
     <li class="<?php if ($context->tab == 'pending') echo 'selected'; ?>"><a href="<?php echo ($context->tab == 'pending' ? '#pending' : '?tab=pending'); ?>">Pending (<?php echo count($categorized_events['pending']); ?>)</a></li>

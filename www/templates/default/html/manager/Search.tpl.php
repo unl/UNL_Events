@@ -1,10 +1,18 @@
 <?php
+    $crumbs = new stdClass;
+    $crumbs->crumbs = array(
+        "Events Manager" => "/manager",
+        $context->calendar->name => $context->calendar->getManageURL(),
+        'Search' => NULL
+    );
+    echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
+?>
+<?php
 	$total_pages = ceil(count($context->events) / 10);
 ?>
-
 <form>
-    <label for="events_search">Search</label>
-    <input type="text" name="search_term" id="events_search" value="<?php echo $context->search_term ?>" />
+    <label for="events-search">Search</label>
+    <input type="text" name="search_term" id="events-search" value="<?php echo $context->search_term ?>" />
 </form>
 
 <div>
