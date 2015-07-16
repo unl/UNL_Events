@@ -3,6 +3,8 @@ namespace UNL\UCBCN;
 
 use UNL\UCBCN\ActiveRecord\RecordList;
 use UNL\UCBCN\ActiveRecord\Record;
+use UNL\UCBCN\Calendar\Event as CalendarHasEvent;
+
 /**
  * Object related to a list of calendars.
  * 
@@ -54,6 +56,11 @@ class Calendars extends RecordList
                 INNER JOIN permission ON user_has_permission.permission_id = permission.id
                 WHERE (permission.name = "Event Post" OR permission.name = "Event Send Event to Pending Queue")
                 AND user_has_permission.user_uid = "' . self::escapeString($this->options['recommend_permissions_for_user_uid']) . '";';
+            return $sql;
+        } else if (array_key_exists('original_calendars_for_event_id', $this->options)) {
+            $sql = 'SELECT DISTINCT calendar_id FROM calendar_has_event
+                    WHERE (source = "' . CalendarHasEvent::SOURCE_CREATE_EVENT_FORM . '" OR source = "' . CalendarHasEvent::SOURCE_CHECKED_CONSIDER_EVENT . '")
+                    AND event_id = ' . (int)$this->options['original_calendars_for_event_id'] . ';';
             return $sql;
         } else {
             return parent::getSQL();

@@ -72,7 +72,7 @@
                                     <input type="checkbox" id="select-event-<?php echo $event->id ?>" class="select-event" data-id="<?php echo $event->id; ?>">
                                 </td>
                                 <td class="small-hidden">
-                                    <?php if ($event->getSource($context->calendar->getRawObject()) == 'create event form' && $user->hasPermission(\UNL\UCBCN\Permission::EVENT_EDIT_ID, $context->calendar->id)): ?>
+                                    <?php if ($event->userCanEdit()): ?>
                                         <a href="<?php echo $event->getEditURL($controller->getCalendar()) ?>">
                                         <?php echo $event->title; ?>
                                         </a>
@@ -82,7 +82,7 @@
                                 </td>
                                 <td>
                                     <div class="small-block hidden calendar-event-title">
-                                        <?php if ($event->getSource($context->calendar->getRawObject()) == 'create event form' && $user->hasPermission(\UNL\UCBCN\Permission::EVENT_EDIT_ID, $context->calendar->id)): ?>
+                                        <?php if ($event->userCanEdit()): ?>
                                             <a href="<?php echo $event->getEditURL($controller->getCalendar()) ?>">
                                             <?php echo $event->title; ?>
                                             </a>

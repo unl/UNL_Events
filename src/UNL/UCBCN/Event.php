@@ -12,6 +12,8 @@ use UNL\UCBCN\Event\RecurringDates;
 use UNL\UCBCN\EventListing;
 use UNL\UCBCN\Manager\Auth;
 use UNL\UCBCN\Manager\Controller;
+use UNL\UCBCN\Permission;
+use UNL\UCBCN\User;
 
 /**
  * Table Definition for event
@@ -161,7 +163,7 @@ class Event extends Record
             return NULL;
         }
     }
-    
+
     public function deleteRecurrences()
     {
         $options = array(
@@ -462,34 +464,22 @@ class Event extends Record
         return new Event\Documents(array('event_id' => $this->id));
     }
     
-    /**
-     * Determine if a user can edit this event
-     * 
-     * @param User $user
-     * @return bool
-     */
-    public function userCanEdit(\UNL\UCBCN\User $user)
+    public function userCanEdit($user = NULL)
     {
-        //Get The origin calendars (the source calendar via the create event form, or if the source was 'checked_consider_event'
-        //In other words, both users of the origin calendar can edit and users of the main calendar can edit the event
-        //This should return at most 2 calendars?
-        $sql = 'SELECT calendar_id
-                FROM calendar_has_event 
-                WHERE 
-                  source IN ("' . CalendarHasEvent::SOURCE_CREATE_EVENT_FORM . '", "' . CalendarHasEvent::SOURCE_CHECKED_CONSIDER_EVENT . '")
-                  AND event_id = ' . (int)$this->id . '
-               ';
-        
-        $db = $this->getDB();
-        
-        if (!$result = $db->query($sql)) {
-            //No origins were found, perhaps orphaned somehow?
-            return false;
+        if (empty($user)) {
+            $user = Auth::getCurrentUser();
         }
-        
-        while ($row = $result->fetch_assoc()) {
-            //Make sure that the user has edit event permission on this calendar
-            if ($user->hasPermission(Permission::getByName(Permission::PERMISSION_EVENT_EDIT)->id, $row['calendar_id'])) {
+
+        // Get The origin calendars (the source calendar via the create event form, or if the source was 'checked_consider_event'
+        // In other words, both users of the origin calendar can edit and users of the main calendar can edit the event
+        // This should return at most 2 calendars
+        $calendars = new Calendars(array(
+            'original_calendars_for_event_id' => $this->id
+        ));
+
+        foreach ($calendars as $calendar) {
+            // Make sure that the user has edit event permission on this calendar
+            if ($user->hasPermission(Permission::EVENT_EDIT_ID, $calendar->id)) {
                 return true;
             }
         }
