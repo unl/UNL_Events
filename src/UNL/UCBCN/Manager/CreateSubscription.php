@@ -96,7 +96,8 @@ class CreateSubscription extends PostHandler
     private function updateSubscription($post_data)
     {
         $this->subscription->name = $post_data['title'];
-        if (empty(trim($this->subscription->name))) {
+        $trimmed = trim($this->subscription->name);
+        if (empty($trimmed)) {
             $this->subscription->name = 'Subscription: ' . count($post_data['calendars']) . ' Calendar' . (count($post_data['calendars']) == 1 ? '' : 's');
         }
 
