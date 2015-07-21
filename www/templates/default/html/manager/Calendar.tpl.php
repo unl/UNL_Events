@@ -128,7 +128,8 @@
                                                     }
                                                 }
                                                 ?><br>
-                                                <?php if (!empty($location = $datetime->getLocation())) echo $location->name; ?>
+                                                <?php $location = $datetime->getLocation(); ?>
+                                                <?php if (!empty($location)) echo $location->name; ?>
                                             <?php else: ?>
                                                 ...and <?php echo (count($datetimes) - 3); ?> more
                                             <?php break; ?>
