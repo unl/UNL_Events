@@ -55,7 +55,11 @@ require(['jquery', 'wdn', 'modernizr', frontend_url + 'templates/default/html/js
 
         $('#toggle-search').click(function (click) {
             click.preventDefault();
-            $('#search-form').slideToggle();
+            $('#search-form').slideToggle(400, function() {
+                if ($('#search-form').is(':visible')) {
+                    $('#search-form input').focus();
+                }
+            });
         });
 
         var ordinal = function(number) {

@@ -21,7 +21,7 @@
     <?php else: ?>
         <div class="event-page">
             <table class="event-list">
-                <thead>
+                <thead class="small-hidden">
                     <tr>
                         <th>Title</th>
                         <th>Original Calendar</th>
@@ -32,20 +32,29 @@
                 <tbody>
                     <?php foreach($context->events as $event): ?>
                         <tr>
-                            <td>
+                            <td class="small-hidden">
                                 <?php if ($event->userCanEdit()): ?>
                                     <a href="<?php echo $event->getEditURL() ?>"><?php echo $event->title; ?></a>
                                 <?php else: ?>
                                     <?php echo $event->title; ?>
                                 <?php endif; ?>
                             </td>
-                            <td>
+                            <td class="small-hidden">
                                 <?php $calendar = $event->getOriginCalendar() ?>
                                 <?php if ($calendar): ?>
                                     <a href="<?php echo $calendar->getFrontendURL() ?>"><?php echo $calendar->name ?></a>
                                 <?php endif; ?>
                             </td>
                             <td>
+                                <div class="small-block hidden calendar-event-title">
+                                    <?php if ($event->userCanEdit()): ?>
+                                        <a href="<?php echo $event->getEditURL() ?>">
+                                        <?php echo $event->title; ?>
+                                        </a>
+                                    <?php else: ?>
+                                        <?php echo $event->title; ?>
+                                    <?php endif; ?>
+                                </div>
                                 <ul>
                                 <?php $datetimes = $event->getDateTimes(); ?>
                                 <?php $count = 0; ?>
@@ -87,8 +96,31 @@
                                     </li>
                                 <?php endforeach; ?>
                                 </ul>
+                                <div class="small-block hidden">
+                                    <?php if ($status = $event->getStatusWithCalendar($context->calendar->getRawObject())): ?>
+                                        <strong><?php echo ucwords($status); ?></strong> on <?php echo $context->calendar->name ?>
+                                    <?php else: ?>
+                                        <select 
+                                            id="event-action-<?php echo $event->id ?>"
+                                            class="searched-event-tools" 
+                                            data-id="<?php echo $event->id; ?>"
+                                            >
+                                                <option value="">Select an Action</option>
+                                                <?php if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_MOVE_TO_UPCOMING_ID, $context->calendar->id)): ?>
+                                                    <option value="move-to-upcoming">Move to Upcoming</option>
+                                                <?php endif; ?>
+                                                <?php if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_MOVE_TO_PENDING_ID, $context->calendar->id)): ?>
+                                                    <option value="move-to-pending">Move to Pending</option>
+                                                <?php endif; ?>
+                                        </select>
+                                        <form id="move-<?php echo $event->id; ?>" method="POST" action="<?php echo $event->getMoveURL($context->calendar) ?>" class="delete-form hidden">
+                                        <input type="text" name="new_status" id="move-target-<?php echo $event->id; ?>">
+                                        <input type="text" name="event_id" value="<?php echo $event->id ?>">
+                                        </form>
+                                    <?php endif; ?>
+                                </div>
                             </td>
-                            <td>
+                            <td class="small-hidden">
                                 <?php if ($status = $event->getStatusWithCalendar($context->calendar->getRawObject())): ?>
                                     <strong><?php echo ucwords($status); ?></strong> on <?php echo $context->calendar->name ?>
                                 <?php else: ?>
