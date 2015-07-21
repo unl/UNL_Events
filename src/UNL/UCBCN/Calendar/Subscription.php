@@ -44,7 +44,6 @@ class Subscription extends Record
     public $uidcreated;                      // string(100)
     public $datelastupdated;                 // datetime(19)  binary
     public $uidlastupdated;                  // string(100)
-    public $searchcriteria;
 
     public static function getTable()
     {
