@@ -43,11 +43,11 @@ $(document).ready(function() {
 
         <div class="footer">
             <h3>Yeah, It's Open Source</h3>
-                The University Event Publishing System is an open source project
+                The UNL Events System is an open source project
                 built by the <a href="http://www.unl.edu/">University of Nebraska&ndash;Lincoln</a>
-                which implements the UC Berkeley Calendar specifications.
+                which implements the UC Berkeley Calendar Network specifications.
             <ul>
-                <li><a href="http://code.google.com/p/unl-event-publisher/">UNL Event Publisher</a></li>
+                <li><a href="https://github.com/unl/UNL_UCBCN_System/wiki">UNL Events on Github</a></li>
             </ul>
         </div>
     </body>
