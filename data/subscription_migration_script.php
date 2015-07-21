@@ -20,23 +20,19 @@ $stmt->execute();
 echo 'Migration: subscription_has_calendar table created.' . PHP_EOL;
 
 # migrate the current things in searchcriteria over to the new table
-$sql = "SELECT id, calendar_id, searchcriteria FROM subscription";
-$stmt = $db->prepare($sql);
-$stmt->execute();
 echo "Retreiving current subscriptions from table." . PHP_EOL;
-$stmt->bind_result($id, $cal_id, $searchcriteria);
 
-$calendars_to_add = array();
-while ($row = $stmt->fetch()) {
-	if (!empty($searchcriteria)) {
+$subscriptions = new Subscriptions;
+foreach ($subscriptions as $subscription) {
+	if (!empty($subscription->searchcriteria)) {
 		# parse the searchcriteria into the appropriate cal_ids
-		foreach(preg_split("/[= ]/", $searchcriteria) as $part) {
+		foreach(preg_split("/[= ]/", $subscription->searchcriteria) as $part) {
 			if (is_numeric($part) && (int)$part != 0) {
 				$calendars_to_add[] = array(
 					"calendar_id" => (int)$part,
-					"subscription_id" => $id
+					"subscription_id" => $subscription->id
 				);
-				echo "Adding calendar " . $part . " to subscription " . $id . PHP_EOL;
+				echo "Adding calendar " . $part . " to subscription " . $subscription->id . PHP_EOL;
 			}
 		}
 	}
