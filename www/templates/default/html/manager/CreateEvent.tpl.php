@@ -180,6 +180,7 @@
                         <select id="recurring-type" name="recurring_type">
                             <option value="daily">Daily</option>
                             <option value="weekly">Weekly</option>
+                            <option value="biweekly">Biweekly</option>
                             <optgroup label="Monthly" id="monthly-group">
                             </optgroup>
                             <option value="annually">Yearly</option>

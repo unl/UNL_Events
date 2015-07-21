@@ -38,10 +38,13 @@
 <div class="toolbox">
     <h3>Tools</h3>
     <div class="tools">
+        <div style="text-align: center; margin-bottom: .8em">
+            <a class="wdn-button" href="<?php echo $base_manager_url ?>calendar/new">
+            <span style="vertical-align: middle;">+</span>
+            <span style="vertical-align: middle;">New Calendar</span>
+            </a>
+        </div>
         <ul>
-            <li>
-                <a href="<?php echo $base_manager_url ?>calendar/new">New Calendar</a>
-            </li>
             <li>
                 <a href="<?php echo $context->getEditAccountURL() ?>">Account Info</a>
             </li>

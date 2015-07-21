@@ -120,7 +120,7 @@
                                                 {
                                                     if ($datetime->recurringtype == 'none') {
                                                         echo date('n/d/y @ g:ia', strtotime($datetime->starttime));
-                                                    } else if ($datetime->recurringtype == 'daily' || $datetime->recurringtype == 'weekly' ||
+                                                    } else if ($datetime->recurringtype == 'daily' || $datetime->recurringtype == 'weekly' || $datetime->recurringtype == 'biweekly' ||
                                                             $datetime->recurringtype == 'annually') {
                                                         echo ucwords($datetime->recurringtype) . ' @ ' . date('g:ia', strtotime($datetime->starttime)) .
                                                             ': ' . date('n/d/y', strtotime($datetime->starttime)) . 

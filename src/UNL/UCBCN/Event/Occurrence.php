@@ -168,6 +168,8 @@ class Occurrence extends Record
                 $this_start += self::ONE_DAY;
             } else if ($recurring_type == 'weekly') {
                 $this_start += self::ONE_WEEK;
+            } else if ($recurring_type == 'biweekly') {
+                $this_start += 2 * self::ONE_WEEK;
             } else if ($recurring_type == 'monthly') {
                 // figure out some preliminary things
                 $hour_on_start_date = date('H', $start_date);
