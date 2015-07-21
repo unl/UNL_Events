@@ -25,6 +25,8 @@ error_reporting(E_ALL);
 
 UNL\UCBCN::$main_calendar_id = 1;
 UNL\UCBCN\Frontend\Controller::$url = '/';
+UNL\UCBCN\Frontend\Controller::$manager_url = '/manager/';
+UNL\UCBCN\Manager\Controller::$url = "/manager/";
 UNL\UCBCN\ActiveRecord\Database::setDbSettings(
     array(
     'host'     => 'localhost',
