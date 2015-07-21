@@ -16,6 +16,21 @@
         default:
             $total_pages = 1;
     }
+
+    function ordinal($number) {
+        $mod = $number % 100;
+        if ($mod >= 11 && $mod <= 13) {
+            return $number . 'th';
+        } else if ($mod % 10 == 1) {
+            return $number . 'st';
+        } else if ($mod % 10 == 2) {
+            return $number . 'nd';
+        } else if ($mod % 10 == 3) {
+            return $number . 'rd';
+        } else {
+            return $number . 'th';
+        }
+    }
 ?>
 <?php
     $crumbs = new stdClass;
