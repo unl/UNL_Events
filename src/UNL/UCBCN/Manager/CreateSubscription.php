@@ -70,7 +70,8 @@ class CreateSubscription extends PostHandler
     {
         $subscription = new Subscription;
         $subscription->name = $post_data['title'];
-        if (empty(trim($subscription->name))) {
+        $trimmed = trim($subscription->name);
+        if (empty($trimmed)) {
             $subscription->name = 'Subscription: ' . count($post_data['calendars']) . ' Calendar' . (count($post_data['calendars']) == 1 ? '' : 's');
         }
         $subscription->automaticapproval = $post_data['auto_approve'] == 'yes' ? 1 : 0;
