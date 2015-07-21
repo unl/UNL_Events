@@ -7,14 +7,18 @@
 <div class="toolbox">
     <h3><?php echo $calendar->name; ?></h3>
     <div class="tools">
+        <div style="text-align: center; margin-bottom: .8em">
+        <?php if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_CREATE_ID, $calendar->id)): ?>
+            <a class="wdn-button wdn-button-brand" href="<?php echo $base_manager_url . $calendar->shortname ?>/create/">
+            <span style="font-size: 2em; vertical-align: middle; font-weight: 600">+</span>
+            <span style="vertical-align: middle;">New Event</span>
+            </a>
+        <?php endif; ?>
+        </div>
         <ul>
             <li><a href="<?php echo $calendar->getManageURL() ?>">Manage Calendar</a></li>
             <li><a href="<?php echo $calendar->getFrontendURL() ?>">Live Calendar</a></li>
             
-            <?php if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_CREATE_ID, $calendar->id)): ?>
-                <li><a href="<?php echo $base_manager_url . $calendar->shortname ?>/create/">New Event</a></li>
-            <?php endif; ?>
-
             <?php if ($user->hasPermission(\UNL\UCBCN\Permission::CALENDAR_EDIT_ID, $calendar->id)): ?>
                 <li><a href="<?php echo $calendar->getEditURL() ?>">Edit Calendar Info</a></li>
             <?php endif; ?>
