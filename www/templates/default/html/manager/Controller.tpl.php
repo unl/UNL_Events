@@ -45,7 +45,21 @@ if ($context->output->getRawObject() instanceof Exception) {
 
 $page->maincontentarea = '
 <div class="wdn-band view-' . $view_class . ' events-manager">
-    <div class="wdn-inner-wrapper">
+    <div class="wdn-inner-wrapper">';
+if ($_SERVER['SERVER_NAME'] == 'events-dev.unl.edu') {
+    $page->maincontentarea .= 
+        '<div id="notice" class="wdn_notice">
+            <div class="close">
+            <a href="#" title="Close this notice">Close this notice</a>
+            </div>
+            <div class="message">
+            <h4>UNL Events Test</h4>
+            <div class="message-content">
+            This is the test server for UNL Events. Events created and published here will not affect the main UNL calendar or your site\'s sub-calendar. Please send all feedback to <a href="mailto:lemburg@unl.edu">the dev team</a> at lemburg@unl.edu.</div>
+            </div>
+        </div>';
+}
+$page->maincontentarea .= '
         <section class="wdn-grid-set reverse">
             <div class="bp2-wdn-col-three-fourths">
 ';
