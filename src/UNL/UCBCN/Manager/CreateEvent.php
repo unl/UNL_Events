@@ -126,6 +126,17 @@ class CreateEvent extends PostHandler
     {
         $user = Auth::getCurrentUser();
 
+        # tricky: if end date is empty, we want that to be the same as the start date
+        # if the end time is also empty, then be sure to set the am/pm appropriately
+        if (empty($post_data['end_date'])) {
+            $post_data['end_date'] = $post_data['start_date'];
+        }
+        if (empty($post_data['end_time_hour']) && empty($post_data['end_time_minute'])) {
+            $post_data['end_time_hour'] = $post_data['start_time_hour'];
+            $post_data['end_time_minute'] = $post_data['start_time_minute'];
+            $post_data['end_time_am_pm'] = $post_data['start_time_am_pm'];
+        }
+
         # by setting and then validating, we allow the event on the form to have the entered data
         # so if the validation fails, the form shows with the entered data
         $this->setEventData($post_data);
