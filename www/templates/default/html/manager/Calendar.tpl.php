@@ -123,21 +123,21 @@
                                                     } else if ($datetime->recurringtype == 'daily' || $datetime->recurringtype == 'weekly' || $datetime->recurringtype == 'biweekly' ||
                                                             $datetime->recurringtype == 'annually') {
                                                         echo ucwords($datetime->recurringtype) . ' @ ' . date('g:ia', strtotime($datetime->starttime)) .
-                                                            ': ' . date('n/d/y', strtotime($datetime->starttime)) . 
+                                                            ':<br>' . date('n/d/y', strtotime($datetime->starttime)) . 
                                                             ' - ' . date('n/d/y', strtotime($datetime->recurs_until));
                                                     } else if ($datetime->recurringtype == 'monthly') {
                                                         if ($datetime->rectypemonth == 'lastday') {
-                                                            echo 'Last day of each month @ ' . date('g:ia', strtotime($datetime->starttime)) . 
-                                                                ': ' . date('n/d/y', strtotime($datetime->starttime)) . 
+                                                            echo 'Last day of every month @ ' . date('g:ia', strtotime($datetime->starttime)) . 
+                                                                ':<br>' . date('n/d/y', strtotime($datetime->starttime)) . 
                                                                 ' - ' . date('n/d/y', strtotime($datetime->recurs_until));
                                                         } else if ($datetime->rectypemonth == 'date') {
                                                             echo ordinal(date('d', strtotime($datetime->starttime))) . 
-                                                                ' of each month @ ' . date('g:ia', strtotime($datetime->starttime)) . 
-                                                                ': ' . date('n/d/y', strtotime($datetime->starttime)) . 
+                                                                ' of every month @ ' . date('g:ia', strtotime($datetime->starttime)) . 
+                                                                ':<br>' . date('n/d/y', strtotime($datetime->starttime)) . 
                                                                 ' - ' . date('n/d/y', strtotime($datetime->recurs_until));
                                                         } else {
-                                                            echo ucwords($datetime->rectypemonth) . date('f', strtotime($datetime->starttime)) . ' of every month' . 
-                                                                ': ' . date('n/d/y', strtotime($datetime->starttime)) . 
+                                                            echo ucwords($datetime->rectypemonth) . date(' l', strtotime($datetime->starttime)) . ' of every month' . 
+                                                                ':<br>' . date('n/d/y', strtotime($datetime->starttime)) . 
                                                                 ' - ' . date('n/d/y', strtotime($datetime->recurs_until));
                                                         }
                                                     }
