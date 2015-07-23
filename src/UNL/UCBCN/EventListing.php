@@ -40,7 +40,7 @@ class EventListing extends RecordList
     {
         if (array_key_exists('event_id', $this->options)) {
             return 'SELECT id FROM eventdatetime WHERE event_id = ' . 
-            (int)($this->options['event_id']) . ';';
+            (int)($this->options['event_id']) . ' ORDER BY starttime ASC;';
         } else {
             return parent::getSQL();
         }

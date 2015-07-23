@@ -41,7 +41,8 @@ class Events extends RecordList
         } else if (array_key_exists('calendar', $this->options)) {
             # get all events related to the calendar through a join on calendar has event and calendar.
             $sql = '
-                SELECT event.id FROM event 
+                SELECT event.id FROM event
+                INNER JOIN eventdatetime ON event.id = eventdatetime.event_id
                 INNER JOIN calendar_has_event ON event.id = calendar_has_event.event_id
                 INNER JOIN calendar ON calendar_has_event.calendar_id = calendar.id
                 WHERE calendar.shortname = "' . self::escapeString($this->options['calendar']) . '"';
@@ -49,7 +50,8 @@ class Events extends RecordList
                 $sql .= ' AND calendar_has_event.status = "' . self::escapeString($this->options['status']) . '"';
             }
 
-            $sql .= ' ORDER BY event.id DESC';
+            $sql .= ' GROUP BY event.id ';
+            $sql .= ' ORDER BY MIN(eventdatetime.starttime) DESC';
             $sql .= ';';
 
             return $sql;
@@ -57,22 +59,23 @@ class Events extends RecordList
             $term = $this->options['search_term'];
             if ($time = strtotime($term)) {
                 $sql = '
-                    SELECT event.id
-                    FROM event
+                    SELECT event.id FROM event
                     INNER JOIN eventdatetime ON (eventdatetime.event_id = event.id)
                     WHERE eventdatetime.starttime LIKE "' . date('Y-m-d', $this->escapeString($time)) . '%"
                         AND event.approvedforcirculation = 1
-                    ORDER BY event.title
                 ';
             } else {
                 $sql = '
-                    SELECT event.id
-                    FROM event
+                    SELECT event.id FROM event
+                    INNER JOIN eventdatetime ON (eventdatetime.event_id = event.id)
                     WHERE event.title LIKE "%' . $this->escapeString($term) . '%"
                        AND event.approvedforcirculation = 1
-                    ORDER BY event.title
                 ';
             }
+
+            $sql .= ' GROUP BY event.id ';
+            $sql .= ' ORDER BY MIN(eventdatetime.starttime) DESC';
+            $sql .= ';';
             
             return $sql;
         } else {
