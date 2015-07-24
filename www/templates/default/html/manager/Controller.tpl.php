@@ -34,7 +34,6 @@ $page->head .= '<script type="text/javascript">WDN.initializePlugin("notice");</
 
 //other
 $page->leftRandomPromo = '';
-//$page->navlinks = $savvy->render($context, 'Navigation.tpl.php');
 $savvy->addGlobal('page', $page);
 
 //Render output
@@ -94,8 +93,8 @@ if (($notice = $context->getNotice()) != NULL) {
                     <a href="#" title="Close this notice">Close this notice</a>
                     </div>
                     <div class="message">
-                    <h4></h4>
-                    <div class="message-content"></div>
+                    <h4>Message Header</h4>
+                    <div class="message-content">Message Content</div>
                     </div>
                 </div>
     ';

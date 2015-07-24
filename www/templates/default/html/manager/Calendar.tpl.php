@@ -43,7 +43,14 @@
 ?>
 <form id="search-form" action="/manager/<?php echo $context->calendar->shortname; ?>/search" style="display: none;">
     <label for="events-search">Search</label>
-    <input type="text" name="search_term" id="events-search" />
+    <div>
+        <div style="float: right; padding-top: 3px;">
+            <button type="submit" class="wdn-button wdn-button-triad">Search</button>
+        </div>
+        <div style="margin-right: 100px;">
+            <input type="text" name="search_term" id="events-search"  />
+        </div>
+    </div>
 </form>
 <br>
 <ul class="wdn_tabs">
@@ -57,7 +64,7 @@
             There are no <?php echo $context->tab ?> events.
         <?php else: ?>
             <div class="medium-hidden">
-                <select id="bulk-action" class="bulk-<?php echo $context->tab; ?>-event-tools">
+                <select id="bulk-action" title="Bulk Action" class="bulk-<?php echo $context->tab; ?>-event-tools">
                     <option value="">Bulk Actions</option>
                     <?php if ($context->tab == 'pending' && $user->hasPermission(\UNL\UCBCN\Permission::EVENT_MOVE_TO_UPCOMING_ID, $context->calendar->id)): ?>
                         <option value="move-to-upcoming">Move to Upcoming</option>
@@ -70,8 +77,9 @@
                     <?php endif; ?>
                 </select>
                 <form id="bulk-action-form" method="POST" action="<?php echo $context->calendar->getBulkActionURL() ?>" class="delete-form hidden">
-                <input type="text" id="bulk-action-ids" name="ids">
-                <input type="text" id="bulk-action-action" name="action">
+                <input type="text" title="Bulk Action IDs" id="bulk-action-ids" name="ids">
+                <input type="text" title="Bulk Action Action" id="bulk-action-action" name="action">
+                <button type="submit">Submit</button>
                 </form>
             </div><br class="medium-hidden">
 
@@ -89,7 +97,7 @@
                         <?php foreach($events as $event): ?>
                             <tr>
                                 <td class="center medium-hidden">
-                                    <input type="checkbox" id="select-event-<?php echo $event->id ?>" class="select-event" data-id="<?php echo $event->id; ?>">
+                                    <input type="checkbox" id="select-event-<?php echo $event->id ?>" title="Select Event" class="select-event" data-id="<?php echo $event->id; ?>">
                                 </td>
                                 <td class="small-hidden">
                                     <?php if ($event->userCanEdit()): ?>
@@ -154,7 +162,8 @@
                                     </ul>
                                     <select 
                                         id="event-action-<?php echo $event->id ?>-small"
-                                        class="<?php echo $context->tab ?>-event-tools small-block hidden" 
+                                        class="<?php echo $context->tab ?>-event-tools small-block hidden"
+                                        title="Select an Action"
                                         data-id="<?php echo $event->id; ?>"
                                         data-recommend-url="<?php echo $event->getRecommendURL($controller->getCalendar()) ?>"
                                         >
@@ -178,7 +187,8 @@
                                 <td class="small-hidden">
                                     <select 
                                         id="event-action-<?php echo $event->id ?>"
-                                        class="<?php echo $context->tab ?>-event-tools" 
+                                        class="<?php echo $context->tab ?>-event-tools"
+                                        title="Select an Action"
                                         data-id="<?php echo $event->id; ?>"
                                         data-recommend-url="<?php echo $event->getRecommendURL($controller->getCalendar()) ?>"
                                         >
@@ -198,10 +208,13 @@
                                             <?php endif; ?>
                                     </select>
                                     <form id="move-<?php echo $event->id; ?>" method="POST" action="<?php echo $event->getMoveURL($controller->getCalendar()) ?>" class="delete-form hidden">
-                                    <input type="text" name="new_status" id="move-target-<?php echo $event->id; ?>">
-                                    <input type="text" name="event_id" value="<?php echo $event->id ?>">
+                                    <input type="text" title="New Status" name="new_status" id="move-target-<?php echo $event->id; ?>">
+                                    <input type="text" title="Event ID" name="event_id" value="<?php echo $event->id ?>">
+                                    <button type="submit">Submit</button>
                                     </form>
-                                    <form id="delete-<?php echo $event->id; ?>" method="POST" action="<?php echo $event->getDeleteURL($controller->getCalendar()) ?>" class="delete-form hidden"></form>
+                                    <form id="delete-<?php echo $event->id; ?>" method="POST" action="<?php echo $event->getDeleteURL($controller->getCalendar()) ?>" class="delete-form hidden">
+                                    <button type="submit">Submit</button>
+                                    </form>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

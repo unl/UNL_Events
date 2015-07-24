@@ -32,9 +32,9 @@
                 </td>
                 <td class="center">
                 <?php if ($arr['status'] == 'pending') { ?>
-                    <img src="<?php echo $base_frontend_url ?>templates/default/html/images/checkmark-16.png">
+                    <img src="<?php echo $base_frontend_url ?>templates/default/html/images/checkmark-16.png" alt="Event is Pending">
                 <?php } else if ($arr['can_pending']) { ?>
-                    <input type="radio" name="calendar_<?php echo $calendar->id ?>" value="pending">
+                    <input type="radio" title="<?php echo $calendar->name ?>: Pending" name="calendar_<?php echo $calendar->id ?>" value="pending">
                 <?php } else { ?>
                     &nbsp;
                 <?php } ?>
@@ -42,9 +42,9 @@
 
                 <td class="center">
                 <?php if ($arr['status'] == 'posted' || $arr['status'] == 'archived') { ?>
-                    <img src="<?php echo $base_frontend_url ?>templates/default/html/images/checkmark-16.png">
+                    <img src="<?php echo $base_frontend_url ?>templates/default/html/images/checkmark-16.png" alt="Event is Upcoming">
                 <?php } else if ($arr['can_posted']) { ?>
-                    <input type="radio" name="calendar_<?php echo $calendar->id ?>" value="posted">
+                    <input type="radio" title="<?php echo $calendar->name ?>: Upcoming" name="calendar_<?php echo $calendar->id ?>" value="posted">
                 <?php } else { ?>
                     &nbsp;
                 <?php } ?>

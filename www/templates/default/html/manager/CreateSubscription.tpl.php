@@ -20,17 +20,15 @@
 <form id="add-subscription" action="<?php echo $context->subscription->id == NULL ? $context->subscription->getNewURL($context->calendar) : $context->subscription->getEditURL($context->calendar) ?>" method="POST">
     <div class="wdn-grid-set" class="clearfix">
         <div class="bp2-wdn-col-two-thirds">
-            <fieldset>
-                <label for="title">Title</label>
-                <input type="text" id="title" name="title" value="<?php echo $context->subscription->name ?>" />
+            <label for="title">Title</label>
+            <input type="text" id="title" name="title" value="<?php echo $context->subscription->name ?>" />
 
-                <label for="calendars">Events Posted to Calendar(s):</label>
-                <select id="calendars" name="calendars[]" multiple="multiple" class="use-select2" style="width: 100%;">
-                <?php foreach($context->getAvailableCalendars() as $calendar): ?>
-                    <option <?php if (in_array($calendar->id, $subbed_calendar_ids)) echo 'selected="selected"'; ?> value="<?php echo $calendar->id ?>"><?php echo $calendar->name ?></option>
-                <?php endforeach; ?>
-                </select>
-            </fieldset>
+            <label for="calendars">Events Posted to Calendar(s):</label>
+            <select id="calendars" name="calendars[]" multiple="multiple" class="use-select2" style="width: 100%;">
+            <?php foreach($context->getAvailableCalendars() as $calendar): ?>
+                <option <?php if (in_array($calendar->id, $subbed_calendar_ids)) echo 'selected="selected"'; ?> value="<?php echo $calendar->id ?>"><?php echo $calendar->name ?></option>
+            <?php endforeach; ?>
+            </select>
         </div>
         <div class="bp2-wdn-col-one-third">
             <br>
@@ -48,6 +46,7 @@
             </div>
         </div>
     </div>
+    <br>
     <button class="wdn-button wdn-button-brand" form="add-subscription" type="submit">
         <?php echo $context->subscription->id == NULL ? 'Add Subscription' : 'Save Subscription' ?>
     </button>

@@ -10,8 +10,9 @@
 
 <?php if (count($context->getSubscriptions()) > 0): ?>
 <?php foreach($context->getSubscriptions() as $subscription): ?>
-<form id="delete-subscription-<?php echo $subscription->id ?>" method="POST" action="<?php echo $subscription->getDeleteURL() ?>" class="delete-form">
+<form id="delete-subscription-<?php echo $subscription->id ?>" method="POST" action="<?php echo $subscription->getDeleteURL() ?>" class="delete-form hidden">
     <input type="hidden" name="subscription_id" value="<?php echo $subscription->id ?>" />
+    <button type="submit">Submit</button>
 </form>
 <?php endforeach; ?>
 <h1 class="wdn-brand">
