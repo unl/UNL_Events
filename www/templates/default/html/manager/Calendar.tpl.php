@@ -82,7 +82,10 @@
                 <button type="submit">Submit</button>
                 </form>
             </div><br class="medium-hidden">
-
+            <div class="medium-hidden" style="margin-bottom: 5px;">
+                <a href='#' class="wdn-button small-button" id="check-all">Check All</a>
+                <a href='#' class="wdn-button small-button" id="uncheck-all">Uncheck All</a>
+            </div>
             <div class="event-page">
                 <table class="event-list">
                     <thead class="small-hidden">

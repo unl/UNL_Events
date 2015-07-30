@@ -36,6 +36,16 @@ require(['jquery', 'wdn', 'modernizr', frontend_url + 'templates/default/html/js
             }
         });
 
+        $('#check-all').click(function (click) {
+            click.preventDefault();
+            $(".select-event").prop("checked", true);
+        });
+
+        $('#uncheck-all').click(function (click) {
+            click.preventDefault();
+            $(".select-event").prop("checked", false);
+        });
+
         $('.pending-event-tools, .upcoming-event-tools, .past-event-tools, .searched-event-tools').change(function () {
             if ($(this).val() == 'recommend') {
                 // redirect to recommend URL

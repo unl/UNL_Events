@@ -27,7 +27,7 @@
         <?php foreach($context->getRecommendableCalendars() as $id => $arr): ?>
             <tr>
                 <?php $calendar = $arr['calendar']; ?>
-                <td style="word-break: break-word;">
+                <td style="word-wrap: break-word;">
                     <?php echo $calendar->name; ?>
                 </td>
                 <td class="center">
