@@ -16,23 +16,25 @@ require(['jquery', 'wdn', 'modernizr', frontend_url + 'templates/default/html/js
                 }
             });
 
-            $('#bulk-action-ids').val(ids.join(','));
-            $('#bulk-action-action').val($(this).val());
+            if (ids.length > 0) {
+                $('#bulk-action-ids').val(ids.join(','));
+                $('#bulk-action-action').val($(this).val());
 
-            var confirm_string = null;
-            if ($(this).val() == 'delete') {
-                confirm_string = 'Are you sure you want to delete these ' + ids.length.toString() + ' events?';
-            } else if ($(this).val() == 'move-to-upcoming') {
-                confirm_string = 'Are you sure to move these ' + ids.length.toString() + ' events to "Upcoming"?';
-            } else if ($(this).val() == 'move-to-pending') {
-                confirm_string = 'Are you sure to move these ' + ids.length.toString() + ' events to "Pending"?';
-            } else {
-                // do nothing
-                return;
-            }
+                var confirm_string = null;
+                if ($(this).val() == 'delete') {
+                    confirm_string = 'Are you sure you want to delete these ' + ids.length.toString() + ' events?';
+                } else if ($(this).val() == 'move-to-upcoming') {
+                    confirm_string = 'Are you sure to move these ' + ids.length.toString() + ' events to "Upcoming"?';
+                } else if ($(this).val() == 'move-to-pending') {
+                    confirm_string = 'Are you sure to move these ' + ids.length.toString() + ' events to "Pending"?';
+                } else {
+                    // do nothing
+                    return;
+                }
 
-            if (window.confirm(confirm_string)) {
-                $('#bulk-action-form').submit();
+                if (window.confirm(confirm_string)) {
+                    $('#bulk-action-form').submit();
+                }
             }
         });
 

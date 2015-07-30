@@ -173,7 +173,10 @@ class AddDatetime extends PostHandler
         $location = new Location;
 
         foreach ($allowed_fields as $field) {
-            $location->$field = $post_data['new_location'][$field];
+            $value = $post_data['new_location'][$field];
+            if (!empty($value)) {
+                $location->$field = $value;
+            }
         }
 
         if (array_key_exists('location_save', $post_data) && $post_data['location_save'] == 'on') {

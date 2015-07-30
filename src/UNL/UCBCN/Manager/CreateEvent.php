@@ -51,15 +51,15 @@ class CreateEvent extends PostHandler
 
     private function setEventData($post_data) 
     {
-        $this->event->title = $post_data['title'];
-        $this->event->subtitle = $post_data['subtitle'];
-        $this->event->description = $post_data['description'];
+        $this->event->title = empty($post_data['title']) ? NULL : $post_data['title'];
+        $this->event->subtitle = empty($post_data['subtitle']) ? NULL : $post_data['subtitle'];
+        $this->event->description = empty($post_data['description']) ? NULL : $post_data['description'];
 
-        $this->event->listingcontactname = $post_data['contact_name'];
-        $this->event->listingcontactphone = $post_data['contact_phone'];
-        $this->event->listingcontactemail = $post_data['contact_email'];
+        $this->event->listingcontactname = empty($post_data['contact_name']) ? NULL : $post_data['contact_name'];
+        $this->event->listingcontactphone = empty($post_data['contact_phone']) ? NULL : $post_data['contact_phone'];
+        $this->event->listingcontactemail = empty($post_data['contact_email']) ? NULL : $post_data['contact_email'];
 
-        $this->event->webpageurl = $post_data['website'];
+        $this->event->webpageurl = empty($post_data['website']) ? NULL : $post_data['website'];
         $this->event->approvedforcirculation = $post_data['private_public'] == 'public' ? 1 : 0;
 
         # for extraneous data aside from the event (location, type, etc)
@@ -232,7 +232,10 @@ class CreateEvent extends PostHandler
         $location = new Location;
 
         foreach ($allowed_fields as $field) {
-            $location->$field = $post_data['new_location'][$field];
+            $value = $post_data['new_location'][$field];
+            if (!empty($value)) {
+                $location->$field = $value;
+            }
         }
 
         if (array_key_exists('location_save', $post_data) && $post_data['location_save'] == 'on') {
