@@ -119,7 +119,7 @@ class Auth {
         $cache_driver = new \Stash\Driver\FileSystem();
         $cache_driver->setOptions(array(
             //Scope the cache to the current application only.
-            'path' => __DIR__. '/../../../../tmp/simpleCAS_map',
+            'path' => '/tmp/simpleCAS_map',
         ));
         
         $session_map = new \SimpleCAS_SLOMap($cache_driver);
