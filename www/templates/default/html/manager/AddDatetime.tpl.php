@@ -234,6 +234,8 @@ WDN.initializePlugin('jqueryui', [function() {
         }
     });
 
+    $('#location').change();
+
     $('#start-date').change(function (change) {
         setRecurringOptions($(this), $('#monthly-group'));
     });

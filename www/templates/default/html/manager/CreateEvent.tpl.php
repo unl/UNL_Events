@@ -275,6 +275,8 @@ WDN.initializePlugin('jqueryui', [function() {
             $('#new-location-fields').hide();
         }
     });
+
+    $('#location').change();
 }]);
 
 require(['jquery'], function ($) {
