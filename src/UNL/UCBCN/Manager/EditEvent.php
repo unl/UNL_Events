@@ -87,29 +87,33 @@ class EditEvent extends PostHandler
 
         $this->event->webpageurl = empty($post_data['website']) ? NULL : $post_data['website'];
         $this->event->approvedforcirculation = $post_data['private_public'] == 'public' ? 1 : 0;
+    }
+
+    private function validateEventData($post_data, $files)
+    {
+        # title required
+        if (empty($post_data['title'])) {
+            throw new ValidationException('<a href="#title">Title</a> is required.');
+        }
 
         if (array_key_exists('remove_image', $post_data) && $post_data['remove_image'] == 'on') {
             $this->event->imagemime = NULL;
             $this->event->imagedata = NULL;
         }
-        else if (isset($files['imagedata']) && is_uploaded_file($files['imagedata']['tmp_name']) && $files['imagedata']['error'] == UPLOAD_ERR_OK) {
-            $this->event->imagemime = $files['imagedata']['type'];
-            $this->event->imagedata = file_get_contents($files['imagedata']['tmp_name']);
-        }
-    }
-
-    private function validateEventData($post_data)
-    {
-        # title required
-        if (empty($post_data['title'])) {
-            throw new ValidationException('<a href="#title">Title</a> is required.');
+        else if (isset($files['imagedata'])) {
+            if (is_uploaded_file($files['imagedata']['tmp_name']) && $files['imagedata']['error'] == UPLOAD_ERR_OK) {
+                $this->event->imagemime = $files['imagedata']['type'];
+                $this->event->imagedata = file_get_contents($files['imagedata']['tmp_name']);
+            } else {
+                throw new ValidationException('There was an error uploading your image.');
+            }
         }
     }
 
     private function updateEvent($post_data, $files) 
     {
         $this->setEventData($post_data, $files);
-        $this->validateEventData($post_data);
+        $this->validateEventData($post_data, $files);
         $result = $this->event->update();
 
         # update the event type record

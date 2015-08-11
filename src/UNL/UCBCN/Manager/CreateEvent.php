@@ -62,16 +62,11 @@ class CreateEvent extends PostHandler
         $this->event->webpageurl = empty($post_data['website']) ? NULL : $post_data['website'];
         $this->event->approvedforcirculation = $post_data['private_public'] == 'public' ? 1 : 0;
 
-        if (isset($files['imagedata']) && is_uploaded_file($files['imagedata']['tmp_name']) && $files['imagedata']['error'] == UPLOAD_ERR_OK) {
-            $this->event->imagemime = $files['imagedata']['type'];
-            $this->event->imagedata = file_get_contents($files['imagedata']['tmp_name']);
-        }
-
         # for extraneous data aside from the event (location, type, etc)
         $this->post = $post_data;
     }
 
-    private function validateEventData($post_data) 
+    private function validateEventData($post_data, $files) 
     {
         # title, start date, location are required
         if (empty($post_data['title']) || empty($post_data['location']) || empty($post_data['start_date'])) {
@@ -106,6 +101,15 @@ class CreateEvent extends PostHandler
         # check that a new location has a name
         if ($post_data['location'] == 'new' && empty($post_data['new_location']['name'])) {
             throw new ValidationException('You must give your new location a <a href="#location-name">name</a>.');
+        }
+
+        if (isset($files['imagedata'])) {
+            if (is_uploaded_file($files['imagedata']['tmp_name']) && $files['imagedata']['error'] == UPLOAD_ERR_OK) {
+                $this->event->imagemime = $files['imagedata']['type'];
+                $this->event->imagedata = file_get_contents($files['imagedata']['tmp_name']);
+            } else {
+                throw new ValidationException('There was an error uploading your image.');
+            }
         }
     }
 
@@ -145,7 +149,7 @@ class CreateEvent extends PostHandler
         # by setting and then validating, we allow the event on the form to have the entered data
         # so if the validation fails, the form shows with the entered data
         $this->setEventData($post_data, $files);
-        $this->validateEventData($post_data);
+        $this->validateEventData($post_data, $files);
 
         $result = $this->event->insert($this->calendar, 'create event form');
 
