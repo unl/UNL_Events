@@ -227,7 +227,7 @@
                         <input type="checkbox" name="remove_image" id="remove-image">
                         <label for="remove-image">Remove Image</label> 
                     <?php endif; ?>
-                    <input style="font-size: 10px;" type="file" name="imagedata" id="imagedata">
+                    <input style="font-size: 10px;" type="file" name="imagedata" id="imagedata" title="Event Image">
                 </div>
             </div>
         </div>

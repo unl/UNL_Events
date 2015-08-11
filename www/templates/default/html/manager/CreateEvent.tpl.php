@@ -245,7 +245,7 @@
                 </div>
 
                 <div class="details">
-                    <input style="font-size: 10px;" type="file" name="imagedata" id="imagedata">
+                    <input style="font-size: 10px;" type="file" name="imagedata" id="imagedata" title="Event Image">
                 </div>
             </div>
         </div>
