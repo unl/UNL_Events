@@ -103,8 +103,8 @@ class CreateEvent extends PostHandler
             throw new ValidationException('You must give your new location a <a href="#location-name">name</a>.');
         }
 
-        if (isset($files['imagedata'])) {
-            if (is_uploaded_file($files['imagedata']['tmp_name']) && $files['imagedata']['error'] == UPLOAD_ERR_OK) {
+        if (isset($files['imagedata']) && is_uploaded_file($files['imagedata']['tmp_name']) {
+            if ($files['imagedata']['error'] == UPLOAD_ERR_OK) {
                 $this->event->imagemime = $files['imagedata']['type'];
                 $this->event->imagedata = file_get_contents($files['imagedata']['tmp_name']);
             } else {
