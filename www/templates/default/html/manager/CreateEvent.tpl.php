@@ -14,7 +14,7 @@
 ?>
 <br>
 <div class="wdn-grid-set">
-    <form id="create-event-form" action="" method="POST">
+    <form id="create-event-form" action="" method="POST" enctype="multipart/form-data">
         <div class="bp3-wdn-col-two-thirds">
             <fieldset>
                 <legend style="margin-top: 0">Event Details</legend>
@@ -236,6 +236,16 @@
 
                     <label for="website">Event Website</label>
                     <input type="text" id="website" name="website" value="<?php echo $event->webpageurl ?>" />
+                </div>
+            </div>
+
+            <div class="visual-island">
+                <div class="vi-header">
+                    <label>Image</label>
+                </div>
+
+                <div class="details">
+                    <input style="font-size: 10px;" type="file" name="imagedata" id="imagedata">
                 </div>
             </div>
         </div>

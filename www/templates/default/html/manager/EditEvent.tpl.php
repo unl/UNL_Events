@@ -46,7 +46,7 @@
     <?php endif; ?>
 <?php endforeach; ?>
 
-<form id="edit-event-form" action="" method="POST" class="clearfix">
+<form id="edit-event-form" action="" method="POST" class="clearfix" enctype="multipart/form-data">
     <div class="wdn-grid-set">
         <div class="bp3-wdn-col-two-thirds">
             <fieldset style="margin-top: 0">
@@ -212,6 +212,22 @@
 
                     <label for="website">Event Website</label>
                     <input value="<?php echo $event->webpageurl; ?>" type="text" id="website" name="website" />
+                </div>
+            </div>
+
+            <div class="visual-island">
+                <div class="vi-header">
+                    <label>Image</label>
+                </div>
+
+                <div class="details">
+                    <?php if ($event->imagemime != NULL): ?>
+                        <img src="/images/<?php echo $event->id; ?>" alt="image for event <?php echo $event->id; ?>">
+                        <br>
+                        <input type="checkbox" name="remove_image" id="remove-image">
+                        <label for="remove-image">Remove Image</label> 
+                    <?php endif; ?>
+                    <input style="font-size: 10px;" type="file" name="imagedata" id="imagedata">
                 </div>
             </div>
         </div>

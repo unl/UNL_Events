@@ -54,7 +54,7 @@ class EditEvent extends PostHandler
     public function handlePost(array $get, array $post, array $files)
     {
         try {
-            $this->updateEvent($_POST);
+            $this->updateEvent($post, $files);
         } catch (ValidationException $e) {
             $this->flashNotice(parent::NOTICE_LEVEL_ALERT, 'Sorry! We couldn\'t edit your event', $e->getMessage());
             throw $e;
@@ -75,7 +75,7 @@ class EditEvent extends PostHandler
         return new Locations(array('user_id' => $user->uid));
     }
 
-    private function setEventData($post_data)
+    private function setEventData($post_data, $files)
     {
         $this->event->title = empty($post_data['title']) ? NULL : $post_data['title'];
         $this->event->subtitle = empty($post_data['subtitle']) ? NULL : $post_data['subtitle'];
@@ -87,6 +87,15 @@ class EditEvent extends PostHandler
 
         $this->event->webpageurl = empty($post_data['website']) ? NULL : $post_data['website'];
         $this->event->approvedforcirculation = $post_data['private_public'] == 'public' ? 1 : 0;
+
+        if (array_key_exists('remove_image', $post_data) && $post_data['remove_image'] == 'on') {
+            $this->event->imagemime = NULL;
+            $this->event->imagedata = NULL;
+        }
+        else if (isset($files['imagedata']) && is_uploaded_file($files['imagedata']['tmp_name']) && $files['imagedata']['error'] == UPLOAD_ERR_OK) {
+            $this->event->imagemime = $files['imagedata']['type'];
+            $this->event->imagedata = file_get_contents($files['imagedata']['tmp_name']);
+        }
     }
 
     private function validateEventData($post_data)
@@ -97,9 +106,9 @@ class EditEvent extends PostHandler
         }
     }
 
-    private function updateEvent($post_data) 
+    private function updateEvent($post_data, $files) 
     {
-        $this->setEventData($post_data);
+        $this->setEventData($post_data, $files);
         $this->validateEventData($post_data);
         $result = $this->event->update();
 
