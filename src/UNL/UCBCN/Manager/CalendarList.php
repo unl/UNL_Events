@@ -12,6 +12,8 @@ class CalendarList {
         	$calendars->seek(0);
         	$calendar = $calendars->current();
         	Controller::redirect($calendar->getManageURL());
+        } else {
+            # what the heck. This user doesn't have a calendar.
         }
     }
 
