@@ -25,6 +25,11 @@ $athletics = file_get_contents('http://www.huskers.com/rss.dbml?db_oem_id=100&me
 
 $xml = new SimpleXMLElement($athletics);
 
+$inserted = 0;
+$updated = 0;
+$no_change = 0;
+$errors = 0;
+
 foreach ($xml->channel->item as $event_xml) {
 
     $starttime = 0;
@@ -73,10 +78,13 @@ foreach ($xml->channel->item as $event_xml) {
         $e->webpageurl = preg_replace('/\&SPSID=[\d]+\&Q_SEASON=[\d]+/', '', $event_xml->link);
 
         if ($e->insert($calendar, 'create event form')) {
+        	$inserted++;
             echo 'Inserted event ' . $e->title . PHP_EOL;
             addDateTime($e, $starttime, $endtime, $location, $additional_info);
+            $inserted++;
         } else {
         	echo 'Error inserting event ' . $e->title . PHP_EOL;
+        	$errors++;
         }
     }
 
@@ -97,7 +105,9 @@ function addDateTime($e, $starttime, $endtime, $location, $additional_info)
         $dt->location_id = $location->id;
         $dt->additionalpublicinfo = $additional_info;
         $dt->recurringtype = 'none';
-        return $dt->insert();
+        $dt->insert();
+        $inserted++;
+        return true;
     }
 
     $dt = Occurrence::getByEvent_ID($e->id);
@@ -117,12 +127,15 @@ function addDateTime($e, $starttime, $endtime, $location, $additional_info)
 	        $dt->starttime = $starttime;
 	        $dt->location_id = $location->id;
 	        $dt->additionalpublicinfo = $additional_info;
-	        return $dt->update();
+	        $dt->update();
+	        $updated++;
 	    } else {
 	    	echo 'No change with datetime.' . PHP_EOL;
+	    	$no_change++;
 	    }
 	} else {
 		echo 'error with datetime for event ' . $e->id . PHP_EOL;
+		$errors++;
 		return false;
 	}
 
@@ -130,3 +143,7 @@ function addDateTime($e, $starttime, $endtime, $location, $additional_info)
 }
 
 echo PHP_EOL.'DONE'.PHP_EOL;
+echo 'Records inserted: ' . $inserted . PHP_EOL;
+echo 'Records updated: ' . $updated . PHP_EOL;
+echo 'Unchanged: ' . $no_change . PHP_EOL;
+echo 'Errors: ' . $errors . PHP_EOL;
