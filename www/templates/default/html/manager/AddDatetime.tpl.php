@@ -153,9 +153,9 @@
 
             <div id="start-time-am-pm" class="am_pm">
                 <input <?php if ($start_am_pm == 'am') echo 'checked="checked"'; ?> 
-                    type="radio" value="am" name="start_time_am_pm">AM<br>
+                    type="radio" value="am" id="start-time-am-pm-am" name="start_time_am_pm">AM<br>
                 <input <?php if ($start_am_pm == 'pm') echo 'checked="checked"'; ?> 
-                type="radio" value="pm" name="start_time_am_pm">PM
+                type="radio" value="pm" id="start-time-am-pm-pm" name="start_time_am_pm">PM
             </div>
         </div>
 
@@ -181,9 +181,9 @@
 
             <div id="end-time-am-pm" class="am_pm">
                 <input <?php if ($end_am_pm == 'am') echo 'checked="checked"'; ?> 
-                    type="radio" value="am" name="end_time_am_pm">AM<br>
+                    type="radio" value="am" id="end-time-am-pm-am" name="end_time_am_pm">AM<br>
                 <input <?php if ($end_am_pm == 'pm') echo 'checked="checked"'; ?> 
-                    type="radio" value="pm" name="end_time_am_pm">PM
+                    type="radio" value="pm" id="end-time-am-pm-pm" name="end_time_am_pm">PM
             </div>
         </div>
 
