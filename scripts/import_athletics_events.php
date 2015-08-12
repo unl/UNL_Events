@@ -69,7 +69,6 @@ foreach ($xml->channel->item as $event_xml) {
 
     if ($event_exists) {
         $e = Event::getByPrivateComment('Imported from athletics rss feed HASH:'.md5($event_xml->guid));
-        echo 'Found DB event ' . $e->title . PHP_EOL;
         addDateTime($e, $starttime, $endtime, $location, $additional_info);
     } else {
         // insert
@@ -130,7 +129,6 @@ function addDateTime($e, $starttime, $endtime, $location, $additional_info)
 	        $dt->update();
 	        $updated++;
 	    } else {
-	    	echo 'No change with datetime.' . PHP_EOL;
 	    	$no_change++;
 	    }
 	} else {
