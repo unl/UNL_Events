@@ -240,6 +240,11 @@ WDN.initializePlugin('jqueryui', [function() {
         setRecurringOptions($(this), $('#monthly-group'));
     });
 
+    <?php if ($datetime->recurringtype != 'none' && $datetime->recurringtype != NULL): ?>
+    setRecurringOptions($('#start-date'), $('#monthly-group'));
+    $('#recurring-type').val('<?php echo $datetime->recurringtype ?>');
+    <?php endif; ?>
+
     $('#add-datetime-form').submit(function (submit) {
         errors = [];
 
@@ -321,12 +326,3 @@ WDN.initializePlugin('jqueryui', [function() {
     });
 }]);
 </script>
-
-<?php if ($datetime->recurringtype != 'none' && $datetime->recurringtype != NULL): ?>
-<script type="text/javascript">
-require(['jquery'], function ($) {
-    setRecurringOptions($('#start-date'), $('#monthly-group'));
-    $('#recurring-type').val('<?php echo $datetime->recurringtype ?>');
-});
-</script>
-<?php endif; ?>
