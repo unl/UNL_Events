@@ -110,6 +110,8 @@ class CreateEvent extends PostHandler
             } else {
                 throw new ValidationException('There was an error uploading your image.');
             }
+        } else if (isset($files['imagedata']) && $files['imagedata']['error'] == UPLOAD_ERR_INI_SIZE) {
+            throw new ValidationException('Your image file size was too large. It must be 2 MB or less. Try a tool like <a target="_blank" href="http://www.imageoptimizer.net">Image Optimizer</a>.');
         }
     }
 

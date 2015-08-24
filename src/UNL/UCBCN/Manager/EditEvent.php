@@ -99,14 +99,15 @@ class EditEvent extends PostHandler
         if (array_key_exists('remove_image', $post_data) && $post_data['remove_image'] == 'on') {
             $this->event->imagemime = NULL;
             $this->event->imagedata = NULL;
-        }
-        else if (isset($files['imagedata']) && is_uploaded_file($files['imagedata']['tmp_name'])) {
+        } else if (isset($files['imagedata']) && is_uploaded_file($files['imagedata']['tmp_name'])) {
             if ($files['imagedata']['error'] == UPLOAD_ERR_OK) {
                 $this->event->imagemime = $files['imagedata']['type'];
                 $this->event->imagedata = file_get_contents($files['imagedata']['tmp_name']);
             } else {
                 throw new ValidationException('There was an error uploading your image.');
             }
+        } else if (isset($files['imagedata']) && $files['imagedata']['error'] == UPLOAD_ERR_INI_SIZE) {
+            throw new ValidationException('Your image file size was too large. It must be 2 MB or less. Try a tool like <a target="_blank" href="http://www.imageoptimizer.net">Image Optimizer</a>.');
         }
     }
 
