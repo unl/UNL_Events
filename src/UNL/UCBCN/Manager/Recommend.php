@@ -101,7 +101,7 @@ class Recommend extends PostHandler
                 );
             } else {
                 # what are the permissions allowed
-                $user_can_pending = $user->hasPermission($pending_permission->id, $cal_id);
+                $user_can_pending = $user->hasPermission($pending_permission->id, $cal_id) || $calendar->recommendationswithinaccount;
                 $user_can_posted = $user->hasPermission($posted_permission->id, $cal_id);
 
                 $calendar_properties[$cal_id] = array(
