@@ -52,7 +52,7 @@ class Recommend extends PostHandler
             $calendar = Calendar::getByID($calendar_id);
 
             if ($status == 'pending') {
-                if ($user->hasPermission($pending_permission->id, $calendar_id)) {
+                if ($user->hasPermission($pending_permission->id, $calendar_id) || $calendar->recommendationswithinaccount) {
                     $calendar->addEvent($this->event, $status, $user, 'recommended');
                 }
             } else if ($status == 'posted') {
