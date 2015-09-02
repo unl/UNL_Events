@@ -24,13 +24,12 @@ $routes['/^images\/(?P<id>[\d]+)$/']                                            
 $routes['/^'.$calendar_slash_required.'upcoming'.'(\/)?'.$format.'$/']                                     = 'UNL\UCBCN\Frontend\Upcoming';
 $routes['/^'.$calendar_slash_required.'week'.'(\/)?'.$format.'$/']                                         = 'UNL\UCBCN\Frontend\Week';
 $routes['/^'.$calendar_slash_required.'search'.'\/$/']                                                     = 'UNL\UCBCN\Frontend\Search';
-$routes['/^'.$calendar_slash_optional.'$/']                                                                = 'UNL\UCBCN\Frontend\Day';
 $routes['/^'.$calendar_slash_required.$year.'(\/)?'.$format.'$/']                                          = 'UNL\UCBCN\Frontend\Year';
 $routes['/^'.$calendar_slash_required.$year.'\/'.$month.'(\/)?'.$format.'$/']                              = 'UNL\UCBCN\Frontend\Month';
 $routes['/^'.$calendar_slash_required.$year.'\/'.$month.'\/widget(\/)?'.$format.'$/']                      = 'UNL\UCBCN\Frontend\MonthWidget';
 $routes['/^'.$calendar_slash_required.$year.'\/'.$week.'(\/)?'.$format.'$/']                               = 'UNL\UCBCN\Frontend\Week';
 $routes['/^'.$calendar_slash_required.$year.'\/'.$month.'\/'.$day.'(\/)?'.$format.'$/']                    = 'UNL\UCBCN\Frontend\Day';
 $routes['/^'.$calendar_slash_required.$year.'\/'.$month.'\/'.$day.'\/(?P<id>[\d]+)'.'(\/)?'.$format.'$/']  = 'UNL\UCBCN\Frontend\EventInstance';
-
+$routes['/^'.$calendar_slash_optional.'$/']                                                                = 'UNL\UCBCN\Frontend\Day';
 
 return $routes;
