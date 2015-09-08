@@ -275,7 +275,7 @@ class Controller
     public function getWebcalUpcomingURL()
     {
         $upcoming = Upcoming::generateURL($this->options['calendar']);
-        $upcoming = 'webcal://' . $_SERVER['SERVER_NAME'] . $upcoming;
+        $upcoming = 'webcal://' . $upcoming;
         return $upcoming;
     }
     
