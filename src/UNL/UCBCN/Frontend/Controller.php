@@ -271,6 +271,13 @@ class Controller
     {
         return Upcoming::generateURL($this->options['calendar']);
     }
+
+    public function getWebcalUpcomingURL()
+    {
+        $upcoming = Upcoming::generateURL($this->options['calendar']);
+        $upcoming = 'webcal://' . $_SERVER['SERVER_NAME'] . $upcoming;
+        return $upcoming;
+    }
     
     public function getCurrentWeekURL()
     {
