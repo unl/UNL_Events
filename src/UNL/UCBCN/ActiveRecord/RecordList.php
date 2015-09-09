@@ -43,6 +43,10 @@ abstract class RecordList extends \LimitIterator implements \Countable
 
         $list = new \ArrayIterator($this->options['array']);
 
+        if (!is_numeric($this->options['limit']) || $this->options['limit'] < 1) {
+            $this->options['limit'] = -1;
+        }
+
         parent::__construct($list, $this->options['offset'], $this->options['limit']);
     }
 

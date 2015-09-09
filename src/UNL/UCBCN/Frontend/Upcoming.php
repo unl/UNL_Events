@@ -95,8 +95,10 @@ class Upcoming extends EventListing implements RoutableInterface
                           CONCAT(DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.starttime," %H:%i:%s"))
                         )
                     ) ASC,
-                    event.title ASC
-                LIMIT ' . (int)$this->options['limit'];
+                    event.title ASC';
+        if (is_numeric($this->options['limit'] && $this->options['limit'] >= 1)) {
+            $sql .= ' LIMIT ' . (int)$this->options['limit'];
+        }
         return $sql;
     }
     
