@@ -35,11 +35,11 @@ class DeleteSubscription extends PostHandler
 
     public function handlePost(array $get, array $post, array $files)
     {
-        if (!isset($post_data['subscription_id'])) {
+        if (!isset($post['subscription_id'])) {
             throw new \Exception("The subscription_id must be set in the post data", 400);
         }
 
-        if ($post_data['subscription_id'] != $this->subscription->id) {
+        if ($post['subscription_id'] != $this->subscription->id) {
             throw new \Exception("The subscription_id in the post data must match the subscriptions_id in the URL", 400);
         }
 
