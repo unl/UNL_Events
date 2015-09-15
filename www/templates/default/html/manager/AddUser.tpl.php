@@ -18,6 +18,11 @@
             <option value="<?php echo $user->uid ?>"><?php echo $user->uid ?></option>
         <?php } ?>
         </select>
+        <div class="visual-island">
+            <div class="details">
+                Note: This is a list of users who have previouslly logged into the system.  If you do not see someone in this list, please have them log into the system so that their account is created.
+            </div>
+        </div>
     <?php } else { ?>
         <label>Editing for User:</label><br><strong><?php echo $context->user->uid ?></strong>
     <?php } ?>
