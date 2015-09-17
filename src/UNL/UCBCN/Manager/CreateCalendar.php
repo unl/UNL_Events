@@ -29,6 +29,7 @@ class CreateCalendar extends PostHandler
         } else {
             # we are creating a new calendar
             $this->calendar = new Calendar;
+            $this->calendar->eventreleasepreference = Calendar::EVENT_RELEASE_PREFERENCE_IMMEDIATE;
         }
     }
 
