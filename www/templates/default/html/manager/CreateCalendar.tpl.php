@@ -30,9 +30,9 @@
 
     <label for="event-release-preference">Event Release Preference</label>
     <select tabindex="4" id="event-release-preference" name="event_release_preference">
-        <option value="" <?php if ($context->calendar->getRawObject()->eventreleasepreference === NULL) echo 'selected="selected"' ?>></option>
-        <option value="immediate" <?php if ($context->calendar->getRawObject()->eventreleasepreference == 1) echo 'selected="selected"' ?>>Immediate</option>
-        <option value="pending" <?php if ($context->calendar->getRawObject()->eventreleasepreference === '0') echo 'selected="selected"' ?>>Pending</option>
+        <option value="" <?php if ($context->calendar->getRawObject()->eventreleasepreference === \UNL\UCBCN\Calendar::EVENT_RELEASE_PREFERENCE_DEFAULT) echo 'selected="selected"' ?>></option>
+        <option value="immediate" <?php if ($context->calendar->getRawObject()->eventreleasepreference == \UNL\UCBCN\Calendar::EVENT_RELEASE_PREFERENCE_IMMEDIATE) echo 'selected="selected"' ?>>Immediate</option>
+        <option value="pending" <?php if ($context->calendar->getRawObject()->eventreleasepreference === (string)\UNL\UCBCN\Calendar::EVENT_RELEASE_PREFERENCE_PENDING) echo 'selected="selected"' ?>>Pending</option>
     </select>
 
     <label for="email-lists">Email Lists (separated by commas)</label>

@@ -304,7 +304,7 @@ class Event extends Record
         $result = parent::insert();
 
         $status_for_new_event = 'pending';
-        if ($calendar->eventreleasepreference == 1) {
+        if ($calendar->eventreleasepreference == Calendar::EVENT_RELEASE_PREFERENCE_IMMEDIATE) {
             $status_for_new_event = 'posted';
         }
 
