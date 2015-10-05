@@ -2,6 +2,7 @@
 namespace UNL\UCBCN\Manager;
 
 use UNL\UCBCN\Calendar as CalendarModel;
+use UNL\UCBCN\Manager\Auth;
 use UNL\UCBCN\User;
 use UNL\UCBCN\Permission;
 
@@ -21,6 +22,11 @@ class Calendar {
 
         if ($this->calendar === FALSE) {
             throw new \Exception("That calendar could not be found.", 404);
+        }
+
+        $user = Auth::getCurrentUser();
+        if (!in_array($this->calendar->id, $user->getCalendars()->getIDs())) {
+            throw new \Exception("Sorry, you don't have permissions on this calendar. Please select a calendar from your calendars on the left.", 404);
         }
 
         # this function will currently run every time the page is loaded. In the future, it would be better
