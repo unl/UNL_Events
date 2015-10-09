@@ -122,14 +122,7 @@ class CreateEvent extends PostHandler
         $minute = $minute == NULL ? 0 : $minute;
         $am_or_pm = $am_or_pm == NULL ? 'am' : $am_or_pm;
 
-        $date = strtotime($date);
-        # add hours correctly
-        # TODO: handle when this is not entered
-        $hours_to_add = (int)($hour) % 12;
-        if ($am_or_pm == 'pm') {
-            $hours_to_add += 12;
-        }
-        $date += $hours_to_add * 60 * 60 + (int)($minute) * 60;
+        $date = strtotime($date . ' ' . $hour . ':' . $minute . ':00 ' . $am_or_pm);
         return date('Y-m-d H:i:s', $date);
     }
 

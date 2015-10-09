@@ -135,13 +135,7 @@ class AddDatetime extends PostHandler
         $minute = $minute == NULL ? 0 : $minute;
         $am_or_pm = $am_or_pm == NULL ? 'am' : $am_or_pm;
 
-        $date = strtotime($date);
-        # add hours correctly
-        $hours_to_add = (int)($hour) % 12;
-        if ($am_or_pm == 'pm') {
-            $hours_to_add += 12;
-        }
-        $date += $hours_to_add * 60 * 60 + (int)($minute) * 60;
+        $date = strtotime($date . ' ' . $hour . ':' . $minute . ':00 ' . $am_or_pm);
         return date('Y-m-d H:i:s', $date);
     }
 
@@ -200,7 +194,6 @@ class AddDatetime extends PostHandler
             $post_data['end_time_hour'], $post_data['end_time_minute'], 
             $post_data['end_time_am_pm']);
 
-        
         if (array_key_exists('recurring', $post_data) && $post_data['recurring'] == 'on') {
             $this->event_datetime->recurringtype = $post_data['recurring_type'];
             $this->event_datetime->recurs_until = $this->calculateDate(
