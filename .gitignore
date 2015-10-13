@@ -9,3 +9,4 @@
 /node_modules
 /vendor/composer
 install
+*/.DS_Store

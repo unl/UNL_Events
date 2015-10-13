@@ -224,7 +224,7 @@ WDN.initializePlugin('jqueryui', [function() {
     $ = require('jquery');
 
     $('.datepicker').datepicker();
-    $("LINK[href='//unlcms.unl.edu/wdn/templates_4.0/scripts/plugins/ui/css/jquery-ui.min.css']").remove();
+    $("LINK[href^='//unlcms.unl.edu/wdn/templates_4.0/scripts/plugins/ui/css/jquery-ui.min.css']").remove();
 
     $('#location').change(function(change) {
         if ($('#location').val() == 'new') {
