@@ -29,6 +29,7 @@ class CreateCalendar extends PostHandler
         } else {
             # we are creating a new calendar
             $this->calendar = new Calendar;
+            $this->calendar->eventreleasepreference = Calendar::EVENT_RELEASE_PREFERENCE_IMMEDIATE;
         }
     }
 
@@ -69,16 +70,16 @@ class CreateCalendar extends PostHandler
         $this->calendar->website = $post_data['website'];
         switch ($post_data['event_release_preference']) {
             case '':
-                $this->calendar->eventreleasepreference = NULL;
+                $this->calendar->eventreleasepreference = Calendar::EVENT_RELEASE_PREFERENCE_DEFAULT;
                 break;
             case 'immediate':
-                $this->calendar->eventreleasepreference = 1;
+                $this->calendar->eventreleasepreference = Calendar::EVENT_RELEASE_PREFERENCE_IMMEDIATE;
                 break;
             case 'pending':
-                $this->calendar->eventreleasepreference = 0;
+                $this->calendar->eventreleasepreference = Calendar::EVENT_RELEASE_PREFERENCE_PENDING;
                 break;
             default:
-                $this->calendar->eventreleasepreference = NULL;
+                $this->calendar->eventreleasepreference = Calendar::EVENT_RELEASE_PREFERENCE_DEFAULT;
         }
 
         $this->calendar->emaillists = $post_data['email_lists'];

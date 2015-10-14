@@ -59,6 +59,10 @@ class Calendar extends Record
     const STATUS_POSTED   = 'posted';
     const STATUS_ARCHIVED = 'archived';
     
+    const EVENT_RELEASE_PREFERENCE_DEFAULT   = null;
+    const EVENT_RELEASE_PREFERENCE_IMMEDIATE = 1;
+    const EVENT_RELEASE_PREFERENCE_PENDING   = 0;
+    
     public static function getTable()
     {
         return 'calendar';
