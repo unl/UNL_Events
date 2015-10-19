@@ -49,6 +49,8 @@ class Occurrence extends Record
 
     const ONE_DAY = 86400;
     const ONE_WEEK = 604800;
+    
+    const RECURRING_TYPE_NONE = 'none';
 
     public static function getTable()
     {
