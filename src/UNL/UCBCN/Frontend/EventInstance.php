@@ -59,7 +59,7 @@ class EventInstance implements RoutableInterface
         }
         
         //Set the recurring date
-        if (isset($options['recurringdate_id'])) {
+        if (Occurrence::RECURRING_TYPE_NONE != $this->eventdatetime->recurringtype && isset($options['recurringdate_id'])) {
             //Set the recurring date by the id
             $this->recurringdate = RecurringDate::getByID($options['recurringdate_id']);
         } else if ($requestedDate != date('Y-m-d', strtotime($this->eventdatetime->starttime))) {
