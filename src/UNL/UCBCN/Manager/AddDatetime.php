@@ -131,7 +131,7 @@ class AddDatetime extends PostHandler
     private function calculateDate($date, $hour, $minute, $am_or_pm)
     {
         # defaults if NULL is passed in
-        $hour = $hour == NULL ? 0 : $hour;
+        $hour = $hour == NULL ? 12 : $hour;
         $minute = $minute == NULL ? 0 : $minute;
         $am_or_pm = $am_or_pm == NULL ? 'am' : $am_or_pm;
 
