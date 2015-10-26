@@ -46,7 +46,7 @@ class DeleteCalendarFinal extends PostHandler
 
         if ($user->hasPermission(Permission::CALENDAR_DELETE_ID, $calendar->id)) {
              $calendar->deleteCalendar($calendar);
-             $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Calendar has been deleted successfully');
+             $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Calendar Deleted','Your calendar has been deleted successfully');
              return '/manager/';
         }
         throw new \Exception("This user does Not have permission to delete this calendar", 404);
