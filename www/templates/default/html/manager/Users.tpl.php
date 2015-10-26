@@ -32,6 +32,8 @@
 	                <input type="hidden" name="user_uid" value="<?php echo $user->uid ?>" />
 	                <button type="submit">Remove</button>
 	            </form>
+	            <span class="small-hidden">|</span><br class="hidden small-block" /><br class="hidden small-block" />
+	            <a class="wdn-button wdn-button-brand" href="<?php echo $user->getDeleteCalendarURL($context->calendar) ?>">Delete Calendar</a>
             </td>
 	    </tr>
 	    </tbody>

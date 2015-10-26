@@ -162,6 +162,20 @@ class Calendar extends Record
         }
         return false;
     }
+
+    public function deleteCalendar(Calendar $calendar){
+        
+        #deletes all the events on the calendar
+        foreach ($calendar->getEvents() as $event) {
+            $event->delete();
+        }
+            #deletes the calendar
+            $sql = 'DELETE FROM calendar WHERE id =' .$calendar->id;
+            $db = $this->getDB();
+            $stmt = $db->prepare($sql);
+            $stmt->execute();
+            return true;
+    }
     
     /**
      * Adds the event to the current calendar, and updates subscribed calendars with the same event.
