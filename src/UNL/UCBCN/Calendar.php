@@ -278,6 +278,19 @@ class Calendar extends Record
         return $events;
     }
 
+    public function getEventsCreatedHere()
+    {
+        # create options for event listing class
+        $options = array(
+            'calendar' => $this->shortname,
+            'created_only' => true
+        );
+
+        # create new events class. On constructor it will get the stuff
+        $events = new Events($options);
+        return $events;
+    }
+
     public function getSubscriptions() 
     {
         return new Calendar\Subscriptions(array('calendar_id' => $this->id));
