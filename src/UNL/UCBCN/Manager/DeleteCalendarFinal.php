@@ -30,28 +30,30 @@ class DeleteCalendarFinal extends PostHandler
             throw new \Exception("You do not have permission to edit user permissions on this calendar.", 403);
         }
 
-        $this->user = User::getByUID($this->options['user_uid']);
 
-        if ($this->user === FALSE) {
+        if ($user === FALSE) {
             throw new \Exception("That user could not be found.", 404);
+        }
+
+        
+        $calendar = Calendar::getByShortname($this->options['calendar_shortname']);
+
+        if (!$user->hasPermission(Permission::CALENDAR_DELETE_ID, $calendar->id)){
+            throw new \Exception("User does not have permission to delete this calendar.", 404);
         }
         
     }
 
     public function handlePost(array $get, array $post, array $files)
     {   
-        #  $this->options = $options + $this->options;
+        
         $calendar = Calendar::getByShortname($this->options['calendar_shortname']);
         $user = Auth::getCurrentUser();
-
-        if ($user->hasPermission(Permission::CALENDAR_DELETE_ID, $calendar->id)) {
-             $calendar->deleteCalendar($calendar);
+                
+               $calendar->delete(); 
+             #$calendar->deleteCalendar($calendar);
              $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Calendar Deleted','Your calendar has been deleted successfully');
              return '/manager/';
-        }
-        throw new \Exception("This user does Not have permission to delete this calendar", 404);
-        return '/manager/';
-       
     }
 
     

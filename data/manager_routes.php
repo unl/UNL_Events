@@ -39,7 +39,7 @@ $routes['/^'.$calendar_slash_required.'users\/' . $user . '\/edit(\/)?$/'] = 'UN
 $routes['/^'.$calendar_slash_required.'users\/' . $user . '\/delete(\/)?$/'] = 'UNL\UCBCN\Manager\DeleteUser';
 $routes['/^'.$calendar_slash_required.'event\/' . $event . '\/recommend(\/)?$/'] = 'UNL\UCBCN\Manager\Recommend';
 $routes['/^'.$calendar_slash_required.'search(\/)?$/'] = 'UNL\UCBCN\Manager\Search';
-$routes['/^'.$calendar_slash_required.'users\/' . $user . '\/deleteCalendar(\/)?$/'] = 'UNL\UCBCN\Manager\DeleteCalendar';
-$routes['/^'.$calendar_slash_required.'users\/' . $user . '\/deleteCalendarFinal(\/)?$/'] = 'UNL\UCBCN\Manager\DeleteCalendarFinal';
+$routes['/^'.$calendar_slash_required.'delete(\/)?$/'] = 'UNL\UCBCN\Manager\DeleteCalendar';
+$routes['/^'.$calendar_slash_required.'delete_final(\/)?$/'] = 'UNL\UCBCN\Manager\DeleteCalendarFinal';
 
 return $routes;

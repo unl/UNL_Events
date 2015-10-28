@@ -163,6 +163,16 @@ class Calendar extends Record
         return false;
     }
 
+    public function getDeleteCalendarURL()
+    {
+        return ManagerController::$url . $this->shortname . "/delete/";
+    }
+
+    public function getDeleteCalendarFinalURL()
+    {
+        return ManagerController::$url . $this->shortname . "/delete_final/";
+    }
+
     public function deleteCalendar(Calendar $calendar){
         
         #deletes all the events on the calendar
@@ -176,6 +186,17 @@ class Calendar extends Record
             $stmt->execute();
             return true;
     }
+
+    public function delete() {
+
+    # delete all events that were created on this calendar
+    $events = $this->getEventsCreatedHere(); # we will need to write this method
+    foreach ($events as $record) {
+       $record->delete();
+    }
+
+    return parent::delete();
+}
     
     /**
      * Adds the event to the current calendar, and updates subscribed calendars with the same event.

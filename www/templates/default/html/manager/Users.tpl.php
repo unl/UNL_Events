@@ -6,6 +6,7 @@
 		"Users & Permissions" => NULL
 	);
 	echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
+	//$calendar = Calendar::getByShortname($this->options['calendar_shortname']);
 ?>
 
 <h1 class="wdn-brand">
@@ -33,7 +34,7 @@
 	                <button type="submit">Remove</button>
 	            </form>
 	            <span class="small-hidden">|</span><br class="hidden small-block" /><br class="hidden small-block" />
-	            <a class="wdn-button wdn-button-brand" href="<?php echo $user->getDeleteCalendarURL($context->calendar) ?>">Delete Calendar</a>
+	            <a class="wdn-button wdn-button-brand" href="<?php echo $context->calendar->getDeleteCalendarURL() ?>">Delete Calendar</a>
             </td>
 	    </tr>
 	    </tbody>

@@ -8,7 +8,7 @@ use UNL\UCBCN\Permissions;
 use UNL\UCBCN\Manager\Controller;
 use UNL\UCBCN\Calendar as CalendarModel;
 
-class DeleteCalendar extends PostHandler
+class DeleteCalendar
 {       
 
     public $options = array();
@@ -23,13 +23,17 @@ class DeleteCalendar extends PostHandler
         if ($this->calendar === FALSE) {
             throw new \Exception("That calendar could not be found.", 404);
         }
+
+        $user = Auth::getCurrentUser();
+        $calendar = Calendar::getByShortname($this->options['calendar_shortname']);
+
+        if (!$user->hasPermission(Permission::CALENDAR_DELETE_ID, $calendar->id)){
+            throw new \Exception("User does not have permission to delete this calendar.", 404);
+        }
         
     }
 
-    public function handlePost(array $get, array $post, array $files)
-    {
-        
-    }
+    
 
     
 }
