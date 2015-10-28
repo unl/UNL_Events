@@ -173,20 +173,6 @@ class Calendar extends Record
         return ManagerController::$url . $this->shortname . "/delete_final/";
     }
 
-    public function deleteCalendar(Calendar $calendar){
-        
-        #deletes all the events on the calendar
-        foreach ($calendar->getEvents() as $event) {
-            $event->delete();
-        }
-            #deletes the calendar
-            $sql = 'DELETE FROM calendar WHERE id =' .$calendar->id;
-            $db = $this->getDB();
-            $stmt = $db->prepare($sql);
-            $stmt->execute();
-            return true;
-    }
-
     public function delete() {
 
     # delete all events that were created on this calendar

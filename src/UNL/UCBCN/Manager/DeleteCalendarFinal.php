@@ -50,9 +50,8 @@ class DeleteCalendarFinal extends PostHandler
         $calendar = Calendar::getByShortname($this->options['calendar_shortname']);
         $user = Auth::getCurrentUser();
                 
-               $calendar->delete(); 
-             #$calendar->deleteCalendar($calendar);
-             $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Calendar Deleted','Your calendar has been deleted successfully');
+             $calendar->delete();             
+             $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Calendar Deleted','Your calendar has been successfully deleted.');
              return '/manager/';
     }
 

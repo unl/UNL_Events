@@ -46,13 +46,13 @@ class Events extends RecordList
                 INNER JOIN calendar ON calendar_has_event.calendar_id = calendar.id
                 WHERE calendar.shortname = "' . self::escapeString($this->options['calendar']) . '"
                 AND calendar_has_event.source = "create event form"';
-            }
+            
 
             $sql .= ' GROUP BY event.id ';
             $sql .= ';';
 
             return $sql;
-        }
+        
         } else if (array_key_exists('calendar', $this->options)) {
             # get all events related to the calendar through a join on calendar has event and calendar.
             $sql = '
