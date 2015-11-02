@@ -83,15 +83,24 @@ class Calendar {
     private function archiveEvents() {
         # find all posted (upcoming) events on the calendar
         $events = $this->calendar->getEvents('posted');
+        $archived_events = $this->calendar->getEvents('archived');
 
         # check each event to see if it has passed
         foreach ($events as $event) {
             # we will consider it passed if all datetimes are in the past
             $datetimes = $event->getDatetimes();
-            $archive = true;
+            $archive = TRUE;
             foreach ($datetimes as $datetime) {
+                $recurring_dates = $datetime->getAllDates();
+                foreach($recurring_dates as $recurring_date) {
+                    if ($recurring_date->recurringdate >= date('Y-m-d')) {
+                        $archive = FALSE;
+                        break;
+                    }
+                }
+
                 if ($datetime->starttime >= date('Y-m-d 00:00:00') || ($datetime->endtime != NULL && $datetime->endtime >= date('Y-m-d 00:00:00'))) {
-                    $archive = false;
+                    $archive = FALSE;
                     break;
                 }
             }
@@ -99,6 +108,32 @@ class Calendar {
             # update the status with the calendar
             if ($archive) {
                 $event->updateStatusWithCalendar($this->calendar, 'archived');
+            }
+        }
+
+        # check each past event to see if it is now current
+        foreach ($archived_events as $event) {
+            # we will consider it upcoming if any datetime is after today at midnight
+            $datetimes = $event->getDatetimes();
+            $move = FALSE;
+            foreach ($datetimes as $datetime) {
+                $recurring_dates = $datetime->getAllDates();
+                foreach($recurring_dates as $recurring_date) {
+                    if ($recurring_date->recurringdate >= date('Y-m-d')) {
+                        $move = TRUE;
+                        break;
+                    }
+                }
+
+                if ($datetime->starttime >= date('Y-m-d 00:00:00') || ($datetime->endtime != NULL && $datetime->endtime >= date('Y-m-d 00:00:00'))) {
+                    $move = TRUE;
+                    break;
+                }
+            }
+
+            # update the status with the calendar
+            if ($move) {
+                $event->updateStatusWithCalendar($this->calendar, 'posted');
             }
         }
     }

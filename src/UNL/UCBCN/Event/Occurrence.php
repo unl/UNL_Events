@@ -126,6 +126,14 @@ class Occurrence extends Record
         ));
     }
 
+    public function getAllDates()
+    {
+        return new RecurringDates(array(
+            'event_datetime_id' => $this->id,
+            'with_ongoing' => true
+        ));
+    }
+
     public function deleteRecurrences()
     {
         $recurring_dates = $this->getRecurrences();
