@@ -57,7 +57,7 @@ class Day extends EventListing implements RoutableInterface
                 FROM eventdatetime as e
                 INNER JOIN event ON e.event_id = event.id
                 INNER JOIN calendar_has_event ON calendar_has_event.event_id = event.id
-                LEFT JOIN recurringdate ON (recurringdate.event_id = event.id AND recurringdate.recurringdate = "' . $date . '" AND recurringdate.unlinked = 0)
+                LEFT JOIN recurringdate ON (recurringdate.event_datetime_id = e.id AND recurringdate.recurringdate = "' . $date . '" AND recurringdate.unlinked = 0)
                 WHERE
                     calendar_has_event.calendar_id = ' . (int)$this->calendar->id . '
                     AND calendar_has_event.status IN ("posted", "archived")
