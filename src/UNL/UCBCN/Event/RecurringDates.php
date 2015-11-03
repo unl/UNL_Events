@@ -40,9 +40,15 @@ class RecurringDates extends RecordList
                         'ORDER BY recurrence_id ASC;';
                 }
             } else {
-                return 'SELECT id FROM recurringdate WHERE ' .
-                    'event_datetime_id = ' . (int)($this->options['event_datetime_id']) . ' AND unlinked = 0 AND ongoing = 0 ' .
-                    'ORDER BY recurrence_id ASC;';
+                if (array_key_exists('with_ongoing', $this->options)) {
+                    return 'SELECT id FROM recurringdate WHERE ' .
+                        'event_datetime_id = ' . (int)($this->options['event_datetime_id']) . ' AND unlinked = 0 ' .
+                        'ORDER BY recurrence_id ASC;';
+                } else {
+                    return 'SELECT id FROM recurringdate WHERE ' .
+                        'event_datetime_id = ' . (int)($this->options['event_datetime_id']) . ' AND unlinked = 0 AND ongoing = 0 ' .
+                        'ORDER BY recurrence_id ASC;';
+                }
             }
         } else {
             return 'SELECT id FROM recurringdate WHERE ' .
