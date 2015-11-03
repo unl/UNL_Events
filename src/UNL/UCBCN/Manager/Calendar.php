@@ -82,8 +82,8 @@ class Calendar {
 
     private function archiveEvents() {
         # find all posted (upcoming) events on the calendar
-        $events = $this->calendar->getEvents('posted');
-        $archived_events = $this->calendar->getEvents('archived');
+        $events = $this->calendar->getEvents(CalendarModel::STATUS_POSTED);
+        $archived_events = $this->calendar->getEvents(CalendarModel::STATUS_ARCHIVED);
 
         # check each event to see if it has passed
         foreach ($events as $event) {
@@ -95,7 +95,7 @@ class Calendar {
                 foreach($recurring_dates as $recurring_date) {
                     if ($recurring_date->recurringdate >= date('Y-m-d')) {
                         $archive = FALSE;
-                        break;
+                        break 2;
                     }
                 }
 
@@ -107,7 +107,7 @@ class Calendar {
 
             # update the status with the calendar
             if ($archive) {
-                $event->updateStatusWithCalendar($this->calendar, 'archived');
+                $event->updateStatusWithCalendar($this->calendar, CalendarModel::STATUS_ARCHIVED);
             }
         }
 
@@ -121,7 +121,7 @@ class Calendar {
                 foreach($recurring_dates as $recurring_date) {
                     if ($recurring_date->recurringdate >= date('Y-m-d')) {
                         $move = TRUE;
-                        break;
+                        break 2;
                     }
                 }
 
@@ -133,7 +133,7 @@ class Calendar {
 
             # update the status with the calendar
             if ($move) {
-                $event->updateStatusWithCalendar($this->calendar, 'posted');
+                $event->updateStatusWithCalendar($this->calendar, CalendarModel::STATUS_POSTED);
             }
         }
     }
