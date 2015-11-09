@@ -102,7 +102,7 @@
                                             ' from ' . date('n/d/y', strtotime($datetime->starttime)) . 
         				            		' to ' . date('n/d/y', strtotime($datetime->recurs_until));
         				        	} else {
-        				        		echo ucwords($datetime->rectypemonth) . date('f', strtotime($datetime->starttime)) . ' of every month' . 
+        				        		echo ucwords($datetime->rectypemonth) . date(' l', strtotime($datetime->starttime)) . ' of every month' . 
         				        			' from ' . date('n/d/y', strtotime($datetime->starttime)) . 
         				            		' to ' . date('n/d/y', strtotime($datetime->recurs_until));
         				        	}
