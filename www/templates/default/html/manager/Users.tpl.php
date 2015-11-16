@@ -6,6 +6,7 @@
 		"Users & Permissions" => NULL
 	);
 	echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
+	//$calendar = Calendar::getByShortname($this->options['calendar_shortname']);
 ?>
 
 <h1 class="wdn-brand">

@@ -3,12 +3,14 @@ namespace UNL\UCBCN;
 
 use UNL\UCBCN\Manager\Auth;
 use UNL\UCBCN\ActiveRecord\Record;
-use UNL\UCBCN\Events;
+use UNL\UCBCN\Events as Events;
 use UNL\UCBCN\Frontend\Controller as FrontendController;
 use UNL\UCBCN\Manager\Controller as ManagerController;
 use UNL\UCBCN\Calendar\Event as CalendarHasEvent;
+use UNL\UCBCN\Calendar\Events as CalendarHasEvents;
 use UNL\UCBCN\Calendar\Subscriptions;
 use UNL\UCBCN\Users;
+
 /**
  * Details related to a calendar within the UNL Event Publisher system.
  *
@@ -91,6 +93,14 @@ class Calendar extends Record
         return ManagerController::$url . $this->shortname . '/edit/';
     }
 
+    public function getDeleteURL() {
+        return ManagerController::$url . $this->shortname . '/delete/';
+    }
+
+    public function getDeleteFinalURL() {
+        return ManagerController::$url . $this->shortname . '/delete_final/';
+    }
+
     public function getSubscriptionsURL() {
         return ManagerController::$url . $this->shortname . '/subscriptions/';
     }
@@ -155,12 +165,46 @@ class Calendar extends Record
     
     public function removeUser(User $user)
     {
-        if (isset($this->id)&&isset($user->uid)) {
+        if (isset($this->id) && isset($user->uid)) {
             $sql = 'DELETE FROM user_has_permission WHERE user_uid = \''.$user->uid.'\' AND calendar_id ='.$this->id;
             $db = $this->getDB();
             return $db->execute($sql);
         }
         return false;
+    }
+
+    public function delete() {
+        # delete all events that were created on this calendar
+        $events = $this->getEventsCreatedHere(); # we will need to write this method
+        foreach ($events as $record) {
+           $record->delete();
+        }
+
+        # delete the calendar_has_event records
+        $has_events = $this->getCalendarHasEvents();
+        foreach ($has_events as $record) {
+            $record->delete();
+        }
+
+        # delete the user_has_permission records
+        $permissions = $this->getAllPermissions();
+        foreach ($permissions as $record) {
+            $record->delete();
+        }
+
+        # delete the subscriptions on the calendar
+        $subscriptions = $this->getSubscriptions();
+        foreach ($subscriptions as $record) {
+            $record->delete();
+        }
+
+        # delete the subscription_has_calendar records (remove calendar from subscriptions that subscribe to it)
+        $subscriptions = $this->getSubscriptionHasCalendarRecords();
+        foreach ($subscriptions as $record) {
+            $record->delete();
+        }
+
+        return parent::delete();
     }
     
     /**
@@ -243,6 +287,19 @@ class Calendar extends Record
         return $events;
     }
 
+    public function getEventsCreatedHere()
+    {
+        # create options for event listing class
+        $options = array(
+            'calendar' => $this->shortname,
+            'created_only' => true
+        );
+
+        # create new events class. On constructor it will get the stuff
+        $events = new Events($options);
+        return $events;
+    }
+
     public function getSubscriptions() 
     {
         return new Calendar\Subscriptions(array('calendar_id' => $this->id));
@@ -251,6 +308,21 @@ class Calendar extends Record
     public function getSubscriptionsToThis() 
     {
         return new Calendar\Subscriptions(array('subbed_calendar_id' => $this->id));
+    }
+
+    public function getSubscriptionHasCalendarRecords()
+    {
+        return new Calendar\SubscriptionHasCalendars(array('calendar_id' => $this->id));
+    }
+
+    public function getAllPermissions()
+    {
+        return new User\Permissions(array('calendar_id' => $this->id));
+    }
+
+    public function getCalendarHasEvents()
+    {
+        return new CalendarHasEvents(array('calendar_id' => $this->id));
     }
 
     /**

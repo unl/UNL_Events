@@ -45,6 +45,13 @@
     <button tabindex="7" class="wdn-button wdn-button-brand" type="submit">
         <?php echo $context->calendar->id == NULL ? 'Create Calendar' : 'Save Calendar' ?>
     </button>
+    <br><br>
+
+    <?php if ($context->calendar->id != NULL): ?>
+    <a tabindex="7" class="wdn-button" href="<?php echo $context->calendar->getDeleteURL() ?>">
+    Delete Calendar
+    </a>
+    <?php endif; ?>
 </form>
 
 <script type="text/javascript">

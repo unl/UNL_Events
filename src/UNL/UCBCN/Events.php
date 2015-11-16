@@ -38,6 +38,21 @@ class Events extends RecordList
                 $this->options['subscription_calendar'] . " AND c2.event_id = event.id);";
 
             return $sql;
+        } else if (array_key_exists('created_only', $this->options)) {
+            # get all events related to the calendar through a join on calendar has event and calendar.
+            $sql = '
+                SELECT event.id FROM event
+                INNER JOIN calendar_has_event ON event.id = calendar_has_event.event_id
+                INNER JOIN calendar ON calendar_has_event.calendar_id = calendar.id
+                WHERE calendar.shortname = "' . self::escapeString($this->options['calendar']) . '"
+                AND calendar_has_event.source = "create event form"';
+            
+
+            $sql .= ' GROUP BY event.id ';
+            $sql .= ';';
+
+            return $sql;
+        
         } else if (array_key_exists('calendar', $this->options)) {
             # get all events related to the calendar through a join on calendar has event and calendar.
             $sql = '
