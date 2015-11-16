@@ -10,10 +10,8 @@ use UNL\UCBCN\Calendar as CalendarModel;
 
 class DeleteCalendar
 {       
-
     public $options = array();
     public $calendar;
-
 
     public function __construct($options = array()) 
     {
@@ -25,15 +23,8 @@ class DeleteCalendar
         }
 
         $user = Auth::getCurrentUser();
-        $calendar = Calendar::getByShortname($this->options['calendar_shortname']);
-
-        if (!$user->hasPermission(Permission::CALENDAR_DELETE_ID, $calendar->id)){
-            throw new \Exception("User does not have permission to delete this calendar.", 404);
+        if (!$user->hasPermission(Permission::CALENDAR_DELETE_ID, $this->calendar->id)){
+            throw new \Exception("You do not have permission to delete this calendar.", 400);
         }
-        
     }
-
-    
-
-    
 }
