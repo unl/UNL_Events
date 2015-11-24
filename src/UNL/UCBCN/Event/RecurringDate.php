@@ -41,7 +41,7 @@ class RecurringDate extends Record
             __CLASS__,
             'recurrence_id',
             $this->recurrence_id,
-            'event_id = ' . (int)$this->event_id . ' AND ongoing = 0'
+            'event_datetime_id = ' . (int)$this->event_datetime_id . ' AND ongoing = 0'
         );
     }
 
