@@ -44,6 +44,13 @@ class Auth {
     }
 
     /**
+     * Authenticate via token
+     */
+    public function authenticateViaToken($token) {
+        return User::getByToken($token);
+    }
+
+    /**
      * Get the current user (will create a user if none exist)
      *
      * @param $uid string the UID of the user
@@ -167,6 +174,13 @@ class Auth {
      */
     public static function getCurrentUser()
     {
+        global $_API_USER;
+
+        # check for an API user first
+        if (isset($_API_USER)) {
+            return $_API_USER;
+        }
+
         if (!isset($_SESSION['__SIMPLECAS']['UID'])) {
             return false;
         }

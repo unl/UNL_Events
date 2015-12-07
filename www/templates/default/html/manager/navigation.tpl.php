@@ -46,6 +46,9 @@
         </div>
         <ul>
             <li>
+                <a href="<?php echo $context->getEditMeURL() ?>">User Info</a>
+            </li>
+            <li>
                 <a href="<?php echo $context->getEditAccountURL() ?>">Account Info</a>
             </li>
             <li>

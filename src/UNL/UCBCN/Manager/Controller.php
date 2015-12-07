@@ -66,6 +66,11 @@ class Controller {
         return self::$url;
     }
 
+    public static function getEditMeURL() 
+    {
+        return self::$url . 'me/';
+    }
+
     public static function getEditAccountURL() 
     {
         return self::$url . 'account/';
