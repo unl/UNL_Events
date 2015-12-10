@@ -40,6 +40,7 @@ class Event extends Record
     public $uidlastupdated;                  // string(100)
     
     const SOURCE_CREATE_EVENT_FORM      = 'create event form';
+    const SOURCE_CREATE_EVENT_API       = 'create event api';
     const SOURCE_CHECKED_CONSIDER_EVENT = 'checked consider event';
     
     const STATUS_PENDING  = 'pending';

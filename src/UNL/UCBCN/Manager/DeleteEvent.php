@@ -37,7 +37,7 @@ class DeleteEvent extends PostHandler
         $calendar_has_event = CalendarHasEvent::getByIDs($this->calendar->id, $this->event->id);
 
         # check if this is where the event was originally created
-        if ($calendar_has_event->source == 'create event form') {
+        if ($calendar_has_event->source == 'create event form' || $calendar_has_event->source == 'create event api') {
             # delete the event from the entire system
             $this->event->delete();
             $this->flashNotice(NOTICE_LEVEL_SUCCESS, 'Event Deleted', 'The event ' . $this->event->title . ' has been removed from the system.');
