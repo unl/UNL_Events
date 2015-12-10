@@ -352,10 +352,10 @@ class Event extends Record
 
         $calendar_has_event->calendar_id = $calendar_id;
         $calendar_has_event->event_id = $this->id;
-        $calendar_has_event->uidcreated = $_SESSION['__SIMPLECAS']['UID'];
+        $calendar_has_event->uidcreated = Auth::getCurrentUser()->uid;
         $calendar_has_event->datecreated = date('Y-m-d H:i:s');
         $calendar_has_event->datelastupdated = date('Y-m-d H:i:s');
-        $calendar_has_event->uidlastupdated = $_SESSION['__SIMPLECAS']['UID'];
+        $calendar_has_event->uidlastupdated = Auth::getCurrentUser()->uid;
         $calendar_has_event->status = $status;
 
         if (isset($source)) {

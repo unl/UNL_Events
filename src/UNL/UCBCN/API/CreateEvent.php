@@ -103,6 +103,10 @@ class CreateEvent
 
         $event_datetime->insert();
 
+        if (array_key_exists('send_to_main', $post_data) && $post_data['send_to_main'] == 'yes') {
+            $this->event->considerForMainCalendar();
+        }
+
         return $this->event;
     }
 }
