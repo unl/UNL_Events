@@ -299,8 +299,8 @@ class Event extends Record
         $this->datecreated = date('Y-m-d H:i:s');
         $this->datelastupdated = date('Y-m-d H:i:s');
 
-        $this->uidcreated = Auth::getCurrentUser();
-        $this->uidlastupdated = Auth::getCurrentUser();
+        $this->uidcreated = Auth::getCurrentUser()->uid;
+        $this->uidlastupdated = Auth::getCurrentUser()->uid;
         $result = parent::insert();
 
         $status_for_new_event = 'pending';
