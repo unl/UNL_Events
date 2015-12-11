@@ -18,13 +18,13 @@ use RegExpRouter as RegExpRouter;
 $auth = new \UNL\UCBCN\Manager\Auth;
 $token = NULL;
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-	$token = $_POST['api_token'];
+	$token = array_key_exists('api_token', $_POST) ? $_POST['api_token'] : '';
 } else if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-	$token = $_GET['api_token'];
+	$token = array_key_exists('api_token', $_GET) ? $_GET['api_token'] : '';
 } 
 
 $user = $auth->authenticateViaToken($token);
-if (!$user) {
+if (!$user || empty($token)) {
 	http_response_code(403);
 	echo 'Unauthorized';
 	exit;
