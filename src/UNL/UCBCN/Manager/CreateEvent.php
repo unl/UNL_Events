@@ -60,7 +60,7 @@ class CreateEvent extends PostHandler
         $this->event->listingcontactemail = empty($post_data['contact_email']) ? NULL : $post_data['contact_email'];
 
         $this->event->webpageurl = empty($post_data['website']) ? NULL : $post_data['website'];
-        $this->event->approvedforcirculation = $post_data['private_public'] == 'public' ? 1 : 0;
+        $this->event->approvedforcirculation = $post_data['private_public'] == 'private' ? 0 : 1;
 
         # for extraneous data aside from the event (location, type, etc)
         $this->post = $post_data;

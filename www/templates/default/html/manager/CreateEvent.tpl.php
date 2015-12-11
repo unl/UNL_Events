@@ -206,11 +206,11 @@
                     <label>Sharing</label>
                 </div>
                 <div class="details">
-                    <input type="radio" value="private" name="private_public" id="sharing-private" <?php if ($post['private_public'] != 'public') echo 'checked="checked"'; ?>> 
+                    <input type="radio" value="private" name="private_public" id="sharing-private" <?php if ($post['private_public'] == 'private') echo 'checked="checked"'; ?>> 
                     <label for="sharing-private">Private</label> 
                     <br>
                 
-                    <input type="radio" value="public" name="private_public" id="sharing-public" <?php if ($post['private_public'] == 'public') echo 'checked="checked"'; ?>> 
+                    <input type="radio" value="public" name="private_public" id="sharing-public" <?php if ($post['private_public'] != 'private') echo 'checked="checked"'; ?>> 
                     <label for="sharing-public">Public</label> 
                     <br>
 
