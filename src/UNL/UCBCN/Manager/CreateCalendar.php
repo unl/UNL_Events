@@ -90,6 +90,13 @@ class CreateCalendar extends PostHandler
     # this function looks at the posted calendar data to ensure its integrity
     private function validateCalendarData($post_data)
     {
+        $invalid_shortnames = array(
+            'manager',
+            'api',
+            'www',
+            'templates'
+        );
+
         # name and shortname are required
         if (empty($post_data['name']) || empty($post_data['shortname'])) {
             throw new ValidationException('Calendar name and shortname are required.');
@@ -103,6 +110,11 @@ class CreateCalendar extends PostHandler
         # check if this shortname is already being used
         if (($server_cal = Calendar::getByShortname($post_data['shortname'])) != NULL && $server_cal->id != $this->calendar->id) {
             throw new ValidationException('That shortname is already in use.');
+        }
+
+        # check if the shortname is in the list of invalids
+        if (in_array($post_data['shortname'], $invalid_shortnames)) {
+            throw new ValidationException('Sorry, that shortname is invalid. Please try another one.');
         }
     }
 
