@@ -1,7 +1,9 @@
 <?php
-UNL_Templates::$options['version'] = 4.0;
-$page = UNL_Templates::factory('Fixed');
+use UNL\Templates\Templates;
 
+$page = Templates::factory('Fixed', Templates::VERSION_4_1);
+
+//Document titles
 $title = '';
 $site_title = 'UNL Events';
 if (!$context->getCalendar()) {
@@ -14,12 +16,11 @@ if (!$context->getCalendar()) {
     $title .= ' | Events';
     $site_title = $context->getCalendar()->name . ' Events';
 }
-$view_class = str_replace('\\', '_', strtolower($context->options['model']));
 
-//Document titles
-$page->doctitle     = '<title>' . $title . '</title>';
+$page->doctitle = '<title>' . $title . '</title>';
 $page->titlegraphic = $site_title;
-$page->pagetitle    = '';
+$page->pagetitle = '';
+$page->affiliation = '';
 
 //css
 $page->addStyleSheet($frontend->getURL().'templates/default/html/css/events.css');
@@ -39,8 +40,7 @@ if ($context->getRaw('output') instanceof UNL\UCBCN\Frontend\RoutableInterface) 
 
 $page->head .= '<link rel="home" href="' . $context->getCalendarURL() . '" />' . PHP_EOL;
 
-//other
-$page->leftRandomPromo = '';
+//Navigation
 $page->breadcrumbs = '
 <ul>
     <li><a href="http://www.unl.edu/">UNL</a></li>
@@ -48,9 +48,11 @@ $page->breadcrumbs = '
     <li>Events</li>
 </ul>';
 //$page->navlinks = $savvy->render(null, 'Navigation.tpl.php');
-$savvy->addGlobal('page', $page);
 
 //Render output
+$savvy->addGlobal('page', $page);
+$view_class = str_replace('\\', '_', strtolower($context->options['model']));
+
 if ($context->getCalendar()) {
     $page->maincontentarea = '
             <div class="wdn-band view-' . $view_class . ' band-nav">
@@ -95,13 +97,7 @@ $page->maincontentarea .= '
         </div>
     </div>';
 
-$page->contactinfo = '
-<p>University of Nebraska&ndash;Lincoln<br />
-1400 R Street<br />
-Lincoln, NE 68588<br />
-402-472-7211</p>';
-$page->footercontent = $page->footercontent = '© '.date('Y').' University of Nebraska–Lincoln · Lincoln, NE 68588 · 402-472-7211<br />
-    The University of Nebraska–Lincoln is an <a href="http://www.unl.edu/equity/">equal opportunity</a> educator and employer.';
+$page->leftcollinks = $savvy->render($context, 'localfooter.tpl.php');
 
 //echo everything
 echo $page;
