@@ -101,6 +101,7 @@
 	padding: 0 1rem;
 	position: relative;
 	width: auto;
+	overflow: hidden;
 	&.search {
 		border-top-right-radius: 3px;
 		border-bottom-right-radius: 3px;
@@ -114,11 +115,15 @@
 		color: #fff;
 		&:after {
 			vertical-align: bottom;
+			top: -1px;
 		}
 	}
 	a {
 		color: #fff;
 		border-bottom: 0;
+	}
+	#show-search:before {
+		font-size: 12px;
 	}
 }
 
@@ -141,7 +146,7 @@
 	}
 	a {
 		color: #FFFFFF;
-		padding: 5px;
+		padding: 2px;
 	}
 }
 
@@ -237,6 +242,22 @@
 		    text-align: center;
 		}
 	}
+
+	#breadcrumbs {
+		padding-top: 10px !important;
+	}
+}
+
+@media (max-width: 699px) {
+	#breadcrumbs {
+		#toggle-search {
+			a {
+				position: relative;
+				top: 50%;
+				margin-top: -12px;
+			}
+		}
+	}
 }
 
 /* for mobile-ish sizes */
@@ -260,5 +281,4 @@
 		margin-top: 1em;
 		word-wrap: break-word;
 	}
-
 }
