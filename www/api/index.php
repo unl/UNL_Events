@@ -2,6 +2,8 @@
 
 namespace UNL\UCBCN\API;
 global $_API_USER;
+global $WWW_ROOT;
+$WWW_ROOT = __DIR__ . '/..';
 
 ini_set('html_errors', 0);
 

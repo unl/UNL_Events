@@ -1,6 +1,12 @@
 <?php
-UNL_Templates::$options['version'] = 4.0;
-$page = UNL_Templates::factory('Fixed');
+use UNL\Templates\Templates;
+
+$page = Templates::factory('Fixed', Templates::VERSION_4_1);
+
+global $WWW_ROOT;
+if (file_exists($WWW_ROOT . '/wdn/templates_4.1')) {
+    $page->setLocalIncludePath($wdn_include_path);
+}
 
 $title = '';
 $site_title = 'UNL Events';
@@ -17,9 +23,10 @@ if (!$context->getCalendar()) {
 $view_class = str_replace('\\', '_', strtolower($context->options['model']));
 
 //Document titles
-$page->doctitle     = '<title>' . $title . '</title>';
+$page->doctitle = '<title>' . $title . '</title>';
 $page->titlegraphic = $site_title;
-$page->pagetitle    = '';
+$page->pagetitle = '';
+$page->affiliation = '';
 
 //css
 $page->addStyleSheet($base_frontend_url.'templates/default/html/css/events.css');
@@ -33,7 +40,6 @@ $page->head .= '<script>var manager_url = "'.$base_manager_url.'";</script>' . P
 $page->head .= '<script type="text/javascript">WDN.initializePlugin("notice");</script>' . PHP_EOL;
 
 //other
-$page->leftRandomPromo = '';
 $savvy->addGlobal('page', $page);
 
 //Render output
@@ -112,14 +118,8 @@ $page->maincontentarea .= $savvy->render($context->output, $template) . '
 <script src="' . $base_frontend_url .'templates/default/html/js/manager.min.js"></script>
 ';
 
+$page->leftcollinks = $savvy->render($context, 'html/localfooter.tpl.php');
 
-$page->contactinfo = '
-<p>University of Nebraska&ndash;Lincoln<br />
-1400 R Street<br />
-Lincoln, NE 68588<br />
-402-472-7211</p>';
-$page->footercontent = $page->footercontent = '© '.date('Y').' University of Nebraska–Lincoln · Lincoln, NE 68588 · 402-472-7211<br />
-    The University of Nebraska–Lincoln is an <a href="http://www.unl.edu/equity/">equal opportunity</a> educator and employer.';
 
 //echo everything
 echo $page;
