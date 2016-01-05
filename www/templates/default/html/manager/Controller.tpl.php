@@ -3,6 +3,11 @@ use UNL\Templates\Templates;
 
 $page = Templates::factory('Fixed', Templates::VERSION_4_1);
 
+global $WWW_ROOT;
+if (file_exists($WWW_ROOT . '/wdn/templates_4.1')) {
+    $page->setLocalIncludePath($wdn_include_path);
+}
+
 $title = '';
 $site_title = 'UNL Events';
 if (!$context->getCalendar()) {
