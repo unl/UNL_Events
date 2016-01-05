@@ -2,8 +2,8 @@
 use UNL\Templates\Templates;
 
 $page = Templates::factory('Fixed', Templates::VERSION_4_1);
-$wdn_include_path = \SiteMaster\Core\Util::getRootDir();
-if (file_exists($wdn_include_path . '/wdn/templates_4.1')) {
+global $WWW_ROOT;
+if (file_exists($WWW_ROOT . '/wdn/templates_4.1')) {
     $page->setLocalIncludePath($wdn_include_path);
 }
 
