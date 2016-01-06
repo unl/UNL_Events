@@ -107,7 +107,7 @@ require(['jquery', 'wdn', 'modernizr'], function($, WDN, Modernizr) {
 				cancelProgress();
 				$loadTo.html(data);
 				$monthWidget = $('.wp-calendar');
-				$(document.body).trigger("sticky_kit:recalc");
+				//$(document.body).trigger("sticky_kit:recalc");
 				addMonthWidgetStates();
 			});
 		}
@@ -140,8 +140,8 @@ require(['jquery', 'wdn', 'modernizr'], function($, WDN, Modernizr) {
 				cancelProgress();
 				$loadTo.html(data);
 				determineActiveDay();
-				stickyHeader();
-				$(document.body).trigger("sticky_kit:recalc");
+				//stickyHeader();
+				//$(document.body).trigger("sticky_kit:recalc");
 				if (widgetDate.getFullYear() !== nowActive.getFullYear() || widgetDate.getMonth() !== nowActive.getMonth()) {
 					loadMonthWidget(nowActive);
 				} else {
@@ -159,7 +159,7 @@ require(['jquery', 'wdn', 'modernizr'], function($, WDN, Modernizr) {
 			$.get(href + '?format=hcalendar', function(data) {
 				cancelProgress();
 				$loadTo.html(data);
-				$(document.body).trigger("sticky_kit:recalc");
+				//$(document.body).trigger("sticky_kit:recalc");
 			});
 		}
 		
@@ -211,7 +211,7 @@ require(['jquery', 'wdn', 'modernizr'], function($, WDN, Modernizr) {
 		if ($sidebarCal.length) {
 			determineActiveDay();
 			addMonthWidgetStates();
-			stickySidebar();
+			//stickySidebar();
 			
 			$sidebarCal.on('click', 'td a', function(e) {
 				e.preventDefault();
@@ -223,7 +223,7 @@ require(['jquery', 'wdn', 'modernizr'], function($, WDN, Modernizr) {
 				loadMonthWidget(this.href);
 			});
 		}
-		stickyHeader();
+		//stickyHeader();
 		
 		if ($('.view-unl_ucbcn_frontend_eventinstance').length) {
 			initRoute = 'event';
@@ -287,11 +287,11 @@ require(['jquery', 'wdn', 'modernizr'], function($, WDN, Modernizr) {
 		
 		$(window).on('resize', function() {
 			if (Modernizr.mediaqueries && !Modernizr.mq(mqBp2)) {
-				$monthWidget.trigger('sticky_kit:detach');
-				$('h1').trigger('sticky_kit:detach');
+				//$monthWidget.trigger('sticky_kit:detach');
+				//$('h1').trigger('sticky_kit:detach');
 			} else {
-				stickySidebar();
-				stickyHeader();
+				//stickySidebar();
+				//stickyHeader();
 			}
 		});
 	});
