@@ -3,8 +3,7 @@
         <div class="wdn-footer-module">
             <span role="heading" class="wdn-footer-heading">About UNL Events</span>
             <?php
-            global $WWW_ROOT;
-            if ($file = @file_get_contents($WWW_ROOT . '/tmp/iim-app-footer.html')) {
+            if ($file = @file_get_contents(\UNL\UCBCN\Util::getWWWRoot() . '/tmp/iim-app-footer.html')) {
                 echo $file;
             } else {
                 echo file_get_contents('http://iim.unl.edu/iim-app-footer?format=partial');

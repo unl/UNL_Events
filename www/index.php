@@ -14,9 +14,6 @@
  */
 namespace UNL\UCBCN\Frontend;
 
-global $WWW_ROOT;
-$WWW_ROOT = __DIR__;
-
 $config_file = __DIR__ . '/../config.sample.php';
 
 if (file_exists(__DIR__ . '/../config.inc.php')) {
