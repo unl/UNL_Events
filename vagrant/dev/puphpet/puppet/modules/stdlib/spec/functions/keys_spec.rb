@@ -1,21 +1,19 @@
-#! /usr/bin/env ruby -S rspec
 require 'spec_helper'
 
-describe "the keys function" do
-  let(:scope) { PuppetlabsSpec::PuppetInternals.scope }
-
-  it "should exist" do
-    Puppet::Parser::Functions.function("keys").should == "function_keys"
-  end
-
-  it "should raise a ParseError if there is less than 1 arguments" do
-    lambda { scope.function_keys([]) }.should( raise_error(Puppet::ParseError))
-  end
-
-  it "should return an array of keys when given a hash" do
-    result = scope.function_keys([{'a'=>1, 'b'=>2}])
-    # =~ performs 'array with same elements' (set) matching
-    # For more info see RSpec::Matchers::MatchArray
-    result.should =~ ['a','b']
+describe 'keys' do
+  it { is_expected.not_to eq(nil) }
+  it { is_expected.to run.with_params().and_raise_error(Puppet::ParseError, /wrong number of arguments/i) }
+  it {
+    pending("Current implementation ignores parameters after the first.")
+    is_expected.to run.with_params({}, {}).and_raise_error(Puppet::ParseError, /wrong number of arguments/i)
+  }
+  it { is_expected.to run.with_params('').and_raise_error(Puppet::ParseError, /Requires hash to work with/) }
+  it { is_expected.to run.with_params(1).and_raise_error(Puppet::ParseError, /Requires hash to work with/) }
+  it { is_expected.to run.with_params([]).and_raise_error(Puppet::ParseError, /Requires hash to work with/) }
+  it { is_expected.to run.with_params({}).and_return([]) }
+  it { is_expected.to run.with_params({ 'key' => 'value' }).and_return(['key']) }
+  it 'should return the array of keys' do
+    result = subject.call([{ 'key1' => 'value1', 'key2' => 'value2' }])
+    expect(result).to match_array(['key1', 'key2'])
   end
 end

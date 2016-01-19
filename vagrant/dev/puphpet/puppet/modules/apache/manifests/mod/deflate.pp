@@ -3,7 +3,8 @@ class apache::mod::deflate (
     'text/html text/plain text/xml',
     'text/css',
     'application/x-javascript application/javascript application/ecmascript',
-    'application/rss+xml'
+    'application/rss+xml',
+    'application/json'
   ],
   $notes = {
     'Input'  => 'instream',
@@ -19,6 +20,6 @@ class apache::mod::deflate (
     content => template('apache/mod/deflate.conf.erb'),
     require => Exec["mkdir ${::apache::mod_dir}"],
     before  => File[$::apache::mod_dir],
-    notify  => Service['httpd'],
+    notify  => Class['apache::service'],
   }
 }

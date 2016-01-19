@@ -3,6 +3,7 @@ class apache::mod::userdir (
   $dir = 'public_html',
   $disable_root = true,
   $apache_version = $::apache::apache_version,
+  $options = [ 'MultiViews', 'Indexes', 'SymLinksIfOwnerMatch', 'IncludesNoExec' ],
 ) {
   ::apache::mod { 'userdir': }
 
@@ -13,6 +14,6 @@ class apache::mod::userdir (
     content => template('apache/mod/userdir.conf.erb'),
     require => Exec["mkdir ${::apache::mod_dir}"],
     before  => File[$::apache::mod_dir],
-    notify  => Service['httpd'],
+    notify  => Class['apache::service'],
   }
 }

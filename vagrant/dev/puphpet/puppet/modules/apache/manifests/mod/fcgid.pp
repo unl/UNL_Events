@@ -1,16 +1,19 @@
 class apache::mod::fcgid(
   $options = {},
 ) {
-  ::apache::mod { 'fcgid': }
+
+  ::apache::mod { 'fcgid':
+    loadfile_name => 'unixd_fcgid.load',
+  }
 
   # Template uses:
   # - $options
-  file { 'fcgid.conf':
+  file { 'unixd_fcgid.conf':
     ensure  => file,
-    path    => "${::apache::mod_dir}/fcgid.conf",
-    content => template('apache/mod/fcgid.conf.erb'),
+    path    => "${::apache::mod_dir}/unixd_fcgid.conf",
+    content => template('apache/mod/unixd_fcgid.conf.erb'),
     require => Exec["mkdir ${::apache::mod_dir}"],
     before  => File[$::apache::mod_dir],
-    notify  => Service['httpd'],
+    notify  => Class['apache::service'],
   }
 }

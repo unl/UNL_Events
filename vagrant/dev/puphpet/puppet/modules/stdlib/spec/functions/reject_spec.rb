@@ -1,20 +1,19 @@
-#!/usr/bin/env ruby
-
 require 'spec_helper'
 
-describe "the reject function" do
-  let(:scope) { PuppetlabsSpec::PuppetInternals.scope }
+describe 'reject' do
+  it { is_expected.not_to eq(nil) }
+  it { is_expected.to run.with_params().and_raise_error(Puppet::ParseError, /wrong number of arguments/i) }
+  it { is_expected.to run.with_params([], 'pattern', 'extra').and_raise_error(Puppet::ParseError, /wrong number of arguments/i) }
 
-  it "should exist" do
-    Puppet::Parser::Functions.function("reject").should == "function_reject"
-  end
-
-  it "should raise a ParseError if there is less than 1 arguments" do
-    lambda { scope.function_reject([]) }.should( raise_error(Puppet::ParseError))
-  end
-
-  it "should reject contents from an array" do
-    result = scope.function_reject([["1111", "aaabbb","bbbccc","dddeee"], "bbb"])
-    result.should(eq(["1111", "dddeee"]))
-  end
+  it {
+    pending("reject does not actually check this, and raises NoMethodError instead")
+    is_expected.to run.with_params('one', 'two').and_raise_error(Puppet::ParseError, /first argument not an array/)
+  }
+  it {
+    pending("reject does not actually check this, and raises NoMethodError instead")
+    is_expected.to run.with_params(1, 'two').and_raise_error(Puppet::ParseError, /first argument not an array/)
+  }
+  it { is_expected.to run.with_params([], 'two').and_return([]) }
+  it { is_expected.to run.with_params(['one', 'two', 'three'], 'two').and_return(['one', 'three']) }
+  it { is_expected.to run.with_params(['one', 'two', 'three'], 't(wo|hree)').and_return(['one']) }
 end

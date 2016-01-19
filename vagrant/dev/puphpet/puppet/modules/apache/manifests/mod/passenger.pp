@@ -4,6 +4,7 @@ class apache::mod::passenger (
   $passenger_high_performance     = undef,
   $passenger_pool_idle_time       = undef,
   $passenger_max_requests         = undef,
+  $passenger_spawn_method         = undef,
   $passenger_stat_throttle_rate   = undef,
   $rack_autodetect                = undef,
   $rails_autodetect               = undef,
@@ -11,7 +12,9 @@ class apache::mod::passenger (
   $passenger_ruby                 = $::apache::params::passenger_ruby,
   $passenger_default_ruby         = $::apache::params::passenger_default_ruby,
   $passenger_max_pool_size        = undef,
+  $passenger_min_instances        = undef,
   $passenger_use_global_queue     = undef,
+  $passenger_app_env              = undef,
   $mod_package                    = undef,
   $mod_package_ensure             = undef,
   $mod_lib                        = undef,
@@ -19,24 +22,15 @@ class apache::mod::passenger (
   $mod_id                         = undef,
   $mod_path                       = undef,
 ) {
+
+  if $passenger_spawn_method {
+    validate_re($passenger_spawn_method, '(^smart$|^direct$|^smart-lv2$|^conservative$)', "${passenger_spawn_method} is not permitted for passenger_spawn_method. Allowed values are 'smart', 'direct', 'smart-lv2', or 'conservative'.")
+  }
+
   # Managed by the package, but declare it to avoid purging
   if $passenger_conf_package_file {
     file { 'passenger_package.conf':
       path => "${::apache::mod_dir}/${passenger_conf_package_file}",
-    }
-  } else {
-    # Remove passenger_extra.conf left over from before Passenger support was
-    # reworked for Debian. This is a temporary fix for users running this
-    # module from master after release 1.0.1 It will be removed in two
-    # releases from now.
-    $passenger_package_conf_ensure = $::osfamily ? {
-      'Debian' => 'absent',
-      default  => undef,
-    }
-
-    file { 'passenger_package.conf':
-      ensure => $passenger_package_conf_ensure,
-      path   => "${::apache::mod_dir}/passenger_extra.conf",
     }
   }
 
@@ -62,6 +56,7 @@ class apache::mod::passenger (
     lib_path       => $_lib_path,
     id             => $_id,
     path           => $_path,
+    loadfile_name  => 'zpassenger.load',
   }
 
   # Template uses:
@@ -69,10 +64,13 @@ class apache::mod::passenger (
   # - $passenger_ruby
   # - $passenger_default_ruby
   # - $passenger_max_pool_size
+  # - $passenger_min_instances
   # - $passenger_high_performance
   # - $passenger_max_requests
+  # - $passenger_spawn_method
   # - $passenger_stat_throttle_rate
   # - $passenger_use_global_queue
+  # - $passenger_app_env
   # - $rack_autodetect
   # - $rails_autodetect
   file { 'passenger.conf':
@@ -81,6 +79,6 @@ class apache::mod::passenger (
     content => template('apache/mod/passenger.conf.erb'),
     require => Exec["mkdir ${::apache::mod_dir}"],
     before  => File[$::apache::mod_dir],
-    notify  => Service['httpd'],
+    notify  => Class['apache::service'],
   }
 }

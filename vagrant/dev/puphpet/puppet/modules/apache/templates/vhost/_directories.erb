@@ -1,22 +1,41 @@
 <% if @_directories and ! @_directories.empty? -%>
+
+  ## Directories, there should at least be a declaration for <%= @docroot %>
   <%- [@_directories].flatten.compact.each do |directory| -%>
-    <%- if directory['path'] and directory['path'] != '' -%>
-  <%- if directory['provider'] and directory['provider'].match('(directory|location|files)') -%>
-    <%- if /^(.*)match$/ =~ directory['provider'] -%>
-      <%- provider = $1.capitalize + 'Match' -%>
-    <%- else -%>
-      <%- provider = directory['provider'].capitalize -%>
+    <%- if scope.function_versioncmp([@apache_version, '2.4']) >= 0 -%>
+      <%- if directory['allow'] and ! [ false, 'false', '' ].include?(directory['allow']) -%>
+        <%- scope.function_warning(["Apache::Vhost: Using allow is deprecated in your Apache version"]) -%>
+      <%- end -%>
+      <%- if directory['deny'] and ! [ false, 'false', '' ].include?(directory['deny']) -%>
+        <%- scope.function_warning(["Apache::Vhost: Using deny is deprecated in your Apache version"]) -%>
+      <%- end -%>
+      <%- if directory['order'] and ! [ false, 'false', '' ].include?(directory['order']) -%>
+        <%- scope.function_warning(["Apache::Vhost: Using order is deprecated in your Apache version"]) -%>
+      <%- end -%>
+      <%- if directory['satisfy'] and ! [ false, 'false', '' ].include?(directory['satisfy']) -%>
+        <%- scope.function_warning(["Apache::Vhost: Using satisfy is deprecated in your Apache version"]) -%>
+      <%- end -%>
     <%- end -%>
-  <%- else -%>
-    <%- provider = 'Directory' -%>
-  <%- end -%>
-  <%- path = directory['path'] -%>
+    <%- if directory['path'] and directory['path'] != '' -%>
+      <%- if directory['provider'] and directory['provider'].match('(directory|location|files)') -%>
+        <%- if /^(.*)match$/ =~ directory['provider'] -%>
+          <%- provider = $1.capitalize + 'Match' -%>
+        <%- else -%>
+          <%- provider = directory['provider'].capitalize -%>
+        <%- end -%>
+      <%- else -%>
+        <%- provider = 'Directory' -%>
+      <%- end -%>
+      <%- path = directory['path'] -%>
 
   <<%= provider %> "<%= path %>">
-    <%- if directory['headers'] -%>
-      <%- Array(directory['headers']).each do |header| -%>
+      <%- if directory['headers'] -%>
+        <%- Array(directory['headers']).each do |header| -%>
     Header <%= header %>
       <%- end -%>
+    <%- end -%>
+    <%- if ! directory['geoip_enable'].nil? -%>
+    GeoIPEnable <%= scope.function_bool2httpd([directory['geoip_enable']]) %>
     <%- end -%>
     <%- if directory['options'] -%>
     Options <%= Array(directory['options']).join(' ') %>
@@ -28,6 +47,9 @@
       <%- if directory['index_order_default'] -%>
     IndexOrderDefault <%= Array(directory['index_order_default']).join(' ') %>
       <%- end -%>
+      <%- if directory['index_style_sheet'] -%>
+    IndexStyleSheet '<%= directory['index_style_sheet'] %>'
+      <%- end -%>
       <%- if directory['allow_override'] -%>
     AllowOverride <%= Array(directory['allow_override']).join(' ') %>
       <%- elsif provider == 'Directory' -%>
@@ -36,18 +58,33 @@
     <%- end -%>
     <%- if scope.function_versioncmp([@apache_version, '2.4']) >= 0 -%>
       <%- if directory['require'] and directory['require'] != '' -%>
-    Require <%= Array(directory['require']).join(' ') %>
-      <%- else -%>
+        <%- Array(directory['require']).each do |req| -%>
+    Require <%= req %>
+        <%- end -%>
+      <%- end -%>
+      <%- if directory['auth_require'] -%>
+    Require <%= directory['auth_require'] %>
+      <%- end -%>
+      <%- if !(directory['require'] and directory['require'] != '') && !(directory['auth_require']) -%>
     Require all granted
       <%- end -%>
     <%- else -%>
+      <%- if directory['auth_require'] -%>
+    Require <%= directory['auth_require'] %>
+      <%- end -%>
       <%- if directory['order'] and directory['order'] != '' -%>
     Order <%= Array(directory['order']).join(',') %>
       <%- else -%>
     Order allow,deny
       <%- end -%>
-      <%- if directory['deny'] and directory['deny'] != '' -%>
+      <%- if directory['deny'] and ! [ false, 'false', '' ].include?(directory['deny']) -%>
+        <%- if directory['deny'].kind_of?(Array) -%>
+          <%- Array(directory['deny']).each do |restrict| -%>
+    Deny <%=  restrict %>
+          <%- end -%>
+        <%- else -%>
     Deny <%= directory['deny'] %>
+        <%- end -%>
       <%- end -%>
       <%- if directory['allow'] and ! [ false, 'false', '' ].include?(directory['allow']) -%>
         <%- if directory['allow'].kind_of?(Array) -%>
@@ -78,14 +115,25 @@
     <%- if directory['passenger_enabled'] and directory['passenger_enabled'] != '' -%>
     PassengerEnabled <%= directory['passenger_enabled'] %>
     <%- end -%>
+    <%- if directory['php_flags'] and ! directory['php_flags'].empty? -%>
+      <%- directory['php_flags'].sort.each do |flag,value| -%>
+        <%- value = if value =~ /true|yes|on|1/i then 'on' else 'off' end -%>
+    php_flag <%= "#{flag} #{value}" %>
+      <%- end -%>
+    <%- end -%>
+    <%- if directory['php_values'] and ! directory['php_values'].empty? -%>
+      <%- directory['php_values'].sort.each do |key,value| -%>
+    php_value <%= "#{key} #{value}" %>
+      <%- end -%>
+    <%- end -%>
     <%- if directory['php_admin_flags'] and ! directory['php_admin_flags'].empty? -%>
-      <%- directory['php_admin_flags'].each do |flag,value| -%>
-      <%- value = if value =~ /true|yes|on|1/i then 'on' else 'off' end -%>
+      <%- directory['php_admin_flags'].sort.each do |flag,value| -%>
+        <%- value = if value =~ /true|yes|on|1/i then 'on' else 'off' end -%>
     php_admin_flag <%= "#{flag} #{value}" %>
       <%- end -%>
     <%- end -%>
     <%- if directory['php_admin_values'] and ! directory['php_admin_values'].empty? -%>
-      <%- directory['php_admin_values'].each do |key,value| -%>
+      <%- directory['php_admin_values'].sort.each do |key,value| -%>
     php_admin_value <%= "#{key} #{value}" %>
       <%- end -%>
     <%- end -%>
@@ -136,9 +184,6 @@
     <%- if directory['auth_group_file'] -%>
     AuthGroupFile <%= directory['auth_group_file'] %>
     <%- end -%>
-    <%- if directory['auth_require'] -%>
-    Require <%= directory['auth_require'] %>
-    <%- end -%>
     <%- if directory['fallbackresource'] -%>
     FallbackResource <%= directory['fallbackresource'] %>
     <%- end -%>
@@ -153,6 +198,9 @@
     ExpiresByType <%= rule %>
     <%- end -%>
     <%- end -%>
+    <%- if directory['ext_filter_options'] -%>
+    ExtFilterOptions <%= directory['ext_filter_options'] %>
+    <%- end -%>
     <%- if directory['force_type'] -%>
     ForceType <%= directory['force_type'] %>
     <%- end -%>
@@ -164,6 +212,82 @@
     <%- end -%>
     <%- if directory['fcgiwrapper'] -%>
     FcgidWrapper <%= directory['fcgiwrapper']['command'] %> <%= directory['fcgiwrapper']['suffix'] %> <%= directory['fcgiwrapper']['virtual'] %>
+    <%- end -%>
+    <%- if directory['rewrites'] -%>
+    # Rewrite rules
+    RewriteEngine On
+      <%- directory['rewrites'].flatten.compact.each do |rewrite_details| -%>
+        <%- if rewrite_details['comment'] -%>
+    #<%= rewrite_details['comment'] %>
+        <%- end -%>
+        <%- if rewrite_details['rewrite_base'] -%>
+    RewriteBase <%= rewrite_details['rewrite_base'] %>
+        <%- end -%>
+        <%- if rewrite_details['rewrite_cond'] -%>
+          <%- Array(rewrite_details['rewrite_cond']).each do |commands| -%>
+            <%- Array(commands).each do |command| -%>
+    RewriteCond <%= command %>
+            <%- end -%>
+          <%- end -%>
+        <%- end -%>
+        <%- Array(rewrite_details['rewrite_rule']).each do |commands| -%>
+          <%- Array(commands).each do |command| -%>
+    RewriteRule <%= command %>
+          <%- end -%>
+        <%- end -%>
+      <%- end -%>
+    <%- end -%>
+    <%- if directory['setenv'] -%>
+      <%- Array(directory['setenv']).each do |setenv| -%>
+    SetEnv <%= setenv %>
+      <%- end -%>
+    <%- end -%>
+    <%- if directory['set_output_filter'] -%>
+    SetOutputFilter <%= directory['set_output_filter'] %>
+    <%- end -%>
+    <%- if @shibboleth_enabled -%>
+      <%- if directory['shib_require_session'] and ! directory['shib_require_session'].empty? -%>
+    ShibRequireSession <%= directory['shib_require_session'] %>
+      <%- end -%>
+      <%- if directory['shib_request_settings'] and ! directory['shib_request_settings'].empty? -%>
+        <%- directory['shib_request_settings'].each do |key,value| -%>
+    ShibRequestSetting <%= key %> <%= value %>
+        <%- end -%>
+      <%- end -%>
+      <%- if directory['shib_use_headers'] and ! directory['shib_use_headers'].empty? -%>
+    ShibUseHeaders <%= directory['shib_use_headers'] %>
+      <%- end -%>
+    <%- end -%>
+    <%- if directory['mellon_enable'] -%>
+    MellonEnable "<%= directory['mellon_enable'] %>"
+      <%- if directory['mellon_endpoint_path'] -%>
+    MellonEndpointPath "<%= directory['mellon_endpoint_path'] %>"
+      <%- end -%>
+      <%- if directory['mellon_sp_private_key_file'] -%>
+    MellonSPPrivateKeyFile "<%= directory['mellon_sp_private_key_file'] %>"
+      <%- end -%>
+      <%- if directory['mellon_sp_cert_file'] -%>
+    MellonSPCertFile "<%= directory['mellon_sp_cert_file'] %>"
+      <%- end -%>
+      <%- if directory['mellon_idp_metadata_file'] -%>
+    MellonIDPMetadataFile "<%= directory['mellon_idp_metadata_file'] %>"
+      <%- end -%>
+      <%- if directory['mellon_set_env_no_prefix'] -%>
+        <%- directory['mellon_set_env_no_prefix'].each do |key, value| -%>
+    MellonSetEnvNoPrefix "<%= key %>" "<%= value %>"
+        <%- end -%>
+      <%- end -%>
+      <%- if directory['mellon_user'] -%>
+    MellonUser "<%= directory['mellon_user'] %>"
+      <%- end -%>
+      <%- if directory['mellon_saml_response_dump'] -%>
+    MellonSamlResponseDump "<%= directory['mellon_saml_response_dump'] %>"
+      <%- end -%>
+      <%- if directory['mellon_cond'] -%>
+        <%- Array(directory['mellon_cond']).each do |cond| -%>
+    MellonCond <%= cond %>
+         <%- end -%>
+      <%- end -%>
     <%- end -%>
     <%- if directory['custom_fragment'] -%>
     <%= directory['custom_fragment'] %>

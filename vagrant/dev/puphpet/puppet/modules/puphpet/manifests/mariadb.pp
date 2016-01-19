@@ -7,8 +7,6 @@ class puphpet::mariadb(
   $release = $::lsbdistcodename,
   $arch    = $::architecture,
   $version = '10.0',
-  $url     = $puphpet::params::apache_mod_pagespeed_url,
-  $package = $puphpet::params::apache_mod_pagespeed_package
 ) {
 
   $arch_package_name = $::architecture ? {
@@ -26,9 +24,11 @@ class puphpet::mariadb(
         release           => $release,
         repos             => 'main',
         required_packages => 'debian-keyring debian-archive-keyring',
-        key               => '1BB943DB',
-        key_server        => 'keyserver.ubuntu.com',
-        include_src       => true
+          key               => {
+            'id'      => '199369E5404BD5FC7D2FE43BCBCB082A1BB943DB',
+            'server'  => 'hkp://keyserver.ubuntu.com:80',
+          },
+        include           => { 'src' => true }
       }
 
       apt::pin { 'mariadb':

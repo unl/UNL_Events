@@ -15,6 +15,7 @@ describe 'apache::mod::worker', :type => :class do
         :id                     => 'root',
         :kernel                 => 'Linux',
         :path                   => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+        :is_pe                  => false,
       }
     end
     it { is_expected.to contain_class("apache::params") }
@@ -60,6 +61,7 @@ describe 'apache::mod::worker', :type => :class do
         :id                     => 'root',
         :kernel                 => 'Linux',
         :path                   => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+        :is_pe                  => false,
       }
     end
     it { is_expected.to contain_class("apache::params") }
@@ -105,11 +107,29 @@ describe 'apache::mod::worker', :type => :class do
         :id                     => 'root',
         :kernel                 => 'FreeBSD',
         :path                   => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+        :is_pe                  => false,
       }
     end
     it { is_expected.to contain_class("apache::params") }
     it { is_expected.not_to contain_apache__mod('worker') }
-    it { is_expected.to contain_file("/usr/local/etc/apache22/Modules/worker.conf").with_ensure('file') }
+    it { is_expected.to contain_file("/usr/local/etc/apache24/Modules/worker.conf").with_ensure('file') }
+  end
+  context "on a Gentoo OS" do
+    let :facts do
+      {
+        :osfamily               => 'Gentoo',
+        :operatingsystem        => 'Gentoo',
+        :operatingsystemrelease => '3.16.1-gentoo',
+        :concat_basedir         => '/dne',
+        :id                     => 'root',
+        :kernel                 => 'Linux',
+        :path                   => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/bin',
+        :is_pe                  => false,
+      }
+    end
+    it { is_expected.to contain_class("apache::params") }
+    it { is_expected.not_to contain_apache__mod('worker') }
+    it { is_expected.to contain_file("/etc/apache2/modules.d/worker.conf").with_ensure('file') }
   end
 
   # Template config doesn't vary by distro
@@ -119,9 +139,11 @@ describe 'apache::mod::worker', :type => :class do
         :osfamily               => 'RedHat',
         :operatingsystem        => 'CentOS',
         :operatingsystemrelease => '6',
+        :kernel                 => 'Linux',
         :id                     => 'root',
         :concat_basedir         => '/dne',
         :path                   => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+        :is_pe                  => false,
       }
     end
 
@@ -135,6 +157,7 @@ describe 'apache::mod::worker', :type => :class do
       it { should contain_file('/etc/httpd/conf.d/worker.conf').with(:content => /^\s+ThreadsPerChild\s+25$/) }
       it { should contain_file('/etc/httpd/conf.d/worker.conf').with(:content => /^\s+MaxRequestsPerChild\s+0$/) }
       it { should contain_file('/etc/httpd/conf.d/worker.conf').with(:content => /^\s+ThreadLimit\s+64$/) }
+      it { should contain_file("/etc/httpd/conf.d/worker.conf").with(:content => /^\s*ListenBacklog\s*511/) }
     end
 
     context 'setting params' do
@@ -147,7 +170,8 @@ describe 'apache::mod::worker', :type => :class do
           :maxsparethreads      => 14,
           :threadsperchild      => 15,
           :maxrequestsperchild  => 16,
-          :threadlimit          => 17
+          :threadlimit          => 17,
+          :listenbacklog        => 8,
         }
       end
       it { should contain_file('/etc/httpd/conf.d/worker.conf').with(:content => /^<IfModule mpm_worker_module>$/) }
@@ -159,6 +183,7 @@ describe 'apache::mod::worker', :type => :class do
       it { should contain_file('/etc/httpd/conf.d/worker.conf').with(:content => /^\s+ThreadsPerChild\s+15$/) }
       it { should contain_file('/etc/httpd/conf.d/worker.conf').with(:content => /^\s+MaxRequestsPerChild\s+16$/) }
       it { should contain_file('/etc/httpd/conf.d/worker.conf').with(:content => /^\s+ThreadLimit\s+17$/) }
+      it { should contain_file("/etc/httpd/conf.d/worker.conf").with(:content => /^\s*ListenBacklog\s*8/) }
     end
   end
 end

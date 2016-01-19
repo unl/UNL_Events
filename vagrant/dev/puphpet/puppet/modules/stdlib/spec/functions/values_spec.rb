@@ -1,31 +1,19 @@
-#! /usr/bin/env ruby -S rspec
 require 'spec_helper'
 
-describe "the values function" do
-  let(:scope) { PuppetlabsSpec::PuppetInternals.scope }
-
-  it "should exist" do
-    Puppet::Parser::Functions.function("values").should == "function_values"
-  end
-
-  it "should raise a ParseError if there is less than 1 arguments" do
-    lambda { scope.function_values([]) }.should( raise_error(Puppet::ParseError))
-  end
-
-  it "should return values from a hash" do
-    result = scope.function_values([{'a'=>'1','b'=>'2','c'=>'3'}])
-    # =~ is the RSpec::Matchers::MatchArray matcher.
-    # A.K.A. "array with same elements" (multiset) matching
-    result.should =~ %w{ 1 2 3 }
-  end
-
-  it "should return a multiset" do
-    result = scope.function_values([{'a'=>'1','b'=>'3','c'=>'3'}])
-    result.should     =~ %w{ 1 3 3 }
-    result.should_not =~ %w{ 1 3 }
-  end
-
-  it "should raise a ParseError unless a Hash is provided" do
-    lambda { scope.function_values([['a','b','c']]) }.should( raise_error(Puppet::ParseError))
+describe 'values' do
+  it { is_expected.not_to eq(nil) }
+  it { is_expected.to run.with_params().and_raise_error(Puppet::ParseError, /wrong number of arguments/i) }
+  it {
+    pending("Current implementation ignores parameters after the first.")
+    is_expected.to run.with_params({}, 'extra').and_raise_error(Puppet::ParseError, /wrong number of arguments/i)
+  }
+  it { is_expected.to run.with_params('').and_raise_error(Puppet::ParseError, /Requires hash to work with/) }
+  it { is_expected.to run.with_params(1).and_raise_error(Puppet::ParseError, /Requires hash to work with/) }
+  it { is_expected.to run.with_params([]).and_raise_error(Puppet::ParseError, /Requires hash to work with/) }
+  it { is_expected.to run.with_params({}).and_return([]) }
+  it { is_expected.to run.with_params({ 'key' => 'value' }).and_return(['value']) }
+  it 'should return the array of values' do
+    result = subject.call([{ 'key1' => 'value1', 'key2' => 'value2', 'duplicate_value_key' => 'value2' }])
+    expect(result).to match_array(['value1', 'value2', 'value2'])
   end
 end
