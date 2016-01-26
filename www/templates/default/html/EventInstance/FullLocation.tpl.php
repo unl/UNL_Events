@@ -1,7 +1,7 @@
 <?php 
 $location = $context->eventdatetime->getLocation();
-$room = isset($location->room) ? $location->room : $context->eventdatetime->room;
-$directions = isset($location->directions) ? $location->directions : $context->eventdatetime->directions
+$room = !empty($context->eventdatetime->room) ? $context->eventdatetime->room : $location->room;
+$directions = !empty($context->eventdatetime->directions) ? $context->eventdatetime->directions : $location->directions;
 ?>
 <?php if (isset($location->name) || $room || $directions || isset($location->streetaddress1)): ?>
 <div class="location eventicon-location">
@@ -10,7 +10,7 @@ $directions = isset($location->directions) ? $location->directions : $context->e
 <?php else: ?>
     <?php echo $location->name; ?>
 <?php endif; ?>
-<?php if ($room): ?>
+<?php if (!empty($room)): ?>
     <span class="room">Room: <?php echo $room ?></span>
 <?php endif; ?>
 <?php if (isset($location->streetaddress1)): ?>
@@ -27,7 +27,7 @@ $directions = isset($location->directions) ? $location->directions : $context->e
         <?php endif; ?>
     </div>
 <?php endif; ?>
-<?php if ($directions): ?>
+<?php if (!empty($directions)): ?>
     <div class="directions">Directions: <?php echo $savvy->dbStringtoHtml($directions) ?></div>
 <?php endif ?>
 <?php if (isset($location->additionalpublicinfo)): ?>

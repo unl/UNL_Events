@@ -46,7 +46,7 @@ class CreateEvent extends PostHandler
         $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Event Created', 'Your event "' . $new_event->title . '" has been created.');
 
         # redirect
-        return '/manager/' . $this->calendar->shortname . '/';
+        return Controller::$url . $this->calendar->shortname . '/';
     }
 
     private function setEventData($post_data, $files) 
