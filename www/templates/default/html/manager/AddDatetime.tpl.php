@@ -128,7 +128,7 @@
         </div>
 
         <label for="room">Room</label>
-        <input type="text" id="room" name="room" />
+        <input type="text" id="room" name="room" value="<?php echo $datetime->room; ?>" />
 
 
         <label for="start-date" ><span class="required">*</span> Start Date &amp; Time</label>
