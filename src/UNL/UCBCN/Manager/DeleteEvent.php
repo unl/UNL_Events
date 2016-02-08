@@ -48,6 +48,6 @@ class DeleteEvent extends PostHandler
         }
 
         //redirect
-        return $this->calendar->getManageURL();
+        return $this->calendar->getManageURL(TRUE);
     }
 }

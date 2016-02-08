@@ -103,6 +103,7 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <?php try { ?>
                         <?php foreach($events as $event): ?>
                             <tr>
                                 <td class="center medium-hidden">
@@ -227,6 +228,7 @@
                                 </td>
                             </tr>
                         <?php endforeach; ?>
+                        <?php } catch (\OutOfBoundsException $e) {} ?>
                     </tbody>
                 </table>
             </div>

@@ -57,6 +57,6 @@ class CleanupCalendar extends PostHandler
 
         $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Events Deleted', $count . ' events have been removed from your calendar.');
         //redirect
-        return $this->calendar->getManageURL();
+        return $this->calendar->getManageURL(TRUE);
     }
 }

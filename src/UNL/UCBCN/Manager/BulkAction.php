@@ -75,6 +75,6 @@ class BulkAction extends PostHandler
         }
 
         //redirect
-        return $this->calendar->getManageURL();
+        return $this->calendar->getManageURL(TRUE);
     }
 }

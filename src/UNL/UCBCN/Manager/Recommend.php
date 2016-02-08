@@ -37,7 +37,7 @@ class Recommend extends PostHandler
     public function handlePost(array $get, array $post, array $files)
     {
         $this->recommendEvent($post);
-        return $this->calendar->getManageURL();
+        return $this->calendar->getManageURL(TRUE);
     }
 
     private function recommendEvent($post_data)

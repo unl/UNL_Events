@@ -46,6 +46,10 @@ class Calendar {
         } else {
             $this->page = 1;
         }
+
+        # store tab and page in session
+        $_SESSION['current_tab'] = $this->tab;
+        $_SESSION['current_page'] = $this->page;
     }
 
     public function getCategorizedEvents()

@@ -67,6 +67,6 @@ class MoveEvent extends PostHandler
         }
         
         //redirect
-        return $this->calendar->getManageURL();
+        return $this->calendar->getManageURL(TRUE);
     }
 }

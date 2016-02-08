@@ -81,8 +81,23 @@ class Calendar extends Record
         return FrontendController::$url . $this->shortname . "/";
     }
 
-    public function getManageURL() {
-        return ManagerController::$url . $this->shortname . "/";
+    public function getManageURL($append_page_tab = FALSE) {
+        $append = '';
+        if ($append_page_tab) {
+            $append = array();
+            if (array_key_exists('current_tab', $_SESSION)) {
+                $append['tab'] = $_SESSION['current_tab'];
+            }
+            if (array_key_exists('current_page', $_SESSION)) {
+                $append['page'] = $_SESSION['current_page'];
+            }
+            if (!empty($append)) {
+                $append = '?' . join(array_map(function ($key, $val) {return $key . '=' . $val;}, array_keys($append), $append), '&');
+            } else {
+                $append = '';
+            }
+        }
+        return ManagerController::$url . $this->shortname . "/" . $append;
     }
 
     public function getNewURL() {
