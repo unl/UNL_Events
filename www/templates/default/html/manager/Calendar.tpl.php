@@ -85,6 +85,12 @@
             <div class="medium-hidden" style="margin-bottom: 5px;">
                 <a href='#' class="wdn-button small-button" id="check-all">Check All</a>
                 <a href='#' class="wdn-button small-button" id="uncheck-all">Uncheck All</a>
+                <?php if ($context->tab != 'upcoming' && $user->hasPermission(\UNL\UCBCN\Permission::EVENT_DELETE_ID, $context->calendar->id)): ?> 
+                    <form id="cleanup-events" class="delete-form" action="<?php echo $context->calendar->getCleanupURL() ?>" method="POST">
+                    <input type="hidden" name="tab" value="<?php echo $context->tab ?>">
+                    <button type="submit" class="wdn-button small-button">Clean Up Old Events</button>
+                    </form>
+                <?php endif; ?>
             </div>
             <div class="event-page">
                 <table class="event-list">
@@ -260,3 +266,15 @@
         <?php endif; ?>
     </div>
 </div>
+
+<script type="text/javascript">
+require(['jquery'], function ($) {
+    $(document).ready(function () {
+        $("#cleanup-events").submit(function (submit) {
+            if (!window.confirm('Are you sure you want to remove all old events from this tab? This may take a while.')) {
+                submit.preventDefault();
+            }
+        })
+    });
+});
+</script>

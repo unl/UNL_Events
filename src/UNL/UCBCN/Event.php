@@ -406,6 +406,28 @@ class Event extends Record
             return false;
         }
     }
+
+    public function isInThePast() {
+        # we will consider it passed if all datetimes are in the past
+        $datetimes = $this->getDatetimes();
+        $past = TRUE;
+        foreach ($datetimes as $datetime) {
+            $recurring_dates = $datetime->getAllDates();
+            foreach($recurring_dates as $recurring_date) {
+                if ($recurring_date->recurringdate >= date('Y-m-d')) {
+                    $past = FALSE;
+                    break 2;
+                }
+            }
+
+            if ($datetime->starttime >= date('Y-m-d 00:00:00') || ($datetime->endtime != NULL && $datetime->endtime >= date('Y-m-d 00:00:00'))) {
+                $past = FALSE;
+                break;
+            }
+        }
+
+        return $past;
+    }
     
     /**
      * Adds other information to the array produced by $event->toArray().

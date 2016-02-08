@@ -109,6 +109,10 @@ class Calendar extends Record
         return ManagerController::$url . $this->shortname . '/users/';
     }
 
+    public function getCleanupURL() {
+        return ManagerController::$url . $this->shortname . '/cleanup/';
+    }
+
     public function getBulkActionURL() {
         return $this->getManageURL() . 'bulk/';
     }
@@ -254,15 +258,18 @@ class Calendar extends Record
      *
      * @return bool
      */
-    public function removeEvent(UNL_UCBCN_Event $event)
+    public function removeEvent($event)
     {
-        if (isset($this->id) && isset($event->id)) {
-            $calendar_has_event              = UNL_UCBCN::factory('calendar_has_event');
-            $calendar_has_event->calendar_id = $this->id;
-            $calendar_has_event->event_id    = $event->id;
-            return $calendar_has_event->delete();
+        # get the Calendar Has Event record
+        $calendar_has_event = CalendarHasEvent::getByIDs($this->id, $event->id);
+
+        # check if this is where the event was originally created
+        if ($calendar_has_event->source == 'create event form' || $calendar_has_event->source == 'create event api') {
+            # delete the event from the entire system
+            $event->delete();
         } else {
-            return false;
+            # delete the calendar has event record
+            $calendar_has_event->delete();
         }
     }
 

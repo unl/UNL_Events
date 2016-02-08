@@ -87,23 +87,7 @@ class Calendar {
 
         # check each event to see if it has passed
         foreach ($events as $event) {
-            # we will consider it passed if all datetimes are in the past
-            $datetimes = $event->getDatetimes();
-            $archive = TRUE;
-            foreach ($datetimes as $datetime) {
-                $recurring_dates = $datetime->getAllDates();
-                foreach($recurring_dates as $recurring_date) {
-                    if ($recurring_date->recurringdate >= date('Y-m-d')) {
-                        $archive = FALSE;
-                        break 2;
-                    }
-                }
-
-                if ($datetime->starttime >= date('Y-m-d 00:00:00') || ($datetime->endtime != NULL && $datetime->endtime >= date('Y-m-d 00:00:00'))) {
-                    $archive = FALSE;
-                    break;
-                }
-            }
+            $archive = $event->isInThePast();
 
             # update the status with the calendar
             if ($archive) {
