@@ -50,7 +50,7 @@ class CleanupCalendar extends PostHandler
         $count = 0;
         foreach ($events as $event) {
             if ($event->isInThePast()) {
-                $this->calendar->removeEvent($event);
+                $this->calendar->removeEvent($event, $backend_tab_name);
                 $count++;
             }
         }

@@ -79,6 +79,7 @@
                 <form id="bulk-action-form" method="POST" action="<?php echo $context->calendar->getBulkActionURL() ?>" class="delete-form hidden">
                 <input type="text" title="Bulk Action IDs" id="bulk-action-ids" name="ids">
                 <input type="text" title="Bulk Action Action" id="bulk-action-action" name="action">
+                <input type="text" name="status" value="<?php echo $context->tab ?>">
                 <button type="submit">Submit</button>
                 </form>
             </div><br class="medium-hidden">
@@ -220,9 +221,11 @@
                                     <form id="move-<?php echo $event->id; ?>" method="POST" action="<?php echo $event->getMoveURL($controller->getCalendar()) ?>" class="delete-form hidden">
                                     <input type="text" title="New Status" name="new_status" id="move-target-<?php echo $event->id; ?>">
                                     <input type="text" title="Event ID" name="event_id" value="<?php echo $event->id ?>">
+                                    <input type="text" name="status" value="<?php echo $context->tab ?>">
                                     <button type="submit">Submit</button>
                                     </form>
                                     <form id="delete-<?php echo $event->id; ?>" method="POST" action="<?php echo $event->getDeleteURL($controller->getCalendar()) ?>" class="delete-form hidden">
+                                    <input type="text" name="status" value="<?php echo $context->tab ?>">
                                     <button type="submit">Submit</button>
                                     </form>
                                 </td>

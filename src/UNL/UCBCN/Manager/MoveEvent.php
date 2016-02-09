@@ -28,6 +28,21 @@ class MoveEvent extends PostHandler
 
     public function handlePost(array $get, array $post, array $files)
     {
+        $backend_tab_name = NULL;
+        switch ($post['status']) {
+            case 'pending':
+                $backend_tab_name = 'pending';
+                break;
+            case 'upcoming':
+                $backend_tab_name = 'posted';
+                break;
+            case 'past':
+                $backend_tab_name = 'archived';
+                break;
+            default:
+                return $this->calendar->getManageURL();
+        }
+
         if (!isset($post['event_id'])) {
             throw new \Exception("The event_id must be set in the post data.", 400);
         }
@@ -36,7 +51,7 @@ class MoveEvent extends PostHandler
             throw new \Exception("The event_id in the post data must match the event_id in the URL.", 400);
         }
 
-        $calendar_has_event = CalendarHasEvent::getByIDs($this->calendar->id, $this->event->id);
+        $calendar_has_event = CalendarHasEvent::getByIdsStatus($this->calendar->id, $this->event->id, $backend_tab_name);
 
         if ($calendar_has_event == FALSE) {
             $calendar_has_event = new CalendarHasEvent;

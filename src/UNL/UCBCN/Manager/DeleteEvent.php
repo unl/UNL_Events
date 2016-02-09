@@ -33,8 +33,23 @@ class DeleteEvent extends PostHandler
 
     public function handlePost(array $get, array $post, array $files)
     {
+        $backend_tab_name = NULL;
+        switch ($post['status']) {
+            case 'pending':
+                $backend_tab_name = 'pending';
+                break;
+            case 'upcoming':
+                $backend_tab_name = 'posted';
+                break;
+            case 'past':
+                $backend_tab_name = 'archived';
+                break;
+            default:
+                return $this->calendar->getManageURL();
+        }
+
         # get the Calendar Has Event record
-        $calendar_has_event = CalendarHasEvent::getByIDs($this->calendar->id, $this->event->id);
+        $calendar_has_event = CalendarHasEvent::getByIdsStatus($this->calendar->id, $this->event->id, $backend_tab_name);
 
         # check if this is where the event was originally created
         if ($calendar_has_event->source == 'create event form' || $calendar_has_event->source == 'create event api') {

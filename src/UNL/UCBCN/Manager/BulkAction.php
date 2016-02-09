@@ -22,6 +22,21 @@ class BulkAction extends PostHandler
 
     public function handlePost(array $get, array $post, array $files)
     {
+        $backend_tab_name = NULL;
+        switch ($post['status']) {
+            case 'pending':
+                $backend_tab_name = 'pending';
+                break;
+            case 'upcoming':
+                $backend_tab_name = 'posted';
+                break;
+            case 'past':
+                $backend_tab_name = 'archived';
+                break;
+            default:
+                return $this->calendar->getManageURL();
+        }
+
         // get the ids of the events to do things with
         $ids = explode(',', $post['ids']);
         $action = $post['action'];
@@ -33,7 +48,7 @@ class BulkAction extends PostHandler
             }
 
             foreach ($ids as $id) {
-                $calendar_has_event = CalendarHasEvent::getByIDs($this->calendar->id, $id);
+                $calendar_has_event = CalendarHasEvent::getByIdsStatus($this->calendar->id, $id, $backend_tab_name);
 
                 if ($calendar_has_event !== FALSE) {
                     $calendar_has_event->status = Calendar::STATUS_POSTED;
@@ -48,7 +63,7 @@ class BulkAction extends PostHandler
             }
 
             foreach ($ids as $id) {
-                $calendar_has_event = CalendarHasEvent::getByIDs($this->calendar->id, $id);
+                $calendar_has_event = CalendarHasEvent::getByIdsStatus($this->calendar->id, $id, $backend_tab_name);
 
                 if ($calendar_has_event !== FALSE) {
                     $calendar_has_event->status = Calendar::STATUS_PENDING;
@@ -63,7 +78,7 @@ class BulkAction extends PostHandler
             }
 
             foreach ($ids as $id) {
-                $calendar_has_event = CalendarHasEvent::getByIDs($this->calendar->id, $id);
+                $calendar_has_event = CalendarHasEvent::getByIdsStatus($this->calendar->id, $id, $backend_tab_name);
 
                 if ($calendar_has_event !== FALSE) {
                     $calendar_has_event->delete();

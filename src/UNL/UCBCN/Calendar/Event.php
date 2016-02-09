@@ -64,6 +64,14 @@ class Event extends Record
         return self::getByAnyField(__CLASS__, 'calendar_id', $calendar_id, 'event_id = '.(int)$event_id);
     }
 
+    public static function getByIdsStatus($calendar_id, $event_id, $status)
+    {
+        if ($status != self::STATUS_PENDING && $status != self::STATUS_POSTED && $status != self::STATUS_ARCHIVED) {
+            return FALSE;
+        }
+        return self::getByAnyField(__CLASS__, 'calendar_id', $calendar_id, 'event_id = '.(int)$event_id.' AND status = "' . $status . '"');
+    }
+
     public static function getByEventIDSource($event_id, $source)
     {
         return self::getByAnyField(__CLASS__, 'source', $source, 'event_id = '.(int)$event_id);

@@ -238,22 +238,30 @@ class Calendar extends Record
      */
     public function addEvent($event, $status, $user, $source = null)
     {
-        $calendar_has_event = new CalendarHasEvent;
+        if (CalendarHasEvent::findByIDs($this->id, $event->id)) {
+            # do not add this
+        } else {
+            $calendar_has_event = new CalendarHasEvent;
 
-        $calendar_has_event->calendar_id = $this->id;
-        $calendar_has_event->event_id = $event->id;
-        $calendar_has_event->status = $status;
-        $calendar_has_event->source = $source;
+            $calendar_has_event->calendar_id = $this->id;
+            $calendar_has_event->event_id = $event->id;
+            $calendar_has_event->status = $status;
+            $calendar_has_event->source = $source;
+            $calendar_has_event->insert();
+        }
 
-        $result = $calendar_has_event->insert();
-
-        if ($result && $event->approvedforcirculation) {
+        if ($event->approvedforcirculation) {
             # get the subscribed calendars and similarly add the event to them.
             # we use the insert method instead of reusing addEvent because we do not want an infinite loop
             foreach ($this->getSubscriptionsToThis() as $subscription) {
                 # it's confusing, but for each subscription which has this calendar as a 
                 # subscribed calendar, take that subscription, find what calendar it is
                 # attached to, and add a calendar_has_event record
+                if (CalendarHasEvent::findByIDs($subscription->calendar_id, $event->id)) {
+                    # do not add this
+                    continue; 
+                }
+
                 $calendar_has_event = new CalendarHasEvent;
 
                 $calendar_has_event->calendar_id = $subscription->calendar_id;
@@ -273,10 +281,10 @@ class Calendar extends Record
      *
      * @return bool
      */
-    public function removeEvent($event)
+    public function removeEvent($event, $status)
     {
         # get the Calendar Has Event record
-        $calendar_has_event = CalendarHasEvent::getByIDs($this->id, $event->id);
+        $calendar_has_event = CalendarHasEvent::getByIdsStatus($this->id, $event->id, $status);
 
         # check if this is where the event was originally created
         if ($calendar_has_event->source == 'create event form' || $calendar_has_event->source == 'create event api') {

@@ -348,6 +348,10 @@ class Event extends Record
      */
     public function addToCalendar($calendar_id, $status='pending', $source = null)
     {
+        if (CalendarHasEvent::findByIDs($calendar_id, $this->id)) {
+            return TRUE;
+        }
+
         $calendar_has_event = new CalendarHasEvent;
 
         $calendar_has_event->calendar_id = $calendar_id;
