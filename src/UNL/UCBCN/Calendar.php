@@ -238,7 +238,7 @@ class Calendar extends Record
      */
     public function addEvent($event, $status, $user, $source = null)
     {
-        if (CalendarHasEvent::findByIDs($this->id, $event->id)) {
+        if (CalendarHasEvent::getByIDs($this->id, $event->id)) {
             # do not add this
         } else {
             $calendar_has_event = new CalendarHasEvent;
@@ -257,7 +257,7 @@ class Calendar extends Record
                 # it's confusing, but for each subscription which has this calendar as a 
                 # subscribed calendar, take that subscription, find what calendar it is
                 # attached to, and add a calendar_has_event record
-                if (CalendarHasEvent::findByIDs($subscription->calendar_id, $event->id)) {
+                if (CalendarHasEvent::getByIDs($subscription->calendar_id, $event->id)) {
                     # do not add this
                     continue; 
                 }
