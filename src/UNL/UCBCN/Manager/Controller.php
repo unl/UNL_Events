@@ -76,6 +76,10 @@ class Controller {
         return self::$url . 'account/';
     }
 
+    public static function getWelcomeURL() {
+        return self::$url . 'welcome/';
+    }
+
     /**
      * Runs/builds the manager object with the display parameters set.
      * This function will populate all of the output and member variables with the

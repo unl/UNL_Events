@@ -94,7 +94,13 @@ class CreateCalendar extends PostHandler
             'manager',
             'api',
             'www',
-            'templates'
+            'templates',
+            'me',
+            'welcome',
+            'account',
+            'calendar',
+            'events',
+            'event'
         );
 
         # name and shortname are required

@@ -46,6 +46,9 @@
         </div>
         <ul>
             <li>
+                <a href="<?php echo $context->getWelcomeURL() ?>">Welcome</a>
+            </li>
+            <li>
                 <a href="<?php echo $context->getEditMeURL() ?>">User Info</a>
             </li>
             <li>

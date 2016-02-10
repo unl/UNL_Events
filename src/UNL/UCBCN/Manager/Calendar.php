@@ -26,7 +26,7 @@ class Calendar {
 
         $user = Auth::getCurrentUser();
         if (!in_array($this->calendar->id, $user->getCalendars()->getIDs())) {
-            throw new \Exception("Sorry, you don't have permissions on this calendar. Please select a calendar from your calendars on the left.", 404);
+            Controller::redirect(Controller::$url . 'welcome/');
         }
 
         # this function will currently run every time the page is loaded. In the future, it would be better
