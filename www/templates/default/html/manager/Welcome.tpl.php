@@ -33,7 +33,8 @@ Here are some tips to get going with UNL Events:
     <li>
         The "Pending" tab is a "staging" area for events. You can 
         "approve" these events to show on your live calendar by clicking "Move to Upcoming" in the
-        dropdown to the right of them. 
+        dropdown to the right of them. They'll then be in the "Upcoming" tab, which shows the upcoming events
+        on your calendar. These events will move to "Past" once they are completed.
     </li>
     </ul>
 </div>

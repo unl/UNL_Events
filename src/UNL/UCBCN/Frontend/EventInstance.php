@@ -268,7 +268,7 @@ class EventInstance implements RoutableInterface
                 'LocationName'  => $location->name,
                 'LocationTypes' => array('LocationType' => $location->type),
                 'Address' => array(
-                    'Room'                 => $this->eventdatetime->room,
+                    'Room'                 => $location->room,
                     'BuildingName'         => $location->name,
                     'CityName'             => $location->city,
                     'PostalZone'           => $location->zip,
@@ -297,6 +297,7 @@ class EventInstance implements RoutableInterface
                 'AdditionalPublicInfo' => $location->additionalpublicinfo,
             );
         }
+        $data['Room'] = !empty($this->eventdatetime->room) ? $this->eventdatetime->room : ($location ? $location->room : NULL);
 
         if ($eventTypes->count()) {
             $data['EventTypes'] = array();
