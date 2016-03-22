@@ -24,7 +24,7 @@
                 <label for="subtitle">Subtitle</label>
                 <input type="text" id="subtitle" name="subtitle" value="<?php echo $event->subtitle; ?>"  />
 
-                <label for="description">Description</label>
+                <label for="description"><span class="required">*</span> Description</label>
                 <textarea rows="4" id="description" name="description"><?php echo $event->description; ?> </textarea>
 
                 <label for="type">Type</label>

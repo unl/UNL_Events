@@ -8,6 +8,7 @@ $routes = array();
 $calendar = '(?P<calendar_shortname>([a-zA-Z-_0-9]+)+)';
 $user = '(?P<user_uid>([a-zA-Z0-9-_]+))';
 $subscription = '(?P<subscription_id>([0-9]+))';
+$location = '(?P<location_id>([0-9]+))';
 $event = '(?P<event_id>([0-9]+))';
 $event_datetime	= '(?P<event_datetime_id>([0-9]+))';
 $recurrence_id = '(?P<recurrence_id>([0-9]+))';
@@ -15,6 +16,9 @@ $calendar_slash_required = '(' . $calendar . '\/)?';
 $calendar_slash_optional = '(' . $calendar . '(\/)?)?';
 
 $routes['/^(\/)?$/'] = 'UNL\UCBCN\API\Home';
+$routes['/^location\/' . $location . '(\/)?$/'] = 'UNL\UCBCN\API\GetLocation';
+$routes['/^location\/create(\/)?$/'] = 'UNL\UCBCN\API\CreateLocation';
 $routes['/^'.$calendar_slash_required.'create(\/)?$/'] = 'UNL\UCBCN\API\CreateEvent';
+
 
 return $routes;
