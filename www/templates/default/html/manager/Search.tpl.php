@@ -121,10 +121,6 @@
                                                     <option value="move-to-pending">Move to Pending</option>
                                                 <?php endif; ?>
                                         </select>
-                                        <form id="move-<?php echo $event->id; ?>" method="POST" action="<?php echo $event->getMoveURL($context->calendar) ?>" class="delete-form hidden">
-                                        <input type="text" name="new_status" id="move-target-<?php echo $event->id; ?>">
-                                        <input type="text" name="event_id" value="<?php echo $event->id ?>">
-                                        </form>
                                     <?php endif; ?>
                                 </div>
                             </td>

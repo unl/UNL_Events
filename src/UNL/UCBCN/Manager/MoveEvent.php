@@ -39,8 +39,6 @@ class MoveEvent extends PostHandler
             case 'past':
                 $backend_tab_name = 'archived';
                 break;
-            default:
-                return $this->calendar->getManageURL();
         }
 
         if (!isset($post['event_id'])) {

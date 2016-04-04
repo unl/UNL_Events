@@ -41,7 +41,7 @@
     $crumbs->search = TRUE;
     echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
 ?>
-<form id="search-form" action="/manager/<?php echo $context->calendar->shortname; ?>/search" style="display: none;">
+<form id="search-form" action="<?php echo $context->calendar->getSearchURL(); ?>" style="display: none;">
     <label for="events-search">Search</label>
     <div>
         <div style="float: right; padding-top: 3px;">

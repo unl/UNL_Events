@@ -20,5 +20,4 @@ $routes['/^location\/' . $location . '(\/)?$/'] = 'UNL\UCBCN\API\GetLocation';
 $routes['/^location\/create(\/)?$/'] = 'UNL\UCBCN\API\CreateLocation';
 $routes['/^'.$calendar_slash_required.'create(\/)?$/'] = 'UNL\UCBCN\API\CreateEvent';
 
-
 return $routes;

@@ -128,6 +128,10 @@ class Calendar extends Record
         return ManagerController::$url . $this->shortname . '/cleanup/';
     }
 
+    public function getSearchURL() {
+        return ManagerController::$url . $this->shortname . '/search/';
+    }
+
     public function getBulkActionURL() {
         return $this->getManageURL() . 'bulk/';
     }
