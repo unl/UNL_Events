@@ -80,21 +80,6 @@ class Auth {
             $user->datelastupdated = date('Y-m-d H:i:s');
             $user->uidlastupdated = $uid;
             $user->insert();
-
-            # create a base calendar for this user
-            $calendar = new Calendar;
-            $calendar->name = $user->uid .'\'s Event Publisher';
-            $calendar->shortname = $user->uid;
-            $calendar->uidcreated = $user->uid;
-            $calendar->uidlastupdated = $user->uid;
-            $calendar->datecreated = date('Y-m-d H:i:s');
-            $calendar->datelastupdated = date('Y-m-d H:i:s');
-            $calendar->account_id = $account->id;
-            $calendar->insert();
-            $calendar->addUser($user);
-
-            $user->calendar_id = $calendar->id;
-            $user->update();
         }
         
         return $user;
