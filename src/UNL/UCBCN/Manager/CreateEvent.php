@@ -69,8 +69,15 @@ class CreateEvent extends PostHandler
     private function validateEventData($post_data, $files) 
     {
         # title, start date, location are required
-        if (empty($post_data['title']) || empty($post_data['location']) || empty($post_data['start_date']) || empty($post_data['description'] || empty($post_data['contact_name']))) {
-            throw new ValidationException('<a href="#title">Title</a>, <a href="#location">location</a>, <a href="#description">description</a>, <a href="#contact-name">contact name</a>, and <a href="#start-date">start date</a> are required.');
+        if (empty($post_data['title']) || empty($post_data['location']) || empty($post_data['start_date'])) {
+            throw new ValidationException('<a href="#title">Title</a>, <a href="#location">location</a>, and <a href="#start-date">start date</a> are required.');
+        }
+
+        # if we are sending this to UNL Main Calendar, description and contact info must be given
+        if (array_key_exists('send_to_main', $post_data) && $post_data['send_to_main'] == 'on') {
+            if (empty($post_data['description']) || empty($post_data['contact_name'])) {
+                throw new ValidationException('<a href="#contact-name">Contact name</a> and <a href="#description">description</a> are required to recommend to UNL Main Calendar.');
+            }
         }
 
         # end date must be after start date

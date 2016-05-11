@@ -1,6 +1,7 @@
 <?php
     $calendar = $context->calendar;
     $event = $context->event;
+    $post = $context->post;
     $event_type = $event->getFirstType();
 
     $total_pages = ceil(count($event->getDatetimes()) / 5);
@@ -189,7 +190,7 @@
                         <img src="<?php echo $base_frontend_url ?>templates/default/html/images/checkmark-16.png">
                         <label>(event has been sent to main UNL calendar for approval)</label>
                     <?php else: ?>
-                        <input type="checkbox" name="send_to_main" id="send-to-main"> 
+                        <input type="checkbox" <?php if (isset($post['send_to_main'])) echo 'checked="checked"'; ?> name="send_to_main" id="send-to-main"> 
                         <label for="send-to-main">Consider for main UNL calendar</label>
                     <?php endif; ?>
                 </div>

@@ -16,6 +16,7 @@ class EditEvent extends PostHandler
     public $options = array();
     public $calendar;
     public $event;
+    public $post;
     public $on_main_calendar;
     public $page;
 
@@ -87,6 +88,9 @@ class EditEvent extends PostHandler
 
         $this->event->webpageurl = empty($post_data['website']) ? NULL : $post_data['website'];
         $this->event->approvedforcirculation = $post_data['private_public'] == 'private' ? 0 : 1;
+
+        # for extraneous data aside from the event (location, type, etc)
+        $this->post = $post_data;
     }
 
     private function validateEventData($post_data, $files)
@@ -94,6 +98,15 @@ class EditEvent extends PostHandler
         # title required
         if (empty($post_data['title'])) {
             throw new ValidationException('<a href="#title">Title</a> is required.');
+        }
+
+        # if we are sending this to UNL Main Calendar, description and contact info must be given
+        if (!$this->on_main_calendar) {
+            if (array_key_exists('send_to_main', $post_data) && $post_data['send_to_main'] == 'on') {
+                if (empty($post_data['description']) || empty($post_data['contact_name'])) {
+                    throw new ValidationException('<a href="#contact-name">Contact name</a> and <a href="#description">description</a> are required to recommend to UNL Main Calendar.');
+                }
+            }
         }
 
         if (array_key_exists('remove_image', $post_data) && $post_data['remove_image'] == 'on') {
