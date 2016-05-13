@@ -58,7 +58,7 @@ class CreateSubscription extends PostHandler
         }
 
         //redirect
-        return '/manager/' . $this->calendar->shortname . '/subscriptions/';
+        return Controller::$url . $this->calendar->shortname . '/subscriptions/';
     }
 
     public function getAvailableCalendars() 
