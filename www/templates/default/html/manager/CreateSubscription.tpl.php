@@ -34,14 +34,19 @@
             <br>
             <div class="visual-island">
                 <div class="details top-border">
-                    <label>Automatically approve events?</label>
-                    <br>
-                    <br>
-                    <input type="radio" value="no" name="auto_approve" id="auto-approve-no" checked="checked"> 
-                    <label for="auto-approve-no">No (send to pending)</label> 
-                    <br>
-                    <input type="radio" value="yes" name="auto_approve" id="auto-approve-yes"> 
-                    <label for="auto-approve-yes">Yes (send to upcoming)</label> 
+                    <fieldset>
+                        <legend>Automatically approve events?</legend>
+                        <ul>
+                            <li>
+                                <input type="radio" value="no" name="auto_approve" id="auto-approve-no" checked="checked"> 
+                                <label for="auto-approve-no">No (send to pending)</label> 
+                            </li>
+                            <li>
+                                <input type="radio" value="yes" name="auto_approve" id="auto-approve-yes"> 
+                                <label for="auto-approve-yes">Yes (send to upcoming)</label> 
+                            </li>
+                        </ul>
+                    </fieldset>
                 </div>
             </div>
         </div>
