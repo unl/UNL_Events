@@ -127,6 +127,9 @@ class CreateSubscription extends PostHandler
                 $sub_has_calendar->insert();
             }
         }
+        
+        # update the auto-aprove status
+        $this->subscription->automaticapproval = $post_data['auto_approve'] == 'yes' ? 1 : 0;
 
         $this->subscription->save();
 
