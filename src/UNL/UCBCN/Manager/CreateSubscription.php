@@ -58,7 +58,7 @@ class CreateSubscription extends PostHandler
         }
 
         //redirect
-        return '/manager/' . $this->calendar->shortname . '/subscriptions/';
+        return Controller::$url . $this->calendar->shortname . '/subscriptions/';
     }
 
     public function getAvailableCalendars() 
@@ -127,6 +127,9 @@ class CreateSubscription extends PostHandler
                 $sub_has_calendar->insert();
             }
         }
+        
+        # update the auto-aprove status
+        $this->subscription->automaticapproval = $post_data['auto_approve'] == 'yes' ? 1 : 0;
 
         $this->subscription->save();
 
