@@ -20,7 +20,10 @@
         </select>
         <div class="visual-island">
             <div class="details">
-                Note: This is a list of users who have previously logged into the system.  If you do not see someone in this list, please have them log into the system so that their account is created.
+                Note: This is a list of users who have previously logged into the system.  
+                If you do not see someone in this list, please have him or her navigate to 
+                <a href="http://events.unl.edu/manager">http://events.unl.edu/manager</a> and login. His or her
+                username will then be present in this list.
             </div>
         </div>
     <?php } else { ?>
