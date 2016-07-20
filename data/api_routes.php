@@ -18,6 +18,7 @@ $calendar_slash_optional = '(' . $calendar . '(\/)?)?';
 $routes['/^(\/)?$/'] = 'UNL\UCBCN\API\Home';
 $routes['/^location\/' . $location . '(\/)?$/'] = 'UNL\UCBCN\API\GetLocation';
 $routes['/^location\/create(\/)?$/'] = 'UNL\UCBCN\API\CreateLocation';
+$routes['/^'.$calendar_slash_required.'event\/' . $event . '(\/)?$/'] = 'UNL\UCBCN\API\GetEvent';
 $routes['/^'.$calendar_slash_required.'create(\/)?$/'] = 'UNL\UCBCN\API\CreateEvent';
 
 return $routes;
