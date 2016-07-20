@@ -60,6 +60,7 @@ class GetEvent
             throw new \Exception("You do not have permission to edit this event.", 403);
         }
     	$this->updateEvent($post);
+        $this->event->imagedata = NULL;
         return $this->event;
     }
 
