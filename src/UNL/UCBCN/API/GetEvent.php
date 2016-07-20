@@ -50,6 +50,7 @@ class GetEvent
 
     public function handleGet($get)
     {
+        $this->event->imagedata = NULL;
     	return $this->event;
     }
 
