@@ -14,6 +14,7 @@
  * @link      http://code.google.com/p/unl-event-publisher/
  */
 namespace UNL\UCBCN\Frontend;
+use UNL\UCBCN\Calendar\EventType;
 
 /**
  * A list of upcoming events for a calendar.
@@ -72,14 +73,23 @@ class Upcoming extends EventListing implements RoutableInterface
     function getSQL()
     {
         $timestamp = $this->getDateTime()->getTimestamp();
+        
+        $eventType = false;
+        if (isset($this->options['eventtype'])) {
+            $eventType = EventType::getByName($this->options['eventtype']);
+        }
 
-        $sql = '
-                SELECT e.id as id, recurringdate.id as recurringdate_id
+        $sql = 'SELECT e.id as id, recurringdate.id as recurringdate_id
                 FROM eventdatetime as e
                 INNER JOIN event ON e.event_id = event.id
                 INNER JOIN calendar_has_event ON calendar_has_event.event_id = event.id
-                LEFT JOIN recurringdate ON (recurringdate.event_datetime_id = e.id AND recurringdate.unlinked = 0)
-                WHERE
+                LEFT JOIN recurringdate ON (recurringdate.event_datetime_id = e.id AND recurringdate.unlinked = 0)';
+        
+        if ($eventType) {
+            $sql .= 'INNER JOIN event_has_eventtype ON (event_has_eventtype.eventtype_id = '. (int)$eventType->id.' AND event_has_eventtype.event_id = event.id)';
+        }
+        
+        $sql .= 'WHERE
                     calendar_has_event.calendar_id = ' . (int)$this->calendar->id . '
                     AND (
                          calendar_has_event.status =\'posted\'

@@ -68,5 +68,10 @@ class EventType extends Record
     {
         return array('calendar_id' => 'calendar:id');
     }
+
+    public static function getByName($name)
+    {
+        return self::getByAnyField(__CLASS__, 'name', $name);
+    }
     
 }
