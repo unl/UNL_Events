@@ -24,6 +24,7 @@ $view_class = str_replace('\\', '_', strtolower($context->options['model']));
 //Document titles
 $page->doctitle = '<title>' . $title . '</title>';
 $page->titlegraphic = $site_title;
+$page->setParam('class', 'hide-wdn_navigation_wrapper');
 $page->pagetitle = '';
 $page->affiliation = '';
 

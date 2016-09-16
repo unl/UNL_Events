@@ -23,6 +23,7 @@ if (!$context->getCalendar()) {
 
 $page->doctitle = '<title>' . $title . '</title>';
 $page->titlegraphic = $site_title;
+$page->setParam('class', 'hide-wdn_navigation_wrapper');
 $page->pagetitle = '';
 $page->affiliation = '';
 
