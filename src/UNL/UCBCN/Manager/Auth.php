@@ -41,6 +41,9 @@ class Auth {
 
             $account->insert();
         }
+
+        // store this username in a non-CAS session variable. 
+        $_SESSION['UNL_Events_Username'] = $client->getUsername();
     }
 
     /**
@@ -167,7 +170,11 @@ class Auth {
         }
 
         if (!isset($_SESSION['__SIMPLECAS']['UID'])) {
-            return false;
+            if (!isset($_SESSION['UNL_Events_Username'])) {
+                return false; 
+            }
+            $username = $_SESSION['UNL_Events_Username'];
+            return User::getByUid($username);
         }
         
         $username = $_SESSION['__SIMPLECAS']['UID'];
