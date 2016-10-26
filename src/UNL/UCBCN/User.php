@@ -71,8 +71,8 @@ class User extends Record
 
     public function insert()
     {
-        $this->uidcreated = Auth::getCurrentUser()->uid;
-        $this->uidlastupdated = Auth::getCurrentUser()->uid;
+        $this->uidcreated = $_SESSION['__SIMPLECAS']['UID'];
+        $this->uidlastupdated = $_SESSION['__SIMPLECAS']['UID'];
         $this->datecreated     = date('Y-m-d H:i:s');
         $this->datelastupdated = date('Y-m-d H:i:s');
         return parent::insert();
