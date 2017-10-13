@@ -87,7 +87,7 @@ class Recommend extends PostHandler
 
         # also get the calendars with same account id as the user
         $other_other_calendars = new Calendars(array(
-            'recommendable_within_account_id' => $user->uid
+            'recommendable_within_account_id' => $user->account_id
         ));
         $other_other_calendars = $other_other_calendars->getIDs();
 
