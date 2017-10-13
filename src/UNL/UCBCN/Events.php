@@ -72,26 +72,36 @@ class Events extends RecordList
             return $sql;
         } else if (array_key_exists('search_term', $this->options)) {
             $term = $this->options['search_term'];
+
+            $sql = '
+                SELECT event.id
+                FROM eventdatetime as e
+                INNER JOIN event ON e.event_id = event.id
+                INNER JOIN calendar_has_event ON calendar_has_event.event_id = event.id
+                LEFT JOIN event_has_eventtype ON (event_has_eventtype.event_id = event.id)
+                LEFT JOIN eventtype ON (eventtype.id = event_has_eventtype.eventtype_id)
+                LEFT JOIN location ON (location.id = e.location_id)
+                WHERE
+                    event.approvedforcirculation = 1
+                    AND  (';
+
             if ($time = strtotime($term)) {
-                $sql = '
-                    SELECT event.id FROM event
-                    INNER JOIN eventdatetime ON (eventdatetime.event_id = event.id)
-                    WHERE eventdatetime.starttime LIKE "' . date('Y-m-d', $this->escapeString($time)) . '%"
-                        AND event.approvedforcirculation = 1
-                ';
+                // This is a time...
+                $sql .= 'e.starttime LIKE \''.date('Y-m-d', $this->escapeString($time)).'%\'';
             } else {
-                $sql = '
-                    SELECT event.id FROM event
-                    INNER JOIN eventdatetime ON (eventdatetime.event_id = event.id)
-                    WHERE event.title LIKE "%' . $this->escapeString($term) . '%"
-                       AND event.approvedforcirculation = 1
-                ';
+                // Do a textual search.
+                $sql .=
+                    '(event.title LIKE \'%'.self::escapeString($term).'%\' OR '.
+                    'eventtype.name LIKE \'%'.self::escapeString($term).'%\' OR '.
+                    'event.description LIKE \'%'.self::escapeString($term).'%\' OR '.
+                    'location.name LIKE \'%'.self::escapeString($term).'%\') ';
             }
 
-            $sql .= ' GROUP BY event.id ';
-            $sql .= ' ORDER BY MIN(eventdatetime.starttime) DESC';
-            $sql .= ';';
-            
+            $sql.= ')
+                GROUP BY event.id
+                ORDER BY e.starttime DESC, event.title ASC';
+            $sql.=';';
+
             return $sql;
         } else {
             return parent::getSQL();
