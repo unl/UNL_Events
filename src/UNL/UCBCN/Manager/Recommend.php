@@ -85,8 +85,14 @@ class Recommend extends PostHandler
         ));
         $other_calendars = $other_calendars->getIDs();
 
-        # merge these two lists with details regarding calendar status
-        $calendars = array_merge($calendars, $other_calendars);
+        # also get the calendars with same account id as the user
+        $other_other_calendars = new Calendars(array(
+            'recommendable_within_account_id' => $user->uid
+        ));
+        $other_other_calendars = $other_other_calendars->getIDs();
+
+        # merge these three lists with details regarding calendar status
+        $calendars = array_merge($calendars, $other_calendars, $other_other_calendars);
         $calendar_properties = array();
         foreach($calendars as $cal_id) {
             # we need to know if the event is already on that calendar, and if not, what permissions the user has to push to it
