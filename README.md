@@ -1,8 +1,7 @@
 UNL Events
 ==================
 
-This is the new branch for the manager rewrite of UNL Events. 
-This branch will eventually contain the manager, frontend, and backend, all in one repo.
+Join us at https://unlevents.slack.com
 
 INSTALL using vagrant
 ---------------------
