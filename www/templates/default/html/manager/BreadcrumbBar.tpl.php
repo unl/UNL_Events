@@ -16,7 +16,7 @@
 
 <?php if (isset($context->search)): ?>
 <div id="toggle-search" title="Search">
-	<a id="show-search" class="wdn-icon-search" href='#' title="Search"></a>
+	<a id="show-search" href='#'><span class="wdn-icon-search" aria-hidden="true"></span><span class="wdn-text-hidden">search</span></a>
 </div>
 <?php endif; ?>
 </nav>

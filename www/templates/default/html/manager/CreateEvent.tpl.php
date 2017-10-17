@@ -109,7 +109,7 @@
                 <input type="text" id="room" name="room" value="<?php echo $post['room']; ?>" />
 
                 <label for="start-date" ><span class="required">*</span> Start Date &amp; Time</label>
-                <div class="date-time-select"><span class="wdn-icon-calendar"></span>
+                <div class="date-time-select"><span class="wdn-icon-calendar" aria-hidden="true"></span>
                     <input id="start-date" name="start_date" title="Start Date" type="text" class="datepicker" value="<?php echo $post['start_date']; ?>" /><br class="hidden small-block"> @
                     <select id="start-time-hour" name="start_time_hour" title="Start Time Hour">
                         <option value=""></option>
@@ -141,7 +141,7 @@
                 </div>
 
                 <label for="end-date">End Date &amp; Time (Optional)</label>
-                <div class="date-time-select"><span class="wdn-icon-calendar"></span>
+                <div class="date-time-select"><span class="wdn-icon-calendar" aria-hidden="true"></span>
                     <input id="end-date" name="end_date" title="End Date" type="text" class="datepicker" value="<?php echo $post['end_date']; ?>" /><br class="hidden small-block"> @
                     <select id="end-time-hour" name="end_time_hour" title="End Time Hour">
                         <option value=""></option>
@@ -186,7 +186,7 @@
                             <option value="annually">Yearly</option>
                         </select>
                         <label for="recurs-until-date">until </label><br>
-                        <span style="top: .4em" class="wdn-icon-calendar"></span>
+                        <span style="top: .4em" class="wdn-icon-calendar" aria-hidden="true"></span>
                         <input value="<?php echo $post['recurs_until_date']; ?>" id="recurs-until-date" name="recurs_until_date" type="text" class="datepicker" />
                     </div>
                 </div>

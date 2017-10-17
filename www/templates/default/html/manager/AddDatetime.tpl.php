@@ -132,7 +132,7 @@
 
 
         <label for="start-date" ><span class="required">*</span> Start Date &amp; Time</label>
-        <div class="date-time-select"><span class="wdn-icon-calendar"></span>
+        <div class="date-time-select"><span class="wdn-icon-calendar" aria-hidden="true"></span>
             <input id="start-date" value="<?php echo $start_date; ?>" 
                 name="start_date" type="text" class="datepicker" /><br class="hidden small-block"> @
             <select id="start-time-hour" name="start_time_hour">
@@ -160,7 +160,7 @@
         </div>
 
         <label for="end-date">End Date &amp; Time (Optional)</label>
-        <div class="date-time-select"><span class="wdn-icon-calendar"></span>
+        <div class="date-time-select"><span class="wdn-icon-calendar" aria-hidden="true"></span>
             <input id="end-date" value="<?php echo $end_date; ?>"
                 name="end_date" type="text" class="datepicker" /><br class="hidden small-block"> @
             <select id="end-time-hour" name="end_time_hour">
@@ -200,9 +200,9 @@
                         <optgroup label="Monthly" id="monthly-group">
                         </optgroup>
                         <option value="annually">Yearly</option>
-                    </select>
+                    </select>s
                     <label for="recurs-until-date">until </label><br>
-                    <span class="wdn-icon-calendar" style="top: .4em"></span>
+                    <span class="wdn-icon-calendar" style="top: .4em" aria-hidden="true"></span>
                     <input value="<?php if ($datetime->recurringtype != 'none' && $datetime->recurringtype != NULL) echo $recurs_until_date; ?>" id="recurs-until-date" name="recurs_until_date" type="text" class="datepicker" />
                 </div>
             </div>
