@@ -2,7 +2,8 @@ require(['jquery', 'wdn', 'modernizr'], function($, WDN, Modernizr) {
 	"use strict";
 	
 	var $progress = $('<progress>'),
-		mqBp2 = '(min-width: 768px)';
+		mqBp2 = '(min-width: 768px)',
+		lastLocation = window.location;
 	
 	$(function() {
 		var homeUrl = $('link[rel=home]'),
@@ -269,8 +270,15 @@ require(['jquery', 'wdn', 'modernizr'], function($, WDN, Modernizr) {
 		});
 		
 		$(window).on('popstate', function(e) {
+			//This fires on navigation back/forward
 			var route = (e.originalEvent.state && e.originalEvent.state.route) || initRoute,
 				url = window.location.href;
+
+			if (e.originalEvent.state === null) {
+				//state will be null on hash change, which is likely an in-page link
+				event.preventDefault();
+				return false;
+			}
 			
 			switch (route) {
 				case 'event':
