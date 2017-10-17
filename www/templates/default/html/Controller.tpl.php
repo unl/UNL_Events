@@ -70,9 +70,9 @@ if ($context->getCalendar()) {
                                     <form id="event_search" method="get" action="' . $frontend->getCalendarURL() . 'search/" role="search">
                                         <label for="searchinput">Search Events</label>
                                         <div class="wdn-input-group">
-                                            <input type="text" name="q" id="searchinput" title="Search Query" placeholder="e.g., Monday, tomorrow" value="' . ((isset($context->options['q']))?$context->options['q']:'') . '" />
+                                            <input type="text" name="q" id="searchinput" placeholder="e.g., Monday, tomorrow" value="' . ((isset($context->options['q']))?$context->options['q']:'') . '"/>
                                             <span class="wdn-input-group-btn">
-                                                <button type="submit" class="wdn-icon-search" title="Search"></button>
+                                                <button><span class="wdn-icon-search" aria-hidden="true"></span><span class="wdn-text-hidden">search</span></button>
                                             </span>
                                         </div>
                                     </form>
