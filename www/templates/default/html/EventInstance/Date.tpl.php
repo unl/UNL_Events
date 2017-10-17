@@ -10,14 +10,16 @@ $startu = new DateTime($starttime);
 $endu = new DateTime($endtime);
 ?>
 
-<span class="date-wrapper eventicon-calendar-empty">
+<span class="date-wrapper">
+    <span class="eventicon-calendar-empty" aria-hidden="true"></span><span class="wdn-text-hidden">Date:</span>
     <?php if (!empty($starttime)): ?>
         <time class="dtstart" datetime="<?php echo $startu->format('c') ?>"><?php echo $startu->format('M. j, Y') ?></time>
     <?php endif; ?>
     <?php if (!empty($endtime) && $context->isOngoing()): ?>&ndash; <time class="dtend" datetime="<?php echo $endu->format('c') ?>"><?php echo $endu->format('M. j, Y')?></time>
     <?php endif; ?>
 </span>
-<span class="time-wrapper eventicon-clock">
+<span class="time-wrapper">
+    <span class="eventicon-clock" aria-hidden="true"></span><span class="wdn-text-hidden">Time:</span>
     <?php if ($context->isAllDay()): ?>
     All Day
     <?php else: ?>

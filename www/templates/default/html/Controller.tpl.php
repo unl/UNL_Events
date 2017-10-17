@@ -66,7 +66,7 @@ if ($context->getCalendar()) {
                         <div class="wdn-col-full">
                             <div class="events-nav">
                                 <div class="submit-search">
-                                    <a id="frontend_login" class="eventicon-plus-circled" href="' . UNL\UCBCN\Frontend\Controller::$manager_url . $context->getCalendar()->shortname . '">Manage Events</a>
+                                    <a id="frontend_login" href="' . UNL\UCBCN\Frontend\Controller::$manager_url . $context->getCalendar()->shortname . '"><span class="eventicon-plus-circled" aria-hidden="true"></span>Manage Events</a>
                                     <form id="event_search" method="get" action="' . $frontend->getCalendarURL() . 'search/" role="search">
                                         <label for="searchinput">Search Events</label>
                                         <div class="wdn-input-group">

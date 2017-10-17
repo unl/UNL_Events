@@ -5,14 +5,14 @@ $next = $context->getDateTime()->modify('+1 month');
 <div class="monthwidget">
     <table class="wp-calendar" data-datetime="<?php echo $context->getDateTime()->format('c') ?>">
         <caption>
-            <span class="prev"><a href="<?php echo $context->getPreviousMonthURL(); ?>" title="View events for <?php echo $prev->format('F'); ?>" class="eventicon-angle-circled-left"></a></span>
+            <span class="prev"><a href="<?php echo $context->getPreviousMonthURL(); ?>"><span class="eventicon-angle-circled-left" aria-hidden="true"></span><span class="wdn-text-hidden">View events for <?php echo $prev->format('F'); ?></span></a></span>
             <span class="monthvalue">
                 <a href="<?php echo $context->getURL(); ?>"><?php echo $context->getDateTime()->format('F'); ?></a>
             </span>
             <span class="yearvalue">
                 <a href="<?php echo $context->getYearURL(); ?>"><?php echo $context->getDateTime()->format('Y'); ?></a>
             </span>
-            <span class="next"><a href="<?php echo $context->getNextMonthURL(); ?>" title="View events for <?php echo $next->format('F'); ?>" class="eventicon-angle-circled-right"></a></span>
+            <span class="next"><a href="<?php echo $context->getNextMonthURL(); ?>"><span class="eventicon-angle-circled-right" aria-hidden="true"></span><span class="wdn-text-hidden">View events for <?php echo $next->format('F'); ?></span></a></span>
     
         </caption>
         <thead>
