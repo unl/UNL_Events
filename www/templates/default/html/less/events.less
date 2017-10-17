@@ -320,7 +320,7 @@
     padding-top: 0.75em;
     border-top: 1px solid @ui04;
 
-    span {
+    span.title {
         float: left;
         width: 50%;
         padding: 0.254em 1em 0 0;
@@ -433,7 +433,7 @@
                 font-size: 1.425rem;
             }
 
-            &:before {
+            span:before {
                 color: @ui05;
                 margin-left: 0;
             }
@@ -480,6 +480,11 @@
 
             button {
                 font-size: 0.75em;
+                padding: 1em;
+                
+                @media @bp2 {
+                    padding: 1.64em 1.333em;
+                }
             }
         }
     }
