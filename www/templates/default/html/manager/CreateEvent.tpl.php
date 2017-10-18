@@ -110,16 +110,16 @@
 
                 <label for="start-date" ><span class="required">*</span> Start Date &amp; Time</label>
                 <div class="date-time-select"><span class="wdn-icon-calendar" aria-hidden="true"></span>
-                    <input id="start-date" name="start_date" title="Start Date" type="text" class="datepicker" value="<?php echo $post['start_date']; ?>" /><br class="hidden small-block"> @
-                    <select id="start-time-hour" name="start_time_hour" title="Start Time Hour">
-                        <option value=""></option>
+                    <input id="start-date" name="start_date" aria-label="Start Date in the format of mm/dd/yyyy" type="text" class="datepicker" value="<?php echo $post['start_date']; ?>" /><br class="hidden small-block"> @
+                    <select id="start-time-hour" name="start_time_hour" aria-label="Start Time Hour">
+                        <option value="">Hour</option>
                     <?php for ($i = 1; $i <= 12; $i++) { ?>
                         <option <?php if ($post['start_time_hour'] == $i) echo 'selected="selected"'; ?> value="<?php echo $i ?>"><?php echo $i ?></option>
                     <?php } ?>
                     </select> : 
 
-                    <select id="start-time-minute" name="start_time_minute" title="Start Time Minute">
-                        <option value=""></option>
+                    <select id="start-time-minute" name="start_time_minute" aria-label="Start Time Minute">
+                        <option value="">Minute</option>
                         <option <?php if ($post['start_time_minute'] === 0 || $post['start_time_minute'] === '0') echo 'selected="selected"'; ?> value="0">00</option>
                         <option <?php if ($post['start_time_minute'] == 5) echo 'selected="selected"'; ?> value="5">05</option>
                         <option <?php if ($post['start_time_minute'] == 10) echo 'selected="selected"'; ?> value="10">10</option>
@@ -135,23 +135,26 @@
                     </select>
 
                     <div id="start-time-am-pm" class="am_pm">
-                        <input <?php if (!isset($post) || $post['start_time_am_pm'] == 'am') echo 'checked="checked"'; ?> id="start-time-am-pm-am" title="AM" type="radio" value="am" name="start_time_am_pm">AM<br>
-                        <input <?php if ($post['start_time_am_pm'] == 'pm') echo 'checked="checked"'; ?> id="start-time-am-pm-pm" title="PM" type="radio" value="pm" name="start_time_am_pm">PM
+                        <fieldset>
+                            <legend class="wdn-text-hidden">AM/PM</legend>
+                            <label><input <?php if (!isset($post) || $post['start_time_am_pm'] == 'am') echo 'checked="checked"'; ?> id="start-time-am-pm-am" title="AM" type="radio" value="am" name="start_time_am_pm">AM</label><br>
+                            <label><input <?php if ($post['start_time_am_pm'] == 'pm') echo 'checked="checked"'; ?> id="start-time-am-pm-pm" type="radio" value="pm" name="start_time_am_pm">PM</label>
+                        </fieldset>
                     </div>
                 </div>
 
-                <label for="end-date">End Date &amp; Time (Optional)</label>
+                <label for="end-date">End Date &amp;amp; Time (Optional)</label>
                 <div class="date-time-select"><span class="wdn-icon-calendar" aria-hidden="true"></span>
-                    <input id="end-date" name="end_date" title="End Date" type="text" class="datepicker" value="<?php echo $post['end_date']; ?>" /><br class="hidden small-block"> @
-                    <select id="end-time-hour" name="end_time_hour" title="End Time Hour">
-                        <option value=""></option>
+                    <input id="end-date" name="end_date" aria-label="End Date in the format of mm/dd/yyyy" type="text" class="datepicker" value="<?php echo $post['end_date']; ?>" /><br class="hidden small-block"> @
+                    <select id="end-time-hour" name="end_time_hour" aria-label="End Time Hour">
+                        <option value="">Hour</option>
                     <?php for ($i = 1; $i <= 12; $i++) { ?>
                         <option <?php if ($post['end_time_hour'] == $i) echo 'selected="selected"'; ?> value="<?php echo $i ?>"><?php echo $i ?></option>
                     <?php } ?>
                     </select> :
 
-                    <select id="end-time-minute" name="end_time_minute" title="End Time Minute">
-                        <option value=""></option>
+                    <select id="end-time-minute" name="end_time_minute" aria-label="End Time Minute">
+                        <option value="">Minute</option>
                         <option <?php if ($post['end_time_minute'] === 0 || $post['end_time_minute'] === '0') echo 'selected="selected"'; ?> value="0">00</option>
                         <option <?php if ($post['end_time_minute'] == 5) echo 'selected="selected"'; ?> value="5">05</option>
                         <option <?php if ($post['end_time_minute'] == 10) echo 'selected="selected"'; ?> value="10">10</option>
@@ -167,8 +170,11 @@
                     </select>
 
                     <div id="end-time-am-pm" class="am_pm">
-                        <input <?php if (empty($post) || $post['end_time_am_pm'] == 'am') echo 'checked="checked"'; ?> id="end-time-am-pm-am" title="AM" type="radio" value="am" name="end_time_am_pm">AM<br>
-                        <input <?php if ($post['end_time_am_pm'] == 'pm') echo 'checked="checked"'; ?> id="end-time-am-pm-pm" type="radio" title="PM" value="pm" name="end_time_am_pm">PM
+                        <fieldset>
+                            <legend class="wdn-text-hidden">AM/PM</legend>
+                            <label><input <?php if (empty($post) || $post['end_time_am_pm'] == 'am') echo 'checked="checked"'; ?> id="end-time-am-pm-am" type="radio" value="am" name="end_time_am_pm">AM</label><br>
+                            <label><input <?php if ($post['end_time_am_pm'] == 'pm') echo 'checked="checked"'; ?> id="end-time-am-pm-pm" type="radio" value="pm" name="end_time_am_pm">PM</label>
+                        </fieldset>
                     </div>
                 </div>
 
@@ -187,7 +193,7 @@
                         </select>
                         <label for="recurs-until-date">until </label><br>
                         <span style="top: .4em" class="wdn-icon-calendar" aria-hidden="true"></span>
-                        <input value="<?php echo $post['recurs_until_date']; ?>" id="recurs-until-date" name="recurs_until_date" type="text" class="datepicker" />
+                        <input value="<?php echo $post['recurs_until_date']; ?>" id="recurs-until-date" name="recurs_until_date" type="text" class="datepicker" aria-label="until this date in the format of mm/dd/yyyy"/>
                     </div>
                 </div>
 
@@ -201,28 +207,35 @@
         </div>
 
         <div class="bp3-wdn-col-one-third">
-            <div class="visual-island">
-                <div class="vi-header">
-                    <label>Sharing</label>
-                </div>
+            <fieldset class="visual-island">
+                <legend class="vi-header">
+                    Sharing
+                </legend>
                 <div class="details">
-                    <input type="radio" value="private" name="private_public" id="sharing-private" <?php if ($post['private_public'] == 'private') echo 'checked="checked"'; ?>> 
-                    <label for="sharing-private">Private</label> 
-                    <br>
-                
-                    <input type="radio" value="public" name="private_public" id="sharing-public" <?php if ($post['private_public'] != 'private') echo 'checked="checked"'; ?>> 
-                    <label for="sharing-public">Public</label> 
-                    <br>
+                    <fieldset>
+                        <legend class="wdn-text-hidden">Privacy</legend>
+                        <label>
+                            <input type="radio" value="private" name="private_public" id="sharing-private" <?php if ($post['private_public'] == 'private') echo 'checked="checked"'; ?>> 
+                            Private
+                        </label> 
+                        <br>
+                        <label>
+                            <input type="radio" value="public" name="private_public" id="sharing-public" <?php if ($post['private_public'] != 'private') echo 'checked="checked"'; ?>> 
+                            Public
+                        </label>
+                    </fieldset>
 
-                    <input <?php if (isset($post['send_to_main'])) echo 'checked="checked"'; ?> type="checkbox" name="send_to_main" id="send-to-main"> 
-                    <label for="send-to-main">Consider for main UNL calendar</label>
+                    <label>
+                        <input <?php if (isset($post['send_to_main'])) echo 'checked="checked"'; ?> type="checkbox" name="send_to_main" id="send-to-main"> 
+                        Consider for main UNL calendar
+                    </label>
                 </div>
-            </div>
+            </fieldset>
 
-            <div class="visual-island">
-                <div class="vi-header">
-                    <label>Contact Info</label>
-                </div>
+            <fieldset class="visual-island">
+                <legend class="vi-header">
+                    Contact Info
+                </legend>
 
                 <div class="details">
                     <label for="contact-name">Name</label>
@@ -237,17 +250,17 @@
                     <label for="website">Event Website</label>
                     <input type="text" id="website" name="website" value="<?php echo $event->webpageurl ?>" />
                 </div>
-            </div>
+            </fieldset>
 
-            <div class="visual-island">
-                <div class="vi-header">
-                    <label>Image</label>
-                </div>
+            <fieldset class="visual-island">
+                <legend class="vi-header">
+                    Image
+                </legend>
 
                 <div class="details">
-                    <input style="font-size: 10px;" type="file" name="imagedata" id="imagedata" title="Event Image">
+                    <input style="font-size: 10px;" type="file" name="imagedata" id="imagedata" aria-label="Select an Image">
                 </div>
-            </div>
+            </fieldset>
         </div>
         <div class="bp1-wdn-col-two-thirds">
             <button class="wdn-button wdn-button-brand wdn-pull-left" type="submit">Submit Event</button>

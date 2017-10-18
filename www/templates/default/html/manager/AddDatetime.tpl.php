@@ -134,17 +134,17 @@
         <label for="start-date" ><span class="required">*</span> Start Date &amp; Time</label>
         <div class="date-time-select"><span class="wdn-icon-calendar" aria-hidden="true"></span>
             <input id="start-date" value="<?php echo $start_date; ?>" 
-                name="start_date" type="text" class="datepicker" /><br class="hidden small-block"> @
-            <select id="start-time-hour" name="start_time_hour">
-                <option value=""></option>
+                name="start_date" type="text" class="datepicker" aria-label="Start date in the format of mm/dd/yyyy"/><br class="hidden small-block"> @
+            <select id="start-time-hour" name="start_time_hour" aria-label="Start time hour">
+                <option value="">Hour</option>
             <?php for ($i = 1; $i <= 12; $i++) { ?>
                 <option <?php if ($i == $start_hour) echo 'selected="selected"'; ?> 
                     value="<?php echo $i ?>"><?php echo $i ?></option>
             <?php } ?>
             </select> : 
 
-            <select id="start-time-minute" name="start_time_minute">
-                <option value=""></option>
+            <select id="start-time-minute" name="start_time_minute" aria-label="End time minute">
+                <option value="">Minute</option>
                 <?php for ($i = 0; $i < 60; $i+=5): ?>
                     <option <?php if ($i == $start_minute) echo 'selected="selected"'; ?> 
                         value="<?php echo $i; ?>"><?php echo str_pad($i, 2, '0', STR_PAD_LEFT); ?></option>
@@ -152,27 +152,30 @@
             </select>
 
             <div id="start-time-am-pm" class="am_pm">
-                <input <?php if ($start_am_pm == 'am') echo 'checked="checked"'; ?> 
-                    type="radio" value="am" id="start-time-am-pm-am" name="start_time_am_pm">AM<br>
-                <input <?php if ($start_am_pm == 'pm') echo 'checked="checked"'; ?> 
-                type="radio" value="pm" id="start-time-am-pm-pm" name="start_time_am_pm">PM
+                <fieldset>
+                    <legend class="wdn-text-hidden">AM/PM</legend>
+                    <label><input <?php if ($start_am_pm == 'am') echo 'checked="checked"'; ?> 
+                        type="radio" value="am" id="start-time-am-pm-am" name="start_time_am_pm">AM</label><br>
+                    <label><input <?php if ($start_am_pm == 'pm') echo 'checked="checked"'; ?> 
+                    type="radio" value="pm" id="start-time-am-pm-pm" name="start_time_am_pm">PM</label>
+                </fieldset>
             </div>
         </div>
 
         <label for="end-date">End Date &amp; Time (Optional)</label>
         <div class="date-time-select"><span class="wdn-icon-calendar" aria-hidden="true"></span>
             <input id="end-date" value="<?php echo $end_date; ?>"
-                name="end_date" type="text" class="datepicker" /><br class="hidden small-block"> @
-            <select id="end-time-hour" name="end_time_hour">
-                <option value=""></option>
+                name="end_date" type="text" class="datepicker" aria-label="End date in the format of mm/dd/yyyy" /><br class="hidden small-block"> @
+            <select id="end-time-hour" name="end_time_hour" aria-label="End time hour">
+                <option value="">Hour</option>
             <?php for ($i = 1; $i <= 12; $i++) { ?>
                 <option <?php if ($i == $end_hour) echo 'selected="selected"'; ?> 
                     value="<?php echo $i ?>"><?php echo $i ?></option>
             <?php } ?>
             </select> :
 
-            <select id="end-time-minute" name="end_time_minute">
-                <option value=""></option>
+            <select id="end-time-minute" name="end_time_minute" aria-label="End time minute">
+                <option value="">Minute</option>
                 <?php for ($i = 0; $i < 60; $i+=5): ?>
                     <option <?php if ($i == $end_minute) echo 'selected="selected"'; ?> 
                         value="<?php echo $i; ?>"><?php echo str_pad($i, 2, '0', STR_PAD_LEFT); ?></option>
@@ -180,10 +183,13 @@
             </select>
 
             <div id="end-time-am-pm" class="am_pm">
-                <input <?php if ($end_am_pm == 'am') echo 'checked="checked"'; ?> 
-                    type="radio" value="am" id="end-time-am-pm-am" name="end_time_am_pm">AM<br>
-                <input <?php if ($end_am_pm == 'pm') echo 'checked="checked"'; ?> 
-                    type="radio" value="pm" id="end-time-am-pm-pm" name="end_time_am_pm">PM
+                <fieldset>
+                    <legend class="wdn-text-hidden">AM/PM</legend>
+                    <label><input <?php if ($end_am_pm == 'am') echo 'checked="checked"'; ?> 
+                        type="radio" value="am" id="end-time-am-pm-am" name="end_time_am_pm">AM</label><br>
+                    <label><input <?php if ($end_am_pm == 'pm') echo 'checked="checked"'; ?> 
+                        type="radio" value="pm" id="end-time-am-pm-pm" name="end_time_am_pm">PM</label>
+                </fieldset>
             </div>
         </div>
 
@@ -203,7 +209,7 @@
                     </select>s
                     <label for="recurs-until-date">until </label><br>
                     <span class="wdn-icon-calendar" style="top: .4em" aria-hidden="true"></span>
-                    <input value="<?php if ($datetime->recurringtype != 'none' && $datetime->recurringtype != NULL) echo $recurs_until_date; ?>" id="recurs-until-date" name="recurs_until_date" type="text" class="datepicker" />
+                    <input value="<?php if ($datetime->recurringtype != 'none' && $datetime->recurringtype != NULL) echo $recurs_until_date; ?>" id="recurs-until-date" name="recurs_until_date" type="text" class="datepicker" aria-label="Until date in the format of mm/dd/yyyy" />
                 </div>
             </div>
         <?php endif; ?>
