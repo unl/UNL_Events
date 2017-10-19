@@ -4,7 +4,8 @@ $room = !empty($context->eventdatetime->room) ? $context->eventdatetime->room : 
 $directions = !empty($context->eventdatetime->directions) ? $context->eventdatetime->directions : $location->directions;
 ?>
 <?php if (isset($location->name) || $room || $directions || isset($location->streetaddress1)): ?>
-<div class="location eventicon-location">
+<div class="location">
+    <span class="eventicon-location" aria-hidden="true"></span>
 <?php if (isset($location->mapurl)): ?>
     <a class="mapurl" href="<?php echo $location->mapurl ?>"><?php echo $location->name; ?></a>
 <?php else: ?>

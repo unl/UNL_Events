@@ -126,7 +126,7 @@
 		color: #fff;
 		border-bottom: 0;
 	}
-	#show-search:before {
+	#show-search .wdn-icon-search:before {
 		font-size: 12px;
 	}
 }
@@ -137,7 +137,7 @@
 	top: 0;
 	text-align: center;
 	width: 36px;
-	height: 100%;
+	height: 105%;
 	font-size: 1.4em;
 	background-color: #adacaa;
 	border-top-right-radius: 3px;
@@ -148,9 +148,11 @@
 	&:hover {
 		background-color: #137cbd;
 	}
-	a {
+	button {
+		background-color: #adacaa;
 		color: #FFFFFF;
 		padding: 2px;
+		border: none;
 	}
 }
 
@@ -258,7 +260,7 @@
 @media (max-width: 699px) {
 	#breadcrumbs {
 		#toggle-search {
-			a {
+			button {
 				position: relative;
 				top: 50%;
 				margin-top: -12px;

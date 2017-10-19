@@ -320,7 +320,7 @@
     padding-top: 0.75em;
     border-top: 1px solid @ui04;
 
-    span {
+    span.title {
         float: left;
         width: 50%;
         padding: 0.254em 1em 0 0;
@@ -433,7 +433,7 @@
                 font-size: 1.425rem;
             }
 
-            &:before {
+            span:before {
                 color: @ui05;
                 margin-left: 0;
             }
@@ -480,6 +480,11 @@
 
             button {
                 font-size: 0.75em;
+                padding: 1em;
+                
+                @media @bp2 {
+                    padding: 1.64em 1.333em;
+                }
             }
         }
     }
@@ -498,31 +503,45 @@
             }
         }
 
-        .day-heading,
-        .ongoing-heading,
-        .upcoming-heading {
+        .section-heading {
             width: 100%;
-            margin: 0 0 1rem;
-            padding: 1.069em 23px 1em;
-            padding: 1.069em 1.425rem 1em;
-            .sans-serif-font();
-            font-size: 12px;
-            font-size: 0.923rem;
+            position: relative;
             text-transform: uppercase;
             color: #fff;
             background-color: mix(@ui09, @page-background, 95%);
 
-            @media @bp2 {
-                padding: 1.069em 30px 1em;
-                padding: 1.069em 1.899rem 1em;
-                font-size: 13px;
-                font-size: 0.802rem;
+            h1, h2 {
+                .sans-serif-font();
+                margin: 0 0 1rem;
+                font-size: 12px;
+                font-size: 0.923rem;
+                padding: 1.069em 23px 1em;
+                padding: 1.069em 1.425rem 1em;
+                color: #fff;
             }
 
-            a {
-                float: right;
-                color: #fff;
-                margin-left: 0.451em;
+            @media @bp2 {
+                h1, h2 {
+                    font-size: 13px;
+                    font-size: 0.802rem;
+                }
+            }
+            
+            .links {
+                position: absolute;
+                top: 0;
+                right: 0;
+                margin-top: .5em;
+                margin-right: 1em;
+
+                a {
+                    color: #fff;
+                    margin-left: 0.451em;
+                }
+
+                @media @bp2 {
+                    margin-top: .25em;
+                }
             }
         }
 

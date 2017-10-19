@@ -174,32 +174,39 @@
             </fieldset>
         </div>
         <div class="bp3-wdn-col-one-third">
-            <div class="visual-island">
-                <div class="vi-header">
-                    <label>Sharing</label>
-                </div>
+            <fieldset class="visual-island">
+                <legend class="vi-header">
+                    Sharing
+                </legend>
                 <div class="details">
-                    <input <?php if (!$event->approvedforcirculation) echo 'checked="checked"' ?> type="radio" value="private" name="private_public" id="sharing-private"> 
-                    <label for="sharing-private">Private</label> 
-                    <br>
-                
-                    <input <?php if ($event->approvedforcirculation) echo 'checked="checked"' ?> type="radio" value="public" name="private_public" id="sharing-public"> 
-                    <label for="sharing-public">Public</label> 
-                    <br>
+                    <fieldset>
+                        <legend class="wdn-text-hidden">Privacy</legend>
+                        <label>
+                            <input <?php if (!$event->approvedforcirculation) echo 'checked="checked"' ?> type="radio" value="private" name="private_public" id="sharing-private"> 
+                            Private
+                        </label> 
+                        <br>
+                        <label>
+                            <input <?php if ($event->approvedforcirculation) echo 'checked="checked"' ?> type="radio" value="public" name="private_public" id="sharing-public"> 
+                            Public
+                        </label>
+                    </fieldset>
                     <?php if ($context->on_main_calendar): ?>
                         <img src="<?php echo $base_frontend_url ?>templates/default/html/images/checkmark-16.png">
-                        <label>(event has been sent to main UNL calendar for approval)</label>
+                        (event has been sent to main UNL calendar for approval)
                     <?php else: ?>
-                        <input type="checkbox" <?php if (isset($post['send_to_main'])) echo 'checked="checked"'; ?> name="send_to_main" id="send-to-main"> 
-                        <label for="send-to-main">Consider for main UNL calendar</label>
+                        <label>
+                            <input type="checkbox" <?php if (isset($post['send_to_main'])) echo 'checked="checked"'; ?> name="send_to_main" id="send-to-main"> 
+                            Consider for main UNL calendar
+                        </label>
                     <?php endif; ?>
                 </div>
-            </div>
+            </fieldset>
 
-            <div class="visual-island">
-                <div class="vi-header">
-                    <label>Contact Info</label>
-                </div>
+            <fieldset class="visual-island">
+                <legend class="vi-header">
+                    Contact Info
+                </legend>
 
                 <div class="details">
                     <label for="contact-name">Name</label>
@@ -214,12 +221,12 @@
                     <label for="website">Event Website</label>
                     <input value="<?php echo $event->webpageurl; ?>" type="text" id="website" name="website" />
                 </div>
-            </div>
+            </fieldset>
 
-            <div class="visual-island">
-                <div class="vi-header">
-                    <label>Image</label>
-                </div>
+            <fieldset class="visual-island">
+                <legend class="vi-header">
+                    Image
+                </legend>
 
                 <div class="details">
                     <?php if ($event->imagemime != NULL): ?>
@@ -228,9 +235,9 @@
                         <input type="checkbox" name="remove_image" id="remove-image">
                         <label for="remove-image">Remove Image</label> 
                     <?php endif; ?>
-                    <input style="font-size: 10px;" type="file" name="imagedata" id="imagedata" title="Event Image">
+                    <input style="font-size: 10px;" type="file" name="imagedata" id="imagedata" aria-label="Event Image">
                 </div>
-            </div>
+            </fieldset>
         </div>
     </div>
     <button class="wdn-button wdn-button-brand wdn-pull-left" type="submit">Save Event</button>

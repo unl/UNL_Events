@@ -1,7 +1,7 @@
 <?php 
 if (count($context)) {
     ?>
-    <a href="<?php echo $context->getURL(); ?>"><?php echo $context->getDateTime()->format('j')?></a>
+    <a href="<?php echo $context->getURL(); ?>" aria-label="<?php echo $context->getDateTime()->format('F j'); ?>"><?php echo $context->getDateTime()->format('j')?></a>
     <?php
 } else {
     echo $context->getDateTime()->format('j');
