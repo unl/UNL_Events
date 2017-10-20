@@ -78,6 +78,8 @@ class Controller
         'model'  => false,
         'format' => 'html',
     );
+    
+    public static $version = '2017-10-20';
 
     /**
      * Constructor for the frontend.

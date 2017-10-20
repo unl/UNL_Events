@@ -28,11 +28,11 @@ $page->pagetitle = '';
 $page->affiliation = '';
 
 //css
-$page->addStyleSheet($frontend->getURL().'templates/default/html/css/events.css');
+$page->addStyleSheet($frontend->getURL().'templates/default/html/css/events.css?v='.UNL\UCBCN\Frontend\Controller::$version);
 
 //javascript
 $page->head .= '<script>var frontend_url = "'.$frontend->getURL().'";</script>' . PHP_EOL;
-$page->addScript($frontend->getURL().'templates/default/html/js/events.min.js');
+$page->addScript($frontend->getURL().'templates/default/html/js/events.min.js?v='.UNL\UCBCN\Frontend\Controller::$version);
 
 //other head
 if ($context->getCalendar()) {
