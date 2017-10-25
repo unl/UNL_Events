@@ -29,10 +29,10 @@ $page->pagetitle = '';
 $page->affiliation = '';
 
 //css
-$page->addStyleSheet($base_frontend_url.'templates/default/html/css/events.css');
-$page->addStyleSheet($base_frontend_url.'templates/default/html/css/manager.css');
-$page->addStyleSheet($base_frontend_url.'templates/default/html/css/jquery-ui.min-custom.css');
-$page->addStyleSheet($base_frontend_url.'templates/default/html/js/vendor/select2/css/select2.min.css');
+$page->addStyleSheet($base_frontend_url.'templates/default/html/css/events.css?v='.UNL\UCBCN\Frontend\Controller::$version);
+$page->addStyleSheet($base_frontend_url.'templates/default/html/css/manager.css?v='.UNL\UCBCN\Frontend\Controller::$version);
+$page->addStyleSheet($base_frontend_url.'templates/default/html/css/jquery-ui.min-custom.css?v='.UNL\UCBCN\Frontend\Controller::$version);
+$page->addStyleSheet($base_frontend_url.'templates/default/html/js/vendor/select2/css/select2.min.css?v='.UNL\UCBCN\Frontend\Controller::$version);
 
 //javascript
 $page->head .= '<script>var frontend_url = "'.$base_frontend_url.'";</script>' . PHP_EOL;
@@ -115,7 +115,7 @@ $page->maincontentarea .= $savvy->render($context->output, $template) . '
     </div>
 </div>
 
-<script src="' . $base_frontend_url .'templates/default/html/js/manager.min.js"></script>
+<script src="' . $base_frontend_url .'templates/default/html/js/manager.min.js?v='.UNL\UCBCN\Frontend\Controller::$version.'"></script>
 ';
 
 $page->leftcollinks = $savvy->render($context, 'html/localfooter.tpl.php');
