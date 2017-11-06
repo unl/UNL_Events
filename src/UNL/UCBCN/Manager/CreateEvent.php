@@ -75,8 +75,13 @@ class CreateEvent extends PostHandler
 
         # if we are sending this to UNL Main Calendar, description and contact info must be given
         if (array_key_exists('send_to_main', $post_data) && $post_data['send_to_main'] == 'on') {
-            if (empty($post_data['description']) || empty($post_data['contact_name'])) {
-                throw new ValidationException('<a href="#contact-name">Contact name</a> and <a href="#description">description</a> are required to recommend to UNL Main Calendar.');
+            if (empty($post_data['description']) || empty($post_data['contact_name']) || ( empty($post_data['room']) && !($post_data['location'] == 'new' && !empty($post_data['new_location']['room'])))) {
+                if($post_data['location'] == 'new'){
+                    throw new ValidationException('<a href="#contact-name">Contact name</a>, <a href="#description">description</a> and <a href="#room">room</a>/<a href="#location-room">location-room</a> are required to recommend to UNL Main Calendar.');
+                }
+                else{
+                    throw new ValidationException('<a href="#contact-name">Contact name</a>, <a href="#description">description</a> and <a href="#room">room</a> are required to recommend to UNL Main Calendar.');
+                }
             }
         }
 

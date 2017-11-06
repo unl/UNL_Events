@@ -60,48 +60,48 @@
                 <div id="new-location-fields" style="display: none;">
                     <h6>New Location</h6>
                     <label for="location-name"><span class="required">*</span> Name</label>
-                    <input type="text" id="location-name" name="new_location[name]" value="<?php echo $post['location']['name']; ?>">
+                    <input type="text" id="location-name" name="new_location[name]" value="<?php echo $post['new_location']['name']; ?>">
 
                     <label for="location-address-1">Address</label>
-                    <input type="text" id="location-address-1" name="new_location[streetaddress1]" value="<?php echo $post['location']['streetaddress1']; ?>">
+                    <input type="text" id="location-address-1" name="new_location[streetaddress1]" value="<?php echo $post['new_location']['streetaddress1']; ?>">
 
                     <label for="location-address-2">Address 2</label>
-                    <input type="text" id="location-address-2" name="new_location[streetaddress2]" value="<?php echo $post['location']['streetaddress2']; ?>">
+                    <input type="text" id="location-address-2" name="new_location[streetaddress2]" value="<?php echo $post['new_location']['streetaddress2']; ?>">
 
                     <label for="location-room">Room</label>
-                    <input type="text" id="location-room" name="new_location[room]" value="<?php echo $post['location']['room']; ?>">
+                    <input type="text" id="location-room" name="new_location[room]" value="<?php echo $post['new_location']['room']; ?>">
 
                     <label for="location-city">City</label>
-                    <input type="text" id="location-city" name="new_location[city]" value="<?php echo $post['location']['city']; ?>">
+                    <input type="text" id="location-city" name="new_location[city]" value="<?php echo $post['new_location']['city']; ?>">
 
                     <label for="location-state">State</label>
-                    <input type="text" id="location-state" name="new_location[state]" value="<?php echo $post['location']['state']; ?>">
+                    <input type="text" id="location-state" name="new_location[state]" value="<?php echo $post['new_location']['state']; ?>">
 
                     <label for="location-zip">Zip</label>
-                    <input type="text" id="location-zip" name="new_location[zip]" value="<?php echo $post['location']['zip']; ?>">
+                    <input type="text" id="location-zip" name="new_location[zip]" value="<?php echo $post['new_location']['zip']; ?>">
 
                     <label for="location-map-url">Map URL</label>
-                    <input type="text" id="location-map-url" name="new_location[mapurl]" value="<?php echo $post['location']['mapurl']; ?>">
+                    <input type="text" id="location-map-url" name="new_location[mapurl]" value="<?php echo $post['new_location']['mapurl']; ?>">
 
                     <label for="location-webpage">Webpage</label>
-                    <input type="text" id="location-webpage" name="new_location[webpageurl]" value="<?php echo $post['location']['webpageurl']; ?>">
+                    <input type="text" id="location-webpage" name="new_location[webpageurl]" value="<?php echo $post['new_location']['webpageurl']; ?>">
 
                     <label for="location-hours">Hours</label>
-                    <input type="text" id="location-hours" name="new_location[hours]" value="<?php echo $post['location']['hours']; ?>">
+                    <input type="text" id="location-hours" name="new_location[hours]" value="<?php echo $post['new_location']['hours']; ?>">
 
                     <label for="location-directions">Directions</label>
-                    <textarea id="location-directions" name="new_location[directions]"><?php echo $post['location']['directions']; ?></textarea>
+                    <textarea id="location-directions" name="new_location[directions]"><?php echo $post['new_location']['directions']; ?></textarea>
 
                     <label for="location-additional-public-info">Additional Public Info</label>
-                    <input type="text" id="location-additional-public-info" name="new_location[additionalpublicinfo]" value="<?php echo $post['location']['additionalpublicinfo']; ?>">
+                    <input type="text" id="location-additional-public-info" name="new_location[additionalpublicinfo]" value="<?php echo $post['new_location']['additionalpublicinfo']; ?>">
 
                     <label for="location-type">Type</label>
-                    <input type="text" id="location-type" name="new_location[type]" value="<?php echo $post['location']['type']; ?>">
+                    <input type="text" id="location-type" name="new_location[type]" value="<?php echo $post['new_location']['type']; ?>">
 
                     <label for="location-phone">Phone</label>
-                    <input type="text" id="location-phone" name="new_location[phone]" value="<?php echo $post['location']['phone']; ?>">
+                    <input type="text" id="location-phone" name="new_location[phone]" value="<?php echo $post['new_location']['phone']; ?>">
 
-                    <input <?php if ($post['location_save'] == 'on') echo 'checked="checked"'; ?> type="checkbox" id="location-save" name="location_save"> 
+                    <input <?php if (isset($post['location_save']) && $post['location_save'] == 'on') echo 'checked="checked"'; ?> type="checkbox" id="location-save" name="location_save">
                     <label for="location-save">Save this location for future events</label>
                 </div>
 
@@ -368,6 +368,20 @@ require(['jquery'], function ($) {
         if ($('#location').val() == 'new' && $('#location-name').val() == '') {
             notifier.mark_input_invalid($('#location-name'));
             errors.push('You must give your new location a <a href="#location-name">name</a>.');
+        }
+
+        //A room number is required if recommended to unl main calendar. Check the room number on the event or the room number on new location if created
+        if ($('#send-to-main').is(':checked')) {
+            if($('#room').val() == '' && $('#location-room').val() == '') {
+                notifier.mark_input_invalid($('#room'));
+                if($('#location').val() == 'new') {
+                    notifier.mark_input_invalid($('#location-room'));
+                    errors.push('You must give either a <a href="#room">event room</a> or your new location a <a href="#location-room">room</a> to recommend to UNL Main Calendar.');
+                }
+                else {
+                    errors.push('You must give a <a href="#room">room</a> to recommend to UNL Main Calendar.');
+                }
+            }
         }
 
         if (errors.length > 0) {
