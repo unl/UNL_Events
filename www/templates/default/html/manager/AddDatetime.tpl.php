@@ -2,6 +2,7 @@
     $calendar = $context->calendar;
     $event = $context->event;
     $datetime = $context->event_datetime;
+    $event_duration_type = 'single_day';
 
     if ($datetime->starttime == NULL) {
         $start_time = '';
@@ -29,6 +30,10 @@
         $end_hour = date('h', $end_time);
         $end_minute = date('i', $end_time);
         $end_am_pm = date('a', $end_time);
+    }
+
+    if($datetime->starttime != NULL && $datetime->endtime != NULL && date('m/d/Y', strtotime($datetime->starttime)) != date('m/d/Y', strtotime($datetime->endtime))) {
+        $event_duration_type = 'multi_day';
     }
 
     $recurs_until_date = date('m/d/Y', strtotime($datetime->recurs_until));
@@ -130,74 +135,92 @@
         <label for="room">Room</label>
         <input type="text" id="room" name="room" value="<?php echo $datetime->room; ?>" />
 
+        <?php #Don't show the box when the current eventdatetime is a recurring instance or current evendatetime is a recurring and multi-day type.
+            if ($context->recurrence_id == NULL && !($datetime->recurringtype != 'none' && $event_duration_type == 'multi_day')) : ?>
+            <label for="single-day-event"><span class="required">*</span> Event duration type</label><br>
+            <input <?php if ($event_duration_type =='single_day') echo 'checked=checked' ?> id="single-day-event" type="radio" value="single_day" name="event_duration_type">
+            <label>Single Day</label>&nbsp;
+            <input <?php if ($event_duration_type == 'multi_day') echo 'checked=checked' ?> id="multi-day-event" type="radio" value="multi_day" name="event_duration_type">
+            <label>Multi Day</label>
+        <?php endif; ?>
 
-        <label for="start-date" ><span class="required">*</span> Start Date &amp; Time</label>
-        <div class="date-time-select"><span class="wdn-icon-calendar" aria-hidden="true"></span>
-            <input id="start-date" value="<?php echo $start_date; ?>" 
-                name="start_date" type="text" class="datepicker" aria-label="Start date in the format of mm/dd/yyyy"/><br class="hidden small-block"> @
-            <select id="start-time-hour" name="start_time_hour" aria-label="Start time hour">
-                <option value="">Hour</option>
-            <?php for ($i = 1; $i <= 12; $i++) { ?>
-                <option <?php if ($i == $start_hour) echo 'selected="selected"'; ?> 
-                    value="<?php echo $i ?>"><?php echo $i ?></option>
-            <?php } ?>
-            </select> : 
-
-            <select id="start-time-minute" name="start_time_minute" aria-label="End time minute">
-                <option value="">Minute</option>
-                <?php for ($i = 0; $i < 60; $i+=5): ?>
-                    <option <?php if ($i == $start_minute) echo 'selected="selected"'; ?> 
-                        value="<?php echo $i; ?>"><?php echo str_pad($i, 2, '0', STR_PAD_LEFT); ?></option>
-                <?php endfor; ?>
-            </select>
-
-            <div id="start-time-am-pm" class="am_pm">
-                <fieldset>
-                    <legend class="wdn-text-hidden">AM/PM</legend>
-                    <label><input <?php if ($start_am_pm == 'am') echo 'checked="checked"'; ?> 
-                        type="radio" value="am" id="start-time-am-pm-am" name="start_time_am_pm">AM</label><br>
-                    <label><input <?php if ($start_am_pm == 'pm') echo 'checked="checked"'; ?> 
-                    type="radio" value="pm" id="start-time-am-pm-pm" name="start_time_am_pm">PM</label>
-                </fieldset>
+        <div class="wdn-grid-set date-time-select">
+            <div id="start-date-select" class="bp3-wdn-col-one-half date-select">
+                <span class="required">*</span>
+                <label for="start-date">Date</label><br/>
+                <span class="wdn-icon-calendar" aria-hidden="true"></span>
+                <input id="start-date" value="<?php echo $start_date; ?>"
+                    name="start_date" type="text" class="datepicker" aria-label="Start date in the format of mm/dd/yyyy"/><br class="hidden small-block">
             </div>
-        </div>
+            <div id="end-date-select" class="bp3-wdn-col-one-half date-select">
+                <label for="end-date">End Date (Optional)</label><br/>
+                <span class="wdn-icon-calendar" aria-hidden="true"></span>
+                <input id="end-date" value="<?php echo $end_date; ?>"
+                    name="end_date" type="text" class="datepicker" aria-label="End date in the format of mm/dd/yyyy" /><br class="hidden small-block">
+            </div>
+            <div id="start-time-select" class="bp3-wdn-col-one-half time-select">
+                <label for="" ><span class="required">*</span> Start Time</label><br/>
+                <select id="start-time-hour" name="start_time_hour" aria-label="Start Time Hour">
+                    <option value="">Hour</option>
+                    <?php for ($i = 1; $i <= 12; $i++) { ?>
+                        <option <?php if ($i == $start_hour) echo 'selected="selected"'; ?>
+                            value="<?php echo $i ?>"><?php echo $i ?></option>
+                    <?php } ?>
+                </select> :
 
-        <label for="end-date">End Date &amp; Time (Optional)</label>
-        <div class="date-time-select"><span class="wdn-icon-calendar" aria-hidden="true"></span>
-            <input id="end-date" value="<?php echo $end_date; ?>"
-                name="end_date" type="text" class="datepicker" aria-label="End date in the format of mm/dd/yyyy" /><br class="hidden small-block"> @
-            <select id="end-time-hour" name="end_time_hour" aria-label="End time hour">
-                <option value="">Hour</option>
-            <?php for ($i = 1; $i <= 12; $i++) { ?>
-                <option <?php if ($i == $end_hour) echo 'selected="selected"'; ?> 
-                    value="<?php echo $i ?>"><?php echo $i ?></option>
-            <?php } ?>
-            </select> :
+                <select id="start-time-minute" name="start_time_minute" aria-label="Start Time Minute">
+                    <option value="">Minute</option>
+                    <?php for ($i = 0; $i < 60; $i+=5): ?>
+                        <option <?php if ($i == $start_minute) echo 'selected="selected"'; ?>
+                            value="<?php echo $i; ?>"><?php echo str_pad($i, 2, '0', STR_PAD_LEFT); ?></option>
+                    <?php endfor; ?>
+                </select>
 
-            <select id="end-time-minute" name="end_time_minute" aria-label="End time minute">
-                <option value="">Minute</option>
-                <?php for ($i = 0; $i < 60; $i+=5): ?>
-                    <option <?php if ($i == $end_minute) echo 'selected="selected"'; ?> 
-                        value="<?php echo $i; ?>"><?php echo str_pad($i, 2, '0', STR_PAD_LEFT); ?></option>
-                <?php endfor; ?>
-            </select>
+                <div id="start-time-am-pm" class="am_pm">
+                    <fieldset>
+                        <legend class="wdn-text-hidden">AM/PM</legend>
+                        <label><input <?php if ($start_am_pm == 'am') echo 'checked="checked"'; ?>
+                                type="radio" value="am" id="start-time-am-pm-am" name="start_time_am_pm">AM</label><br>
+                        <label><input <?php if ($start_am_pm == 'pm') echo 'checked="checked"'; ?>
+                                type="radio" value="pm" id="start-time-am-pm-pm" name="start_time_am_pm">PM</label>
+                    </fieldset>
+                </div>
+            </div>
+            <div id="end-time-select" class="bp3-wdn-col-one-half time-select">
+                <label for="" > End Time (Optional)</label><br/>
+                <select id="end-time-hour" name="end_time_hour" aria-label="End Time Hour">
+                    <option value="">Hour</option>
+                    <?php for ($i = 1; $i <= 12; $i++) { ?>
+                        <option <?php if ($i == $end_hour) echo 'selected="selected"'; ?>
+                            value="<?php echo $i ?>"><?php echo $i ?></option>
+                    <?php } ?>
+                </select> :
 
-            <div id="end-time-am-pm" class="am_pm">
-                <fieldset>
-                    <legend class="wdn-text-hidden">AM/PM</legend>
-                    <label><input <?php if ($end_am_pm == 'am') echo 'checked="checked"'; ?> 
-                        type="radio" value="am" id="end-time-am-pm-am" name="end_time_am_pm">AM</label><br>
-                    <label><input <?php if ($end_am_pm == 'pm') echo 'checked="checked"'; ?> 
-                        type="radio" value="pm" id="end-time-am-pm-pm" name="end_time_am_pm">PM</label>
-                </fieldset>
+                <select id="end-time-minute" name="end_time_minute" aria-label="End Time Minute">
+                    <option value="">Minute</option>
+                    <?php for ($i = 0; $i < 60; $i+=5): ?>
+                        <option <?php if ($i == $end_minute) echo 'selected="selected"'; ?>
+                            value="<?php echo $i; ?>"><?php echo str_pad($i, 2, '0', STR_PAD_LEFT); ?></option>
+                    <?php endfor; ?>
+                </select>
+
+                <div id="end-time-am-pm" class="am_pm">
+                    <fieldset>
+                        <legend class="wdn-text-hidden">AM/PM</legend>
+                        <label><input <?php if ($end_am_pm == 'am') echo 'checked="checked"'; ?>
+                                type="radio" value="am" id="end-time-am-pm-am" name="end_time_am_pm">AM</label><br>
+                        <label><input <?php if ($end_am_pm == 'pm') echo 'checked="checked"'; ?>
+                                type="radio" value="pm" id="end-time-am-pm-pm" name="end_time_am_pm">PM</label>
+                    </fieldset>
+                </div>
             </div>
         </div>
 
         <?php if ($context->recurrence_id == NULL) : ?>
-            <div class="section-container">
+            <div class="section-container outer-recurring-container">
                 <input <?php if ($datetime->recurringtype != 'none' && $datetime->recurringtype != NULL) echo 'checked="checked"' ?> type="checkbox" name="recurring" id="recurring"> 
                 <label for="recurring">This is a recurring event</label>
-                <div class="recurring-container date-time-select">                        
+                <div class="recurring-container">
                     <label for="recurring-type">This event recurs </label>
                     <select id="recurring-type" name="recurring_type">
                         <option value="daily">Daily</option>
@@ -244,6 +267,21 @@ WDN.initializePlugin('jqueryui', [function() {
 
     $('#start-date').change(function (change) {
         setRecurringOptions($(this), $('#monthly-group'));
+    });
+
+    $('#single-day-event').change(function() {
+        if($(this).is(':checked')) {
+            if($('#end-date').val() != '' && $('#start-date').val() != '') {
+                $('#end-date').val($('#start-date').val());
+            }
+        }
+    });
+    $('#multi-day-event').change(function() {
+        if($(this).is(':checked')) {
+            if ($('#recurring').is(':checked')) {
+                $('#recurring').prop('checked', false);
+            }
+        }
     });
 
     <?php if ($datetime->recurringtype != 'none' && $datetime->recurringtype != NULL): ?>

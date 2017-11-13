@@ -108,80 +108,97 @@
                 <label for="room">Room</label>
                 <input type="text" id="room" name="room" value="<?php echo $post['room']; ?>" />
 
-                <label for="start-date" ><span class="required">*</span> Start Date &amp; Time</label>
-                <div class="date-time-select"><span class="wdn-icon-calendar" aria-hidden="true"></span>
-                    <input id="start-date" name="start_date" aria-label="Start Date in the format of mm/dd/yyyy" type="text" class="datepicker" value="<?php echo $post['start_date']; ?>" /><br class="hidden small-block"> @
-                    <select id="start-time-hour" name="start_time_hour" aria-label="Start Time Hour">
-                        <option value="">Hour</option>
-                    <?php for ($i = 1; $i <= 12; $i++) { ?>
-                        <option <?php if ($post['start_time_hour'] == $i) echo 'selected="selected"'; ?> value="<?php echo $i ?>"><?php echo $i ?></option>
-                    <?php } ?>
-                    </select> : 
+                <label for="event-duration-type"><span class="required">*</span> Event duration type</label>
+                <br/>
+                <input <?php if (!isset($post) || $post['event_duration_type'] =='single_day') echo 'checked=checked' ?> id="single-day-event" type="radio" value="single_day" name="event_duration_type">
+                <label>Single Day</label>&nbsp;
+                <input <?php if ($post['event_duration_type'] == 'multi_day') echo 'checked=checked' ?> id="multi-day-event" type="radio" value="multi_day" name="event_duration_type">
+                <label>Multi Day</label>
 
-                    <select id="start-time-minute" name="start_time_minute" aria-label="Start Time Minute">
-                        <option value="">Minute</option>
-                        <option <?php if ($post['start_time_minute'] === 0 || $post['start_time_minute'] === '0') echo 'selected="selected"'; ?> value="0">00</option>
-                        <option <?php if ($post['start_time_minute'] == 5) echo 'selected="selected"'; ?> value="5">05</option>
-                        <option <?php if ($post['start_time_minute'] == 10) echo 'selected="selected"'; ?> value="10">10</option>
-                        <option <?php if ($post['start_time_minute'] == 15) echo 'selected="selected"'; ?> value="15">15</option>
-                        <option <?php if ($post['start_time_minute'] == 20) echo 'selected="selected"'; ?> value="20">20</option>
-                        <option <?php if ($post['start_time_minute'] == 25) echo 'selected="selected"'; ?> value="25">25</option>
-                        <option <?php if ($post['start_time_minute'] == 30) echo 'selected="selected"'; ?> value="30">30</option>
-                        <option <?php if ($post['start_time_minute'] == 35) echo 'selected="selected"'; ?> value="35">35</option>
-                        <option <?php if ($post['start_time_minute'] == 40) echo 'selected="selected"'; ?> value="40">40</option>
-                        <option <?php if ($post['start_time_minute'] == 45) echo 'selected="selected"'; ?> value="45">45</option>
-                        <option <?php if ($post['start_time_minute'] == 50) echo 'selected="selected"'; ?> value="50">50</option>
-                        <option <?php if ($post['start_time_minute'] == 55) echo 'selected="selected"'; ?> value="55">55</option>
-                    </select>
+                <div class="wdn-grid-set date-time-select">
+                    <div id="start-date-select" class="bp3-wdn-col-one-half date-select">
+                        <span class="required">*</span>
+                        <label for="start-date">Date</label><br/>
+                        <span class="wdn-icon-calendar" aria-hidden="true"></span>
+                        <input id="start-date" name="start_date" aria-label="Start Date in the format of mm/dd/yyyy" type="text" class="datepicker" value="<?php echo $post['start_date']; ?>" /><br class="hidden small-block">
+                    </div>
+                    <div id="end-date-select" class="bp3-wdn-col-one-half date-select">
+                        <label for="end-date">End Date (Optional)</label><br/>
+                        <span class="wdn-icon-calendar" aria-hidden="true"></span>
+                        <input id="end-date" name="end_date" aria-label="End Date in the format of mm/dd/yyyy" type="text" class="datepicker" value="<?php echo $post['end_date']; ?>" /><br class="hidden small-block">
+                    </div>
+                    <div id="start-time-select" class="bp3-wdn-col-one-half time-select">
+                        <label for="" ><span class="required">*</span> Start Time</label><br/>
+                        <select id="start-time-hour" name="start_time_hour" aria-label="Start Time Hour">
+                            <option value="">Hour</option>
+                            <?php for ($i = 1; $i <= 12; $i++) { ?>
+                                <option <?php if ($post['start_time_hour'] == $i) echo 'selected="selected"'; ?> value="<?php echo $i ?>"><?php echo $i ?></option>
+                            <?php } ?>
+                        </select> :
 
-                    <div id="start-time-am-pm" class="am_pm">
-                        <fieldset>
-                            <legend class="wdn-text-hidden">AM/PM</legend>
-                            <label><input <?php if (!isset($post) || $post['start_time_am_pm'] == 'am') echo 'checked="checked"'; ?> id="start-time-am-pm-am" title="AM" type="radio" value="am" name="start_time_am_pm">AM</label><br>
-                            <label><input <?php if ($post['start_time_am_pm'] == 'pm') echo 'checked="checked"'; ?> id="start-time-am-pm-pm" type="radio" value="pm" name="start_time_am_pm">PM</label>
-                        </fieldset>
+                        <select id="start-time-minute" name="start_time_minute" aria-label="Start Time Minute">
+                            <option value="">Minute</option>
+                            <option <?php if ($post['start_time_minute'] === 0 || $post['start_time_minute'] === '0') echo 'selected="selected"'; ?> value="0">00</option>
+                            <option <?php if ($post['start_time_minute'] == 5) echo 'selected="selected"'; ?> value="5">05</option>
+                            <option <?php if ($post['start_time_minute'] == 10) echo 'selected="selected"'; ?> value="10">10</option>
+                            <option <?php if ($post['start_time_minute'] == 15) echo 'selected="selected"'; ?> value="15">15</option>
+                            <option <?php if ($post['start_time_minute'] == 20) echo 'selected="selected"'; ?> value="20">20</option>
+                            <option <?php if ($post['start_time_minute'] == 25) echo 'selected="selected"'; ?> value="25">25</option>
+                            <option <?php if ($post['start_time_minute'] == 30) echo 'selected="selected"'; ?> value="30">30</option>
+                            <option <?php if ($post['start_time_minute'] == 35) echo 'selected="selected"'; ?> value="35">35</option>
+                            <option <?php if ($post['start_time_minute'] == 40) echo 'selected="selected"'; ?> value="40">40</option>
+                            <option <?php if ($post['start_time_minute'] == 45) echo 'selected="selected"'; ?> value="45">45</option>
+                            <option <?php if ($post['start_time_minute'] == 50) echo 'selected="selected"'; ?> value="50">50</option>
+                            <option <?php if ($post['start_time_minute'] == 55) echo 'selected="selected"'; ?> value="55">55</option>
+                        </select>
+
+                        <div id="start-time-am-pm" class="am_pm">
+                            <fieldset>
+                                <legend class="wdn-text-hidden">AM/PM</legend>
+                                <label><input <?php if (!isset($post) || $post['start_time_am_pm'] == 'am') echo 'checked="checked"'; ?> id="start-time-am-pm-am" title="AM" type="radio" value="am" name="start_time_am_pm">AM</label><br>
+                                <label><input <?php if ($post['start_time_am_pm'] == 'pm') echo 'checked="checked"'; ?> id="start-time-am-pm-pm" type="radio" value="pm" name="start_time_am_pm">PM</label>
+                            </fieldset>
+                        </div>
+                    </div>
+                    <div id="end-time-select" class="bp3-wdn-col-one-half time-select">
+                        <label for="" > End Time (Optional)</label><br/>
+                        <select id="end-time-hour" name="end_time_hour" aria-label="End Time Hour">
+                            <option value="">Hour</option>
+                            <?php for ($i = 1; $i <= 12; $i++) { ?>
+                                <option <?php if ($post['end_time_hour'] == $i) echo 'selected="selected"'; ?> value="<?php echo $i ?>"><?php echo $i ?></option>
+                            <?php } ?>
+                        </select> :
+
+                        <select id="end-time-minute" name="end_time_minute" aria-label="End Time Minute">
+                            <option value="">Minute</option>
+                            <option <?php if ($post['end_time_minute'] === 0 || $post['end_time_minute'] === '0') echo 'selected="selected"'; ?> value="0">00</option>
+                            <option <?php if ($post['end_time_minute'] == 5) echo 'selected="selected"'; ?> value="5">05</option>
+                            <option <?php if ($post['end_time_minute'] == 10) echo 'selected="selected"'; ?> value="10">10</option>
+                            <option <?php if ($post['end_time_minute'] == 15) echo 'selected="selected"'; ?> value="15">15</option>
+                            <option <?php if ($post['end_time_minute'] == 20) echo 'selected="selected"'; ?> value="20">20</option>
+                            <option <?php if ($post['end_time_minute'] == 25) echo 'selected="selected"'; ?> value="25">25</option>
+                            <option <?php if ($post['end_time_minute'] == 30) echo 'selected="selected"'; ?> value="30">30</option>
+                            <option <?php if ($post['end_time_minute'] == 35) echo 'selected="selected"'; ?> value="35">35</option>
+                            <option <?php if ($post['end_time_minute'] == 40) echo 'selected="selected"'; ?> value="40">40</option>
+                            <option <?php if ($post['end_time_minute'] == 45) echo 'selected="selected"'; ?> value="45">45</option>
+                            <option <?php if ($post['end_time_minute'] == 50) echo 'selected="selected"'; ?> value="50">50</option>
+                            <option <?php if ($post['end_time_minute'] == 55) echo 'selected="selected"'; ?> value="55">55</option>
+                        </select>
+
+                        <div id="end-time-am-pm" class="am_pm">
+                            <fieldset>
+                                <legend class="wdn-text-hidden">AM/PM</legend>
+                                <label><input <?php if (empty($post) || $post['end_time_am_pm'] == 'am') echo 'checked="checked"'; ?> id="end-time-am-pm-am" type="radio" value="am" name="end_time_am_pm">AM</label><br>
+                                <label><input <?php if ($post['end_time_am_pm'] == 'pm') echo 'checked="checked"'; ?> id="end-time-am-pm-pm" type="radio" value="pm" name="end_time_am_pm">PM</label>
+                            </fieldset>
+                        </div>
                     </div>
                 </div>
 
-                <label for="end-date">End Date &amp;amp; Time (Optional)</label>
-                <div class="date-time-select"><span class="wdn-icon-calendar" aria-hidden="true"></span>
-                    <input id="end-date" name="end_date" aria-label="End Date in the format of mm/dd/yyyy" type="text" class="datepicker" value="<?php echo $post['end_date']; ?>" /><br class="hidden small-block"> @
-                    <select id="end-time-hour" name="end_time_hour" aria-label="End Time Hour">
-                        <option value="">Hour</option>
-                    <?php for ($i = 1; $i <= 12; $i++) { ?>
-                        <option <?php if ($post['end_time_hour'] == $i) echo 'selected="selected"'; ?> value="<?php echo $i ?>"><?php echo $i ?></option>
-                    <?php } ?>
-                    </select> :
-
-                    <select id="end-time-minute" name="end_time_minute" aria-label="End Time Minute">
-                        <option value="">Minute</option>
-                        <option <?php if ($post['end_time_minute'] === 0 || $post['end_time_minute'] === '0') echo 'selected="selected"'; ?> value="0">00</option>
-                        <option <?php if ($post['end_time_minute'] == 5) echo 'selected="selected"'; ?> value="5">05</option>
-                        <option <?php if ($post['end_time_minute'] == 10) echo 'selected="selected"'; ?> value="10">10</option>
-                        <option <?php if ($post['end_time_minute'] == 15) echo 'selected="selected"'; ?> value="15">15</option>
-                        <option <?php if ($post['end_time_minute'] == 20) echo 'selected="selected"'; ?> value="20">20</option>
-                        <option <?php if ($post['end_time_minute'] == 25) echo 'selected="selected"'; ?> value="25">25</option>
-                        <option <?php if ($post['end_time_minute'] == 30) echo 'selected="selected"'; ?> value="30">30</option>
-                        <option <?php if ($post['end_time_minute'] == 35) echo 'selected="selected"'; ?> value="35">35</option>
-                        <option <?php if ($post['end_time_minute'] == 40) echo 'selected="selected"'; ?> value="40">40</option>
-                        <option <?php if ($post['end_time_minute'] == 45) echo 'selected="selected"'; ?> value="45">45</option>
-                        <option <?php if ($post['end_time_minute'] == 50) echo 'selected="selected"'; ?> value="50">50</option>
-                        <option <?php if ($post['end_time_minute'] == 55) echo 'selected="selected"'; ?> value="55">55</option>
-                    </select>
-
-                    <div id="end-time-am-pm" class="am_pm">
-                        <fieldset>
-                            <legend class="wdn-text-hidden">AM/PM</legend>
-                            <label><input <?php if (empty($post) || $post['end_time_am_pm'] == 'am') echo 'checked="checked"'; ?> id="end-time-am-pm-am" type="radio" value="am" name="end_time_am_pm">AM</label><br>
-                            <label><input <?php if ($post['end_time_am_pm'] == 'pm') echo 'checked="checked"'; ?> id="end-time-am-pm-pm" type="radio" value="pm" name="end_time_am_pm">PM</label>
-                        </fieldset>
-                    </div>
-                </div>
-
-                <div class="section-container">
+                <div class="section-container outer-recurring-container">
                     <input <?php if (isset($post['recurring'])) echo 'checked="checked"'; ?> type="checkbox" name="recurring" id="recurring"> 
                     <label for="recurring">This is a recurring event</label>
-                    <div class="recurring-container date-time-select">                        
+                    <div class="recurring-container">
                         <label for="recurring-type">This event recurs </label>
                         <select id="recurring-type" name="recurring_type">
                             <option value="daily">Daily</option>
@@ -290,6 +307,22 @@ WDN.initializePlugin('jqueryui', [function() {
     });
 
     $('#location').change();
+
+    $('#single-day-event').change(function() {
+        if($(this).is(':checked')) {
+            if($('#end-date').val() != '' && $('#start-date').val() != '') {
+                $('#end-date').val($('#start-date').val());
+            }
+        }
+    });
+    $('#multi-day-event').change(function() {
+        if($(this).is(':checked')) {
+            if ($('#recurring').is(':checked')) {
+                $('#recurring').prop('checked', false);
+            }
+        }
+    });
+
 }]);
 
 require(['jquery'], function ($) {

@@ -72,32 +72,78 @@
 	font-size: 60%;
 }
 
+#single-day-event:checked ~ .outer-recurring-container {
+    display: block;
+}
+
+#multi-day-event:checked ~ .outer-recurring-container {
+    display: none;
+}
+
+#single-day-event:checked ~ .date-time-select-test > #end-date-select {
+    display: none;
+}
+
+#single-day-event:checked ~ .date-time-select-test {
+    #start-date-select {
+      label::before {
+        content: '';
+      }
+    }
+    #start-time-select {
+      clear: left;
+    }
+}
+
+#multi-day-event:checked ~ .date-time-select-test {
+    #start-date-select {
+      label::before {
+        content: 'Start ';
+      }
+    }
+}
+
 .date-time-select {
-    padding: 1em;
-    background-color: #f9f8f5;
-    border: 1px solid #d5d5d2;
-    margin-bottom: 0.75em;
-    text-align: center;
-    .wdn-icon-calendar {
-	    margin-right: -2.3em;
-	    position: relative;
-	    z-index: 2;
-	    margin-left: 0.8em;
-	}
-	input {
-	    padding-left: 2.3em;
-	    width: 40%;
-	    position: relative;
-	    text-align: center;
-	}
-	select {
-	    width: 14%;
-	    text-align: center;
-	    padding: 0;
-	}
-	> * {
-	  vertical-align: middle;
-	}
+  padding: 1em;
+  background-color: #f9f8f5;
+  border: 1px solid #d5d5d2;
+  margin: 1em auto;
+
+  .wdn-icon-calendar {
+    margin-right: -2.3em;
+    position: relative;
+    z-index: 2;
+    margin-left: 0.8em;
+  }
+  > * {
+    vertical-align: middle;
+  }
+  .date-select {
+    float:left;
+    margin-bottom: 0.50em;
+    label {
+      text-align: left;
+    }
+    input {
+      padding-left: 2.3em;
+      position: relative;
+      text-align: center;
+    }
+  }
+  .time-select {
+    float: left;
+    vertical-align: middle;
+    margin: auto;
+    label {
+      text-align: left;
+    }
+    select {
+      width: 30%;
+      margin-bottom: 0.50em;
+      text-align: center;
+      padding: 0;
+    }
+  }
 }
 
 #breadcrumbs {
@@ -164,10 +210,33 @@
 }
 
 #recurring ~ .recurring-container {
-    display: none;
-    padding: 1em;
-    background-color: #f9f8f5;
-    border: 1px solid #d5d5d2;
+  display: none;
+  padding: 1em;
+  background-color: #f9f8f5;
+  border: 1px solid #d5d5d2;
+  margin-bottom: 0.75em;
+  text-align: center;
+
+  .wdn-icon-calendar {
+    margin-right: -2.3em;
+    position: relative;
+    z-index: 2;
+    margin-left: 0.8em;
+  }
+  input {
+    padding-left: 2.3em;
+    width: 40%;
+    position: relative;
+    text-align: center;
+  }
+  select {
+    width: 14%;
+    text-align: center;
+    padding: 0;
+  }
+  > * {
+    vertical-align: middle;
+  }
 }
 
 #recurring-type {
