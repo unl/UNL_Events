@@ -65,8 +65,13 @@ class Day extends EventListing implements RoutableInterface
                         "' . $date . '" BETWEEN DATE(e.starttime) AND IF(DATE(e.endtime), DATE(e.endtime), DATE(e.starttime))
                        OR "' . $date . '" = recurringdate.recurringdate
                       )
-                ORDER BY e.starttime ASC, event.title ASC
-                ';
+                ORDER BY (
+                    IF (recurringdate.recurringdate IS NULL,
+                      e.starttime,
+                      CONCAT(DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.starttime," %H:%i:%s"))
+                    )
+                ) ASC,
+                event.title ASC';
         
         return $sql;
     }
