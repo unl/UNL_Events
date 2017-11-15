@@ -108,22 +108,23 @@
                 <label for="room">Room</label>
                 <input type="text" id="room" name="room" value="<?php echo $post['room']; ?>" />
 
-                <label for="event-duration-type"><span class="required">*</span> Event duration type</label>
-                <br/>
-                <input <?php if (!isset($post) || $post['event_duration_type'] =='single_day') echo 'checked=checked' ?> id="single-day-event" type="radio" value="single_day" name="event_duration_type">
-                <label>Single Day</label>&nbsp;
-                <input <?php if ($post['event_duration_type'] == 'multi_day') echo 'checked=checked' ?> id="multi-day-event" type="radio" value="multi_day" name="event_duration_type">
-                <label>Multi Day</label>
+                <fieldset>
+                    <legend style="margin:auto; font-size:.802rem;"><span class="required">*</span> Event duration type</legend>
+                    <input <?php if (!isset($post) || $post['event_duration_type'] =='single_day') echo 'checked=checked' ?> id="single-day-event" type="radio" value="single_day" name="event_duration_type">
+                    <label for="single-day-event">Single Day</label>&nbsp;
+                    <input <?php if ($post['event_duration_type'] == 'multi_day') echo 'checked=checked' ?> id="multi-day-event" type="radio" value="multi_day" name="event_duration_type">
+                    <label for="multi-day-event">Multi Day</label>
+                </fieldset>
 
                 <div class="wdn-grid-set date-time-select">
                     <div id="start-date-select" class="bp3-wdn-col-one-half date-select">
                         <span class="required">*</span>
-                        <label for="start-date">Date</label><br/>
+                        <label for="start-date" id="start-date-label">Date</label><br/>
                         <span class="wdn-icon-calendar" aria-hidden="true"></span>
                         <input id="start-date" name="start_date" aria-label="Start Date in the format of mm/dd/yyyy" type="text" class="datepicker" value="<?php echo $post['start_date']; ?>" /><br class="hidden small-block">
                     </div>
                     <div id="end-date-select" class="bp3-wdn-col-one-half date-select">
-                        <label for="end-date">End Date (Optional)</label><br/>
+                        <label for="end-date" id="end-date-label">End Date (Optional)</label><br/>
                         <span class="wdn-icon-calendar" aria-hidden="true"></span>
                         <input id="end-date" name="end_date" aria-label="End Date in the format of mm/dd/yyyy" type="text" class="datepicker" value="<?php echo $post['end_date']; ?>" /><br class="hidden small-block">
                     </div>
@@ -310,18 +311,25 @@ WDN.initializePlugin('jqueryui', [function() {
 
     $('#single-day-event').change(function() {
         if($(this).is(':checked')) {
+            $('#start-date-label').text("Date");
+            $('#recurring').prop('disabled',false);
+            $('#end-date-select').hide();
             if($('#end-date').val() != '' && $('#start-date').val() != '') {
                 $('#end-date').val($('#start-date').val());
             }
         }
-    });
+    }).change();
+
     $('#multi-day-event').change(function() {
         if($(this).is(':checked')) {
+            $('#start-date-label').text("Start Date");
+            $('#recurring').prop('disabled',true);
+            $('#end-date-select').show();
             if ($('#recurring').is(':checked')) {
                 $('#recurring').prop('checked', false);
             }
         }
-    });
+    }).change();
 
 }]);
 

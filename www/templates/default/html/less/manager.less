@@ -72,37 +72,6 @@
 	font-size: 60%;
 }
 
-#single-day-event:checked ~ .outer-recurring-container {
-    display: block;
-}
-
-#multi-day-event:checked ~ .outer-recurring-container {
-    display: none;
-}
-
-#single-day-event:checked ~ .date-time-select-test > #end-date-select {
-    display: none;
-}
-
-#single-day-event:checked ~ .date-time-select-test {
-    #start-date-select {
-      label::before {
-        content: '';
-      }
-    }
-    #start-time-select {
-      clear: left;
-    }
-}
-
-#multi-day-event:checked ~ .date-time-select-test {
-    #start-date-select {
-      label::before {
-        content: 'Start ';
-      }
-    }
-}
-
 .date-time-select {
   padding: 1em;
   background-color: #f9f8f5;
@@ -144,6 +113,10 @@
       padding: 0;
     }
   }
+}
+
+#start-time-select {
+  clear: left;
 }
 
 #breadcrumbs {

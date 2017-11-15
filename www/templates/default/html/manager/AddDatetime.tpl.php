@@ -137,23 +137,25 @@
 
         <?php #Don't show the box when the current eventdatetime is a recurring instance or current evendatetime is a recurring and multi-day type.
             if ($context->recurrence_id == NULL && !($datetime->recurringtype != 'none' && $event_duration_type == 'multi_day')) : ?>
-            <label for="single-day-event"><span class="required">*</span> Event duration type</label><br>
-            <input <?php if ($event_duration_type =='single_day') echo 'checked=checked' ?> id="single-day-event" type="radio" value="single_day" name="event_duration_type">
-            <label>Single Day</label>&nbsp;
-            <input <?php if ($event_duration_type == 'multi_day') echo 'checked=checked' ?> id="multi-day-event" type="radio" value="multi_day" name="event_duration_type">
-            <label>Multi Day</label>
+                <fieldset>
+                    <legend style="margin:auto; font-size:.802rem;"><span class="required">*</span> Event duration type</legend>
+                    <input <?php if ($event_duration_type =='single_day') echo 'checked=checked' ?> id="single-day-event" type="radio" value="single_day" name="event_duration_type">
+                    <label for="single-day-event">Single Day</label>&nbsp;
+                    <input <?php if ($event_duration_type == 'multi_day') echo 'checked=checked' ?> id="multi-day-event" type="radio" value="multi_day" name="event_duration_type">
+                    <label for="multi-day-event">Multi Day</label>
+                </fieldset>
         <?php endif; ?>
 
         <div class="wdn-grid-set date-time-select">
             <div id="start-date-select" class="bp3-wdn-col-one-half date-select">
                 <span class="required">*</span>
-                <label for="start-date">Date</label><br/>
+                <label for="start-date" id="start-date-label">Date</label><br/>
                 <span class="wdn-icon-calendar" aria-hidden="true"></span>
                 <input id="start-date" value="<?php echo $start_date; ?>"
                     name="start_date" type="text" class="datepicker" aria-label="Start date in the format of mm/dd/yyyy"/><br class="hidden small-block">
             </div>
             <div id="end-date-select" class="bp3-wdn-col-one-half date-select">
-                <label for="end-date">End Date (Optional)</label><br/>
+                <label for="end-date" id="end-date-label">End Date (Optional)</label><br/>
                 <span class="wdn-icon-calendar" aria-hidden="true"></span>
                 <input id="end-date" value="<?php echo $end_date; ?>"
                     name="end_date" type="text" class="datepicker" aria-label="End date in the format of mm/dd/yyyy" /><br class="hidden small-block">
@@ -271,18 +273,25 @@ WDN.initializePlugin('jqueryui', [function() {
 
     $('#single-day-event').change(function() {
         if($(this).is(':checked')) {
+            $('#start-date-label').text("Date");
+            $('#recurring').prop('disabled',false);
+            $('#end-date-select').hide();
             if($('#end-date').val() != '' && $('#start-date').val() != '') {
                 $('#end-date').val($('#start-date').val());
             }
         }
-    });
+    }).change();
+
     $('#multi-day-event').change(function() {
         if($(this).is(':checked')) {
+            $('#start-date-label').text("Start Date");
+            $('#recurring').prop('disabled',true);
+            $('#end-date-select').show();
             if ($('#recurring').is(':checked')) {
                 $('#recurring').prop('checked', false);
             }
         }
-    });
+    }).change();
 
     <?php if ($datetime->recurringtype != 'none' && $datetime->recurringtype != NULL): ?>
     setRecurringOptions($('#start-date'), $('#monthly-group'));
