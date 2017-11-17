@@ -109,7 +109,7 @@
                 <input type="text" id="room" name="room" value="<?php echo $post['room']; ?>" />
 
                 <fieldset>
-                    <legend style="margin:auto; font-size:.802rem;"><span class="required">*</span> Event duration type</legend>
+                    <legend id="event-duration-legend"><span class="required">*</span> Event duration type</legend>
                     <input <?php if (!isset($post) || $post['event_duration_type'] =='single_day') echo 'checked=checked' ?> id="single-day-event" type="radio" value="single_day" name="event_duration_type">
                     <label for="single-day-event">Single Day</label>&nbsp;
                     <input <?php if ($post['event_duration_type'] == 'multi_day') echo 'checked=checked' ?> id="multi-day-event" type="radio" value="multi_day" name="event_duration_type">
