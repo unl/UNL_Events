@@ -56,10 +56,18 @@ class GetEvent
 
     public function handlePost($post)
     {
-    	if (!$this->event->userCanEdit()) {
+        if (!$this->event->userCanEdit()) {
             throw new \Exception("You do not have permission to edit this event.", 403);
         }
-    	$this->updateEvent($post);
+
+        if (array_key_exists('delete', $post) && $post['delete'] === true) {
+            //This is a delete request
+            $this->event->delete();
+            return true;
+        } else {
+            $this->updateEvent($post);
+        }
+
         $this->event->imagedata = NULL;
         return $this->event;
     }
