@@ -45,40 +45,42 @@ switch (count($events['with_image'])) {
     break;
 }
 ?>
-<div class="band-results">
-    <div class="section-heading">
-        <h1>Today @ UNL</h1>
+<div id="events-promo-bar">
+    <div class="band-results">
+        <div class="section-heading">
+            <h2>Today @ UNL</h2>
+        </div>
     </div>
-</div>
-<div class="wdn-grid-set" style="word-break: break-word;">
-    <?php for ($i = 0; $i < count($events['with_image']) && $i < 3 ; $i++): ?>
-        <div class="bp768-<?php echo $grid_class; ?> promo-box">
-            <div class="wdn-grid-set">
-                <div class="wdn-col-one-half bp768-wdn-col-full">
-                    <a href="<?php echo $frontend->getEventURL($events['with_image'][$i]) ?>">
-                        <img class="event_description_img" src="<?php if ($imageURL = $events['with_image'][$i]->getImageURL()) echo $imageURL; else echo "//events.unl.edu/images/"?>" alt="image for event <?php echo $events['with_image'][$i]->event->id; ?>" />
-                    </a>
-                </div>
-                <div class="wdn-col-one-half bp768-wdn-col-full">
-                    <h3 class="event-heading">
+    <div class="wdn-grid-set" style="word-break: break-word;">
+        <?php for ($i = 0; $i < count($events['with_image']) && $i < 3 ; $i++): ?>
+            <div class="bp768-<?php echo $grid_class; ?> promo-box">
+                <div class="wdn-grid-set">
+                    <div class="wdn-col-one-half bp768-wdn-col-full">
                         <a href="<?php echo $frontend->getEventURL($events['with_image'][$i]) ?>">
-                            <?php echo $savvy->dbStringtoHtml($events['with_image'][$i]->event->title) ?>
+                            <img class="event_description_img" src="<?php if ($imageURL = $events['with_image'][$i]->getImageURL()) echo $imageURL; else echo "//events.unl.edu/images/"?>" alt="image for event <?php echo $events['with_image'][$i]->event->id; ?>" />
                         </a>
-                    </h3>
+                    </div>
+                    <div class="wdn-col-one-half bp768-wdn-col-full">
+                        <h3 class="event-heading">
+                            <a href="<?php echo $frontend->getEventURL($events['with_image'][$i]) ?>">
+                                <?php echo $savvy->dbStringtoHtml($events['with_image'][$i]->event->title) ?>
+                            </a>
+                        </h3>
+                    </div>
                 </div>
             </div>
-        </div>
-    <?php endfor; ?>
-    <div class="bp768-<?php echo $grid_class; ?> promo-non-image-link">
-        <?php for ($i = 0; $i < count($events['without_image']) && $i < 3 ; $i++): ?>
-        <h3 class="event-heading" style="border-bottom: 1px solid #CCC; padding-bottom: .354em;">
-            <a href="<?php echo $frontend->getEventURL($events['without_image'][$i]) ?>">
-                <?php echo $savvy->dbStringtoHtml($events['without_image'][$i]->event->title) ?>
-            </a>
-        </h3>
         <?php endfor; ?>
-        <div style="margin-bottom: .5em;">
-            <a style="font-family: 'Gotham SSm A','Gotham SSm B',Verdana,sans-serif;" href="<?php echo $frontend->getUpcomingURL(); ?>">...and more</a>
+        <div class="bp768-<?php echo $grid_class; ?> promo-non-image-link">
+            <?php for ($i = 0; $i < count($events['without_image']) && $i < 3 ; $i++): ?>
+            <h3 class="event-heading" style="border-bottom: 1px solid #CCC; padding-bottom: .354em;">
+                <a href="<?php echo $frontend->getEventURL($events['without_image'][$i]) ?>">
+                    <?php echo $savvy->dbStringtoHtml($events['without_image'][$i]->event->title) ?>
+                </a>
+            </h3>
+            <?php endfor; ?>
+            <div style="margin-bottom: .5em;">
+                <a style="font-family: 'Gotham SSm A','Gotham SSm B',Verdana,sans-serif;" href="<?php echo $frontend->getUpcomingURL(); ?>">...and more</a>
+            </div>
         </div>
     </div>
 </div>

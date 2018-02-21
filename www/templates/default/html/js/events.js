@@ -115,6 +115,7 @@ require(['jquery', 'wdn', 'modernizr'], function($, WDN, Modernizr) {
 		
 		function changeDay(datetime)
 		{
+			var now = new Date();
 			var url, $loadTo = $('#updatecontent');
 			if (datetime instanceof Date) {
 				url = homeUrl + datetime.getFullYear() + '/' + (datetime.getMonth() + 1) + '/' + datetime.getDate() + '/';
@@ -141,12 +142,19 @@ require(['jquery', 'wdn', 'modernizr'], function($, WDN, Modernizr) {
 				cancelProgress();
 				$loadTo.html(data);
 				determineActiveDay();
+				if (nowActive.getFullYear() == now.getFullYear() && nowActive.getMonth() == now.getMonth() && nowActive.getDate() == now.getDate()) {
+					window.location = window.location;
+				}
 				//stickyHeader();
 				//$(document.body).trigger("sticky_kit:recalc");
 				if (widgetDate.getFullYear() !== nowActive.getFullYear() || widgetDate.getMonth() !== nowActive.getMonth()) {
 					loadMonthWidget(nowActive);
 				} else {
 					addMonthWidgetStates();
+				}
+				
+				if (nowActive.getFullYear() != now.getFullYear() && nowActive.getMonth() != now.getMonth() && nowActive.getDate() != now.getDate()) {
+					$('#events-promo-bar').hide();
 				}
 			});
 		}

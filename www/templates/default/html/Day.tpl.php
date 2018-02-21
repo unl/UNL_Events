@@ -1,5 +1,9 @@
 <?php
-	if ($context->calendar->id == UNL\UCBCN::$main_calendar_id) {
+	# show promo bar if main calendar and today
+	if ($context->calendar->id == UNL\UCBCN::$main_calendar_id && 
+		$context->options['m'] == date('m') && 
+		$context->options['d'] == date('d') && 
+		$context->options['y'] == date('Y')) {
 		echo $savvy->render($context, 'EventsPromoBar.tpl.php');
 	}
 ?>
