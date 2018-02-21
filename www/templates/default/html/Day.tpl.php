@@ -1,4 +1,8 @@
-<?php echo $savvy->render($context, 'EventsPromoBar.tpl.php'); ?>
+<?php
+	if ($context->calendar->id == UNL\UCBCN::$main_calendar_id) {
+		echo $savvy->render($context, 'EventsPromoBar.tpl.php');
+	}
+?>
 <div class="wdn-grid-set">
     <aside class="bp2-wdn-col-one-third">
         <?php echo $savvy->render($context, 'sidebar.tpl.php'); ?>
