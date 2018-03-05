@@ -53,7 +53,7 @@ class Day extends EventListing implements RoutableInterface
     {
         $date = $this->getDateTime()->format('Y-m-d');
         $sql = '
-                SELECT DISTINCT e.id as id, recurringdate.id as recurringdate_id
+                SELECT DISTINCT e.id as id,recurringdate.recurringdate,e.starttime,event.title, recurringdate.id as recurringdate_id
                 FROM eventdatetime as e
                 INNER JOIN event ON e.event_id = event.id
                 INNER JOIN calendar_has_event ON calendar_has_event.event_id = event.id

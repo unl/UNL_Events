@@ -185,6 +185,11 @@
                                                 <option value="move-to-pending">Move to Pending</option>
                                             <?php endif; ?>
 
+                                            <?php if ($context->calendar->id == UNL\UCBCN::$main_calendar_id && $context->tab != 'pending' && $user->hasPermission(\UNL\UCBCN\Permission::CALENDAR_EDIT_ID, $context->calendar->id)): ?>
+                                                <option value="promote">Promote Event</option>
+                                                <option value="hide-promo">Remove from Promo Bar</option>
+                                            <?php endif; ?>
+
                                             <?php if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_RECOMMEND_ID, $context->calendar->id)): ?>
                                                 <option value="recommend">Recommend</option>
                                             <?php endif; ?>
@@ -210,6 +215,11 @@
                                                 <option value="move-to-pending">Move to Pending</option>
                                             <?php endif; ?>
 
+                                            <?php if ($context->calendar->id == UNL\UCBCN::$main_calendar_id && $context->tab != 'pending' && $user->hasPermission(\UNL\UCBCN\Permission::CALENDAR_EDIT_ID, $context->calendar->id)): ?>
+                                                <option value="promote">Promote Event</option>
+                                                <option value="hide-promo">Remove from Promo Bar</option>
+                                            <?php endif; ?>
+
                                             <?php if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_RECOMMEND_ID, $context->calendar->id)): ?>
                                                 <option value="recommend">Recommend</option>
                                             <?php endif; ?>
@@ -226,6 +236,11 @@
                                     </form>
                                     <form id="delete-<?php echo $event->id; ?>" method="POST" action="<?php echo $event->getDeleteURL($controller->getCalendar()) ?>" class="delete-form hidden">
                                     <input type="text" name="status" value="<?php echo $context->tab ?>">
+                                    <button type="submit">Submit</button>
+                                    </form>
+                                    <form id="promote-<?php echo $event->id; ?>" method="POST" action="<?php echo $event->getPromoteURL($controller->getCalendar()) ?>" class="delete-form hidden">
+                                    <input type="text" id="promote-target-<?php echo $event->id; ?>" name="status" value="promote">
+                                    <input type="text" title="Event ID" name="event_id" value="<?php echo $event->id ?>">
                                     <button type="submit">Submit</button>
                                     </form>
                                 </td>

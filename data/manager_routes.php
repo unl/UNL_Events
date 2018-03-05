@@ -24,6 +24,7 @@ $routes['/^'.$calendar_slash_required.'create(\/)?$/'] = 'UNL\UCBCN\Manager\Crea
 $routes['/^'.$calendar_slash_required.'bulk(\/)?$/'] = 'UNL\UCBCN\Manager\BulkAction';
 $routes['/^'.$calendar_slash_required.'event\/' . $event . '\/edit(\/)?$/'] = 'UNL\UCBCN\Manager\EditEvent';
 $routes['/^'.$calendar_slash_required.'event\/' . $event . '\/move(\/)?$/'] = 'UNL\UCBCN\Manager\MoveEvent';
+$routes['/^'.$calendar_slash_required.'event\/' . $event . '\/promote(\/)?$/'] = 'UNL\UCBCN\Manager\PromoteEvent';
 $routes['/^'.$calendar_slash_required.'event\/' . $event . '\/datetime\/add(\/)?$/'] = 'UNL\UCBCN\Manager\AddDatetime';
 $routes['/^'.$calendar_slash_required.'event\/' . $event . '\/datetime\/' . $event_datetime . '\/edit(\/)?$/'] = 'UNL\UCBCN\Manager\AddDatetime';
 $routes['/^'.$calendar_slash_required.'event\/' . $event . '\/datetime\/' . $event_datetime . '\/edit\/recurrence\/' . $recurrence_id . '(\/)?$/'] = 'UNL\UCBCN\Manager\AddDatetime';

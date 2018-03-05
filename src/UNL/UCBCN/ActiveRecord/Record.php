@@ -128,7 +128,6 @@ abstract class Record
         foreach ($this->keys() as $key) {
             $values[] =& $this->$key;
         }
-
         return $this->prepareAndExecute($sql, $values);
     }
 

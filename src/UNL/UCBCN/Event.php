@@ -70,6 +70,7 @@ class Event extends Record
     public $uidcreated;                      // string(100)
     public $datelastupdated;                 // datetime(19)  binary
     public $uidlastupdated;                  // string(100)
+    public $promoted;
 
     const ONE_DAY = 86400;
     const ONE_WEEK = 604800;
@@ -155,6 +156,10 @@ class Event extends Record
 
     public function getMoveURL($calendar) {
         return Controller::$url . $calendar->shortname . '/event/' . $this->id . '/move/';
+    }
+
+    public function getPromoteURL($calendar) {
+        return Controller::$url . $calendar->shortname . '/event/' . $this->id . '/promote/';
     }
 
     # events will only have one type. But the database allows them to have more, technically.

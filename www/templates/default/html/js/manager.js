@@ -150,6 +150,12 @@ require(['jquery', 'wdn', 'modernizr', frontend_url + 'templates/default/html/js
             } else if ($(this).val() == 'move-to-pending') {
                 $('#move-target-' + $(this).attr('data-id')).val('pending');
                 $('#move-' + $(this).attr('data-id')).submit();
+            } else if ($(this).val() == 'promote') {
+                $('#promote-target-' + $(this).attr('data-id')).val('promote');
+                $('#promote-' + $(this).attr('data-id')).submit();
+            } else if ($(this).val() == 'hide-promo') {
+                $('#promote-target-' + $(this).attr('data-id')).val('hide-promo');
+                $('#promote-' + $(this).attr('data-id')).submit();
             }
         });
 
