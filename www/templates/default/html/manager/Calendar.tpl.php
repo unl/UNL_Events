@@ -116,7 +116,9 @@
                                         <?php echo $event->title; ?>
                                         </a>
                                     <?php else: ?>
+                                        <a href="<?php echo $event->getViewURL($controller->getCalendar()) ?>">
                                         <?php echo $event->title; ?>
+                                        </a> (preview)
                                     <?php endif; ?>
                                 </td>
                                 <td>
