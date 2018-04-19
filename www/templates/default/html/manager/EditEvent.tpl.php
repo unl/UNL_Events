@@ -180,7 +180,7 @@
                 </legend>
                 <div class="details">
                     <fieldset>
-                        <legend class="wdn-text-hidden">Privacy</legend>
+                        <legend>Privacy</legend>
                         <label>
                             <input <?php if (!$event->approvedforcirculation) echo 'checked="checked"' ?> type="radio" value="private" name="private_public" id="sharing-private"> 
                             Private
@@ -191,15 +191,18 @@
                             Public
                         </label>
                     </fieldset>
-                    <?php if ($context->on_main_calendar): ?>
-                        <img src="<?php echo $base_frontend_url ?>templates/default/html/images/checkmark-16.png">
+                  <fieldset>
+                    <legend>Consider for main UNL Calendar</legend>
+                      <?php if ($context->on_main_calendar): ?>
+                        <img src="<?php echo $base_frontend_url ?>templates/default/html/images/checkmark-16.png" alt="">
                         (event has been sent to main UNL calendar for approval)
-                    <?php else: ?>
+                      <?php else: ?>
                         <label>
                             <input type="checkbox" <?php if (isset($post['send_to_main'])) echo 'checked="checked"'; ?> name="send_to_main" id="send-to-main"> 
-                            Consider for main UNL calendar
+                            Yes, please consider for the main calendar
                         </label>
-                    <?php endif; ?>
+                      <?php endif; ?>
+                  </fieldset>
                 </div>
             </fieldset>
 

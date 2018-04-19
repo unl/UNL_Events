@@ -213,7 +213,7 @@
                 </legend>
                 <div class="details">
                     <fieldset>
-                        <legend class="wdn-text-hidden">Privacy</legend>
+                        <legend>Privacy</legend>
                         <label>
                             <input type="radio" value="private" name="private_public" id="sharing-private" <?php if ($post['private_public'] == 'private') echo 'checked="checked"'; ?>> 
                             Private
@@ -225,10 +225,18 @@
                         </label>
                     </fieldset>
 
-                    <label>
-                        <input <?php if (isset($post['send_to_main'])) echo 'checked="checked"'; ?> type="checkbox" name="send_to_main" id="send-to-main"> 
-                        Consider for main UNL calendar
-                    </label>
+                  <fieldset>
+                    <legend>Consider for main UNL Calendar</legend>
+                      <label>
+                        <input type="radio" name="send_to_main" value="on" required />
+                        Yes
+                      </label>
+                      <br>
+                      <label>
+                        <input type="radio" name="send_to_main" value="off" required />
+                        No
+                      </label>
+                  </fieldset>
                 </div>
             </fieldset>
 
