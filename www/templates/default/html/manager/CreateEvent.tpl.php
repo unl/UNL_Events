@@ -226,7 +226,7 @@
                     </fieldset>
 
                   <fieldset>
-                    <legend>Consider for main UNL Calendar</legend>
+                    <legend><span class="required">*</span> Consider for main UNL Calendar</legend>
                       <label>
                         <input type="radio" name="send_to_main" value="on" required />
                         Yes
