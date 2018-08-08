@@ -1,6 +1,7 @@
 {
     "config": {
-        "vendor-dir": "vendor/composer"
+        "vendor-dir": "vendor/composer",
+        "secure-http": false
     },
     "require": {
         "michelf/php-smartypants": "1.6.0-beta1",
