@@ -9,7 +9,8 @@
         "pear-pear.php.net/HTTP_Request2": "*",
         "tedivm/stash": "0.12.*",
         "unl/php-wdn-templates": "^4.1",
-        "unl/unl_cache_lite": "0.1.*"
+        "unl/unl_cache_lite": "0.1.*",
+        "slim/csrf": "^0.8.2"
     },
     "repositories": [
         {

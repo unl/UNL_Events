@@ -77,10 +77,12 @@
                     <?php endif; ?>
                 </select>
                 <form id="bulk-action-form" method="POST" action="<?php echo $context->calendar->getBulkActionURL() ?>" class="delete-form hidden">
-                <input type="text" title="Bulk Action IDs" id="bulk-action-ids" name="ids">
-                <input type="text" title="Bulk Action Action" id="bulk-action-action" name="action">
-                <input type="text" name="status" value="<?php echo $context->tab ?>">
-                <button type="submit">Submit</button>
+                  <input type="text" title="Bulk Action IDs" id="bulk-action-ids" name="ids">
+                  <input type="text" title="Bulk Action Action" id="bulk-action-action" name="action">
+                  <input type="text" name="status" value="<?php echo $context->tab ?>">
+                  <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
+                  <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
+                  <button type="submit">Submit</button>
                 </form>
             </div><br class="medium-hidden">
             <div class="medium-hidden" style="margin-bottom: 5px;">
@@ -88,8 +90,10 @@
                 <a href='#' class="wdn-button small-button" id="uncheck-all">Uncheck All</a>
                 <?php if ($context->tab != 'upcoming' && $user->hasPermission(\UNL\UCBCN\Permission::EVENT_DELETE_ID, $context->calendar->id)): ?> 
                     <form id="cleanup-events" class="delete-form" action="<?php echo $context->calendar->getCleanupURL() ?>" method="POST">
-                    <input type="hidden" name="tab" value="<?php echo $context->tab ?>">
-                    <button type="submit" class="wdn-button small-button">Clean Up Old Events</button>
+                      <input type="hidden" name="tab" value="<?php echo $context->tab ?>">
+                      <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
+                      <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
+                      <button type="submit" class="wdn-button small-button">Clean Up Old Events</button>
                     </form>
                 <?php endif; ?>
             </div>
@@ -231,19 +235,25 @@
                                             <?php endif; ?>
                                     </select>
                                     <form id="move-<?php echo $event->id; ?>" method="POST" action="<?php echo $event->getMoveURL($controller->getCalendar()) ?>" class="delete-form hidden">
-                                    <input type="text" title="New Status" name="new_status" id="move-target-<?php echo $event->id; ?>">
-                                    <input type="text" title="Event ID" name="event_id" value="<?php echo $event->id ?>">
-                                    <input type="text" name="status" value="<?php echo $context->tab ?>">
-                                    <button type="submit">Submit</button>
+                                      <input type="text" title="New Status" name="new_status" id="move-target-<?php echo $event->id; ?>">
+                                      <input type="text" title="Event ID" name="event_id" value="<?php echo $event->id ?>">
+                                      <input type="text" name="status" value="<?php echo $context->tab ?>">
+                                      <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
+                                      <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
+                                      <button type="submit">Submit</button>
                                     </form>
                                     <form id="delete-<?php echo $event->id; ?>" method="POST" action="<?php echo $event->getDeleteURL($controller->getCalendar()) ?>" class="delete-form hidden">
-                                    <input type="text" name="status" value="<?php echo $context->tab ?>">
-                                    <button type="submit">Submit</button>
+                                      <input type="text" name="status" value="<?php echo $context->tab ?>">
+                                      <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
+                                      <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
+                                      <button type="submit">Submit</button>
                                     </form>
                                     <form id="promote-<?php echo $event->id; ?>" method="POST" action="<?php echo $event->getPromoteURL($controller->getCalendar()) ?>" class="delete-form hidden">
-                                    <input type="text" id="promote-target-<?php echo $event->id; ?>" name="status" value="promote">
-                                    <input type="text" title="Event ID" name="event_id" value="<?php echo $event->id ?>">
-                                    <button type="submit">Submit</button>
+                                      <input type="text" id="promote-target-<?php echo $event->id; ?>" name="status" value="promote">
+                                      <input type="text" title="Event ID" name="event_id" value="<?php echo $event->id ?>">
+                                      <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
+                                      <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
+                                      <button type="submit">Submit</button>
                                     </form>
                                 </td>
                             </tr>

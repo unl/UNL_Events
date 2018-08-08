@@ -35,11 +35,15 @@
 
 <?php foreach($event->getDatetimes() as $datetime) : ?>
     <form id="delete-datetime-<?php echo $datetime->id; ?>" class="delete-datetime delete-form" method="POST" action="<?php echo $datetime->getDeleteURL($context->calendar) ?>" class="delete-form hidden">
-        <input type="hidden" name="event_datetime_id" value="<?php echo $datetime->id ?>" />
+      <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
+      <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">  
+      <input type="hidden" name="event_datetime_id" value="<?php echo $datetime->id ?>" />
     </form>
     <?php if ($datetime->recurringtype != 'none') : ?>
         <?php foreach ($datetime->getRecurrences() as $recurring_date) : ?>
             <form id="delete-datetime-<?php echo $datetime->id; ?>-recurrence-<?php echo $recurring_date->recurrence_id ?>" class="delete-datetime-recurrence delete-form" method="POST" action="<?php echo $datetime->getDeleteRecurrenceURL($context->calendar, $recurring_date->recurrence_id) ?>" class="delete-form hidden">
+                <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
+                <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
                 <input type="hidden" name="event_datetime_id" value="<?php echo $datetime->id ?>" />
                 <input type="hidden" name="recurrence_id" value="<?php echo $recurring_date->recurrence_id ?>" />
             </form>
@@ -48,6 +52,8 @@
 <?php endforeach; ?>
 
 <form id="edit-event-form" action="" method="POST" class="clearfix" enctype="multipart/form-data">
+    <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
+    <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
     <div class="wdn-grid-set">
         <div class="bp3-wdn-col-two-thirds">
             <fieldset style="margin-top: 0">
@@ -129,7 +135,7 @@
                                     </div>
                                     <div class="controls recurring">
                                         <a href="<?php echo $datetime->getEditRecurrenceURL($context->calendar, $recurring_date->recurrence_id); ?>" class="wdn-button wdn-button-brand small edit-recurring-edt">Edit</a>
-                                        <button type="submit" form="delete-datetime-<?php echo $datetime->id ?>-recurrence-<?php echo $recurring_date->recurrence_id ?>" class="small delete-datetime-recurrence">Delete</a>
+                                        <button type="submit" form="delete-datetime-<?php echo $datetime->id ?>-recurrence-<?php echo $recurring_date->recurrence_id ?>" class="small delete-datetime-recurrence">Delete</button>
                                     </div>
                                 </div>
                             </div>

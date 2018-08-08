@@ -54,6 +54,8 @@
 <?php echo $last_crumb ?>
 </h1>
 <form id="add-datetime-form" action="" method="POST">
+  <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
+  <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
     <fieldset>
         <label for="location"><span class="required">*</span> Location</label>
         <select id="location" name="location" class="use-select2" style="width: 100%;">

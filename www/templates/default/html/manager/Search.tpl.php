@@ -142,8 +142,10 @@
                                             <?php endif; ?>
                                     </select>
                                     <form id="move-<?php echo $event->id; ?>" method="POST" action="<?php echo $event->getMoveURL($context->calendar) ?>" class="delete-form hidden">
-                                    <input type="text" name="new_status" id="move-target-<?php echo $event->id; ?>">
-                                    <input type="text" name="event_id" value="<?php echo $event->id ?>">
+                                        <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
+                                        <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
+                                        <input type="text" name="new_status" id="move-target-<?php echo $event->id; ?>">
+                                        <input type="text" name="event_id" value="<?php echo $event->id ?>">
                                     </form>
                                 <?php endif; ?>
                             </td>

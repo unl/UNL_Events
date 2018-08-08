@@ -19,6 +19,9 @@
 <h1 class="wdn-brand"><?php echo ($context->calendar->id == NULL ? 'Create Calendar' : 'Edit ' . $context->calendar->name); ?></h1>
 
 <form id="create-calendar-form" action="" method="POST">
+    <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
+    <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
+  
     <label for="name"><span class="required">*</span> Name</label>
     <input type="text" id="name" name="name" value="<?php echo $context->calendar->name ?>" />
 

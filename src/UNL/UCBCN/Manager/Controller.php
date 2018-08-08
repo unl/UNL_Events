@@ -118,6 +118,10 @@ class Controller {
             throw new \Exception("The object is not an instance of the PostHandler", 500);
         }
         
+        if (!$this->validateCSRF()) {
+            throw new \Exception('Invalid security token provided. If you think this was an error, please retry the request.', 403);
+        }
+        
         $result = $object->handlePost($_GET, $_POST, $_FILES);
 
         if (is_string($result)) {
@@ -229,5 +233,46 @@ class Controller {
     public function getCalendar()
     {
         return $this->calendar;
+    }
+
+    /**
+     * Wrapper function to help with CSRF tokens
+     *
+     * @return \Slim\Csrf\Guard
+     */
+    public function getCSRFHelper()
+    {
+        static $csrf;
+
+        if (!$csrf) {
+            $csrf = new \Slim\Csrf\Guard('csrf');
+            $csrf->validateStorage();
+            $csrf->generateToken();
+        }
+
+        return $csrf;
+    }
+
+    /**
+     * Validate a POST request for CSRF
+     *
+     * @return bool
+     */
+    public function validateCSRF()
+    {
+        $csrf = $this->getCSRFHelper();
+
+        if (!isset($_POST[$csrf->getTokenNameKey()])) {
+            return false;
+        }
+
+        if (!isset($_POST[$csrf->getTokenValueKey()])) {
+            return false;
+        }
+
+        $name = $_POST[$csrf->getTokenNameKey()];
+        $value = $_POST[$csrf->getTokenValueKey()];
+
+        return $csrf->validateToken($name, $value);
     }
 }

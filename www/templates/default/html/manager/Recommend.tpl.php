@@ -11,6 +11,8 @@
 <?php echo 'Recommend ' . $context->event->title; ?>
 </h1>
 <form action="" method="POST">
+    <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
+    <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
     <table class="recommend-list">
         <thead>
             <th>

@@ -15,6 +15,8 @@
 <br>
 <div class="wdn-grid-set">
     <form id="create-event-form" action="" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
+        <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
         <div class="bp3-wdn-col-two-thirds">
             <fieldset>
                 <legend style="margin-top: 0">Event Details</legend>
