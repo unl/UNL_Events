@@ -10,7 +10,7 @@ class Auth {
 
     protected $options = array();
     
-    public static $directory_url = 'http://directory.unl.edu/';
+    public static $directory_url = 'https://directory.unl.edu/';
 
     /**
      * Authenticate the user
@@ -90,9 +90,9 @@ class Auth {
 
     public function getClient() {
         $options = array(
-            'hostname' => 'login.unl.edu',
+            'hostname' => 'shib.unl.edu',
             'port'     => 443,
-            'uri'      => 'cas'
+            'uri'      => 'idp/profile/cas'
         );
         
         $protocol = new \SimpleCAS_Protocol_Version2($options);
