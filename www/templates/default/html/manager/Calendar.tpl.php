@@ -45,7 +45,7 @@
     <label for="events-search">Search</label>
     <div>
         <div style="float: right; padding-top: 3px;">
-            <button type="submit" class="wdn-button wdn-button-triad">Search</button>
+            <button type="submit" class="dcf-btn wdn-button-triad">Search</button>
         </div>
         <div style="margin-right: 100px;">
             <input type="text" name="search_term" id="events-search"  />
@@ -86,14 +86,14 @@
                 </form>
             </div><br class="medium-hidden">
             <div class="medium-hidden" style="margin-bottom: 5px;">
-                <a href='#' class="wdn-button small-button" id="check-all">Check All</a>
-                <a href='#' class="wdn-button small-button" id="uncheck-all">Uncheck All</a>
+                <a href='#' class="dcf_btn small-button" id="check-all">Check All</a>
+                <a href='#' class="dcf-btn small-button" id="uncheck-all">Uncheck All</a>
                 <?php if ($context->tab != 'upcoming' && $user->hasPermission(\UNL\UCBCN\Permission::EVENT_DELETE_ID, $context->calendar->id)): ?> 
                     <form id="cleanup-events" class="delete-form" action="<?php echo $context->calendar->getCleanupURL() ?>" method="POST">
                       <input type="hidden" name="tab" value="<?php echo $context->tab ?>">
                       <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
                       <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
-                      <button type="submit" class="wdn-button small-button">Clean Up Old Events</button>
+                      <button type="submit" class="wdcf_btn small-button">Clean Up Old Events</button>
                     </form>
                 <?php endif; ?>
             </div>

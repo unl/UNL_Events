@@ -11,7 +11,7 @@ $endu = new DateTime($endtime);
 ?>
 
 <span class="date-wrapper">
-    <span class="eventicon-calendar-empty" aria-hidden="true"></span><span class="wdn-text-hidden">Date:</span>
+    <span class="eventicon-calendar-empty" aria-hidden="true"></span><span class="dcf-sr-only">Date:</span>
     <?php if (!empty($starttime)): ?>
         <time class="dtstart" datetime="<?php echo $startu->format('c') ?>"><?php echo $startu->format('M. j, Y') ?></time>
     <?php endif; ?>
@@ -19,7 +19,7 @@ $endu = new DateTime($endtime);
     <?php endif; ?>
 </span>
 <span class="time-wrapper">
-    <span class="eventicon-clock" aria-hidden="true"></span><span class="wdn-text-hidden">Time:</span>
+    <span class="eventicon-clock" aria-hidden="true"></span><span class="dcf-sr-only">Time:</span>
     <?php if ($context->isAllDay()): ?>
     All Day
     <?php else: ?>

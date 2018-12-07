@@ -14,7 +14,7 @@
     <label for="events-search">Search</label>
     <div>
         <div style="float: right; padding-top: 3px;">
-            <button type="submit" class="wdn-button wdn-button-triad">Search</button>
+            <button type="submit" class="dcf-btn wdn-button-triad">Search</button>
         </div>
         <div style="margin-right: 100px;">
             <input type="text" name="search_term" id="events-search" value="<?php echo $context->search_term ?>" />

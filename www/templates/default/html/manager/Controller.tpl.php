@@ -1,9 +1,9 @@
 <?php
 use UNL\Templates\Templates;
 
-$page = Templates::factory('Fixed', Templates::VERSION_4_1);
+$page = Templates::factory('App', Templates::VERSION_5);
 
-if (file_exists(\UNL\UCBCN\Util::getWWWRoot() . '/wdn/templates_4.1')) {
+if (file_exists(\UNL\UCBCN\Util::getWWWRoot() . '/wdn/templates_5.0_tmp')) {
     $page->setLocalIncludePath(\UNL\UCBCN\Util::getWWWRoot());
 }
 
@@ -25,7 +25,6 @@ $view_class = str_replace('\\', '_', strtolower($context->options['model']));
 $page->doctitle = '<title>' . $title . '</title>';
 $page->titlegraphic = $site_title;
 $page->setParam('class', 'hide-wdn_navigation_wrapper');
-$page->pagetitle = '';
 $page->affiliation = '';
 
 //css
@@ -118,7 +117,7 @@ $page->maincontentarea .= $savvy->render($context->output, $template) . '
 <script src="' . $base_frontend_url .'templates/default/html/js/manager.min.js?v='.UNL\UCBCN\Frontend\Controller::$version.'"></script>
 ';
 
-$page->leftcollinks = $savvy->render($context, 'html/localfooter.tpl.php');
+$page->contactinfo = $savvy->render($context, 'html/localfooter.tpl.php');
 
 
 //echo everything

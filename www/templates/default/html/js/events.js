@@ -1,4 +1,4 @@
-require(['jquery', 'wdn', 'modernizr'], function($, WDN, Modernizr) {
+require(['jquery', 'wdn'], function($, WDN) {
 	"use strict";
 	
 	var $progress = $('<progress>'),
@@ -186,7 +186,7 @@ require(['jquery', 'wdn', 'modernizr'], function($, WDN, Modernizr) {
 		
 		function stickyHeader()
 		{
-			if (!Modernizr.mediaqueries || Modernizr.mq(mqBp2)) {
+			if (window.matchMedia(mqBp2).matches) {
 				var $dayHeading = $('h1.day-heading, h1.upcoming-heading');
 				if ($dayHeading.length) {
 					require([mainScript + 'jquery.sticky-kit.min.js'], function() {
@@ -198,7 +198,7 @@ require(['jquery', 'wdn', 'modernizr'], function($, WDN, Modernizr) {
 		
 		function stickySidebar()
 		{
-			if (!Modernizr.mediaqueries || Modernizr.mq(mqBp2)) {
+			if (window.matchMedia(mqBp2).matches) {
 				require([mainScript + 'jquery.sticky-kit.min.js'], function() {
 					$sidebarCal.closest('aside').stick_in_parent();
 				});
@@ -302,7 +302,7 @@ require(['jquery', 'wdn', 'modernizr'], function($, WDN, Modernizr) {
 		});
 		
 		$(window).on('resize', function() {
-			if (Modernizr.mediaqueries && !Modernizr.mq(mqBp2)) {
+			if (!window.matchMedia(mqBp2).matches) {
 				//$monthWidget.trigger('sticky_kit:detach');
 				//$('h1').trigger('sticky_kit:detach');
 			} else {

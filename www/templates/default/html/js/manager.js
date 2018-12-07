@@ -86,7 +86,7 @@ setRecurringOptions = function(start_elem, month_group_elem) {
     month_group_elem.prepend("<option class='dynamicRecurring' value='date'>" + text + "</option>");
 };
 
-require(['jquery', 'wdn', 'modernizr', frontend_url + 'templates/default/html/js/vendor/select2/js/select2.min.js'], function($, WDN, Modernizr) {
+require(['jquery', 'wdn', frontend_url + 'templates/default/html/js/vendor/select2/js/select2.min.js'], function($, WDN) {
     $(document).ready(function() {
         $('form').on('change blur', 'input', function() {
             $(this).removeClass('validation-failed');

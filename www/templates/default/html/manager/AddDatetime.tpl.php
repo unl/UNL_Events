@@ -155,7 +155,7 @@
 
             <div id="start-time-am-pm" class="am_pm">
                 <fieldset>
-                    <legend class="wdn-text-hidden">AM/PM</legend>
+                    <legend class="dcf-sr-only">AM/PM</legend>
                     <label><input <?php if ($start_am_pm == 'am') echo 'checked="checked"'; ?> 
                         type="radio" value="am" id="start-time-am-pm-am" name="start_time_am_pm">AM</label><br>
                     <label><input <?php if ($start_am_pm == 'pm') echo 'checked="checked"'; ?> 
@@ -186,7 +186,7 @@
 
             <div id="end-time-am-pm" class="am_pm">
                 <fieldset>
-                    <legend class="wdn-text-hidden">AM/PM</legend>
+                    <legend class="dcf-sr-only">AM/PM</legend>
                     <label><input <?php if ($end_am_pm == 'am') echo 'checked="checked"'; ?> 
                         type="radio" value="am" id="end-time-am-pm-am" name="end_time_am_pm">AM</label><br>
                     <label><input <?php if ($end_am_pm == 'pm') echo 'checked="checked"'; ?> 
@@ -223,7 +223,7 @@
         <textarea id="additional-public-info" name="additional_public_info"><?php echo $datetime->additionalpublicinfo; ?></textarea>
     </fieldset>
 
-    <button class="wdn-button wdn-button-brand wdn-pull-left" type="submit">Submit</button>
+    <button class="dcf-btn wdn-button-brand dcf-float-left" type="submit">Submit</button>
 </form>
 <br>
 

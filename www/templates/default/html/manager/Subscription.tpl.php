@@ -35,9 +35,9 @@
 		        	<?php echo $subscription->name; ?>
 				</td>
 				<td class="small-center table-actions">
-			        <a class="wdn-button wdn-button-brand" href="<?php echo $subscription->getEditURL() ?>">Edit</a>
+			        <a class="dcf-btn wdn-button-brand" href="<?php echo $subscription->getEditURL() ?>">Edit</a>
 			        <span class="small-hidden">|</span><br class="hidden small-block"><br class="hidden small-block">
-		            <button class="wdn-button wdn-button-triad" form="delete-subscription-<?php echo $subscription->id ?>" type="submit">Delete</button>
+		            <button class="dcf-button wdn-button-triad" form="delete-subscription-<?php echo $subscription->id ?>" type="submit">Delete</button>
 				</td>
 			</tr>
 	    <?php endforeach; ?>
@@ -53,5 +53,5 @@
 
 <br>
 <a href="<?php echo $base_manager_url . $context->calendar->shortname ?>/subscriptions/new/" 
-	class="wdn-button wdn-button-brand">Add Subscription
+	class="dcf-btn wdn-button-brand">Add Subscription
 </a>

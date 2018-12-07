@@ -13,11 +13,11 @@
     echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
 ?>
 <br>
-<div class="wdn-grid-set">
+<div class="dcf-grid">
     <form id="create-event-form" action="" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
         <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
-        <div class="bp3-wdn-col-two-thirds">
+        <div class="dcf-col-100% dcf-col-67%-start@md">
             <fieldset>
                 <legend style="margin-top: 0">Event Details</legend>
                 <label for="title"><span class="required">*</span> Title</label>
@@ -138,7 +138,7 @@
 
                     <div id="start-time-am-pm" class="am_pm">
                         <fieldset>
-                            <legend class="wdn-text-hidden">AM/PM</legend>
+                            <legend class="dcf-sr-only">AM/PM</legend>
                             <label><input <?php if (!isset($post) || $post['start_time_am_pm'] == 'am') echo 'checked="checked"'; ?> id="start-time-am-pm-am" title="AM" type="radio" value="am" name="start_time_am_pm">AM</label><br>
                             <label><input <?php if ($post['start_time_am_pm'] == 'pm') echo 'checked="checked"'; ?> id="start-time-am-pm-pm" type="radio" value="pm" name="start_time_am_pm">PM</label>
                         </fieldset>
@@ -173,7 +173,7 @@
 
                     <div id="end-time-am-pm" class="am_pm">
                         <fieldset>
-                            <legend class="wdn-text-hidden">AM/PM</legend>
+                            <legend class="dcf-sr-only">AM/PM</legend>
                             <label><input <?php if (empty($post) || $post['end_time_am_pm'] == 'am') echo 'checked="checked"'; ?> id="end-time-am-pm-am" type="radio" value="am" name="end_time_am_pm">AM</label><br>
                             <label><input <?php if ($post['end_time_am_pm'] == 'pm') echo 'checked="checked"'; ?> id="end-time-am-pm-pm" type="radio" value="pm" name="end_time_am_pm">PM</label>
                         </fieldset>
@@ -208,7 +208,7 @@
 
         </div>
 
-        <div class="bp3-wdn-col-one-third">
+        <div class="dcf-col-100% dcf-col-33%-end@md">
             <fieldset class="visual-island">
                 <legend class="vi-header">
                     Sharing
@@ -272,8 +272,8 @@
                 </div>
             </fieldset>
         </div>
-        <div class="bp1-wdn-col-two-thirds">
-            <button class="wdn-button wdn-button-brand wdn-pull-left" type="submit">Submit Event</button>
+        <div class="dcf-col-100%">
+            <button class="dcf-btn wdn-button-brand dcf-float-left" type="submit">Submit Event</button>
         </div>
     </form>
 </div>

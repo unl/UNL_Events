@@ -7,7 +7,7 @@
     );
     echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
 ?>
-<h1 class="wdn-center">Welcome to UNL Events</h1>
+<h1 class="dcf-txt-center">Welcome to UNL Events</h1>
 
 <p>
 Welcome to the UNL Events Manager! UNL Events is a calendar system that 
@@ -19,7 +19,7 @@ You can also subscribe to other calendars to pull in events that are relevant to
 
 <h3 class="wdn-brand">Getting Started</h3>
 Here are some tips to get going with UNL Events:
-<div class="wdn-grid-set">
+<div class="dcf-grid">
     <ul class="helpful">
     <li>
         If this is your first time here, you may not have access to any calendars. 

@@ -48,7 +48,7 @@ $(CSS_OBJ2): www/templates/default/html/less/manager.less www/templates/default/
 	$(LESSC) --clean-css $< $@
 	
 $(LESSC):
-	npm install less@1.7.5
+	npm install less@3.9.0
 
 $(LESS_LIB)/%.less:
 	@mkdir -p $(@D)

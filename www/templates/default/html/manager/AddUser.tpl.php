@@ -42,5 +42,5 @@
         <br>
     <?php } ?>
     <br>
-    <button class="wdn-button wdn-button-brand" type="submit"><?php echo $context->user == NULL ? 'Add User' : 'Update User Permissions' ?></button>
+    <button class="dcf-btn wdn-button-brand" type="submit"><?php echo $context->user == NULL ? 'Add User' : 'Update User Permissions' ?></button>
 </form>

@@ -20,8 +20,8 @@
 <form id="add-subscription" action="<?php echo $context->subscription->id == NULL ? $context->subscription->getNewURL($context->calendar) : $context->subscription->getEditURL($context->calendar) ?>" method="POST">
     <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
     <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
-    <div class="wdn-grid-set" class="clearfix">
-        <div class="bp2-wdn-col-two-thirds">
+    <div class="dcf-grid" class="clearfix">
+        <div class="dcf-col-100% dcf-col-67%-start@md">
             <label for="title">Title</label>
             <input type="text" id="title" name="title" value="<?php echo $context->subscription->name ?>" />
 
@@ -32,7 +32,7 @@
             <?php endforeach; ?>
             </select>
         </div>
-        <div class="bp2-wdn-col-one-third">
+        <div class="dcf-col-100% dcf-col-33%-end@md">
             <br>
             <div class="visual-island">
                 <div class="details top-border">
@@ -66,7 +66,7 @@
         </div>
     </div>
     <br>
-    <button class="wdn-button wdn-button-brand" form="add-subscription" type="submit">
+    <button class="dcf-btn wdn-button-brand" form="add-subscription" type="submit">
         <?php echo $context->subscription->id == NULL ? 'Add Subscription' : 'Save Subscription' ?>
     </button>
 </form>

@@ -54,8 +54,8 @@
 <form id="edit-event-form" action="" method="POST" class="clearfix" enctype="multipart/form-data">
     <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
     <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
-    <div class="wdn-grid-set">
-        <div class="bp3-wdn-col-two-thirds">
+    <div class="dcf-grid">
+        <div class="dcf-col-100% dcf-col-67%-start@md">
             <fieldset style="margin-top: 0">
             	<legend style="margin-top: 0">Event Details</legend>
                 <label for="title"><span class="required">*</span> Title</label>
@@ -76,7 +76,7 @@
             </fieldset>
             <fieldset class="event-datetimes">
 	            <legend>Location, Date, and Time</legend>
-                <a class="wdn-button wdn-button-brand" href="<?php echo $event->getAddDatetimeURL($context->calendar) ?>">Add Location, Date, and/or Time</a><br><br>
+                <a class="dcf-btn wdn-button-brand" href="<?php echo $event->getAddDatetimeURL($context->calendar) ?>">Add Location, Date, and/or Time</a><br><br>
 	            <div class="edt-header">
                     <div class="dates">
 	            	  Dates
@@ -89,7 +89,7 @@
             	<?php foreach($event->getDatetimes(5, ($context->page - 1)*5) as $datetime) : ?>
                 	<div class="edt-record <?php if ($datetime->recurringtype != 'none') echo 'has-recurring' ?>">
                         <div class="dates">
-                    		<?php 
+                    		<?php
         				    {
         				        if ($datetime->recurringtype == 'none') {
         				            echo date('n/d/y @ g:ia', strtotime($datetime->starttime));
@@ -121,7 +121,7 @@
                 		  <?php echo $datetime->getLocation()->name; ?>
                         </div>
                         <div class="controls">
-                    		<a href="<?php echo $datetime->getEditURL($context->calendar); ?>" class="wdn-button wdn-button-brand small">Edit</a>
+                    		<a href="<?php echo $datetime->getEditURL($context->calendar); ?>" class="dcf-btn wdn-button-brand small">Edit</a>
                             <button class="small" form="delete-datetime-<?php echo $datetime->id; ?>" type="submit">Delete</button>
                         </div>
                 	</div>
@@ -134,7 +134,7 @@
                                         <?php echo date('n/d/y', strtotime($recurring_date->recurringdate)) . ' @ ' . date('g:ia', strtotime($datetime->starttime)); ?>
                                     </div>
                                     <div class="controls recurring">
-                                        <a href="<?php echo $datetime->getEditRecurrenceURL($context->calendar, $recurring_date->recurrence_id); ?>" class="wdn-button wdn-button-brand small edit-recurring-edt">Edit</a>
+                                        <a href="<?php echo $datetime->getEditRecurrenceURL($context->calendar, $recurring_date->recurrence_id); ?>" class="dcf-btn wdn-button-brand small edit-recurring-edt">Edit</a>
                                         <button type="submit" form="delete-datetime-<?php echo $datetime->id ?>-recurrence-<?php echo $recurring_date->recurrence_id ?>" class="small delete-datetime-recurrence">Delete</button>
                                     </div>
                                 </div>
@@ -179,7 +179,7 @@
             <?php endif; ?>
             </fieldset>
         </div>
-        <div class="bp3-wdn-col-one-third">
+        <div class="dcf-col-100% dcf-col-33%-end@md">
             <fieldset class="visual-island">
                 <legend class="vi-header">
                     Sharing
@@ -249,7 +249,7 @@
             </fieldset>
         </div>
     </div>
-    <button class="wdn-button wdn-button-brand wdn-pull-left" type="submit">Save Event</button>
+    <button class="dcf-btn wdn-button-brand dcf-float-left" type="submit">Save Event</button>
 </form>
 <br>
 

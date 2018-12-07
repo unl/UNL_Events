@@ -45,13 +45,13 @@
     <label for="recommend-within-account">Allow event recommendations within this account</label>
     <br>
     <br>
-    <button class="wdn-button wdn-button-brand" type="submit">
+    <button class="dcf-btn wdn-button-brand" type="submit">
         <?php echo $context->calendar->id == NULL ? 'Create Calendar' : 'Save Calendar' ?>
     </button>
     <br><br>
 
     <?php if ($context->calendar->id != NULL): ?>
-    <a class="wdn-button" href="<?php echo $context->calendar->getDeleteURL() ?>">
+    <a class="dcf-btn" href="<?php echo $context->calendar->getDeleteURL() ?>">
     Delete Calendar
     </a>
     <?php endif; ?>

@@ -7,9 +7,9 @@ $nextYear = $context->getRawObject()->getDateTime()->modify('+1 year');
     <h1 class="year_main"><?php echo $context->year; ?></h1>
     <a href="<?php echo UNL\UCBCN\Frontend\Year::generateURL($context->getRaw('calendar'), $nextYear) ?>"><?php echo $nextYear->format('Y') ?><span class="eventicon-angle-circled-right" aria-hidden="true"></span></a>
 </div>
-<div class="year_cal wdn-grid-set bp1-wdn-grid-set-halves bp2-wdn-grid-set-thirds">
+<div class="year_cal dcf-grid-halves@sm dcf-grid-thirds@md">
 <?php foreach ($context->getRaw('monthwidgets') as $widget): ?>
-<div class="wdn-col">
+<div class="dcf-col-100%">
     <?php echo $savvy->render($widget) ?>
 </div>
 <?php endforeach; ?>

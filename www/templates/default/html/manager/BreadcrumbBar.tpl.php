@@ -1,6 +1,6 @@
 <nav id="breadcrumbs" <?php if (isset($context->search)) echo 'class="search"' ?>>
 <!-- WDN: see glossary item 'breadcrumbs' -->
-<h3 class="wdn_list_descriptor wdn-text-hidden">Breadcrumbs</h3>
+<h3 class="wdn_list_descriptor dcf-sr-only">Breadcrumbs</h3>
 
 <ul>
 	<?php foreach ($context->crumbs as $text => $url): ?>
@@ -16,7 +16,7 @@
 
 <?php if (isset($context->search)): ?>
 <div id="toggle-search">
-	<button id="show-search"><span class="wdn-icon-search" aria-hidden="true"></span><span class="wdn-text-hidden">search</span></button>
+	<button id="show-search"><span class="wdn-icon-search" aria-hidden="true"></span><span class="dcf-sr-only">search</span></button>
 </div>
 <?php endif; ?>
 </nav>
