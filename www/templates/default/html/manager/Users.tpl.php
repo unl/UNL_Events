@@ -9,9 +9,7 @@
 	//$calendar = Calendar::getByShortname($this->options['calendar_shortname']);
 ?>
 
-<h1 class="wdn-brand">
-	Users on this Calendar
-</h1>
+<h2 class="wdn-brand">Users on this Calendar</h2>
 <div>
 	<table>
 		<thead>
@@ -27,13 +25,13 @@
 	        	<?php echo $user->uid; ?>
 	    	</td>
 	    	<td class="small-center table-actions">
-		        <a class="wdn-button wdn-button-brand" href="<?php echo $user->getEditPermissionsURL($context->calendar) ?>">Edit Permissions</a>
-		        <span class="small-hidden">|</span><br class="hidden small-block" /><br class="hidden small-block" />
+		        <a class="dcf-btn wdn-button-brand" href="<?php echo $user->getEditPermissionsURL($context->calendar) ?>">Edit Permissions</a>
+		        <span class="small-hidden">|</span><br class="hidden small-block" /><br class="dcf-d-none small-block" />
 		        <form method="post" action="<?php echo $user->getDeletePermissionsURL($context->calendar) ?>" class="delete-form">
                   <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
                   <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
 	                <input type="hidden" name="user_uid" value="<?php echo $user->uid ?>" />
-	                <button type="submit">Remove</button>
+	                <button class="dcf-btn" type="submit">Remove</button>
 	            </form>
             </td>
 	    </tr>
@@ -44,5 +42,5 @@
 <br>
 
 <a href="<?php echo $base_manager_url . $context->calendar->shortname ?>/users/new/" 
-	class="wdn-button wdn-button-brand">Add User
+	class="dcf-btn wdn-button-brand">Add User
 </a><br>

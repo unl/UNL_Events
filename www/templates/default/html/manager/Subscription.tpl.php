@@ -10,16 +10,14 @@
 
 <?php if (count($context->getSubscriptions()) > 0): ?>
 <?php foreach($context->getSubscriptions() as $subscription): ?>
-<form id="delete-subscription-<?php echo $subscription->id ?>" method="POST" action="<?php echo $subscription->getDeleteURL() ?>" class="delete-form hidden">
+<form id="delete-subscription-<?php echo $subscription->id ?>" method="POST" action="<?php echo $subscription->getDeleteURL() ?>" class="delete-form dcf-d-none">
     <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
     <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
     <input type="hidden" name="subscription_id" value="<?php echo $subscription->id ?>" />
     <button type="submit">Submit</button>
 </form>
 <?php endforeach; ?>
-<h1 class="wdn-brand">
-	Current Subscriptions
-</h1>
+<h2 class="wdn-brand">Current Subscriptions</h2>
 <div>
 	<table>
 		<thead>

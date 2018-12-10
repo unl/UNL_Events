@@ -19,7 +19,7 @@ You can also subscribe to other calendars to pull in events that are relevant to
 
 <h3 class="wdn-brand">Getting Started</h3>
 Here are some tips to get going with UNL Events:
-<div class="dcf-grid">
+<div>
     <ul class="helpful">
     <li>
         If this is your first time here, you may not have access to any calendars. 

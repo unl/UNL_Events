@@ -16,33 +16,37 @@
     echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
 ?>
 
-<h1 class="wdn-brand"><?php echo ($context->calendar->id == NULL ? 'Create Calendar' : 'Edit ' . $context->calendar->name); ?></h1>
+<h2 class="wdn-brand"><?php echo ($context->calendar->id == NULL ? 'Create Calendar' : 'Edit ' . $context->calendar->name); ?></h2>
 
 <form id="create-calendar-form" action="" method="POST">
     <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
     <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
   
-    <label for="name"><span class="required">*</span> Name</label>
-    <input type="text" id="name" name="name" value="<?php echo $context->calendar->name ?>" />
+    <label class="dcf-label" for="name"><span class="dcf-required">*</span> Name</label>
+    <input class="dcf-input-text" type="text" id="name" name="name" value="<?php echo $context->calendar->name ?>" />
 
-    <label for="shortname"><span class="required">*</span> Shortname</label>
-    <input type="text" id="shortname" name="shortname" value="<?php echo $context->calendar->shortname ?>" />
+    <label class="dcf-label" for="shortname"><span class="dcf-required">*</span> Shortname</label>
+    <input class="dcf-input-text" type="text" id="shortname" name="shortname" value="<?php echo $context->calendar->shortname ?>" />
 
-    <label for="website">Website</label>
-    <input type="text" id="website" name="website" value="<?php echo $context->calendar->website ?>" />
+    <label class="dcf-label" for="website">Website</label>
+    <input class="dcf-input-text" type="text" id="website" name="website" value="<?php echo $context->calendar->website ?>" />
 
-    <label for="event-release-preference">Event Release Preference</label>
-    <select id="event-release-preference" name="event_release_preference">
-        <option value="" <?php if ($context->calendar->getRawObject()->eventreleasepreference === \UNL\UCBCN\Calendar::EVENT_RELEASE_PREFERENCE_DEFAULT) echo 'selected="selected"' ?>></option>
-        <option value="immediate" <?php if ($context->calendar->getRawObject()->eventreleasepreference == \UNL\UCBCN\Calendar::EVENT_RELEASE_PREFERENCE_IMMEDIATE) echo 'selected="selected"' ?>>Immediate</option>
-        <option value="pending" <?php if ($context->calendar->getRawObject()->eventreleasepreference === (string)\UNL\UCBCN\Calendar::EVENT_RELEASE_PREFERENCE_PENDING) echo 'selected="selected"' ?>>Pending</option>
-    </select>
+    <div class="dcf-form-group">
+      <label class="dcf-label" for="event-release-preference">Event Release Preference</label>
+      <div class="dcf-input-select">
+        <select id="event-release-preference" name="event_release_preference">
+            <option value="" <?php if ($context->calendar->getRawObject()->eventreleasepreference === \UNL\UCBCN\Calendar::EVENT_RELEASE_PREFERENCE_DEFAULT) echo 'selected="selected"' ?>></option>
+            <option value="immediate" <?php if ($context->calendar->getRawObject()->eventreleasepreference == \UNL\UCBCN\Calendar::EVENT_RELEASE_PREFERENCE_IMMEDIATE) echo 'selected="selected"' ?>>Immediate</option>
+            <option value="pending" <?php if ($context->calendar->getRawObject()->eventreleasepreference === (string)\UNL\UCBCN\Calendar::EVENT_RELEASE_PREFERENCE_PENDING) echo 'selected="selected"' ?>>Pending</option>
+        </select>
+      </div>
+    </div>
 
-    <label for="email-lists">Email Lists (separated by commas)</label>
-    <textarea id="email-lists" name="email_lists"><?php echo $context->calendar->emaillists ?></textarea>
+    <label class="dcf-label" for="email-lists">Email Lists (separated by commas)</label>
+    <textarea class="dcf-input-text" id="email-lists" name="email_lists"><?php echo $context->calendar->emaillists ?></textarea>
 
-    <input type="checkbox" name="recommend_within_account" id="recommend-within-account" <?php if ($context->calendar->recommendationswithinaccount) echo 'checked="checked"' ?>> 
-    <label for="recommend-within-account">Allow event recommendations within this account</label>
+    <input class="dcf-input-control" type="checkbox" name="recommend_within_account" id="recommend-within-account" <?php if ($context->calendar->recommendationswithinaccount) echo 'checked="checked"' ?>>
+    <label class="dcf-label" for="recommend-within-account">Allow event recommendations within this account</label>
     <br>
     <br>
     <button class="dcf-btn wdn-button-brand" type="submit">
@@ -57,7 +61,8 @@
     <?php endif; ?>
 </form>
 
-<script type="text/javascript">
+<?php
+$page->addScriptDeclaration("
 require(['jquery'], function($) {
     $('#create-calendar-form').submit(function (submit) {
         if ($('#name').val() == '' || $('#shortname').val() == '') {
@@ -75,5 +80,5 @@ require(['jquery'], function($) {
             submit.preventDefault();
         }
     });
-});
-</script>
+});");
+?>

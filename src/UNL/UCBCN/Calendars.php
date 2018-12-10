@@ -34,7 +34,7 @@ class Calendars extends RecordList
                 SELECT DISTINCT calendar.id FROM calendar
                 INNER JOIN user_has_permission ON calendar.id = user_has_permission.calendar_id
                 INNER JOIN user ON user_has_permission.user_uid = user.uid
-                WHERE user.uid = "' . self::escapeString($this->options['user_id']) . '" ORDER BY calendar.name;';
+                WHERE user.uid = "' . self::escapeString($this->options['user_id']) . '" ORDER BY calendar.id;';
             return $sql;
         } else if (array_key_exists('subscription_id', $this->options)) {
             # get all calendars that are subscribed with a certain subscription

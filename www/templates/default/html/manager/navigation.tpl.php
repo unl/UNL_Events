@@ -39,7 +39,7 @@
     <h3>Tools</h3>
     <div class="tools">
         <div style="text-align: center; margin-bottom: .8em">
-            <a class="dcf_btn wdn-button-triad" href="<?php echo $base_manager_url ?>calendar/new">
+            <a class="dcf-btn wdn-button-triad" href="<?php echo $base_manager_url ?>calendar/new">
             <span style="vertical-align: middle;">+</span>
             <span style="vertical-align: middle;">New Calendar</span>
             </a>

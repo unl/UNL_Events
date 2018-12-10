@@ -11,13 +11,13 @@
 	$total_pages = ceil(count($context->events) / 10);
 ?>
 <form>
-    <label for="events-search">Search</label>
+    <label class="dcf-label" for="events-search">Search</label>
     <div>
         <div style="float: right; padding-top: 3px;">
             <button type="submit" class="dcf-btn wdn-button-triad">Search</button>
         </div>
         <div style="margin-right: 100px;">
-            <input type="text" name="search_term" id="events-search" value="<?php echo $context->search_term ?>" />
+            <input class="dcf-input-text" type="text" name="search_term" id="events-search" value="<?php echo $context->search_term ?>" />
         </div>
     </div>
 </form>
@@ -128,24 +128,26 @@
                                 <?php if ($status = $event->getStatusWithCalendar($context->calendar->getRawObject())): ?>
                                     <strong><?php echo ucwords($status); ?></strong> on <?php echo $context->calendar->name ?>
                                 <?php else: ?>
-                                    <select 
-                                        id="event-action-<?php echo $event->id ?>"
-                                        class="searched-event-tools" 
-                                        data-id="<?php echo $event->id; ?>"
-                                        >
-                                            <option value="">Select an Action</option>
-                                            <?php if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_MOVE_TO_UPCOMING_ID, $context->calendar->id)): ?>
-                                                <option value="move-to-upcoming">Move to Upcoming</option>
-                                            <?php endif; ?>
-                                            <?php if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_MOVE_TO_PENDING_ID, $context->calendar->id)): ?>
-                                                <option value="move-to-pending">Move to Pending</option>
-                                            <?php endif; ?>
-                                    </select>
+                                    <div class="dcf-input-select">
+                                      <select
+                                          id="event-action-<?php echo $event->id ?>"
+                                          class="searched-event-tools"
+                                          data-id="<?php echo $event->id; ?>"
+                                          >
+                                              <option value="">Select an Action</option>
+                                              <?php if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_MOVE_TO_UPCOMING_ID, $context->calendar->id)): ?>
+                                                  <option value="move-to-upcoming">Move to Upcoming</option>
+                                              <?php endif; ?>
+                                              <?php if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_MOVE_TO_PENDING_ID, $context->calendar->id)): ?>
+                                                  <option value="move-to-pending">Move to Pending</option>
+                                              <?php endif; ?>
+                                      </select>
+                                    </div>
                                     <form id="move-<?php echo $event->id; ?>" method="POST" action="<?php echo $event->getMoveURL($context->calendar) ?>" class="delete-form hidden">
                                         <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
                                         <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
-                                        <input type="text" name="new_status" id="move-target-<?php echo $event->id; ?>">
-                                        <input type="text" name="event_id" value="<?php echo $event->id ?>">
+                                        <input class="dcf-input-text" type="text" name="new_status" id="move-target-<?php echo $event->id; ?>">
+                                        <input class="dcf-input-text" type="text" name="event_id" value="<?php echo $event->id ?>">
                                     </form>
                                 <?php endif; ?>
                             </td>
@@ -156,9 +158,9 @@
         </div>
 
         <?php if ($total_pages > 1): ?>
-            <script type="text/javascript">
-            WDN.loadCSS(WDN.getTemplateFilePath('css/modules/pagination.css'));
-            </script>
+            <?php
+              $page->addScriptDeclaration("WDN.loadCSS(WDN.getTemplateFilePath('css/modules/pagination.css'));");
+            ?>
             <div style="text-align: center;">
                 <div style="display: inline-block;">
                     <ul id="pending-pagination" class="wdn_pagination" data-tab="pending" style="padding-left: 0;">

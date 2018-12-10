@@ -8,11 +8,9 @@ if (false == headers_sent()
 
 $savvy->setReplacementData('pagetitle', 'Sorry, an error occurred.');
 $savvy->setReplacementData('sitetitle', 'Sorry, an error occurred');
+$page->addScriptDeclaration("WDN.initializePlugin('notice');");
 ?>
 
-<script type="text/javascript">
-WDN.initializePlugin('notice');
-</script>
 <div class="wdn_notice alert">
     <div class="close">
         <a href="#" title="Close this notice">Close this notice</a>

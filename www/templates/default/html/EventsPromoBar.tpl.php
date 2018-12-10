@@ -73,7 +73,7 @@ switch (count($events['with_image'])) {
             <h2>Today @ UNL</h2>
         </div>
     </div>
-    <div class="dcf-grid- break-word">
+    <div class="dcf-grid dcf-col-gap-4 break-word">
         <div class="dcf-col-100% dcf-col-75%-start@md">
         <div class="dcf-grid">
         <?php for ($k = 0; $k < $grid_count; $k++): ?>

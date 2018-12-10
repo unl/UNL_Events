@@ -86,14 +86,14 @@
                 </form>
             </div><br class="medium-hidden">
             <div class="medium-hidden" style="margin-bottom: 5px;">
-                <a href='#' class="dcf_btn small-button" id="check-all">Check All</a>
+                <a href='#' class="dcf-btn small-button" id="check-all">Check All</a>
                 <a href='#' class="dcf-btn small-button" id="uncheck-all">Uncheck All</a>
                 <?php if ($context->tab != 'upcoming' && $user->hasPermission(\UNL\UCBCN\Permission::EVENT_DELETE_ID, $context->calendar->id)): ?> 
                     <form id="cleanup-events" class="delete-form" action="<?php echo $context->calendar->getCleanupURL() ?>" method="POST">
                       <input type="hidden" name="tab" value="<?php echo $context->tab ?>">
                       <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
                       <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
-                      <button type="submit" class="wdcf_btn small-button">Clean Up Old Events</button>
+                      <button type="submit" class="dcf-btn small-button">Clean Up Old Events</button>
                     </form>
                 <?php endif; ?>
             </div>
@@ -264,9 +264,9 @@
             </div>
 
             <?php if ($total_pages > 1): ?>
-                <script type="text/javascript">
-                WDN.loadCSS(WDN.getTemplateFilePath('css/modules/pagination.css'));
-                </script>
+                <?php
+                  $page->addScriptDeclaration("WDN.loadCSS(WDN.getTemplateFilePath('css/modules/pagination.css'));");
+                ?>
                 <div style="text-align: center;">
                     <div style="display: inline-block;">
                         <ul id="pending-pagination" class="wdn_pagination" data-tab="pending" style="padding-left: 0;">
@@ -299,14 +299,16 @@
     </div>
 </div>
 
-<script type="text/javascript">
+<?php
+$page->addScriptDeclaration("
 require(['jquery'], function ($) {
     $(document).ready(function () {
-        $("#cleanup-events").submit(function (submit) {
+        $(\"#cleanup-events\").submit(function (submit) {
             if (!window.confirm('Are you sure you want to remove all old events from this tab? This may take a while.')) {
                 submit.preventDefault();
             }
         })
     });
-});
-</script>
+});");
+?>
+

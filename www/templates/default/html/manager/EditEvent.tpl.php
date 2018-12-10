@@ -244,7 +244,7 @@
                         <input type="checkbox" name="remove_image" id="remove-image">
                         <label for="remove-image">Remove Image</label> 
                     <?php endif; ?>
-                    <input style="font-size: 10px;" type="file" name="imagedata" id="imagedata" aria-label="Event Image">
+                    <input class="dcf-input-file" style="font-size: 10px;" type="file" name="imagedata" id="imagedata" aria-label="Event Image">
                 </div>
             </fieldset>
         </div>
@@ -253,7 +253,8 @@
 </form>
 <br>
 
-<script type="text/javascript">
+<?php
+$page->addScriptDeclaration("
 require(['jquery'], function($) {
     $('.delete-datetime').submit(function (submit) {
         if (!window.confirm('Are you sure you want to delete this location, date, and time?')) {
@@ -277,10 +278,10 @@ require(['jquery'], function($) {
         // validate required fields
         if ($('#title').val() == '') {
             notifier.mark_input_invalid($('#title'));
-            notifier.alert('Sorry! We couldn\'t edit your event', '<a href="#title">Title</a> is required.');
+            notifier.alert('Sorry! We couldn\'t edit your event', '<a href=\"#title\">Title</a> is required.');
             submit.preventDefault();
         }
     });
-});
+});");
+?>
 
-</script>

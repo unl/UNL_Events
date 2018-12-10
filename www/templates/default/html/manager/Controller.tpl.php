@@ -1,7 +1,7 @@
 <?php
 use UNL\Templates\Templates;
-
-$page = Templates::factory('App', Templates::VERSION_5);
+// TODO: Type needs to be 'App', not 'Fixed', but app currently not supporting JavaScript correctly
+$page = Templates::factory('Fixed', Templates::VERSION_5);
 
 if (file_exists(\UNL\UCBCN\Util::getWWWRoot() . '/wdn/templates_5.0_tmp')) {
     $page->setLocalIncludePath(\UNL\UCBCN\Util::getWWWRoot());
@@ -34,9 +34,14 @@ $page->addStyleSheet($base_frontend_url.'templates/default/html/css/jquery-ui.mi
 $page->addStyleSheet($base_frontend_url.'templates/default/html/js/vendor/select2/css/select2.min.css?v='.UNL\UCBCN\Frontend\Controller::$version);
 
 //javascript
-$page->head .= '<script>var frontend_url = "'.$base_frontend_url.'";</script>' . PHP_EOL;
-$page->head .= '<script>var manager_url = "'.$base_manager_url.'";</script>' . PHP_EOL;
-$page->head .= '<script type="text/javascript">WDN.initializePlugin("notice");</script>' . PHP_EOL;
+$page->addScriptDeclaration('var frontend_url = "'.$base_frontend_url.'";');
+$page->addScriptDeclaration('var manager_url = "'.$base_manager_url.'";');
+$page->addScriptDeclaration("WDN.initializePlugin('notice');");
+$page->addScriptDeclaration("
+require(['jquery'], function ($) {
+    $('#breadcrumbs > ul > li > a').last().parent().addClass('last-link');
+});");
+$page->addScript($base_frontend_url .'templates/default/html/js/manager.min.js?v='.UNL\UCBCN\Frontend\Controller::$version);
 
 //other
 $savvy->addGlobal('page', $page);
@@ -48,10 +53,10 @@ if ($context->output->getRawObject() instanceof Exception) {
 }
 
 $page->maincontentarea = '
-<div class="wdn-band view-' . $view_class . ' events-manager">
-    <div class="wdn-inner-wrapper">';
+<div class="dcf-bleed view-' . $view_class . ' events-manager">
+    <div class="dcf-wrapper">';
 if ($_SERVER['SERVER_NAME'] == 'events-dev.unl.edu') {
-    $page->maincontentarea .= 
+    $page->maincontentarea .=
         '<div id="notice" class="wdn_notice">
             <div class="close">
             <a href="#" title="Close this notice">Close this notice</a>
@@ -64,8 +69,8 @@ if ($_SERVER['SERVER_NAME'] == 'events-dev.unl.edu') {
         </div>';
 }
 $page->maincontentarea .= '
-        <section class="wdn-grid-set reverse">
-            <div class="bp2-wdn-col-three-fourths">
+        <section class="dcf-grid dcf-col-gap-4">
+            <div class="dcf-col-100% dcf-col-75%-start@md">
 ';
 if (($notice = $context->getNotice()) != NULL) {
     $class = '';
@@ -107,14 +112,14 @@ if (($notice = $context->getNotice()) != NULL) {
 $page->maincontentarea .= $savvy->render($context->output, $template) . '
             <br>
             </div>
-            <nav class="calendars-list bp2-wdn-col-one-fourth">
-                ' . $savvy->render($context, 'navigation.tpl.php') . '
-            </nav>
+            <div class="dcf-col-100% dcf-col-25%-end@md">
+                <nav class="calendars-list">
+                    ' . $savvy->render($context, 'navigation.tpl.php') . '
+                </nav>
+            </div>
         </section>
     </div>
 </div>
-
-<script src="' . $base_frontend_url .'templates/default/html/js/manager.min.js?v='.UNL\UCBCN\Frontend\Controller::$version.'"></script>
 ';
 
 $page->contactinfo = $savvy->render($context, 'html/localfooter.tpl.php');

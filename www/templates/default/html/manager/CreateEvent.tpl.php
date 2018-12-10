@@ -13,104 +13,108 @@
     echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
 ?>
 <br>
-<div class="dcf-grid">
+<div>
     <form id="create-event-form" action="" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
         <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
         <div class="dcf-col-100% dcf-col-67%-start@md">
             <fieldset>
-                <legend style="margin-top: 0">Event Details</legend>
-                <label for="title"><span class="required">*</span> Title</label>
-                <input type="text" id="title" name="title" value="<?php echo $event->title; ?>" />
+                <legend class="dcf-legend" style="margin-top: 0">Event Details</legend>
+                <label class="dcf-label" for="title"><span class="dcf-required">*</span> Title</label>
+                <input class="dcf-input-text" type="text" id="title" name="title" value="<?php echo $event->title; ?>" />
 
-                <label for="subtitle">Subtitle</label>
-                <input type="text" id="subtitle" name="subtitle" value="<?php echo $event->subtitle; ?>" />
+                <label class="dcf-label" for="subtitle">Subtitle</label>
+                <input class="dcf-input-text" type="text" id="subtitle" name="subtitle" value="<?php echo $event->subtitle; ?>" />
 
-                <label for="description">Description</label>
-                <textarea rows="4" id="description" name="description"><?php echo $event->description; ?></textarea>
+                <label class="dcf-label" for="description">Description</label>
+                <textarea class="dcf-input-text" rows="4" id="description" name="description"><?php echo $event->description; ?></textarea>
 
-                <label for="type">Type</label>
-                <select id="type" name="type" class="use-select2" style="width: 100%;">
-                <?php foreach ($context->getEventTypes() as $type) { ?>
-                    <option <?php if ($post['type'] == $type->id) echo 'selected="selected"' ?> value="<?php echo $type->id ?>"><?php echo $type->name ?></option>
-                <?php } ?>
-                </select>
+                <label class="dcf-label" for="type">Type</label>
+                <div class="dcf-input-select">
+                  <select id="type" name="type"  style="width: 100%;">
+                  <?php foreach ($context->getEventTypes() as $type) { ?>
+                      <option <?php if ($post['type'] == $type->id) echo 'selected="selected"' ?> value="<?php echo $type->id ?>"><?php echo $type->name ?></option>
+                  <?php } ?>
+                  </select>
+                </div>
             </fieldset>
 
             <fieldset>
-            <legend style="font-size: 1.6em">Location, Date, and Time</legend>
-                <label for="location"><span class="required">*</span> Location</label>
-                <select id="location" name="location" class="use-select2" style="width: 100%;">
-                    <optgroup label="Your saved locations">
-                        <?php foreach ($context->getUserLocations() as $location): ?>
-                            <option <?php if ($post['location'] == $location->id) echo 'selected="selected"' ?> value="<?php echo $location->id ?>"><?php echo $location->name ?></option>
-                        <?php endforeach ?>
-                        <option <?php if ($post['location'] == 'new') echo 'selected="selected"' ?>value="new">-- New Location --</option>
-                    </optgroup>
-                    <optgroup label="UNL Campus locations">
-                        <?php foreach ($context->getStandardLocations(\UNL\UCBCN\Location::DISPLAY_ORDER_MAIN) as $location): ?>
-                            <option <?php if ($post['location'] == $location->id) echo 'selected="selected"' ?> value="<?php echo $location->id ?>"><?php echo $location->name ?></option>
-                        <?php endforeach ?>
-                    </optgroup>
-                    <optgroup label="Extension locations">
-                        <?php foreach ($context->getStandardLocations(\UNL\UCBCN\Location::DISPLAY_ORDER_EXTENSION) as $location): ?>
-                            <option <?php if ($post['location'] == $location->id) echo 'selected="selected"' ?> value="<?php echo $location->id ?>"><?php echo $location->name ?></option>
-                        <?php endforeach ?>
-                    </optgroup>
-                </select>
+            <legend class="dcf-legend" style="font-size: 1.6em">Location, Date, and Time</legend>
+                <label class="dcf-label" for="location"><span class="dcf-required">*</span> Location</label>
+                <div class="dcf-input-select">
+                  <select id="location" name="location" cstyle="width: 100%;">
+                      <optgroup label="Your saved locations">
+                          <?php foreach ($context->getUserLocations() as $location): ?>
+                              <option <?php if ($post['location'] == $location->id) echo 'selected="selected"' ?> value="<?php echo $location->id ?>"><?php echo $location->name ?></option>
+                          <?php endforeach ?>
+                          <option <?php if ($post['location'] == 'new') echo 'selected="selected"' ?>value="new">-- New Location --</option>
+                      </optgroup>
+                      <optgroup label="UNL Campus locations">
+                          <?php foreach ($context->getStandardLocations(\UNL\UCBCN\Location::DISPLAY_ORDER_MAIN) as $location): ?>
+                              <option <?php if ($post['location'] == $location->id) echo 'selected="selected"' ?> value="<?php echo $location->id ?>"><?php echo $location->name ?></option>
+                          <?php endforeach ?>
+                      </optgroup>
+                      <optgroup label="Extension locations">
+                          <?php foreach ($context->getStandardLocations(\UNL\UCBCN\Location::DISPLAY_ORDER_EXTENSION) as $location): ?>
+                              <option <?php if ($post['location'] == $location->id) echo 'selected="selected"' ?> value="<?php echo $location->id ?>"><?php echo $location->name ?></option>
+                          <?php endforeach ?>
+                      </optgroup>
+                  </select>
+                </div>
 
                 <div id="new-location-fields" style="display: none;">
                     <h6>New Location</h6>
-                    <label for="location-name"><span class="required">*</span> Name</label>
-                    <input type="text" id="location-name" name="new_location[name]" value="<?php echo $post['location']['name']; ?>">
+                    <label class="dcf-label" for="location-name"><span class="required">*</span> Name</label>
+                    <input class="dcf-input-text" type="text" id="location-name" name="new_location[name]" value="<?php echo $post['location']['name']; ?>">
 
-                    <label for="location-address-1">Address</label>
-                    <input type="text" id="location-address-1" name="new_location[streetaddress1]" value="<?php echo $post['location']['streetaddress1']; ?>">
+                    <label class="dcf-label" for="location-address-1">Address</label>
+                    <input class="dcf-input-text" type="text" id="location-address-1" name="new_location[streetaddress1]" value="<?php echo $post['location']['streetaddress1']; ?>">
 
-                    <label for="location-address-2">Address 2</label>
-                    <input type="text" id="location-address-2" name="new_location[streetaddress2]" value="<?php echo $post['location']['streetaddress2']; ?>">
+                    <label class="dcf-label" for="location-address-2">Address 2</label>
+                    <input class="dcf-input-text" type="text" id="location-address-2" name="new_location[streetaddress2]" value="<?php echo $post['location']['streetaddress2']; ?>">
 
-                    <label for="location-room">Room</label>
-                    <input type="text" id="location-room" name="new_location[room]" value="<?php echo $post['location']['room']; ?>">
+                    <label class="dcf-label" for="location-room">Room</label>
+                    <input class="dcf-input-text" type="text" id="location-room" name="new_location[room]" value="<?php echo $post['location']['room']; ?>">
 
-                    <label for="location-city">City</label>
-                    <input type="text" id="location-city" name="new_location[city]" value="<?php echo $post['location']['city']; ?>">
+                    <label class="dcf-label" for="location-city">City</label>
+                    <input class="dcf-input-text" type="text" id="location-city" name="new_location[city]" value="<?php echo $post['location']['city']; ?>">
 
-                    <label for="location-state">State</label>
-                    <input type="text" id="location-state" name="new_location[state]" value="<?php echo $post['location']['state']; ?>">
+                    <label class="dcf-label" for="location-state">State</label>
+                    <input class="dcf-input-text" type="text" id="location-state" name="new_location[state]" value="<?php echo $post['location']['state']; ?>">
 
-                    <label for="location-zip">Zip</label>
-                    <input type="text" id="location-zip" name="new_location[zip]" value="<?php echo $post['location']['zip']; ?>">
+                    <label class="dcf-label" for="location-zip">Zip</label>
+                    <input class="dcf-input-text" type="text" id="location-zip" name="new_location[zip]" value="<?php echo $post['location']['zip']; ?>">
 
-                    <label for="location-map-url">Map URL</label>
-                    <input type="text" id="location-map-url" name="new_location[mapurl]" value="<?php echo $post['location']['mapurl']; ?>">
+                    <label class="dcf-label" for="location-map-url">Map URL</label>
+                    <input class="dcf-input-text" type="text" id="location-map-url" name="new_location[mapurl]" value="<?php echo $post['location']['mapurl']; ?>">
 
-                    <label for="location-webpage">Webpage</label>
-                    <input type="text" id="location-webpage" name="new_location[webpageurl]" value="<?php echo $post['location']['webpageurl']; ?>">
+                    <label class="dcf-label" for="location-webpage">Webpage</label>
+                    <input class="dcf-input-text" type="text" id="location-webpage" name="new_location[webpageurl]" value="<?php echo $post['location']['webpageurl']; ?>">
 
-                    <label for="location-hours">Hours</label>
-                    <input type="text" id="location-hours" name="new_location[hours]" value="<?php echo $post['location']['hours']; ?>">
+                    <label class="dcf-label" for="location-hours">Hours</label>
+                    <input class="dcf-input-text" type="text" id="location-hours" name="new_location[hours]" value="<?php echo $post['location']['hours']; ?>">
 
-                    <label for="location-directions">Directions</label>
-                    <textarea id="location-directions" name="new_location[directions]"><?php echo $post['location']['directions']; ?></textarea>
+                    <label class="dcf-label" for="location-directions">Directions</label>
+                    <textarea class="dcf-input-text" id="location-directions" name="new_location[directions]"><?php echo $post['location']['directions']; ?></textarea>
 
-                    <label for="location-additional-public-info">Additional Public Info</label>
-                    <input type="text" id="location-additional-public-info" name="new_location[additionalpublicinfo]" value="<?php echo $post['location']['additionalpublicinfo']; ?>">
+                    <label class="dcf-label" for="location-additional-public-info">Additional Public Info</label>
+                    <input class="dcf-input-text" type="text" id="location-additional-public-info" name="new_location[additionalpublicinfo]" value="<?php echo $post['location']['additionalpublicinfo']; ?>">
 
-                    <label for="location-type">Type</label>
-                    <input type="text" id="location-type" name="new_location[type]" value="<?php echo $post['location']['type']; ?>">
+                    <label class="dcf-label" for="location-type">Type</label>
+                    <input class="dcf-input-text" type="text" id="location-type" name="new_location[type]" value="<?php echo $post['location']['type']; ?>">
 
-                    <label for="location-phone">Phone</label>
-                    <input type="text" id="location-phone" name="new_location[phone]" value="<?php echo $post['location']['phone']; ?>">
+                    <label class="dcf-label" for="location-phone">Phone</label>
+                    <input class="dcf-input-text" type="text" id="location-phone" name="new_location[phone]" value="<?php echo $post['location']['phone']; ?>">
 
-                    <input <?php if ($post['location_save'] == 'on') echo 'checked="checked"'; ?> type="checkbox" id="location-save" name="location_save"> 
-                    <label for="location-save">Save this location for future events</label>
+                    <input class="dcf-input-control" <?php if ($post['location_save'] == 'on') echo 'checked="checked"'; ?> type="checkbox" id="location-save" name="location_save">
+                    <label class="dcf-label" for="location-save">Save this location for future events</label>
                 </div>
 
-                <label for="room">Room</label>
-                <input type="text" id="room" name="room" value="<?php echo $post['room']; ?>" />
+                <label class="dcf-label" for="room">Room</label>
+                <input class="dcf-input-text"type="text" id="room" name="room" value="<?php echo $post['room']; ?>" />
 
-                <label for="start-date" ><span class="required">*</span> Start Date &amp; Time</label>
+                <label class="dcf-label" for="start-date" ><span class="dcf-required">*</span> Start Date &amp; Time</label>
                 <div class="date-time-select"><span class="wdn-icon-calendar" aria-hidden="true"></span>
                     <input id="start-date" name="start_date" aria-label="Start Date in the format of mm/dd/yyyy" type="text" class="datepicker" value="<?php echo $post['start_date']; ?>" /><br class="hidden small-block"> @
                     <select id="start-time-hour" name="start_time_hour" aria-label="Start Time Hour">
@@ -145,7 +149,7 @@
                     </div>
                 </div>
 
-                <label for="end-date">End Date &amp;amp; Time (Optional)</label>
+                <label class="dcf-label" for="end-date">End Date &amp;amp; Time (Optional)</label>
                 <div class="date-time-select"><span class="wdn-icon-calendar" aria-hidden="true"></span>
                     <input id="end-date" name="end_date" aria-label="End Date in the format of mm/dd/yyyy" type="text" class="datepicker" value="<?php echo $post['end_date']; ?>" /><br class="hidden small-block"> @
                     <select id="end-time-hour" name="end_time_hour" aria-label="End Time Hour">
@@ -173,7 +177,7 @@
 
                     <div id="end-time-am-pm" class="am_pm">
                         <fieldset>
-                            <legend class="dcf-sr-only">AM/PM</legend>
+                            <legend class="dcf-legend dcf-sr-only">AM/PM</legend>
                             <label><input <?php if (empty($post) || $post['end_time_am_pm'] == 'am') echo 'checked="checked"'; ?> id="end-time-am-pm-am" type="radio" value="am" name="end_time_am_pm">AM</label><br>
                             <label><input <?php if ($post['end_time_am_pm'] == 'pm') echo 'checked="checked"'; ?> id="end-time-am-pm-pm" type="radio" value="pm" name="end_time_am_pm">PM</label>
                         </fieldset>
@@ -181,10 +185,10 @@
                 </div>
 
                 <div class="section-container">
-                    <input <?php if (isset($post['recurring'])) echo 'checked="checked"'; ?> type="checkbox" name="recurring" id="recurring"> 
-                    <label for="recurring">This is a recurring event</label>
+                    <input class="dcf-input-control" <?php if (isset($post['recurring'])) echo 'checked="checked"'; ?> type="checkbox" name="recurring" id="recurring">
+                    <label class="dcf-label" for="recurring">This is a recurring event</label>
                     <div class="recurring-container date-time-select">                        
-                        <label for="recurring-type">This event recurs </label>
+                        <label class="dcf-label" for="recurring-type">This event recurs </label>
                         <select id="recurring-type" name="recurring_type">
                             <option value="daily">Daily</option>
                             <option value="weekly">Weekly</option>
@@ -193,49 +197,47 @@
                             </optgroup>
                             <option value="annually">Yearly</option>
                         </select>
-                        <label for="recurs-until-date">until </label><br>
+                        <label class="dcf-label" for="recurs-until-date">until </label><br>
                         <span style="top: .4em" class="wdn-icon-calendar" aria-hidden="true"></span>
-                        <input value="<?php echo $post['recurs_until_date']; ?>" id="recurs-until-date" name="recurs_until_date" type="text" class="datepicker" aria-label="until this date in the format of mm/dd/yyyy"/>
+                        <input class="dcf-input-text" value="<?php echo $post['recurs_until_date']; ?>" id="recurs-until-date" name="recurs_until_date" type="text" class="datepicker" aria-label="until this date in the format of mm/dd/yyyy"/>
                     </div>
                 </div>
 
-                <label for="directions">Directions</label>
-                <textarea id="directions" name="directions"><?php echo $post['directions'] ?></textarea>
+                <label class="dcf-label" for="directions">Directions</label>
+                <textarea class="dcf-input-text" id="directions" name="directions"><?php echo $post['directions'] ?></textarea>
 
-                <label for="additional-public-info">Additional Public Info</label>
-                <textarea id="additional-public-info" name="additional_public_info"><?php echo $post['additional_public_info'] ?></textarea>
+                <label class="dcf-label" for="additional-public-info">Additional Public Info</label>
+                <textarea class="dcf-input-text" id="additional-public-info" name="additional_public_info"><?php echo $post['additional_public_info'] ?></textarea>
             </fieldset>
 
         </div>
 
         <div class="dcf-col-100% dcf-col-33%-end@md">
             <fieldset class="visual-island">
-                <legend class="vi-header">
-                    Sharing
-                </legend>
+                <legend class="dcf-legend vi-header">Sharing</legend>
                 <div class="details">
                     <fieldset>
-                        <legend>Privacy</legend>
-                        <label>
-                            <input type="radio" value="private" name="private_public" id="sharing-private" <?php if ($post['private_public'] == 'private') echo 'checked="checked"'; ?>> 
+                        <legend class="dcf-legend">Privacy</legend>
+                        <label class="dcf-label">
+                            <input class="dcf-input-control" type="radio" value="private" name="private_public" id="sharing-private" <?php if ($post['private_public'] == 'private') echo 'checked="checked"'; ?>>
                             Private
                         </label> 
                         <br>
-                        <label>
-                            <input type="radio" value="public" name="private_public" id="sharing-public" <?php if ($post['private_public'] != 'private') echo 'checked="checked"'; ?>> 
+                        <label class="dcf-label">
+                            <input class="dcf-input-control" type="radio" value="public" name="private_public" id="sharing-public" <?php if ($post['private_public'] != 'private') echo 'checked="checked"'; ?>>
                             Public
                         </label>
                     </fieldset>
 
                   <fieldset>
-                    <legend><span class="required">*</span> Consider for main UNL Calendar</legend>
-                      <label>
-                        <input type="radio" name="send_to_main" value="on" required />
+                    <legend class="dcf-legend"><span class="dcf-required">*</span> Consider for main UNL Calendar</legend>
+                      <label class="dcf-label">
+                        <input class="dcf-input-control" type="radio" name="send_to_main" value="on" required />
                         Yes
                       </label>
                       <br>
-                      <label>
-                        <input type="radio" name="send_to_main" value="off" required />
+                      <label class="dcf-label">
+                        <input class="dcf-input-control" type="radio" name="send_to_main" value="off" required />
                         No
                       </label>
                   </fieldset>
@@ -243,32 +245,27 @@
             </fieldset>
 
             <fieldset class="visual-island">
-                <legend class="vi-header">
-                    Contact Info
-                </legend>
+                <legend class="dcf-legend vi-header">Contact Info</legend>
 
                 <div class="details">
-                    <label for="contact-name">Name</label>
-                    <input type="text" id="contact-name" name="contact_name" value="<?php echo $post['contact_name'] ?>" />
+                    <label class="dcf-label" for="contact-name">Name</label>
+                    <input class="dcf-input-text" type="text" id="contact-name" name="contact_name" value="<?php echo $post['contact_name'] ?>" />
 
-                    <label for="contact-phone">Phone</label>
-                    <input type="text" id="contact-phone" name="contact_phone" value="<?php echo $post['contact_phone'] ?>" />
+                    <label class="dcf-label" for="contact-phone">Phone</label>
+                    <input class="dcf-input-text" type="text" id="contact-phone" name="contact_phone" value="<?php echo $post['contact_phone'] ?>" />
 
-                    <label for="contact-email">Email</label>
-                    <input type="text" id="contact-email" name="contact_email" value="<?php echo $post['contact_email'] ?>" />
+                    <label class="dcf-label" for="contact-email">Email</label>
+                    <input class="dcf-input-text" type="text" id="contact-email" name="contact_email" value="<?php echo $post['contact_email'] ?>" />
 
-                    <label for="website">Event Website</label>
-                    <input type="text" id="website" name="website" value="<?php echo $event->webpageurl ?>" />
+                    <label class="dcf-label" for="website">Event Website</label>
+                    <input class="dcf-input-text" type="text" id="website" name="website" value="<?php echo $event->webpageurl ?>" />
                 </div>
             </fieldset>
 
             <fieldset class="visual-island">
-                <legend class="vi-header">
-                    Image
-                </legend>
-
+                <legend class="dcf-legend vi-header">Image</legend>
                 <div class="details">
-                    <input style="font-size: 10px;" type="file" name="imagedata" id="imagedata" aria-label="Select an Image">
+                    <input class="dcf-input-file" style="font-size: 10px;" type="file" name="imagedata" id="imagedata" aria-label="Select an Image">
                 </div>
             </fieldset>
         </div>
@@ -278,18 +275,19 @@
     </form>
 </div>
 
-<script type="text/javascript">
+<?php
+$page->addScriptDeclaration("
 WDN.initializePlugin('jqueryui', [function() {  
     $ = require('jquery');
     $('.datepicker').datepicker();
-    $("LINK[href^='//unlcms.unl.edu/wdn/templates_4.0/scripts/plugins/ui/css/jquery-ui.min.css']").remove();
+    $(\"LINK[href^='//unlcms.unl.edu/wdn/templates_4.0/scripts/plugins/ui/css/jquery-ui.min.css']\").remove();
 
     $('#start-date').change(function (change) {
         setRecurringOptions($(this), $('#monthly-group'));
     });
 
     setRecurringOptions($('#start-date'), $('#monthly-group'));
-    $('#recurring-type').val("<?php echo $post['recurring_type']; ?>");
+    $('#recurring-type').val(\"". $post['recurring_type'] ."\");
 
     $('#location').change(function (change) {
         if ($(this).val() == 'new') {
@@ -317,7 +315,7 @@ require(['jquery'], function ($) {
             if ($('#start-date').val() == '') {
                 notifier.mark_input_invalid($('#start-date'));
             }
-            errors.push('<a href="#title">Title</a>, <a href="#location">location</a>, and <a href="#start-date">start date</a> are required.');
+            errors.push('<a href=\"#title\">Title</a>, <a href=\"#location\">location</a>, and <a href=\"#start-date\">start date</a> are required.');
         }
 
         var start = new Date($('#start-date').val());
@@ -343,7 +341,7 @@ require(['jquery'], function ($) {
 
                 if (start > end) {
                     notifier.mark_input_invalid($('#end-date'));
-                    errors.push('Your <a href="#end-date">end date/time</a> must be on or after the <a href="#start-date">start date/time</a>.');
+                    errors.push('Your <a href=\"#end-date\">end date/time</a> must be on or after the <a href=\"#start-date\">start date/time</a>.');
                 }
             }
         }
@@ -359,7 +357,7 @@ require(['jquery'], function ($) {
                     if ($('#recurs-until-date').val() == '') {
                         notifier.mark_input_invalid($('#recurs-until-date'));
                     }
-                    errors.push('Recurring events require a <a href="#recurring-type">recurring type</a> and <a href="#recurs-until-date">date</a> that they recur until.');
+                    errors.push('Recurring events require a <a href=\"#recurring-type\">recurring type</a> and <a href=\"#recurs-until-date\">date</a> that they recur until.');
                 }
 
                 // check that the recurs until date is on or after the start date
@@ -369,7 +367,7 @@ require(['jquery'], function ($) {
 
                 if (start > until) {
                     notifier.mark_input_invalid($('#recurs-until-date'));
-                    errors.push('The <a href="#recurs-until-date">"recurs until date"</a> must be on or after the start date.');
+                    errors.push('The <a href=\"#recurs-until-date\">\"recurs until date\"</a> must be on or after the start date.');
                 }
             }
         }
@@ -377,7 +375,7 @@ require(['jquery'], function ($) {
         // new locations must have a name
         if ($('#location').val() == 'new' && $('#location-name').val() == '') {
             notifier.mark_input_invalid($('#location-name'));
-            errors.push('You must give your new location a <a href="#location-name">name</a>.');
+            errors.push('You must give your new location a <a href=\"#location-name\">name</a>.');
         }
 
         if (errors.length > 0) {
@@ -385,6 +383,5 @@ require(['jquery'], function ($) {
             notifier.alert('Sorry! We couldn\'t create your event', '<ul><li>' + errors.join('</li><li>') + '</li></ul>');
         }
     });
-});
-
-</script>
+});");
+?>
