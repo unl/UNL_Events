@@ -2,7 +2,7 @@
 $prev = $context->getDateTime()->modify('-1 month');
 $next = $context->getDateTime()->modify('+1 month');
 ?>
-<div class="month_cal" id="month_viewcal">
+<div class="month_cal dcf-pb-8" id="month_viewcal">
     <table class="wp-calendar wdn_responsive_table">
         <caption>
             <span><a href="<?php echo $context->getPreviousMonthURL(); ?>" id="prev_month"><span class="eventicon-angle-circled-left" aria-hidden="true"></span><span class="dcf-sr-only">View events for <?php echo $prev->format('F'); ?></span></a></span>

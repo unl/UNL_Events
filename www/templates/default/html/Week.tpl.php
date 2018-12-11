@@ -2,7 +2,7 @@
 $prev = $context->getDateTime()->modify('-1 week');
 $next = $context->getDateTime()->modify('+1 week');
 ?>
-<div class="week_cal" id="month_viewcal">
+<div class="week_cal dcf-pb-8" id="month_viewcal">
     <table class="wp-calendar wdn_responsive_table">
         <caption>
             <span><a href="<?php echo $context->getPreviousURL(); ?>" id="prev_week"><span class="eventicon-angle-circled-left" aria-hidden="true"></span><span class="dcf-sr-only">View events for week <?php echo $prev->format('W'); ?></span></a></span>
@@ -48,3 +48,4 @@ $next = $context->getDateTime()->modify('+1 week');
         </tbody>
     </table>
 </div>
+

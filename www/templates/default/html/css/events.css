@@ -799,8 +799,8 @@
 }
 #dcf-main .band-results .vcalendar .vevent {
   margin-bottom: 1em;
-  padding: 0 23px 1.777em;
-  padding: 0 1.425rem 1.777em;
+  padding: 23px 1.777em;
+  padding: 1.425rem 1.777em;
   border-top: 5px solid #c1c0be;
   background-color: rgba(255, 255, 255, 0.67);
   box-shadow: 0 0 0 1px rgba(20, 20, 20, 0.1);
@@ -808,34 +808,14 @@
 }
 @media  (min-width: 48em) {
   #dcf-main .band-results .vcalendar .vevent {
-    padding: 0 30px 2.369em;
-    padding: 0 1.899rem 2.369em;
+    padding: 30px 2.369em;
+    padding: 1.899rem 2.369em;
   }
 }
 #dcf-main .band-results .vcalendar .vevent:hover {
   border-top: 5px solid #d00000;
   background-color: #fff;
   box-shadow: 0 0 1px 1px rgba(20, 20, 20, 0.2);
-}
-#dcf-main .band-results .vcalendar .vevent h1 {
-  font-size: 30px;
-  font-size: 2.3077rem;
-}
-@media  (min-width: 48em) {
-  #dcf-main .band-results .vcalendar .vevent h1 {
-    font-size: 41px;
-    font-size: 2.532rem;
-  }
-}
-#dcf-main .band-results .vcalendar .vevent h2 {
-  font-size: 28px;
-  font-size: 2.1538rem;
-}
-@media  (min-width: 48em) {
-  #dcf-main .band-results .vcalendar .vevent h2 {
-    font-size: 38px;
-    font-size: 2.369rem;
-  }
 }
 #dcf-main .band-results .vcalendar .vevent .date-wrapper,
 #dcf-main .band-results .vcalendar .vevent .time-wrapper,

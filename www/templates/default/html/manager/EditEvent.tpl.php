@@ -34,7 +34,7 @@
 <br>
 
 <?php foreach($event->getDatetimes() as $datetime) : ?>
-    <form id="delete-datetime-<?php echo $datetime->id; ?>" class="delete-datetime delete-form" method="POST" action="<?php echo $datetime->getDeleteURL($context->calendar) ?>" class="delete-form hidden">
+    <form id="delete-datetime-<?php echo $datetime->id; ?>" class="delete-datetime delete-form" method="POST" action="<?php echo $datetime->getDeleteURL($context->calendar) ?>" class="delete-form dcf-d-none">
       <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
       <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">  
       <input type="hidden" name="event_datetime_id" value="<?php echo $datetime->id ?>" />
@@ -54,28 +54,30 @@
 <form id="edit-event-form" action="" method="POST" class="clearfix" enctype="multipart/form-data">
     <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
     <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
-    <div class="dcf-grid">
+    <div class="dcf-grid dcf-col-gap-4" style="margin-top: -2.5rem">
         <div class="dcf-col-100% dcf-col-67%-start@md">
             <fieldset style="margin-top: 0">
-            	<legend style="margin-top: 0">Event Details</legend>
-                <label for="title"><span class="required">*</span> Title</label>
-                <input type="text" id="title" name="title" value="<?php echo $event->title; ?>" />
+            	<legend class="dcf-legend" style="margin-top: 0">Event Details</legend>
+                <label class="dcf-label" for="title"><span class="required">*</span> Title</label>
+                <input class="dcf-input-text" type="text" id="title" name="title" value="<?php echo $event->title; ?>" />
 
-                <label for="subtitle">Subtitle</label>
-                <input type="text" id="subtitle" name="subtitle" value="<?php echo $event->subtitle; ?>" />
+                <label class="dcf-label" for="subtitle">Subtitle</label>
+                <input class="dcf-input-text" type="text" id="subtitle" name="subtitle" value="<?php echo $event->subtitle; ?>" />
 
-                <label for="description">Description</label>
-                <textarea rows="4" id="description" name="description"><?php echo $event->description; ?></textarea>
+                <label class="dcf-label" for="description">Description</label>
+                <textarea class="dcf-input-text" rows="4" id="description" name="description"><?php echo $event->description; ?></textarea>
 
-                <label for="type">Type</label>
-                <select id="type" name="type">
-                <?php foreach ($context->getEventTypes() as $type) { ?>
-                    <option <?php if ($event_type != NULL && $event_type->id == $type->id) echo 'selected="selected"'; ?> value="<?php echo $type->id ?>"><?php echo $type->name ?></option>
-                <?php } ?>
-                </select>
+                <label class="dcf-label" for="type">Type</label>
+                <div class="dcf-input-select">
+                  <select id="type" name="type">
+                  <?php foreach ($context->getEventTypes() as $type) { ?>
+                      <option <?php if ($event_type != NULL && $event_type->id == $type->id) echo 'selected="selected"'; ?> value="<?php echo $type->id ?>"><?php echo $type->name ?></option>
+                  <?php } ?>
+                  </select>
+                </div>
             </fieldset>
             <fieldset class="event-datetimes">
-	            <legend>Location, Date, and Time</legend>
+	            <legend class="dcf-legend">Location, Date, and Time</legend>
                 <a class="dcf-btn wdn-button-brand" href="<?php echo $event->getAddDatetimeURL($context->calendar) ?>">Add Location, Date, and/or Time</a><br><br>
 	            <div class="edt-header">
                     <div class="dates">
@@ -120,9 +122,9 @@
                         <div class="location with-controls">
                 		  <?php echo $datetime->getLocation()->name; ?>
                         </div>
-                        <div class="controls">
-                    		<a href="<?php echo $datetime->getEditURL($context->calendar); ?>" class="dcf-btn wdn-button-brand small">Edit</a>
-                            <button class="small" form="delete-datetime-<?php echo $datetime->id; ?>" type="submit">Delete</button>
+                        <div class="dcf-btn-group controls">
+                    		  <a href="<?php echo $datetime->getEditURL($context->calendar); ?>" class="dcf-btn wdn-button-brand small">Edit</a>
+                          <button class="dcf-btn small" form="delete-datetime-<?php echo $datetime->id; ?>" type="submit">Delete</button>
                         </div>
                 	</div>
                     <?php if ($datetime->recurringtype != 'none') : ?>
@@ -133,9 +135,9 @@
                                     <div class="dates recurring">
                                         <?php echo date('n/d/y', strtotime($recurring_date->recurringdate)) . ' @ ' . date('g:ia', strtotime($datetime->starttime)); ?>
                                     </div>
-                                    <div class="controls recurring">
+                                    <div class=" dcf-btn-group controls recurring">
                                         <a href="<?php echo $datetime->getEditRecurrenceURL($context->calendar, $recurring_date->recurrence_id); ?>" class="dcf-btn wdn-button-brand small edit-recurring-edt">Edit</a>
-                                        <button type="submit" form="delete-datetime-<?php echo $datetime->id ?>-recurrence-<?php echo $recurring_date->recurrence_id ?>" class="small delete-datetime-recurrence">Delete</button>
+                                        <button type="dcf-btn submit" form="delete-datetime-<?php echo $datetime->id ?>-recurrence-<?php echo $recurring_date->recurrence_id ?>" class="small delete-datetime-recurrence">Delete</button>
                                     </div>
                                 </div>
                             </div>
@@ -186,19 +188,19 @@
                 </legend>
                 <div class="details">
                     <fieldset>
-                        <legend>Privacy</legend>
+                        <legend class="dcf-legend">Privacy</legend>
                         <label>
-                            <input <?php if (!$event->approvedforcirculation) echo 'checked="checked"' ?> type="radio" value="private" name="private_public" id="sharing-private"> 
+                            <input class=""dcf-input-control" <?php if (!$event->approvedforcirculation) echo 'checked="checked"' ?> type="radio" value="private" name="private_public" id="sharing-private">
                             Private
                         </label> 
                         <br>
                         <label>
-                            <input <?php if ($event->approvedforcirculation) echo 'checked="checked"' ?> type="radio" value="public" name="private_public" id="sharing-public"> 
+                            <input class=""dcf-input-control" <?php if ($event->approvedforcirculation) echo 'checked="checked"' ?> type="radio" value="public" name="private_public" id="sharing-public">
                             Public
                         </label>
                     </fieldset>
                   <fieldset>
-                    <legend>Consider for main UNL Calendar</legend>
+                    <legend class="dcf-legend">Consider for main UNL Calendar</legend>
                       <?php if ($context->on_main_calendar): ?>
                         <img src="<?php echo $base_frontend_url ?>templates/default/html/images/checkmark-16.png" alt="">
                         (event has been sent to main UNL calendar for approval)
@@ -218,22 +220,22 @@
                 </legend>
 
                 <div class="details">
-                    <label for="contact-name">Name</label>
-                    <input value="<?php echo $event->listingcontactname; ?>" type="text" id="contact-name" name="contact_name" />
+                    <label class="dcf-label" for="contact-name">Name</label>
+                    <input class="dcf-input-text" value="<?php echo $event->listingcontactname; ?>" type="text" id="contact-name" name="contact_name" />
 
-                    <label for="contact-phone">Phone</label>
-                    <input value="<?php echo $event->listingcontactphone; ?>" type="text" id="contact-phone" name="contact_phone" />
+                    <label class="dcf-label" for="contact-phone">Phone</label>
+                    <input class="dcf-input-text" value="<?php echo $event->listingcontactphone; ?>" type="text" id="contact-phone" name="contact_phone" />
 
-                    <label for="contact-email">Email</label>
-                    <input value="<?php echo $event->listingcontactemail; ?>"type="text" id="contact-email" name="contact_email" />
+                    <label class="dcf-label" for="contact-email">Email</label>
+                    <input class="dcf-input-text" value="<?php echo $event->listingcontactemail; ?>"type="text" id="contact-email" name="contact_email" />
 
-                    <label for="website">Event Website</label>
-                    <input value="<?php echo $event->webpageurl; ?>" type="text" id="website" name="website" />
+                    <label class="dcf-label" for="website">Event Website</label>
+                    <input class="dcf-input-text" value="<?php echo $event->webpageurl; ?>" type="text" id="website" name="website" />
                 </div>
             </fieldset>
 
             <fieldset class="visual-island">
-                <legend class="vi-header">
+                <legend class="dcf-legend vi-header">
                     Image
                 </legend>
 

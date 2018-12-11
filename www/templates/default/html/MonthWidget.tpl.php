@@ -5,7 +5,7 @@ $next = $context->getDateTime()->modify('+1 month');
 <div class="monthwidget">
     <table class="wp-calendar" data-datetime="<?php echo $context->getDateTime()->format('c') ?>">
         <caption>
-            <span class="prev"><a href="<?php echo $context->getPreviousMonthURL(); ?>"><span class="eventicon-angle-circled-left" aria-hidden="true"></span><span class="wdcf-sr-only">View events for <?php echo $prev->format('F'); ?></span></a></span>
+            <span class="prev"><a href="<?php echo $context->getPreviousMonthURL(); ?>"><span class="eventicon-angle-circled-left" aria-hidden="true"></span><span class="dcf-sr-only">View events for <?php echo $prev->format('F'); ?></span></a></span>
             <span class="monthvalue">
                 <a href="<?php echo $context->getURL(); ?>"><?php echo $context->getDateTime()->format('F'); ?></a>
             </span>

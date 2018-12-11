@@ -57,85 +57,87 @@
   <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
   <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
     <fieldset>
-        <label for="location"><span class="required">*</span> Location</label>
-        <select id="location" name="location" class="use-select2" style="width: 100%;">
-            <?php if ($datetime->id != NULL): ?>
-            <optgroup label="Current location">
-                <option selected="selected" value="<?php echo $datetime->location_id ?>"><?php echo $datetime->getLocation()->name; ?></option>
-            <?php endif; ?>
-            <optgroup label="Your saved locations">
-                <?php foreach ($context->getUserLocations() as $location): ?>
-                    <option value="<?php echo $location->id ?>"><?php echo $location->name ?></option>
-                <?php endforeach; ?>
-                <option value="new">-- New Location --</option>
-            </optgroup>
-            <optgroup label="UNL Campus locations">
-                <?php foreach ($context->getStandardLocations(\UNL\UCBCN\Location::DISPLAY_ORDER_MAIN) as $location): ?>
-                    <option value="<?php echo $location->id ?>"><?php echo $location->name ?></option>
-                <?php endforeach; ?>
-            </optgroup>
-            <optgroup label="Extension locations">
-                <?php foreach ($context->getStandardLocations(\UNL\UCBCN\Location::DISPLAY_ORDER_EXTENSION) as $location): ?>
-                    <option value="<?php echo $location->id ?>"><?php echo $location->name ?></option>
-                <?php endforeach; ?>
-            </optgroup>
-        </select>
+        <label class="dcf-label" for="location"><span class="dcf-required">*</span> Location</label>
+        <div class="dcf-input-select">
+          <select id="location" name="location" style="width: 100%;">
+              <?php if ($datetime->id != NULL): ?>
+              <optgroup label="Current location">
+                  <option selected="selected" value="<?php echo $datetime->location_id ?>"><?php echo $datetime->getLocation()->name; ?></option>
+              <?php endif; ?>
+              <optgroup label="Your saved locations">
+                  <?php foreach ($context->getUserLocations() as $location): ?>
+                      <option value="<?php echo $location->id ?>"><?php echo $location->name ?></option>
+                  <?php endforeach; ?>
+                  <option value="new">-- New Location --</option>
+              </optgroup>
+              <optgroup label="UNL Campus locations">
+                  <?php foreach ($context->getStandardLocations(\UNL\UCBCN\Location::DISPLAY_ORDER_MAIN) as $location): ?>
+                      <option value="<?php echo $location->id ?>"><?php echo $location->name ?></option>
+                  <?php endforeach; ?>
+              </optgroup>
+              <optgroup label="Extension locations">
+                  <?php foreach ($context->getStandardLocations(\UNL\UCBCN\Location::DISPLAY_ORDER_EXTENSION) as $location): ?>
+                      <option value="<?php echo $location->id ?>"><?php echo $location->name ?></option>
+                  <?php endforeach; ?>
+              </optgroup>
+          </select>
+        </div>
 
         <div id="new-location-fields" style="display: none;">
             <h6>New Location</h6>
-            <label for="location-name"><span class="required">*</span> Name</label>
-            <input type="text" id="location-name" name="new_location[name]">
+            <label class="dcf-label" for="location-name"><span class="required">*</span> Name</label>
+            <input class="dcf-input-text" type="text" id="location-name" name="new_location[name]">
 
-            <label for="location-address-1">Address</label>
-            <input type="text" id="location-address-1" name="new_location[streetaddress1]">
+            <label class="dcf-label" for="location-address-1">Address</label>
+            <input class="dcf-input-text" type="text" id="location-address-1" name="new_location[streetaddress1]">
 
-            <label for="location-address-2">Address 2</label>
-            <input type="text" id="location-address-2" name="new_location[streetaddress2]">
+            <label class="dcf-label" for="location-address-2">Address 2</label>
+            <input class="dcf-input-text" type="text" id="location-address-2" name="new_location[streetaddress2]">
 
-            <label for="location-room">Room</label>
-            <input type="text" id="location-room" name="new_location[room]">
+            <label class="dcf-label" for="location-room">Room</label>
+            <input class="dcf-input-text" type="text" id="location-room" name="new_location[room]">
 
-            <label for="location-city">City</label>
-            <input type="text" id="location-city" name="new_location[city]">
+            <label class="dcf-label" for="location-city">City</label>
+            <input class="dcf-input-text" type="text" id="location-city" name="new_location[city]">
 
-            <label for="location-state">State</label>
-            <input type="text" id="location-state" name="new_location[state]">
+            <label class="dcf-label" for="location-state">State</label>
+            <input class="dcf-input-text" type="text" id="location-state" name="new_location[state]">
 
-            <label for="location-zip">Zip</label>
-            <input type="text" id="location-zip" name="new_location[zip]">
+            <label class="dcf-label" for="location-zip">Zip</label>
+            <input class="dcf-input-text" type="text" id="location-zip" name="new_location[zip]">
 
-            <label for="location-map-url">Map URL</label>
-            <input type="text" id="location-map-url" name="new_location[mapurl]">
+            <label class="dcf-label" for="location-map-url">Map URL</label>
+            <input class="dcf-input-text" type="text" id="location-map-url" name="new_location[mapurl]">
 
-            <label for="location-webpage">Webpage</label>
-            <input type="text" id="location-webpage" name="new_location[webpageurl]">
+            <label class="dcf-label" for="location-webpage">Webpage</label>
+            <input class="dcf-input-text" type="text" id="location-webpage" name="new_location[webpageurl]">
 
-            <label for="location-hours">Hours</label>
-            <input type="text" id="location-hours" name="new_location[hours]">
+            <label class="dcf-label" for="location-hours">Hours</label>
+            <input class="dcf-input-text" type="text" id="location-hours" name="new_location[hours]">
 
-            <label for="location-directions">Directions</label>
-            <textarea id="location-directions" name="new_location[directions]"></textarea>
+            <label class="dcf-label" for="location-directions">Directions</label>
+            <textarea class="dcf-input-text" id="location-directions" name="new_location[directions]"></textarea>
 
-            <label for="location-additional-public-info">Additional Public Info</label>
-            <input type="text" id="location-additional-public-info" name="new_location[additionalpublicinfo]">
+            <label class="dcf-label" for="location-additional-public-info">Additional Public Info</label>
+            <input class="dcf-input-text" type="text" id="location-additional-public-info" name="new_location[additionalpublicinfo]">
 
-            <label for="location-type">Type</label>
-            <input type="text" id="location-type" name="new_location[type]">
+            <label class="dcf-label" for="location-type">Type</label>
+            <input class="dcf-input-text" type="text" id="location-type" name="new_location[type]">
 
-            <label for="location-phone">Phone</label>
-            <input type="text" id="location-phone" name="new_location[phone]">
+            <label class="dcf-label" for="location-phone">Phone</label>
+            <input class="dcf-input-text" type="text" id="location-phone" name="new_location[phone]">
 
-            <input type="checkbox" id="location-save" name="location_save"> 
-            <label for="location-save">Save this location for future events</label>
+            <input class="dcf-input-control" type="checkbox" id="location-save" name="location_save">
+            <label class="dcf-label" for="location-save">Save this location for future events</label>
         </div>
 
-        <label for="room">Room</label>
-        <input type="text" id="room" name="room" value="<?php echo $datetime->room; ?>" />
+        <label class="dcf-label" for="room">Room</label>
+        <input class="dcf-input-text" type="text" id="room" name="room" value="<?php echo $datetime->room; ?>" />
 
 
-        <label for="start-date" ><span class="required">*</span> Start Date &amp; Time</label>
+        <label class="dcf-label" for="start-date" ><span class="dcf-required">*</span> Start Date &amp; Time</label>
         <div class="date-time-select"><span class="wdn-icon-calendar" aria-hidden="true"></span>
-            <input id="start-date" value="<?php echo $start_date; ?>" 
+            <input id="start-date" value="<?php echo $start_date; ?>"
                 name="start_date" type="text" class="datepicker" aria-label="Start date in the format of mm/dd/yyyy"/><br class="hidden small-block"> @
             <select id="start-time-hour" name="start_time_hour" aria-label="Start time hour">
                 <option value="">Hour</option>
@@ -164,7 +166,7 @@
             </div>
         </div>
 
-        <label for="end-date">End Date &amp; Time (Optional)</label>
+        <label class="dcf-label" for="end-date">End Date &amp; Time (Optional)</label>
         <div class="date-time-select"><span class="wdn-icon-calendar" aria-hidden="true"></span>
             <input id="end-date" value="<?php echo $end_date; ?>"
                 name="end_date" type="text" class="datepicker" aria-label="End date in the format of mm/dd/yyyy" /><br class="hidden small-block"> @
@@ -186,10 +188,10 @@
 
             <div id="end-time-am-pm" class="am_pm">
                 <fieldset>
-                    <legend class="dcf-sr-only">AM/PM</legend>
-                    <label><input <?php if ($end_am_pm == 'am') echo 'checked="checked"'; ?> 
+                    <legend class="dcf-sr-only">AM/PMdd</legend>
+                    <label><input class="dcf-input-control" <?php if ($end_am_pm == 'am') echo 'checked="checked"'; ?>
                         type="radio" value="am" id="end-time-am-pm-am" name="end_time_am_pm">AM</label><br>
-                    <label><input <?php if ($end_am_pm == 'pm') echo 'checked="checked"'; ?> 
+                    <label><input class="dcf-input-control" <?php if ($end_am_pm == 'pm') echo 'checked="checked"'; ?>
                         type="radio" value="pm" id="end-time-am-pm-pm" name="end_time_am_pm">PM</label>
                 </fieldset>
             </div>
@@ -198,41 +200,50 @@
         <?php if ($context->recurrence_id == NULL) : ?>
             <div class="section-container">
                 <input <?php if ($datetime->recurringtype != 'none' && $datetime->recurringtype != NULL) echo 'checked="checked"' ?> type="checkbox" name="recurring" id="recurring"> 
-                <label for="recurring">This is a recurring event</label>
+                <label class="dcf-label" for="recurring">This is a recurring event</label>
                 <div class="recurring-container date-time-select">                        
-                    <label for="recurring-type">This event recurs </label>
-                    <select id="recurring-type" name="recurring_type">
-                        <option value="daily">Daily</option>
-                        <option value="weekly">Weekly</option>
-                        <option value="biweekly">Biweekly</option>
-                        <optgroup label="Monthly" id="monthly-group">
-                        </optgroup>
-                        <option value="annually">Yearly</option>
-                    </select>s
-                    <label for="recurs-until-date">until </label><br>
+                    <label class="dcf-label dcf-d-inline-block" for="recurring-type">This event recurs </label>
+                    <div class="dcf-input-select dcf-d-inline-block">
+                      <select id="recurring-type" name="recurring_type">
+                          <option value="daily">Daily</option>
+                          <option value="weekly">Weekly</option>
+                          <option value="biweekly">Biweekly</option>
+                          <optgroup label="Monthly" id="monthly-group">
+                          </optgroup>
+                          <option value="annually">Yearly</option>
+                      </select>
+                    </div>
+                    <label class="dcf-label dcf-d-inline-block" for="recurs-until-date">until </label><br>
                     <span class="wdn-icon-calendar" style="top: .4em" aria-hidden="true"></span>
                     <input value="<?php if ($datetime->recurringtype != 'none' && $datetime->recurringtype != NULL) echo $recurs_until_date; ?>" id="recurs-until-date" name="recurs_until_date" type="text" class="datepicker" aria-label="Until date in the format of mm/dd/yyyy" />
                 </div>
             </div>
         <?php endif; ?>
 
-        <label for="directions">Directions</label>
-        <textarea id="directions" name="directions"><?php echo $datetime->directions; ?></textarea>
+        <label class="dcf-label" for="directions">Directions</label>
+        <textarea class="dcf-input-text" id="directions" name="directions"><?php echo $datetime->directions; ?></textarea>
 
-        <label for="additional-public-info">Additional Public Info</label>
-        <textarea id="additional-public-info" name="additional_public_info"><?php echo $datetime->additionalpublicinfo; ?></textarea>
+        <label class="dcf-label" for="additional-public-info">Additional Public Info</label>
+        <textarea class="dcf-input-text" id="additional-public-info" name="additional_public_info"><?php echo $datetime->additionalpublicinfo; ?></textarea>
     </fieldset>
 
     <button class="dcf-btn wdn-button-brand dcf-float-left" type="submit">Submit</button>
 </form>
 <br>
 
-<script type="text/javascript">
+<?php
+$recurringCode = '';
+if ($datetime->recurringtype != 'none' && $datetime->recurringtype != NULL) {
+  $recurringCode = "
+    setRecurringOptions($('#start-date'), $('#monthly-group'));
+    $('#recurring-type').val('<?php echo $datetime->recurringtype ?>');";
+}
+$page->addScriptDeclaration("
 WDN.initializePlugin('jqueryui', [function() {  
     $ = require('jquery');
 
     $('.datepicker').datepicker();
-    $("LINK[href^='//unlcms.unl.edu/wdn/templates_4.0/scripts/plugins/ui/css/jquery-ui.min.css']").remove();
+    $(\"LINK[href^='//unlcms.unl.edu/wdn/templates_4.0/scripts/plugins/ui/css/jquery-ui.min.css']\").remove();
 
     $('#location').change(function(change) {
         if ($('#location').val() == 'new') {
@@ -248,10 +259,7 @@ WDN.initializePlugin('jqueryui', [function() {
         setRecurringOptions($(this), $('#monthly-group'));
     });
 
-    <?php if ($datetime->recurringtype != 'none' && $datetime->recurringtype != NULL): ?>
-    setRecurringOptions($('#start-date'), $('#monthly-group'));
-    $('#recurring-type').val('<?php echo $datetime->recurringtype ?>');
-    <?php endif; ?>
+    " . $recurringCode . "
 
     $('#add-datetime-form').submit(function (submit) {
         errors = [];
@@ -264,7 +272,7 @@ WDN.initializePlugin('jqueryui', [function() {
             if ($('#start-date').val() == '') {
                 notifier.mark_input_invalid($('#start-date'));
             }
-            errors.push('<a href="#location">Location</a> and <a href="#start-date">start date</a> are required.');
+            errors.push('<a href=\"#location\">Location</a> and <a href=\"#start-date\">start date</a> are required.');
         }
 
         var start = new Date($('#start-date').val());
@@ -290,7 +298,7 @@ WDN.initializePlugin('jqueryui', [function() {
 
                 if (start > end) {
                     notifier.mark_input_invalid($('#end-date'));
-                    errors.push('Your <a href="#end-date">end date/time</a> must be on or after the <a href="#start-date">start date/time</a>.');
+                    errors.push('Your <a href=\"#end-date\">end date/time</a> must be on or after the <a href=\"#start-date\">start date/time</a>.');
                 }
             }
         }
@@ -306,7 +314,7 @@ WDN.initializePlugin('jqueryui', [function() {
                     if ($('#recurs-until-date').val() == '') {
                         notifier.mark_input_invalid($('#recurs-until-date'));
                     }
-                    errors.push('Recurring events require a <a href="#recurring-type">recurring type</a> and <a href="#recurs-until-date">date</a> that they recur until.');
+                    errors.push('Recurring events require a <a href=\"#recurring-type\">recurring type</a> and <a href=\"#recurs-until-date\">date</a> that they recur until.');
                 }
 
                 // check that the recurs until date is on or after the start date
@@ -316,7 +324,7 @@ WDN.initializePlugin('jqueryui', [function() {
 
                 if (start > until) {
                     notifier.mark_input_invalid($('#recurs-until-date'));
-                    errors.push('The <a href="#recurs-until-date">"recurs until date"</a> must be on or after the start date.');
+                    errors.push('The <a href=\"#recurs-until-date\">\"recurs until date\"</a> must be on or after the start date.');
                 }
             }
         }
@@ -324,7 +332,7 @@ WDN.initializePlugin('jqueryui', [function() {
         // new locations must have a name
         if ($('#location').val() == 'new' && $('#location-name').val() == '') {
             notifier.mark_input_invalid($('#location-name'));
-            errors.push('You must give your new location a <a href="#location-name">name</a>.');
+            errors.push('You must give your new location a <a href=\"#location-name\">name</a>.');
         }
 
         if (errors.length > 0) {
@@ -332,5 +340,6 @@ WDN.initializePlugin('jqueryui', [function() {
             notifier.alert('Sorry! We couldn\'t create your event', '<ul><li>' + errors.join('</li><li>') + '</li></ul>');
         }
     });
-}]);
-</script>
+}]);");
+
+?>
