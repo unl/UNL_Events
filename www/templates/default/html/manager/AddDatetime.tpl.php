@@ -50,9 +50,9 @@
     );
     echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
 ?>
-<h1 class="wdn-brand">
+<h2 class="wdn-brand">
 <?php echo $last_crumb ?>
-</h1>
+</h2>
 <form id="add-datetime-form" action="" method="POST">
   <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
   <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">

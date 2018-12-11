@@ -1,6 +1,6 @@
 <div class="dcf-grid">
     <section class="dcf-col-100% dcf-col-33%-start@md">
-        <h1 class="results clear-top">
+        <h2 class="results clear-top">
             <?php
             if ($dt = $context->getSearchTimestamp()) {
                 echo '<span class="dcf-subhead">'.$context->count().' search results for events dated </span><a class="permalink" href="'.$context->getURL().'">'.date('F jS',$dt).'</a>';
@@ -8,7 +8,7 @@
                 echo '<span class="dcf-subhead">'.$context->count().' search results for </span><a class="permalink" href="'.$context->getURL().'">'.htmlentities($context->search_query).'</a>';
             }
             ?>
-        </h1>
+        </h2>
         <div id="subscribe">
             <span>Subscribe to this search</span>
             <ul id="droplist">

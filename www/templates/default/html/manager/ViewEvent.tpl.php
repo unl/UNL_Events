@@ -31,7 +31,7 @@ $crumbs->crumbs = array(
 echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
 ?>
 
-<h1>Event Preview</h1>
+<h2>Event Preview</h2>
 
 <p>This is a preview of an event to help you decide whether or not to accept a recommendation.</p>
 

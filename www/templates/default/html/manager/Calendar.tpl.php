@@ -42,13 +42,13 @@
     echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
 ?>
 <form id="search-form" action="<?php echo $context->calendar->getSearchURL(); ?>" style="display: none;">
-    <label for="events-search">Search</label>
-    <div>
+    <label class="dcf-label" for="events-search">Search</label>
+    <div class="dcf-form-group">
         <div style="float: right; padding-top: 3px;">
             <button type="submit" class="dcf-btn wdn-button-triad">Search</button>
         </div>
         <div style="margin-right: 100px;">
-            <input type="text" name="search_term" id="events-search"  />
+            <input type="text" name="search_term" id="events-search"  class="dcf-input-text" style="width: 97%" />
         </div>
     </div>
 </form>

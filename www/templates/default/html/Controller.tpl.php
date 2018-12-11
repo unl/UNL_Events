@@ -69,9 +69,9 @@ if ($context->getCalendar()) {
                                 <div class="submit-search">
                                     <a id="frontend_login" href="' . UNL\UCBCN\Frontend\Controller::$manager_url . $context->getCalendar()->shortname . '"><span class="eventicon-plus-circled" aria-hidden="true"></span>Manage Events</a>
                                     <form id="event_search" method="get" action="' . $frontend->getCalendarURL() . 'search/" role="search">
-                                        <label for="searchinput">Search Events</label>
+                                        <label class="dcf-label" for="searchinput">Search Events</label>
                                         <div class="dcf-input-group">
-                                            <input type="text" name="q" id="searchinput" placeholder="e.g., Monday, tomorrow" value="' . ((isset($context->options['q']))?$context->options['q']:'') . '"/>
+                                            <input class="dcf-input-text" type="text" name="q" id="searchinput" placeholder="e.g., Monday, tomorrow" value="' . ((isset($context->options['q']))?$context->options['q']:'') . '"/>
                                             <span class="wdn-input-group-btn">
                                                 <button><span class="wdn-icon-search" aria-hidden="true"></span><span class="dcf-sr-only">search</span></button>
                                             </span>

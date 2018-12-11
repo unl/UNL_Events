@@ -31,10 +31,10 @@ class Calendars extends RecordList
         if (array_key_exists('user_id', $this->options)) {
             # get all calendars related through a join on user_has_permission
             $sql = '
-                SELECT DISTINCT calendar.id FROM calendar
+                SELECT DISTINCT id FROM (SELECT calendar.id, calendar.name FROM calendar
                 INNER JOIN user_has_permission ON calendar.id = user_has_permission.calendar_id
                 INNER JOIN user ON user_has_permission.user_uid = user.uid
-                WHERE user.uid = "' . self::escapeString($this->options['user_id']) . '" ORDER BY calendar.id;';
+                WHERE user.uid = "' . self::escapeString($this->options['user_id']) . '" ORDER BY calendar.name) as distinctfilter';
             return $sql;
         } else if (array_key_exists('subscription_id', $this->options)) {
             # get all calendars that are subscribed with a certain subscription

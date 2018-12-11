@@ -56,7 +56,8 @@ class Search extends EventListing implements RoutableInterface
     function getSQL()
     {
         $sql = '
-                SELECT DISTINCT e.id as id, recurringdate.id as recurringdate_id
+                SELECT DISTINCT id, recurringdate_id FROM (
+                SELECT e.id as id, recurringdate.id as recurringdate_id, e.starttime, recurringdate.recurringdate, event.title
                 FROM eventdatetime as e
                 INNER JOIN event ON e.event_id = event.id
                 INNER JOIN calendar_has_event ON calendar_has_event.event_id = event.id
@@ -85,7 +86,7 @@ class Search extends EventListing implements RoutableInterface
         }
 
         $sql.= ')
-                ORDER BY e.starttime ASC, recurringdate.recurringdate ASC, event.title ASC';
+                ORDER BY e.starttime ASC, recurringdate.recurringdate ASC, event.title ASC) as distinctsearch';
 
         return $sql;
     }
