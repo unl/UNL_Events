@@ -1,9 +1,9 @@
 <?php
 use UNL\Templates\Templates;
-// TODO: Type needs to be 'App', not 'Fixed', but app currently not supporting JavaScript correctly
-$page = Templates::factory('Fixed', Templates::VERSION_5);
 
-if (file_exists(\UNL\UCBCN\Util::getWWWRoot() . '/wdn/templates_5.0_tmp')) {
+$page = Templates::factory('App', Templates::VERSION_5);
+
+if (file_exists(\UNL\UCBCN\Util::getWWWRoot() . '/wdn/templates_5.0')) {
     $page->setLocalIncludePath(\UNL\UCBCN\Util::getWWWRoot());
 }
 
