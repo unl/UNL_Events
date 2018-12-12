@@ -69,7 +69,7 @@ if ($_SERVER['SERVER_NAME'] == 'events-dev.unl.edu') {
         </div>';
 }
 $page->maincontentarea .= '
-        <section class="dcf-grid dcf-col-gap-4">
+        <section class="dcf-grid dcf-col-gap-4 dcf-pb-8">
             <div class="dcf-col-100% dcf-col-75%-start@md">
 ';
 if (($notice = $context->getNotice()) != NULL) {
