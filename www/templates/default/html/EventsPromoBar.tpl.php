@@ -58,7 +58,7 @@ switch (count($events['with_image'])) {
         $grid_count = 2;
     break;
     case 1:
-        $grid_class = 'dcf-grid-halves centered';
+        $grid_class = 'dcf-grid-full';
         $grid_count = 1;
         break;
     default:
@@ -68,41 +68,40 @@ switch (count($events['with_image'])) {
 }
 ?>
 <div id="events-promo-bar">
+
     <div class="band-results">
         <div class="section-heading">
             <h2>Today @ UNL</h2>
         </div>
     </div>
+
     <div class="dcf-grid dcf-col-gap-4 break-word">
+
         <div class="dcf-col-100% dcf-col-75%-start@md">
-        <div class="dcf-grid">
-        <?php for ($k = 0; $k < $grid_count; $k++): ?>
-            <div class="<?php echo $grid_class; ?>@md promo-box">
-                <div class="dcf-grid">
-                    <?php for ($i = $k*(count($events['with_image'])<=3?1:2); $i < count($events['with_image']) && $i < 6 && $i < (count($events['with_image'])<=3?$k+1:$k*2+2); $i++): ?>
-                    <div class="clearfix">
-                    <div class="wdcf-col-50%-start dcf-col-100%@md promo-bar-container">
-                        <div class="promo-box-image-barrier">
-                            <a href="<?php echo $frontend->getEventURL($events['with_image'][$i]) ?>">
-                                <img class="event_description_img" src="<?php if ($imageURL = $events['with_image'][$i]->getImageURL()) echo $imageURL; else echo "//events.unl.edu/images/"?>" alt="image for event <?php echo $events['with_image'][$i]->event->id; ?>" />
-                            </a>
-                        </div>
-                    </div>
-                    <div class="dcf-col-50%-end dcf-col-100%@md promo-bar-container">
+          <?php for ($k = 0; $k < $grid_count; $k++): ?>
+              <div class="<?php echo $grid_class; ?>@md promo-box">
+                <?php for ($i = $k*(count($events['with_image'])<=3?1:2); $i < count($events['with_image']) && $i < 6 && $i < (count($events['with_image'])<=3?$k+1:$k*2+2); $i++): ?>
+                  <div>
+                    <div class="dcf-grid-halves dcf-grid-full%@md promo-bar-container">
+                      <div class="promo-box-image-barrier">
+                        <a href="<?php echo $frontend->getEventURL($events['with_image'][$i]) ?>">
+                          <img class="event_description_img" src="<?php if ($imageURL = $events['with_image'][$i]->getImageURL()) echo $imageURL; else echo "//events.unl.edu/images/"?>" alt="image for event <?php echo $events['with_image'][$i]->event->id; ?>" />
+                        </a>
+                      </div>
+                      <div>
                         <h3 class="event-heading">
-                            <a href="<?php echo $frontend->getEventURL($events['with_image'][$i]) ?>">
-                                <?php echo $savvy->dbStringtoHtml($events['with_image'][$i]->event->title) ?>
-                            </a>
+                          <a href="<?php echo $frontend->getEventURL($events['with_image'][$i]) ?>">
+                              <?php echo $savvy->dbStringtoHtml($events['with_image'][$i]->event->title) ?>
+                          </a>
                         </h3>
+                      </div>
                     </div>
-                    </div>
-                    <?php endfor; ?>
-                </div>
-            </div>
-        <?php endfor; ?>
+                  </div>
+                <?php endfor; ?>
+              </div>
+          <?php endfor; ?>
         </div>
-        </div>
-        <div class="dcf-col-100% dcf-col-25%-end@md" promo-non-image-link">
+        <div class="dcf-col-100% dcf-col-25%-end@md promo-non-image-link">
             <?php for ($i = 0; $i < count($events['without_image']) && $i < 6; $i++): ?>
             <h3 class="event-heading promo-box-event-listing">
                 <a href="<?php echo $frontend->getEventURL($events['without_image'][$i]) ?>">
