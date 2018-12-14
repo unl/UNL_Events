@@ -4,7 +4,8 @@
 		$context->options['m'] == date('m') && 
 		$context->options['d'] == date('d') && 
 		$context->options['y'] == date('Y')) {
-		echo $savvy->render($context, 'EventsPromoBar.tpl.php');
+	  // Hide for now
+		//echo $savvy->render($context, 'EventsPromoBar.tpl.php');
 	}
 ?>
 <div class="dcf-grid dcf-col-gap-4">
