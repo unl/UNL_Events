@@ -54,7 +54,7 @@ $grid_count = 0;
 switch (count($events['with_image'])) {
     case 4:
     case 2:
-        $grid_class = 'dcf-grid-halves dcf-col-gap-4';
+        $grid_class = 'dcf-grid-halves';
         $grid_count = 2;
     break;
     case 1:
@@ -62,7 +62,7 @@ switch (count($events['with_image'])) {
         $grid_count = 1;
         break;
     default:
-        $grid_class = 'dcf-grid-thirds dcf-col-gap-3';
+        $grid_class = 'dcf-grid-thirds';
         $grid_count = 3;
     break;
 }
@@ -79,7 +79,7 @@ switch (count($events['with_image'])) {
 
         <div class="dcf-col-100% dcf-col-75%-start@md">
           <?php for ($k = 0; $k < $grid_count; $k++): ?>
-              <div class="<?php echo $grid_class; ?>@md promo-box">
+              <div class="<?php echo $grid_class; ?>@md dcf-col-gap-4 promo-box">
                 <?php for ($i = $k*(count($events['with_image'])<=3?1:2); $i < count($events['with_image']) && $i < 6 && $i < (count($events['with_image'])<=3?$k+1:$k*2+2); $i++): ?>
                   <div>
                     <div class="dcf-grid-halves dcf-grid-full%@md dcf-col-gap-4 promo-bar-container">
@@ -101,6 +101,7 @@ switch (count($events['with_image'])) {
               </div>
           <?php endfor; ?>
         </div>
+
         <div class="dcf-col-100% dcf-col-25%-end@md promo-non-image-link">
             <?php for ($i = 0; $i < count($events['without_image']) && $i < 6; $i++): ?>
             <h3 class="promo-box-event-listing">
