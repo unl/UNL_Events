@@ -77,7 +77,7 @@ switch (count($events['with_image'])) {
 
     <div class="dcf-grid dcf-col-gap-4 break-word">
 
-        <div class="dcf-col-100% dcf-col-75%-start@md">
+        <div class="dcf-col-100% dcf-col-75%-start@sm">
           <?php for ($k = 0; $k < $grid_count; $k++): ?>
               <div class="<?php echo $grid_class; ?>@sm dcf-col-gap-4 promo-box">
                 <?php for ($i = $k*(count($events['with_image'])<=3?1:2); $i < count($events['with_image']) && $i < 6 && $i < (count($events['with_image'])<=3?$k+1:$k*2+2); $i++): ?>
@@ -102,7 +102,7 @@ switch (count($events['with_image'])) {
           <?php endfor; ?>
         </div>
 
-        <div class="dcf-col-100% dcf-col-25%-end@md promo-non-image-link">
+        <div class="dcf-col-100% dcf-col-25%-end@sm promo-non-image-link">
             <?php for ($i = 0; $i < count($events['without_image']) && $i < 6; $i++): ?>
             <h3 class="promo-box-event-listing">
                 <a href="<?php echo $frontend->getEventURL($events['without_image'][$i]) ?>">
