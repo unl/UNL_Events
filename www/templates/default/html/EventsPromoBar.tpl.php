@@ -81,7 +81,6 @@ switch (count($events['with_image'])) {
           <?php for ($k = 0; $k < $grid_count; $k++): ?>
               <div class="<?php echo $grid_class; ?>@sm dcf-col-gap-4 promo-box">
                 <?php for ($i = $k*(count($events['with_image'])<=3?1:2); $i < count($events['with_image']) && $i < 6 && $i < (count($events['with_image'])<=3?$k+1:$k*2+2); $i++): ?>
-                  <div>
                     <div class="dcf-grid-halves dcf-grid-full%@sm dcf-col-gap-4 promo-bar-container">
                       <div class="promo-box-image-barrier">
                         <a href="<?php echo $frontend->getEventURL($events['with_image'][$i]) ?>">
@@ -96,7 +95,6 @@ switch (count($events['with_image'])) {
                         </h3>
                       </div>
                     </div>
-                  </div>
                 <?php endfor; ?>
               </div>
           <?php endfor; ?>
