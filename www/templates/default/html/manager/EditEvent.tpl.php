@@ -148,9 +148,9 @@
             	<?php endforeach; ?>
 
                 <?php if ($total_pages > 1): ?>
-                <script type="text/javascript">
-                WDN.loadCSS(WDN.getTemplateFilePath('css/modules/pagination.css'));
-                </script>
+                <?php
+                    $page->addScriptDelcaration("WDN.getTemplateFilePath('css/modules/pagination.css')");
+                ?>
                 <div style="text-align: center;">
                     <div style="display: inline-block;">
                         <ul id="pending-pagination" class="wdn_pagination" data-tab="pending" style="padding-left: 0;">
@@ -241,7 +241,7 @@
 
                 <div class="details">
                     <?php if ($event->imagemime != NULL): ?>
-                        <img src="/images/<?php echo $event->id; ?>" alt="image for event <?php echo $event->id; ?>">
+                        <img src="<?php echo $base_frontend_url ?>images/<?php echo $event->id; ?>" alt="image for event <?php echo $event->id; ?>">
                         <br>
                         <input type="checkbox" name="remove_image" id="remove-image">
                         <label for="remove-image">Remove Image</label> 
@@ -250,8 +250,10 @@
                 </div>
             </fieldset>
         </div>
+        <div class="dcf-col-100%">
+          <button class="dcf-btn wdn-button-brand dcf-float-left" type="submit">Save Event</button>
+        </div>
     </div>
-    <button class="dcf-btn wdn-button-brand dcf-float-left" type="submit">Save Event</button>
 </form>
 <br>
 

@@ -12,9 +12,9 @@
     );
     echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
 ?>
-<br>
 <div>
-    <form id="create-event-form" action="" method="POST" enctype="multipart/form-data">
+    <form id="create-event-form" action="" method="POST" enctype="multipart/form-data" class="dcf-pt-0">
+      <div class="dcf-grid dcf-col-gap-4">
         <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
         <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
         <div class="dcf-col-100% dcf-col-67%-start@md">
@@ -272,6 +272,7 @@
         <div class="dcf-col-100%">
             <button class="dcf-btn wdn-button-brand dcf-float-left" type="submit">Submit Event</button>
         </div>
+      </div>
     </form>
 </div>
 
