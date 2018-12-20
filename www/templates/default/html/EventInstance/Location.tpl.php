@@ -2,7 +2,7 @@
 <?php $l = $context->eventdatetime->getLocation(); ?>
 <?php if (isset($l->mapurl) || !empty($l->name)): ?>
     <span class="location">
-        <span class="eventicon-location" aria-hidden="true"></span><span class="wdn-text-hidden">Location:</span>
+        <span class="eventicon-location" aria-hidden="true"></span><span class="dcf-sr-only">Location:</span>
 <?php if (isset($l->mapurl)): ?>
         <a class="mapurl" href="<?php echo $l->mapurl ?>"><?php echo $l->name; ?></a>
 <?php else: ?>
