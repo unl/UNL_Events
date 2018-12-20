@@ -99,7 +99,7 @@ if ($context->output->getRawObject() instanceof Exception) {
     $template = 'Exception.tpl.php';
 }
 $page->maincontentarea .= ' 
-    <div class="dcf-bleed view-' . $view_class . ' band-results">
+    <div class="dcf-bleed view-' . $view_class . ' band-results dcf-pb-8">
         <div class="dcf-wrapper">
             ' . $savvy->render($context->output, $template) . '
         </div>
