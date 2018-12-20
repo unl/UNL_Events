@@ -66,7 +66,7 @@
         </div>
     </div>
     <br>
-    <button class="dcf-btn wdn-button-brand" form="add-subscription" type="submit">
+    <button class="dcf-btn dcf-btn-primary" form="add-subscription" type="submit">
         <?php echo $context->subscription->id == NULL ? 'Add Subscription' : 'Save Subscription' ?>
     </button>
 </form>

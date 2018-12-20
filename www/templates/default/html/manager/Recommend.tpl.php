@@ -56,7 +56,7 @@
         </tbody>
     </table>
     <br>
-    <button class="dcf-btn wdn-button-brand" type="submit">
+    <button class="dcf-btn dcf-btn-primary" type="submit">
         Submit
     </button>
 </form>

@@ -37,7 +37,7 @@
 			<figure><img class="event_description_img" src="<?php echo $imageURL ?>" alt="image for event <?php echo $context->event->id; ?>" /></figure>
 		<?php endif; ?>
         <p class="download">
-			<a class="wdn-button wdn-button-brand" href="<?php echo $url ?>.ics">Download this event to my calendar</a>
+			<a class="wdn-button dcf-btn-primary" href="<?php echo $url ?>.ics">Download this event to my calendar</a>
 		</p>
 	</div>
 </div>

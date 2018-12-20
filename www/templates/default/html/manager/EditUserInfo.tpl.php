@@ -15,7 +15,7 @@
     <input class="hidden" type="text" name="generate_api_token" value="true">
 
     <br><br>
-    <button class="dcf-btn wdn-button-brand" type="submit">
+    <button class="dcf-btn dcf-btn-primary" type="submit">
         Generate new API Token
     </button>
 </form>

@@ -270,7 +270,7 @@
             </fieldset>
         </div>
         <div class="dcf-col-100%">
-            <button class="dcf-btn wdn-button-brand dcf-float-left" type="submit">Submit Event</button>
+            <button class="dcf-btn dcf-btn-primary dcf-float-left" type="submit">Submit Event</button>
         </div>
       </div>
     </form>

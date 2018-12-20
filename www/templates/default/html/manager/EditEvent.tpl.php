@@ -78,7 +78,7 @@
             </fieldset>
             <fieldset class="event-datetimes">
 	            <legend class="dcf-legend">Location, Date, and Time</legend>
-                <a class="dcf-btn wdn-button-brand" href="<?php echo $event->getAddDatetimeURL($context->calendar) ?>">Add Location, Date, and/or Time</a><br><br>
+                <a class="dcf-btn dcf-btn-primary" href="<?php echo $event->getAddDatetimeURL($context->calendar) ?>">Add Location, Date, and/or Time</a><br><br>
 	            <div class="edt-header">
                     <div class="dates">
 	            	  Dates
@@ -123,7 +123,7 @@
                 		  <?php echo $datetime->getLocation()->name; ?>
                         </div>
                         <div class="dcf-btn-group controls">
-                    		  <a href="<?php echo $datetime->getEditURL($context->calendar); ?>" class="dcf-btn wdn-button-brand small">Edit</a>
+                    		  <a href="<?php echo $datetime->getEditURL($context->calendar); ?>" class="dcf-btn dcf-btn-primary small">Edit</a>
                           <button class="dcf-btn small" form="delete-datetime-<?php echo $datetime->id; ?>" type="submit">Delete</button>
                         </div>
                 	</div>
@@ -136,7 +136,7 @@
                                         <?php echo date('n/d/y', strtotime($recurring_date->recurringdate)) . ' @ ' . date('g:ia', strtotime($datetime->starttime)); ?>
                                     </div>
                                     <div class=" dcf-btn-group controls recurring">
-                                        <a href="<?php echo $datetime->getEditRecurrenceURL($context->calendar, $recurring_date->recurrence_id); ?>" class="dcf-btn wdn-button-brand small edit-recurring-edt">Edit</a>
+                                        <a href="<?php echo $datetime->getEditRecurrenceURL($context->calendar, $recurring_date->recurrence_id); ?>" class="dcf-btn dcf-btn-primary small edit-recurring-edt">Edit</a>
                                         <button type="dcf-btn submit" form="delete-datetime-<?php echo $datetime->id ?>-recurrence-<?php echo $recurring_date->recurrence_id ?>" class="small delete-datetime-recurrence">Delete</button>
                                     </div>
                                 </div>
@@ -251,7 +251,7 @@
             </fieldset>
         </div>
         <div class="dcf-col-100%">
-          <button class="dcf-btn wdn-button-brand dcf-float-left" type="submit">Save Event</button>
+          <button class="dcf-btn dcf-btn-primary dcf-float-left" type="submit">Save Event</button>
         </div>
     </div>
 </form>

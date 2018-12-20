@@ -17,6 +17,6 @@
 <form method="POST" action="<?php echo $context->calendar->getDeleteFinalURL() ?>" class="delete-form">
     <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
     <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
-    <button class="dcf-btn wdn-button-brand" type="submit">Yes, Delete</button>
+    <button class="dcf-btn dcf-btn-primary" type="submit">Yes, Delete</button>
     <a href="<?php echo $context->calendar->getEditURL() ?>" class="dcf-btn" style="vertical-align: middle;">No, let's not</a>
 </form>

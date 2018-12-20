@@ -46,5 +46,5 @@
           </div>
       <?php } ?>
     </fieldset>
-    <button class="dcf-btn wdn-button-brand" type="submit"><?php echo $context->user == NULL ? 'Add User' : 'Update User Permissions' ?></button>
+    <button class="dcf-btn dcf-btn-primary" type="submit"><?php echo $context->user == NULL ? 'Add User' : 'Update User Permissions' ?></button>
 </form>

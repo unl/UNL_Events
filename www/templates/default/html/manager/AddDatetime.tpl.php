@@ -227,7 +227,7 @@
         <textarea class="dcf-input-text" id="additional-public-info" name="additional_public_info"><?php echo $datetime->additionalpublicinfo; ?></textarea>
     </fieldset>
 
-    <button class="dcf-btn wdn-button-brand dcf-float-left" type="submit">Submit</button>
+    <button class="dcf-btn dcf-btn-primary dcf-float-left" type="submit">Submit</button>
 </form>
 <br>
 
