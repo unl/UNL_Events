@@ -54,7 +54,7 @@
 <form id="edit-event-form" action="" method="POST" class="clearfix" enctype="multipart/form-data">
     <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
     <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
-    <div class="dcf-grid dcf-col-gap-4" style="margin-top: -2.5rem">
+    <div class="dcf-grid dcf-col-gap-vw" style="margin-top: -2.5rem">
         <div class="dcf-col-100% dcf-col-67%-start@md">
             <fieldset style="margin-top: 0">
             	<legend class="dcf-legend" style="margin-top: 0">Event Details</legend>

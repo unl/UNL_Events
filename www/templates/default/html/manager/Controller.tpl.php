@@ -33,6 +33,9 @@ $page->addStyleSheet($base_frontend_url.'templates/default/html/css/manager.css?
 $page->addStyleSheet($base_frontend_url.'templates/default/html/css/jquery-ui.min-custom.css?v='.UNL\UCBCN\Frontend\Controller::$version);
 $page->addStyleSheet($base_frontend_url.'templates/default/html/js/vendor/select2/css/select2.min.css?v='.UNL\UCBCN\Frontend\Controller::$version);
 
+// no menu items, so hide mobile menu
+$page->addStyleDeclaration("#dcf-mobile-toggle-menu {display: none!important}");
+
 //javascript
 $page->addScriptDeclaration('var frontend_url = "'.$base_frontend_url.'";');
 $page->addScriptDeclaration('var manager_url = "'.$base_manager_url.'";');
@@ -69,7 +72,7 @@ if ($_SERVER['SERVER_NAME'] == 'events-dev.unl.edu') {
         </div>';
 }
 $page->maincontentarea .= '
-        <section class="dcf-grid dcf-col-gap-4 dcf-pb-8">
+        <section class="dcf-grid dcf-col-gap-vw dcf-pb-8">
             <div class="dcf-col-100% dcf-col-75%-start@md">
 ';
 if (($notice = $context->getNotice()) != NULL) {

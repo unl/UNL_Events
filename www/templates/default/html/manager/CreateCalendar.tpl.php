@@ -49,7 +49,7 @@
     <label class="dcf-label" for="recommend-within-account">Allow event recommendations within this account</label>
     <br>
     <br>
-    <button class="dcf-btn wdn-button-brand" type="submit">
+    <button class="dcf-btn dcf-btn-primary" type="submit">
         <?php echo $context->calendar->id == NULL ? 'Create Calendar' : 'Save Calendar' ?>
     </button>
     <br><br>

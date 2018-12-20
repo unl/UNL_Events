@@ -29,6 +29,9 @@ $page->affiliation = '';
 //css
 $page->addStyleSheet($frontend->getURL().'templates/default/html/css/events.css?v='.UNL\UCBCN\Frontend\Controller::$version);
 
+// no menu items, so hide mobile menu
+$page->addStyleDeclaration("#dcf-mobile-toggle-menu {display: none!important}");
+
 //javascript
 $page->addScriptDeclaration('var frontend_url = "'.$frontend->getURL().'";');
 $page->addScript($frontend->getURL().'templates/default/html/js/events.min.js?v='.UNL\UCBCN\Frontend\Controller::$version);
