@@ -9,7 +9,7 @@
     <div class="tools">
         <div style="text-align: center; margin-bottom: .8em">
         <?php if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_CREATE_ID, $calendar->id)): ?>
-            <a class="wdn-button wdn-button-brand" href="<?php echo $base_manager_url . $calendar->shortname ?>/create/">
+            <a class="dcf-btn dcf-btn-primary" href="<?php echo $base_manager_url . $calendar->shortname ?>/create/">
             <span style="font-size: 2em; vertical-align: middle; font-weight: 600">+</span>
             <span style="vertical-align: middle;">New Event</span>
             </a>
@@ -39,7 +39,7 @@
     <h3>Tools</h3>
     <div class="tools">
         <div style="text-align: center; margin-bottom: .8em">
-            <a class="wdn-button wdn-button-triad" href="<?php echo $base_manager_url ?>calendar/new">
+            <a class="dcf-btn wdn-button-triad" href="<?php echo $base_manager_url ?>calendar/new">
             <span style="vertical-align: middle;">+</span>
             <span style="vertical-align: middle;">New Calendar</span>
             </a>

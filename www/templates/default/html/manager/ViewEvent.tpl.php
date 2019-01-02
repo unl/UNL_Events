@@ -31,12 +31,12 @@ $crumbs->crumbs = array(
 echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
 ?>
 
-<h1>Event Preview</h1>
+<h2>Event Preview</h2>
 
 <p>This is a preview of an event to help you decide whether or not to accept a recommendation.</p>
 
-<div class="wdn-grid-set">
-    <div class="bp3-wdn-col-two-thirds">
+<div class="dcf-grid dcf-col-gap-vw">
+    <div class="dcf-col-100% dcf-col-67%-start@sm">
         <h2>Event Details</h2>
         <dl>
             <dt>Title</dt>
@@ -96,7 +96,7 @@ echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
             </tbody>
         </table>
     </div>
-    <div class="bp3-wdn-col-one-third">
+    <div class="dcf-col-100% dcf-col-33%-end@sm">
         <h2>Contact Info</h2>
         <?php if (!empty($event->listingcontactname) || !empty($event->listingcontactphone) || !empty($event->listingcontactemail) || !empty($event->webpageurl)): ?>
             <dl>

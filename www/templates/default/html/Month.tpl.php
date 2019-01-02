@@ -2,17 +2,17 @@
 $prev = $context->getDateTime()->modify('-1 month');
 $next = $context->getDateTime()->modify('+1 month');
 ?>
-<div class="month_cal" id="month_viewcal">
+<div class="month_cal dcf-pb-8" id="month_viewcal">
     <table class="wp-calendar wdn_responsive_table">
         <caption>
-            <span><a href="<?php echo $context->getPreviousMonthURL(); ?>" id="prev_month"><span class="eventicon-angle-circled-left" aria-hidden="true"></span><span class="wdn-text-hidden">View events for <?php echo $prev->format('F'); ?></span></a></span>
+            <span><a href="<?php echo $context->getPreviousMonthURL(); ?>" id="prev_month"><span class="eventicon-angle-circled-left" aria-hidden="true"></span><span class="dcf-sr-only">View events for <?php echo $prev->format('F'); ?></span></a></span>
             <span class="monthvalue">
                 <a href="<?php echo $context->getURL(); ?>"><?php echo $context->getDateTime()->format('F'); ?></a>
             </span>
             <span class="yearvalue">
                 <a href="<?php echo $context->getYearURL(); ?>"><?php echo $context->getDateTime()->format('Y'); ?></a>
             </span>
-            <span><a href="<?php echo $context->getNextMonthURL(); ?>" id="next_month"><span class="eventicon-angle-circled-right" aria-hidden="true"></span><span class="wdn-text-hidden">View events for <?php echo $next->format('F'); ?></span></a></span>
+            <span><a href="<?php echo $context->getNextMonthURL(); ?>" id="next_month"><span class="eventicon-angle-circled-right" aria-hidden="true"></span><span class="dcf-sr-only">View events for <?php echo $next->format('F'); ?></span></a></span>
         </caption>
         <thead>
         <?php

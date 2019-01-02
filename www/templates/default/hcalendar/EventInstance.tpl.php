@@ -3,10 +3,10 @@
 <div class='vcalendar'>
 	<div class='vevent'>
 	    <a href="<?php echo $url; ?>">
-		<h1 class='summary' data-datetime="<?php echo (new DateTime($context->getStartTime()))->format('c') ?>">
+		<h2 class='summary' data-datetime="<?php echo (new DateTime($context->getStartTime()))->format('c') ?>">
 		    <?php echo $savvy->dbStringtoHtml($context->event->title); ?> 
-		    <?php if (isset($context->event->subtitle)): ?><span class="wdn-subhead"><?php echo $savvy->dbStringtoHtml($context->event->subtitle) ?></span><?php endif; ?>
-	    </h1>
+		    <?php if (isset($context->event->subtitle)): ?><span class="dcf-subhead"><?php echo $savvy->dbStringtoHtml($context->event->subtitle) ?></span><?php endif; ?>
+	    </h2>
 	    </a>
 	    <?php echo $savvy->render($context, 'EventInstance/Date.tpl.php') ?>
 	    <?php echo $savvy->render($context, 'EventInstance/FullLocation.tpl.php') ?>
@@ -37,7 +37,7 @@
 			<figure><img class="event_description_img" src="<?php echo $imageURL ?>" alt="image for event <?php echo $context->event->id; ?>" /></figure>
 		<?php endif; ?>
         <p class="download">
-			<a class="wdn-button wdn-button-brand" href="<?php echo $url ?>.ics">Download this event to my calendar</a>
+			<a class="dcf-btn dcf-btn-primary" href="<?php echo $url ?>.ics">Download this event to my calendar</a>
 		</p>
 	</div>
 </div>

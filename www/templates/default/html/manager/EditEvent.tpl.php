@@ -34,7 +34,7 @@
 <br>
 
 <?php foreach($event->getDatetimes() as $datetime) : ?>
-    <form id="delete-datetime-<?php echo $datetime->id; ?>" class="delete-datetime delete-form" method="POST" action="<?php echo $datetime->getDeleteURL($context->calendar) ?>" class="delete-form hidden">
+    <form id="delete-datetime-<?php echo $datetime->id; ?>" class="delete-datetime delete-form" method="POST" action="<?php echo $datetime->getDeleteURL($context->calendar) ?>" class="delete-form dcf-d-none">
       <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
       <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">  
       <input type="hidden" name="event_datetime_id" value="<?php echo $datetime->id ?>" />
@@ -54,29 +54,31 @@
 <form id="edit-event-form" action="" method="POST" class="clearfix" enctype="multipart/form-data">
     <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
     <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
-    <div class="wdn-grid-set">
-        <div class="bp3-wdn-col-two-thirds">
+    <div class="dcf-grid dcf-col-gap-vw" style="margin-top: -2.5rem">
+        <div class="dcf-col-100% dcf-col-67%-start@md">
             <fieldset style="margin-top: 0">
-            	<legend style="margin-top: 0">Event Details</legend>
-                <label for="title"><span class="required">*</span> Title</label>
-                <input type="text" id="title" name="title" value="<?php echo $event->title; ?>" />
+            	<legend class="dcf-legend" style="margin-top: 0">Event Details</legend>
+                <label class="dcf-label" for="title"><span class="required">*</span> Title</label>
+                <input class="dcf-input-text" type="text" id="title" name="title" value="<?php echo $event->title; ?>" />
 
-                <label for="subtitle">Subtitle</label>
-                <input type="text" id="subtitle" name="subtitle" value="<?php echo $event->subtitle; ?>" />
+                <label class="dcf-label" for="subtitle">Subtitle</label>
+                <input class="dcf-input-text" type="text" id="subtitle" name="subtitle" value="<?php echo $event->subtitle; ?>" />
 
-                <label for="description">Description</label>
-                <textarea rows="4" id="description" name="description"><?php echo $event->description; ?></textarea>
+                <label class="dcf-label" for="description">Description</label>
+                <textarea class="dcf-input-text" rows="4" id="description" name="description"><?php echo $event->description; ?></textarea>
 
-                <label for="type">Type</label>
-                <select id="type" name="type">
-                <?php foreach ($context->getEventTypes() as $type) { ?>
-                    <option <?php if ($event_type != NULL && $event_type->id == $type->id) echo 'selected="selected"'; ?> value="<?php echo $type->id ?>"><?php echo $type->name ?></option>
-                <?php } ?>
-                </select>
+                <label class="dcf-label" for="type">Type</label>
+                <div class="dcf-input-select">
+                  <select id="type" name="type">
+                  <?php foreach ($context->getEventTypes() as $type) { ?>
+                      <option <?php if ($event_type != NULL && $event_type->id == $type->id) echo 'selected="selected"'; ?> value="<?php echo $type->id ?>"><?php echo $type->name ?></option>
+                  <?php } ?>
+                  </select>
+                </div>
             </fieldset>
             <fieldset class="event-datetimes">
-	            <legend>Location, Date, and Time</legend>
-                <a class="wdn-button wdn-button-brand" href="<?php echo $event->getAddDatetimeURL($context->calendar) ?>">Add Location, Date, and/or Time</a><br><br>
+	            <legend class="dcf-legend">Location, Date, and Time</legend>
+                <a class="dcf-btn dcf-btn-primary" href="<?php echo $event->getAddDatetimeURL($context->calendar) ?>">Add Location, Date, and/or Time</a><br><br>
 	            <div class="edt-header">
                     <div class="dates">
 	            	  Dates
@@ -89,7 +91,7 @@
             	<?php foreach($event->getDatetimes(5, ($context->page - 1)*5) as $datetime) : ?>
                 	<div class="edt-record <?php if ($datetime->recurringtype != 'none') echo 'has-recurring' ?>">
                         <div class="dates">
-                    		<?php 
+                    		<?php
         				    {
         				        if ($datetime->recurringtype == 'none') {
         				            echo date('n/d/y @ g:ia', strtotime($datetime->starttime));
@@ -120,9 +122,9 @@
                         <div class="location with-controls">
                 		  <?php echo $datetime->getLocation()->name; ?>
                         </div>
-                        <div class="controls">
-                    		<a href="<?php echo $datetime->getEditURL($context->calendar); ?>" class="wdn-button wdn-button-brand small">Edit</a>
-                            <button class="small" form="delete-datetime-<?php echo $datetime->id; ?>" type="submit">Delete</button>
+                        <div class="dcf-btn-group controls">
+                    		  <a href="<?php echo $datetime->getEditURL($context->calendar); ?>" class="dcf-btn dcf-btn-primary small">Edit</a>
+                          <button class="dcf-btn small" form="delete-datetime-<?php echo $datetime->id; ?>" type="submit">Delete</button>
                         </div>
                 	</div>
                     <?php if ($datetime->recurringtype != 'none') : ?>
@@ -133,9 +135,9 @@
                                     <div class="dates recurring">
                                         <?php echo date('n/d/y', strtotime($recurring_date->recurringdate)) . ' @ ' . date('g:ia', strtotime($datetime->starttime)); ?>
                                     </div>
-                                    <div class="controls recurring">
-                                        <a href="<?php echo $datetime->getEditRecurrenceURL($context->calendar, $recurring_date->recurrence_id); ?>" class="wdn-button wdn-button-brand small edit-recurring-edt">Edit</a>
-                                        <button type="submit" form="delete-datetime-<?php echo $datetime->id ?>-recurrence-<?php echo $recurring_date->recurrence_id ?>" class="small delete-datetime-recurrence">Delete</button>
+                                    <div class=" dcf-btn-group controls recurring">
+                                        <a href="<?php echo $datetime->getEditRecurrenceURL($context->calendar, $recurring_date->recurrence_id); ?>" class="dcf-btn dcf-btn-primary small edit-recurring-edt">Edit</a>
+                                        <button type="dcf-btn submit" form="delete-datetime-<?php echo $datetime->id ?>-recurrence-<?php echo $recurring_date->recurrence_id ?>" class="small delete-datetime-recurrence">Delete</button>
                                     </div>
                                 </div>
                             </div>
@@ -146,9 +148,9 @@
             	<?php endforeach; ?>
 
                 <?php if ($total_pages > 1): ?>
-                <script type="text/javascript">
-                WDN.loadCSS(WDN.getTemplateFilePath('css/modules/pagination.css'));
-                </script>
+                <?php
+                    $page->addScriptDelcaration("WDN.getTemplateFilePath('css/modules/pagination.css')");
+                ?>
                 <div style="text-align: center;">
                     <div style="display: inline-block;">
                         <ul id="pending-pagination" class="wdn_pagination" data-tab="pending" style="padding-left: 0;">
@@ -179,26 +181,26 @@
             <?php endif; ?>
             </fieldset>
         </div>
-        <div class="bp3-wdn-col-one-third">
+        <div class="dcf-col-100% dcf-col-33%-end@md">
             <fieldset class="visual-island">
                 <legend class="vi-header">
                     Sharing
                 </legend>
                 <div class="details">
                     <fieldset>
-                        <legend>Privacy</legend>
+                        <legend class="dcf-legend">Privacy</legend>
                         <label>
-                            <input <?php if (!$event->approvedforcirculation) echo 'checked="checked"' ?> type="radio" value="private" name="private_public" id="sharing-private"> 
+                            <input class=""dcf-input-control" <?php if (!$event->approvedforcirculation) echo 'checked="checked"' ?> type="radio" value="private" name="private_public" id="sharing-private">
                             Private
                         </label> 
                         <br>
                         <label>
-                            <input <?php if ($event->approvedforcirculation) echo 'checked="checked"' ?> type="radio" value="public" name="private_public" id="sharing-public"> 
+                            <input class=""dcf-input-control" <?php if ($event->approvedforcirculation) echo 'checked="checked"' ?> type="radio" value="public" name="private_public" id="sharing-public">
                             Public
                         </label>
                     </fieldset>
                   <fieldset>
-                    <legend>Consider for main UNL Calendar</legend>
+                    <legend class="dcf-legend">Consider for main UNL Calendar</legend>
                       <?php if ($context->on_main_calendar): ?>
                         <img src="<?php echo $base_frontend_url ?>templates/default/html/images/checkmark-16.png" alt="">
                         (event has been sent to main UNL calendar for approval)
@@ -218,42 +220,45 @@
                 </legend>
 
                 <div class="details">
-                    <label for="contact-name">Name</label>
-                    <input value="<?php echo $event->listingcontactname; ?>" type="text" id="contact-name" name="contact_name" />
+                    <label class="dcf-label" for="contact-name">Name</label>
+                    <input class="dcf-input-text" value="<?php echo $event->listingcontactname; ?>" type="text" id="contact-name" name="contact_name" />
 
-                    <label for="contact-phone">Phone</label>
-                    <input value="<?php echo $event->listingcontactphone; ?>" type="text" id="contact-phone" name="contact_phone" />
+                    <label class="dcf-label" for="contact-phone">Phone</label>
+                    <input class="dcf-input-text" value="<?php echo $event->listingcontactphone; ?>" type="text" id="contact-phone" name="contact_phone" />
 
-                    <label for="contact-email">Email</label>
-                    <input value="<?php echo $event->listingcontactemail; ?>"type="text" id="contact-email" name="contact_email" />
+                    <label class="dcf-label" for="contact-email">Email</label>
+                    <input class="dcf-input-text" value="<?php echo $event->listingcontactemail; ?>"type="text" id="contact-email" name="contact_email" />
 
-                    <label for="website">Event Website</label>
-                    <input value="<?php echo $event->webpageurl; ?>" type="text" id="website" name="website" />
+                    <label class="dcf-label" for="website">Event Website</label>
+                    <input class="dcf-input-text" value="<?php echo $event->webpageurl; ?>" type="text" id="website" name="website" />
                 </div>
             </fieldset>
 
             <fieldset class="visual-island">
-                <legend class="vi-header">
+                <legend class="dcf-legend vi-header">
                     Image
                 </legend>
 
                 <div class="details">
                     <?php if ($event->imagemime != NULL): ?>
-                        <img src="/images/<?php echo $event->id; ?>" alt="image for event <?php echo $event->id; ?>">
+                        <img src="<?php echo $base_frontend_url ?>images/<?php echo $event->id; ?>" alt="image for event <?php echo $event->id; ?>">
                         <br>
                         <input type="checkbox" name="remove_image" id="remove-image">
                         <label for="remove-image">Remove Image</label> 
                     <?php endif; ?>
-                    <input style="font-size: 10px;" type="file" name="imagedata" id="imagedata" aria-label="Event Image">
+                    <input class="dcf-input-file" style="font-size: 10px;" type="file" name="imagedata" id="imagedata" aria-label="Event Image">
                 </div>
             </fieldset>
         </div>
+        <div class="dcf-col-100%">
+          <button class="dcf-btn dcf-btn-primary dcf-float-left" type="submit">Save Event</button>
+        </div>
     </div>
-    <button class="wdn-button wdn-button-brand wdn-pull-left" type="submit">Save Event</button>
 </form>
 <br>
 
-<script type="text/javascript">
+<?php
+$page->addScriptDeclaration("
 require(['jquery'], function($) {
     $('.delete-datetime').submit(function (submit) {
         if (!window.confirm('Are you sure you want to delete this location, date, and time?')) {
@@ -277,10 +282,10 @@ require(['jquery'], function($) {
         // validate required fields
         if ($('#title').val() == '') {
             notifier.mark_input_invalid($('#title'));
-            notifier.alert('Sorry! We couldn\'t edit your event', '<a href="#title">Title</a> is required.');
+            notifier.alert('Sorry! We couldn\'t edit your event', '<a href=\"#title\">Title</a> is required.');
             submit.preventDefault();
         }
     });
-});
+});");
+?>
 
-</script>

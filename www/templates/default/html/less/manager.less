@@ -1,3 +1,9 @@
+#dcf-main {
+	a {
+		text-decoration: none;
+	}
+}
+
 .use-select2 {
 	width: 100%;
 }
@@ -12,10 +18,6 @@
    display: block;
    height: 0;
    clear: both;
-}
-
-.wdn-grid-set.reverse > [class*=wdn-col] {
-	float: right;
 }
 
 .toolbox, .visual-island {
@@ -85,22 +87,24 @@
 	    margin-left: 0.8em;
 	}
 	input {
-	    padding-left: 2.3em;
-	    width: 40%;
-	    position: relative;
-	    text-align: center;
+	    padding-left: 2.3em!important;
+	    width: 40%!important;
+	    position: relative!important;
+	    text-align: center!important;
 	}
 	select {
-	    width: 14%;
-	    text-align: center;
-	    padding: 0;
+	    width: 14%!important;
+	    text-align: center!important;
+	    padding: 0!important;
+		  display: inline-block!important;
 	}
 	> * {
-	  vertical-align: middle;
+	  vertical-align: middle!important;
 	}
 }
 
 #breadcrumbs {
+	margin-bottom: 1.5rem;
 	background: #474746;
 	padding: 0 1rem;
 	position: relative;
@@ -253,6 +257,7 @@
 	}
 
 	#breadcrumbs {
+		margin-bottom: 2rem;
 		padding-top: 10px !important;
 	}
 }

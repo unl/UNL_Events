@@ -1,5 +1,7 @@
 @charset "UTF-8";
 
+@import "lib/4-1carryoverhack.less";
+
 @import "lib/lesshat.less";
 
 @import "lib/breakpoints.less";
@@ -224,7 +226,7 @@
         margin-right: 0.451em;
     }
 
-    .wdn-main p a& { // Needed to make the selector more specific
+    .dcf-main p a& { // Needed to make the selector more specific
         border-bottom: 0;
     }
 }
@@ -373,7 +375,7 @@
         }
 }
 
-#maincontent {
+#dcf-main {
 
     .band-nav {
         background-color: @ui02;
@@ -388,12 +390,12 @@
             text-transform: uppercase;
             margin: 0;
             padding: 0;
-            font-size: 21px;
-            font-size: 1.615rem;
+            font-size: 16px;
+            font-size: 1rem;
 
             @media @bp2 {
-                font-size: 23px;
-                font-size: 1.425rem;
+                font-size: 16px;
+                font-size: 1rem;
             }
 
             li {
@@ -404,9 +406,10 @@
 
         a {
             border-bottom: 0;
+            text-decoration: none;
         }
 
-        .wdn-inner-wrapper {
+        .dcf-wrapper {
             padding-top: 1em;
             padding-bottom: 0.451em;
         }
@@ -425,12 +428,12 @@
             .brand-font();
             text-transform: uppercase;
             margin-right: 1em;
-            font-size: 21px;
-            font-size: 1.615rem;
+            font-size: 16px;
+            font-size: 1rem;
 
             @media @bp2 {
-                font-size: 23px;
-                font-size: 1.425rem;
+                font-size: 16px;
+                font-size: 1rem;
             }
 
             span:before {
@@ -456,8 +459,10 @@
 
             }
 
-            .wdn-input-group {
+            .dcf-input-group {
                 margin-top: 0.143em;
+                font-size: 8px;
+                font-size: .5rem;
 
                 @media @bp2 {
                     margin-top: 0.1em;
@@ -466,15 +471,17 @@
 
             label {
                 float: left;
+                margin-top: .178rem;
                 margin-right: 0.339em;
                 .brand-font();
                 text-transform: uppercase;
-                font-size: 21px;
-                font-size: 1.615rem;
+                font-size: 16px;
+                font-size: 1rem;
 
                 @media @bp2 {
-                    font-size: 23px;
-                    font-size: 1.425rem;
+                    margin-top: .46rem;
+                    font-size: 16px;
+                    font-size: 1rem;
                 }
             }
 
@@ -492,7 +499,7 @@
     .band-results {
         background-color: @ui02;
 
-        .wdn-inner-wrapper {
+        .dcf-wrapper {
             padding-top: 1em;
         }
 
@@ -590,16 +597,16 @@
         .vcalendar {
             .vevent {
                 margin-bottom: 1em;
-                padding: 0 23px 1.777em;
-                padding: 0 1.425rem 1.777em;
+                padding: 23px 1.777em;
+                padding: 1.425rem 1.777em;
                 border-top: 5px solid @ui05;
                 background-color: fadeout(#fff, 33%);
                 box-shadow: 0 0 0 1px fadeout(@ui14, 90%);
                 transition: all 0.2s ease-out;
 
                 @media @bp2 {
-                    padding: 0 30px 2.369em;
-                    padding: 0 1.899rem 2.369em;
+                    padding: 30px 2.369em;
+                    padding: 1.899rem 2.369em;
 
                 }
 
@@ -607,26 +614,6 @@
                     border-top: 5px solid @scarlet;
                     background-color: #fff;
                     box-shadow: 0 0 1px 1px fadeout(@ui14, 80%);
-                }
-
-                h1 {
-                    font-size: 30px;
-                    font-size: 2.3077rem;
-
-                    @media @bp2 {
-                        font-size: 41px;
-                        font-size: 2.532rem;
-                    }
-                }
-
-                h2 {
-                    font-size: 28px;
-                    font-size: 2.1538rem;
-
-                    @media @bp2 {
-                        font-size: 38px;
-                        font-size: 2.369rem;
-                    }
                 }
 
                 .date-wrapper,

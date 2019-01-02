@@ -1,9 +1,9 @@
 <?php
 use UNL\Templates\Templates;
 
-$page = Templates::factory('Fixed', Templates::VERSION_4_1);
+$page = Templates::factory('App', Templates::VERSION_5);
 
-if (file_exists(\UNL\UCBCN\Util::getWWWRoot() . '/wdn/templates_4.1')) {
+if (file_exists(\UNL\UCBCN\Util::getWWWRoot() . '/wdn/templates_5.0')) {
     $page->setLocalIncludePath(\UNL\UCBCN\Util::getWWWRoot());
 }
 
@@ -23,9 +23,8 @@ $view_class = str_replace('\\', '_', strtolower($context->options['model']));
 
 //Document titles
 $page->doctitle = '<title>' . $title . '</title>';
-$page->titlegraphic = $site_title;
+$page->titlegraphic = '<a class="dcf-txt-h5" href="/">' . $site_title . '</a>';
 $page->setParam('class', 'hide-wdn_navigation_wrapper');
-$page->pagetitle = '';
 $page->affiliation = '';
 
 //css
@@ -34,10 +33,18 @@ $page->addStyleSheet($base_frontend_url.'templates/default/html/css/manager.css?
 $page->addStyleSheet($base_frontend_url.'templates/default/html/css/jquery-ui.min-custom.css?v='.UNL\UCBCN\Frontend\Controller::$version);
 $page->addStyleSheet($base_frontend_url.'templates/default/html/js/vendor/select2/css/select2.min.css?v='.UNL\UCBCN\Frontend\Controller::$version);
 
+// no menu items, so hide mobile menu
+$page->addStyleDeclaration("#dcf-mobile-toggle-menu {display: none!important}");
+
 //javascript
-$page->head .= '<script>var frontend_url = "'.$base_frontend_url.'";</script>' . PHP_EOL;
-$page->head .= '<script>var manager_url = "'.$base_manager_url.'";</script>' . PHP_EOL;
-$page->head .= '<script type="text/javascript">WDN.initializePlugin("notice");</script>' . PHP_EOL;
+$page->addScriptDeclaration('var frontend_url = "'.$base_frontend_url.'";');
+$page->addScriptDeclaration('var manager_url = "'.$base_manager_url.'";');
+$page->addScriptDeclaration("WDN.initializePlugin('notice');");
+$page->addScriptDeclaration("
+require(['jquery'], function ($) {
+    $('#breadcrumbs > ul > li > a').last().parent().addClass('last-link');
+});");
+$page->addScript($base_frontend_url .'templates/default/html/js/manager.min.js?v='.UNL\UCBCN\Frontend\Controller::$version);
 
 //other
 $savvy->addGlobal('page', $page);
@@ -49,10 +56,10 @@ if ($context->output->getRawObject() instanceof Exception) {
 }
 
 $page->maincontentarea = '
-<div class="wdn-band view-' . $view_class . ' events-manager">
-    <div class="wdn-inner-wrapper">';
+<div class="dcf-bleed view-' . $view_class . ' events-manager">
+    <div class="dcf-wrapper">';
 if ($_SERVER['SERVER_NAME'] == 'events-dev.unl.edu') {
-    $page->maincontentarea .= 
+    $page->maincontentarea .=
         '<div id="notice" class="wdn_notice">
             <div class="close">
             <a href="#" title="Close this notice">Close this notice</a>
@@ -65,8 +72,8 @@ if ($_SERVER['SERVER_NAME'] == 'events-dev.unl.edu') {
         </div>';
 }
 $page->maincontentarea .= '
-        <section class="wdn-grid-set reverse">
-            <div class="bp2-wdn-col-three-fourths">
+        <section class="dcf-grid dcf-col-gap-vw dcf-pb-8">
+            <div class="dcf-col-100% dcf-col-75%-start@md">
 ';
 if (($notice = $context->getNotice()) != NULL) {
     $class = '';
@@ -108,17 +115,17 @@ if (($notice = $context->getNotice()) != NULL) {
 $page->maincontentarea .= $savvy->render($context->output, $template) . '
             <br>
             </div>
-            <nav class="calendars-list bp2-wdn-col-one-fourth">
-                ' . $savvy->render($context, 'navigation.tpl.php') . '
-            </nav>
+            <div class="dcf-col-100% dcf-col-25%-end@md">
+                <nav class="calendars-list">
+                    ' . $savvy->render($context, 'navigation.tpl.php') . '
+                </nav>
+            </div>
         </section>
     </div>
 </div>
-
-<script src="' . $base_frontend_url .'templates/default/html/js/manager.min.js?v='.UNL\UCBCN\Frontend\Controller::$version.'"></script>
 ';
 
-$page->leftcollinks = $savvy->render($context, 'html/localfooter.tpl.php');
+$page->contactinfo = $savvy->render($context, 'html/localfooter.tpl.php');
 
 
 //echo everything

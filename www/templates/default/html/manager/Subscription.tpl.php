@@ -10,16 +10,14 @@
 
 <?php if (count($context->getSubscriptions()) > 0): ?>
 <?php foreach($context->getSubscriptions() as $subscription): ?>
-<form id="delete-subscription-<?php echo $subscription->id ?>" method="POST" action="<?php echo $subscription->getDeleteURL() ?>" class="delete-form hidden">
+<form id="delete-subscription-<?php echo $subscription->id ?>" method="POST" action="<?php echo $subscription->getDeleteURL() ?>" class="delete-form dcf-d-none">
     <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
     <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
     <input type="hidden" name="subscription_id" value="<?php echo $subscription->id ?>" />
     <button type="submit">Submit</button>
 </form>
 <?php endforeach; ?>
-<h1 class="wdn-brand">
-	Current Subscriptions
-</h1>
+<h2 class="wdn-brand">Current Subscriptions</h2>
 <div>
 	<table>
 		<thead>
@@ -35,9 +33,9 @@
 		        	<?php echo $subscription->name; ?>
 				</td>
 				<td class="small-center table-actions">
-			        <a class="wdn-button wdn-button-brand" href="<?php echo $subscription->getEditURL() ?>">Edit</a>
+			        <a class="dcf-btn dcf-btn-primary" href="<?php echo $subscription->getEditURL() ?>">Edit</a>
 			        <span class="small-hidden">|</span><br class="hidden small-block"><br class="hidden small-block">
-		            <button class="wdn-button wdn-button-triad" form="delete-subscription-<?php echo $subscription->id ?>" type="submit">Delete</button>
+		            <button class="dcf-button wdn-button-triad" form="delete-subscription-<?php echo $subscription->id ?>" type="submit">Delete</button>
 				</td>
 			</tr>
 	    <?php endforeach; ?>
@@ -53,5 +51,5 @@
 
 <br>
 <a href="<?php echo $base_manager_url . $context->calendar->shortname ?>/subscriptions/new/" 
-	class="wdn-button wdn-button-brand">Add Subscription
+	class="dcf-btn dcf-btn-primary">Add Subscription
 </a>

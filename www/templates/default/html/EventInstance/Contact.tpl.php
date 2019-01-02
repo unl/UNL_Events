@@ -11,7 +11,7 @@ if (isset($context->event->listingcontactemail)) {
 ?>
 <?php if (!empty($contactInfo)): ?>
 <div class="contact">
-    <span class="eventicon-vcard" aria-hidden="true"></span><span class="wdn-text-hidden">Contact:</span>
+    <span class="eventicon-vcard" aria-hidden="true"></span><span class="dcf-sr-only">Contact:</span>
     <?php echo implode(', ', $contactInfo) ?>
 </div>
 <?php endif; ?>
