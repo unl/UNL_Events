@@ -23,7 +23,7 @@ $view_class = str_replace('\\', '_', strtolower($context->options['model']));
 
 //Document titles
 $page->doctitle = '<title>' . $title . '</title>';
-$page->titlegraphic = $site_title;
+$page->titlegraphic = '<a class="dcf-txt-h5" href="/">' . $site_title . '</a>';
 $page->setParam('class', 'hide-wdn_navigation_wrapper');
 $page->affiliation = '';
 
