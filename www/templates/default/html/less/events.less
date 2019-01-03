@@ -112,14 +112,12 @@
         margin: 0;
         padding: 1.069em 1em 1em;
         .sans-serif-font();
-        font-size: 12px;
         font-size: 0.923rem;
         text-transform: uppercase;
         color: #fff;
         background-color: @ui09;
 
         @media @bp2 {
-            font-size: 13px;
             font-size: 0.802rem;
         }
 
@@ -143,7 +141,6 @@
 
     td, th {
         .sans-serif-font();
-        font-size: 12px;
         font-size: 0.923rem;
         text-align: center;
         border: 1px solid darken(#fff, 20%);
@@ -157,7 +154,6 @@
         background-color:#fff;
         /* Previous or next month */
         &.prev, &.prev a, &.next, &.next a {
-            font-size: 9px;
             font-size: 0.6923rem;
 
             @media @bp2 {
@@ -213,11 +209,9 @@
 
 .return-today {
     .sans-serif-font();
-    font-size: 12px;
     font-size: 0.75rem;
 
     @media @bp2 {
-        font-size: 13px;
         font-size: 0.802rem;
     }
 
@@ -251,7 +245,6 @@
         text-align: left;
         vertical-align: top;
         padding: 1em;
-        font-size: 9px;
         font-size: 0.6923rem;
 
         @media @under-bp2 {
@@ -261,12 +254,10 @@
         }
 
         @media @bp2 {
-            font-size: 10px;
             font-size: 0.602rem;
         }
 
         &:before {
-            font-size: 10px;
             font-size: 0.76923rem;
             font-weight: 400;
         }
@@ -289,11 +280,9 @@
         }
 
         > a {
-            font-size: 16px;
             font-size: 1.2307rem;
 
             @media @bp2 {
-                font-size: 13px;
                 font-size: 0.802rem;
             }
         }
@@ -318,6 +307,9 @@
 }
 
 #subscribe {
+    display: flex;
+    align-items: center;
+    flex-flow: row wrap;
     margin: 1.777em 0;
     padding-top: 0.75em;
     border-top: 1px solid @ui04;
@@ -325,40 +317,17 @@
     span.title {
         float: left;
         width: 50%;
-        padding: 0.254em 1em 0 0;
+        padding-right: 1em;
         .sans-serif-font();
-        font-size: 10px;
-        font-size: 0.769rem;
+        font-size: 0.75em;
         text-transform: uppercase;
-        line-height: 1.425;
-
-        @media @bp1 {
-            float: left;
-            width: auto;
-            padding: 1em 1em 0 0;
-        }
-
-        @media @bp2 {
-            clear: both;
-            padding: 0;
-            width: 100%;
-            font-size: 12px;
-            font-size: 0.75rem;
-        }
     }
 
     ul {
         margin: 0;
         padding: 0;
         list-style: none;
-        .brand-font();
-        font-size: 21px;
-        font-size: 1.615rem;
-
-        @media @bp2 {
-            font-size: 23px;
-            font-size: 1.425rem;
-        }
+        .sans-serif-font();
 
         li {
             display: inline;
@@ -369,34 +338,31 @@
 
                 &:before {
                     color: @ui05;
-                    }
                 }
             }
         }
+    }
 }
 
 #dcf-main {
 
     .band-nav {
         background-color: @ui02;
-        .brand-font();
+        .sans-serif-font();
 
         .events-nav {
-            padding-bottom: 0.339em;
+            display: flex;
+            flex-flow: row wrap;
+            align-items: center;
+            justify-content: space-between;
             border-bottom: 1px solid @ui04;
         }
 
         ul {
             text-transform: uppercase;
             margin: 0;
-            padding: 0;
-            font-size: 16px;
-            font-size: 1rem;
-
-            @media @bp2 {
-                font-size: 16px;
-                font-size: 1rem;
-            }
+            padding: 0 0 0.75em 0;
+            font-size: .75em;
 
             li {
                 display: inline;
@@ -415,26 +381,25 @@
         }
 
         .submit-search {
+            display: flex;
+            flex-flow: row wrap;
+            align-items: center;
+            justify-content: space-between;
             text-align: left;
 
-            @media @bp2 {
-                float: right;
-                width: 60%;
+            @media @bp960 {
+                order: 2;
                 text-align: right;
             }
         }
 
         #frontend_login {
-            .brand-font();
+            flex-shrink: 0;
+            .sans-serif-font();
             text-transform: uppercase;
-            margin-right: 1em;
-            font-size: 16px;
-            font-size: 1rem;
-
-            @media @bp2 {
-                font-size: 16px;
-                font-size: 1rem;
-            }
+            margin-right: 1.77em;
+            padding-bottom: 0.75em;
+            font-size: .75em;
 
             span:before {
                 color: @ui05;
@@ -443,55 +408,24 @@
         }
 
         #event_search {
+            display: flex;
+            align-items: center;
+            flex-basis: 23.68em;
+            flex-grow: 1;
+            font-size: .75em;
             margin: 0;
-            padding: 0;
+            padding: 0 0 0.75em 0;
             width: 100%;
-            display: inline-block;
-            vertical-align: middle;
-            font-size: 0.75em;
-
-            @media @bp1 {
-                width: 60%;
-                margin: -8px 0 0;
-            }
-
-            @media @bp2 {
-
-            }
 
             .dcf-input-group {
-                margin-top: 0.143em;
-                font-size: 8px;
-                font-size: .5rem;
-
-                @media @bp2 {
-                    margin-top: 0.1em;
-                }
+                margin-top: 0;
             }
 
             label {
-                float: left;
-                margin-top: .178rem;
-                margin-right: 0.339em;
-                .brand-font();
+                margin-right: 0.75em;
+                margin-top: 0;
                 text-transform: uppercase;
-                font-size: 16px;
-                font-size: 1rem;
-
-                @media @bp2 {
-                    margin-top: .46rem;
-                    font-size: 16px;
-                    font-size: 1rem;
-                }
-            }
-
-            button {
-                font-size: 0.75em;
-                padding: 1em;
-                
-                @media @bp2 {
-                    padding: 1.64em 1.333em;
-                }
+                font-size: 1em;
             }
         }
     }
@@ -520,7 +454,6 @@
             h1, h2 {
                 .sans-serif-font();
                 margin: 0 0 1rem;
-                font-size: 12px;
                 font-size: 0.923rem;
                 padding: 1.069em 23px 1em;
                 padding: 1.069em 1.425rem 1em;
@@ -529,11 +462,10 @@
 
             @media @bp2 {
                 h1, h2 {
-                    font-size: 13px;
                     font-size: 0.802rem;
                 }
             }
-            
+
             .links {
                 position: absolute;
                 top: 0;
@@ -558,12 +490,10 @@
 
             a {
                 .sans-serif-font();
-                font-size: 12px;
                 font-size: 0.923rem;
                 margin-top: 1.333em;
 
                 @media @bp2 {
-                    font-size: 13px;
                     font-size: 0.802rem;
                 }
 
@@ -622,11 +552,9 @@
                 .contact {
                     display: block;
                     .sans-serif-font();
-                    font-size: 12px;
                     font-size: 0.75rem;
 
                     @media @bp2 {
-                        font-size: 13px;
                         font-size: 0.802rem;
                     }
 
@@ -694,11 +622,11 @@
     clear: both;
 }
 .promo-box-image-barrier {
-    padding: 0.5em; 
+    padding: 0.5em;
     border: 1px solid #CCC;
 }
 .promo-box-event-listing {
-    border-bottom: 1px solid #CCC; 
+    border-bottom: 1px solid #CCC;
     padding-bottom: .354em;
 }
 .sans-serif {
