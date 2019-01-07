@@ -15,13 +15,11 @@
     <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
     <?php if ($context->user == NULL) { ?>
         <label class="dcf-label" for="user">User</label>
-        <div class="dcf-input-select">
-          <select id="user" name="user">
-          <?php foreach($context->getAvailableUsers() as $user) { ?>
+        <select class="dcf-input-select" id="user" name="user">
+            <?php foreach($context->getAvailableUsers() as $user) { ?>
               <option value="<?php echo $user->uid ?>"><?php echo $user->uid ?></option>
           <?php } ?>
-          </select>
-        </div>
+        </select>
         <div class="visual-island dcf-mt-4">
             <div class="details">
                 Note: This is a list of users who have previously logged into the system.  

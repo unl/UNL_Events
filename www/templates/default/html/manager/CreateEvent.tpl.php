@@ -30,38 +30,34 @@
                 <textarea class="dcf-input-text" rows="4" id="description" name="description"><?php echo $event->description; ?></textarea>
 
                 <label class="dcf-label" for="type">Type</label>
-                <div class="dcf-input-select">
-                  <select id="type" name="type"  style="width: 100%;">
-                  <?php foreach ($context->getEventTypes() as $type) { ?>
+                <select  class="dcf-input-select"id="type" name="type"  style="width: 100%;">
+                    <?php foreach ($context->getEventTypes() as $type) { ?>
                       <option <?php if ($post['type'] == $type->id) echo 'selected="selected"' ?> value="<?php echo $type->id ?>"><?php echo $type->name ?></option>
                   <?php } ?>
-                  </select>
-                </div>
+                </select>
             </fieldset>
 
             <fieldset>
             <legend class="dcf-legend" style="font-size: 1.6em">Location, Date, and Time</legend>
                 <label class="dcf-label" for="location"><span class="dcf-required">*</span> Location</label>
-                <div class="dcf-input-select">
-                  <select id="location" name="location" cstyle="width: 100%;">
-                      <optgroup label="Your saved locations">
-                          <?php foreach ($context->getUserLocations() as $location): ?>
-                              <option <?php if ($post['location'] == $location->id) echo 'selected="selected"' ?> value="<?php echo $location->id ?>"><?php echo $location->name ?></option>
-                          <?php endforeach ?>
-                          <option <?php if ($post['location'] == 'new') echo 'selected="selected"' ?>value="new">-- New Location --</option>
-                      </optgroup>
-                      <optgroup label="UNL Campus locations">
-                          <?php foreach ($context->getStandardLocations(\UNL\UCBCN\Location::DISPLAY_ORDER_MAIN) as $location): ?>
-                              <option <?php if ($post['location'] == $location->id) echo 'selected="selected"' ?> value="<?php echo $location->id ?>"><?php echo $location->name ?></option>
-                          <?php endforeach ?>
-                      </optgroup>
-                      <optgroup label="Extension locations">
-                          <?php foreach ($context->getStandardLocations(\UNL\UCBCN\Location::DISPLAY_ORDER_EXTENSION) as $location): ?>
-                              <option <?php if ($post['location'] == $location->id) echo 'selected="selected"' ?> value="<?php echo $location->id ?>"><?php echo $location->name ?></option>
-                          <?php endforeach ?>
-                      </optgroup>
-                  </select>
-                </div>
+                <select class="dcf-input-select" id="location" name="location" cstyle="width: 100%;">
+                  <optgroup label="Your saved locations">
+                      <?php foreach ($context->getUserLocations() as $location): ?>
+                        <option <?php if ($post['location'] == $location->id) echo 'selected="selected"' ?> value="<?php echo $location->id ?>"><?php echo $location->name ?></option>
+                      <?php endforeach ?>
+                    <option <?php if ($post['location'] == 'new') echo 'selected="selected"' ?>value="new">-- New Location --</option>
+                  </optgroup>
+                  <optgroup label="UNL Campus locations">
+                      <?php foreach ($context->getStandardLocations(\UNL\UCBCN\Location::DISPLAY_ORDER_MAIN) as $location): ?>
+                        <option <?php if ($post['location'] == $location->id) echo 'selected="selected"' ?> value="<?php echo $location->id ?>"><?php echo $location->name ?></option>
+                      <?php endforeach ?>
+                  </optgroup>
+                  <optgroup label="Extension locations">
+                      <?php foreach ($context->getStandardLocations(\UNL\UCBCN\Location::DISPLAY_ORDER_EXTENSION) as $location): ?>
+                        <option <?php if ($post['location'] == $location->id) echo 'selected="selected"' ?> value="<?php echo $location->id ?>"><?php echo $location->name ?></option>
+                      <?php endforeach ?>
+                  </optgroup>
+                </select>
 
                 <div id="new-location-fields" style="display: none;">
                     <h6>New Location</h6>
