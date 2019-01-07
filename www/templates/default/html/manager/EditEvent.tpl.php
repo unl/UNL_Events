@@ -68,13 +68,11 @@
                 <textarea class="dcf-input-text" rows="4" id="description" name="description"><?php echo $event->description; ?></textarea>
 
                 <label class="dcf-label" for="type">Type</label>
-                <div class="dcf-input-select">
-                  <select id="type" name="type">
-                  <?php foreach ($context->getEventTypes() as $type) { ?>
-                      <option <?php if ($event_type != NULL && $event_type->id == $type->id) echo 'selected="selected"'; ?> value="<?php echo $type->id ?>"><?php echo $type->name ?></option>
-                  <?php } ?>
-                  </select>
-                </div>
+                <select class="dcf-input-select" id="type" name="type">
+                <?php foreach ($context->getEventTypes() as $type) { ?>
+                  <option <?php if ($event_type != NULL && $event_type->id == $type->id) echo 'selected="selected"'; ?> value="<?php echo $type->id ?>"><?php echo $type->name ?></option>
+                <?php } ?>
+                </select>
             </fieldset>
             <fieldset class="event-datetimes">
 	            <legend class="dcf-legend">Location, Date, and Time</legend>

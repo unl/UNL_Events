@@ -64,20 +64,18 @@
             There are no <?php echo $context->tab ?> events.
         <?php else: ?>
             <div class="medium-hidden">
-                <div class="dcf-input-select">
-                  <select id="bulk-action" title="Bulk Action" class="bulk-<?php echo $context->tab; ?>-event-tools">
-                      <option value="">Bulk Actions</option>
-                      <?php if ($context->tab == 'pending' && $user->hasPermission(\UNL\UCBCN\Permission::EVENT_MOVE_TO_UPCOMING_ID, $context->calendar->id)): ?>
-                          <option value="move-to-upcoming">Move to Upcoming</option>
-                      <?php elseif ($context->tab != 'pending' && $user->hasPermission(\UNL\UCBCN\Permission::EVENT_MOVE_TO_PENDING_ID, $context->calendar->id)): ?>
-                          <option value="move-to-pending">Move to Pending</option>
-                      <?php endif; ?>
+              <select id="bulk-action" title="Bulk Action" class="bulk-<?php echo $context->tab; ?>-event-tools dcf-input-select">
+                  <option value="">Bulk Actions</option>
+                  <?php if ($context->tab == 'pending' && $user->hasPermission(\UNL\UCBCN\Permission::EVENT_MOVE_TO_UPCOMING_ID, $context->calendar->id)): ?>
+                    <option value="move-to-upcoming">Move to Upcoming</option>
+                  <?php elseif ($context->tab != 'pending' && $user->hasPermission(\UNL\UCBCN\Permission::EVENT_MOVE_TO_PENDING_ID, $context->calendar->id)): ?>
+                    <option value="move-to-pending">Move to Pending</option>
+                  <?php endif; ?>
 
-                      <?php if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_DELETE_ID, $context->calendar->id)): ?>
-                          <option value="delete">Delete</option>
-                      <?php endif; ?>
-                  </select>
-                </div>
+                  <?php if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_DELETE_ID, $context->calendar->id)): ?>
+                    <option value="delete">Delete</option>
+                  <?php endif; ?>
+              </select>
                 <form id="bulk-action-form" method="POST" action="<?php echo $context->calendar->getBulkActionURL() ?>" class="delete-form dcf-d-none">
                   <input type="text" title="Bulk Action IDs" id="bulk-action-ids" name="ids">
                   <input type="text" title="Bulk Action Action" id="bulk-action-action" name="action">
@@ -179,67 +177,63 @@
                                         </li>
                                     <?php endforeach; ?>
                                     </ul>
-                                    <div class="dcf-input-select dcf-d-none">
-                                      <select
-                                          id="event-action-<?php echo $event->id ?>-small"
-                                          class="<?php echo $context->tab ?>-event-tools small-block dcf-d-none"
-                                          title="Select an Action"
-                                          data-id="<?php echo $event->id; ?>"
-                                          data-recommend-url="<?php echo $event->getRecommendURL($controller->getCalendar()) ?>"
-                                          >
-                                              <option value="">Select an Action</option>
-                                              <?php if ($context->tab == 'pending' && $user->hasPermission(\UNL\UCBCN\Permission::EVENT_MOVE_TO_UPCOMING_ID, $context->calendar->id)): ?>
-                                                  <option value="move-to-upcoming">Move to Upcoming</option>
-                                              <?php elseif ($context->tab != 'pending' && $user->hasPermission(\UNL\UCBCN\Permission::EVENT_MOVE_TO_PENDING_ID, $context->calendar->id)): ?>
-                                                  <option value="move-to-pending">Move to Pending</option>
-                                              <?php endif; ?>
+                                    <select
+                                        id="event-action-<?php echo $event->id ?>-small"
+                                        class="<?php echo $context->tab ?>-event-tools small-block dcf-input-select  dcf-d-none"
+                                        title="Select an Action"
+                                        data-id="<?php echo $event->id; ?>"
+                                        data-recommend-url="<?php echo $event->getRecommendURL($controller->getCalendar()) ?>"
+                                    >
+                                      <option value="">Select an Action</option>
+                                        <?php if ($context->tab == 'pending' && $user->hasPermission(\UNL\UCBCN\Permission::EVENT_MOVE_TO_UPCOMING_ID, $context->calendar->id)): ?>
+                                          <option value="move-to-upcoming">Move to Upcoming</option>
+                                        <?php elseif ($context->tab != 'pending' && $user->hasPermission(\UNL\UCBCN\Permission::EVENT_MOVE_TO_PENDING_ID, $context->calendar->id)): ?>
+                                          <option value="move-to-pending">Move to Pending</option>
+                                        <?php endif; ?>
 
-                                              <?php if ($context->calendar->id == UNL\UCBCN::$main_calendar_id && $context->tab != 'pending' && $user->hasPermission(\UNL\UCBCN\Permission::CALENDAR_EDIT_ID, $context->calendar->id)): ?>
-                                                  <option value="promote">Promote Event</option>
-                                                  <option value="hide-promo">Remove from Promo Bar</option>
-                                              <?php endif; ?>
+                                        <?php if ($context->calendar->id == UNL\UCBCN::$main_calendar_id && $context->tab != 'pending' && $user->hasPermission(\UNL\UCBCN\Permission::CALENDAR_EDIT_ID, $context->calendar->id)): ?>
+                                          <option value="promote">Promote Event</option>
+                                          <option value="hide-promo">Remove from Promo Bar</option>
+                                        <?php endif; ?>
 
-                                              <?php if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_RECOMMEND_ID, $context->calendar->id)): ?>
-                                                  <option value="recommend">Recommend</option>
-                                              <?php endif; ?>
+                                        <?php if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_RECOMMEND_ID, $context->calendar->id)): ?>
+                                          <option value="recommend">Recommend</option>
+                                        <?php endif; ?>
 
-                                              <?php if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_DELETE_ID, $context->calendar->id)): ?>
-                                                  <option value="delete">Delete</option>
-                                              <?php endif; ?>
-                                      </select>
-                                    </div>
+                                        <?php if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_DELETE_ID, $context->calendar->id)): ?>
+                                          <option value="delete">Delete</option>
+                                        <?php endif; ?>
+                                    </select>
                                     <br class="small-block hidden">
                                 </td>
                                 <td class="small-hidden">
-                                    <div class="dcf-input-select">
-                                      <select
-                                          id="event-action-<?php echo $event->id ?>"
-                                          class="<?php echo $context->tab ?>-event-tools"
-                                          title="Select an Action"
-                                          data-id="<?php echo $event->id; ?>"
-                                          data-recommend-url="<?php echo $event->getRecommendURL($controller->getCalendar()) ?>"
-                                          >
-                                              <option value="">Select an Action</option>
-                                              <?php if ($context->tab == 'pending' && $user->hasPermission(\UNL\UCBCN\Permission::EVENT_MOVE_TO_UPCOMING_ID, $context->calendar->id)): ?>
-                                                  <option value="move-to-upcoming">Move to Upcoming</option>
-                                              <?php elseif ($context->tab != 'pending' && $user->hasPermission(\UNL\UCBCN\Permission::EVENT_MOVE_TO_PENDING_ID, $context->calendar->id)): ?>
-                                                  <option value="move-to-pending">Move to Pending</option>
-                                              <?php endif; ?>
+                                  <select
+                                      id="event-action-<?php echo $event->id ?>"
+                                      class="<?php echo $context->tab ?>-event-tools dcf-input-select"
+                                      title="Select an Action"
+                                      data-id="<?php echo $event->id; ?>"
+                                      data-recommend-url="<?php echo $event->getRecommendURL($controller->getCalendar()) ?>"
+                                  >
+                                    <option value="">Select an Action</option>
+                                      <?php if ($context->tab == 'pending' && $user->hasPermission(\UNL\UCBCN\Permission::EVENT_MOVE_TO_UPCOMING_ID, $context->calendar->id)): ?>
+                                        <option value="move-to-upcoming">Move to Upcoming</option>
+                                      <?php elseif ($context->tab != 'pending' && $user->hasPermission(\UNL\UCBCN\Permission::EVENT_MOVE_TO_PENDING_ID, $context->calendar->id)): ?>
+                                        <option value="move-to-pending">Move to Pending</option>
+                                      <?php endif; ?>
 
-                                              <?php if ($context->calendar->id == UNL\UCBCN::$main_calendar_id && $context->tab != 'pending' && $user->hasPermission(\UNL\UCBCN\Permission::CALENDAR_EDIT_ID, $context->calendar->id)): ?>
-                                                  <option value="promote">Promote Event</option>
-                                                  <option value="hide-promo">Remove from Promo Bar</option>
-                                              <?php endif; ?>
+                                      <?php if ($context->calendar->id == UNL\UCBCN::$main_calendar_id && $context->tab != 'pending' && $user->hasPermission(\UNL\UCBCN\Permission::CALENDAR_EDIT_ID, $context->calendar->id)): ?>
+                                        <option value="promote">Promote Event</option>
+                                        <option value="hide-promo">Remove from Promo Bar</option>
+                                      <?php endif; ?>
 
-                                              <?php if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_RECOMMEND_ID, $context->calendar->id)): ?>
-                                                  <option value="recommend">Recommend</option>
-                                              <?php endif; ?>
+                                      <?php if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_RECOMMEND_ID, $context->calendar->id)): ?>
+                                        <option value="recommend">Recommend</option>
+                                      <?php endif; ?>
 
-                                              <?php if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_DELETE_ID, $context->calendar->id)): ?>
-                                                  <option value="delete">Delete</option>
-                                              <?php endif; ?>
-                                      </select>
-                                    </div>
+                                      <?php if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_DELETE_ID, $context->calendar->id)): ?>
+                                        <option value="delete">Delete</option>
+                                      <?php endif; ?>
+                                    </select>
                                     <form id="move-<?php echo $event->id; ?>" method="POST" action="<?php echo $event->getMoveURL($controller->getCalendar()) ?>" class="delete-form dcf-d-none">
                                       <input type="text" title="New Status" name="new_status" id="move-target-<?php echo $event->id; ?>">
                                       <input type="text" title="Event ID" name="event_id" value="<?php echo $event->id ?>">

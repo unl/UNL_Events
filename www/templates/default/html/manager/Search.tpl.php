@@ -128,19 +128,19 @@
                                 <?php if ($status = $event->getStatusWithCalendar($context->calendar->getRawObject())): ?>
                                     <strong><?php echo ucwords($status); ?></strong> on <?php echo $context->calendar->name ?>
                                 <?php else: ?>
-                                    <div class="dcf-input-select">
-                                      <select
-                                          id="event-action-<?php echo $event->id ?>"
-                                          class="searched-event-tools"
-                                          data-id="<?php echo $event->id; ?>"
-                                          >
-                                              <option value="">Select an Action</option>
-                                              <?php if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_MOVE_TO_UPCOMING_ID, $context->calendar->id)): ?>
-                                                  <option value="move-to-upcoming">Move to Upcoming</option>
-                                              <?php endif; ?>
-                                              <?php if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_MOVE_TO_PENDING_ID, $context->calendar->id)): ?>
-                                                  <option value="move-to-pending">Move to Pending</option>
-                                              <?php endif; ?>
+                                    <select
+                                        class="dcf-input-select"
+                                        id="event-action-<?php echo $event->id ?>"
+                                        class="searched-event-tools"
+                                        data-id="<?php echo $event->id; ?>"
+                                    >
+                                      <option value="">Select an Action</option>
+                                      <?php if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_MOVE_TO_UPCOMING_ID, $context->calendar->id)): ?>
+                                        <option value="move-to-upcoming">Move to Upcoming</option>
+                                      <?php endif; ?>
+                                      <?php if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_MOVE_TO_PENDING_ID, $context->calendar->id)): ?>
+                                        <option value="move-to-pending">Move to Pending</option>
+                                       <?php endif; ?>
                                       </select>
                                     </div>
                                     <form id="move-<?php echo $event->id; ?>" method="POST" action="<?php echo $event->getMoveURL($context->calendar) ?>" class="delete-form hidden">

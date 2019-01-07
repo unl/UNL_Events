@@ -58,8 +58,7 @@
   <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
     <fieldset>
         <label class="dcf-label" for="location"><span class="dcf-required">*</span> Location</label>
-        <div class="dcf-input-select">
-          <select id="location" name="location" style="width: 100%;">
+        <select class="dcf-input-select" id="location" name="location" style="width: 100%;">
               <?php if ($datetime->id != NULL): ?>
               <optgroup label="Current location">
                   <option selected="selected" value="<?php echo $datetime->location_id ?>"><?php echo $datetime->getLocation()->name; ?></option>
@@ -80,8 +79,7 @@
                       <option value="<?php echo $location->id ?>"><?php echo $location->name ?></option>
                   <?php endforeach; ?>
               </optgroup>
-          </select>
-        </div>
+        </select>
 
         <div id="new-location-fields" style="display: none;">
             <h6>New Location</h6>
@@ -203,16 +201,14 @@
                 <label class="dcf-label" for="recurring">This is a recurring event</label>
                 <div class="recurring-container date-time-select">                        
                     <label class="dcf-label dcf-d-inline-block" for="recurring-type">This event recurs </label>
-                    <div class="dcf-input-select dcf-d-inline-block">
-                      <select id="recurring-type" name="recurring_type">
-                          <option value="daily">Daily</option>
-                          <option value="weekly">Weekly</option>
-                          <option value="biweekly">Biweekly</option>
-                          <optgroup label="Monthly" id="monthly-group">
-                          </optgroup>
-                          <option value="annually">Yearly</option>
-                      </select>
-                    </div>
+                    <select class="dcf-input-select dcf-d-inline-block" id="recurring-type" name="recurring_type">
+                      <option value="daily">Daily</option>
+                      <option value="weekly">Weekly</option>
+                      <option value="biweekly">Biweekly</option>
+                      <optgroup label="Monthly" id="monthly-group">
+                      </optgroup>
+                      <option value="annually">Yearly</option>
+                    </select>
                     <label class="dcf-label dcf-d-inline-block" for="recurs-until-date">until </label><br>
                     <span class="wdn-icon-calendar" style="top: .4em" aria-hidden="true"></span>
                     <input value="<?php if ($datetime->recurringtype != 'none' && $datetime->recurringtype != NULL) echo $recurs_until_date; ?>" id="recurs-until-date" name="recurs_until_date" type="text" class="datepicker" aria-label="Until date in the format of mm/dd/yyyy" />
