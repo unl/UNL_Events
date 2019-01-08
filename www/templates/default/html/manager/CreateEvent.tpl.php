@@ -231,8 +231,6 @@
                 <label class="dcf-label" for="additional-public-info">Additional Public Info</label>
                 <textarea class="dcf-input-text" id="additional-public-info" name="additional_public_info"><?php echo $post['additional_public_info'] ?></textarea>
             </fieldset>
-          </div>
-
         </div>
 
         <div class="dcf-col-100% dcf-col-33%-end@md">
