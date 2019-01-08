@@ -91,32 +91,26 @@
   font-size: 60%;
 }
 .date-time-select {
-  padding: 1em;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  padding: 1em 1em 0 1em;
   background-color: #f9f8f5;
   border: 1px solid #d5d5d2;
   margin-bottom: 0.75em;
   text-align: center;
 }
 .date-time-select .wdn-icon-calendar {
-  margin-right: -2.3em;
-  position: relative;
-  z-index: 2;
-  margin-left: 0.8em;
+  left: 0.75em;
 }
 .date-time-select input {
-  padding-left: 2.3em !important;
-  width: 40%!important;
-  position: relative!important;
   text-align: center!important;
 }
 .date-time-select select {
-  width: 14%!important;
   text-align: center!important;
-  padding: 0!important;
+  font-size: 0.675rem !important;
   display: inline-block !important;
-}
-.date-time-select > * {
-  vertical-align: middle!important;
+  margin-bottom: 0;
 }
 #breadcrumbs {
   margin-bottom: 1.5rem;
@@ -178,6 +172,9 @@
   font-family: "Gotham";
   font-size: 0.75em;
   margin-left: 0.75em;
+}
+.am_pm fieldset {
+  margin-bottom: 0 !important;
 }
 #recurring ~ .recurring-container {
   display: none;
@@ -243,13 +240,6 @@
   }
   .medium-block {
     display: block !important;
-  }
-  .date-time-select input {
-    width: 100%;
-  }
-  .date-time-select select {
-    width: 30%;
-    text-align: center;
   }
   #breadcrumbs {
     margin-bottom: 2rem;

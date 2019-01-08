@@ -75,32 +75,26 @@
 }
 
 .date-time-select {
-    padding: 1em;
-    background-color: #f9f8f5;
-    border: 1px solid #d5d5d2;
-    margin-bottom: 0.75em;
-    text-align: center;
-    .wdn-icon-calendar {
-	    margin-right: -2.3em;
-	    position: relative;
-	    z-index: 2;
-	    margin-left: 0.8em;
-	}
-	input {
-	    padding-left: 2.3em!important;
-	    width: 40%!important;
-	    position: relative!important;
-	    text-align: center!important;
-	}
-	select {
-	    width: 14%!important;
-	    text-align: center!important;
-	    padding: 0!important;
-		  display: inline-block!important;
-	}
-	> * {
-	  vertical-align: middle!important;
-	}
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  padding: 1em 1em 0 1em;
+  background-color: #f9f8f5;
+  border: 1px solid #d5d5d2;
+  margin-bottom: 0.75em;
+  text-align: center;
+  .wdn-icon-calendar {
+    left: .75em;
+  }
+  input {
+    text-align: center!important;
+  }
+  select {
+    text-align: center!important;
+    font-size: .675rem!important;
+    display: inline-block!important;
+    margin-bottom: 0;
+  }
 }
 
 #breadcrumbs {
@@ -165,6 +159,10 @@
     font-family: "Gotham";
     font-size: .75em;
     margin-left: .75em;
+
+		fieldset {
+			margin-bottom: 0 !important;
+		}
 }
 
 #recurring ~ .recurring-container {
@@ -244,16 +242,6 @@
 
 	.medium-block {
 		display: block !important;
-	}
-
-	.date-time-select {
-		input {
-		    width: 100%;
-		}
-		select {
-		    width: 30%;
-		    text-align: center;
-		}
 	}
 
 	#breadcrumbs {

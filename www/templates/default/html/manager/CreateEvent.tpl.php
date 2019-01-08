@@ -111,16 +111,24 @@
                 <input class="dcf-input-text"type="text" id="room" name="room" value="<?php echo $post['room']; ?>" />
 
                 <label class="dcf-label" for="start-date" ><span class="dcf-required">*</span> Start Date &amp; Time</label>
-                <div class="date-time-select"><span class="wdn-icon-calendar" aria-hidden="true"></span>
-                    <input id="start-date" name="start_date" aria-label="Start Date in the format of mm/dd/yyyy" type="text" class="datepicker" value="<?php echo $post['start_date']; ?>" /><br class="hidden small-block"> @
-                    <select id="start-time-hour" name="start_time_hour" aria-label="Start Time Hour">
+                <div class="date-time-select">
+                  <div class="date-group dcf-d-flex dcf-flex-grow-1 dcf-ai-center dcf-relative dcf-mb-4 dcf-pr-6">
+                    <span class="dcf-absolute dcf-z-1 wdn-icon-calendar" aria-hidden="true"></span>
+                    <input id="start-date" name="start_date" aria-label="Start Date in the format of mm/dd/yyyy" type="text" class="dcf-flex-grow-1 datepicker" value="<?php echo $post['start_date']; ?>" />
+                  </div>
+
+                  <div class="time-group dcf-d-flex dcf-ai-center dcf-flex-grow-1 dcf-mb-4">
+
+                    <span class="dcf-pr-2">@</span>
+
+                    <select class="dcf-flex-grow-1 dcf-input-select" id="start-time-hour" name="start_time_hour" aria-label="Start Time Hour">
                         <option value="">Hour</option>
                     <?php for ($i = 1; $i <= 12; $i++) { ?>
                         <option <?php if ($post['start_time_hour'] == $i) echo 'selected="selected"'; ?> value="<?php echo $i ?>"><?php echo $i ?></option>
                     <?php } ?>
                     </select> : 
 
-                    <select id="start-time-minute" name="start_time_minute" aria-label="Start Time Minute">
+                    <select class="dcf-flex-grow-1 dcf-input-select" id="start-time-minute" name="start_time_minute" aria-label="Start Time Minute">
                         <option value="">Minute</option>
                         <option <?php if ($post['start_time_minute'] === 0 || $post['start_time_minute'] === '0') echo 'selected="selected"'; ?> value="0">00</option>
                         <option <?php if ($post['start_time_minute'] == 5) echo 'selected="selected"'; ?> value="5">05</option>
@@ -136,26 +144,39 @@
                         <option <?php if ($post['start_time_minute'] == 55) echo 'selected="selected"'; ?> value="55">55</option>
                     </select>
 
-                    <div id="start-time-am-pm" class="am_pm">
-                        <fieldset>
-                            <legend class="dcf-sr-only">AM/PM</legend>
-                            <label><input <?php if (!isset($post) || $post['start_time_am_pm'] == 'am') echo 'checked="checked"'; ?> id="start-time-am-pm-am" title="AM" type="radio" value="am" name="start_time_am_pm">AM</label><br>
-                            <label><input <?php if ($post['start_time_am_pm'] == 'pm') echo 'checked="checked"'; ?> id="start-time-am-pm-pm" type="radio" value="pm" name="start_time_am_pm">PM</label>
-                        </fieldset>
-                    </div>
+                    <fieldset id="start-time-am-pm" class="am_pm dcf-mb-0 dcf-pl-3">
+                      <legend class="dcf-sr-only">AM/PM</legend>
+                      <div class="dcf-d-flex dcf-ai-center">
+                        <label class="dcf-label dcf-2nd dcf-mt-0" for="start-time-am-pm-am">AM</label>
+                        <input <?php if (!isset($post) || $post['start_time_am_pm'] == 'am') echo 'checked="checked"'; ?> class="dcf-input-control dcf-flex-shrink-0" id="start-time-am-pm-am" title="AM" type="radio" value="am" name="start_time_am_pm">
+                      </div>
+                      <div class="dcf-d-flex dcf-ai-center">
+                        <label class="dcf-label dcf-2nd dcf-mt-0" for="start-time-am-pm-pm">PM</label>
+                        <input <?php if ($post['start_time_am_pm'] == 'pm') echo 'checked="checked"'; ?> class="dcf-input-control dcf-flex-shrink-0" id="start-time-am-pm-pm" type="radio" value="pm" name="start_time_am_pm">
+                      </div>
+                    </fieldset>
+                  </div>
                 </div>
 
-                <label class="dcf-label" for="end-date">End Date &amp;amp; Time (Optional)</label>
-                <div class="date-time-select"><span class="wdn-icon-calendar" aria-hidden="true"></span>
-                    <input id="end-date" name="end_date" aria-label="End Date in the format of mm/dd/yyyy" type="text" class="datepicker" value="<?php echo $post['end_date']; ?>" /><br class="hidden small-block"> @
-                    <select id="end-time-hour" name="end_time_hour" aria-label="End Time Hour">
+                <label class="dcf-label" for="end-date">End Date &amp; Time (Optional)</label>
+                <div class="date-time-select">
+                  <div class="date-group dcf-d-flex dcf-flex-grow-1 dcf-ai-center dcf-relative dcf-mb-4 dcf-pr-6">
+                    <span class="dcf-absolute dcf-z-1 wdn-icon-calendar" aria-hidden="true"></span>
+                    <input id="end-date" name="end_date" aria-label="End Date in the format of mm/dd/yyyy" type="text" class="datepicker" value="<?php echo $post['end_date']; ?>" />
+                  </div>
+
+                  <div class="time-group dcf-d-flex dcf-ai-center dcf-flex-grow-1 dcf-mb-4">
+
+                    <span class="dcf-pr-2">@</span>
+
+                    <select class="dcf-flex-grow-1 dcf-input-select" id="end-time-hour" name="end_time_hour" aria-label="End Time Hour">
                         <option value="">Hour</option>
                     <?php for ($i = 1; $i <= 12; $i++) { ?>
                         <option <?php if ($post['end_time_hour'] == $i) echo 'selected="selected"'; ?> value="<?php echo $i ?>"><?php echo $i ?></option>
                     <?php } ?>
                     </select> :
 
-                    <select id="end-time-minute" name="end_time_minute" aria-label="End Time Minute">
+                    <select class="dcf-flex-grow-1 dcf-input-select" id="end-time-minute" name="end_time_minute" aria-label="End Time Minute">
                         <option value="">Minute</option>
                         <option <?php if ($post['end_time_minute'] === 0 || $post['end_time_minute'] === '0') echo 'selected="selected"'; ?> value="0">00</option>
                         <option <?php if ($post['end_time_minute'] == 5) echo 'selected="selected"'; ?> value="5">05</option>
@@ -171,13 +192,18 @@
                         <option <?php if ($post['end_time_minute'] == 55) echo 'selected="selected"'; ?> value="55">55</option>
                     </select>
 
-                    <div id="end-time-am-pm" class="am_pm">
-                        <fieldset>
-                            <legend class="dcf-legend dcf-sr-only">AM/PM</legend>
-                            <label><input <?php if (empty($post) || $post['end_time_am_pm'] == 'am') echo 'checked="checked"'; ?> id="end-time-am-pm-am" type="radio" value="am" name="end_time_am_pm">AM</label><br>
-                            <label><input <?php if ($post['end_time_am_pm'] == 'pm') echo 'checked="checked"'; ?> id="end-time-am-pm-pm" type="radio" value="pm" name="end_time_am_pm">PM</label>
-                        </fieldset>
-                    </div>
+                    <fieldset id="start-time-am-pm" class="am_pm dcf-mb-0 dcf-pl-3">
+                      <legend class="dcf-sr-only">AM/PM</legend>
+                      <div class="dcf-d-flex dcf-ai-center">
+                        <label class="dcf-label dcf-2nd dcf-mt-0" for="end-time-am-pm-am">AM</label>
+                        <input <?php if (empty($post) || $post['end_time_am_pm'] == 'am') echo 'checked="checked"'; ?> class="dcf-input-control dcf-flex-shrink-0" id="end-time-am-pm-am" type="radio" value="am" name="end_time_am_pm">
+                      </div>
+                      <div class="dcf-d-flex dcf-ai-center">
+                        <label class="dcf-label dcf-2nd dcf-mt-0" for="end-time-am-pm-pm">PM</label>
+                        <input <?php if ($post['end_time_am_pm'] == 'pm') echo 'checked="checked"'; ?> class="dcf-input-control dcf-flex-shrink-0" id="end-time-am-pm-pm" type="radio" value="pm" name="end_time_am_pm">
+                      </div>
+                    </fieldset>
+                  </div>
                 </div>
 
                 <div class="section-container">
@@ -205,6 +231,7 @@
                 <label class="dcf-label" for="additional-public-info">Additional Public Info</label>
                 <textarea class="dcf-input-text" id="additional-public-info" name="additional_public_info"><?php echo $post['additional_public_info'] ?></textarea>
             </fieldset>
+          </div>
 
         </div>
 
