@@ -53,7 +53,7 @@
                                 <?php endif; ?>
                             </td>
                             <td>
-                                <div class="small-block hidden calendar-event-title">
+                                <div class="small-block dcf-d-none calendar-event-title">
                                     <?php if ($event->userCanEdit()): ?>
                                         <a href="<?php echo $event->getEditURL() ?>">
                                         <?php echo $event->title; ?>
@@ -104,7 +104,7 @@
                                     </li>
                                 <?php endforeach; ?>
                                 </ul>
-                                <div class="small-block hidden">
+                                <div class="small-block dcf-d-none">
                                     <?php if ($status = $event->getStatusWithCalendar($context->calendar->getRawObject())): ?>
                                         <strong><?php echo ucwords($status); ?></strong> on <?php echo $context->calendar->name ?>
                                     <?php else: ?>
@@ -143,7 +143,7 @@
                                        <?php endif; ?>
                                       </select>
                                     </div>
-                                    <form id="move-<?php echo $event->id; ?>" method="POST" action="<?php echo $event->getMoveURL($context->calendar) ?>" class="delete-form hidden">
+                                    <form id="move-<?php echo $event->id; ?>" method="POST" action="<?php echo $event->getMoveURL($context->calendar) ?>" class="delete-form dcf-d-none">
                                         <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
                                         <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
                                         <input class="dcf-input-text" type="text" name="new_status" id="move-target-<?php echo $event->id; ?>">

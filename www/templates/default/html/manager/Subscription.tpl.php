@@ -34,8 +34,8 @@
 				</td>
 				<td class="small-center table-actions">
 			        <a class="dcf-btn dcf-btn-primary" href="<?php echo $subscription->getEditURL() ?>">Edit</a>
-			        <span class="small-hidden">|</span><br class="hidden small-block"><br class="hidden small-block">
-		            <button class="dcf-button wdn-button-triad" form="delete-subscription-<?php echo $subscription->id ?>" type="submit">Delete</button>
+			        <span class="small-hidden">|</span><br class="dcf-d-none small-block"><br class="dcf-d-none small-block">
+		            <button class="dcf-btn wdn-button-triad" form="delete-subscription-<?php echo $subscription->id ?>" type="submit">Delete</button>
 				</td>
 			</tr>
 	    <?php endforeach; ?>
