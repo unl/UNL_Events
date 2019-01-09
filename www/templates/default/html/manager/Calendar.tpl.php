@@ -126,7 +126,7 @@
                                     <?php endif; ?>
                                 </td>
                                 <td>
-                                    <div class="small-block hidden calendar-event-title">
+                                    <div class="small-block dcf-d-none calendar-event-title">
                                         <?php if ($event->userCanEdit()): ?>
                                             <a href="<?php echo $event->getEditURL($controller->getCalendar()) ?>">
                                             <?php echo $event->title; ?>
@@ -204,7 +204,7 @@
                                           <option value="delete">Delete</option>
                                         <?php endif; ?>
                                     </select>
-                                    <br class="small-block hidden">
+                                    <br class="small-block dcf-d-none">
                                 </td>
                                 <td class="small-hidden">
                                   <select

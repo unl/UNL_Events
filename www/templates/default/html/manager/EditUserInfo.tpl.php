@@ -12,7 +12,7 @@
     <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
     <label class="dcf-label" for="api_token">Current API Token</label>
     <input class="dcf-input-text" disabled="disabled" type="text" id="token" name="token" value="<?php echo $context->user->token ?>" />
-    <input class="hidden" type="text" name="generate_api_token" value="true">
+    <input class="dcf-d-none" type="text" name="generate_api_token" value="true">
 
     <br><br>
     <button class="dcf-btn dcf-btn-primary" type="submit">
