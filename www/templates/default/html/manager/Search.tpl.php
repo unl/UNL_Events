@@ -12,12 +12,12 @@
 ?>
 <form>
     <label class="dcf-label" for="events-search">Search</label>
-    <div>
+    <div class="dcf-form-group">
         <div style="float: right; padding-top: 3px;">
             <button type="submit" class="dcf-btn wdn-button-triad">Search</button>
         </div>
         <div style="margin-right: 100px;">
-            <input class="dcf-input-text" type="text" name="search_term" id="events-search" value="<?php echo $context->search_term ?>" />
+            <input class="dcf-input-text" type="text" name="search_term" id="events-search" value="<?php echo $context->search_term ?>" style="width: 97%" />
         </div>
     </div>
 </form>
