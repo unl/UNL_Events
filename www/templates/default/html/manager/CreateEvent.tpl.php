@@ -221,7 +221,7 @@
                         </select>
                         <label class="dcf-label" for="recurs-until-date">until </label><br>
                         <span style="top: .4em" class="wdn-icon-calendar" aria-hidden="true"></span>
-                        <input class="dcf-input-text" value="<?php echo $post['recurs_until_date']; ?>" id="recurs-until-date" name="recurs_until_date" type="text" class="datepicker" aria-label="until this date in the format of mm/dd/yyyy"/>
+                        <input value="<?php echo $post['recurs_until_date']; ?>" id="recurs-until-date" name="recurs_until_date" type="text" class="dcf-input-text datepicker" aria-label="until this date in the format of mm/dd/yyyy"/>
                     </div>
                 </div>
 
