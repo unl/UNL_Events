@@ -129,9 +129,8 @@
                                     <strong><?php echo ucwords($status); ?></strong> on <?php echo $context->calendar->name ?>
                                 <?php else: ?>
                                     <select
-                                        class="dcf-input-select"
                                         id="event-action-<?php echo $event->id ?>"
-                                        class="searched-event-tools"
+                                        class="dcf-input-select searched-event-tools"
                                         data-id="<?php echo $event->id; ?>"
                                     >
                                       <option value="">Select an Action</option>
@@ -159,7 +158,7 @@
 
         <?php if ($total_pages > 1): ?>
             <?php
-              $page->addScriptDeclaration("WDN.loadCSS(WDN.getTemplateFilePath('css/modules/pagination.css'));");
+            $page->addScriptDeclaration("WDN.loadCSS('https://unlcms.unl.edu/wdn/templates_4.1/css/modules/pagination.css');");
             ?>
             <div style="text-align: center;">
                 <div style="display: inline-block;">
