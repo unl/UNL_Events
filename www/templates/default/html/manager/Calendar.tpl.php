@@ -265,7 +265,7 @@
 
             <?php if ($total_pages > 1): ?>
                 <?php
-                  $page->addScriptDeclaration("WDN.loadCSS(WDN.getTemplateFilePath('css/modules/pagination.css'));");
+                $page->addScriptDeclaration("WDN.loadCSS('https://unlcms.unl.edu/wdn/templates_4.1/css/modules/pagination.css');");
                 ?>
                 <div style="text-align: center;">
                     <div style="display: inline-block;">
