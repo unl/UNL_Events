@@ -50,6 +50,7 @@ class Upcoming extends EventListing implements RoutableInterface
         $options['m'] = date('m');
         $options['d'] = date('d');
         $options['y'] = date('Y');
+        $options['includeEventImageData'] = TRUE;
 
         parent::__construct($options);
     }

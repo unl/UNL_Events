@@ -72,7 +72,8 @@ class EventInstance implements RoutableInterface
             );
         }
 
-        $this->event = $this->eventdatetime->getEvent();
+        // get event with image data if includeEventImageData is not set or is TRUE
+        $this->event = $this->eventdatetime->getEvent(!isset($options['includeEventImageData']) || $options['includeEventImageData'] === TRUE);
         $this->options = $options;
     }
 

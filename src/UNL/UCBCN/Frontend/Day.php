@@ -40,6 +40,9 @@ class Day extends EventListing implements RoutableInterface
         $this->options['m'] = date('m');
         $this->options['d'] = date('d');
         $this->options['y'] = date('Y');
+        if (!isset($this->options['includeEventImageData'])) {
+            $this->options['includeEventImageData'] = TRUE;
+        }
 
         parent::__construct($options);
     }
