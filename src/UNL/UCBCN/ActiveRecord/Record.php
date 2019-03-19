@@ -217,10 +217,20 @@ abstract class Record
      *
      * @return false | Record
      */
-    public static function getRecordByID($table, $id, $field = 'id')
+    public static function getRecordByID($table, $id, $field = 'id', $fields = array())
     {
+
+        if (empty($fields)) {
+            $fields = array_keys(get_class_vars($class));
+        }
+
+        $fieldList = '*';
+        if (is_array($fields)) {
+            $fieldList = implode(", ", $fields);
+        }
         $mysqli = self::getDB();
-        $sql    = "SELECT * FROM $table WHERE $field = ".intval($id).' LIMIT 1;';
+        $sql    = "SELECT " . $fieldList . " FROM $table WHERE $field = ".intval($id).' LIMIT 1;';
+
         if ($result = $mysqli->query($sql)) {
             return $result->fetch_assoc();
         }
@@ -280,22 +290,34 @@ abstract class Record
             if (isset($args[1])) {
                 $whereAdd = $args[1];
             }
+            $fields = array();
+            if (isset($args[2]) && is_array($args[2])) {
+                $fields = $args[2];
+            }
 
-            return self::getByAnyField($class, $field, $args[0], $whereAdd);
+            return self::getByAnyField($class, $field, $args[0], $whereAdd, $fields);
             break;
         }
         throw new Exception('Invalid static method called.', 500);
     }
 
-    public static function getByAnyField($class, $field, $value, $whereAdd = '') {
+    public static function getByAnyField($class, $field, $value, $whereAdd = '', $fields = array()) {
         $record = new $class;
 
         if (!empty($whereAdd)) {
             $whereAdd = $whereAdd . ' AND ';
         }
 
+        if (empty($fields)) {
+            $fields = array_keys(get_class_vars($class));
+        }
+
+        $fieldList = '*';
+        if (is_array($fields)) {
+           $fieldList = implode(", ", $fields);
+        }
         $mysqli = self::getDB();
-        $sql    = 'SELECT * FROM '
+        $sql    = 'SELECT ' . $fieldList . ' FROM '
                     . $record->getTable()
                     . ' WHERE '
                     . $whereAdd

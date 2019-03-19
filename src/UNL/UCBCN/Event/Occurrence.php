@@ -248,8 +248,12 @@ class Occurrence extends Record
      *
      * @return \UNL\UCBCN\Event
      */
-    public function getEvent()
+    public function getEvent($includeImageData = FALSE)
     {
-        return Event::getById($this->event_id);
+        $fields = array_keys(get_class_vars(get_class(new Event)));
+        if ($includeImageData === FALSE) {
+            $fields = array_diff($fields, array('imagedata'));
+        }
+        return Event::getById($this->event_id, NULL, $fields);
     }
 }

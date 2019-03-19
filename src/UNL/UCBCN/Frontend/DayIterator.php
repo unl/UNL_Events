@@ -21,6 +21,7 @@ class DayIterator extends \IteratorIterator
              'y' => $datetime->format('Y'),
              'd' => $datetime->format('d'),
              'calendar' => $this->calendar,
+             'includeEventImageData' => FALSE
          );
          
          return new Day($options);

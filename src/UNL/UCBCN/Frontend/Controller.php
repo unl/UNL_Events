@@ -204,6 +204,7 @@ class Controller
         $options['d'] = $datetime->format('d');
         $options['m'] = $datetime->format('m');
         $options['y'] = $datetime->format('Y');
+        $this->options['includeEventImageData'] = TRUE;
 
         return new Day($options);
     }
