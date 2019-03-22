@@ -28,6 +28,18 @@
     <label class="dcf-label" for="shortname"><span class="dcf-required">*</span> Shortname</label>
     <input class="dcf-input-text" type="text" id="shortname" name="shortname" value="<?php echo $context->calendar->shortname ?>" />
 
+    <label class="dcf-label dcf-mt-2" for="timezone"><span class="dcf-required">*</span> Default Timezone</label>
+    <select class="dcf-input-select" id="defaulttimezone"" name="defaulttimezone" aria-label="Default Timezone">
+      <?php
+      $timezone = UNL\UCBCN::$defaultTimezone;
+      if (!empty($post['defaulttimezone'])) {
+          $timezone = $post['defaulttimezone'];
+      };
+      foreach (UNL\UCBCN::getTimezoneOptions() as $tzName => $tzValue) { ?>
+        <option <?php if ($timezone == $tzValue) echo 'selected="selected"'; ?> value="<?php echo $tzValue ?>"><?php echo $tzName ?></option>
+      <?php } ?>
+    </select>
+
     <label class="dcf-label" for="website">Website</label>
     <input class="dcf-input-text" type="text" id="website" name="website" value="<?php echo $context->calendar->website ?>" />
 

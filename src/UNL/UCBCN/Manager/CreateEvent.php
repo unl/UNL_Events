@@ -1,6 +1,7 @@
 <?php
 namespace UNL\UCBCN\Manager;
 
+use UNL\UCBCN as BaseUCBCN;
 use UNL\UCBCN\Calendar as CalendarModel;
 use UNL\UCBCN\Calendar\EventTypes;
 use UNL\UCBCN\Location;
@@ -78,6 +79,11 @@ class CreateEvent extends PostHandler
             if (empty($post_data['description']) || empty($post_data['contact_name'])) {
                 throw new ValidationException('<a href="#contact-name">Contact name</a> and <a href="#description">description</a> are required to recommend to UNL Main Calendar.');
             }
+        }
+
+        # timezone must be valid
+        if (empty($post_data['timezone']) || !(in_array($post_data['timezone'], BaseUCBCN::getTimezoneOptions()))) {
+            throw new ValidationException('The timezone is invalid.');
         }
 
         # end date must be after start date
@@ -202,6 +208,7 @@ class CreateEvent extends PostHandler
         } else {
             $event_datetime->recurringtype = 'none';
         }
+        $event_datetime->timezone = $post_data['timezone'];
         $event_datetime->room = $post_data['room'];
         $event_datetime->directions = $post_data['directions'];
         $event_datetime->additionalpublicinfo = $post_data['additional_public_info'];

@@ -107,6 +107,8 @@ class EventInstance extends UNL_UCBCN
     
     public function fixRecurringEvent(&$event, $startdate, $rec_id=0, $isongoing=false)
     {
+        $timezoneDateTime = new \UNL\UCBCN\TimezoneDateTime($event->eventdatetime->timezone);
+
         // Update URL
         $date = explode('-', $startdate);
         $day  = explode(' ', $date[2]);
@@ -121,7 +123,7 @@ class EventInstance extends UNL_UCBCN
         $event->url = UNL_UCBCN_Frontend::formatURL($f);
         // Update starttime and endtime
         $starttime =& $event->eventdatetime->starttime;
-        $original = strtotime($starttime);
+        $original = $timezoneDateTime->getTimestamp($starttime);
         if ($isongoing) {
             // Get the real startdate
             $id = $event->eventdatetime->event_id;
@@ -133,13 +135,13 @@ class EventInstance extends UNL_UCBCN
         }
         $starttime = $startdate.substr($starttime, 10);
         // get difference between now and the original starttime
-        $updated = strtotime($starttime);
+        $updated = $timezoneDateTime->getTimestamp($starttime);
         $updated -= $original;
         // add the difference to endtime
         $endtime =& $event->eventdatetime->endtime;
-        $original = strtotime($endtime);
+        $original = $timezoneDateTime->getTimestamp($endtime);
         $updated += $original;
-        $endtime = date('Y-m-d H:i:s', $updated);
+        $endtime = $timezoneDateTime->format('Y-m-d H:i:s', $updated);
     }
 }
 

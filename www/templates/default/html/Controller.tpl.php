@@ -22,7 +22,7 @@ if (!$context->getCalendar()) {
 }
 
 $page->doctitle = '<title>' . $title . '</title>';
-$page->titlegraphic = '<a class="dcf-txt-h5" href="/">' . $site_title . '</a>';
+$page->titlegraphic = '<a class="dcf-txt-h5" href="' . $context->getCalendarURL() . '">' . $site_title . '</a>';
 $page->setParam('class', 'hide-wdn_navigation_wrapper');
 $page->affiliation = '';
 
@@ -61,6 +61,7 @@ $page->head .= '<link rel="home" href="' . $context->getCalendarURL() . '" />' .
 $savvy->addGlobal('page', $page);
 $view_class = str_replace('\\', '_', strtolower($context->options['model']));
 
+$calendarTimezone = array_search($context->getCalendar()->defaulttimezone, \UNL\UCBCN::getTimezoneOptions());
 if ($context->getCalendar()) {
     $page->maincontentarea = '
             <div class="dcf-bleed view-' . $view_class . ' band-nav">
@@ -90,6 +91,7 @@ if ($context->getCalendar()) {
                             </div>
                         </div>
                     </div>
+                    <div class="dcf-pt-2 dcf-txt-3xs unl-font-sans">All events are in ' . $calendarTimezone . ' time unless specified.</div>
                 </div>
             </div>';
 }

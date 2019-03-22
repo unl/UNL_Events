@@ -8,25 +8,7 @@ VERSION:2.0
 PRODID:-//UNL_UCBCN//NONSGML UNL Event Publisher//EN
 X-WR-CALNAME:<?php echo $context->options['calendar']->name."\n"; ?>
 CALSCALE:GREGORIAN
-X-WR-TIMEZONE:America/Chicago
 METHOD:PUBLISH
-BEGIN:VTIMEZONE
-TZID:America/Chicago
-BEGIN:DAYLIGHT
-TZOFFSETFROM:-0600
-RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU
-DTSTART:20070311T020000
-TZNAME:CDT
-TZOFFSETTO:-0500
-END:DAYLIGHT
-BEGIN:STANDARD
-TZOFFSETFROM:-0500
-RRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU
-DTSTART:20071104T020000
-TZNAME:CST
-TZOFFSETTO:-0600
-END:STANDARD
-END:VTIMEZONE
 <?php echo $savvy->render($context->output); ?>
 END:VCALENDAR
 <?php
@@ -35,5 +17,15 @@ $out = ob_get_contents();
 ob_clean();
 $out = explode("\n", $out);
 foreach ($out as $line) {
+    // remove any empty lines
+    if (empty(trim($line))) { continue; }
     echo \UNL\UCBCN\Frontend\Util::ical_split($line) . "\r\n";
 }
+
+function icalFormatString($string) {
+    $formattedString = preg_replace("/\r\n|\n|\r/", '\n', strip_tags(trim($string)));
+    $formattedString = preg_replace("/([,;:])/", '\\\$1', $formattedString);
+    return $formattedString;
+}
+
+

@@ -110,6 +110,18 @@
                 <label class="dcf-label" for="room">Room</label>
                 <input class="dcf-input-text"type="text" id="room" name="room" value="<?php echo $post['room']; ?>" />
 
+                <label class="dcf-label dcf-mt-2" for="timezone"><span class="dcf-required">*</span> Timezone</label>
+                <select class="dcf-input-select" id="timezone"" name="timezone" aria-label="Timezone">
+                <?php
+                  $timezone = $calendar->defaulttimezone;
+                  if (!empty($post['timezone'])) {
+                      $timezone = $post['timezone'];
+                  };
+                  foreach (UNL\UCBCN::getTimezoneOptions() as $tzName => $tzValue) { ?>
+                  <option <?php if ($timezone == $tzValue) echo 'selected="selected"'; ?> value="<?php echo $tzValue ?>"><?php echo $tzName ?></option>
+                <?php } ?>
+                </select>
+
                 <label class="dcf-label" for="start-date" ><span class="dcf-required">*</span> Start Date &amp; Time</label>
                 <div class="date-time-select">
                   <div class="date-group dcf-d-flex dcf-flex-grow-1 dcf-ai-center dcf-relative dcf-mb-4 dcf-pr-6">

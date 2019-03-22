@@ -1,6 +1,5 @@
 <?php
-$startu = strtotime($context->eventdatetime->starttime);
-$endu = strtotime($context->eventdatetime->endtime);
+$timezoneDateTime = new \UNL\UCBCN\TimezoneDateTime($context->eventdatetime->timezone);
 ?>
 <item>
 	<title><?php echo $context->event->title; ?></title>
@@ -9,13 +8,13 @@ $endu = strtotime($context->eventdatetime->endtime);
 		<?php
 		echo '&lt;div&gt;'.$context->event->description.'&lt;/div&gt;';
 		if (isset($context->event->subtitle)) echo '&lt;div&gt;'.$context->event->subtitle.'&lt;/div&gt;';
-		echo '&lt;small&gt;'.date('l, F jS', $startu).'&lt;/small&gt;';
+		echo '&lt;small&gt;'.$timezoneDateTime->format($context->eventdatetime->starttime, 'l, F jS').'&lt;/small&gt;';
 		
 		if (isset($context->eventdatetime->starttime)) {
 			if (strpos($context->eventdatetime->starttime,'00:00:00')) {
-				echo ' | &lt;small&gt;&lt;abbr class="dtstart" title="'.date(DATE_ISO8601, $startu).'"&gt;All day&lt;/abbr&gt;&lt;/small&gt;';
+				echo ' | &lt;small&gt;&lt;abbr class="dtstart" title="'.$timezoneDateTime->format($context->eventdatetime->starttime, DATE_ISO8601).'"&gt;All day&lt;/abbr&gt;&lt;/small&gt;';
 			} else {
-	        	echo ' | &lt;small&gt;&lt;abbr class="dtstart" title="'.date(DATE_ISO8601, $startu).'"&gt;'.date('g:i a', $startu).'&lt;/abbr&gt;&lt;/small&gt;';
+        echo ' | &lt;small&gt;&lt;abbr class="dtstart" title="'.$timezoneDateTime->format($context->eventdatetime->starttime, DATE_ISO8601).'"&gt;'.$timezoneDateTime->format($context->eventdatetime->starttime, 'g:i a').'&lt;/abbr&gt;&lt;/small&gt;';
 			}
 	    } else {
 	        echo 'Unknown';
@@ -23,11 +22,11 @@ $endu = strtotime($context->eventdatetime->endtime);
 	    if (isset($context->eventdatetime->endtime) &&
 	    	($context->eventdatetime->endtime != $context->eventdatetime->starttime) &&
 	    	($context->eventdatetime->endtime > $context->eventdatetime->starttime)) {
-	    	echo '-&lt;small&gt;&lt;abbr class="dtend" title="'.date(DATE_ISO8601, $endu).'"&gt;'.date('g:i a', $endu).'&lt;/abbr&gt;&lt;/small&gt;';
+        echo '-&lt;small&gt;&lt;abbr class="dtend" title="'.$timezoneDateTime->format($context->eventdatetime->endtime, DATE_ISO8601).'"&gt;'.$timezoneDateTime->format($context->eventdatetime->endtime, 'g:i a').'&lt;/abbr&gt;&lt;/small&gt;';
 	    }
 		if ($context->eventdatetime->location_id) {
 		    $loc = $context->eventdatetime->getLocation();
-			echo ' | &lt;small&gt;'.$loc->name;
+      echo ' | &lt;small&gt;'.$loc->name;
 			if (isset($context->eventdatetime->room)) {
 			    echo ' Room:'.$context->eventdatetime->room;
 			}

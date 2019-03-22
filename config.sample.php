@@ -34,3 +34,14 @@ UNL\UCBCN\ActiveRecord\Database::setDbSettings(
     'password' => 'password',
     'dbname'   => 'events',
 ));
+
+UNL\UCBCN::$defaultTimezone = 'America/Chicago';
+UNL\UCBCN::setTimezoneOptions(
+    array(
+        'Eastern' => 'America/New_York',
+        'Central' => 'America/Chicago',
+        'Mountain' => 'America/Denver',
+        'Arizona' => 'America/Phoenix',
+        'Pacific' => 'America/Los_Angeles'
+    )
+);
