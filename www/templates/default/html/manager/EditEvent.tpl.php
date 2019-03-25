@@ -75,7 +75,7 @@
                 </select>
             </fieldset>
             <fieldset class="event-datetimes">
-	            <legend class="dcf-legend">Location, Date, and Time</legend>
+	            <legend class="dcf-legend dcf-txt-md">Location, Date, and Time</legend>
                 <a class="dcf-btn dcf-btn-primary" href="<?php echo $event->getAddDatetimeURL($context->calendar) ?>">Add Location, Date, and/or Time</a><br><br>
 	            <div class="edt-header">
                     <div class="dates">
@@ -180,25 +180,25 @@
             </fieldset>
         </div>
         <div class="dcf-col-100% dcf-col-33%-end@md">
-            <fieldset class="visual-island">
+            <fieldset class="visual-island dcf-b-0">
                 <legend class="vi-header">
                     Sharing
                 </legend>
                 <div class="details">
                     <fieldset>
-                        <legend class="dcf-legend">Privacy</legend>
+                        <legend class="dcf-legend dcf-txt-sm">Privacy</legend>
                         <label>
-                            <input class=""dcf-input-control" <?php if (!$event->approvedforcirculation) echo 'checked="checked"' ?> type="radio" value="private" name="private_public" id="sharing-private">
+                            <input class="dcf-input-control" <?php if (!$event->approvedforcirculation) echo 'checked="checked"' ?> type="radio" value="private" name="private_public" id="sharing-private">
                             Private
                         </label> 
                         <br>
                         <label>
-                            <input class=""dcf-input-control" <?php if ($event->approvedforcirculation) echo 'checked="checked"' ?> type="radio" value="public" name="private_public" id="sharing-public">
+                            <input class="dcf-input-control" <?php if ($event->approvedforcirculation) echo 'checked="checked"' ?> type="radio" value="public" name="private_public" id="sharing-public">
                             Public
                         </label>
                     </fieldset>
                   <fieldset>
-                    <legend class="dcf-legend">Consider for main UNL Calendar</legend>
+                    <legend class="dcf-legend dcf-txt-sm">Consider for main UNL Calendar</legend>
                       <?php if ($context->on_main_calendar): ?>
                         <img src="<?php echo $base_frontend_url ?>templates/default/html/images/checkmark-16.png" alt="">
                         (event has been sent to main UNL calendar for approval)
@@ -212,7 +212,7 @@
                 </div>
             </fieldset>
 
-            <fieldset class="visual-island">
+            <fieldset class="visual-island dcf-b-0">
                 <legend class="vi-header">
                     Contact Info
                 </legend>
@@ -232,7 +232,7 @@
                 </div>
             </fieldset>
 
-            <fieldset class="visual-island">
+            <fieldset class="visual-island dcf-b-0">
                 <legend class="dcf-legend vi-header">
                     Image
                 </legend>

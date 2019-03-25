@@ -56,7 +56,7 @@
 <form id="add-datetime-form" action="" method="POST">
   <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
   <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
-    <fieldset>
+    <fieldset class="dcf-b-0">
         <label class="dcf-label" for="location"><span class="dcf-required">*</span> Location</label>
         <select class="dcf-input-select" id="location" name="location" style="width: 100%;">
               <?php if ($datetime->id != NULL): ?>
@@ -169,7 +169,7 @@
               <?php endfor; ?>
             </select>
 
-            <fieldset id="start-time-am-pm" class="am_pm dcf-mb-0 dcf-pl-3">
+            <fieldset id="start-time-am-pm" class="am_pm dcf-mb-0 dcf-pl-3 dcf-b-0">
               <legend class="dcf-sr-only">AM/PM</legend>
               <div class="dcf-d-flex dcf-ai-center">
                 <label class="dcf-label dcf-2nd dcf-mt-0" for="start-time-am-pm-am">AM</label>
@@ -208,7 +208,7 @@
                 <?php endfor; ?>
             </select>
 
-            <fieldset id="start-time-am-pm" class="am_pm dcf-mb-0 dcf-pl-3">
+            <fieldset id="start-time-am-pm" class="am_pm dcf-mb-0 dcf-pl-3 dcf-b-0">
               <legend class="dcf-sr-only">AM/PM</legend>
               <div class="dcf-d-flex dcf-ai-center">
                 <label class="dcf-label dcf-2nd dcf-mt-0" for="end-time-am-pm-am">AM</label>
