@@ -11,7 +11,15 @@ class TimezoneDateTime
     public function __construct(String $timezoneString)
     {
         $this->timezone = new \DateTimeZone($timezoneString);
-        $this->UTCTimezone = new \DateTimeZone($timezoneString);
+    }
+
+    public function getTimezone() {
+        return $this->timezone;
+    }
+
+    public function getTimezoneAbbreviation() {
+        $dateTime = $this->getDateTime('now');
+        return $dateTime->format('T');
     }
 
     public function getDateTime(String $dateTimeString) {

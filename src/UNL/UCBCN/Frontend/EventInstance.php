@@ -237,8 +237,7 @@ class EventInstance implements RoutableInterface
     
     public function toJSONData()
     {
-        $startu     = strtotime($this->getStartTime());
-        $endu       = strtotime($this->getEndTime());
+        $timezoneDateTime = new \UNL\UCBCN\TimezoneDateTime($this->eventdatetime->timezone);
         $location   = $this->eventdatetime->getLocation();
         $eventTypes = $this->event->getEventTypes();
         $webcasts   = $this->event->getWebcasts();
@@ -251,8 +250,9 @@ class EventInstance implements RoutableInterface
         $data['EventTitle']    = $this->event->title;
         $data['EventSubtitle'] = $this->event->subtitle;
         $data['DateTime'] = array(
-            'Start' => date('c', $startu),
-            'End'   => date('c', $endu),
+            'Start' => $timezoneDateTime->formatUTC($this->getStartTime(),'Y-m-d\TH:i:s\Z'),
+            'End'   => $timezoneDateTime->formatUTC($this->getEndTime(),'Y-m-d\TH:i:s\Z'),
+            'AllDay' => $this->isAllDay()
         );
         $data['EventStatus']           = 'Happening As Scheduled';
         $data['Classification']        = 'Public';

@@ -1,28 +1,32 @@
 <?php
 $starttime = $context->getStartTime();
 $endtime = $context->getEndTime();
-$timezoneDateTime = new \UNL\UCBCN\TimezoneDateTime($context->eventdatetime->timezone);
+
+if (empty($timezoneDisplay) || empty($timezoneDisplay->getTimezone())) {
+    // set with default calendar timezone
+    $timezoneDisplay = new \UNL\UCBCN\TimezoneDisplay($context->calendar->defaulttimezone, FALSE);
+}
 ?>
 <span class="time-wrapper">
 <?php
     if (!$context->isAllDay()) {
-        if (intval($timezoneDateTime->format($starttime,'i')) == 0) {
-            echo $timezoneDateTime->format($starttime,'g a');
+        if (intval($timezoneDisplay->format($starttime, $context->eventdatetime->timezone,'i')) == 0) {
+            echo $timezoneDisplay->format($starttime, $context->eventdatetime->timezone,'g a');
         } else {
-            echo $timezoneDateTime->format($starttime,'g:i a');
+            echo $timezoneDisplay->format($starttime, $context->eventdatetime->timezone,'g:i a');
         }
 
         if (!empty($endtime) && $endtime != $starttime) {
             echo '&ndash;';
-            if (intval($timezoneDateTime->format($endtime,'i')) == 0) {
-                echo $timezoneDateTime->format($endtime,'g a');
+            if (intval($timezoneDisplay->format($endtime, $context->eventdatetime->timezone,'i')) == 0) {
+                echo $timezoneDisplay->format($endtime, $context->eventdatetime->timezone,'g a');
             } else {
-                echo $timezoneDateTime->format($endtime,'g:i a');
+                echo $timezoneDisplay->format($endtime, $context->eventdatetime->timezone,'g:i a');
             }
         }
 
-        if ($context->eventdatetime->timezone != $context->calendar->defaulttimezone) {
-          echo $timezoneDateTime->format($starttime,' T');
+        if ($timezoneDisplay->isClientTime() === FALSE && $context->eventdatetime->timezone != $context->calendar->defaulttimezone) {
+          echo $timezoneDisplay->format($starttime, $context->eventdatetime->timezone,' T');
         }
     }
 ?>
