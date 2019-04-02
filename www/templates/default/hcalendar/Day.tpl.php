@@ -1,4 +1,10 @@
-<?php $formattedDate = $context->getDateTime()->format('l, F j'); ?>
+<?php
+  if (empty($timezoneDisplay) || empty($timezoneDisplay->getTimezone())) {
+      // set with default calendar timezone
+      $timezoneDisplay = new \UNL\UCBCN\TimezoneDisplay($context->calendar->defaulttimezone, FALSE);
+  }
+  $formattedDate = $context->getDateTime($timezoneDisplay)->format('l, F j');
+?>
 <div class="section-heading">
     <h2 data-datetime="<?php echo $context->getDateTime()->format('c') ?>">
       <?php echo $formattedDate ?>
