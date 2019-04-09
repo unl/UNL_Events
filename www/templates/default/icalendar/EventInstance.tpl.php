@@ -16,7 +16,11 @@ if (isset($context->eventdatetime->starttime)) {
            $out[] = 'DTSTART;TZID=America/Chicago:'.date('Ymd\THis', $startu);
     }
 }
-$out[] = 'UID:'.$context->eventdatetime->id.'@'.$_SERVER['SERVER_NAME'];
+if ($context->eventdatetime->recurringtype == 'none') {
+    $out[] = 'UID:'.$context->eventdatetime->id.'@'.$_SERVER['SERVER_NAME'];
+} else {
+    $out[] = 'UID:'.$context->eventdatetime->id . '-' . $context->recurringdate->id .'@'.$_SERVER['SERVER_NAME'];
+}
 $out[] = 'DTSTAMP:'.date('Ymd\THis',strtotime($context->event->datecreated));
 $out[] = 'SUMMARY:'.strip_tags($context->event->title);
 $out[] = 'DESCRIPTION:'.preg_replace("/\r\n|\n|\r/", '\n', strip_tags($context->event->description));
