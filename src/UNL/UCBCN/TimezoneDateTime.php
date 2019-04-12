@@ -4,9 +4,6 @@ namespace UNL\UCBCN;
 class TimezoneDateTime
 {
     private $timezone;
-    const DST_START = '20070311T020000';
-    const ST_START = '20071104T020000';
-
 
     public function __construct(String $timezoneString)
     {
@@ -28,7 +25,19 @@ class TimezoneDateTime
 
     public function getDateTimeAddInterval(String $dateTimeString, String $addInterval) {
         $dateTime = new \DateTime($dateTimeString, $this->timezone);
-        return $dateTime->add(new \DateInterval($addInterval));
+        $invert = false;
+
+        if (substr($addInterval, 0, 1) == '-'){
+            $invert = true;
+            $addInterval = ltrim($addInterval, '-');
+        }
+
+        $interval = new \DateInterval($addInterval);
+        if ($invert === true){
+            $interval->invert = 1;
+        }
+
+        return $dateTime->add($interval);
     }
 
     public function getTimestamp(String $dateTimeString) {

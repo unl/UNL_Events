@@ -48,9 +48,10 @@ $page->addScript($frontend->getURL().'templates/default/html/js/events.min.js?v=
 $page->addScript($frontend->getURL().'templates/default/html/js/vendor/jstz.min.js?v='.UNL\UCBCN\Frontend\Controller::$version, NULL, TRUE);
 // Capture client local timezone and place in cookie
 if (empty($_COOKIE[LOCAL_TIMEZONE])) {
-    echo "here1";
     $page->addScriptDeclaration('document.cookie = "' . LOCAL_TIMEZONE . '=" + jstz.determine().name();');
-} elseif (empty($_COOKIE[DISPLAY_TIMEZONE_NOTICE])) {
+    $_COOKIE[DISPLAY_TIMEZONE_NOTICE] = 'true';
+}
+if (empty($_COOKIE[DISPLAY_TIMEZONE_NOTICE])) {
     $_COOKIE[DISPLAY_TIMEZONE_NOTICE] = 'true';
 }
 

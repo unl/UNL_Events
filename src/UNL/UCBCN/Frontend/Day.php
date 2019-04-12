@@ -56,21 +56,21 @@ class Day extends EventListing implements RoutableInterface
     function getSQL()
     {
         // Due to timezones spanning multiple days open search up to all possible days.  Invalid events for day will be filtered out from results.
-        $startTimestamp = $this->getDateTime(FALSE)->format('U') - 86400;
-        $endTimestamp = $this->getDateTime(TRUE)->format('U') + 86400;
+        $startDateTime = $this->getDateTime(FALSE, '-P1D')->format('Y-m-d H:i:s');
+        $endDateTime = $this->getDateTime(TRUE, 'P1D')->format('Y-m-d H:i:s');
 
         $sql = '
                 SELECT DISTINCT e.id as id,recurringdate.recurringdate,e.starttime,e.timezone,event.title, recurringdate.id as recurringdate_id
                 FROM eventdatetime as e
                 INNER JOIN event ON e.event_id = event.id
                 INNER JOIN calendar_has_event ON calendar_has_event.event_id = event.id
-                LEFT JOIN recurringdate ON (recurringdate.event_datetime_id = e.id AND recurringdate.recurringdate_timestamp >= ' . $startTimestamp . ' AND recurringdate.recurringdate_timestamp <= ' . $endTimestamp . ' AND recurringdate.unlinked = 0)
+                LEFT JOIN recurringdate ON (recurringdate.event_datetime_id = e.id AND recurringdate.recurringdate >= "' . $startDateTime . '" AND recurringdate.recurringdate <= "' . $endDateTime . '" AND recurringdate.unlinked = 0)
                 WHERE
                     calendar_has_event.calendar_id = ' . (int)$this->calendar->id . '
                     AND calendar_has_event.status IN ("posted", "archived")
                     AND  (
-                        (e.starttime_timestamp >= ' . $startTimestamp . ' AND e.endtime_timestamp <= ' . $endTimestamp . ')
-                       OR (recurringdate.recurringdate_timestamp >= ' . $startTimestamp . ' AND recurringdate.recurringdate_timestamp <= ' . $endTimestamp . ')
+                        (e.starttime >= "' . $startDateTime . '" AND e.endtime <= "' . $endDateTime . '")
+                       OR (recurringdate.recurringdate >= "' . $startDateTime . '" AND recurringdate.recurringdate <= "' . $endDateTime . '")
                       )
                 ORDER BY (
                     IF (recurringdate.recurringdate IS NULL,
@@ -79,19 +79,22 @@ class Day extends EventListing implements RoutableInterface
                     )
                 ) ASC,
                 event.title ASC';
-        
+
         return trim($sql);
     }
 
     // Overwrite to filter out bad results for timezone
     protected function getAllForConstructor()
     {
-        $options['sql']         = $this->getSQL();
-        $options['returnArray'] = true;
+        if (array_key_exists('periodEvents', $this->options)) {
+            $results = $this->options['periodEvents'];
+        } else {
+            $options['sql']         = $this->getSQL();
+            $options['returnArray'] = true;
+            $results = $this->getBySQL($options);
+        }
 
-        $results = $this->getBySQL($options);
         $filteredResults = array();
-
         $dayFilter = $this->getDateTime()->format('m-d-Y');
         $timezoneDisplay = \UNL\UCBCN::getTimezoneDisplay($this->calendar->defaulttimezone);
         foreach($results as $result) {
@@ -117,10 +120,14 @@ class Day extends EventListing implements RoutableInterface
      *
      * @return \DateTime
      */
-    public function getDateTime($endOfDay = FALSE)
+    public function getDateTime($endOfDay = FALSE, $interval = NULL)
     {
         $timezoneDisplay = \UNL\UCBCN::getTimezoneDisplay($this->calendar->defaulttimezone);
-        return $timezoneDisplay->getDateTime($this->getDateTimeString($endOfDay));
+        if (empty($interval)) {
+            return $timezoneDisplay->getDateTime($this->getDateTimeString($endOfDay));
+        } else {
+            return $timezoneDisplay->getDateTimeAddInterval($this->getDateTimeString($endOfDay), $interval);
+        }
     }
 
     /**

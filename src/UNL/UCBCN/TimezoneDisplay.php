@@ -28,6 +28,10 @@ class TimezoneDisplay
         return $this->timezoneDateTime->getDateTime($dateTimeString);
     }
 
+    public function getDateTimeAddInterval(String $dateTimeString, String $addInterval) {
+        return $this->timezoneDateTime->getDateTimeAddInterval($dateTimeString, $addInterval);
+    }
+
     public function formatTimestamp(Int $timestamp, String $format) {
         $eventDateTime = new \DateTime();
         $eventDateTime->setTimestamp($timestamp);
