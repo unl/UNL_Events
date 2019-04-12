@@ -73,7 +73,7 @@ class EventInstance implements RoutableInterface
         }
 
         // Always include images with XML and JSON formats
-        if (strtolower($_GET['format']) == 'xml' || strtolower($_GET['format']) == 'json') {
+        if (isset($_GET['format']) && (strtolower($_GET['format']) == 'xml' || strtolower($_GET['format']) == 'json')) {
             $options['includeEventImageData'] = TRUE;
         }
 
