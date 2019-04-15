@@ -2,18 +2,17 @@
         <EventID><?php echo $context->event->id; ?></EventID>
         <EventTitle><?php echo htmlspecialchars($context->event->title); ?></EventTitle>
         <EventSubtitle><?php echo htmlspecialchars($context->event->subtitle); ?></EventSubtitle>
-        <?php 
-        $startu = strtotime($context->getStartTime());
-		$endu = strtotime($context->getEndTime());
-		?>
+        <?php
+        $timezoneDateTime = new \UNL\UCBCN\TimezoneDateTime($context->eventdatetime->timezone);
+		    ?>
         <DateTime>
-            <StartDate><?php echo date('Y-m-d', $startu); ?></StartDate>
-            <StartTime><?php echo date('H:i:s', $startu); ?>Z</StartTime>
+            <StartDate><?php echo $timezoneDateTime->formatUTC($context->getStartTime(),'Y-m-d'); ?></StartDate>
+            <StartTime><?php echo $timezoneDateTime->formatUTC($context->getStartTime(),'c'); ?></StartTime>
             <?php if (isset($context->eventdatetime->endtime)
                     && !empty($context->eventdatetime->endtime)
-                    && ($endu > $startu)) : ?>
-            <EndDate><?php echo date('Y-m-d', $endu); ?></EndDate>
-            <EndTime><?php echo date('H:i:s', $endu); ?>Z</EndTime>
+                    && ($context->getEndTime() > $context->getStartTime())) : ?>
+            <EndDate><?php echo $timezoneDateTime->formatUTC($context->getEndTime(),'Y-m-d'); ?></EndDate>
+            <EndTime><?php echo $timezoneDateTime->formatUTC($context->getEndTime(),'c'); ?></EndTime>
             <?php endif; ?>
         </DateTime>
         <Locations>
