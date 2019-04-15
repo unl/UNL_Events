@@ -80,7 +80,7 @@ $page->maincontentarea .=
             <div class="message">
             <h4>Timezone Support Notice</h4>
             <div class="message-content">
-            UNL Events now supports timezones.  Calendar and event timezones default to Central time and will require no action unless you with to use another timezone.  Please send all feedback to <a href="mailto:iim@listserve.unl.edu">the dev team</a> at iim@listserve.unl.edu.</div>
+            UNL Events now supports timezones.  Calendar and event timezones default to Central time and will require no action unless you wish to use another timezone.  Please send all feedback/issues to <a href="mailto:iim@listserve.unl.edu">the dev team</a> at iim@listserve.unl.edu.</div>
             </div>
         </div>';
 
