@@ -251,8 +251,6 @@ class Setup_PostInstall
         } else {
             $new_definition_file = $this->data_dir.'/UNL_UCBCN_db.xml';
             
-            $db->exec('DROP TABLE `ongoingcheck`;');
-            
             if (!fopen($new_definition_file, 'r')) {
                 $this->outputData('File '.$new_definition_file.' does not exist! Cannot upgrade DB.');
                 return false;

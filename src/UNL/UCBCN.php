@@ -55,11 +55,11 @@ class UCBCN
         'Eastern' => 'America/New_York',
         'Central' => 'America/Chicago',
         'Mountain' => 'America/Denver',
-        'Mountain no DST' => 'America/Phoenix',
+        'Phoenix' => 'America/Phoenix',
         'Pacific' => 'America/Los_Angeles',
         'Alaska' => 'America/Anchorage',
         'Hawaii' => 'America/Adak',
-        'Hawaii no DST' => 'Pacific/Honolulu'
+        'Honolulu' => 'Pacific/Honolulu'
     );
 
     private static $timezoneOptions = array();
