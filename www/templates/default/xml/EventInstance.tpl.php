@@ -6,11 +6,11 @@
         $timezoneDateTime = new \UNL\UCBCN\TimezoneDateTime($context->eventdatetime->timezone);
 		    ?>
         <DateTime>
-            <StartDate><?php echo $timezoneDateTime->formatUTC($context->getStartTime(),'c'); ?></StartDate>
+            <StartDate><?php echo $timezoneDateTime->formatUTC($context->getStartTime(),'Y-m-d\TH:i:s\Z'); ?></StartDate>
             <?php if (isset($context->eventdatetime->endtime)
                     && !empty($context->eventdatetime->endtime)
                     && ($context->getEndTime() > $context->getStartTime())) : ?>
-            <EndDate><?php echo $timezoneDateTime->formatUTC($context->getEndTime(),'c'); ?></EndDate>
+            <EndDate><?php echo $timezoneDateTime->formatUTC($context->getEndTime(),'Y-m-d\TH:i:s\Z'); ?></EndDate>
             <?php endif; ?>
         </DateTime>
         <Locations>
