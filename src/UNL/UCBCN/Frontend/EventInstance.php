@@ -257,7 +257,9 @@ class EventInstance implements RoutableInterface
         $data['DateTime'] = array(
             'Start' => $timezoneDateTime->formatUTC($this->getStartTime(),'Y-m-d\TH:i:s\Z'),
             'End'   => $timezoneDateTime->formatUTC($this->getEndTime(),'Y-m-d\TH:i:s\Z'),
-            'AllDay' => $this->isAllDay()
+            'AllDay' => $this->isAllDay(),
+            'EventTimezone' => $this->eventdatetime->timezone,
+            'CalendarTimezone' => $this->calendar->defaulttimezone
         );
         $data['EventStatus']           = 'Happening As Scheduled';
         $data['Classification']        = 'Public';
