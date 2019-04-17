@@ -317,7 +317,7 @@ WDN.initializePlugin('jqueryui', [function() {
     $(\"LINK[href^='//unlcms.unl.edu/wdn/templates_4.0/scripts/plugins/ui/css/jquery-ui.min.css']\").remove();
 
     $('#start-date').change(function (change) {
-        setRecurringOptions($(this), $('#monthly-group'));
+        setRecurringOptions($(this), $('#monthly-group'), '" . $post['recurring_type'] . "');
     });
 
     setRecurringOptions($('#start-date'), $('#monthly-group'));

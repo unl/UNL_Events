@@ -225,7 +225,7 @@
         <?php if ($context->recurrence_id == NULL) : ?>
             <div class="section-container">
                 <input <?php if ($datetime->recurringtype != 'none' && $datetime->recurringtype != NULL) echo 'checked="checked"' ?> type="checkbox" name="recurring" id="recurring"> 
-                <label class="dcf-label" for="recurring">This is a recurring event<?php echo $datetime->recurringtype; ?></label>
+                <label class="dcf-label" for="recurring">This is a recurring <?php echo $datetime->recurringtype; ?> event</label>
                 <div class="recurring-container date-time-select">                        
                     <label class="dcf-label dcf-d-inline-block" for="recurring-type">This event recurs </label>
                     <select class="dcf-input-select" id="recurring-type" name="recurring_type">
@@ -257,7 +257,11 @@
 <?php
 $recurringCode = '';
 if ($datetime->recurringtype != 'none' && $datetime->recurringtype != NULL) {
-  $recurringCode = "setRecurringOptions($('#start-date'), $('#monthly-group'));";
+  $rectypemonth = '';
+  if ($datetime->recurringtype == 'monthly') {
+      $rectypemonth = $datetime->rectypemonth;
+  }
+  $recurringCode = "setRecurringOptions($('#start-date'), $('#monthly-group'), '" . $rectypemonth. "');";
 }
 $page->addScriptDeclaration("
 WDN.initializePlugin('jqueryui', [function() {  
@@ -277,7 +281,7 @@ WDN.initializePlugin('jqueryui', [function() {
     $('#location').change();
 
     $('#start-date').change(function (change) {
-        setRecurringOptions($(this), $('#monthly-group'));
+        setRecurringOptions($(this), $('#monthly-group'), '" . $rectypemonth. "');
     });
 
     " . $recurringCode . "

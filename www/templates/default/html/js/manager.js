@@ -14,7 +14,7 @@ var ordinal = function(number) {
 };
 
 // this needs to be global as it gets tapped by the page js
-setRecurringOptions = function(start_elem, month_group_elem) {
+setRecurringOptions = function(start_elem, month_group_elem, rectypemonth) {
     // get startdate info
     var weekdays = [
         "Sunday", 
@@ -70,20 +70,29 @@ setRecurringOptions = function(start_elem, month_group_elem) {
     month_group_elem.children(".dynamicRecurring").remove();
     // populate rectypemonth with appropriate options
 
+    var dynamicRecurringSelected = '';
     if (nth[week] != undefined) {
-        month_group_elem.prepend("<option class='dynamicRecurring' value='" + nth[week].toLowerCase() + "'>" + nth[week] + " " + start_weekday + " of every month</option>")
+        dynamicRecurringSelected = '';
+        if (rectypemonth == nth[week].toLowerCase()) { dynamicRecurringSelected = ' selected="selected" '}
+        month_group_elem.prepend("<option class='dynamicRecurring' " + dynamicRecurringSelected + "value='" + nth[week].toLowerCase() + "'>" + nth[week] + " " + start_weekday + " of every month</option>")
     }
 
     if (week == 4 && total_weeks == 4) {
-        month_group_elem.prepend("<option class='dynamicRecurring' value='last'>" + "Last " + start_weekday + " of every month</option>")
+        dynamicRecurringSelected = '';
+        if (rectypemonth == 'last') { dynamicRecurringSelected = ' selected="selected" '}
+        month_group_elem.prepend("<option class='dynamicRecurring' " + dynamicRecurringSelected + "value='last'>" + "Last " + start_weekday + " of every month</option>")
     }
 
     if (days_in_month == start_day) {
-        month_group_elem.prepend("<option class='dynamicRecurring' value='lastday'>Last day of every month</option>");
+      dynamicRecurringSelected = '';
+      if (rectypemonth == 'lastday') { dynamicRecurringSelected = ' selected="selected" '}
+      month_group_elem.prepend("<option class='dynamicRecurring' " + dynamicRecurringSelected + "value='lastday'>Last day of every month</option>");
     }
 
     var text = ordinal(start_day) + ' of every month';
-    month_group_elem.prepend("<option class='dynamicRecurring' value='date'>" + text + "</option>");
+    dynamicRecurringSelected = '';
+    if (rectypemonth == 'date') { dynamicRecurringSelected = ' selected="selected" '}
+    month_group_elem.prepend("<option class='dynamicRecurring' " + dynamicRecurringSelected + "value='date'>" + text + "</option>");
 };
 
 require(['jquery', 'wdn', frontend_url + 'templates/default/html/js/vendor/select2/js/select2.min.js'], function($, WDN) {
