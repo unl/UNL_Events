@@ -1,7 +1,7 @@
 <?php
   if (empty($timezoneDisplay) || empty($timezoneDisplay->getTimezone())) {
       // set with default calendar timezone
-      $timezoneDisplay = new \UNL\UCBCN\TimezoneDisplay($context->calendar->defaulttimezone, FALSE);
+      $timezoneDisplay = new \UNL\UCBCN\TimezoneDisplay($context->calendar->defaulttimezone);
   }
   $formattedDate = $context->getDateTime($timezoneDisplay)->format('l, F j');
 ?>

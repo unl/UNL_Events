@@ -122,22 +122,7 @@ class UCBCN
     }
 
     public static function getTimezoneDisplay($defaultTimezone) {
-        $timezoneDisplay = NULL;
-        if (!empty($_COOKIE[LOCAL_TIMEZONE])) {
-            try {
-                $timezoneDisplay = new \UNL\UCBCN\TimezoneDisplay($_COOKIE[LOCAL_TIMEZONE], TRUE);
-            } catch (Exception $e) {
-                // setting client time zone failed
-                $timezoneDisplay = NULL;
-            }
-        }
-
-        if (empty($timezoneDisplay)) {
-            // unable to get client timezone so use calendars default timezone
-            $timezoneDisplay = new \UNL\UCBCN\TimezoneDisplay($defaultTimezone, FALSE);
-        }
-
-        return $timezoneDisplay;
+        return new \UNL\UCBCN\TimezoneDisplay($defaultTimezone);
     }
     
     /**

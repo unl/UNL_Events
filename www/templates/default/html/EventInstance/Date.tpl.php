@@ -8,7 +8,7 @@ $starttime = $context->getStartTime();
 $endtime = $context->getEndTime();
 if (empty($timezoneDisplay) || empty($timezoneDisplay->getTimezone())) {
   // set with default calendar timezone
-  $timezoneDisplay = new \UNL\UCBCN\TimezoneDisplay($context->calendar->defaulttimezone, FALSE);
+  $timezoneDisplay = new \UNL\UCBCN\TimezoneDisplay($context->calendar->defaulttimezone);
 }
 ?>
 <span class="date-wrapper">
@@ -25,6 +25,6 @@ if (empty($timezoneDisplay) || empty($timezoneDisplay->getTimezone())) {
     All Day
     <?php else: ?>
         <?php echo $timezoneDisplay->format($starttime, $context->eventdatetime->timezone, 'g:i a')?><?php if (!empty($endtime) && $endtime != $starttime): ?>&ndash;<?php echo $timezoneDisplay->format($endtime, $context->eventdatetime->timezone,'g:i a')?><?php endif; ?>
-        <?php if ($timezoneDisplay->isClientTime() === FALSE && $context->eventdatetime->timezone != $context->calendar->defaulttimezone) { echo $timezoneDisplay->format($starttime, $context->eventdatetime->timezone, ' T'); } ?>
+        <?php if ($context->eventdatetime->timezone != $context->calendar->defaulttimezone) { echo $timezoneDisplay->format($starttime, $context->eventdatetime->timezone, ' T'); } ?>
     <?php endif; ?>
 </span>

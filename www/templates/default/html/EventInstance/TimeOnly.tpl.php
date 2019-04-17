@@ -4,7 +4,7 @@ $endtime = $context->getEndTime();
 
 if (empty($timezoneDisplay) || empty($timezoneDisplay->getTimezone())) {
     // set with default calendar timezone
-    $timezoneDisplay = new \UNL\UCBCN\TimezoneDisplay($context->calendar->defaulttimezone, FALSE);
+    $timezoneDisplay = new \UNL\UCBCN\TimezoneDisplay($context->calendar->defaulttimezone);
 }
 ?>
 <span class="time-wrapper">
@@ -25,7 +25,7 @@ if (empty($timezoneDisplay) || empty($timezoneDisplay->getTimezone())) {
             }
         }
 
-        if ($timezoneDisplay->isClientTime() === FALSE && $context->eventdatetime->timezone != $context->calendar->defaulttimezone) {
+        if ($context->eventdatetime->timezone != $context->calendar->defaulttimezone) {
           echo $timezoneDisplay->format($starttime, $context->eventdatetime->timezone,' T');
         }
     }

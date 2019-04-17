@@ -2,12 +2,9 @@
 use UNL\Templates\Templates;
 
 $timezoneDisplay = $timezoneDisplay = \UNL\UCBCN::getTimezoneDisplay($context->getCalendar()->defaulttimezone);
-if ($timezoneDisplay->isClientTime()) {
-    $timezoneMessage = 'All events are displayed in your local time of ' . $timezoneDisplay->getTimezoneAbbreviation() . '.';
-} else {
-    $calendarTimezone = array_search($context->getCalendar()->defaulttimezone, \UNL\UCBCN::getTimezoneOptions());
-    $timezoneMessage = 'All events are in ' . $calendarTimezone . ' time unless specified.';
-}
+$calendarTimezone = array_search($context->getCalendar()->defaulttimezone, \UNL\UCBCN::getTimezoneOptions());
+$timezoneMessage = 'All events are in ' . $calendarTimezone . ' time unless specified.';
+
 // Need to for datetime display
 $savvy->addGlobal('timezoneDisplay', $timezoneDisplay);
 
@@ -45,12 +42,7 @@ $page->addStyleDeclaration("#dcf-mobile-toggle-menu {display: none!important}");
 //javascript
 $page->addScriptDeclaration('var frontend_url = "'.$frontend->getURL().'";');
 $page->addScript($frontend->getURL().'templates/default/html/js/events.min.js?v='.UNL\UCBCN\Frontend\Controller::$version);
-$page->addScript($frontend->getURL().'templates/default/html/js/vendor/jstz.min.js?v='.UNL\UCBCN\Frontend\Controller::$version, NULL, TRUE);
-// Capture client local timezone and place in cookie
-if (empty($_COOKIE[LOCAL_TIMEZONE])) {
-    $page->addScriptDeclaration('document.cookie = "' . LOCAL_TIMEZONE . '=" + jstz.determine().name();');
-    $_COOKIE[DISPLAY_TIMEZONE_NOTICE] = 'true';
-}
+
 if (empty($_COOKIE[DISPLAY_TIMEZONE_NOTICE])) {
     $_COOKIE[DISPLAY_TIMEZONE_NOTICE] = 'true';
 }

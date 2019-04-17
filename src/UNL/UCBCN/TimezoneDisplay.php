@@ -4,16 +4,10 @@ namespace UNL\UCBCN;
 class TimezoneDisplay
 {
     private $timezoneDateTime;
-    private $isClientTime = FALSE;
 
-    public function __construct($timezoneString, $isClientTime)
+    public function __construct($timezoneString)
     {
         $this->timezoneDateTime = new \UNL\UCBCN\TimezoneDateTime($timezoneString);
-        $this->isClientTime = $isClientTime;
-    }
-
-    public function isClientTime() {
-        return $this->isClientTime;
     }
 
     public function getTimezone() {
@@ -41,13 +35,6 @@ class TimezoneDisplay
 
     public function format($DateTimeString, $eventTimezone, $format) {
         $eventTimezoneDateTime = new \UNL\UCBCN\TimezoneDateTime($eventTimezone);
-
-        if ($this->isClientTime === TRUE) {
-            // format event datetime relative to client timezone
-            return $this->formatTimestamp($eventTimezoneDateTime->getTimestamp($DateTimeString), $format);
-        } else {
-            // format event datetime relative to event timezone
-            return $eventTimezoneDateTime->format($DateTimeString, $format);
-        }
+        return $eventTimezoneDateTime->format($DateTimeString, $format);
     }
 }
