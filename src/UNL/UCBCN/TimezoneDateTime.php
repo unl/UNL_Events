@@ -5,7 +5,7 @@ class TimezoneDateTime
 {
     private $timezone;
 
-    public function __construct(String $timezoneString)
+    public function __construct($timezoneString)
     {
         $this->timezone = new \DateTimeZone($timezoneString);
     }
@@ -19,11 +19,11 @@ class TimezoneDateTime
         return $dateTime->format('T');
     }
 
-    public function getDateTime(String $dateTimeString) {
+    public function getDateTime($dateTimeString) {
         return new \DateTime($dateTimeString, $this->timezone);
     }
 
-    public function getDateTimeAddInterval(String $dateTimeString, String $addInterval) {
+    public function getDateTimeAddInterval($dateTimeString, $addInterval) {
         $dateTime = new \DateTime($dateTimeString, $this->timezone);
         $invert = false;
 
@@ -40,17 +40,17 @@ class TimezoneDateTime
         return $dateTime->add($interval);
     }
 
-    public function getTimestamp(String $dateTimeString) {
+    public function getTimestamp($dateTimeString) {
         $dateTime = $this->getDateTime($dateTimeString);
         return $dateTime->format('U');
     }
 
-    public function format(String $dateTimeString, String $format) {
+    public function format($dateTimeString, $format) {
         $dateTime = $this->getDateTime($dateTimeString);
         return $dateTime->format($format);
     }
 
-    public function formatUTC(String $dateTimeString, String $format) {
+    public function formatUTC($dateTimeString, $format) {
         $dateTime = $this->getDateTime($dateTimeString);
         return gmdate($format, $dateTime->format('U'));
     }

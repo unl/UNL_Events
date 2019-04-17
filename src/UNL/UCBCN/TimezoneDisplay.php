@@ -6,7 +6,7 @@ class TimezoneDisplay
     private $timezoneDateTime;
     private $isClientTime = FALSE;
 
-    public function __construct(String $timezoneString, Bool $isClientTime)
+    public function __construct($timezoneString, $isClientTime)
     {
         $this->timezoneDateTime = new \UNL\UCBCN\TimezoneDateTime($timezoneString);
         $this->isClientTime = $isClientTime;
@@ -24,22 +24,22 @@ class TimezoneDisplay
         return $this->timezoneDateTime->getTimezoneAbbreviation();
     }
 
-    public function getDateTime(String $dateTimeString) {
+    public function getDateTime($dateTimeString) {
         return $this->timezoneDateTime->getDateTime($dateTimeString);
     }
 
-    public function getDateTimeAddInterval(String $dateTimeString, String $addInterval) {
+    public function getDateTimeAddInterval($dateTimeString, $addInterval) {
         return $this->timezoneDateTime->getDateTimeAddInterval($dateTimeString, $addInterval);
     }
 
-    public function formatTimestamp(Int $timestamp, String $format) {
+    public function formatTimestamp($timestamp, $format) {
         $eventDateTime = new \DateTime();
         $eventDateTime->setTimestamp($timestamp);
         $eventDateTime->setTimezone($this->getTimezone());
         return $eventDateTime->format($format);
     }
 
-    public function format(String $DateTimeString, String $eventTimezone, String $format) {
+    public function format($DateTimeString, $eventTimezone, $format) {
         $eventTimezoneDateTime = new \UNL\UCBCN\TimezoneDateTime($eventTimezone);
 
         if ($this->isClientTime === TRUE) {
