@@ -1,12 +1,8 @@
 <?php
+
+const DISPLAY_TIMEZONE_NOTICE = 'displayTimeZoneNotice';
+
 use UNL\Templates\Templates;
-
-$timezoneDisplay = $timezoneDisplay = \UNL\UCBCN::getTimezoneDisplay($context->getCalendar()->defaulttimezone);
-$calendarTimezone = array_search($context->getCalendar()->defaulttimezone, \UNL\UCBCN::getTimezoneOptions());
-$timezoneMessage = 'All events are in ' . $calendarTimezone . ' time unless specified.';
-
-// Need to for datetime display
-$savvy->addGlobal('timezoneDisplay', $timezoneDisplay);
 
 $page = Templates::factory('App', Templates::VERSION_5);
 
@@ -43,10 +39,6 @@ $page->addStyleDeclaration("#dcf-mobile-toggle-menu {display: none!important}");
 $page->addScriptDeclaration('var frontend_url = "'.$frontend->getURL().'";');
 $page->addScript($frontend->getURL().'templates/default/html/js/events.min.js?v='.UNL\UCBCN\Frontend\Controller::$version);
 
-if (empty($_COOKIE[DISPLAY_TIMEZONE_NOTICE])) {
-    $_COOKIE[DISPLAY_TIMEZONE_NOTICE] = 'true';
-}
-
 //other head
 if ($context->getCalendar()) {
     $page->head .= '<link rel="alternate" type="application/rss+xml" title="' . $context->getCalendar()->name . ' Events" href="' . $frontend->getCalendarURL() . '.rss" />' . PHP_EOL;
@@ -63,17 +55,22 @@ $savvy->addGlobal('page', $page);
 $view_class = str_replace('\\', '_', strtolower($context->options['model']));
 
 if ($context->getCalendar()) {
+    $timezoneDisplay = \UNL\UCBCN::getTimezoneDisplay($context->getCalendar()->defaulttimezone);
+    $calendarTimezone = array_search($context->getCalendar()->defaulttimezone, \UNL\UCBCN::getTimezoneOptions());
+    $timezoneMessage = 'All events are in ' . $calendarTimezone . ' time unless specified.';
+
+    // Need to for datetime display
+    $savvy->addGlobal('timezoneDisplay', $timezoneDisplay);
+
     $page->maincontentarea = '
             <div class="dcf-bleed view-' . $view_class . ' band-nav">
                 <div class="dcf-wrapper">';
 
-    if ($_COOKIE[DISPLAY_TIMEZONE_NOTICE] == 'true') {
-        $_COOKIE[DISPLAY_TIMEZONE_NOTICE] = 'false';
+    if (empty($_COOKIE[DISPLAY_TIMEZONE_NOTICE]) || $_COOKIE[DISPLAY_TIMEZONE_NOTICE] != $context->getCalendar()->defaulttimezone) {
+        setcookie(DISPLAY_TIMEZONE_NOTICE, $context->getCalendar()->defaulttimezone);
         $page->addScriptDeclaration("
-        WDN.initializePlugin('notice');
-        document.getElementById('timezone-notice').style.display = 'block';
-        document.cookie = '" . DISPLAY_TIMEZONE_NOTICE . "=false';
-        ");
+            WDN.initializePlugin('notice');
+            document.getElementById('timezone-notice').style.display = 'block';");
         $page->maincontentarea .=
             '<div id="timezone-notice" class="wdn_notice" style="display:none">
             <div class="close">
