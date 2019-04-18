@@ -32,9 +32,9 @@
     <select class="dcf-input-select" id="defaulttimezone"" name="defaulttimezone" aria-label="Default Timezone">
       <?php
       $timezone = UNL\UCBCN::$defaultTimezone;
-      if (!empty($post['defaulttimezone'])) {
-          $timezone = $post['defaulttimezone'];
-      };
+      if (!empty($context->calendar->defaulttimezone)) {
+          $timezone = $context->calendar->defaulttimezone;
+      }
       foreach (UNL\UCBCN::getTimezoneOptions() as $tzName => $tzValue) { ?>
         <option <?php if ($timezone == $tzValue) echo 'selected="selected"'; ?> value="<?php echo $tzValue ?>"><?php echo $tzName ?></option>
       <?php } ?>
