@@ -256,8 +256,8 @@
 
 <?php
 $recurringCode = '';
+$rectypemonth = '';
 if ($datetime->recurringtype != 'none' && $datetime->recurringtype != NULL) {
-  $rectypemonth = '';
   if ($datetime->recurringtype == 'monthly') {
       $rectypemonth = $datetime->rectypemonth;
   }
