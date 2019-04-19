@@ -29,6 +29,7 @@ use UNL\UCBCN\RuntimeException;
  */
 class Day extends EventListing implements RoutableInterface
 {
+
     /**
      * Constructor for an individual day.
      * 
@@ -54,19 +55,22 @@ class Day extends EventListing implements RoutableInterface
      */
     function getSQL()
     {
-        $date = $this->getDateTime()->format('Y-m-d');
+        // Due to timezones spanning multiple days open search up to all possible days.  Invalid events for day will be filtered out from results.
+        $startDateTime = $this->getDateTime(FALSE, '-P1D')->format('Y-m-d H:i:s');
+        $endDateTime = $this->getDateTime(TRUE, 'P1D')->format('Y-m-d H:i:s');
+
         $sql = '
-                SELECT DISTINCT e.id as id,recurringdate.recurringdate,e.starttime,event.title, recurringdate.id as recurringdate_id
+                SELECT DISTINCT e.id as id,recurringdate.recurringdate,e.starttime,e.timezone,event.title, recurringdate.id as recurringdate_id
                 FROM eventdatetime as e
                 INNER JOIN event ON e.event_id = event.id
                 INNER JOIN calendar_has_event ON calendar_has_event.event_id = event.id
-                LEFT JOIN recurringdate ON (recurringdate.event_datetime_id = e.id AND recurringdate.recurringdate = "' . $date . '" AND recurringdate.unlinked = 0)
+                LEFT JOIN recurringdate ON (recurringdate.event_datetime_id = e.id AND recurringdate.recurringdate >= "' . $startDateTime . '" AND recurringdate.recurringdate <= "' . $endDateTime . '" AND recurringdate.unlinked = 0)
                 WHERE
                     calendar_has_event.calendar_id = ' . (int)$this->calendar->id . '
                     AND calendar_has_event.status IN ("posted", "archived")
                     AND  (
-                        "' . $date . '" BETWEEN DATE(e.starttime) AND IF(DATE(e.endtime), DATE(e.endtime), DATE(e.starttime))
-                       OR "' . $date . '" = recurringdate.recurringdate
+                        (e.starttime >= "' . $startDateTime . '" AND e.endtime <= "' . $endDateTime . '")
+                       OR (recurringdate.recurringdate >= "' . $startDateTime . '" AND recurringdate.recurringdate <= "' . $endDateTime . '")
                       )
                 ORDER BY (
                     IF (recurringdate.recurringdate IS NULL,
@@ -75,8 +79,40 @@ class Day extends EventListing implements RoutableInterface
                     )
                 ) ASC,
                 event.title ASC';
-        
-        return $sql;
+
+        return trim($sql);
+    }
+
+    // Overwrite to filter out bad results for timezone
+    protected function getAllForConstructor()
+    {
+        if (array_key_exists('periodEvents', $this->options)) {
+            $results = $this->options['periodEvents'];
+        } else {
+            $options['sql']         = $this->getSQL();
+            $options['returnArray'] = true;
+            $results = $this->getBySQL($options);
+        }
+
+        $filteredResults = array();
+        $dayFilter = $this->getDateTime()->format('m-d-Y');
+        $timezoneDisplay = \UNL\UCBCN::getTimezoneDisplay($this->calendar->defaulttimezone);
+        foreach($results as $result) {
+            // Only include results which match display timezone day
+            if ($dayFilter == $timezoneDisplay->format($result['starttime'], $result['timezone'], 'm-d-Y') ||
+                (!empty($result['recurringdate']) && $dayFilter == $timezoneDisplay->format($result['recurringdate'] . substr($result['starttime'], -8) , $result['timezone'], 'm-d-Y'))) {
+                $filteredResults[] = $result;
+            }
+        }
+
+        return $filteredResults;
+    }
+
+    public function getDateTimeString($endOfDay = FALSE){
+        if ($endOfDay === TRUE) {
+            return $this->options['y'] . '-' . $this->options['m'] . '-' . $this->options['d'] . " 23:59:59";
+        }
+        return $this->options['y'] . '-' . $this->options['m'] . '-' . $this->options['d'] . " 00:00:00";
     }
 
     /**
@@ -84,9 +120,14 @@ class Day extends EventListing implements RoutableInterface
      *
      * @return \DateTime
      */
-    public function getDateTime()
+    public function getDateTime($endOfDay = FALSE, $interval = NULL)
     {
-        return new \DateTime('@'.mktime(0, 0, 0, $this->options['m'], $this->options['d'], $this->options['y']));
+        $timezoneDisplay = \UNL\UCBCN::getTimezoneDisplay($this->calendar->defaulttimezone);
+        if (empty($interval)) {
+            return $timezoneDisplay->getDateTime($this->getDateTimeString($endOfDay));
+        } else {
+            return $timezoneDisplay->getDateTimeAddInterval($this->getDateTimeString($endOfDay), $interval);
+        }
     }
 
     /**

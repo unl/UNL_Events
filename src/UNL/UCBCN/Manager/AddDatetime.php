@@ -1,6 +1,7 @@
 <?php
 namespace UNL\UCBCN\Manager;
 
+use UNL\UCBCN as BaseUCBCN;
 use UNL\UCBCN\Calendar as CalendarModel;
 use UNL\UCBCN\Event;
 use UNL\UCBCN\Location;
@@ -186,6 +187,7 @@ class AddDatetime extends PostHandler
     private function setDatetimeData($post_data)
     {
         # set the start date and end date
+        $this->event_datetime->timezone = empty($post_data['timezone']) ? BaseUCBCN::$defaultTimezone : $post_data['timezone'];
         $this->event_datetime->starttime = $this->calculateDate($post_data['start_date'], 
             $post_data['start_time_hour'], $post_data['start_time_minute'], 
             $post_data['start_time_am_pm']);
@@ -218,6 +220,11 @@ class AddDatetime extends PostHandler
 
     private function validateDatetimeData($post_data)
     {
+        # timezone must be valid
+        if (empty($post_data['timezone']) || !(in_array($post_data['timezone'], BaseUCBCN::getTimezoneOptions()))) {
+            throw new ValidationException('The timezone is invalid.');
+        }
+
         # start date, location are required
         if (empty($post_data['location']) || empty($post_data['start_date'])) {
             throw new ValidationException('<a href="#location">Location</a> and <a href="#start-date">start date</a> are required.');

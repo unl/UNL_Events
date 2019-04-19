@@ -41,6 +41,7 @@ class Calendar extends Record
     public $account_id;                      // int(10)  not_null multiple_key unsigned
     public $name;                            // string(255)
     public $shortname;                       // string(100)  multiple_key
+    public $defaulttimezone;                 // string(30)
     public $website;                         // string(255)
     public $eventreleasepreference;          // string(255)
     public $calendardaterange;               // int(10)  unsigned

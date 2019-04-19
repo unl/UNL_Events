@@ -3,6 +3,7 @@ namespace UNL\UCBCN\Manager;
 
 use UNL\UCBCN\Calendar;
 use UNL\UCBCN\Permission;
+use UNL\UCBCN as BaseUCBCN;
 
 class CreateCalendar extends PostHandler
 {
@@ -67,6 +68,7 @@ class CreateCalendar extends PostHandler
     {
         $this->calendar->name = $post_data['name'];
         $this->calendar->shortname = $post_data['shortname'];
+        $this->calendar->defaulttimezone = empty($post_data['defaulttimezone']) ? BaseUCBCN::$defaultTimezone : $post_data['defaulttimezone'];
         $this->calendar->website = $post_data['website'];
         switch ($post_data['event_release_preference']) {
             case '':
@@ -111,6 +113,11 @@ class CreateCalendar extends PostHandler
         # check that the shortname will match the regex it needs to
         if (!preg_match('/^[a-zA-Z-_0-9]+$/', $post_data['shortname'])) {
             throw new ValidationException('Calendar shortnames must contain only letters, numbers, dashes, and underscores.');
+        }
+
+        # timezone must be valid
+        if (empty($post_data['defaulttimezone']) || !(in_array($post_data['defaulttimezone'], BaseUCBCN::getTimezoneOptions()))) {
+            throw new ValidationException('The timezone is invalid.');
         }
 
         # check if this shortname is already being used

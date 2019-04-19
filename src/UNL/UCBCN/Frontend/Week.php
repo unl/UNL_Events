@@ -81,7 +81,8 @@ class Week implements \IteratorAggregate, RoutableInterface
     
     public function getDateTime()
     {
-        return new \DateTime($this->options['y'] . '-' . 'W' . $this->options['w']);
+        $timeZoneDisplay = \UNL\UCBCN::getTimezoneDisplay($this->calendar->defaulttimezone);
+        return $timeZoneDisplay->getDateTime($this->options['y'] . '-' . 'W' . $this->options['w']);
     }
     
     public function getStartDateTime()

@@ -1,4 +1,7 @@
 <?php
+
+const DISPLAY_TIMEZONE_NOTICE = 'displayTimeZoneNotice';
+
 use UNL\Templates\Templates;
 
 $page = Templates::factory('App', Templates::VERSION_5);
@@ -47,24 +50,41 @@ if ($context->getRaw('output') instanceof UNL\UCBCN\Frontend\RoutableInterface) 
 
 $page->head .= '<link rel="home" href="' . $context->getCalendarURL() . '" />' . PHP_EOL;
 
-//Navigation
-/*$page->breadcrumbs = '
-<ol>
-    <li><a href="http://www.unl.edu/">UNL</a></li>
-    <li><a href="' . $frontend->getURL() .'">UNL Events</a></li>
-    <li>Events</li>
-</ol>';
-*/
-//$page->navlinks = $savvy->render(null, 'Navigation.tpl.php');
-
 //Render output
 $savvy->addGlobal('page', $page);
 $view_class = str_replace('\\', '_', strtolower($context->options['model']));
 
 if ($context->getCalendar()) {
+    $timezoneDisplay = \UNL\UCBCN::getTimezoneDisplay($context->getCalendar()->defaulttimezone);
+    $calendarTimezone = array_search($context->getCalendar()->defaulttimezone, \UNL\UCBCN::getTimezoneOptions());
+    $timezoneMessage = 'All events are in ' . $calendarTimezone . ' time unless specified.';
+
+    // Need to for datetime display
+    $savvy->addGlobal('timezoneDisplay', $timezoneDisplay);
+
     $page->maincontentarea = '
             <div class="dcf-bleed view-' . $view_class . ' band-nav">
-                <div class="dcf-wrapper">
+                <div class="dcf-wrapper">';
+
+    // Display timezone notice when calendar timezone is not app default and DISPLAY_TIMEZONE_NOTICE cookie not set or has changed
+    if ($context->getCalendar()->defaulttimezone != UNL\UCBCN::$defaultTimezone && (empty($_COOKIE[DISPLAY_TIMEZONE_NOTICE]) || $_COOKIE[DISPLAY_TIMEZONE_NOTICE] != $context->getCalendar()->defaulttimezone)) {
+        setcookie(DISPLAY_TIMEZONE_NOTICE, $context->getCalendar()->defaulttimezone);
+        $page->addScriptDeclaration("
+            WDN.initializePlugin('notice');
+            document.getElementById('timezone-notice').style.display = 'block';");
+        $page->maincontentarea .=
+            '<div id="timezone-notice" class="wdn_notice" style="display:none">
+            <div class="close">
+            <a href="#" title="Close this notice">Close this notice</a>
+            </div>
+            <div class="message">
+            <h4>Timezone Display</h4>
+            <div class="message-content">' . $timezoneMessage . '</div>
+            </div>
+        </div>';
+    }
+
+    $page->maincontentarea .= '
                     <div class="dcf-grid">
                         <div class="dcf-col-100%">
                             <div class="events-nav">
@@ -90,6 +110,7 @@ if ($context->getCalendar()) {
                             </div>
                         </div>
                     </div>
+                    <div class="dcf-pt-2 dcf-txt-3xs unl-font-sans">' . $timezoneMessage . '</div>
                 </div>
             </div>';
 }

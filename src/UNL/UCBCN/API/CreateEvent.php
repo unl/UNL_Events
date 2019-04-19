@@ -59,6 +59,11 @@ class CreateEvent
             throw new ValidationException('That location ID is invalid.');
         }
 
+        # timezone must be valid
+        if (empty($post_data['timezone']) || !(in_array($post_data['timezone'], UNL\UCBCN::getTimezoneOptions()))) {
+            throw new ValidationException('The timezone is invalid.');
+        }
+
         # end date must be after start date
         $start_date = date('Y-m-d H:i:s', strtotime($post_data['start_time']));
         $end_date = date('Y-m-d H:i:s', strtotime($post_data['end_time']));
@@ -93,6 +98,7 @@ class CreateEvent
         $event_datetime->location_id = $post_data['location'];
 
         # set the start date and end date
+        $event_datetime->timezone = empty($post_data['timezone']) ? UNL\UCBCN::$defaultTimezone : $post_data['timezone'];
         $event_datetime->starttime = date('Y-m-d H:i:s', strtotime($post_data['start_time']));
         $event_datetime->endtime = date('Y-m-d H:i:s', strtotime($post_data['end_time']));
 

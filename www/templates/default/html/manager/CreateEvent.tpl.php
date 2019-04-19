@@ -38,7 +38,7 @@
             </fieldset>
 
             <fieldset>
-            <legend class="dcf-legend" style="font-size: 1.6em">Location, Date, and Time</legend>
+            <legend class="dcf-legend">Location, Date, and Time</legend>
                 <label class="dcf-label" for="location"><span class="dcf-required">*</span> Location</label>
                 <select class="dcf-input-select" id="location" name="location" cstyle="width: 100%;">
                   <optgroup label="Your saved locations">
@@ -110,6 +110,18 @@
                 <label class="dcf-label" for="room">Room</label>
                 <input class="dcf-input-text"type="text" id="room" name="room" value="<?php echo $post['room']; ?>" />
 
+                <label class="dcf-label dcf-mt-2" for="timezone"><span class="dcf-required">*</span> Timezone</label>
+                <select class="dcf-input-select" id="timezone"" name="timezone" aria-label="Timezone">
+                <?php
+                  $timezone = $calendar->defaulttimezone;
+                  if (!empty($post['timezone'])) {
+                      $timezone = $post['timezone'];
+                  };
+                  foreach (UNL\UCBCN::getTimezoneOptions() as $tzName => $tzValue) { ?>
+                  <option <?php if ($timezone == $tzValue) echo 'selected="selected"'; ?> value="<?php echo $tzValue ?>"><?php echo $tzName ?></option>
+                <?php } ?>
+                </select>
+
                 <label class="dcf-label" for="start-date" ><span class="dcf-required">*</span> Start Date &amp; Time</label>
                 <div class="date-time-select">
                   <div class="date-group dcf-d-flex dcf-flex-grow-1 dcf-ai-center dcf-relative dcf-mb-4 dcf-pr-6">
@@ -144,7 +156,7 @@
                         <option <?php if ($post['start_time_minute'] == 55) echo 'selected="selected"'; ?> value="55">55</option>
                     </select>
 
-                    <fieldset id="start-time-am-pm" class="am_pm dcf-mb-0 dcf-pl-3">
+                    <fieldset id="start-time-am-pm" class="am_pm dcf-mb-0 dcf-pl-3 dcf-b-0">
                       <legend class="dcf-sr-only">AM/PM</legend>
                       <div class="dcf-d-flex dcf-ai-center">
                         <label class="dcf-label dcf-2nd dcf-mt-0" for="start-time-am-pm-am">AM</label>
@@ -192,7 +204,7 @@
                         <option <?php if ($post['end_time_minute'] == 55) echo 'selected="selected"'; ?> value="55">55</option>
                     </select>
 
-                    <fieldset id="start-time-am-pm" class="am_pm dcf-mb-0 dcf-pl-3">
+                    <fieldset id="start-time-am-pm" class="am_pm dcf-mb-0 dcf-pl-3 dcf-b-0">
                       <legend class="dcf-sr-only">AM/PM</legend>
                       <div class="dcf-d-flex dcf-ai-center">
                         <label class="dcf-label dcf-2nd dcf-mt-0" for="end-time-am-pm-am">AM</label>
@@ -234,11 +246,11 @@
         </div>
 
         <div class="dcf-col-100% dcf-col-33%-end@md">
-            <fieldset class="visual-island">
+            <fieldset class="visual-island dcf-b-0">
                 <legend class="dcf-legend vi-header">Sharing</legend>
                 <div class="details">
                     <fieldset>
-                        <legend class="dcf-legend">Privacy</legend>
+                        <legend class="dcf-legend dcf-txt-sm">Privacy</legend>
                         <label class="dcf-label">
                             <input class="dcf-input-control" type="radio" value="private" name="private_public" id="sharing-private" <?php if ($post['private_public'] == 'private') echo 'checked="checked"'; ?>>
                             Private
@@ -251,7 +263,7 @@
                     </fieldset>
 
                   <fieldset>
-                    <legend class="dcf-legend"><span class="dcf-required">*</span> Consider for main UNL Calendar</legend>
+                    <legend class="dcf-legend dcf-txt-sm"><span class="dcf-required">*</span> Consider for main UNL Calendar</legend>
                       <label class="dcf-label">
                         <input class="dcf-input-control" type="radio" name="send_to_main" value="on" required />
                         Yes
@@ -265,7 +277,7 @@
                 </div>
             </fieldset>
 
-            <fieldset class="visual-island">
+            <fieldset class="visual-island dcf-b-0">
                 <legend class="dcf-legend vi-header">Contact Info</legend>
 
                 <div class="details">
@@ -283,7 +295,7 @@
                 </div>
             </fieldset>
 
-            <fieldset class="visual-island">
+            <fieldset class="visual-island dcf-b-0">
                 <legend class="dcf-legend vi-header">Image</legend>
                 <div class="details">
                     <input class="dcf-input-file" style="font-size: 10px;" type="file" name="imagedata" id="imagedata" aria-label="Select an Image">
@@ -305,7 +317,7 @@ WDN.initializePlugin('jqueryui', [function() {
     $(\"LINK[href^='//unlcms.unl.edu/wdn/templates_4.0/scripts/plugins/ui/css/jquery-ui.min.css']\").remove();
 
     $('#start-date').change(function (change) {
-        setRecurringOptions($(this), $('#monthly-group'));
+        setRecurringOptions($(this), $('#monthly-group'), '" . $post['recurring_type'] . "');
     });
 
     setRecurringOptions($('#start-date'), $('#monthly-group'));

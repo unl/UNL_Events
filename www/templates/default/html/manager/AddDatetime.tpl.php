@@ -56,7 +56,7 @@
 <form id="add-datetime-form" action="" method="POST">
   <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
   <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
-    <fieldset>
+    <fieldset class="dcf-b-0">
         <label class="dcf-label" for="location"><span class="dcf-required">*</span> Location</label>
         <select class="dcf-input-select" id="location" name="location" style="width: 100%;">
               <?php if ($datetime->id != NULL): ?>
@@ -132,6 +132,17 @@
         <label class="dcf-label" for="room">Room</label>
         <input class="dcf-input-text" type="text" id="room" name="room" value="<?php echo $datetime->room; ?>" />
 
+        <label class="dcf-label dcf-mt-2" for="timezone"><span class="dcf-required">*</span> Timezone</label>
+        <select class="dcf-input-select" id="timezone"" name="timezone" aria-label="Timezone">
+          <?php
+          $timezone = $calendar->defaulttimezone;
+          if (!empty($datetime->timezone)) {
+              $timezone = $datetime->timezone;
+          };
+          foreach (UNL\UCBCN::getTimezoneOptions() as $tzName => $tzValue) { ?>
+            <option <?php if ($timezone == $tzValue) echo 'selected="selected"'; ?> value="<?php echo $tzValue ?>"><?php echo $tzName ?></option>
+          <?php } ?>
+        </select>
 
         <label class="dcf-label" for="start-date" ><span class="dcf-required">*</span> Start Date &amp; Time</label>
         <div class="date-time-select">
@@ -158,7 +169,7 @@
               <?php endfor; ?>
             </select>
 
-            <fieldset id="start-time-am-pm" class="am_pm dcf-mb-0 dcf-pl-3">
+            <fieldset id="start-time-am-pm" class="am_pm dcf-mb-0 dcf-pl-3 dcf-b-0">
               <legend class="dcf-sr-only">AM/PM</legend>
               <div class="dcf-d-flex dcf-ai-center">
                 <label class="dcf-label dcf-2nd dcf-mt-0" for="start-time-am-pm-am">AM</label>
@@ -197,7 +208,7 @@
                 <?php endfor; ?>
             </select>
 
-            <fieldset id="start-time-am-pm" class="am_pm dcf-mb-0 dcf-pl-3">
+            <fieldset id="start-time-am-pm" class="am_pm dcf-mb-0 dcf-pl-3 dcf-b-0">
               <legend class="dcf-sr-only">AM/PM</legend>
               <div class="dcf-d-flex dcf-ai-center">
                 <label class="dcf-label dcf-2nd dcf-mt-0" for="end-time-am-pm-am">AM</label>
@@ -214,16 +225,16 @@
         <?php if ($context->recurrence_id == NULL) : ?>
             <div class="section-container">
                 <input <?php if ($datetime->recurringtype != 'none' && $datetime->recurringtype != NULL) echo 'checked="checked"' ?> type="checkbox" name="recurring" id="recurring"> 
-                <label class="dcf-label" for="recurring">This is a recurring event</label>
+                <label class="dcf-label" for="recurring">This is a recurring <?php echo $datetime->recurringtype; ?> event</label>
                 <div class="recurring-container date-time-select">                        
                     <label class="dcf-label dcf-d-inline-block" for="recurring-type">This event recurs </label>
-                    <select class="dcf-input-select dcf-d-inline-block" id="recurring-type" name="recurring_type">
-                      <option value="daily">Daily</option>
-                      <option value="weekly">Weekly</option>
-                      <option value="biweekly">Biweekly</option>
+                    <select class="dcf-input-select" id="recurring-type" name="recurring_type">
+                      <option value="daily" <?php if($datetime->recurringtype == "daily") { echo 'selected="selected"'; } ?>>Daily</option>
+                      <option value="weekly" <?php if($datetime->recurringtype == "weekly") { echo 'selected="selected"'; } ?>>Weekly</option>
+                      <option value="biweekly" <?php if($datetime->recurringtype == "biweekly") { echo 'selected="selected"'; } ?>>Biweekly</option>
                       <optgroup label="Monthly" id="monthly-group">
                       </optgroup>
-                      <option value="annually">Yearly</option>
+                      <option value="annually" <?php if($datetime->recurringtype == "biweekly") { echo 'selected="selected"'; } ?>>Yearly</option>
                     </select>
                     <label class="dcf-label dcf-d-inline-block" for="recurs-until-date">until </label><br>
                     <span class="wdn-icon-calendar" style="top: .4em" aria-hidden="true"></span>
@@ -245,10 +256,12 @@
 
 <?php
 $recurringCode = '';
+$rectypemonth = '';
 if ($datetime->recurringtype != 'none' && $datetime->recurringtype != NULL) {
-  $recurringCode = "
-    setRecurringOptions($('#start-date'), $('#monthly-group'));
-    $('#recurring-type').val('<?php echo $datetime->recurringtype ?>');";
+  if ($datetime->recurringtype == 'monthly') {
+      $rectypemonth = $datetime->rectypemonth;
+  }
+  $recurringCode = "setRecurringOptions($('#start-date'), $('#monthly-group'), '" . $rectypemonth. "');";
 }
 $page->addScriptDeclaration("
 WDN.initializePlugin('jqueryui', [function() {  
@@ -268,7 +281,7 @@ WDN.initializePlugin('jqueryui', [function() {
     $('#location').change();
 
     $('#start-date').change(function (change) {
-        setRecurringOptions($(this), $('#monthly-group'));
+        setRecurringOptions($(this), $('#monthly-group'), '" . $rectypemonth. "');
     });
 
     " . $recurringCode . "

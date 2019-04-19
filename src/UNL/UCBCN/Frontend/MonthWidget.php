@@ -51,7 +51,6 @@ class MonthWidget extends Month
     {
         return Day::generateURL($this->calendar, $datetime);
     }
-
     /**
      * This function finds ongoing events for the given month.
      *
@@ -62,56 +61,59 @@ class MonthWidget extends Month
      */
     public function getEventTotals(\DatePeriod $datePeriod)
     {
-        //Create a temporary table to store dates in every month.
+        $periodEvents = $this->getEvents($datePeriod);
+        $results = array();
+        foreach ($datePeriod as $dt) {
+            $options = array(
+                'calendar' => $this->calendar,
+                'm' => $dt->format('m'),
+                'd' => $dt->format('d'),
+                'y' => $dt->format('Y'),
+                'periodEvents' => $periodEvents
+            );
+            $day = new Day($options);
+            if (count($day) > 0) {
+                $results[$dt->format("Y-m-d")] = count($day);
+            }
+        }
+
+        return $results;
+    }
+
+    public function getEvents(\DatePeriod $datePeriod) {
+
+        $timezoneDisplay = \UNL\UCBCN::getTimezoneDisplay($this->calendar->defaulttimezone);
+        $startDateTime = $timezoneDisplay->getDateTimeAddInterval($datePeriod->getStartDate()->format('Y-m-d H:i:s'), '-P1D')->format('Y-m-d H:i:s');
+        $endDateTime = $timezoneDisplay->getDateTimeAddInterval($datePeriod->getEndDate()->format('Y-m-d H:i:s'), 'P1D')->format('Y-m-d H:i:s');
+
+        $sql = '
+                SELECT DISTINCT e.id as id,recurringdate.recurringdate,e.starttime,e.timezone,event.title, recurringdate.id as recurringdate_id
+                FROM eventdatetime as e
+                INNER JOIN event ON e.event_id = event.id
+                INNER JOIN calendar_has_event ON calendar_has_event.event_id = event.id
+                LEFT JOIN recurringdate ON (recurringdate.event_datetime_id = e.id AND (recurringdate.recurringdate >= "' . $startDateTime . '" AND recurringdate.recurringdate <= "' . $endDateTime . '") AND recurringdate.unlinked = 0)
+                WHERE
+                    calendar_has_event.calendar_id = ' . (int)$this->calendar->id . '
+                    AND calendar_has_event.status IN ("posted", "archived")
+                    AND  (
+                        (e.starttime >= "' . $startDateTime . '" AND e.endtime <= "' . $endDateTime . '")
+                       OR (recurringdate.recurringdate >= "' . $startDateTime . '" AND recurringdate.recurringdate <= "' . $endDateTime . '")
+                      )
+                ORDER BY (
+                    IF (recurringdate.recurringdate IS NULL,
+                      e.starttime,
+                      CONCAT(DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.starttime," %H:%i:%s"))
+                    )
+                ) ASC,
+                event.title ASC';
+
         $db = \UNL\UCBCN\ActiveRecord\Database::getDB();
-        $sql     = "CREATE TABLE IF NOT EXISTS `ongoingcheck` (`d` DATE NOT NULL DEFAULT '".date('Y-m-d')."', PRIMARY KEY ( `d` ))";
-        $res     = $db->query($sql);
-        
+        $res = $db->query(trim($sql));
+
         if (!$res) {
             return array();
         }
 
-        $values = array();
-        foreach ($datePeriod as $date) {
-            $strdate = $date->format('Y-m-d');
-            
-            $values[] = '("' . $strdate . '")';
-            
-            if (!isset($firstday)) {
-                $firstday = $strdate;
-            }
-            $lastday = $strdate;
-        }
-        
-        //Try to add this month's dates to the table.
-        $sql = 'INSERT IGNORE INTO ongoingcheck VALUES ' . implode(', ', $values) . ';';
-        $db->query($sql);
-        
-        //Using the temporary table, get the number of events for each date.
-        $sql = "
-                SELECT og.d as day, count(DISTINCT e.id) as events
-                FROM ongoingcheck AS og
-                JOIN calendar_has_event ON (calendar_has_event.calendar_id = " . (int)$this->calendar->id . ")
-                JOIN eventdatetime as e ON (calendar_has_event.event_id = e.event_id)
-                LEFT JOIN recurringdate ON (recurringdate.event_id = calendar_has_event.event_id AND recurringdate.unlinked = 0)
-                WHERE calendar_has_event.status IN ('posted', 'archived')
-                AND (
-                  og.d BETWEEN DATE(e.starttime) AND IF(DATE(e.endtime), DATE(e.endtime), DATE(e.starttime))
-                  OR og.d = recurringdate.recurringdate
-                )
-                AND (og.d >= '$firstday' AND og.d <= '$lastday')
-                group by og.d";
-        $res = $db->query($sql);
-        
-        if (!$res) {
-            return array();
-        }
-        
-        $results = array();
-        foreach ($res as $row) {
-            $results[$row['day']] = $row['events'];
-        }
-        
-        return $results;
+        return $res;
     }
 }

@@ -2,18 +2,15 @@
         <EventID><?php echo $context->event->id; ?></EventID>
         <EventTitle><?php echo htmlspecialchars($context->event->title); ?></EventTitle>
         <EventSubtitle><?php echo htmlspecialchars($context->event->subtitle); ?></EventSubtitle>
-        <?php 
-        $startu = strtotime($context->getStartTime());
-		$endu = strtotime($context->getEndTime());
-		?>
+        <?php
+        $timezoneDateTime = new \UNL\UCBCN\TimezoneDateTime($context->eventdatetime->timezone);
+		    ?>
         <DateTime>
-            <StartDate><?php echo date('Y-m-d', $startu); ?></StartDate>
-            <StartTime><?php echo date('H:i:s', $startu); ?>Z</StartTime>
+            <StartDate><?php echo $timezoneDateTime->format($context->getStartTime(),'c'); ?></StartDate>
             <?php if (isset($context->eventdatetime->endtime)
                     && !empty($context->eventdatetime->endtime)
-                    && ($endu > $startu)) : ?>
-            <EndDate><?php echo date('Y-m-d', $endu); ?></EndDate>
-            <EndTime><?php echo date('H:i:s', $endu); ?>Z</EndTime>
+                    && ($context->getEndTime() > $context->getStartTime())) : ?>
+            <EndDate><?php echo $timezoneDateTime->format($context->getEndTime(),'c'); ?></EndDate>
             <?php endif; ?>
         </DateTime>
         <Locations>
@@ -125,7 +122,7 @@
             <?php endforeach; ?>
         </Webcasts>
         <?php endif; ?>
-        <?php if (isset($context->event->imagedata)) : ?>
+        <?php if (!empty($context->event->imagedata)) : ?>
         <Images>
             <Image>
                 <Title>Image</Title>

@@ -124,7 +124,7 @@ class OutputController extends \Savvy
     public function setTheme($theme)
     {
         if (!is_dir($this->getWebDir() . '/themes/'.$theme)) {
-            throw new Exception('Invalid theme, there are no files in '.$dir);
+            throw new \Exception('Invalid theme, there are no files in '.$this->getWebDir() . '/themes/'.$theme);
         }
         $this->theme = $theme;
     }

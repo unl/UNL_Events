@@ -42,12 +42,27 @@ class UCBCN
 
     public $default_calendar_id = 1;
 
+    public static $defaultTimezone = 'America/Chicago';
+
     protected static $db_settings = array(
         'host'     => 'localhost',
         'user'     => 'eventcal',
         'password' => 'eventcal',
         'dbname'   => 'eventcal'
     );
+
+    private static $defaultTimezoneOptions = array(
+        'Eastern' => 'America/New_York',
+        'Central' => 'America/Chicago',
+        'Mountain' => 'America/Denver',
+        'Phoenix' => 'America/Phoenix',
+        'Pacific' => 'America/Los_Angeles',
+        'Alaska' => 'America/Anchorage',
+        'Hawaii' => 'America/Adak',
+        'Honolulu' => 'Pacific/Honolulu'
+    );
+
+    private static $timezoneOptions = array();
 
     /**
      * Constructor for the UCBCN object, initializes member variables and sets up
@@ -92,6 +107,22 @@ class UCBCN
             $db->set_charset('utf8');
         }
         return $db;
+    }
+
+    public static function setTimezoneOptions(Array $timezoneOptions = array()) {
+        self::$timezoneOptions = $timezoneOptions;
+    }
+
+    public static function getTimezoneOptions() {
+        if (empty(self::$timezoneOptions)) {
+            return self::$defaultTimezoneOptions;
+        }
+
+        return self::$timezoneOptions;
+    }
+
+    public static function getTimezoneDisplay($defaultTimezone) {
+        return new \UNL\UCBCN\TimezoneDisplay($defaultTimezone);
     }
     
     /**
@@ -377,7 +408,7 @@ class UCBCN
         $return_false = true,
         $redirecturl=null)
     {
-        
+
         $mdb2 = $account->getDatabaseConnection();
         $res =& $mdb2->query(
             'SELECT calendar.id FROM calendar,user_has_permission

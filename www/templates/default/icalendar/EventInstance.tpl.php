@@ -1,19 +1,17 @@
 <?php
 /**
- * icalendar output for a single vent instance.
+ * icalendar output for a single event instance.
  */
 
-$startu = strtotime($context->getStartTime());
-$endu = strtotime($context->getEndTime());
+$timezoneDateTime = new \UNL\UCBCN\TimezoneDateTime($context->eventdatetime->timezone);
 
 $out = array();
 $out[] = 'BEGIN:VEVENT';
-//$out[] = 'SEQUENCE:5';
 if (isset($context->eventdatetime->starttime)) {
     if (strpos($context->eventdatetime->starttime,'00:00:00')) {
-        $out[] = 'DTSTART;VALUE=DATE:'.date('Ymd', $startu);
+        $out[] = 'DTSTART;VALUE=DATE:' . $timezoneDateTime->format($context->getStartTime(),'Ymd');
     } else {
-           $out[] = 'DTSTART;TZID=America/Chicago:'.date('Ymd\THis', $startu);
+           $out[] = 'DTSTART:'. $timezoneDateTime->formatUTC($context->getStartTime(),'Ymd\THis\Z');
     }
 }
 if ($context->eventdatetime->recurringtype == 'none') {
@@ -21,9 +19,13 @@ if ($context->eventdatetime->recurringtype == 'none') {
 } else {
     $out[] = 'UID:'.$context->eventdatetime->id . '-' . $context->recurringdate->id .'@'.$_SERVER['SERVER_NAME'];
 }
-$out[] = 'DTSTAMP:'.date('Ymd\THis',strtotime($context->event->datecreated));
-$out[] = 'SUMMARY:'.strip_tags($context->event->title);
-$out[] = 'DESCRIPTION:'.preg_replace("/\r\n|\n|\r/", '\n', strip_tags($context->event->description));
+$out[] = 'DTSTAMP:'.gmdate("Ymd\THis\Z" , strtotime($context->event->datecreated));
+$contactName = !empty($context->event->listingcontactname) ? $context->event->listingcontactname : 'unknown';
+$contactEmail = !empty($context->event->listingcontactemail) ? 'MAILTO:' . $context->event->listingcontactemail : '';
+$organizer = icalFormatString('CN=' . $contactName) . ":" . $contactEmail;
+$out[] = 'ORGANIZER;' . $organizer;
+$out[] = 'SUMMARY:' . icalFormatString($context->event->title);
+$out[] = 'DESCRIPTION:' . icalFormatString($context->event->description);
 if (isset($context->eventdatetime->location_id) && $context->eventdatetime->location_id) {
     $l = $context->eventdatetime->getLocation();
     $loc =  'LOCATION:'.$l->name;
@@ -34,21 +36,22 @@ if (isset($context->eventdatetime->location_id) && $context->eventdatetime->loca
 }
 $out[] = 'URL:'.$context->getURL();
 if (isset($context->eventdatetime->endtime)
-    && $endu > $startu) {
+    && $timezoneDateTime->getTimestamp($context->getEndTime()) > $timezoneDateTime->getTimestamp($context->getStartTime())) {
     if (strpos($context->eventdatetime->endtime,'00:00:00')) {
-        $out[] = 'DTEND;VALUE=DATE:'.date('Ymd', $endu);
+        $out[] = 'DTEND;VALUE=DATE:'. $timezoneDateTime->format($context->getEndTime(),'Ymd');
     } else {
-           $out[] = 'DTEND;TZID=America/Chicago:'.date('Ymd\THis', $endu);
+           $out[] = 'DTEND:' . $timezoneDateTime->formatUTC($context->getEndTime(),'Ymd\THis\Z');
     }
 } elseif (isset($context->eventdatetime->starttime)) {
     if (strpos($context->eventdatetime->starttime,'00:00:00')) {
         // All-day event
-        $out[] = 'DTEND;VALUE=DATE:'.date('Ymd', $startu + 86400);
+        $allDayEndDateTime = $timezoneDateTime->getDateTimeAddInterval($context->getStartTime(), 'P1D');
+        $out[] = 'DTEND;VALUE=DATE:' . $allDayEndDateTime->format('Ymd');
     } else {
         // Event with unknown end-time
-        $out[] = 'DTEND;TZID=America/Chicago:'.date('Ymd\THis', $startu);
+        $out[] = 'DTEND:'. $timezoneDateTime->formatUTC($context->getEndTime(),'Ymd\THis\Z');
     }
 }
 $out[] = 'END:VEVENT';
 echo implode("\n",$out)."\n";
-?>
+

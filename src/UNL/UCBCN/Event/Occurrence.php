@@ -37,6 +37,7 @@ class Occurrence extends Record
     public $id;                              // int(10)  not_null primary_key unsigned auto_increment
     public $event_id;                        // int(10)  not_null multiple_key unsigned
     public $location_id;                     // int(10)  not_null multiple_key unsigned
+    public $timezone;                        // string(30)
     public $starttime;                       // datetime(19)  multiple_key binary
     public $endtime;                         // datetime(19)  multiple_key binary
     public $recurringtype;                   // string(255)
