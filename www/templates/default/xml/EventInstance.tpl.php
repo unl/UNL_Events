@@ -7,10 +7,12 @@
 		    ?>
         <DateTime>
             <StartDate><?php echo $timezoneDateTime->format($context->getStartTime(),'c'); ?></StartDate>
+            <StartTime><?php echo $timezoneDateTime->format($context->getStartTime(),'H:i:s'); ?></StartTime>
             <?php if (isset($context->eventdatetime->endtime)
                     && !empty($context->eventdatetime->endtime)
                     && ($context->getEndTime() > $context->getStartTime())) : ?>
             <EndDate><?php echo $timezoneDateTime->format($context->getEndTime(),'c'); ?></EndDate>
+            <EndTime><?php echo $timezoneDateTime->format($context->getEndTime(),'H:i:s'); ?></EndTime>
             <?php endif; ?>
         </DateTime>
         <Locations>
