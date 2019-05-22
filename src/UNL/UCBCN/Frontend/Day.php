@@ -56,8 +56,8 @@ class Day extends EventListing implements RoutableInterface
     function getSQL()
     {
         // Due to timezones spanning multiple days open search up to all possible days.  Invalid events for day will be filtered out from results.
-        $startDateTime = $this->getDateTime(FALSE, '-P1W')->format('Y-m-d H:i:s');
-        $endDateTime = $this->getDateTime(TRUE, 'P1W')->format('Y-m-d H:i:s');
+        $startDateTime = $this->getDateTime(FALSE, '-P2W')->format('Y-m-d H:i:s');
+        $endDateTime = $this->getDateTime(TRUE, 'P2W')->format('Y-m-d H:i:s');
 
         $sql = '
                 SELECT DISTINCT e.id as id,recurringdate.recurringdate,e.starttime,e.endtime,e.timezone,event.title, recurringdate.id as recurringdate_id
@@ -98,6 +98,7 @@ class Day extends EventListing implements RoutableInterface
         $dayFilter = $this->getDateTime()->format('m-d-Y');
         $timezoneDisplay = \UNL\UCBCN::getTimezoneDisplay($this->calendar->defaulttimezone);
         foreach($results as $result) {
+
             if (!empty($result['recurringdate'])) {
                 $startDateTime = $timezoneDisplay->getDateTime($result['recurringdate'] . substr($result['starttime'], -8), $result['timezone']);
                 $endDateTime = $timezoneDisplay->getDateTime($result['recurringdate'] . substr($result['endtime'], -8), $result['timezone']);
@@ -106,24 +107,39 @@ class Day extends EventListing implements RoutableInterface
                 $endDateTime = $timezoneDisplay->getDateTime($result['endtime'], $result['timezone']);
             }
 
-            if ($result['starttime'] == $result['endtime'] && $dayFilter == $startDateTime->format('m-d-Y')) {
-                // Handle all day events or day events without endtime
-                $filteredResults[] = $result;
-                continue; // found day match so quit looking
-            } else {
-                $interval = \DateInterval::createFromDateString('1 day');
-                $period = new \DatePeriod($startDateTime, $interval, $endDateTime);
+            if ($this->isAllDayEvent($startDateTime,  $endDateTime)) {
+                // Make endtime at end of day
+                $endDateTime->add(new \DateInterval('PT23H59M59S'));
+            }
 
-                foreach ($period as $eventDateTime) {
-                    if ($dayFilter == $eventDateTime->format('m-d-Y')) {
-                        $filteredResults[] = $result;
-                        break; // found day match so quit looking
-                    }
+            $interval = \DateInterval::createFromDateString('1 day');
+            $period = new \DatePeriod($startDateTime, $interval, $endDateTime);
+
+            foreach ($period as $eventDateTime) {
+                if ($dayFilter == $eventDateTime->format('m-d-Y')) {
+                    $filteredResults[] = $result;
+                    break; // found day match so quit looking
                 }
             }
         }
 
         return $filteredResults;
+    }
+
+    private function isAllDayEvent(\DateTime $startDateTime, \DateTime $endDateTime) {
+
+        //It must start at midnight to be an all day event
+        if (strpos($startDateTime->format('H:i:s'), '00:00:00') === false) {
+            return false;
+        }
+
+        //It must end at midnight, or not have an end date.
+        if (!empty($endDateTime) &&
+            strpos($endDateTime->format('H:i:s'), '00:00:00') === false) {
+            return false;
+        }
+
+        return true;
     }
 
     public function getDateTimeString($endOfDay = FALSE){
