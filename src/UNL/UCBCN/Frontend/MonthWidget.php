@@ -83,11 +83,11 @@ class MonthWidget extends Month
     public function getEvents(\DatePeriod $datePeriod) {
 
         $timezoneDisplay = \UNL\UCBCN::getTimezoneDisplay($this->calendar->defaulttimezone);
-        $startDateTime = $timezoneDisplay->getDateTimeAddInterval($datePeriod->getStartDate()->format('Y-m-d H:i:s'), '-P1D')->format('Y-m-d H:i:s');
-        $endDateTime = $timezoneDisplay->getDateTimeAddInterval($datePeriod->getEndDate()->format('Y-m-d H:i:s'), 'P1D')->format('Y-m-d H:i:s');
+        $startDateTime = $timezoneDisplay->getDateTimeAddInterval($datePeriod->getStartDate()->format('Y-m-d H:i:s'), '-P1W')->format('Y-m-d H:i:s');
+        $endDateTime = $timezoneDisplay->getDateTimeAddInterval($datePeriod->getEndDate()->format('Y-m-d H:i:s'), 'P1W')->format('Y-m-d H:i:s');
 
         $sql = '
-                SELECT DISTINCT e.id as id,recurringdate.recurringdate,e.starttime,e.timezone,event.title, recurringdate.id as recurringdate_id
+                SELECT DISTINCT e.id as id,recurringdate.recurringdate,e.starttime,e.endtime,e.timezone,event.title, recurringdate.id as recurringdate_id
                 FROM eventdatetime as e
                 INNER JOIN event ON e.event_id = event.id
                 INNER JOIN calendar_has_event ON calendar_has_event.event_id = event.id

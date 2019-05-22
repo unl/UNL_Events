@@ -56,11 +56,11 @@ class Day extends EventListing implements RoutableInterface
     function getSQL()
     {
         // Due to timezones spanning multiple days open search up to all possible days.  Invalid events for day will be filtered out from results.
-        $startDateTime = $this->getDateTime(FALSE, '-P1D')->format('Y-m-d H:i:s');
-        $endDateTime = $this->getDateTime(TRUE, 'P1D')->format('Y-m-d H:i:s');
+        $startDateTime = $this->getDateTime(FALSE, '-P1W')->format('Y-m-d H:i:s');
+        $endDateTime = $this->getDateTime(TRUE, 'P1W')->format('Y-m-d H:i:s');
 
         $sql = '
-                SELECT DISTINCT e.id as id,recurringdate.recurringdate,e.starttime,e.timezone,event.title, recurringdate.id as recurringdate_id
+                SELECT DISTINCT e.id as id,recurringdate.recurringdate,e.starttime,e.endtime,e.timezone,event.title, recurringdate.id as recurringdate_id
                 FROM eventdatetime as e
                 INNER JOIN event ON e.event_id = event.id
                 INNER JOIN calendar_has_event ON calendar_has_event.event_id = event.id
@@ -98,10 +98,22 @@ class Day extends EventListing implements RoutableInterface
         $dayFilter = $this->getDateTime()->format('m-d-Y');
         $timezoneDisplay = \UNL\UCBCN::getTimezoneDisplay($this->calendar->defaulttimezone);
         foreach($results as $result) {
-            // Only include results which match display timezone day
-            if ($dayFilter == $timezoneDisplay->format($result['starttime'], $result['timezone'], 'm-d-Y') ||
-                (!empty($result['recurringdate']) && $dayFilter == $timezoneDisplay->format($result['recurringdate'] . substr($result['starttime'], -8) , $result['timezone'], 'm-d-Y'))) {
-                $filteredResults[] = $result;
+            if (!empty($result['recurringdate'])) {
+                $startDateTime = $timezoneDisplay->getDateTime($result['recurringdate'] . substr($result['starttime'], -8), $result['timezone']);
+                $endDateTime = $timezoneDisplay->getDateTime($result['recurringdate'] . substr($result['endtime'], -8), $result['timezone']);
+            } else {
+                $startDateTime = $timezoneDisplay->getDateTime($result['starttime'], $result['timezone']);
+                $endDateTime = $timezoneDisplay->getDateTime($result['endtime'], $result['timezone']);
+            }
+
+            $interval = \DateInterval::createFromDateString('1 day');
+            $period = new \DatePeriod($startDateTime, $interval, $endDateTime);
+
+            foreach ($period as $eventDateTime) {
+                if ($dayFilter == $eventDateTime->format('m-d-Y')) {
+                    $filteredResults[] = $result;
+                    break; // found day match so quit looking
+                }
             }
         }
 
