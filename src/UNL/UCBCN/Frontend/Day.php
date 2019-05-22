@@ -106,13 +106,19 @@ class Day extends EventListing implements RoutableInterface
                 $endDateTime = $timezoneDisplay->getDateTime($result['endtime'], $result['timezone']);
             }
 
-            $interval = \DateInterval::createFromDateString('1 day');
-            $period = new \DatePeriod($startDateTime, $interval, $endDateTime);
+            if ($result['starttime'] == $result['endtime'] && $dayFilter == $startDateTime->format('m-d-Y')) {
+                // Handle all day events or day events without endtime
+                $filteredResults[] = $result;
+                continue; // found day match so quit looking
+            } else {
+                $interval = \DateInterval::createFromDateString('1 day');
+                $period = new \DatePeriod($startDateTime, $interval, $endDateTime);
 
-            foreach ($period as $eventDateTime) {
-                if ($dayFilter == $eventDateTime->format('m-d-Y')) {
-                    $filteredResults[] = $result;
-                    break; // found day match so quit looking
+                foreach ($period as $eventDateTime) {
+                    if ($dayFilter == $eventDateTime->format('m-d-Y')) {
+                        $filteredResults[] = $result;
+                        break; // found day match so quit looking
+                    }
                 }
             }
         }
