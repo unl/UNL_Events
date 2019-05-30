@@ -110,6 +110,9 @@ class Day extends EventListing implements RoutableInterface
             if ($this->isAllDayEvent($startDateTime,  $endDateTime)) {
                 // Make endtime at end of day
                 $endDateTime->add(new \DateInterval('PT23H59M59S'));
+            } elseif ($startDateTime == $endDateTime) {
+                // Bump endtime by 1 second so will show in period below
+                $endDateTime->add(new \DateInterval('PT1S'));
             }
 
             $interval = \DateInterval::createFromDateString('1 day');
