@@ -4,7 +4,7 @@
 	<div class='vevent'>
 	    <a class="dcf-txt-decor-none" href="<?php echo $url; ?>">
 		<h2 class='summary' data-datetime="<?php echo (new DateTime($context->getStartTime()))->format('c') ?>">
-		    <?php echo $savvy->dbStringtoHtml($context->event->title); ?> 
+		    <?php echo $savvy->dbStringtoHtml($context->event->title); ?>
 		    <?php if (isset($context->event->subtitle)): ?><span class="dcf-subhead"><?php echo $savvy->dbStringtoHtml($context->event->subtitle) ?></span><?php endif; ?>
 	    </h2>
 	    </a>
