@@ -117,7 +117,13 @@ class Controller
      */
     public function run()
     {
-        $this->determineCalendar();
+        try {
+            $this->determineCalendar();
+        } catch (\Exception $e) {
+            // Invalid calendar 404
+            header("HTTP/1.0 404 Not Found");
+            die();
+        }
 
         if (!isset($this->options['model'])
             || false === $this->options['model']) {
