@@ -266,7 +266,7 @@ class Calendar extends Record
                 # it's confusing, but for each subscription which has this calendar as a 
                 # subscribed calendar, take that subscription, find what calendar it is
                 # attached to, and add a calendar_has_event record
-                if (CalendarHasEvent::getByIDs($subscription->calendar_id, $event->id)) {
+                if (!($subscription instanceof \UNL\UCBCN\Calendar\Subscription) || CalendarHasEvent::getByIDs($subscription->calendar_id, $event->id)) {
                     # do not add this
                     continue; 
                 }
