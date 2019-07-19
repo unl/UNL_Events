@@ -17,7 +17,8 @@ if (isset($context->eventdatetime->starttime)) {
 if ($context->eventdatetime->recurringtype == 'none') {
     $out[] = 'UID:'.$context->eventdatetime->id.'@'.$_SERVER['SERVER_NAME'];
 } else {
-    $out[] = 'UID:'.$context->eventdatetime->id . '-' . $context->recurringdate->id .'@'.$_SERVER['SERVER_NAME'];
+    $recurringDateID = isset($context->recurringdate->id) ? $context->recurringdate->id : '';
+    $out[] = 'UID:'.$context->eventdatetime->id . '-' . $recurringDateID .'@'.$_SERVER['SERVER_NAME'];
 }
 $out[] = 'DTSTAMP:'.gmdate("Ymd\THis\Z" , strtotime($context->event->datecreated));
 $contactName = !empty($context->event->listingcontactname) ? $context->event->listingcontactname : 'unknown';

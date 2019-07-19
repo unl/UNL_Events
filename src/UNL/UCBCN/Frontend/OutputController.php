@@ -21,7 +21,6 @@ class OutputController extends \Savvy
 
     public function initialize($options = array())
     {
-
         switch ($options['format']) {
             case 'json':
                 header('Content-type:application/json');
@@ -82,6 +81,7 @@ class OutputController extends \Savvy
                 }
                 $this->setTemplateFormatPaths($options['format']);
                 break;
+
             case 'partial':
             case 'hcalendar':
                 $this->sendCORSHeaders();
@@ -89,6 +89,7 @@ class OutputController extends \Savvy
                 // intentional no-break
 
             case 'html':
+            default:
                 // Always escape output, use $context->getRaw('var'); to get the raw data.
                 $this->setEscape(function($data) {
                     $data = SmartyPants::defaultTransform($data);
@@ -103,8 +104,6 @@ class OutputController extends \Savvy
                 }
                 $this->addFilters(array(new OutputController\PostRunFilter\HTML($options), 'postRun'));
                 break;
-            default:
-                throw new UnexpectedValueException('Invalid/unsupported output format', 500);
         }
     }
     
