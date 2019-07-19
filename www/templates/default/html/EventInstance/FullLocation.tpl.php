@@ -1,7 +1,9 @@
 <?php 
 $location = $context->eventdatetime->getLocation();
-$room = !empty($context->eventdatetime->room) ? $context->eventdatetime->room : $location->room;
-$directions = !empty($context->eventdatetime->directions) ? $context->eventdatetime->directions : $location->directions;
+$locationRoom = isset($location->room) ? $location->room : NULL;
+$locationDirections = isset($location->directions) ? $location->directions : NULL;
+$room = !empty($context->eventdatetime->room) ? $context->eventdatetime->room : $locationRoom;
+$directions = !empty($context->eventdatetime->directions) ? $context->eventdatetime->directions : $locationDirections;
 ?>
 <?php if (isset($location->name) || $room || $directions || isset($location->streetaddress1)): ?>
 <div class="location">

@@ -117,22 +117,10 @@ class Controller
      */
     public function run()
     {
-        try {
-            $this->determineCalendar();
-        } catch (\Exception $e) {
-            // Invalid calendar 404
-            header("HTTP/1.0 404 Not Found");
-            die();
-        }
+        $this->determineCalendar();
 
         if (!isset($this->options['model']) || false === $this->options['model']) {
-            if (empty($this->options['format']) || strtolower($this->options['format']) == 'html') {
-                throw new UnexpectedValueException('Un-registered view', 404);
-            } else {
-                // Invalid model and not html format so 404
-                header("HTTP/1.0 404 Not Found");
-                die();
-            }
+            throw new UnexpectedValueException('Un-registered view', 404);
         }
         
         if ($this->options['model'] == 'UNL\\UCBCN\\Frontend\\Image') {

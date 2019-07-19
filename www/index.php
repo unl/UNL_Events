@@ -33,11 +33,18 @@ if (isset($_GET['model'])) {
     unset($_GET['model']);
 }
 
-// Initialize Controller, and construct everything the user requested
-$frontend = new Controller($router->route($_SERVER['REQUEST_URI'], $_GET));
+try {
+    // Initialize Controller, and construct everything the user requested
+    $frontend = new Controller($router->route($_SERVER['REQUEST_URI'], $_GET));
 
-// Now render what the user has requested
-$savvy = new OutputController($frontend);
-$savvy->addGlobal('frontend', $frontend);
+    // Now render what the user has requested
+    $savvy = new OutputController($frontend);
+    $savvy->addGlobal('frontend', $frontend);
 
-echo $savvy->render($frontend);
+    echo $savvy->render($frontend);
+}  catch (\Exception $e) {
+
+    header('HTTP/1.1 ' . $e->getCode() .' ' . $e->getMessage());
+    header('Status: ' . $e->getCode() .' ' . $e->getMessage());
+    die();
+}
