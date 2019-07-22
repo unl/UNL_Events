@@ -1,3 +1,10 @@
+<?php
+// 404 if invalid calendar
+if (!isset($context->options['calendar']) || $context->options['calendar'] instanceof \UNL\UCBCN\Frontend\Calendar) {
+  header("HTTP/1.0 404 Not Found");
+  die();
+}
+?>
 <?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0">
     <channel>
