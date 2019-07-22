@@ -62,48 +62,48 @@
                 <div id="new-location-fields" style="display: none;">
                     <h6>New Location</h6>
                     <label class="dcf-label" for="location-name"><span class="required">*</span> Name</label>
-                    <input class="dcf-input-text" type="text" id="location-name" name="new_location[name]" value="<?php echo $post['location']['name']; ?>">
+                    <input class="dcf-input-text" type="text" id="location-name" name="new_location[name]" value="<?php echo isset($post['location']['name']) ? $post['location']['name']: ''; ?>">
 
                     <label class="dcf-label" for="location-address-1">Address</label>
-                    <input class="dcf-input-text" type="text" id="location-address-1" name="new_location[streetaddress1]" value="<?php echo $post['location']['streetaddress1']; ?>">
+                    <input class="dcf-input-text" type="text" id="location-address-1" name="new_location[streetaddress1]" value="<?php echo isset($post['location']['streetaddress1']) ? $post['location']['streetaddress1']: ''; ?>">
 
                     <label class="dcf-label" for="location-address-2">Address 2</label>
-                    <input class="dcf-input-text" type="text" id="location-address-2" name="new_location[streetaddress2]" value="<?php echo $post['location']['streetaddress2']; ?>">
+                    <input class="dcf-input-text" type="text" id="location-address-2" name="new_location[streetaddress2]" value="<?php echo isset($post['location']['streetaddress2']) ? $post['location']['streetaddress2']: ''; ?>">
 
                     <label class="dcf-label" for="location-room">Room</label>
-                    <input class="dcf-input-text" type="text" id="location-room" name="new_location[room]" value="<?php echo $post['location']['room']; ?>">
+                    <input class="dcf-input-text" type="text" id="location-room" name="new_location[room]" value="<?php echo isset($post['location']['room']) ? $post['location']['room']: ''; ?>">
 
                     <label class="dcf-label" for="location-city">City</label>
-                    <input class="dcf-input-text" type="text" id="location-city" name="new_location[city]" value="<?php echo $post['location']['city']; ?>">
+                    <input class="dcf-input-text" type="text" id="location-city" name="new_location[city]" value="<?php echo isset($post['location']['city']) ? $post['location']['city']: ''; ?>">
 
                     <label class="dcf-label" for="location-state">State</label>
-                    <input class="dcf-input-text" type="text" id="location-state" name="new_location[state]" value="<?php echo $post['location']['state']; ?>">
+                    <input class="dcf-input-text" type="text" id="location-state" name="new_location[state]" value="<?php echo isset($post['location']['state']) ? $post['location']['state']: ''; ?>">
 
                     <label class="dcf-label" for="location-zip">Zip</label>
-                    <input class="dcf-input-text" type="text" id="location-zip" name="new_location[zip]" value="<?php echo $post['location']['zip']; ?>">
+                    <input class="dcf-input-text" type="text" id="location-zip" name="new_location[zip]" value="<?php echo isset($post['location']['zip']) ? $post['location']['zip']: ''; ?>">
 
                     <label class="dcf-label" for="location-map-url">Map URL</label>
-                    <input class="dcf-input-text" type="text" id="location-map-url" name="new_location[mapurl]" value="<?php echo $post['location']['mapurl']; ?>">
+                    <input class="dcf-input-text" type="text" id="location-map-url" name="new_location[mapurl]" value="<?php echo isset($post['location']['mapurl']) ? $post['location']['mapurl']: ''; ?>">
 
                     <label class="dcf-label" for="location-webpage">Webpage</label>
-                    <input class="dcf-input-text" type="text" id="location-webpage" name="new_location[webpageurl]" value="<?php echo $post['location']['webpageurl']; ?>">
+                    <input class="dcf-input-text" type="text" id="location-webpage" name="new_location[webpageurl]" value="<?php echo isset($post['location']['webpageurl']) ? $post['location']['webpageurl']: ''; ?>">
 
                     <label class="dcf-label" for="location-hours">Hours</label>
-                    <input class="dcf-input-text" type="text" id="location-hours" name="new_location[hours]" value="<?php echo $post['location']['hours']; ?>">
+                    <input class="dcf-input-text" type="text" id="location-hours" name="new_location[hours]" value="<?php echo isset($post['location']['hours']) ? $post['location']['hours']: ''; ?>">
 
                     <label class="dcf-label" for="location-directions">Directions</label>
-                    <textarea class="dcf-input-text" id="location-directions" name="new_location[directions]"><?php echo $post['location']['directions']; ?></textarea>
+                    <textarea class="dcf-input-text" id="location-directions" name="new_location[directions]"><?php echo isset($post['location']['directions']) ? $post['location']['directions']: ''; ?></textarea>
 
                     <label class="dcf-label" for="location-additional-public-info">Additional Public Info</label>
-                    <input class="dcf-input-text" type="text" id="location-additional-public-info" name="new_location[additionalpublicinfo]" value="<?php echo $post['location']['additionalpublicinfo']; ?>">
+                    <input class="dcf-input-text" type="text" id="location-additional-public-info" name="new_location[additionalpublicinfo]" value="<?php echo isset($post['location']['additionalpublicinfo']) ? $post['location']['additionalpublicinfo']: ''; ?>">
 
                     <label class="dcf-label" for="location-type">Type</label>
-                    <input class="dcf-input-text" type="text" id="location-type" name="new_location[type]" value="<?php echo $post['location']['type']; ?>">
+                    <input class="dcf-input-text" type="text" id="location-type" name="new_location[type]" value="<?php echo isset($post['location']['type']) ?  $post['location']['type']: ''; ?>">
 
                     <label class="dcf-label" for="location-phone">Phone</label>
-                    <input class="dcf-input-text" type="text" id="location-phone" name="new_location[phone]" value="<?php echo $post['location']['phone']; ?>">
+                    <input class="dcf-input-text" type="text" id="location-phone" name="new_location[phone]" value="<?php echo isset($post['location']['phone']) ? $post['location']['phone']: ''; ?>">
 
-                    <input class="dcf-input-control" <?php if ($post['location_save'] == 'on') echo 'checked="checked"'; ?> type="checkbox" id="location-save" name="location_save">
+                    <input class="dcf-input-control" <?php if (isset($post['location_save']) && $post['location_save'] == 'on') echo 'checked="checked"'; ?> type="checkbox" id="location-save" name="location_save">
                     <label class="dcf-label" for="location-save">Save this location for future events</label>
                 </div>
 

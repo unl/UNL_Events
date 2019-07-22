@@ -1,4 +1,9 @@
 <?php
+// 404 if invalid calendar
+if (!isset($context->options['calendar']) || $context->options['calendar'] instanceof \UNL\UCBCN\Frontend\Calendar) {
+    header("HTTP/1.0 404 Not Found");
+    die();
+}
 /**
  * This template file is for the icalendar and ics output formats.
  */
