@@ -1,11 +1,12 @@
 <?php 
 $location = $context->eventdatetime->getLocation();
-$locationRoom = isset($location->room) ? $location->room : NULL;
-$locationDirections = isset($location->directions) ? $location->directions : NULL;
+$locationName = isset($location->name) ? $location->name : '';
+$locationRoom = isset($location->room) ? $location->room : '';
+$locationDirections = isset($location->directions) ? $location->directions : '';
 $room = !empty($context->eventdatetime->room) ? $context->eventdatetime->room : $locationRoom;
 $directions = !empty($context->eventdatetime->directions) ? $context->eventdatetime->directions : $locationDirections;
 ?>
-<?php if (isset($location->name) || $room || $directions || isset($location->streetaddress1)): ?>
+<?php if ($locationName || $room || $directions || isset($location->streetaddress1)): ?>
 <div class="location">
     <span class="eventicon-location" aria-hidden="true"></span>
 <?php if (isset($location->mapurl)): ?>
