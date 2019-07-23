@@ -1,6 +1,6 @@
 <?php
 // 404 if invalid calendar
-if (!isset($context->options['calendar']) || $context->options['calendar'] instanceof \UNL\UCBCN\Frontend\Calendar) {
+if (!isset($context->options['calendar']) || !isset($context->options['calendar']->name)) {
   header("HTTP/1.0 404 Not Found");
   die();
 }
