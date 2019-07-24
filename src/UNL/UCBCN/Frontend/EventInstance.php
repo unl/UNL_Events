@@ -194,7 +194,9 @@ class EventInstance implements RoutableInterface
         
         if (isset($this->recurringdate) && $this->recurringdate instanceof \UNL\UCBCN\Event\RecurringDate) {
             $first_recurring_date = $this->recurringdate->getFirstRecordInOngoingSeries();
-            $time = $first_recurring_date->recurringdate . ' ' . substr($time, 11);
+            if (isset($first_recurring_date->recurringdate)) {
+                $time = $first_recurring_date->recurringdate . ' ' . substr($time, 11);
+            }
         }
 
         return $time;
