@@ -67,27 +67,16 @@ if ($_SERVER['SERVER_NAME'] == 'events-dev.unl.edu') {
             <div class="message">
             <h4>UNL Events Test</h4>
             <div class="message-content">
-            This is the test server for UNL Events. Events created and published here will not affect the main UNL calendar or your site\'s sub-calendar. Please send all feedback to <a href="mailto:iim@listserv.unl.edu">the dev team</a> at iim@listserv.unl.edu.</div>
+            This is the test server for UNL Events. Events created and published here will not affect the main UNL calendar or your site\'s sub-calendar. Please send all feedback to <a href="mailto:dxg@listserv.unl.edu">the dev team</a> at iim@listserv.unl.edu.</div>
             </div>
         </div>';
 }
-
-$page->maincontentarea .=
-    '<div class="wdn_notice">
-            <div class="close">
-            <a href="#" title="Close this notice">Close this notice</a>
-            </div>
-            <div class="message">
-            <h4>Timezone Support Notice</h4>
-            <div class="message-content">
-            UNL Events now supports timezones.  Calendar and event timezones default to Central time and will require no action unless you wish to use another timezone.  Please send all feedback/issues to <a href="mailto:iim@listserv.unl.edu">the dev team</a> at iim@listserv.unl.edu.</div>
-            </div>
-        </div>';
 
 $page->maincontentarea .= '
         <section class="dcf-grid dcf-col-gap-vw dcf-pb-8">
             <div class="dcf-col-100% dcf-col-75%-start@md">
 ';
+
 if (($notice = $context->getNotice()) != NULL) {
     $class = '';
     switch ($notice['level']) {
