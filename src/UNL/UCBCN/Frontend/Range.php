@@ -65,17 +65,23 @@ class Range extends EventListing implements RoutableInterface
             $fromTimestamp = $timezoneDateTime->getTimestamp($this->options['from']);
         }
 
-        if (empty($this->options['to'])) {
-            $toTimestamp = $timezoneDateTime->getTimestamp(date('Y-m-d'));
-            if ($toTimestamp < $fromTimestamp) {
-                $toTimestamp = $fromTimestamp;
-            }
-        } else {
+        if (!empty($this->options['to'])) {
             $toTimestamp = $timezoneDateTime->getTimestamp($this->options['to']);
-        }
+            // Adjsust toTimestamp to end of the day
+            $toTimestamp += 86400;
 
-        // Adjsust toTimestamp to end of the day
-        $toTimestamp += 86400;
+            $eventSQL = '(recurringdate.recurringdate IS NULL AND (
+                            (e.starttime >= "'.date('Y-m-d', $fromTimestamp).'" AND e.starttime <= "'.date('Y-m-d', $toTimestamp).'" AND e.endtime >= "'.date('Y-m-d', $fromTimestamp).'" AND e.endtime >= "'.date('Y-m-d', $toTimestamp).'") OR
+                            (e.starttime >= "'.date('Y-m-d', $fromTimestamp).'" AND e.endtime <= "'.date('Y-m-d', $toTimestamp).'") OR
+                            (e.endtime <= "'.date('Y-m-d', $fromTimestamp).'" AND e.endtime <= "'.date('Y-m-d', $toTimestamp).'" AND e.endtime >= "'.date('Y-m-d', $fromTimestamp).'" AND e.endtime <= "'.date('Y-m-d', $toTimestamp).'")
+                        )) OR 
+                        (recurringdate.recurringdate IS NOT NULL AND (
+                            (recurringdate.recurringdate >= "'.date('Y-m-d', $fromTimestamp).'" AND recurringdate.recurringdate <= "'.date('Y-m-d', $toTimestamp).'")
+                        ))';
+        } else {
+
+            $eventSQL = "IF (recurringdate.recurringdate IS NULL, e.starttime, recurringdate.recurringdate) >=  \"'.date('Y-m-d', $fromTimestamp).'\"";
+        }
 
 
         $sql = '
@@ -90,16 +96,7 @@ class Range extends EventListing implements RoutableInterface
                          calendar_has_event.status =\'posted\'
                          OR calendar_has_event.status =\'archived\'
                     )
-                    AND (
-                        (recurringdate.recurringdate IS NULL AND (
-                            (e.starttime >= "'.date('Y-m-d', $fromTimestamp).'" AND e.starttime <= "'.date('Y-m-d', $toTimestamp).'" AND e.endtime >= "'.date('Y-m-d', $fromTimestamp).'" AND e.endtime >= "'.date('Y-m-d', $toTimestamp).'") OR
-                            (e.starttime >= "'.date('Y-m-d', $fromTimestamp).'" AND e.endtime <= "'.date('Y-m-d', $toTimestamp).'") OR
-                            (e.endtime <= "'.date('Y-m-d', $fromTimestamp).'" AND e.endtime <= "'.date('Y-m-d', $toTimestamp).'" AND e.endtime >= "'.date('Y-m-d', $fromTimestamp).'" AND e.endtime <= "'.date('Y-m-d', $toTimestamp).'")
-                        )) OR 
-                        (recurringdate.recurringdate IS NOT NULL AND (
-                            (recurringdate.recurringdate >= "'.date('Y-m-d', $fromTimestamp).'" AND recurringdate.recurringdate <= "'.date('Y-m-d', $toTimestamp).'")
-                        ))
-                    )
+                    AND (' . $eventSQL . ')
                 ORDER BY (
                         IF (recurringdate.recurringdate IS NULL,
                           e.starttime,
