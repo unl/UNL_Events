@@ -80,7 +80,7 @@ class Range extends EventListing implements RoutableInterface
                         ))';
         } else {
 
-            $eventSQL = "IF (recurringdate.recurringdate IS NULL, e.starttime, recurringdate.recurringdate) >=  \"'.date('Y-m-d', $fromTimestamp).'\"";
+            $eventSQL = "IF (recurringdate.recurringdate IS NULL, e.starttime, recurringdate.recurringdate) >=  '" .date('Y-m-d', $fromTimestamp) . "'";
         }
 
 
@@ -104,6 +104,7 @@ class Range extends EventListing implements RoutableInterface
                         )
                     ) ASC,
                     event.title ASC';
+
         if (is_numeric($this->options['limit'] && $this->options['limit'] >= 1)) {
             $sql .= ' LIMIT ' . (int)$this->options['limit'];
         }
