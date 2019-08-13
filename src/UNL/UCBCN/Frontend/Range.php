@@ -16,7 +16,7 @@
 namespace UNL\UCBCN\Frontend;
 
 /**
- * A list of upcoming events for a calendar.
+ * A list of range of events for a calendar.
  *
  * @category  Events
  * @package   UNL_UCBCN_Frontend
@@ -40,7 +40,7 @@ class Range extends EventListing implements RoutableInterface
     );
 
     /**
-     * Constructs an upcoming event view for this calendar.
+     * Constructs an range event view for this calendar.
      *
      * @param array $options Associative array of options.
      */
@@ -115,7 +115,7 @@ class Range extends EventListing implements RoutableInterface
     /**
      * Get a permanent URL to this object.
      *
-     * @return string URL to this specific upcoming.
+     * @return string URL to this specific range.
      */
     public function getURL()
     {
@@ -123,7 +123,7 @@ class Range extends EventListing implements RoutableInterface
     }
 
     /**
-     * Generate an Upcoming URL for a specific calendar
+     * Generate an Range URL for a specific calendar
      *
      * @param Calendar $calendar
      * @return string
