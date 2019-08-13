@@ -16,12 +16,18 @@ $year     = '(?P<y>[\d]{4})';
 $month    = '(?P<m>([0-1])?[0-9])';
 $day      = '(?P<d>([0-3])?[0-9])';
 $week     = 'W(?P<w>[0-5][0-9])';
+$from   = '(?P<from>[\d]{4}-([0-1])?[0-9]-([0-3])?[0-9])';
+$to   = '(?P<to>[\d]{4}-([0-1])?[0-9]-([0-3])?[0-9])';
 
 // Used for determining an output format, e.g. .xml, .html
 $format   = '(\.(?P<format>[\w]+))?';
 
 $routes['/^images\/(?P<id>[\d]+)$/']                                                                       = 'UNL\UCBCN\Frontend\Image';
 $routes['/^'.$calendar_slash_required.'upcoming'.'(\/)?'.$format.'$/']                                     = 'UNL\UCBCN\Frontend\Upcoming';
+$routes['/^'.$calendar_slash_required.'range'.'(\/)?'.$format.'$/']                                        = 'UNL\UCBCN\Frontend\Range';
+$routes['/^'.$calendar_slash_required.'range'.'(\/)?'.$from.'(\/)?'.$format.'$/']                          = 'UNL\UCBCN\Frontend\Range';
+$routes['/^'.$calendar_slash_required.'range'.'(\/)?'.$from.'\/'.$to.'(\/)?'.$format.'$/']                 = 'UNL\UCBCN\Frontend\Range';
+$routes['/^'.$calendar_slash_required.'range'.'(\/)?'.$from.'(\/)?'.$format.'$/']                          = 'UNL\UCBCN\Frontend\Range';
 $routes['/^'.$calendar_slash_required.'week'.'(\/)?'.$format.'$/']                                         = 'UNL\UCBCN\Frontend\Week';
 $routes['/^'.$calendar_slash_required.'search'.'\/$/']                                                     = 'UNL\UCBCN\Frontend\Search';
 $routes['/^'.$calendar_slash_required.$year.'(\/)?'.$format.'$/']                                          = 'UNL\UCBCN\Frontend\Year';
