@@ -67,8 +67,6 @@ class Range extends EventListing implements RoutableInterface
 
         if (!empty($this->options['to'])) {
             $toTimestamp = $timezoneDateTime->getTimestamp($this->options['to']);
-            // Adjsust toTimestamp to end of the day
-            $toTimestamp += 86400;
 
             $eventSQL = '(recurringdate.recurringdate IS NULL AND (
                             (e.starttime >= "'.date('Y-m-d', $fromTimestamp).'" AND e.starttime <= "'.date('Y-m-d', $toTimestamp).'" AND e.endtime >= "'.date('Y-m-d', $fromTimestamp).'" AND e.endtime >= "'.date('Y-m-d', $toTimestamp).'") OR
