@@ -224,8 +224,9 @@
 
         <?php if ($context->recurrence_id == NULL) : ?>
             <div class="section-container">
-                <input <?php if ($datetime->recurringtype != 'none' && $datetime->recurringtype != NULL) echo 'checked="checked"' ?> type="checkbox" name="recurring" id="recurring"> 
-                <label class="dcf-label" for="recurring">This is a recurring <?php echo $datetime->recurringtype; ?> event</label>
+                <input <?php if ($datetime->recurringtype != 'none' && $datetime->recurringtype != NULL) echo 'checked="checked"' ?> type="checkbox" name="recurring" id="recurring">
+                <?php $recurringType = (empty($datetime->recurringtype) || strtolower($datetime->recurringtype) == 'none') ? '' : $datetime->recurringtype; ?>
+                <label class="dcf-label" for="recurring">This is a recurring <?php echo $recurringType; ?> event</label>
                 <div class="recurring-container date-time-select">                        
                     <label class="dcf-label dcf-d-inline-block" for="recurring-type">This event recurs </label>
                     <select class="dcf-input-select" id="recurring-type" name="recurring_type">
