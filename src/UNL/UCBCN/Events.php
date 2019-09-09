@@ -75,19 +75,19 @@ class Events extends RecordList
 
             $sql = '
                 SELECT event.id
-                FROM eventdatetime as e
-                INNER JOIN event ON e.event_id = event.id
+                FROM eventdatetime
+                INNER JOIN event ON eventdatetime.event_id = event.id
                 INNER JOIN calendar_has_event ON calendar_has_event.event_id = event.id
                 LEFT JOIN event_has_eventtype ON (event_has_eventtype.event_id = event.id)
                 LEFT JOIN eventtype ON (eventtype.id = event_has_eventtype.eventtype_id)
-                LEFT JOIN location ON (location.id = e.location_id)
+                LEFT JOIN location ON (location.id = eventdatetime.location_id)
                 WHERE
                     event.approvedforcirculation = 1
                     AND  (';
 
             if ($time = strtotime($term)) {
                 // This is a time...
-                $sql .= 'e.starttime LIKE \''.date('Y-m-d', $this->escapeString($time)).'%\'';
+                $sql .= 'eventdatetime.starttime LIKE \''.date('Y-m-d', $this->escapeString($time)).'%\'';
             } else {
                 // Do a textual search.
                 $sql .=
@@ -98,8 +98,8 @@ class Events extends RecordList
             }
 
             $sql.= ')
-                GROUP BY event.id
-                ORDER BY e.starttime DESC, event.title ASC';
+                GROUP BY event.id, eventdatetime.starttime
+                ORDER BY eventdatetime.starttime DESC, event.title ASC';
             $sql.=';';
 
             return $sql;
