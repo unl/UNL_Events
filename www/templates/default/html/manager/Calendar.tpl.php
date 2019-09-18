@@ -88,13 +88,8 @@
             <div class="medium-hidden" style="margin-bottom: 5px;">
                 <a href='#' class="dcf-btn small-button" id="check-all">Check All</a>
                 <a href='#' class="dcf-btn small-button" id="uncheck-all">Uncheck All</a>
-                <?php if ($context->tab != 'upcoming' && $user->hasPermission(\UNL\UCBCN\Permission::EVENT_DELETE_ID, $context->calendar->id)): ?> 
-                    <form id="cleanup-events" class="delete-form" action="<?php echo $context->calendar->getCleanupURL() ?>" method="POST">
-                      <input type="hidden" name="tab" value="<?php echo $context->tab ?>">
-                      <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
-                      <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
-                      <button type="submit" class="dcf-btn small-button">Clean Up Old Events</button>
-                    </form>
+                <?php if ($context->tab == 'past' && $user->hasPermission(\UNL\UCBCN\Permission::EVENT_DELETE_ID, $context->calendar->id)): ?>
+                    <a class="dcf-btn dcf-btn-primary" href="<?php echo $context->calendar->getCleanupURL() ?>">Cleanup Up Old Events</a>
                 <?php endif; ?>
             </div>
             <div class="event-page">

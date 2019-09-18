@@ -66,7 +66,7 @@ class Events extends RecordList
             }
 
             $sql .= ' GROUP BY event.id ';
-            $sql .= ' ORDER BY MIN(eventdatetime.starttime) DESC';
+            $sql .= ' ORDER BY MIN(eventdatetime.starttime) ASC';
             $sql .= ';';
 
             return $sql;

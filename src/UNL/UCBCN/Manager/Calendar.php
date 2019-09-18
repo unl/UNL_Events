@@ -16,9 +16,18 @@ class Calendar {
     public $tab;
     public $page;
 
-    public function __construct($options = array()) {
+    const HAVE_PURGED_PAST_PENDING_EVENTS = 'HAVE_PURGED_PAST_PENDING_EVENTS';
+
+    public function __construct($options = array())
+    {
         $this->options = $options + $this->options;
         $this->calendar = CalendarModel::getByShortName($this->options['calendar_shortname']);
+
+        // Auto purge past pending events older than 1 month from calendar on first session visit
+        if (!isset($_SESSION[static::HAVE_PURGED_PAST_PENDING_EVENTS])) {
+            $this->calendar->purgePastEventsByStatus(CalendarModel::STATUS_PENDING, CalendarModel::CLEANUP_MONTH_1);
+            $_SESSION[static::HAVE_PURGED_PAST_PENDING_EVENTS] = true;
+        }
 
         if ($this->calendar === FALSE) {
             throw new \Exception("That calendar could not be found.", 404);

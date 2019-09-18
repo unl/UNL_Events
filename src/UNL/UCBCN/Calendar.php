@@ -61,7 +61,15 @@ class Calendar extends Record
     const STATUS_PENDING  = 'pending';
     const STATUS_POSTED   = 'posted';
     const STATUS_ARCHIVED = 'archived';
-    
+
+    const CLEANUP_YEARS_1 = '-1 Year';
+    const CLEANUP_YEARS_2 = '-2 Years';
+    const CLEANUP_YEARS_3 = '-3 Years';
+    const CLEANUP_YEARS_4 = '-4 Years';
+    const CLEANUP_YEARS_5 = '-5 Years';
+    const CLEANUP_YEARS_10 = '-10 Years';
+    const CLEANUP_MONTH_1 = '-1 Month';
+
     const EVENT_RELEASE_PREFERENCE_DEFAULT   = null;
     const EVENT_RELEASE_PREFERENCE_IMMEDIATE = 1;
     const EVENT_RELEASE_PREFERENCE_PENDING   = 0;
@@ -303,6 +311,20 @@ class Calendar extends Record
             # delete the calendar has event record
             $calendar_has_event->delete();
         }
+    }
+
+    public function purgePastEventsByStatus($status, $pastDuration) {
+        $events = $this->getEvents($status);
+
+        $count = 0;
+        foreach ($events as $event) {
+            if ($event->isInThePast($pastDuration)) {
+                $this->removeEvent($event, $status);
+                ++$count;
+            }
+        }
+
+        return $count;
     }
 
     /**

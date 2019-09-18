@@ -47,14 +47,7 @@ class BulkAction extends PostHandler
                 throw new \Exception("You do not have permission to move events to upcoming on this calendar.", 403);
             }
 
-            foreach ($ids as $id) {
-                $calendar_has_event = CalendarHasEvent::getByIdsStatus($this->calendar->id, $id, $backend_tab_name);
-
-                if ($calendar_has_event !== FALSE) {
-                    $calendar_has_event->status = Calendar::STATUS_POSTED;
-                    $calendar_has_event->save();
-                }
-            }
+            CalendarHasEvent::bulkUpdateStatus($this->calendar->id, $ids, $backend_tab_name, Calendar::STATUS_POSTED);
             $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Events Moved To Upcoming', count($ids) . ' events have been set to "upcoming" status. They will automatically move to "past" after the event.');
         } else if ($action == 'move-to-pending') {
             $user = Auth::getCurrentUser();
@@ -62,14 +55,7 @@ class BulkAction extends PostHandler
                 throw new \Exception("You do not have permission to move events to pending on this calendar.", 403);
             }
 
-            foreach ($ids as $id) {
-                $calendar_has_event = CalendarHasEvent::getByIdsStatus($this->calendar->id, $id, $backend_tab_name);
-
-                if ($calendar_has_event !== FALSE) {
-                    $calendar_has_event->status = Calendar::STATUS_PENDING;
-                    $calendar_has_event->save();
-                }
-            }
+            CalendarHasEvent::bulkUpdateStatus($this->calendar->id, $ids, $backend_tab_name, Calendar::STATUS_PENDING);
             $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Events Moved To Pending', count($ids) . ' events have been moved to the "pending" tab.');
         } else if ($action == 'delete') {
             $user = Auth::getCurrentUser();
