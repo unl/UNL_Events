@@ -89,7 +89,7 @@
                 <a href='#' class="dcf-btn small-button" id="check-all">Check All</a>
                 <a href='#' class="dcf-btn small-button" id="uncheck-all">Uncheck All</a>
                 <?php if ($context->tab == 'past' && $user->hasPermission(\UNL\UCBCN\Permission::EVENT_DELETE_ID, $context->calendar->id)): ?>
-                    <a class="dcf-btn dcf-btn-primary" href="<?php echo $context->calendar->getCleanupURL() ?>">Cleanup Up Old Events</a>
+                    <a class="dcf-btn dcf-btn-tertiary" href="<?php echo $context->calendar->getCleanupURL() ?>">Cleanup Up Old Events</a>
                 <?php endif; ?>
             </div>
             <div class="event-page">
@@ -293,17 +293,3 @@
         <?php endif; ?>
     </div>
 </div>
-
-<?php
-$page->addScriptDeclaration("
-require(['jquery'], function ($) {
-    $(document).ready(function () {
-        $(\"#cleanup-events\").submit(function (submit) {
-            if (!window.confirm('Are you sure you want to remove all old events from this tab? This may take a while.')) {
-                submit.preventDefault();
-            }
-        })
-    });
-});");
-?>
-
