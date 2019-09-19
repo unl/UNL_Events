@@ -24,9 +24,9 @@ class Calendar {
         $this->calendar = CalendarModel::getByShortName($this->options['calendar_shortname']);
 
         // Auto purge past pending events older than 1 month from calendar on first session visit
-        if (!isset($_SESSION[static::HAVE_PURGED_PAST_PENDING_EVENTS])) {
+        if (!isset($_SESSION[static::HAVE_PURGED_PAST_PENDING_EVENTS . '-' . $this->calendar->id])) {
             $this->calendar->purgePastEventsByStatus(CalendarModel::STATUS_PENDING, CalendarModel::CLEANUP_MONTH_1);
-            $_SESSION[static::HAVE_PURGED_PAST_PENDING_EVENTS] = true;
+            $_SESSION[static::HAVE_PURGED_PAST_PENDING_EVENTS . '-' . $this->calendar->id] = true;
         }
 
         if ($this->calendar === FALSE) {
