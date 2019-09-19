@@ -27,15 +27,15 @@ class Calendar {
             throw new \Exception("That calendar could not be found.", 404);
         }
 
+        $user = Auth::getCurrentUser();
+        if (!in_array($this->calendar->id, $user->getCalendars()->getIDs())) {
+            Controller::redirect(Controller::$url . 'welcome/');
+        }
+
         // Auto purge past pending events older than 1 month from calendar on first session visit
         if (!isset($_SESSION[static::HAVE_PURGED_PAST_PENDING_EVENTS . '-' . $this->calendar->id])) {
             $this->calendar->purgePastEventsByStatus(CalendarModel::STATUS_PENDING, CalendarModel::CLEANUP_MONTH_1);
             $_SESSION[static::HAVE_PURGED_PAST_PENDING_EVENTS . '-' . $this->calendar->id] = true;
-        }
-
-        $user = Auth::getCurrentUser();
-        if (!in_array($this->calendar->id, $user->getCalendars()->getIDs())) {
-            Controller::redirect(Controller::$url . 'welcome/');
         }
 
         # this function will currently run every time the page is loaded. In the future, it would be better
