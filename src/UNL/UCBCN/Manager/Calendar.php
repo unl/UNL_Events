@@ -2,6 +2,7 @@
 namespace UNL\UCBCN\Manager;
 
 use UNL\UCBCN\Calendar as CalendarModel;
+use UNL\UCBCN\Calendar\Event as CalendarHasEvent;
 use UNL\UCBCN\Manager\Auth;
 use UNL\UCBCN\User;
 use UNL\UCBCN\Permission;
@@ -99,39 +100,27 @@ class Calendar {
         $archived_events = $this->calendar->getEvents(CalendarModel::STATUS_ARCHIVED);
 
         # check each event to see if it has passed
+        $updateEventIDs = array();
         foreach ($events as $event) {
-            $archive = $event->isInThePast();
-
-            # update the status with the calendar
-            if ($archive) {
-                $event->updateStatusWithCalendar($this->calendar, CalendarModel::STATUS_ARCHIVED);
+            # remember event id to update status
+            if ($event->isInThePast()) {
+                $updateEventIDs[] = $event->id;
             }
+        }
+        if (count($updateEventIDs) > 0) {
+            CalendarHasEvent::bulkUpdateStatus($this->calendar->id, $updateEventIDs, CalendarModel::STATUS_POSTED, CalendarModel::STATUS_ARCHIVED);
         }
 
         # check each past event to see if it is now current
+        $updateEventIDs = array();
         foreach ($archived_events as $event) {
-            # we will consider it upcoming if any datetime is after today at midnight
-            $datetimes = $event->getDatetimes();
-            $move = FALSE;
-            foreach ($datetimes as $datetime) {
-                $recurring_dates = $datetime->getAllDates();
-                foreach($recurring_dates as $recurring_date) {
-                    if ($recurring_date->recurringdate >= date('Y-m-d')) {
-                        $move = TRUE;
-                        break 2;
-                    }
-                }
-
-                if ($datetime->starttime >= date('Y-m-d 00:00:00') || ($datetime->endtime != NULL && $datetime->endtime >= date('Y-m-d 00:00:00'))) {
-                    $move = TRUE;
-                    break;
-                }
+            # remember event id to update status
+            if (!$event->isInThePast()) {
+                $updateEventIDs[] = $event->id;
             }
-
-            # update the status with the calendar
-            if ($move) {
-                $event->updateStatusWithCalendar($this->calendar, CalendarModel::STATUS_POSTED);
-            }
+        }
+        if (count($updateEventIDs) > 0) {
+            CalendarHasEvent::bulkUpdateStatus($this->calendar->id, $updateEventIDs, CalendarModel::STATUS_ARCHIVED, CalendarModel::STATUS_POSTED);
         }
     }
 
