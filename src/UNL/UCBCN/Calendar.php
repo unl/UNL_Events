@@ -3,6 +3,7 @@ namespace UNL\UCBCN;
 
 use UNL\UCBCN\Manager\Auth;
 use UNL\UCBCN\ActiveRecord\Record;
+use UNL\UCBCN\Event as Event;
 use UNL\UCBCN\Events as Events;
 use UNL\UCBCN\Frontend\Controller as FrontendController;
 use UNL\UCBCN\Manager\Controller as ManagerController;
@@ -331,10 +332,34 @@ class Calendar extends Record
         return $count;
     }
 
-    public function archiveEvents() {
-        # find all posted (upcoming) events on the calendar
-        $events = $this->getEvents(static::STATUS_POSTED);
-        $archived_events = $this->getEvents(static::STATUS_ARCHIVED);
+    public function archiveEvents($eventIDs = NULL) {
+
+        // process only event ids if provided
+        if (is_array($eventIDs)) {
+
+            $events = array();
+            $archived_events = array();
+
+            // Lookup events and place in correct array
+            foreach($eventIDs as $id) {
+                $calenderEvent = CalendarHasEvent::getByIds($this->id, $id);
+                switch($calenderEvent->status) {
+                    case static::STATUS_POSTED:
+                        $events[] = Event::getById($calenderEvent->event_id);
+                        break;
+                    case static::STATUS_ARCHIVED:
+                        $archived_events[] = Event::getById($calenderEvent->event_id);
+                        break;
+                    default:
+                        // ignore event
+                }
+            }
+
+        } else {
+            # find all posted (upcoming) and archived (past) events on the calendar
+            $events = $this->getEvents(static::STATUS_POSTED);
+            $archived_events = $this->getEvents(static::STATUS_ARCHIVED);
+        }
 
         # check each event to see if it has passed
         $updateEventIDs = array();

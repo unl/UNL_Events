@@ -301,7 +301,7 @@ $page->addScriptDeclaration('
     var xhr = new XMLHttpRequest();
     xhr.open("GET", "'. $context->calendar->getArchiveURL() . '", true);
     xhr.send(null);
-    setTimeout(archive_events, 30000); // run again in 30 seconds
+    setTimeout(archive_events, 60000); // run again in 1 minute
   }
 
   archive_events();

@@ -48,6 +48,7 @@ class BulkAction extends PostHandler
             }
 
             CalendarHasEvent::bulkUpdateStatus($this->calendar->id, $ids, $backend_tab_name, Calendar::STATUS_POSTED);
+            $this->calendar->archiveEvents($ids);
             $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Events Moved To Upcoming', count($ids) . ' events have been set to "upcoming" status. They will automatically move to "past" after the event.');
         } else if ($action == 'move-to-pending') {
             $user = Auth::getCurrentUser();
@@ -56,6 +57,7 @@ class BulkAction extends PostHandler
             }
 
             CalendarHasEvent::bulkUpdateStatus($this->calendar->id, $ids, $backend_tab_name, Calendar::STATUS_PENDING);
+            $this->calendar->archiveEvents($ids);
             $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Events Moved To Pending', count($ids) . ' events have been moved to the "pending" tab.');
         } else if ($action == 'delete') {
             $user = Auth::getCurrentUser();
