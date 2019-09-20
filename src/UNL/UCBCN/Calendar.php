@@ -141,6 +141,10 @@ class Calendar extends Record
         return ManagerController::$url . $this->shortname . '/cleanup/';
     }
 
+    public function getArchiveURL() {
+        return ManagerController::$url . $this->shortname . '/archive/';
+    }
+
     public function getSearchURL() {
         return ManagerController::$url . $this->shortname . '/search/';
     }
@@ -325,6 +329,36 @@ class Calendar extends Record
         }
 
         return $count;
+    }
+
+    public function archiveEvents() {
+        # find all posted (upcoming) events on the calendar
+        $events = $this->getEvents(static::STATUS_POSTED);
+        $archived_events = $this->getEvents(static::STATUS_ARCHIVED);
+
+        # check each event to see if it has passed
+        $updateEventIDs = array();
+        foreach ($events as $event) {
+            # remember event id to update status
+            if ($event->isInThePast()) {
+                $updateEventIDs[] = $event->id;
+            }
+        }
+        if (count($updateEventIDs) > 0) {
+            CalendarHasEvent::bulkUpdateStatus($this->id, $updateEventIDs, static::STATUS_POSTED, static::STATUS_ARCHIVED);
+        }
+
+        # check each past event to see if it is now current
+        $updateEventIDs = array();
+        foreach ($archived_events as $event) {
+            # remember event id to update status
+            if (!$event->isInThePast()) {
+                $updateEventIDs[] = $event->id;
+            }
+        }
+        if (count($updateEventIDs) > 0) {
+            CalendarHasEvent::bulkUpdateStatus($this->id, $updateEventIDs, static::STATUS_ARCHIVED, static::STATUS_POSTED);
+        }
     }
 
     /**

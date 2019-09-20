@@ -293,3 +293,22 @@
         <?php endif; ?>
     </div>
 </div>
+
+<?php
+// Add script tag to archive events in background via ajax
+$page->addScriptDeclaration('
+
+  $(function() {
+     var data = {
+        ' . $controller->getCSRFHelper()->getTokenNameKey() . ': "' . $controller->getCSRFHelper()->getTokenName() . '",
+        ' . $controller->getCSRFHelper()->getTokenValueKey() . ': "' . $controller->getCSRFHelper()->getTokenValue() . '"
+      };
+      $.ajax({
+        type: "POST",
+        data: data,
+        dataType: "json",
+        url: "'. $context->calendar->getArchiveURL() . '"
+      });
+  });
+');
+?>

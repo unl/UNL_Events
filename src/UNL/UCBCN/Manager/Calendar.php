@@ -17,7 +17,7 @@ class Calendar {
     public $tab;
     public $page;
 
-    const HAVE_PURGED_PAST_PENDING_EVENTS = 'HAVE_PURGED_PAST_PENDING_EVENTS';
+    const HAVE_PROCESSED_CALENDAR_EVENTS = 'HAVE_PROCESSED_CALENDAR_EVENTS';
 
     public function __construct($options = array())
     {
@@ -33,16 +33,20 @@ class Calendar {
             Controller::redirect(Controller::$url . 'welcome/');
         }
 
-        // Auto purge past pending events older than 1 month from calendar on first session visit
-        if (!isset($_SESSION[static::HAVE_PURGED_PAST_PENDING_EVENTS . '-' . $this->calendar->id])) {
-            $this->calendar->purgePastEventsByStatus(CalendarModel::STATUS_PENDING, CalendarModel::CLEANUP_MONTH_1);
-            $_SESSION[static::HAVE_PURGED_PAST_PENDING_EVENTS . '-' . $this->calendar->id] = true;
-        }
+        # Process events if session check is not set (first session visit)
+        if (!isset($_SESSION[static::HAVE_PROCESSED_CALENDAR_EVENTS . '-' . $this->calendar->id])) {
 
-        # this function will currently run every time the page is loaded. In the future, it would be better
-        # to simply decide whether an event should be archived or posted based on its dates, instead
-        # of a column that we set in the database
-        $this->archiveEvents();
+            # Auto purge past pending events older than 1 month from calendar
+            $this->calendar->purgePastEventsByStatus(CalendarModel::STATUS_PENDING, CalendarModel::CLEANUP_MONTH_1);
+
+            # Correctly set incoming and past event status based on time
+            # In the future, it would be better to simply decide whether an event should be archived or posted
+            # based on its dates, instead of a column that we set in the database
+            $this->calendar->archiveEvents();
+
+            # Set session variable so we don't run the above again for this calendar this session (unless it's removed)
+            $_SESSION[static::HAVE_PROCESSED_CALENDAR_EVENTS . '-' . $this->calendar->id] = true;
+        }
 
         $allowed_tabs = array('pending', 'upcoming', 'past');
         if (array_key_exists('tab', $_GET) && in_array($_GET['tab'], $allowed_tabs)) {
@@ -92,36 +96,6 @@ class Calendar {
         }
             
         return $events;
-    }
-
-    private function archiveEvents() {
-        # find all posted (upcoming) events on the calendar
-        $events = $this->calendar->getEvents(CalendarModel::STATUS_POSTED);
-        $archived_events = $this->calendar->getEvents(CalendarModel::STATUS_ARCHIVED);
-
-        # check each event to see if it has passed
-        $updateEventIDs = array();
-        foreach ($events as $event) {
-            # remember event id to update status
-            if ($event->isInThePast()) {
-                $updateEventIDs[] = $event->id;
-            }
-        }
-        if (count($updateEventIDs) > 0) {
-            CalendarHasEvent::bulkUpdateStatus($this->calendar->id, $updateEventIDs, CalendarModel::STATUS_POSTED, CalendarModel::STATUS_ARCHIVED);
-        }
-
-        # check each past event to see if it is now current
-        $updateEventIDs = array();
-        foreach ($archived_events as $event) {
-            # remember event id to update status
-            if (!$event->isInThePast()) {
-                $updateEventIDs[] = $event->id;
-            }
-        }
-        if (count($updateEventIDs) > 0) {
-            CalendarHasEvent::bulkUpdateStatus($this->calendar->id, $updateEventIDs, CalendarModel::STATUS_ARCHIVED, CalendarModel::STATUS_POSTED);
-        }
     }
 
 }

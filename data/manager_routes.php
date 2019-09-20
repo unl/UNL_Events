@@ -47,5 +47,6 @@ $routes['/^'.$calendar_slash_required.'search(\/)?$/'] = 'UNL\UCBCN\Manager\Sear
 $routes['/^'.$calendar_slash_required.'cleanup(\/)?$/'] = 'UNL\UCBCN\Manager\CleanupCalendar';
 $routes['/^'.$calendar_slash_required.'delete(\/)?$/'] = 'UNL\UCBCN\Manager\DeleteCalendar';
 $routes['/^'.$calendar_slash_required.'delete_final(\/)?$/'] = 'UNL\UCBCN\Manager\DeleteCalendarFinal';
+$routes['/^'.$calendar_slash_required.'archive(\/)?$/'] = 'UNL\UCBCN\Manager\ArchiveCalendar';
 
 return $routes;
