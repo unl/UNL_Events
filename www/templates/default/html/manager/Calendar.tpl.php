@@ -297,18 +297,14 @@
 <?php
 // Add script tag to archive events in background via ajax
 $page->addScriptDeclaration('
+  function archive_events() {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "'. $context->calendar->getArchiveURL() . '", true);
+    xhr.send(null);
+    setTimeout(archive_events, 30000); // run again in 30 seconds
+  }
 
-  $(function() {
-     var data = {
-        ' . $controller->getCSRFHelper()->getTokenNameKey() . ': "' . $controller->getCSRFHelper()->getTokenName() . '",
-        ' . $controller->getCSRFHelper()->getTokenValueKey() . ': "' . $controller->getCSRFHelper()->getTokenValue() . '"
-      };
-      $.ajax({
-        type: "POST",
-        data: data,
-        dataType: "json",
-        url: "'. $context->calendar->getArchiveURL() . '"
-      });
-  });
+  archive_events();
 ');
+
 ?>

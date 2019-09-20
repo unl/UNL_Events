@@ -7,7 +7,7 @@ use UNL\UCBCN\Permission;
 use UNL\UCBCN\Permissions;
 use UNL\UCBCN\Manager\Controller;
 
-class ArchiveCalendar extends PostHandler
+class ArchiveCalendar
 {
     public $options = array();
     public $calendar;
@@ -27,11 +27,14 @@ class ArchiveCalendar extends PostHandler
         }
     }
 
-    public function handlePost(array $get, array $post, array $files)
+    public function processArchive()
     {
         $this->calendar->archiveEvents();
+        // output is only informational
         $output = new \stdClass();
-        $output->success = true;
+        $output->calendar_id = $this->calendar->id;
+        $output->calendar_shortname = $this->calendar->shortname;
+        $output->action = 'processArchive';
         echo json_encode($output);
         die();
     }
