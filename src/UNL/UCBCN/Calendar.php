@@ -332,19 +332,24 @@ class Calendar extends Record
         return $count;
     }
 
-    public function archivePastEvents() {
-        $sql  = 'UPDATE calendar_has_event,event,eventdatetime
-                 SET calendar_has_event.status=\'archived\' WHERE calendar_has_event.calendar_id = ? AND
-                   calendar_has_event.status = \'posted\' AND
-                   calendar_has_event.event_id = event.id AND
-                   eventdatetime.event_id = event.id AND
-                   eventdatetime.starttime<\''.date('Y-m-d').' 00:00:00\' AND
-                   (eventdatetime.endtime IS NULL
-                   OR eventdatetime.endtime<\''.date('Y-m-d').' 00:00:00\');';
+    public function getPastPostedEventIDs() {
+        $sql = 'SELECT distinct event.id FROM calendar_has_event
+                INNER JOIN event on event.id = calendar_has_event.event_id
+                INNER JOIN eventdatetime on event.id = eventdatetime.event_id
+                WHERE calendar_has_event.calendar_id = ' . $this->id . ' AND
+                    calendar_has_event.status = "posted" AND
+                    eventdatetime.starttime < "' . date('Y-m-d') . ' 00:00:00" AND
+                    (eventdatetime.endtime IS NULL OR eventdatetime.endtime < "' . date('Y-m-d') . ' 00:00:00")';
+
+        $eventIDs = array();
         $mysqli = self::getDB();
-        $stmt = $mysqli->prepare($sql);
-        $stmt->bind_param("i", $this->id);
-        return $stmt->execute();
+        if ($result = $mysqli->query($sql)) {
+            while($row = $result->fetch_assoc()) {
+                $eventIDs[] = $row['id'];
+            }
+        }
+
+        return $eventIDs;
     }
 
     public function archiveEvents($eventIDs = NULL) {
