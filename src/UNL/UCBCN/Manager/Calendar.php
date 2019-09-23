@@ -39,8 +39,8 @@ class Calendar {
             # Auto purge past pending events older than 1 month from calendar
             $this->calendar->purgePastEventsByStatus(CalendarModel::STATUS_PENDING, CalendarModel::CLEANUP_MONTH_1);
 
-            # Correctly set past event status based on time
-            $this->calendar->archivePastEvents();
+            # Correctly set past event status
+            $this->calendar->archiveEvents($this->calendar->getEvents(CalendarModel::STATUS_POSTED));
 
             # Set session variable so we don't run the above again for this calendar this session (unless it's removed)
             $_SESSION[static::HAVE_PROCESSED_CALENDAR_EVENTS . '-' . $this->calendar->id] = true;
