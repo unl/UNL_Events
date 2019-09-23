@@ -27,6 +27,7 @@ class ArchiveCalendar
         }
     }
 
+    // AJAX get
     public function processArchive()
     {
         $this->calendar->archiveEvents();
