@@ -332,6 +332,21 @@ class Calendar extends Record
         return $count;
     }
 
+    public function archivePastEvents() {
+        $sql  = 'UPDATE calendar_has_event,event,eventdatetime
+                 SET calendar_has_event.status=\'archived\' WHERE calendar_has_event.calendar_id = ? AND
+                   calendar_has_event.status = \'posted\' AND
+                   calendar_has_event.event_id = event.id AND
+                   eventdatetime.event_id = event.id AND
+                   eventdatetime.starttime<\''.date('Y-m-d').' 00:00:00\' AND
+                   (eventdatetime.endtime IS NULL
+                   OR eventdatetime.endtime<\''.date('Y-m-d').' 00:00:00\');';
+        $mysqli = self::getDB();
+        $stmt = $mysqli->prepare($sql);
+        $stmt->bind_param("i", $this->id);
+        return $stmt->execute();
+    }
+
     public function archiveEvents($eventIDs = NULL) {
 
         // process only event ids if provided
