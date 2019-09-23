@@ -293,17 +293,3 @@
         <?php endif; ?>
     </div>
 </div>
-
-<?php
-// Add script tag to archive events in background via ajax
-$page->addScriptDeclaration('
-  function archive_events() {
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "'. $context->calendar->getArchiveURL() . '", true);
-    xhr.send(null);
-  }
-
-  archive_events();
-');
-
-?>
