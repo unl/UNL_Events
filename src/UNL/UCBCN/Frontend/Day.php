@@ -56,8 +56,8 @@ class Day extends EventListing implements RoutableInterface
     function getSQL()
     {
         // Due to timezones spanning multiple days open search up to all possible days.  Invalid events for day will be filtered out from results.
-        $startDateTime = $this->getDateTime(FALSE, '-P2W')->format('Y-m-d H:i:s');
-        $endDateTime = $this->getDateTime(TRUE, 'P2W')->format('Y-m-d H:i:s');
+        $startDateTime = $this->getDateTime(FALSE, '-P2D')->format('Y-m-d H:i:s');
+        $endDateTime = $this->getDateTime(TRUE, 'P2D')->format('Y-m-d H:i:s');
 
         $sql = '
                 SELECT DISTINCT e.id as id,recurringdate.recurringdate,e.starttime,e.endtime,e.timezone,event.title, recurringdate.id as recurringdate_id
@@ -69,7 +69,7 @@ class Day extends EventListing implements RoutableInterface
                     calendar_has_event.calendar_id = ' . (int)$this->calendar->id . '
                     AND calendar_has_event.status IN ("posted", "archived")
                     AND  (
-                        (e.starttime >= "' . $startDateTime . '" AND e.endtime <= "' . $endDateTime . '")
+                        (e.endtime >= "' . $startDateTime . '" AND e.starttime <= "' . $endDateTime . '")
                        OR (recurringdate.recurringdate >= "' . $startDateTime . '" AND recurringdate.recurringdate <= "' . $endDateTime . '")
                       )
                 ORDER BY (
