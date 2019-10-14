@@ -64,7 +64,7 @@
             There are no <?php echo $context->tab ?> events.
         <?php else: ?>
             <div class="medium-hidden">
-              <select id="bulk-action" title="Bulk Action" class="bulk-<?php echo $context->tab; ?>-event-tools dcf-input-select">
+              <select id="bulk-action" title="Bulk Action" class="bulk-<?php echo $context->tab; ?>-event-tools dcf-input-select dcf-txt-sm">
                   <option value="">Bulk Actions</option>
                   <?php if ($context->tab == 'pending' && $user->hasPermission(\UNL\UCBCN\Permission::EVENT_MOVE_TO_UPCOMING_ID, $context->calendar->id)): ?>
                     <option value="move-to-upcoming">Move to Upcoming</option>
@@ -84,17 +84,12 @@
                   <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
                   <button type="submit">Submit</button>
                 </form>
-            </div><br class="medium-hidden">
+            </div>
             <div class="medium-hidden" style="margin-bottom: 5px;">
                 <a href='#' class="dcf-btn small-button" id="check-all">Check All</a>
                 <a href='#' class="dcf-btn small-button" id="uncheck-all">Uncheck All</a>
-                <?php if ($context->tab != 'upcoming' && $user->hasPermission(\UNL\UCBCN\Permission::EVENT_DELETE_ID, $context->calendar->id)): ?> 
-                    <form id="cleanup-events" class="delete-form" action="<?php echo $context->calendar->getCleanupURL() ?>" method="POST">
-                      <input type="hidden" name="tab" value="<?php echo $context->tab ?>">
-                      <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
-                      <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
-                      <button type="submit" class="dcf-btn small-button">Clean Up Old Events</button>
-                    </form>
+                <?php if ($context->tab == 'past' && $user->hasPermission(\UNL\UCBCN\Permission::EVENT_DELETE_ID, $context->calendar->id)): ?>
+                    <a class="dcf-btn dcf-btn-tertiary" href="<?php echo $context->calendar->getCleanupURL() ?>">Clean Up Old Events</a>
                 <?php endif; ?>
             </div>
             <div class="event-page">
@@ -112,7 +107,7 @@
                         <?php foreach($events as $event): ?>
                             <tr>
                                 <td class="center medium-hidden">
-                                    <input type="checkbox" id="select-event-<?php echo $event->id ?>" title="Select Event" class="select-event dcf-input-control" data-id="<?php echo $event->id; ?>">
+                                    <input type="checkbox" id="select-event-<?php echo $event->id ?>" title="Select Event" class="select-event dcf-input-control dcf-txt-md" data-id="<?php echo $event->id; ?>">
                                 </td>
                                 <td class="small-hidden">
                                     <?php if ($event->userCanEdit()): ?>
@@ -179,7 +174,7 @@
                                     </ul>
                                     <select
                                         id="event-action-<?php echo $event->id ?>-small"
-                                        class="<?php echo $context->tab ?>-event-tools small-block dcf-input-select  dcf-d-none"
+                                        class="<?php echo $context->tab ?>-event-tools small-block dcf-input-select dcf-d-none dcf-txt-md"
                                         title="Select an Action"
                                         data-id="<?php echo $event->id; ?>"
                                         data-recommend-url="<?php echo $event->getRecommendURL($controller->getCalendar()) ?>"
@@ -209,7 +204,7 @@
                                 <td class="small-hidden">
                                   <select
                                       id="event-action-<?php echo $event->id ?>"
-                                      class="<?php echo $context->tab ?>-event-tools dcf-input-select"
+                                      class="<?php echo $context->tab ?>-event-tools dcf-input-select dcf-txt-md"
                                       title="Select an Action"
                                       data-id="<?php echo $event->id; ?>"
                                       data-recommend-url="<?php echo $event->getRecommendURL($controller->getCalendar()) ?>"
@@ -298,17 +293,3 @@
         <?php endif; ?>
     </div>
 </div>
-
-<?php
-$page->addScriptDeclaration("
-require(['jquery'], function ($) {
-    $(document).ready(function () {
-        $(\"#cleanup-events\").submit(function (submit) {
-            if (!window.confirm('Are you sure you want to remove all old events from this tab? This may take a while.')) {
-                submit.preventDefault();
-            }
-        })
-    });
-});");
-?>
-

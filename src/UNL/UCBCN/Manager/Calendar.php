@@ -2,6 +2,7 @@
 namespace UNL\UCBCN\Manager;
 
 use UNL\UCBCN\Calendar as CalendarModel;
+use UNL\UCBCN\Calendar\Event as CalendarHasEvent;
 use UNL\UCBCN\Manager\Auth;
 use UNL\UCBCN\User;
 use UNL\UCBCN\Permission;
@@ -16,7 +17,10 @@ class Calendar {
     public $tab;
     public $page;
 
-    public function __construct($options = array()) {
+    const HAVE_PROCESSED_CALENDAR_EVENTS = 'HAVE_PROCESSED_CALENDAR_EVENTS';
+
+    public function __construct($options = array())
+    {
         $this->options = $options + $this->options;
         $this->calendar = CalendarModel::getByShortName($this->options['calendar_shortname']);
 
@@ -29,10 +33,18 @@ class Calendar {
             Controller::redirect(Controller::$url . 'welcome/');
         }
 
-        # this function will currently run every time the page is loaded. In the future, it would be better
-        # to simply decide whether an event should be archived or posted based on its dates, instead
-        # of a column that we set in the database
-        $this->archiveEvents();
+        # Process events if session check is not set (first session visit)
+        if (!isset($_SESSION[static::HAVE_PROCESSED_CALENDAR_EVENTS . '-' . $this->calendar->id])) {
+
+            # Auto purge past pending events older than 1 month from calendar
+            $this->calendar->purgePastEventsByStatus(CalendarModel::STATUS_PENDING, CalendarModel::CLEANUP_MONTH_1);
+
+            # Correctly set past event status based on time
+            $this->calendar->archiveEvents($this->calendar->getPastPostedEventIDs());
+
+            # Set session variable so we don't run the above again for this calendar this session (unless it's removed)
+            $_SESSION[static::HAVE_PROCESSED_CALENDAR_EVENTS . '-' . $this->calendar->id] = true;
+        }
 
         $allowed_tabs = array('pending', 'upcoming', 'past');
         if (array_key_exists('tab', $_GET) && in_array($_GET['tab'], $allowed_tabs)) {
@@ -82,48 +94,6 @@ class Calendar {
         }
             
         return $events;
-    }
-
-    private function archiveEvents() {
-        # find all posted (upcoming) events on the calendar
-        $events = $this->calendar->getEvents(CalendarModel::STATUS_POSTED);
-        $archived_events = $this->calendar->getEvents(CalendarModel::STATUS_ARCHIVED);
-
-        # check each event to see if it has passed
-        foreach ($events as $event) {
-            $archive = $event->isInThePast();
-
-            # update the status with the calendar
-            if ($archive) {
-                $event->updateStatusWithCalendar($this->calendar, CalendarModel::STATUS_ARCHIVED);
-            }
-        }
-
-        # check each past event to see if it is now current
-        foreach ($archived_events as $event) {
-            # we will consider it upcoming if any datetime is after today at midnight
-            $datetimes = $event->getDatetimes();
-            $move = FALSE;
-            foreach ($datetimes as $datetime) {
-                $recurring_dates = $datetime->getAllDates();
-                foreach($recurring_dates as $recurring_date) {
-                    if ($recurring_date->recurringdate >= date('Y-m-d')) {
-                        $move = TRUE;
-                        break 2;
-                    }
-                }
-
-                if ($datetime->starttime >= date('Y-m-d 00:00:00') || ($datetime->endtime != NULL && $datetime->endtime >= date('Y-m-d 00:00:00'))) {
-                    $move = TRUE;
-                    break;
-                }
-            }
-
-            # update the status with the calendar
-            if ($move) {
-                $event->updateStatusWithCalendar($this->calendar, CalendarModel::STATUS_POSTED);
-            }
-        }
     }
 
 }

@@ -54,6 +54,12 @@ class Events extends RecordList
             return $sql;
         
         } else if (array_key_exists('calendar', $this->options)) {
+            // Set sort order based on status
+            $sortOrder = 'ASC';
+            if ($this->options['status'] == \UNL\UCBCN\Calendar::STATUS_ARCHIVED) {
+                $sortOrder = 'DESC';
+            }
+
             # get all events related to the calendar through a join on calendar has event and calendar.
             $sql = '
                 SELECT event.id FROM event
@@ -66,7 +72,7 @@ class Events extends RecordList
             }
 
             $sql .= ' GROUP BY event.id ';
-            $sql .= ' ORDER BY MIN(eventdatetime.starttime) DESC';
+            $sql .= ' ORDER BY MIN(eventdatetime.starttime) ' . $sortOrder;
             $sql .= ';';
 
             return $sql;

@@ -120,6 +120,18 @@ class Event extends Record
         return $r;
     }
 
+    public static function bulkUpdateStatus($calendar_id, $event_ids, $oldStatus, $newStatus) {
+        if (!is_array($event_ids)) {
+            $event_ids = array();
+        }
+        $filtered_event_ids = array_filter($event_ids, 'is_numeric');
+        $mysqli = self::getDB();
+        $sql  = 'UPDATE ' . self::getTable() . ' SET status = ? WHERE calendar_id = ? AND status = ? AND event_id IN (' . implode(',', $filtered_event_ids) . ')';
+        $stmt = $mysqli->prepare($sql);
+        $stmt->bind_param("sis", $newStatus, $calendar_id, $oldStatus);
+        return $stmt->execute();
+    }
+
     /**
      * Determine if this event is approved (posted or archived)
      * 

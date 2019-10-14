@@ -3,6 +3,7 @@ namespace UNL\UCBCN;
 
 use UNL\UCBCN\Manager\Auth;
 use UNL\UCBCN\ActiveRecord\Record;
+use UNL\UCBCN\Event as Event;
 use UNL\UCBCN\Events as Events;
 use UNL\UCBCN\Frontend\Controller as FrontendController;
 use UNL\UCBCN\Manager\Controller as ManagerController;
@@ -61,7 +62,15 @@ class Calendar extends Record
     const STATUS_PENDING  = 'pending';
     const STATUS_POSTED   = 'posted';
     const STATUS_ARCHIVED = 'archived';
-    
+
+    const CLEANUP_YEARS_1 = '-1 Year';
+    const CLEANUP_YEARS_2 = '-2 Years';
+    const CLEANUP_YEARS_3 = '-3 Years';
+    const CLEANUP_YEARS_4 = '-4 Years';
+    const CLEANUP_YEARS_5 = '-5 Years';
+    const CLEANUP_YEARS_10 = '-10 Years';
+    const CLEANUP_MONTH_1 = '-1 Month';
+
     const EVENT_RELEASE_PREFERENCE_DEFAULT   = null;
     const EVENT_RELEASE_PREFERENCE_IMMEDIATE = 1;
     const EVENT_RELEASE_PREFERENCE_PENDING   = 0;
@@ -131,6 +140,10 @@ class Calendar extends Record
 
     public function getCleanupURL() {
         return ManagerController::$url . $this->shortname . '/cleanup/';
+    }
+
+    public function getArchiveURL() {
+        return ManagerController::$url . $this->shortname . '/archive/';
     }
 
     public function getSearchURL() {
@@ -302,6 +315,94 @@ class Calendar extends Record
         } else {
             # delete the calendar has event record
             $calendar_has_event->delete();
+        }
+    }
+
+    public function purgePastEventsByStatus($status, $pastDuration) {
+        $events = $this->getEvents($status);
+
+        $count = 0;
+        foreach ($events as $event) {
+            if ($event->isInThePast($pastDuration)) {
+                $this->removeEvent($event, $status);
+                ++$count;
+            }
+        }
+
+        return $count;
+    }
+
+    public function getPastPostedEventIDs() {
+        $sql = 'SELECT distinct event.id FROM calendar_has_event
+                INNER JOIN event on event.id = calendar_has_event.event_id
+                INNER JOIN eventdatetime on event.id = eventdatetime.event_id
+                WHERE calendar_has_event.calendar_id = ' . $this->id . ' AND
+                    calendar_has_event.status = "posted" AND
+                    eventdatetime.starttime < "' . date('Y-m-d') . ' 00:00:00" AND
+                    (eventdatetime.endtime IS NULL OR eventdatetime.endtime < "' . date('Y-m-d') . ' 00:00:00")';
+
+        $eventIDs = array();
+        $mysqli = self::getDB();
+        if ($result = $mysqli->query($sql)) {
+            while($row = $result->fetch_assoc()) {
+                $eventIDs[] = $row['id'];
+            }
+        }
+
+        return $eventIDs;
+    }
+
+    public function archiveEvents($eventIDs = NULL) {
+
+        // process only event ids if provided
+        if (is_array($eventIDs)) {
+
+            $events = array();
+            $archived_events = array();
+
+            // Lookup events and place in correct array
+            foreach($eventIDs as $id) {
+                $calenderEvent = CalendarHasEvent::getByIds($this->id, $id);
+                switch($calenderEvent->status) {
+                    case static::STATUS_POSTED:
+                        $events[] = Event::getById($calenderEvent->event_id);
+                        break;
+                    case static::STATUS_ARCHIVED:
+                        $archived_events[] = Event::getById($calenderEvent->event_id);
+                        break;
+                    default:
+                        // ignore event
+                }
+            }
+
+        } else {
+            # find all posted (upcoming) and archived (past) events on the calendar
+            $events = $this->getEvents(static::STATUS_POSTED);
+            $archived_events = $this->getEvents(static::STATUS_ARCHIVED);
+        }
+
+        # check each event to see if it has passed
+        $updateEventIDs = array();
+        foreach ($events as $event) {
+            # remember event id to update status
+            if ($event->isInThePast()) {
+                $updateEventIDs[] = $event->id;
+            }
+        }
+        if (count($updateEventIDs) > 0) {
+            CalendarHasEvent::bulkUpdateStatus($this->id, $updateEventIDs, static::STATUS_POSTED, static::STATUS_ARCHIVED);
+        }
+
+        # check each past event to see if it is now current
+        $updateEventIDs = array();
+        foreach ($archived_events as $event) {
+            # remember event id to update status
+            if (!$event->isInThePast()) {
+                $updateEventIDs[] = $event->id;
+            }
+        }
+        if (count($updateEventIDs) > 0) {
+            CalendarHasEvent::bulkUpdateStatus($this->id, $updateEventIDs, static::STATUS_ARCHIVED, static::STATUS_POSTED);
         }
     }
 
