@@ -50,7 +50,7 @@ echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
             
         </dl>
         
-        <h2>Location, Date, and Tim</h2>
+        <h2>Location, Date, and Time</h2>
         <table>
             <thead>
                 <tr>
