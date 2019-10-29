@@ -207,6 +207,24 @@
     }
 }
 
+monthwidget table.wp-calendar {
+    th {
+        vertical-align: middle !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        padding-bottom: .75em !important;
+        padding-top: .75em !important;
+    }
+
+    td {
+        vertical-align: middle !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        padding-bottom: 0 !important;
+        padding-top: 0 !important;
+    }
+}
+
 .return-today {
     .sans-serif-font();
     font-size: 0.75rem;
@@ -260,14 +278,6 @@
         &:before {
             font-size: 0.76923rem;
             font-weight: 400;
-        }
-
-        &.prev, &.next {
-            display: none;
-
-            @media @bp2 {
-                display: table-cell;
-            }
         }
 
         li {
