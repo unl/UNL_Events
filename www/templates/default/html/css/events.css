@@ -2,11 +2,6 @@
 /* CSS vars from 4.1 needed for CSS ported below */
 /* CSS from 4.1 layouts/breadcrumbs.less */
 
-table:not(.dcf-table) td, table:not(.dcf-table) th {
-  padding-left: inherit;
-  padding-right: inherit;
-}
-
 #breadcrumbs {
   font-family: 'Gotham SSm A', 'Gotham SSm B', Verdana, sans-serif;
   font-weight: 400;
@@ -492,16 +487,6 @@ table:not(.dcf-table) td, table:not(.dcf-table) th {
   font-size: 0.76923rem;
   font-weight: 400;
 }
-#month_viewcal td.prev,
-#month_viewcal td.next {
-  display: none;
-}
-@media  (min-width: 48em) {
-  #month_viewcal td.prev,
-  #month_viewcal td.next {
-    display: table-cell;
-  }
-}
 #month_viewcal td li {
   margin-bottom: 0.75em;
 }
@@ -530,6 +515,22 @@ table:not(.dcf-table) td, table:not(.dcf-table) th {
   text-transform: none;
   color: #c1c0be;
 }
+
+.monthwidget table.wp-calendar td,
+.monthwidget table.wp-calendar th {
+  vertical-align: middle !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+.monthwidget table.wp-calendar td {
+  padding-bottom: 0 !important;
+  padding-top: 0 !important;
+}
+.monthwidget table.wp-calendar th {
+  padding-bottom: .75em !important;
+  padding-top: .75em !important;
+}
+
 .day-nav {
   display: none;
 }

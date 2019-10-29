@@ -27,6 +27,9 @@ $page->titlegraphic = '<a class="dcf-txt-h5" href="/">' . $site_title . '</a>';
 $page->setParam('class', 'hide-wdn_navigation_wrapper');
 $page->affiliation = '';
 
+// Add WDN Deprecated Styles
+$page->head .= '<link rel="preload" href="https://unlcms.unl.edu/wdn/templates_5.0/css/deprecated.css" as="style" onload="this.onload=null;this.rel=\'stylesheet\'"> <noscript><link rel="stylesheet" href="https://unlcms.unl.edu/wdn/templates_5.0/css/deprecated.css"></noscript>';
+
 //css
 $page->addStyleSheet($base_frontend_url.'templates/default/html/css/events.css?v='.UNL\UCBCN\Frontend\Controller::$version);
 $page->addStyleSheet($base_frontend_url.'templates/default/html/css/manager.css?v='.UNL\UCBCN\Frontend\Controller::$version);
