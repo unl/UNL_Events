@@ -66,7 +66,7 @@
 
     <?php if ($context->calendar->id != NULL): ?>
     <a class="dcf-btn dcf-btn-secondary" href="<?php echo $context->calendar->getDeleteURL() ?>">Delete Calendar</a><br><br>
-    <a class="dcf-btn dcf-btn-secondary" href="<?php echo $context->calendar->getCleanupURL() ?>">Clean Calendar Events</a>
+    <a class="dcf-btn dcf-btn-secondary" href="<?php echo $context->calendar->getCleanupURL() ?>">Clean Up Calendar Events</a>
     <?php endif; ?>
 </form>
 
