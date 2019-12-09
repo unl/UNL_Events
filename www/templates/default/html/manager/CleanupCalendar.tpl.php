@@ -3,12 +3,12 @@ $crumbs = new stdClass;
 $crumbs->crumbs = array(
     "Events Manager" => "/manager",
     $context->calendar->name => $context->calendar->getManageURL(),
-    "Event Cleanup" => $context->calendar->getCleanupURL(),
+    "Event Clean Up" => $context->calendar->getCleanupURL(),
 );
 echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
 ?>
 
-<h2 class="wdn-brand">Event Cleanup</h2>
+<h2 class="wdn-brand">Event Clean Up</h2>
 
 <p>Use this form to permanently remove past events from your calendar. <strong>Note: This may take awhile if you are removing alot of events.</strong></p>
 
