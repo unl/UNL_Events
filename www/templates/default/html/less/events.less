@@ -11,647 +11,647 @@
 @import "eventicon-embedded.less";
 
 .event-datetimes {
-    font-size: 80%;
-    div {
-        vertical-align: middle;
-        line-height: 1.4;
+  font-size: 80%;
+  div {
+    vertical-align: middle;
+    line-height: 1.4;
+  }
+  .edt-header {
+    border-bottom: 2px solid #D5D5D2;
+  }
+  .recurring-record {
+    border-left: 4px solid #D5D5D2;
+    border-right: 4px solid #D5D5D2;
+    padding-bottom: 10px;
+    &:last-child {
+      padding-bottom: 0px;
+      margin-bottom: 10px;
     }
-    .edt-header {
-        border-bottom: 2px solid #D5D5D2;
+  }
+  .edt-record {
+    background: #D5D5D2;
+    margin-bottom: 15px;
+    margin-top: 15px;
+    padding: 5px 0;
+    &.recurring {
+      margin-left: 10px;
+      margin-right: 10px;
+      margin-bottom: 0px;
+      margin-top: 0px;
     }
-    .recurring-record {
-        border-left: 4px solid #D5D5D2;
-        border-right: 4px solid #D5D5D2;
-        padding-bottom: 10px;
-        &:last-child {
-            padding-bottom: 0px;
-            margin-bottom: 10px;
-        }
+    &.has-recurring {
+      margin-bottom: 10px;
     }
-    .edt-record {
-        background: #D5D5D2;
-        margin-bottom: 15px;
-        margin-top: 15px;
-        padding: 5px 0;
-        &.recurring {
-            margin-left: 10px;
-            margin-right: 10px;
-            margin-bottom: 0px;
-            margin-top: 0px;
-        }
-        &.has-recurring {
-            margin-bottom: 10px;
-        }
+  }
+  .dates {
+    width: 40%;
+    padding-left: 20px;
+    display: inline-block;
+  }
+  .location {
+    width: 45%;
+    display: inline-block;
+    &.with-controls {
+      width: 25%;
     }
-    .dates {
-        width: 40%;
-        padding-left: 20px;
-        display: inline-block;
+  }
+  .controls {
+    width: 30%;
+    display: inline-block;
+    text-align: right;
+    &.recurring {
+      width: 55%;
     }
-    .location {
-        width: 45%;
-        display: inline-block;
-        &.with-controls {
-            width: 25%;
-        }
+    a, button {
+      vertical-align: bottom;
     }
-    .controls {
-        width: 30%;
-        display: inline-block;
-        text-align: right;
-        &.recurring {
-            width: 55%;
-        }
-        a, button {
-            vertical-align: bottom;
-        }
-    }
-    .small {
-        font-size: 60%;
-    }
+  }
+  .small {
+    font-size: 60%;
+  }
 }
 
 .event-list {
-    background-color: #eae9e6;
-    font-size: 80%;
-    line-height: 1.4;
-    .center {
-        text-align: center;
-    }
-    tbody tr {
-        min-height: 30px;
-    }
-    ul {
-        padding-left: 0;
-        list-style-type: none;
-    }
-    li {
-        padding: 5px 0;
-    }
-    li:not(:last-child) {
-        border-bottom: 1px solid #999999;
-    }
+  background-color: #eae9e6;
+  font-size: 80%;
+  line-height: 1.4;
+  .center {
+    text-align: center;
+  }
+  tbody tr {
+    min-height: 30px;
+  }
+  ul {
+    padding-left: 0;
+    list-style-type: none;
+  }
+  li {
+    padding: 5px 0;
+  }
+  li:not(:last-child) {
+    border-bottom: 1px solid #999999;
+  }
 }
 
 .recommend-list {
-    background-color: #eae9e6;
-    .center {
-        text-align: center;
-    }
+  background-color: #eae9e6;
+  .center {
+    text-align: center;
+  }
 }
 
 #new-location-fields {
-    background-color: #D5D5D2;
-    padding: 10px 30px;
-    margin-top: 10px;
+  background-color: #D5D5D2;
+  padding: 10px 30px;
+  margin-top: 10px;
 }
 
 .wp-calendar {
 
-    caption {
-        margin: 0;
-        padding: 1.069em 1em 1em;
-        .sans-serif-font();
-        font-size: 0.923rem;
-        text-transform: uppercase;
-        color: #fff;
-        background-color: @ui09;
+  caption {
+    margin: 0;
+    padding: 1.069em 1em 1em;
+    .sans-serif-font();
+    font-size: 0.923rem;
+    text-transform: uppercase;
+    color: #fff;
+    background-color: @ui09;
 
-        @media @bp2 {
-            font-size: 0.802rem;
-        }
-
-        a {
-            color:#fff;
-        }
-
-        > :first-child {
-            float: left;
-        }
-        > :last-child {
-            float: right;
-        }
+    @media @bp2 {
+      font-size: 0.802rem;
     }
 
-    th {
-        text-transform: uppercase;
-        background-color: #eee;
-        width: 14%;
+    a {
+      color:#fff;
     }
 
-    td, th {
-        .sans-serif-font();
-        font-size: 0.923rem;
-        text-align: center;
-        border: 1px solid darken(#fff, 20%);
-
-        @media @bp2 {
-            font-size: 0.75rem;
-        }
+    > :first-child {
+      float: left;
     }
-
-    td {
-        background-color:#fff;
-        /* Previous or next month */
-        &.prev, &.prev a, &.next, &.next a {
-            font-size: 0.6923rem;
-
-            @media @bp2 {
-                font-size: 0.563rem;
-            }
-        }
+    > :last-child {
+      float: right;
     }
+  }
+
+  th {
+    text-transform: uppercase;
+    background-color: #eee;
+    width: 14%;
+  }
+
+  td, th {
+    .sans-serif-font();
+    font-size: 0.923rem;
+    text-align: center;
+    border: 1px solid darken(#fff, 20%);
+
+    @media @bp2 {
+      font-size: 0.75rem;
+    }
+  }
+
+  td {
+    background-color:#fff;
+    /* Previous or next month */
+    &.prev, &.prev a, &.next, &.next a {
+      font-size: 0.6923rem;
+
+      @media @bp2 {
+        font-size: 0.563rem;
+      }
+    }
+  }
 }
 
 .monthwidget {
-    th {
-        padding: 1.069em 1px 1em;
+  th {
+    padding: 1.069em 1px 1em;
+  }
+
+  td {
+    padding: 0;
+
+    span,
+    a {
+      display: block;
+      padding: 8px 1px;
     }
 
-    td {
-        padding: 0;
-
-        span,
-        a {
-            display: block;
-            padding: 8px 1px;
-        }
-
-        // day selection classes
-        &.active {
-            background: @ui09;
-            color: #fff;
-            a {
-                color: inherit;
-            }
-        }
-
-        &.today {
-            background: @brand;
-            color: #fff;
-            a {
-                color: inherit;
-            }
-        }
-
-        a:hover {
-            outline: 2px solid @brand;
-        }
-
-        &.prev, &.next{
-            a {
-                padding: 11px 1px;
-                background-color: #f7f7f7;
-            }
-        }
+    // day selection classes
+    &.active {
+      background: @ui09;
+      color: #fff;
+      a {
+        color: inherit;
+      }
     }
+
+    &.today {
+      background: @brand;
+      color: #fff;
+      a {
+        color: inherit;
+      }
+    }
+
+    a:hover {
+      outline: 2px solid @brand;
+    }
+
+    &.prev, &.next{
+      a {
+        padding: 11px 1px;
+        background-color: #f7f7f7;
+      }
+    }
+  }
 }
 
 .monthwidget table.wp-calendar {
-    th {
-        vertical-align: middle !important;
-        padding-left: 0 !important;
-        padding-right: 0 !important;
-        padding-bottom: .75em !important;
-        padding-top: .75em !important;
-    }
+  th {
+    vertical-align: middle !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    padding-bottom: .75em !important;
+    padding-top: .75em !important;
+  }
 
-    td {
-        vertical-align: middle !important;
-        padding-left: 0 !important;
-        padding-right: 0 !important;
-        padding-bottom: 0 !important;
-        padding-top: 0 !important;
-    }
+  td {
+    vertical-align: middle !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    padding-bottom: 0 !important;
+    padding-top: 0 !important;
+  }
 }
 
 .return-today {
-    .sans-serif-font();
-    font-size: 0.75rem;
+  .sans-serif-font();
+  font-size: 0.75rem;
 
-    @media @bp2 {
-        font-size: 0.802rem;
-    }
+  @media @bp2 {
+    font-size: 0.802rem;
+  }
 
-    &:before {
-        color: @ui05;
-        margin-right: 0.451em;
-    }
+  &:before {
+    color: @ui05;
+    margin-right: 0.451em;
+  }
 
-    .dcf-main p a& { // Needed to make the selector more specific
-        border-bottom: 0;
-    }
+  .dcf-main p a& { // Needed to make the selector more specific
+    border-bottom: 0;
+  }
 }
 
 #month_viewcal {
-    .wp-calendar {
+  .wp-calendar {
 
-        @media @under-bp2 {
-            //border: 0;
-        }
+    @media @under-bp2 {
+      //border: 0;
+    }
+  }
+
+  table {
+    line-height: 1.425;
+  }
+
+  th {
+    padding: 1.069em 1px 1em;
+  }
+
+  td {
+    text-align: left;
+    vertical-align: top;
+    padding: 1em;
+    font-size: 0.6923rem;
+
+    @media @under-bp2 {
+      border-top: 0;
+      border-right: 0;
+      border-left: 0;
     }
 
-    table {
-        line-height: 1.425;
+    @media @bp2 {
+      font-size: 0.602rem;
     }
 
-    th {
-        padding: 1.069em 1px 1em;
+    &:before {
+      font-size: 0.76923rem;
+      font-weight: 400;
     }
 
-    td {
-        text-align: left;
-        vertical-align: top;
-        padding: 1em;
-        font-size: 0.6923rem;
-
-        @media @under-bp2 {
-            border-top: 0;
-            border-right: 0;
-            border-left: 0;
-        }
-
-        @media @bp2 {
-            font-size: 0.602rem;
-        }
-
-        &:before {
-            font-size: 0.76923rem;
-            font-weight: 400;
-        }
-
-        li {
-            margin-bottom: 0.75em;
-        }
-
-        a {
-            text-decoration: none;
-            border-bottom: none;
-        }
-
-        > a {
-            font-size: 1.2307rem;
-
-            @media @bp2 {
-                font-size: 0.802rem;
-            }
-        }
-
-        ul {
-            padding:0;
-            li {
-                list-style: none;
-            }
-        }
+    li {
+      margin-bottom: 0.75em;
     }
 
-    .week-number {
-        .base-font();
-        text-transform: none;
-        color: @ui05;
+    a {
+      text-decoration: none;
+      border-bottom: none;
     }
-}
 
-.day-nav {
-    display: none;
-}
+    > a {
+      font-size: 1.2307rem;
 
-#subscribe {
-    display: flex;
-    align-items: center;
-    flex-flow: row wrap;
-    margin: 1.777em 0;
-    padding-top: 0.75em;
-    border-top: 1px solid @ui04;
-
-    span.title {
-        float: left;
-        width: 50%;
-        padding-right: 1em;
-        .sans-serif-font();
-        font-size: 0.75em;
-        text-transform: uppercase;
+      @media @bp2 {
+        font-size: 0.802rem;
+      }
     }
 
     ul {
-        margin: 0;
-        padding: 0;
+      padding:0;
+      li {
         list-style: none;
-        .sans-serif-font();
-
-        li {
-            display: inline;
-            margin-right: 1em;
-
-            a {
-                border-bottom: 0;
-
-                &:before {
-                    color: @ui05;
-                }
-            }
-        }
+      }
     }
+  }
+
+  .week-number {
+    .base-font();
+    text-transform: none;
+    color: @ui05;
+  }
+}
+
+.day-nav {
+  display: none;
+}
+
+#subscribe {
+  display: flex;
+  align-items: center;
+  flex-flow: row wrap;
+  margin: 1.777em 0;
+  padding-top: 0.75em;
+  border-top: 1px solid @ui04;
+
+  span.title {
+    float: left;
+    width: 50%;
+    padding-right: 1em;
+    .sans-serif-font();
+    font-size: 0.75em;
+    text-transform: uppercase;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    .sans-serif-font();
+
+    li {
+      display: inline;
+      margin-right: 1em;
+
+      a {
+        border-bottom: 0;
+
+        &:before {
+          color: @ui05;
+        }
+      }
+    }
+  }
 }
 
 #dcf-main {
 
-    .band-nav {
-        background-color: @ui02;
+  .band-nav {
+    background-color: @ui02;
+    .sans-serif-font();
+
+    .events-nav {
+      display: flex;
+      flex-flow: row wrap;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid @ui04;
+    }
+
+    ul {
+      text-transform: uppercase;
+      margin: 0;
+      padding: 0 0 0.75em 0;
+      font-size: .75em;
+
+      li {
+        display: inline;
+        margin-right: 0.451em;
+      }
+    }
+
+    a {
+      border-bottom: 0;
+      text-decoration: none;
+    }
+
+    .dcf-wrapper {
+      padding-top: 1em;
+      padding-bottom: 0.451em;
+    }
+
+    .submit-search {
+      display: flex;
+      flex-flow: row wrap;
+      align-items: center;
+      justify-content: space-between;
+      text-align: left;
+
+      @media @bp960 {
+        order: 2;
+        text-align: right;
+      }
+    }
+
+    #frontend_login {
+      flex-shrink: 0;
+      .sans-serif-font();
+      text-transform: uppercase;
+      margin-right: 1.77em;
+      padding-bottom: 0.75em;
+      font-size: .75em;
+
+      span:before {
+        color: @ui05;
+        margin-left: 0;
+      }
+    }
+
+    #event_search {
+      display: flex;
+      align-items: center;
+      flex-basis: 23.68em;
+      flex-grow: 1;
+      font-size: .75em;
+      margin: 0;
+      padding: 0 0 0.75em 0;
+      width: 100%;
+
+      .dcf-input-group {
+        margin-top: 0;
+      }
+
+      label {
+        margin-right: 0.75em;
+        margin-top: 0;
+        text-transform: uppercase;
+        font-size: 1em;
+      }
+    }
+  }
+
+  .band-results {
+    background-color: @ui02;
+
+    .dcf-wrapper {
+      padding-top: 1em;
+    }
+
+    &.view-unl_ucbcn_frontend_search {
+
+      a.permalink {
+        color: @ui09;
+      }
+    }
+
+    .section-heading {
+      width: 100%;
+      position: relative;
+      text-transform: uppercase;
+      color: #fff;
+      background-color: mix(@ui09, @page-background, 95%);
+
+      h1, h2 {
         .sans-serif-font();
+        margin: 0 0 1rem;
+        font-size: 0.923rem;
+        padding: 1.069em 23px 1em;
+        padding: 1.069em 1.425rem 1em;
+        color: #fff;
+      }
 
-        .events-nav {
-            display: flex;
-            flex-flow: row wrap;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 1px solid @ui04;
+      @media @bp2 {
+        h1, h2 {
+          font-size: 0.802rem;
         }
+      }
 
-        ul {
-            text-transform: uppercase;
-            margin: 0;
-            padding: 0 0 0.75em 0;
-            font-size: .75em;
-
-            li {
-                display: inline;
-                margin-right: 0.451em;
-            }
-        }
+      .links {
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin-top: .5em;
+        margin-right: 1em;
 
         a {
-            border-bottom: 0;
-            text-decoration: none;
+          color: #fff;
+          margin-left: 0.451em;
         }
 
-        .dcf-wrapper {
-            padding-top: 1em;
-            padding-bottom: 0.451em;
+        @media @bp2 {
+          margin-top: .25em;
         }
-
-        .submit-search {
-            display: flex;
-            flex-flow: row wrap;
-            align-items: center;
-            justify-content: space-between;
-            text-align: left;
-
-            @media @bp960 {
-                order: 2;
-                text-align: right;
-            }
-        }
-
-        #frontend_login {
-            flex-shrink: 0;
-            .sans-serif-font();
-            text-transform: uppercase;
-            margin-right: 1.77em;
-            padding-bottom: 0.75em;
-            font-size: .75em;
-
-            span:before {
-                color: @ui05;
-                margin-left: 0;
-            }
-        }
-
-        #event_search {
-            display: flex;
-            align-items: center;
-            flex-basis: 23.68em;
-            flex-grow: 1;
-            font-size: .75em;
-            margin: 0;
-            padding: 0 0 0.75em 0;
-            width: 100%;
-
-            .dcf-input-group {
-                margin-top: 0;
-            }
-
-            label {
-                margin-right: 0.75em;
-                margin-top: 0;
-                text-transform: uppercase;
-                font-size: 1em;
-            }
-        }
+      }
     }
 
-    .band-results {
-        background-color: @ui02;
+    .year-nav {
+      text-align: center;
+      padding-bottom: 0.75em;
 
-        .dcf-wrapper {
-            padding-top: 1em;
+      a {
+        .sans-serif-font();
+        font-size: 0.923rem;
+        margin-top: 1.333em;
+
+        @media @bp2 {
+          font-size: 0.802rem;
         }
 
-        &.view-unl_ucbcn_frontend_search {
+        &:first-child {
+          float: left;
 
-            a.permalink {
-                color: @ui09;
+          span[class^='eventicon-'] {
+            &:before {
+              padding-right: 0.254em;
             }
+          }
         }
 
-        .section-heading {
-            width: 100%;
-            position: relative;
-            text-transform: uppercase;
-            color: #fff;
-            background-color: mix(@ui09, @page-background, 95%);
+        &:last-child {
+          float: right;
 
-            h1, h2 {
-                .sans-serif-font();
-                margin: 0 0 1rem;
-                font-size: 0.923rem;
-                padding: 1.069em 23px 1em;
-                padding: 1.069em 1.425rem 1em;
-                color: #fff;
+          span[class^='eventicon-'] {
+            &:before {
+              padding-left: 0.254em;
             }
-
-            @media @bp2 {
-                h1, h2 {
-                    font-size: 0.802rem;
-                }
-            }
-
-            .links {
-                position: absolute;
-                top: 0;
-                right: 0;
-                margin-top: .5em;
-                margin-right: 1em;
-
-                a {
-                    color: #fff;
-                    margin-left: 0.451em;
-                }
-
-                @media @bp2 {
-                    margin-top: .25em;
-                }
-            }
+          }
         }
+      }
 
-        .year-nav {
-            text-align: center;
-            padding-bottom: 0.75em;
-
-            a {
-                .sans-serif-font();
-                font-size: 0.923rem;
-                margin-top: 1.333em;
-
-                @media @bp2 {
-                    font-size: 0.802rem;
-                }
-
-                &:first-child {
-                    float: left;
-
-                    span[class^='eventicon-'] {
-                        &:before {
-                            padding-right: 0.254em;
-                        }
-                    }
-                }
-
-                &:last-child {
-                    float: right;
-
-                    span[class^='eventicon-'] {
-                        &:before {
-                            padding-left: 0.254em;
-                        }
-                    }
-                }
-            }
-
-            h1 {
-                display: inline-block;
-                margin-top: 0;
-            }
-        }
-
-        .vcalendar {
-            .vevent {
-                margin-bottom: 1em;
-                padding: 23px 1.777em;
-                padding: 1.425rem 1.777em;
-                border-top: 5px solid @ui05;
-                background-color: fadeout(#fff, 33%);
-                box-shadow: 0 0 0 1px fadeout(@ui14, 90%);
-                transition: all 0.2s ease-out;
-
-                @media @bp2 {
-                    padding: 30px 2.369em;
-                    padding: 1.899rem 2.369em;
-
-                }
-
-                &:hover {
-                    border-top: 5px solid @scarlet;
-                    background-color: #fff;
-                    box-shadow: 0 0 1px 1px fadeout(@ui14, 80%);
-                }
-
-                .date-wrapper,
-                .time-wrapper,
-                .location,
-                .contact {
-                    display: block;
-                    .sans-serif-font();
-                    font-size: 0.75rem;
-
-                    @media @bp2 {
-                        font-size: 0.802rem;
-                    }
-
-                    &:before {
-                        color: @ui05;
-                    }
-                }
-
-                .location div {
-                    padding-left: 1.777em;
-                }
-
-                .description {
-                    margin: 1em 0 0;
-                    padding-top: 1em;
-                    border-top: 1px solid @ui04;
-                }
-            }
-        }
-
-        .year_cal {
-
-            .wdn-col {
-                @media @bp1 {
-                    &:nth-child(2n+1) {
-                        clear: left;
-                    }
-                }
-
-                @media @bp2 {
-                    &:nth-child(2n+1) {
-                        clear: none;
-                    }
-
-                    &:nth-child(3n+1) {
-                        clear: left;
-                    }
-                }
-            }
-
-            .monthwidget {
-                margin-bottom: 1.899em;
-
-                caption {
-                    .next, .prev {
-                        display: none;
-                    }
-                }
-            }
-        }
-
-        .event-heading {
-            margin-top: .254em;
-            font-size: 2.1538462rem;
-        }
+      h1 {
+          display: inline-block;
+          margin-top: 0;
+      }
     }
+
+    .vcalendar {
+      .vevent {
+        margin-bottom: 1em;
+        padding: 23px 1.777em;
+        padding: 1.425rem 1.777em;
+        border-top: 5px solid @ui05;
+        background-color: fadeout(#fff, 33%);
+        box-shadow: 0 0 0 1px fadeout(@ui14, 90%);
+        transition: all 0.2s ease-out;
+
+        @media @bp2 {
+          padding: 30px 2.369em;
+          padding: 1.899rem 2.369em;
+
+        }
+
+        &:hover {
+          border-top: 5px solid @scarlet;
+          background-color: #fff;
+          box-shadow: 0 0 1px 1px fadeout(@ui14, 80%);
+        }
+
+        .date-wrapper,
+        .time-wrapper,
+        .location,
+        .contact {
+          display: block;
+          .sans-serif-font();
+          font-size: 0.75rem;
+
+          @media @bp2 {
+            font-size: 0.802rem;
+          }
+
+          &:before {
+            color: @ui05;
+          }
+        }
+
+        .location div {
+          padding-left: 1.777em;
+        }
+
+        .description {
+          margin: 1em 0 0;
+          padding-top: 1em;
+          border-top: 1px solid @ui04;
+        }
+      }
+    }
+
+    .year_cal {
+
+      .wdn-col {
+        @media @bp1 {
+          &:nth-child(2n+1) {
+            clear: left;
+          }
+        }
+
+        @media @bp2 {
+          &:nth-child(2n+1) {
+            clear: none;
+          }
+
+          &:nth-child(3n+1) {
+            clear: left;
+          }
+        }
+      }
+
+      .monthwidget {
+        margin-bottom: 1.899em;
+
+        caption {
+          .next, .prev {
+            display: none;
+          }
+        }
+      }
+    }
+
+    .event-heading {
+      margin-top: .254em;
+      font-size: 2.1538462rem;
+    }
+  }
 }
 .break-word {
-    word-break: break-word;
+  word-break: break-word;
 }
 .promo-bar-container {
-    padding-bottom: 1em;
+  padding-bottom: 1em;
 }
 .clearfix {
-    clear: both;
+  clear: both;
 }
 .promo-box-image-barrier {
-    padding: 0.5em;
-    border: 1px solid #CCC;
+  padding: 0.5em;
+  border: 1px solid #CCC;
 }
 .promo-box-event-listing {
-    border-bottom: 1px solid #CCC;
-    padding-bottom: .354em;
+  border-bottom: 1px solid #CCC;
+  padding-bottom: .354em;
 }
 .sans-serif {
-    .sans-serif-font();
+  .sans-serif-font();
 }
 @media @bp2 {
-    .promo-box {
-        text-align: center;
-    }
+  .promo-box {
+    text-align: center;
+  }
 
-    .promo-non-image-link {
-        text-align: right;
-    }
+  .promo-non-image-link {
+    text-align: right;
+  }
 
-    .promo-bar-container {
-        padding-bottom: 0;
-    }
+  .promo-bar-container {
+    padding-bottom: 0;
+  }
 }
