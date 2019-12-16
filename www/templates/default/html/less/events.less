@@ -10,101 +10,134 @@
 
 @import "eventicon-embedded.less";
 
+
 .event-datetimes {
   font-size: 80%;
+
   div {
     vertical-align: middle;
     line-height: 1.4;
   }
+
   .edt-header {
     border-bottom: 2px solid #D5D5D2;
   }
+
   .recurring-record {
     border-left: 4px solid #D5D5D2;
     border-right: 4px solid #D5D5D2;
     padding-bottom: 10px;
+
     &:last-child {
       padding-bottom: 0px;
       margin-bottom: 10px;
     }
+
   }
+
   .edt-record {
     background: #D5D5D2;
     margin-bottom: 15px;
     margin-top: 15px;
     padding: 5px 0;
+
     &.recurring {
       margin-left: 10px;
       margin-right: 10px;
       margin-bottom: 0px;
       margin-top: 0px;
     }
+
     &.has-recurring {
       margin-bottom: 10px;
     }
+
   }
+
   .dates {
     width: 40%;
     padding-left: 20px;
     display: inline-block;
   }
+
   .location {
     width: 45%;
     display: inline-block;
+
     &.with-controls {
       width: 25%;
     }
+
   }
+
   .controls {
     width: 30%;
     display: inline-block;
     text-align: right;
+
     &.recurring {
       width: 55%;
     }
-    a, button {
+
+    a,
+    button {
       vertical-align: bottom;
     }
+
   }
+
   .small {
     font-size: 60%;
   }
+
 }
+
 
 .event-list {
   background-color: #eae9e6;
   font-size: 80%;
   line-height: 1.4;
+
   .center {
     text-align: center;
   }
+
   tbody tr {
     min-height: 30px;
   }
+
   ul {
     padding-left: 0;
     list-style-type: none;
   }
+
   li {
     padding: 5px 0;
   }
+
   li:not(:last-child) {
     border-bottom: 1px solid #999999;
   }
+
 }
+
 
 .recommend-list {
   background-color: #eae9e6;
+
   .center {
     text-align: center;
   }
+
 }
+
 
 #new-location-fields {
   background-color: #D5D5D2;
   padding: 10px 30px;
   margin-top: 10px;
 }
+
 
 .wp-calendar {
 
@@ -128,9 +161,11 @@
     > :first-child {
       float: left;
     }
+
     > :last-child {
       float: right;
     }
+
   }
 
   th {
@@ -139,7 +174,8 @@
     width: 14%;
   }
 
-  td, th {
+  td,
+  th {
     .sans-serif-font();
     font-size: 0.923rem;
     text-align: center;
@@ -148,22 +184,32 @@
     @media @bp2 {
       font-size: 0.75rem;
     }
+
   }
 
   td {
     background-color:#fff;
     /* Previous or next month */
-    &.prev, &.prev a, &.next, &.next a {
+
+    &.prev,
+    &.prev a,
+    &.next,
+    &.next a {
       font-size: 0.6923rem;
 
       @media @bp2 {
         font-size: 0.563rem;
       }
+
     }
+
   }
+
 }
 
+
 .monthwidget {
+
   th {
     padding: 1.069em 1px 1em;
   }
@@ -181,33 +227,44 @@
     &.active {
       background: @ui09;
       color: #fff;
+
       a {
         color: inherit;
       }
+
     }
 
     &.today {
       background: @brand;
       color: #fff;
+
       a {
         color: inherit;
       }
+
     }
 
     a:hover {
       outline: 2px solid @brand;
     }
 
-    &.prev, &.next{
+    &.prev,
+    &.next{
+
       a {
         padding: 11px 1px;
         background-color: #f7f7f7;
       }
+
     }
+
   }
+
 }
 
+
 .monthwidget table.wp-calendar {
+
   th {
     vertical-align: middle !important;
     padding-left: 0 !important;
@@ -223,7 +280,9 @@
     padding-bottom: 0 !important;
     padding-top: 0 !important;
   }
+
 }
+
 
 .return-today {
   .sans-serif-font();
@@ -241,14 +300,18 @@
   .dcf-main p a& { // Needed to make the selector more specific
     border-bottom: 0;
   }
+
 }
 
+
 #month_viewcal {
+
   .wp-calendar {
 
     @media @under-bp2 {
       //border: 0;
     }
+
   }
 
   table {
@@ -295,14 +358,18 @@
       @media @bp2 {
         font-size: 0.802rem;
       }
+
     }
 
     ul {
       padding:0;
+
       li {
         list-style: none;
       }
+
     }
+
   }
 
   .week-number {
@@ -310,11 +377,14 @@
     text-transform: none;
     color: @ui05;
   }
+
 }
+
 
 .day-nav {
   display: none;
 }
+
 
 #subscribe {
   display: flex;
@@ -349,10 +419,15 @@
         &:before {
           color: @ui05;
         }
+
       }
+
     }
+
   }
+
 }
+
 
 #dcf-main {
 
@@ -378,6 +453,7 @@
         display: inline;
         margin-right: 0.451em;
       }
+
     }
 
     a {
@@ -401,6 +477,7 @@
         order: 2;
         text-align: right;
       }
+
     }
 
     #frontend_login {
@@ -415,6 +492,7 @@
         color: @ui05;
         margin-left: 0;
       }
+
     }
 
     #event_search {
@@ -437,7 +515,9 @@
         text-transform: uppercase;
         font-size: 1em;
       }
+
     }
+
   }
 
   .band-results {
@@ -452,6 +532,7 @@
       a.permalink {
         color: @ui09;
       }
+
     }
 
     .section-heading {
@@ -461,7 +542,8 @@
       color: #fff;
       background-color: mix(@ui09, @page-background, 95%);
 
-      h1, h2 {
+      h1,
+      h2 {
         .sans-serif-font();
         margin: 0 0 1rem;
         font-size: 0.923rem;
@@ -471,9 +553,11 @@
       }
 
       @media @bp2 {
-        h1, h2 {
+        h1,
+        h2 {
           font-size: 0.802rem;
         }
+
       }
 
       .links {
@@ -491,7 +575,9 @@
         @media @bp2 {
           margin-top: .25em;
         }
+
       }
+
     }
 
     .year-nav {
@@ -511,30 +597,39 @@
           float: left;
 
           span[class^='eventicon-'] {
+
             &:before {
               padding-right: 0.254em;
             }
+
           }
+
         }
 
         &:last-child {
           float: right;
 
           span[class^='eventicon-'] {
+
             &:before {
               padding-left: 0.254em;
             }
+
           }
+
         }
+
       }
 
       h1 {
           display: inline-block;
           margin-top: 0;
       }
+
     }
 
     .vcalendar {
+
       .vevent {
         margin-bottom: 1em;
         padding: 23px 1.777em;
@@ -571,6 +666,7 @@
           &:before {
             color: @ui05;
           }
+
         }
 
         .location div {
@@ -582,19 +678,25 @@
           padding-top: 1em;
           border-top: 1px solid @ui04;
         }
+
       }
+
     }
 
     .year_cal {
 
       .wdn-col {
+
         @media @bp1 {
+
           &:nth-child(2n+1) {
             clear: left;
           }
+
         }
 
         @media @bp2 {
+
           &:nth-child(2n+1) {
             clear: none;
           }
@@ -602,47 +704,71 @@
           &:nth-child(3n+1) {
             clear: left;
           }
+
         }
+
       }
 
       .monthwidget {
         margin-bottom: 1.899em;
 
         caption {
-          .next, .prev {
+
+          .next,
+          .prev {
             display: none;
           }
+
         }
+
       }
+
     }
 
     .event-heading {
       margin-top: .254em;
       font-size: 2.1538462rem;
     }
+
   }
+
 }
+
+
 .break-word {
   word-break: break-word;
 }
+
+
 .promo-bar-container {
   padding-bottom: 1em;
 }
+
+
 .clearfix {
   clear: both;
 }
+
+
 .promo-box-image-barrier {
   padding: 0.5em;
   border: 1px solid #CCC;
 }
+
+
 .promo-box-event-listing {
   border-bottom: 1px solid #CCC;
   padding-bottom: .354em;
 }
+
+
 .sans-serif {
   .sans-serif-font();
 }
+
+
 @media @bp2 {
+
   .promo-box {
     text-align: center;
   }
@@ -654,4 +780,5 @@
   .promo-bar-container {
     padding-bottom: 0;
   }
+
 }
