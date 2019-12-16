@@ -15,8 +15,8 @@
   font-size: 80%;
 
   div {
-    vertical-align: middle;
     line-height: 1.4;
+    vertical-align: middle;
   }
 
   .edt-header {
@@ -29,8 +29,8 @@
     padding-bottom: 10px;
 
     &:last-child {
-      padding-bottom: 0px;
       margin-bottom: 10px;
+      padding-bottom: 0px;
     }
 
   }
@@ -42,9 +42,9 @@
     padding: 5px 0;
 
     &.recurring {
+      margin-bottom: 0px;
       margin-left: 10px;
       margin-right: 10px;
-      margin-bottom: 0px;
       margin-top: 0px;
     }
 
@@ -55,14 +55,14 @@
   }
 
   .dates {
-    width: 40%;
-    padding-left: 20px;
     display: inline-block;
+    padding-left: 20px;
+    width: 40%;
   }
 
   .location {
-    width: 45%;
     display: inline-block;
+    width: 45%;
 
     &.with-controls {
       width: 25%;
@@ -71,9 +71,9 @@
   }
 
   .controls {
-    width: 30%;
     display: inline-block;
     text-align: right;
+    width: 30%;
 
     &.recurring {
       width: 55%;
@@ -107,8 +107,8 @@
   }
 
   ul {
-    padding-left: 0;
     list-style-type: none;
+    padding-left: 0;
   }
 
   li {
@@ -134,21 +134,21 @@
 
 #new-location-fields {
   background-color: #D5D5D2;
-  padding: 10px 30px;
   margin-top: 10px;
+  padding: 10px 30px;
 }
 
 
 .wp-calendar {
 
   caption {
-    margin: 0;
-    padding: 1.069em 1em 1em;
+    background-color: @ui09;
+    color: #fff;
     .sans-serif-font();
     font-size: 0.923rem;
+    margin: 0;
+    padding: 1.069em 1em 1em;
     text-transform: uppercase;
-    color: #fff;
-    background-color: @ui09;
 
     @media @bp2 {
       font-size: 0.802rem;
@@ -169,17 +169,17 @@
   }
 
   th {
-    text-transform: uppercase;
     background-color: #eee;
+    text-transform: uppercase;
     width: 14%;
   }
 
   td,
   th {
+    border: 1px solid darken(#fff, 20%);
     .sans-serif-font();
     font-size: 0.923rem;
     text-align: center;
-    border: 1px solid darken(#fff, 20%);
 
     @media @bp2 {
       font-size: 0.75rem;
@@ -252,8 +252,8 @@
     &.next{
 
       a {
-        padding: 11px 1px;
         background-color: #f7f7f7;
+        padding: 11px 1px;
       }
 
     }
@@ -266,19 +266,19 @@
 .monthwidget table.wp-calendar {
 
   th {
-    vertical-align: middle !important;
+    padding-bottom: .75em !important;
     padding-left: 0 !important;
     padding-right: 0 !important;
-    padding-bottom: .75em !important;
     padding-top: .75em !important;
+    vertical-align: middle !important;
   }
 
   td {
-    vertical-align: middle !important;
+    padding-bottom: 0 !important;
     padding-left: 0 !important;
     padding-right: 0 !important;
-    padding-bottom: 0 !important;
     padding-top: 0 !important;
+    vertical-align: middle !important;
   }
 
 }
@@ -323,15 +323,15 @@
   }
 
   td {
+    font-size: 0.6923rem;
+    padding: 1em;
     text-align: left;
     vertical-align: top;
-    padding: 1em;
-    font-size: 0.6923rem;
 
     @media @under-bp2 {
-      border-top: 0;
-      border-right: 0;
       border-left: 0;
+      border-right: 0;
+      border-top: 0;
     }
 
     @media @bp2 {
@@ -348,8 +348,8 @@
     }
 
     a {
-      text-decoration: none;
       border-bottom: none;
+      text-decoration: none;
     }
 
     > a {
@@ -373,9 +373,9 @@
   }
 
   .week-number {
+    color: @ui05;
     .base-font();
     text-transform: none;
-    color: @ui05;
   }
 
 }
@@ -387,27 +387,27 @@
 
 
 #subscribe {
-  display: flex;
   align-items: center;
+  border-top: 1px solid @ui04;
+  display: flex;
   flex-flow: row wrap;
   margin: 1.777em 0;
   padding-top: 0.75em;
-  border-top: 1px solid @ui04;
 
   span.title {
     float: left;
-    width: 50%;
-    padding-right: 1em;
     .sans-serif-font();
     font-size: 0.75em;
+    padding-right: 1em;
     text-transform: uppercase;
+    width: 50%;
   }
 
   ul {
+    .sans-serif-font();
+    list-style: none;
     margin: 0;
     padding: 0;
-    list-style: none;
-    .sans-serif-font();
 
     li {
       display: inline;
@@ -436,18 +436,18 @@
     .sans-serif-font();
 
     .events-nav {
+      align-items: center;
+      border-bottom: 1px solid @ui04;
       display: flex;
       flex-flow: row wrap;
-      align-items: center;
       justify-content: space-between;
-      border-bottom: 1px solid @ui04;
     }
 
     ul {
-      text-transform: uppercase;
+      font-size: .75em;
       margin: 0;
       padding: 0 0 0.75em 0;
-      font-size: .75em;
+      text-transform: uppercase;
 
       li {
         display: inline;
@@ -462,14 +462,14 @@
     }
 
     .dcf-wrapper {
-      padding-top: 1em;
       padding-bottom: 0.451em;
+      padding-top: 1em;
     }
 
     .submit-search {
+      align-items: center;
       display: flex;
       flex-flow: row wrap;
-      align-items: center;
       justify-content: space-between;
       text-align: left;
 
@@ -483,10 +483,10 @@
     #frontend_login {
       flex-shrink: 0;
       .sans-serif-font();
-      text-transform: uppercase;
+      font-size: .75em;
       margin-right: 1.77em;
       padding-bottom: 0.75em;
-      font-size: .75em;
+      text-transform: uppercase;
 
       span::before {
         color: @ui05;
@@ -496,8 +496,8 @@
     }
 
     #event_search {
-      display: flex;
       align-items: center;
+      display: flex;
       flex-basis: 23.68em;
       flex-grow: 1;
       font-size: .75em;
@@ -510,10 +510,10 @@
       }
 
       label {
+        font-size: 1em;
         margin-right: 0.75em;
         margin-top: 0;
         text-transform: uppercase;
-        font-size: 1em;
       }
 
     }
@@ -536,20 +536,20 @@
     }
 
     .section-heading {
-      width: 100%;
+      background-color: mix(@ui09, @page-background, 95%);
+      color: #fff;
       position: relative;
       text-transform: uppercase;
-      color: #fff;
-      background-color: mix(@ui09, @page-background, 95%);
+      width: 100%;
 
       h1,
       h2 {
+        color: #fff;
         .sans-serif-font();
-        margin: 0 0 1rem;
         font-size: 0.923rem;
+        margin: 0 0 1rem;
         padding: 1.069em 23px 1em;
         padding: 1.069em 1.425rem 1em;
-        color: #fff;
       }
 
       @media @bp2 {
@@ -561,11 +561,11 @@
       }
 
       .links {
-        position: absolute;
-        top: 0;
-        right: 0;
         margin-top: .5em;
         margin-right: 1em;
+        position: absolute;
+        right: 0;
+        top: 0;
 
         a {
           color: #fff;
@@ -581,8 +581,8 @@
     }
 
     .year-nav {
-      text-align: center;
       padding-bottom: 0.75em;
+      text-align: center;
 
       a {
         .sans-serif-font();
@@ -631,12 +631,12 @@
     .vcalendar {
 
       .vevent {
+        background-color: fadeout(#fff, 33%);
+        border-top: 5px solid @ui05;
+        box-shadow: 0 0 0 1px fadeout(@ui14, 90%);
         margin-bottom: 1em;
         padding: 23px 1.777em;
         padding: 1.425rem 1.777em;
-        border-top: 5px solid @ui05;
-        background-color: fadeout(#fff, 33%);
-        box-shadow: 0 0 0 1px fadeout(@ui14, 90%);
         transition: all 0.2s ease-out;
 
         @media @bp2 {
@@ -646,8 +646,8 @@
         }
 
         &:hover {
-          border-top: 5px solid @scarlet;
           background-color: #fff;
+          border-top: 5px solid @scarlet;
           box-shadow: 0 0 1px 1px fadeout(@ui14, 80%);
         }
 
@@ -674,9 +674,9 @@
         }
 
         .description {
+          border-top: 1px solid @ui04;
           margin: 1em 0 0;
           padding-top: 1em;
-          border-top: 1px solid @ui04;
         }
 
       }
@@ -726,8 +726,8 @@
     }
 
     .event-heading {
-      margin-top: .254em;
       font-size: 2.1538462rem;
+      margin-top: .254em;
     }
 
   }
@@ -751,8 +751,8 @@
 
 
 .promo-box-image-barrier {
-  padding: 0.5em;
   border: 1px solid #CCC;
+  padding: 0.5em;
 }
 
 
