@@ -139,148 +139,48 @@
 }
 
 
-.wp-calendar {
-
-  caption {
-    background-color: @ui09;
-    color: #fff;
-    .sans-serif-font();
-    font-size: 0.923rem;
-    margin: 0;
-    padding: 1.069em 1em 1em;
-    text-transform: uppercase;
-
-    @media @bp2 {
-      font-size: 0.802rem;
-    }
-
-    a {
-      color:#fff;
-    }
-
-    > :first-child {
-      float: left;
-    }
-
-    > :last-child {
-      float: right;
-    }
-
-  }
-
-  th {
-    background-color: #eee;
-    text-transform: uppercase;
+.wp-calendar th {
     width: 14%;
-  }
-
-  td,
-  th {
-    border: 1px solid darken(#fff, 20%);
-    .sans-serif-font();
-    font-size: 0.923rem;
-    text-align: center;
-
-    @media @bp2 {
-      font-size: 0.75rem;
-    }
-
-  }
-
-  td {
-    background-color: #fff;
-    /* Previous or next month */
-
-    &.prev,
-    &.prev a,
-    &.next,
-    &.next a {
-      font-size: 0.6923rem;
-
-      @media @bp2 {
-        font-size: 0.563rem;
-      }
-
-    }
-
-  }
-
 }
 
 
-.monthwidget {
-
-  th {
-    padding: 1.069em 1px 1em;
-  }
-
-  td {
-    padding: 0;
-
-    span,
-    a {
-      display: block;
-      padding: 8px 1px;
-    }
-
-    // day selection classes
-    &.active {
-      background: @ui09;
-      color: #fff;
-
-      a {
-        color: inherit;
-      }
-
-    }
-
-    &.today {
-      background: @brand;
-      color: #fff;
-
-      a {
-        color: inherit;
-      }
-
-    }
-
-    a:hover {
-      outline: 2px solid @brand;
-    }
-
-    &.prev,
-    &.next{
-
-      a {
-        background-color: #f7f7f7;
-        padding: 11px 1px;
-      }
-
-    }
-
-  }
-
+.monthwidget td span,
+.monthwidget td a {
+  display: block;
+  padding: 8px 1px;
 }
 
 
-.monthwidget table.wp-calendar {
+// day selection classes
+.monthwidget td.active {
+  background: #242423;
+  color: #fefdfa;
+}
 
-  th {
-    padding-bottom: .75em !important;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-    padding-top: .75em !important;
-    vertical-align: middle !important;
-  }
 
-  td {
-    padding-bottom: 0 !important;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-    padding-top: 0 !important;
-    vertical-align: middle !important;
-  }
+.monthwidget td.active a {
+  color: inherit;
+}
 
+.monthwidget td.today {
+  background: #d00000;
+  color: #fefdfa;
+}
+
+
+.monthwidget td.today a {
+  color: inherit;
+}
+
+
+.monthwidget td a:hover {
+  outline: 2px solid @brand;
+}
+
+
+.monthwidget td.prev a,
+.monthwidget td.next a {
+  padding: 11px 1px;
 }
 
 
@@ -304,78 +204,51 @@
 }
 
 
-#month_viewcal {
+#month_viewcal td {
+  padding: 1em;
+  text-align: left;
+  vertical-align: top;
 
-  .wp-calendar {
-
-    @media @under-bp2 {
-      //border: 0;
-    }
-
+  @media @under-bp2 {
+    border-left: 0;
+    border-right: 0;
+    border-top: 0;
   }
 
-  table {
-    line-height: 1.425;
+  &::before {
+    font-size: .75rem;
+    font-weight: 400;
   }
 
-  th {
-    padding: 1.069em 1px 1em;
+  a {
+    text-decoration: none;
   }
 
-  td {
-    font-size: 0.6923rem;
-    padding: 1em;
-    text-align: left;
-    vertical-align: top;
+  a:hover {
+    text-decoration: underline;
+  }
 
-    @media @under-bp2 {
-      border-left: 0;
-      border-right: 0;
-      border-top: 0;
-    }
+  > a {
+    font-size: 1.33rem;
 
     @media @bp2 {
-      font-size: 0.602rem;
-    }
-
-    &::before {
-      font-size: 0.76923rem;
-      font-weight: 400;
-    }
-
-    li {
-      margin-bottom: 0.75em;
-    }
-
-    a {
-      border-bottom: none;
-      text-decoration: none;
-    }
-
-    > a {
-      font-size: 1.2307rem;
-
-      @media @bp2 {
-        font-size: 0.802rem;
-      }
-
-    }
-
-    ul {
-      padding:0;
-
-      li {
-        list-style: none;
-      }
-
+      font-size: .84rem;
     }
 
   }
 
-  .week-number {
-    color: @ui05;
-    .base-font();
-    text-transform: none;
+  ul {
+    font-size: .75em;
+    margin: .75em 0 0;
+    padding: 0;
+  }
+
+  li {
+    list-style: none;
+  }
+
+  li:not(:last-child) {
+    margin-bottom: .75em;
   }
 
 }
@@ -579,54 +452,6 @@
 
     }
 
-    .year-nav {
-      padding-bottom: 0.75em;
-      text-align: center;
-
-      a {
-        .sans-serif-font();
-        font-size: 0.923rem;
-        margin-top: 1.333em;
-
-        @media @bp2 {
-          font-size: 0.802rem;
-        }
-
-        &:first-child {
-          float: left;
-
-          span[class^='eventicon-'] {
-
-            &::before {
-              padding-right: 0.254em;
-            }
-
-          }
-
-        }
-
-        &:last-child {
-          float: right;
-
-          span[class^='eventicon-'] {
-
-            &::before {
-              padding-left: 0.254em;
-            }
-
-          }
-
-        }
-
-      }
-
-      h1 {
-        display: inline-block;
-        margin-top: 0;
-      }
-
-    }
-
     .vcalendar {
 
       .vevent {
@@ -706,18 +531,9 @@
 
       }
 
-      .monthwidget {
-        margin-bottom: 1.899em;
-
-        caption {
-
-          .next,
-          .prev {
-            display: none;
-          }
-
-        }
-
+      .monthwidget caption .next,
+      .monthwidget caption .prev {
+        display: none;
       }
 
     }
