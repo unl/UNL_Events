@@ -2,7 +2,6 @@ require(['jquery', 'wdn'], function($, WDN) {
 	"use strict";
 	
 	var $progress = $('<progress>'),
-		mqBp2 = '(min-width: 768px)',
 		lastLocation = window.location;
 	
 	$(function() {
@@ -108,7 +107,6 @@ require(['jquery', 'wdn'], function($, WDN) {
 				cancelProgress();
 				$loadTo.html(data);
 				$monthWidget = $('.wp-calendar');
-				//$(document.body).trigger("sticky_kit:recalc");
 				addMonthWidgetStates();
 			});
 		}
@@ -145,8 +143,6 @@ require(['jquery', 'wdn'], function($, WDN) {
 				if (nowActive.getFullYear() == now.getFullYear() && nowActive.getMonth() == now.getMonth() && nowActive.getDate() == now.getDate()) {
 					window.location = window.location;
 				}
-				//stickyHeader();
-				//$(document.body).trigger("sticky_kit:recalc");
 				if (widgetDate.getFullYear() !== nowActive.getFullYear() || widgetDate.getMonth() !== nowActive.getMonth()) {
 					loadMonthWidget(nowActive);
 				} else {
@@ -168,7 +164,6 @@ require(['jquery', 'wdn'], function($, WDN) {
 			$.get(href + '?format=hcalendar', function(data) {
 				cancelProgress();
 				$loadTo.html(data);
-				//$(document.body).trigger("sticky_kit:recalc");
 			});
 		}
 		
@@ -182,27 +177,6 @@ require(['jquery', 'wdn'], function($, WDN) {
 				cancelProgress();
 				$loadTo.html(data);
 			});
-		}
-		
-		function stickyHeader()
-		{
-			if (window.matchMedia(mqBp2).matches) {
-				var $dayHeading = $('h1.day-heading, h1.upcoming-heading');
-				if ($dayHeading.length) {
-					require([mainScript + 'jquery.sticky-kit.min.js'], function() {
-						$dayHeading.stick_in_parent();
-					});
-				}
-			}
-		}
-		
-		function stickySidebar()
-		{
-			if (window.matchMedia(mqBp2).matches) {
-				require([mainScript + 'jquery.sticky-kit.min.js'], function() {
-					$sidebarCal.closest('aside').stick_in_parent();
-				});
-			}
 		}
 		
 		function getOffsetMonth(fromDate, offset)
@@ -220,7 +194,6 @@ require(['jquery', 'wdn'], function($, WDN) {
 		if ($sidebarCal.length) {
 			determineActiveDay();
 			addMonthWidgetStates();
-			//stickySidebar();
 			
 			$sidebarCal.on('click', 'td a', function(e) {
 				e.preventDefault();
@@ -232,7 +205,6 @@ require(['jquery', 'wdn'], function($, WDN) {
 				loadMonthWidget(this.href);
 			});
 		}
-		//stickyHeader();
 		
 		if ($('.view-unl_ucbcn_frontend_eventinstance').length) {
 			initRoute = 'event';
@@ -301,14 +273,5 @@ require(['jquery', 'wdn'], function($, WDN) {
 			}
 		});
 		
-		$(window).on('resize', function() {
-			if (!window.matchMedia(mqBp2).matches) {
-				//$monthWidget.trigger('sticky_kit:detach');
-				//$('h1').trigger('sticky_kit:detach');
-			} else {
-				//stickySidebar();
-				//stickyHeader();
-			}
-		});
 	});
 });
