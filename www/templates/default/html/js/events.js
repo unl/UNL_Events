@@ -116,10 +116,10 @@ require(['jquery', 'wdn'], function($, WDN) {
         url = datetime;
       }
 
-      //Save the URL in history for the day before we append the hcal format
+      // Save the URL in history for the day before we append the hcal format
       pushState(url, 'day');
 
-      //Append the hcal format for ajax loading (partial content)
+      // Append the hcal format for ajax loading (partial content)
       var format = 'format=hcalendar';
       if (url.charAt(url.length - 1) === '?') {
         url = url + format;
@@ -129,7 +129,7 @@ require(['jquery', 'wdn'], function($, WDN) {
         url = url + '?' + format;
       }
 
-      //Get the goods
+      // Get the goods
       scheduleProgress($loadTo);
       $.get(url, function(data) {
         cancelProgress();
@@ -201,7 +201,7 @@ require(['jquery', 'wdn'], function($, WDN) {
       initRoute = 'search';
     }
 
-    // set up arrow navigation
+    // Set up arrow navigation
     $(document).on('keyup', function(e) {
       if ($(e.target).is('input, select, textarea, button')) {
         return;
@@ -239,12 +239,12 @@ require(['jquery', 'wdn'], function($, WDN) {
     });
 
     $(window).on('popstate', function(e) {
-      //This fires on navigation back/forward
+      // This fires on navigation back/forward
       var route = (e.originalEvent.state && e.originalEvent.state.route) || initRoute,
         url = window.location.href;
 
       if (e.originalEvent.state === null) {
-        //state will be null on hash change, which is likely an in-page link
+        // State will be null on hash change, which is likely an in-page link
         event.preventDefault();
         return false;
       }
