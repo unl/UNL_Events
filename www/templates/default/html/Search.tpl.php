@@ -17,7 +17,7 @@
             </ul>
         </div>
     </section>
-    <section id="updatecontent" class="day_cal dcf-col-100% dcf-col-67%-end@mds">
+    <section id="updatecontent" class="day_cal dcf-col-100% dcf-col-67%-end@md">
         <?php echo $savvy->render($context, 'hcalendar/Search.tpl.php'); ?>
     </section>
 </div>
