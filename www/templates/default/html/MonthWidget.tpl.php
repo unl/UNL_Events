@@ -54,7 +54,7 @@ $next = $context->getDateTime()->modify('+1 month');
             } elseif ($day_timestamp > $current_timestamp) {
                 $class = 'dcf-txt-xs unl-bg-lightest-gray next';
             }
-            echo '<td class="dcf-p-0 dcf-txt-center dcf-txt-middle dcf-b-1 dcf-b-solid unl-b-light-gray unl-bg-cream '.$class.'">';
+            echo '<td class="dcf-p-0 dcf-txt-center dcf-txt-middle dcf-b-1 dcf-b-solid unl-b-light-gray '.$class.'">';
 
             $d = $datetime->format('j');
             if (isset($context->data[$datetime->format('Y-m-d')])) {
