@@ -113,7 +113,7 @@ if ($context->getCalendar()) {
                             </div>
                         </div>
                     </div>
-                    <div class="dcf-pt-2 dcf-txt-3xs unl-font-sans">' . $timezoneMessage . '</div>
+                    <small class="dcf-pt-2 dcf-txt-3xs unl-font-sans">' . $timezoneMessage . '</small>
                 </div>
             </div>';
 }
@@ -122,7 +122,7 @@ $template = null;
 if ($context->output->getRawObject() instanceof Exception) {
     $template = 'Exception.tpl.php';
 }
-$page->maincontentarea .= ' 
+$page->maincontentarea .= '
     <div class="dcf-bleed view-' . $view_class . ' band-results dcf-pb-8">
         <div class="dcf-wrapper">
             ' . $savvy->render($context->output, $template) . '
