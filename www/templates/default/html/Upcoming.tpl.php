@@ -1,4 +1,4 @@
-<div class="dcf-grid dcf-col-gap-vw">
+<div class="dcf-grid dcf-col-gap-vw dcf-row-gap-6">
     <aside class="dcf-col-100% dcf-col-33%-start@md">
         <?php echo $savvy->render($context, 'sidebar.tpl.php'); ?>
     </aside>
