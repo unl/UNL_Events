@@ -41,7 +41,7 @@ class Controller
      * @var \UNL\UCBCN\Calendar
      */
     public $calendar;
-    
+
     /**
      * URI to the frontend
      *
@@ -78,8 +78,8 @@ class Controller
         'model'  => false,
         'format' => 'html',
     );
-    
-    public static $version = '2017-10-20';
+
+    public static $version = '2019-12-18';
 
     /**
      * Constructor for the frontend.
@@ -92,13 +92,13 @@ class Controller
         if (isset($options['monthwidget'])) {
             $options['model'] = 'UNL\\UCBCN\\Frontend\\MonthWidget';
         }
-        
+
         if (isset($options['image'])) {
             $options['model'] = 'UNL\\UCBCN\\Frontend\\Image';
         }
-        
+
         $this->options = $options + $this->options;
-        
+
         try {
             $this->run();
         } catch (\Exception $e) {
@@ -122,7 +122,7 @@ class Controller
         if (!isset($this->options['model']) || false === $this->options['model']) {
             throw new UnexpectedValueException('Un-registered view', 404);
         }
-        
+
         if ($this->options['model'] == 'UNL\\UCBCN\\Frontend\\Image') {
             //Force the image format for the Image modal
             $this->options['format'] = 'image';
@@ -184,7 +184,7 @@ class Controller
 
         return $this->getURL() . $this->getCalendar()->shortname . '/';
     }
-  
+
     public function getEventURL(\UNL\UCBCN\Frontend\EventInstance $instance)
     {
         return $instance->getURL($this->getCalendarURL());
@@ -192,13 +192,13 @@ class Controller
 
     /**
      * Get the Day object for the current date (now)
-     * 
+     *
      * @return Day
      */
     public function getCurrentDay()
     {
         $datetime = new \DateTime();
-        
+
         $options = $this->options;
         $options['d'] = $datetime->format('d');
         $options['m'] = $datetime->format('m');
@@ -220,7 +220,7 @@ class Controller
 
     /**
      * Get the Month object for the current date (now)
-     * 
+     *
      * @return Month
      */
     public function getCurrentMonth()
@@ -246,7 +246,7 @@ class Controller
 
     /**
      * Get the Year object for the current date (now)
-     * 
+     *
      * @return Year
      */
     public function getCurrentYear()
@@ -268,7 +268,7 @@ class Controller
     {
         return Year::generateURL($this->options['calendar'], new \DateTime);
     }
-    
+
     public function getUpcomingURL()
     {
         return Upcoming::generateURL($this->options['calendar']);
@@ -280,7 +280,7 @@ class Controller
         $upcoming = 'webcal:' . $upcoming;
         return $upcoming;
     }
-    
+
     public function getCurrentWeekURL()
     {
         return Week::generateURL($this->options['calendar'], new \DateTime);
@@ -308,7 +308,7 @@ class Controller
             $in_date   = str_replace(array('/',' '), '', $_GET['y'].'-'.$_GET['m'].'-'.$_GET['d']);
             $in_date   = date('Y-m-d', strtotime($in_date));
             $real_date = $date = date('Y-m-d', strtotime($event_instance->eventdatetime->starttime));
- 
+
             // Check if the date is a recurring date for this event
             if (isset($rdates) && in_array($in_date, $rdates)) {
                 //$starttime =& $event_instance->eventdatetime->starttime;
@@ -389,7 +389,7 @@ class Controller
     /**
      * Get the querystring parameters for a URL
      *
-     * @param string $url 
+     * @param string $url
      *
      * @return array key=>value pairs
      */
@@ -421,7 +421,7 @@ class Controller
      */
     public function dayHasEvents($epoch, $calendar = null)
     {
-        
+
         if (isset($calendar)) {
             $db  =& $calendar->getDatabaseConnection();
             $res =& $db->query('SELECT DISTINCT eventdatetime.id FROM calendar_has_event,eventdatetime
