@@ -26,9 +26,19 @@ class Events extends RecordList
     }
 
     public function getSQL() {
-        if (array_key_exists('subscription_calendars', $this->options)) { 
-            $sql = 'SELECT DISTINCT event.id FROM event,calendar_has_event WHERE calendar_has_event.event_id = event.id AND 
-                        calendar_has_event.status != "pending" AND event.approvedforcirculation = 1 AND (';
+        if (array_key_exists('subscription_calendars', $this->options)) {
+            if (empty(count($this->options['subscription_calendars']))) {
+              // empty array so add invalid calendar id so query works and returns no results
+              array_push($this->options['subscription_calendars'], -1);
+            }
+
+            // Note: subscription events are limited to those within a week ago
+            $sql = 'SELECT DISTINCT event.id FROM event
+                    INNER JOIN calendar_has_event ON event.id = calendar_has_event.event_id
+                    INNER JOIN eventdatetime ON event.id = eventdatetime.event_id
+                    WHERE calendar_has_event.status != "pending" AND
+                          event.approvedforcirculation = 1 AND
+                          eventdatetime.starttime >= NOW() - INTERVAL 1 WEEK AND (';
 
             # add the calendars requested
             $sql .= implode(' OR ', array_map(function($calendar_id) {return 'calendar_has_event.calendar_id = ' . (int)$calendar_id;}, $this->options['subscription_calendars']));
@@ -46,7 +56,6 @@ class Events extends RecordList
                 INNER JOIN calendar ON calendar_has_event.calendar_id = calendar.id
                 WHERE calendar.shortname = "' . self::escapeString($this->options['calendar']) . '"
                 AND calendar_has_event.source IN ("create event form", "create event api")';
-            
 
             $sql .= ' GROUP BY event.id ';
             $sql .= ';';
