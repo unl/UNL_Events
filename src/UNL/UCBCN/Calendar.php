@@ -353,22 +353,27 @@ class Calendar extends Record
     }
 
     public function archiveEvents($eventIDs = NULL) {
+        // arrays to store event ids to process status of
+        $eventIDsToArchive = array();
+        $eventIDsToUnarchive = array();
 
-        // process only event ids if provided
+        # process only event ids if provided
         if (is_array($eventIDs)) {
-
-            $events = array();
-            $archived_events = array();
-
-            // Lookup events and place in correct array
+            # Lookup events and place in correct array
             foreach($eventIDs as $id) {
                 $calenderEvent = CalendarHasEvent::getByIds($this->id, $id);
                 switch($calenderEvent->status) {
                     case static::STATUS_POSTED:
-                        $events[] = Event::getById($calenderEvent->event_id);
+                        $event = Event::getById($calenderEvent->event_id);
+                        if ($event->isInThePast()) {
+                            $eventIDsToArchive[] = $event->id;
+                        }
                         break;
                     case static::STATUS_ARCHIVED:
-                        $archived_events[] = Event::getById($calenderEvent->event_id);
+                        $event = Event::getById($calenderEvent->event_id);
+                        if (!$event->isInThePast()) {
+                            $eventIDsToUnarchive[] = $event->id;
+                        }
                         break;
                     default:
                         // ignore event
@@ -376,33 +381,37 @@ class Calendar extends Record
             }
 
         } else {
-            # find all posted (upcoming) and archived (past) events on the calendar
+
+            # event id not provided so find all posted (upcoming) and archived (past) events on the calendar
+
+            # check each event to see if it has passed
             $events = $this->getEvents(static::STATUS_POSTED);
-            $archived_events = $this->getEvents(static::STATUS_ARCHIVED);
+            # check each event to see if it has passed
+            foreach ($events as $event) {
+                # remember event id to update status
+                if ($event->isInThePast()) {
+                    $eventIDsToArchive[] = $event->id;
+                }
+            }
+
+            # check each past event to see if it is now upcoming
+            $events = $this->getEvents(static::STATUS_ARCHIVED);
+                foreach ($events as $event) {
+                    # remember event id to update status
+                    if (!$event->isInThePast()) {
+                        $eventIDsToUnarchive[] = $event->id;
+                    }
+                }
         }
 
-        # check each event to see if it has passed
-        $updateEventIDs = array();
-        foreach ($events as $event) {
-            # remember event id to update status
-            if ($event->isInThePast()) {
-                $updateEventIDs[] = $event->id;
-            }
-        }
-        if (count($updateEventIDs) > 0) {
-            CalendarHasEvent::bulkUpdateStatus($this->id, $updateEventIDs, static::STATUS_POSTED, static::STATUS_ARCHIVED);
+        # archive events by id
+        if (count($eventIDsToArchive) > 0) {
+            CalendarHasEvent::bulkUpdateStatus($this->id, $eventIDsToArchive, static::STATUS_POSTED, static::STATUS_ARCHIVED);
         }
 
-        # check each past event to see if it is now current
-        $updateEventIDs = array();
-        foreach ($archived_events as $event) {
-            # remember event id to update status
-            if (!$event->isInThePast()) {
-                $updateEventIDs[] = $event->id;
-            }
-        }
-        if (count($updateEventIDs) > 0) {
-            CalendarHasEvent::bulkUpdateStatus($this->id, $updateEventIDs, static::STATUS_ARCHIVED, static::STATUS_POSTED);
+        # unarchive events by id
+        if (count($eventIDsToUnarchive) > 0) {
+            CalendarHasEvent::bulkUpdateStatus($this->id, $eventIDsToUnarchive, static::STATUS_ARCHIVED, static::STATUS_POSTED);
         }
     }
 
