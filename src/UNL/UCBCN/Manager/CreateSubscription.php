@@ -41,43 +41,43 @@ class CreateSubscription extends PostHandler
 
     public function handlePost(array $get, array $post, array $files)
     {
-      // defaults for creating subscription
-      $subscriptionID = NULL;
-      $errorURL = Controller::$url . $this->calendar->shortname . '/subscriptions/new/';
-      $formType = 'Add';
+        // defaults for creating subscription
+        $subscriptionID = NULL;
+        $errorURL = Controller::$url . $this->calendar->shortname . '/subscriptions/new/';
+        $formType = 'Add';
 
-      if (array_key_exists('subscription_id', $this->options)) {
-        // editing subscription
-        $subscriptionID = $this->options['subscription_id'];
-        $errorURL = Controller::$url . $this->calendar->shortname . '/subscriptions/' . $subscriptionID . '/edit/';
-        $formType = 'Edit';
-      }
-
-      // Validate subscription error and display error if invalid
-      if (!$this->isValidSubscription($post, $error)) {
-        $this->flashNotice(parent::NOTICE_LEVEL_ERROR, $formType . ' Subscription Error', $error);
-        return $errorURL;
-      }
-
-      if (!empty($subscriptionID)) {
-        # we are editing an existing subscription
-        $this->subscription = Subscription::getById($subscriptionID);
-
-        if ($this->subscription == FALSE) {
-          throw new \Exception("That subscription could not be found.", 404);
+        if (array_key_exists('subscription_id', $this->options)) {
+            // editing subscription
+            $subscriptionID = $this->options['subscription_id'];
+            $errorURL = Controller::$url . $this->calendar->shortname . '/subscriptions/' . $subscriptionID . '/edit/';
+            $formType = 'Edit';
         }
 
-        $this->updateSubscription($post);
-        $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Subscription Updated', 'Your subscription "' . $this->subscription->name . '" has been updated.');
+        // Validate subscription error and display error if invalid
+        if (!$this->isValidSubscription($post, $error)) {
+            $this->flashNotice(parent::NOTICE_LEVEL_ERROR, $formType . ' Subscription Error', $error);
+            return $errorURL;
+        }
 
-      } else {
-        # we are creating a new subscription
-        $this->subscription = $this->createSubscription($post);
-        $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Subscription Created', 'Your subscription "' . $this->subscription->name . '" has been created.');
-      }
+        if (!empty($subscriptionID)) {
+            # we are editing an existing subscription
+            $this->subscription = Subscription::getById($subscriptionID);
 
-      //redirect
-      return Controller::$url . $this->calendar->shortname . '/subscriptions/';
+            if ($this->subscription == FALSE) {
+                throw new \Exception("That subscription could not be found.", 404);
+            }
+
+            $this->updateSubscription($post);
+            $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Subscription Updated', 'Your subscription "' . $this->subscription->name . '" has been updated.');
+
+        } else {
+            # we are creating a new subscription
+            $this->subscription = $this->createSubscription($post);
+            $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Subscription Created', 'Your subscription "' . $this->subscription->name . '" has been created.');
+        }
+
+        //redirect
+        return Controller::$url . $this->calendar->shortname . '/subscriptions/';
     }
 
     public function getAvailableCalendars() 
@@ -88,16 +88,16 @@ class CreateSubscription extends PostHandler
 
     private function isValidSubscription($postData, &$error) {
         if (empty($postData['title'])) {
-          $error = "A subscription must have a title.";
-          return false;
+            $error = "A subscription must have a title.";
+            return false;
         }
 
-      if (empty($postData['calendars']) || !is_array($postData['calendars']) || count($postData['calendars']) < 1) {
-        $error = "A subscription must have at least one calendar.";
-        return false;
-      }
+        if (empty($postData['calendars']) || !is_array($postData['calendars']) || count($postData['calendars']) < 1) {
+            $error = "A subscription must have at least one calendar.";
+            return false;
+        }
 
-      return true;
+        return true;
     }
 
     private function createSubscription($post_data) 

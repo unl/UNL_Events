@@ -28,8 +28,8 @@ class Events extends RecordList
     public function getSQL() {
         if (array_key_exists('subscription_calendars', $this->options)) {
             if (empty(count($this->options['subscription_calendars']))) {
-              // empty array so add invalid calendar id so query works and returns no results
-              array_push($this->options['subscription_calendars'], -1);
+                // empty array so add invalid calendar id so query works and returns no results
+                array_push($this->options['subscription_calendars'], -1);
             }
 
             // Note: subscription events are limited to those within a week ago
@@ -37,8 +37,8 @@ class Events extends RecordList
                     INNER JOIN calendar_has_event ON event.id = calendar_has_event.event_id
                     INNER JOIN eventdatetime ON event.id = eventdatetime.event_id
                     WHERE calendar_has_event.status != "pending" AND
-                          event.approvedforcirculation = 1 AND
-                          eventdatetime.starttime >= NOW() - INTERVAL 1 WEEK AND (';
+                        event.approvedforcirculation = 1 AND
+                        eventdatetime.starttime >= NOW() - INTERVAL 1 WEEK AND (';
 
             # add the calendars requested
             $sql .= implode(' OR ', array_map(function($calendar_id) {return 'calendar_has_event.calendar_id = ' . (int)$calendar_id;}, $this->options['subscription_calendars']));
