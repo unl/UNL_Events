@@ -189,7 +189,7 @@ require(['jquery', 'wdn'], function($, WDN) {
         changeDay(this.href);
       });
 
-      $sidebarCal.on('click', '.next a, .prev a', function(e) {
+      $sidebarCal.on('click', 'a.next, a.prev', function(e) {
         e.preventDefault();
         loadMonthWidget(this.href);
       });

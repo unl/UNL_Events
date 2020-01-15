@@ -61,9 +61,9 @@ $(UGLIFYJS):
 	npm install uglify-js
 	
 $(JS_OBJ): www/templates/default/html/js/events.js $(UGLIFYJS)
-	$(UGLIFYJS) -c -m -o $@ -p 5 --source-map $(<).map --source-map-url $(<F).map $<
+	$(UGLIFYJS) $< -c -m -o $@ --source-map
 
 $(JS_OBJ2): www/templates/default/html/js/manager.js $(UGLIFYJS)
-	$(UGLIFYJS) -c -m -o $@ -p 5 --source-map $(<).map --source-map-url $(<F).map $<
+	$(UGLIFYJS) $< -c -m -o $@ --source-map
 
 .PHONY: all less js clean
