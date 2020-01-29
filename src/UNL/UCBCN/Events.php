@@ -39,7 +39,7 @@ class Events extends RecordList
                     WHERE calendar_has_event.status != "pending" AND
                         calendar_has_event.source  IN ("create event form", "create event api") AND
                         event.approvedforcirculation = 1 AND
-                        eventdatetime.starttime >= NOW() - INTERVAL 1 WEEK AND (';
+                        eventdatetime.starttime >= NOW() - INTERVAL 1 DAY AND (';
 
             # add the calendars requested
             $sql .= implode(' OR ', array_map(function($calendar_id) {return 'calendar_has_event.calendar_id = ' . (int)$calendar_id;}, $this->options['subscription_calendars']));
