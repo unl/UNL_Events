@@ -2,17 +2,19 @@
 <div class="event_cal">
     <div class='vcalendar'>
         <div class='vevent'>
-            <a class="dcf-txt-decor-none" href="<?php echo $url; ?>">
+            <?php if (isset($context->event->subtitle)): ?><header><?php endif; ?>
                 <h2 class='summary' data-datetime="<?php echo (new DateTime($context->getStartTime()))->format('c') ?>">
-                <?php echo $savvy->dbStringtoHtml($context->event->title); ?>
-                <?php if (isset($context->event->subtitle)): ?><span class="dcf-subhead"><?php echo $savvy->dbStringtoHtml($context->event->subtitle) ?></span><?php endif; ?>
+                    <a class="dcf-txt-decor-none" href="<?php echo $url; ?>">
+                        <?php echo $savvy->dbStringtoHtml($context->event->title); ?>
+                    </a>
                 </h2>
-            </a>
+                <?php if (isset($context->event->subtitle)): ?><p class="dcf-subhead"><?php echo $savvy->dbStringtoHtml($context->event->subtitle) ?></p><?php endif; ?>
+            <?php if (isset($context->event->subtitle)): ?></header><?php endif; ?>
             <?php echo $savvy->render($context, 'EventInstance/Date.tpl.php') ?>
             <?php echo $savvy->render($context, 'EventInstance/FullLocation.tpl.php') ?>
             <?php echo $savvy->render($context, 'EventInstance/Contact.tpl.php') ?>
             <div class="description">
-                <?php 
+                <?php
                 $description = $savvy->dbStringtoHtml($context->event->description);
                 $description = $savvy->linkify($description);
                 echo $description;
@@ -34,7 +36,7 @@
             </p>
             <?php endif; ?>
             <?php if ($imageURL = $context->getImageURL()): ?>
-                <img class="event_description_img" src="<?php echo $imageURL ?>" alt="image for event <?php echo $context->event->id; ?>">
+            <img class="event_description_img" src="<?php echo $imageURL ?>" alt="image for event <?php echo $context->event->id; ?>">
             <?php endif; ?>
             <p class="download">
                 <a class="dcf-btn dcf-btn-primary" href="<?php echo $url ?>.ics">Download this event to my calendar</a>
