@@ -377,43 +377,29 @@
     }
 
     .section-heading {
-      background-color: mix(@ui09, @page-background, 95%);
-      color: #fff;
-      position: relative;
+      align-items: center;
+      background-color: #424240;
+      display: flex;
+      justify-content: space-between;
       text-transform: uppercase;
-      width: 100%;
 
       h1,
       h2 {
-        color: #fff;
-        .sans-serif-font();
-        font-size: 0.923rem;
-        margin: 0 0 1rem;
-        padding: 1.069em 1.425rem 1em;
-      }
-
-      @media @bp2 {
-        h1,
-        h2 {
-          font-size: 0.802rem;
-        }
-
+        color: #fefdfa;
+        font-size: 0.75em;
+        font-weight: 400;
+        margin-bottom: 0;
+        padding: 1em 1.33rem;
       }
 
       .links {
-        margin-top: .5em;
-        margin-right: 1em;
-        position: absolute;
-        right: 0;
-        top: 0;
+        display: flex;
 
         a {
-          color: #fff;
-          margin-left: 0.451em;
-        }
-
-        @media @bp2 {
-          margin-top: .25em;
+          color: #fefdfa;
+          display: flex;
+          padding: .75em;
+          text-decoration: none;
         }
 
       }
