@@ -38,7 +38,7 @@ foreach ($context->getRawObject() as $event) {
 ?>
 <?php echo $savvy->render(new ArrayIterator($events['today']), 'EventListing.tpl.php'); ?>
 <?php if (!empty($events['ongoing'])): ?>
-    <div class="dcf-m-0 dcf-pt-4 dcf-pb-4 dcf-pr-6 dcf-pl-6 dcf-txt-xs dcf-regular dcf-uppercase unl-ls-0 unl-cream">
+    <div class="section-heading">
         <h2>Ongoing Events</h2>
     </div>
 
