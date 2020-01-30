@@ -92,7 +92,7 @@ if ($context->getCalendar()) {
                         <div class="dcf-col-100%">
                             <div class="events-nav">
                                 <div class="submit-search">
-                                    <a id="frontend_login" href="' . UNL\UCBCN\Frontend\Controller::$manager_url . $context->getCalendar()->shortname . '"><span class="eventicon-plus-circled" aria-hidden="true"></span>Manage Events</a>
+                                    <a id="frontend_login" href="' . UNL\UCBCN\Frontend\Controller::$manager_url . $context->getCalendar()->shortname . '">Manage Events</a>
                                     <form class="dcf-form" id="event_search" method="get" action="' . $frontend->getCalendarURL() . 'search/" role="search">
                                         <label for="searchinput">Search Events</label>
                                         <div class="dcf-input-group">
