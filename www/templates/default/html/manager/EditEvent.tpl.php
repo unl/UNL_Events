@@ -51,7 +51,7 @@
     <?php endif; ?>
 <?php endforeach; ?>
 
-<form id="edit-event-form" action="" method="POST" class="clearfix" enctype="multipart/form-data">
+<form id="edit-event-form" action="" method="POST" class="dcf-clear-both" enctype="multipart/form-data">
     <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
     <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
     <div class="dcf-grid dcf-col-gap-vw" style="margin-top: -2.5rem">
