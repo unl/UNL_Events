@@ -34,7 +34,7 @@
             </p>
             <?php endif; ?>
             <?php if ($imageURL = $context->getImageURL()): ?>
-                <figure><img class="event_description_img" src="<?php echo $imageURL ?>" alt="image for event <?php echo $context->event->id; ?>" /></figure>
+                <img class="event_description_img" src="<?php echo $imageURL ?>" alt="image for event <?php echo $context->event->id; ?>">
             <?php endif; ?>
             <p class="download">
                 <a class="dcf-btn dcf-btn-primary" href="<?php echo $url ?>.ics">Download this event to my calendar</a>
