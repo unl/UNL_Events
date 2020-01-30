@@ -117,7 +117,7 @@ if ($context->getCalendar()) {
                             </div>
                         </div>
                     </div>
-                    <small class="dcf-pt-2 dcf-txt-3xs unl-font-sans">' . $timezoneMessage . '</small>
+                    <small class="events-timezone-msg">' . $timezoneMessage . '</small>
                 </div>
             </div>';
 }
