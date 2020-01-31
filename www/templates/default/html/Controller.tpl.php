@@ -92,14 +92,18 @@ if ($context->getCalendar()) {
                         <div class="dcf-col-100%">
                             <div class="events-nav">
                                 <div class="submit-search">
-                                    <a id="frontend_login" href="' . UNL\UCBCN\Frontend\Controller::$manager_url . $context->getCalendar()->shortname . '"><span class="eventicon-plus-circled" aria-hidden="true"></span>Manage Events</a>
-                                    <form id="event_search" method="get" action="' . $frontend->getCalendarURL() . 'search/" role="search">
-                                        <label class="dcf-label" for="searchinput">Search Events</label>
+                                    <a id="frontend_login" href="' . UNL\UCBCN\Frontend\Controller::$manager_url . $context->getCalendar()->shortname . '">Manage Events</a>
+                                    <form class="dcf-form" id="event_search" method="get" action="' . $frontend->getCalendarURL() . 'search/" role="search">
+                                        <label for="searchinput">Search Events</label>
                                         <div class="dcf-input-group">
-                                            <input class="dcf-input-text" type="text" name="q" id="searchinput" placeholder="e.g., Monday, tomorrow" value="' . ((isset($context->options['q']))?$context->options['q']:'') . '"/>
-                                            <span class="wdn-input-group-btn">
-                                                <button><span class="wdn-icon-search" aria-hidden="true"></span><span class="dcf-sr-only">search</span></button>
-                                            </span>
+                                            <input type="text" name="q" id="searchinput" placeholder="e.g., Monday, tomorrow" value="' . ((isset($context->options['q']))?$context->options['q']:'') . '"/>
+
+                                            <button class="dcf-btn dcf-btn-primary">
+                                                <svg class="dcf-h-5 dcf-w-5 dcf-fill-current" aria-hidden="true" focusable="false" height="16" width="16" viewBox="0 0 48 48">
+          <path d="M18 36a17.9 17.9 0 0 0 11.27-4l15.31 15.41a2 2 0 0 0 2.84-2.82L32.08 29.18A18 18 0 1 0 18 36zm0-32A14 14 0 1 1 4 18 14 14 0 0 1 18 4z"></path>
+        </svg>
+                                                <span class="dcf-sr-only">Search</span>
+                                            </button>
                                         </div>
                                     </form>
                                 </div>
@@ -113,7 +117,7 @@ if ($context->getCalendar()) {
                             </div>
                         </div>
                     </div>
-                    <small class="dcf-pt-2 dcf-txt-3xs unl-font-sans">' . $timezoneMessage . '</small>
+                    <small class="events-timezone-msg">' . $timezoneMessage . '</small>
                 </div>
             </div>';
 }

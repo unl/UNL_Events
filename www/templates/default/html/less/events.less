@@ -1,14 +1,8 @@
 @charset "UTF-8";
 
 @import "lib/4-1carryoverhack.less";
-
-@import "lib/lesshat.less";
-
 @import "lib/breakpoints.less";
-@import "lib/colors.less";
 @import "lib/fonts.less";
-
-@import "eventicon-embedded.less";
 
 
 .event-datetimes {
@@ -179,33 +173,13 @@
 
 
 .monthwidget td a:hover {
-  outline: 2px solid @brand;
+  outline: 2px solid #d00000;
 }
 
 
 .monthwidget td.prev a,
 .monthwidget td.next a {
   padding: 11px 1px;
-}
-
-
-.return-today {
-  .sans-serif-font();
-  font-size: 0.75rem;
-
-  @media @bp2 {
-    font-size: 0.802rem;
-  }
-
-  &::before {
-    color: @ui05;
-    margin-right: 0.451em;
-  }
-
-  .dcf-main p a& { // Needed to make the selector more specific
-    border-bottom: 0;
-  }
-
 }
 
 
@@ -264,15 +238,21 @@
 }
 
 
+.events-timezone-msg {
+  font-size: .56em;
+  padding-top: .56em;
+}
+
+
 #dcf-main {
 
   .band-nav {
-    background-color: @ui02;
+    background-color: #f6f6f5;
     .sans-serif-font();
 
     .events-nav {
       align-items: center;
-      border-bottom: 1px solid @ui04;
+      border-bottom: 1px solid #e3e3e2;
       display: flex;
       flex-flow: row wrap;
       justify-content: space-between;
@@ -286,18 +266,17 @@
 
       li {
         display: inline;
-        margin-right: 0.451em;
+        margin-right: 0.56em;
       }
 
     }
 
     a {
-      border-bottom: 0;
       text-decoration: none;
     }
 
     .dcf-wrapper {
-      padding-bottom: 0.451em;
+      padding-bottom: 0.56em;
       padding-top: 1em;
     }
 
@@ -322,12 +301,6 @@
       margin-right: 1.77em;
       padding-bottom: 0.75em;
       text-transform: uppercase;
-
-      span::before {
-        color: @ui05;
-        margin-left: 0;
-      }
-
     }
 
     #event_search {
@@ -356,7 +329,7 @@
   }
 
   .band-results {
-    background-color: @ui02;
+    background-color: #f6f6f5;
 
     .dcf-wrapper {
       padding-top: 1em;
@@ -365,49 +338,35 @@
     &.view-unl_ucbcn_frontend_search {
 
       a.permalink {
-        color: @ui09;
+        color: #424240;
       }
 
     }
 
     .section-heading {
-      background-color: mix(@ui09, @page-background, 95%);
-      color: #fff;
-      position: relative;
+      align-items: center;
+      background-color: #424240;
+      display: flex;
+      justify-content: space-between;
       text-transform: uppercase;
-      width: 100%;
 
       h1,
       h2 {
-        color: #fff;
-        .sans-serif-font();
-        font-size: 0.923rem;
-        margin: 0 0 1rem;
-        padding: 1.069em 1.425rem 1em;
-      }
-
-      @media @bp2 {
-        h1,
-        h2 {
-          font-size: 0.802rem;
-        }
-
+        color: #fefdfa;
+        font-size: 0.75em;
+        font-weight: 400;
+        margin-bottom: 0;
+        padding: 1em 1.33rem;
       }
 
       .links {
-        margin-top: .5em;
-        margin-right: 1em;
-        position: absolute;
-        right: 0;
-        top: 0;
+        display: flex;
 
         a {
-          color: #fff;
-          margin-left: 0.451em;
-        }
-
-        @media @bp2 {
-          margin-top: .25em;
+          color: #fefdfa;
+          display: flex;
+          padding: .75em;
+          text-decoration: none;
         }
 
       }
@@ -417,22 +376,25 @@
     .vcalendar {
 
       .vevent {
-        background-color: fadeout(#fff, 33%);
-        border-top: 5px solid @ui05;
-        box-shadow: 0 0 0 1px fadeout(@ui14, 90%);
-        margin-bottom: 1em;
-        padding: 1.425rem 1.777em;
-        transition: all 0.2s ease-out;
+        background-color: #fefdfa;
+        border: 1px solid #e3e3e2;
+        padding: 2.37em 1.78em;
 
-        @media @bp2 {
-          padding: 1.899rem 2.369em;
-
+        h2 {
+          font-size: 1.78em;
         }
 
-        &:hover {
-          background-color: #fff;
-          border-top: 5px solid @scarlet;
-          box-shadow: 0 0 1px 1px fadeout(@ui14, 80%);
+        header {
+          margin-bottom: 1em;
+        }
+
+        header h2 {
+          margin-bottom: 0;
+        }
+
+        .dcf-subhead {
+          .sans-serif-font();
+          margin-top: .43em;
         }
 
         .date-wrapper,
@@ -441,57 +403,28 @@
         .contact {
           display: block;
           .sans-serif-font();
-          font-size: 0.75rem;
-
-          @media @bp2 {
-            font-size: 0.802rem;
-          }
-
-          &::before {
-            color: @ui05;
-          }
-
+          font-size: 0.84em;
         }
 
         .location div {
-          padding-left: 1.777em;
+          padding-left: 1.78em;
         }
 
         .description {
-          border-top: 1px solid @ui04;
-          margin: 1em 0 0;
+          border-top: 1px solid #e3e3e2;
+          margin-top: 1em;
           padding-top: 1em;
         }
 
       }
 
+      .vevent + .vevent {
+        margin-top: 1em;
+      }
+
     }
 
     .year_cal {
-
-      .wdn-col {
-
-        @media @bp1 {
-
-          &:nth-child(2n+1) {
-            clear: left;
-          }
-
-        }
-
-        @media @bp2 {
-
-          &:nth-child(2n+1) {
-            clear: none;
-          }
-
-          &:nth-child(3n+1) {
-            clear: left;
-          }
-
-        }
-
-      }
 
       .monthwidget caption .next,
       .monthwidget caption .prev {
@@ -500,60 +433,6 @@
 
     }
 
-    .event-heading {
-      font-size: 2.1538462rem;
-      margin-top: .254em;
-    }
-
-  }
-
-}
-
-
-.break-word {
-  word-break: break-word;
-}
-
-
-.promo-bar-container {
-  padding-bottom: 1em;
-}
-
-
-.clearfix {
-  clear: both;
-}
-
-
-.promo-box-image-barrier {
-  border: 1px solid #CCC;
-  padding: 0.5em;
-}
-
-
-.promo-box-event-listing {
-  border-bottom: 1px solid #CCC;
-  padding-bottom: .354em;
-}
-
-
-.sans-serif {
-  .sans-serif-font();
-}
-
-
-@media @bp2 {
-
-  .promo-box {
-    text-align: center;
-  }
-
-  .promo-non-image-link {
-    text-align: right;
-  }
-
-  .promo-bar-container {
-    padding-bottom: 0;
   }
 
 }

@@ -20,7 +20,7 @@
 <form id="add-subscription" action="<?php echo $context->subscription->id == NULL ? $context->subscription->getNewURL($context->calendar) : $context->subscription->getEditURL($context->calendar) ?>" method="POST">
     <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
     <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
-    <div class="dcf-grid dcf-col-gap-vw" class="clearfix">
+    <div class="dcf-grid dcf-col-gap-vw">
         <div class="dcf-col-100% dcf-col-67%-start@lg">
             <label class="dcf-label" for="title">Title</label>
             <input type="text" id="title" name="title" value="<?php echo $context->subscription->name ?>" />
