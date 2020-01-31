@@ -382,9 +382,13 @@
         border: 1px solid #e3e3e2;
         margin-top: 1em;
         padding: 2.37em 1.78em;
+        
+        @media (min-width:42.09em) {
+          padding: 1.78em 2.37em;          
+        }
 
         h2 {
-          font-size: 1.78em;
+          font-size: 1.5em;
         }
 
         header {
@@ -397,7 +401,7 @@
 
         .dcf-subhead {
           .sans-serif-font();
-          margin-top: .43em;
+          margin-top: .75em;
         }
 
         .date-wrapper,
@@ -415,8 +419,14 @@
 
         .description {
           border-top: 1px solid #e3e3e2;
-          margin-top: 1em;
+          font-size: 0.84em;
+          margin-bottom: 1em;
+          margin-top: 1.33em;
           padding-top: 1em;
+        }
+        
+        .public-info {
+          font-size: 0.84em;          
         }
 
       }
