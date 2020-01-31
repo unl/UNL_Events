@@ -32,14 +32,15 @@ class Events extends RecordList
                 array_push($this->options['subscription_calendars'], -1);
             }
 
-            // Note: subscription events are limited to those within a week ago and created by calendar
+            // Note: subscription events are limited to those within a day ago and created by calendar
             $sql = 'SELECT DISTINCT event.id FROM event
                     INNER JOIN calendar_has_event ON event.id = calendar_has_event.event_id
                     INNER JOIN eventdatetime ON event.id = eventdatetime.event_id
                     WHERE calendar_has_event.status != "pending" AND
                         calendar_has_event.source  IN ("create event form", "create event api") AND
-                        event.approvedforcirculation = 1 AND
-                        eventdatetime.starttime >= NOW() - INTERVAL 1 DAY AND (';
+                        event.approvedforcirculation = 1 AND (
+                        (eventdatetime.recurringtype = "none" AND eventdatetime.starttime >= NOW() - INTERVAL 1 DAY) OR
+                        (eventdatetime.recurringtype != "none" AND eventdatetime.recurs_until >= NOW() - INTERVAL 1 DAY)) AND (';
 
             # add the calendars requested
             $sql .= implode(' OR ', array_map(function($calendar_id) {return 'calendar_has_event.calendar_id = ' . (int)$calendar_id;}, $this->options['subscription_calendars']));
