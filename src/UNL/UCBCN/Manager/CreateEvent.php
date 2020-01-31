@@ -126,6 +126,11 @@ class CreateEvent extends PostHandler
         } else if (isset($files['imagedata']) && $files['imagedata']['error'] == UPLOAD_ERR_INI_SIZE) {
             throw new ValidationException('Your image file size was too large. It must be 2 MB or less. Try a tool like <a target="_blank" href="http://www.imageoptimizer.net">Image Optimizer</a>.');
         }
+
+        # send to main is required
+        if (empty($post_data['send_to_main'])) {
+            throw new ValidationException('<a href="send_to_main">Consider for main calendar</a> is required.');
+        }
     }
 
     private function calculateDate($date, $hour, $minute, $am_or_pm)

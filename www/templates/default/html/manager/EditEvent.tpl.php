@@ -121,8 +121,8 @@
                 		  <?php echo $datetime->getLocation()->name; ?>
                         </div>
                         <div class="dcf-btn-group controls">
-                    		  <a href="<?php echo $datetime->getEditURL($context->calendar); ?>" class="dcf-btn dcf-btn-primary small">Edit</a>
-                          <button class="dcf-btn small" form="delete-datetime-<?php echo $datetime->id; ?>" type="submit">Delete</button>
+                            <a href="<?php echo $datetime->getEditURL($context->calendar); ?>" class="dcf-btn dcf-btn-primary small dcf-mb-2">Edit</a>
+                            <button class="dcf-btn  dcf-btn-primary small dcf-mb-2" form="delete-datetime-<?php echo $datetime->id; ?>" type="submit">Delete</button>
                         </div>
                 	</div>
                     <?php if ($datetime->recurringtype != 'none') : ?>
@@ -133,9 +133,9 @@
                                     <div class="dates recurring">
                                         <?php echo date('n/d/y', strtotime($recurring_date->recurringdate)) . ' @ ' . date('g:ia', strtotime($datetime->starttime)); ?>
                                     </div>
-                                    <div class=" dcf-btn-group controls recurring">
+                                    <div class="dcf-btn-group controls recurring">
                                         <a href="<?php echo $datetime->getEditRecurrenceURL($context->calendar, $recurring_date->recurrence_id); ?>" class="dcf-btn dcf-btn-primary small edit-recurring-edt">Edit</a>
-                                        <button type="dcf-btn submit" form="delete-datetime-<?php echo $datetime->id ?>-recurrence-<?php echo $recurring_date->recurrence_id ?>" class="small delete-datetime-recurrence">Delete</button>
+                                        <button type="submit" form="delete-datetime-<?php echo $datetime->id ?>-recurrence-<?php echo $recurring_date->recurrence_id ?>" class="dcf-btn dcf-btn-primary small delete-datetime-recurrence">Delete</button>
                                     </div>
                                 </div>
                             </div>

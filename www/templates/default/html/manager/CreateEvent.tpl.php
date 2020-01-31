@@ -204,7 +204,7 @@
                         <option <?php if ($post['end_time_minute'] == 55) echo 'selected="selected"'; ?> value="55">55</option>
                     </select>
 
-                    <fieldset id="start-time-am-pm" class="am_pm dcf-mb-0 dcf-pl-3 dcf-b-0">
+                    <fieldset id="end-time-am-pm" class="am_pm dcf-mb-0 dcf-pl-3 dcf-b-0">
                       <legend class="dcf-sr-only">AM/PM</legend>
                       <div class="dcf-d-flex dcf-ai-center">
                         <label class="dcf-label dcf-2nd dcf-mt-0" for="end-time-am-pm-am">AM</label>
@@ -262,15 +262,15 @@
                         </label>
                     </fieldset>
 
-                  <fieldset>
+                  <fieldset id="send_to_main">
                     <legend class="dcf-legend dcf-txt-sm"><span class="dcf-required">*</span> Consider for main UNL Calendar</legend>
                       <label class="dcf-label">
-                        <input class="dcf-input-control" type="radio" name="send_to_main" value="on" required />
+                        <input class="dcf-input-control" type="radio" id="send_to_main_on" name="send_to_main" value="on" />
                         Yes
                       </label>
                       <br>
                       <label class="dcf-label">
-                        <input class="dcf-input-control" type="radio" name="send_to_main" value="off" required />
+                        <input class="dcf-input-control" type="radio" id="send_to_main_off" name="send_to_main" value="off" />
                         No
                       </label>
                   </fieldset>
@@ -410,6 +410,12 @@ require(['jquery'], function ($) {
         if ($('#location').val() == 'new' && $('#location-name').val() == '') {
             notifier.mark_input_invalid($('#location-name'));
             errors.push('You must give your new location a <a href=\"#location-name\">name</a>.');
+        }
+
+        // Must select whether to consider for main calendar
+        if ($('input[name=\"send_to_main\"]:checked').val() === undefined) {
+            notifier.mark_input_invalid($('#send_to_main_on'));
+            errors.push('<a href=\"#send_to_main\">Consider for main calendar</a> is required.');
         }
 
         if (errors.length > 0) {
