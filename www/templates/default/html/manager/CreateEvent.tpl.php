@@ -265,12 +265,12 @@
                   <fieldset id="send_to_main">
                     <legend class="dcf-legend dcf-txt-sm"><span class="dcf-required">*</span> Consider for main UNL Calendar</legend>
                       <label class="dcf-label">
-                        <input class="dcf-input-control" type="radio" id="send_to_main_on" name="send_to_main" value="on" />
+                        <input class="dcf-input-control" type="radio" id="send_to_main_on" name="send_to_main" value="on" <?php if (!empty($post['send_to_main']) && $post['send_to_main'] == 'on') echo 'checked="checked"'; ?>/>
                         Yes
                       </label>
                       <br>
                       <label class="dcf-label">
-                        <input class="dcf-input-control" type="radio" id="send_to_main_off" name="send_to_main" value="off" />
+                        <input class="dcf-input-control" type="radio" id="send_to_main_off" name="send_to_main" value="off"  <?php if (!empty($post['send_to_main']) && $post['send_to_main'] == 'off') echo 'checked="checked"'; ?>/>
                         No
                       </label>
                   </fieldset>
@@ -416,6 +416,15 @@ require(['jquery'], function ($) {
         if ($('input[name=\"send_to_main\"]:checked').val() === undefined) {
             notifier.mark_input_invalid($('#send_to_main_on'));
             errors.push('<a href=\"#send_to_main\">Consider for main calendar</a> is required.');
+        } else if ($('input[name=\"send_to_main\"]:checked').val() === 'on') {
+            if ($('#description').val().trim() == '') {
+                notifier.mark_input_invalid($('#description'));
+                errors.push('<a href=\"#description\">Description</a> is required when event is considered for main calendar.');
+            }
+            if ($('#contact-name').val().trim() == '') {
+                notifier.mark_input_invalid($('#contact-name'));
+                errors.push('<a href=\"#contact-name\">Contact Name</a> is required when event is considered for main calendar.');
+            }
         }
 
         if (errors.length > 0) {
