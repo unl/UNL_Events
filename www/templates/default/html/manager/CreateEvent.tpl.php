@@ -26,7 +26,7 @@
                 <label class="dcf-label" for="subtitle">Subtitle</label>
                 <input class="dcf-input-text" type="text" id="subtitle" name="subtitle" value="<?php echo $event->subtitle; ?>" />
 
-                <label class="dcf-label" for="description">Description</label>
+                <label class="dcf-label" for="description"><span class="required-for-main-calendar dcf-required" style="display: none">* </span>Description</label>
                 <textarea class="dcf-input-text" rows="4" id="description" name="description"><?php echo $event->description; ?></textarea>
 
                 <label class="dcf-label" for="type">Type</label>
@@ -281,7 +281,7 @@
                 <legend class="dcf-legend vi-header">Contact Info</legend>
 
                 <div class="details">
-                    <label class="dcf-label" for="contact-name">Name</label>
+                    <label class="dcf-label" for="contact-name"><span class="required-for-main-calendar dcf-required" style="display: none">* </span>Name</label>
                     <input class="dcf-input-text" type="text" id="contact-name" name="contact_name" value="<?php echo $post['contact_name'] ?>" />
 
                     <label class="dcf-label" for="contact-phone">Phone</label>
@@ -335,6 +335,16 @@ WDN.initializePlugin('jqueryui', [function() {
 }]);
 
 require(['jquery'], function ($) {
+
+    $('input[type=radio][name=send_to_main]').change(function() {
+        if (this.value == 'on') {
+            $('.required-for-main-calendar').show();
+        }
+        else if (this.value == 'off') {
+            $('.required-for-main-calendar').hide();
+        }
+    });
+
     $('#create-event-form').submit(function (submit) {
         errors = [];
 
