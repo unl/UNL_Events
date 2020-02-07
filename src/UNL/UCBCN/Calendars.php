@@ -62,6 +62,18 @@ class Calendars extends RecordList
                     WHERE (source = "' . CalendarHasEvent::SOURCE_CREATE_EVENT_FORM . '" OR source = "' . CalendarHasEvent::SOURCE_CHECKED_CONSIDER_EVENT . '")
                     AND event_id = ' . (int)$this->options['original_calendars_for_event_id'] . ';';
             return $sql;
+        } else if (array_key_exists('has_event_activity_since', $this->options)) {
+            $format = 'Y-m-d';
+            $date = $this->options['has_event_activity_since'];
+            $d = \DateTime::createFromFormat($format, $date);
+            // use date passed if valid and in expected format or use default date of a year ago
+            $filter_date = $d && $d->format($format) === $date ? $date : date($format, strtotime('-1 Year'));
+            $sql = "
+                SELECT DISTINCT calendar.* FROM calendar
+                INNER JOIN calendar_has_event ON calendar.id = calendar_has_event.calendar_id
+                WHERE calendar_has_event.datelastupdated >= '" . $filter_date . "'
+                ORDER BY calendar.name";
+            return trim($sql);
         } else {
             return parent::getSQL();
         }

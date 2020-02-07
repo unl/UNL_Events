@@ -29,16 +29,22 @@ class MoveEvent extends PostHandler
     public function handlePost(array $get, array $post, array $files)
     {
         $backend_tab_name = NULL;
-        switch ($post['status']) {
-            case 'pending':
-                $backend_tab_name = 'pending';
-                break;
-            case 'upcoming':
-                $backend_tab_name = 'posted';
-                break;
-            case 'past':
-                $backend_tab_name = 'archived';
-                break;
+        if (isset($post['status'])) {
+            switch ($post['status']) {
+                case 'pending':
+                    $backend_tab_name = 'pending';
+                    break;
+                case 'upcoming':
+                    $backend_tab_name = 'posted';
+                    break;
+                case 'past':
+                    $backend_tab_name = 'archived';
+                    break;
+            }
+        }
+
+        if (!isset($post['new_status'])) {
+            throw new \Exception("The new_status must be set in the post data.", 400);
         }
 
         if (!isset($post['event_id'])) {

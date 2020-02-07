@@ -20,7 +20,7 @@
                 echo $description;
                 ?>
             </div>
-            <?php if (isset($context->eventdatetime->additionalpublicinfo)): ?>
+            <?php if (!empty($context->eventdatetime->additionalpublicinfo)): ?>
             <p class="public-info">
               Additional Public Info:<br>
                 <?php
