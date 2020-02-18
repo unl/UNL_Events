@@ -86,6 +86,23 @@ class Event extends Record
             'id',
         );
     }
+
+    // Override Record::synchronizeWithArray to format select event values
+    public function synchronizeWithArray($data)
+    {
+        foreach (get_object_vars($this) as $key=>$default_value) {
+            if (isset($data[$key])) {
+                switch($key) {
+                    case 'listingcontactphone':
+                        $this->$key = Util::formatPhoneNumber($data[$key]);
+                        break;
+
+                    default:
+                        $this->$key = $data[$key];
+                }
+            }
+        }
+    }
     
     function getDatetimes($limit = -1, $offset = 0) 
     {

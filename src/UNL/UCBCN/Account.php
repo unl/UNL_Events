@@ -122,4 +122,21 @@ class Account extends Record
     {
         return array('id', true);
     }
+
+    // Override Record::synchronizeWithArray to format select event values
+    public function synchronizeWithArray($data)
+    {
+        foreach (get_object_vars($this) as $key=>$default_value) {
+            if (isset($data[$key])) {
+                switch($key) {
+                    case 'phone':
+                        $this->$key = Util::formatPhoneNumber($data[$key]);
+                        break;
+
+                    default:
+                        $this->$key = $data[$key];
+                }
+            }
+        }
+    }
 }
