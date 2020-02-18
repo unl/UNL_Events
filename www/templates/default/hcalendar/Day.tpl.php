@@ -6,7 +6,7 @@
   $formattedDate = $context->getDateTime($timezoneDisplay)->format('l, F j');
 ?>
 <div class="section-heading">
-    <h2 data-datetime="<?php echo $context->getDateTime()->format('c') ?>">
+    <h2 id="heading-date" data-datetime="<?php echo $context->getDateTime()->format('c') ?>">
       <?php echo $formattedDate ?>
     </h2>
     <div class="links">

@@ -82,7 +82,7 @@ require(['jquery', 'wdn'], function($, WDN) {
     }
 
     function determineActiveDay() {
-      var headingDate = $('h1').data('datetime');
+      var headingDate = $('#heading-date').data('datetime');
       if (headingDate) {
         nowActive = new Date(headingDate);
       } else {
