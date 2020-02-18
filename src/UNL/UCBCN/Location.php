@@ -89,7 +89,7 @@ class Location extends Record
         return array('id',true);
     }
 
-    // Override Record::synchronizeWithArray to format select event values
+    // Override Record::synchronizeWithArray to format select location values
     public function synchronizeWithArray($data)
     {
         foreach (get_object_vars($this) as $key=>$default_value) {
