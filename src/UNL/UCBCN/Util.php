@@ -8,14 +8,14 @@ class Util
         return dirname(dirname(dirname(__DIR__))) . '/www';
     }
 
-    public static function formatPhoneNumber($phoneNumber) {
+    public static function formatPhoneNumber($rawPhoneNumber) {
 
         // Do not format phone numbers containing letters
-        if (preg_match('/[a-z]/i', $phoneNumber)) {
-            return $phoneNumber;
+        if (preg_match('/[a-z]/i', $rawPhoneNumber)) {
+            return $rawPhoneNumber;
         }
 
-        $phoneNumber = preg_replace('/[^0-9]/','', $phoneNumber);
+        $phoneNumber = preg_replace('/[^0-9]/','', $rawPhoneNumber);
 
         // Format > 10 digit phone number
         if (strlen($phoneNumber) > 10) {
@@ -50,8 +50,11 @@ class Util
             $phoneNumber = '402-472-'.$lastFour;
         }
 
-        // note: if no strlen conditionals are met for numeric phone number,
+        // Nno strlen conditionals are met for numeric phone number,
         // no formatting is done.
+        else {
+            $phoneNumber = $rawPhoneNumber;
+        }
 
         return $phoneNumber;
     }
