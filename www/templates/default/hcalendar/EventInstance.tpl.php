@@ -3,7 +3,7 @@
     <div class='vcalendar'>
         <div class='vevent'>
             <?php if (isset($context->event->subtitle)): ?><header><?php endif; ?>
-                <h2 class='summary' data-datetime="<?php echo (new DateTime($context->getStartTime()))->format('c') ?>">
+                <h2 id="heading-date" class='summary' data-datetime="<?php echo (new DateTime($context->getStartTime()))->format('c') ?>">
                     <a class="dcf-txt-decor-none" href="<?php echo $url; ?>">
                         <?php echo $savvy->dbStringtoHtml($context->event->title); ?>
                     </a>
