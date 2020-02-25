@@ -48,6 +48,10 @@ class Recommend extends PostHandler
 
         # add the event to the given calendars
         foreach ($post_data as $radio => $status) {
+            if (substr($radio, 0, 9)  != 'calendar_') {
+                // skip non calendar post vars
+                continue;
+            }
             $calendar_id = (int)(explode('calendar_', $radio)[1]);
             $calendar = Calendar::getByID($calendar_id);
 
