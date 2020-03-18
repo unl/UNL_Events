@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1c3cc66cb05c96a9e44bff03511bf84c",
+    "content-hash": "0439d4d52739e093c8325b3ed1ca32ec",
     "packages": [
         {
             "name": "jasig/phpcas",
@@ -12,20 +12,22 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/apereo/phpCAS.git",
-                "reference": "94b9c591b8abfb4d9dcae535787e51d94b0d19cf"
+                "reference": "e2a65b7ef4ba48c56ad6444f6690f03a9537bee0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/apereo/phpCAS/zipball/94b9c591b8abfb4d9dcae535787e51d94b0d19cf",
-                "reference": "94b9c591b8abfb4d9dcae535787e51d94b0d19cf",
+                "url": "https://api.github.com/repos/apereo/phpCAS/zipball/e2a65b7ef4ba48c56ad6444f6690f03a9537bee0",
+                "reference": "e2a65b7ef4ba48c56ad6444f6690f03a9537bee0",
                 "shasum": ""
             },
             "require": {
                 "ext-curl": "*",
-                "php": ">=5.4.0"
+                "php": ">=5.4.0",
+                "psr/log": "^1.0.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "~3.7.10"
+                "monolog/monolog": "^1.0.0",
+                "phpunit/phpunit": ">=4.8.35 <8"
             },
             "type": "library",
             "extra": {
@@ -59,7 +61,7 @@
                 "cas",
                 "jasig"
             ],
-            "time": "2018-11-21T21:07:05+00:00"
+            "time": "2020-03-16T00:24:54+00:00"
         },
         {
             "name": "michelf/php-smartypants",
@@ -208,18 +210,16 @@
         },
         {
             "name": "pear-pear.php.net/Archive_Tar",
-            "version": "1.4.3",
+            "version": "1.4.9",
             "dist": {
                 "type": "file",
-                "url": "http://pear.php.net/get/Archive_Tar-1.4.3.tgz",
-                "reference": null,
-                "shasum": null
+                "url": "http://pear.php.net/get/Archive_Tar-1.4.9.tgz"
             },
             "require": {
                 "php": ">=5.2.0.0"
             },
             "replace": {
-                "pear-pear/archive_tar": "== 1.4.3.0"
+                "pear-pear/archive_tar": "== 1.4.9.0"
             },
             "type": "pear-library",
             "autoload": {
@@ -233,22 +233,20 @@
             "license": [
                 "New BSD License"
             ],
-            "description": "This class provides handling of tar files in PHP.\nIt supports creating, listing, extracting and adding to tar files.\nGzip support is available if PHP has the zlib extension built-in or\nloaded. Bz2 compression is also supported with the bz2 extension loaded."
+            "description": "This class provides handling of tar files in PHP.\nIt supports creating, listing, extracting and adding to tar files.\nGzip support is available if PHP has the zlib extension built-in or\nloaded. Bz2 compression is also supported with the bz2 extension loaded.\nAlso Lzma2 compressed archives are supported with xz extension."
         },
         {
             "name": "pear-pear.php.net/Console_Getopt",
-            "version": "1.4.1",
+            "version": "1.4.3",
             "dist": {
                 "type": "file",
-                "url": "http://pear.php.net/get/Console_Getopt-1.4.1.tgz",
-                "reference": null,
-                "shasum": null
+                "url": "http://pear.php.net/get/Console_Getopt-1.4.3.tgz"
             },
             "require": {
                 "php": ">=5.4.0.0"
             },
             "replace": {
-                "pear-pear/console_getopt": "== 1.4.1.0"
+                "pear-pear/console_getopt": "== 1.4.3.0"
             },
             "type": "pear-library",
             "autoload": {
@@ -269,9 +267,7 @@
             "version": "2.3.0",
             "dist": {
                 "type": "file",
-                "url": "http://pear.php.net/get/HTTP_Request2-2.3.0.tgz",
-                "reference": null,
-                "shasum": null
+                "url": "http://pear.php.net/get/HTTP_Request2-2.3.0.tgz"
             },
             "require": {
                 "pear-pear.php.net/net_url2": ">=2.2.0.0",
@@ -300,9 +296,7 @@
             "version": "2.2.1",
             "dist": {
                 "type": "file",
-                "url": "http://pear.php.net/get/Net_URL2-2.2.1.tgz",
-                "reference": null,
-                "shasum": null
+                "url": "http://pear.php.net/get/Net_URL2-2.2.1.tgz"
             },
             "require": {
                 "php": ">=5.1.4.0"
@@ -326,12 +320,10 @@
         },
         {
             "name": "pear-pear.php.net/PEAR",
-            "version": "1.10.7",
+            "version": "1.10.10",
             "dist": {
                 "type": "file",
-                "url": "http://pear.php.net/get/PEAR-1.10.7.tgz",
-                "reference": null,
-                "shasum": null
+                "url": "http://pear.php.net/get/PEAR-1.10.10.tgz"
             },
             "require": {
                 "ext-pcre": "*",
@@ -347,7 +339,7 @@
                 "pear-pear.php.net/pear_frontend_web": "<=0.4.0.0"
             },
             "replace": {
-                "pear-pear/pear": "== 1.10.7.0"
+                "pear-pear/pear": "== 1.10.10.0"
             },
             "type": "pear-library",
             "autoload": {
@@ -368,9 +360,7 @@
             "version": "1.1.1",
             "dist": {
                 "type": "file",
-                "url": "http://pear.php.net/get/Structures_Graph-1.1.1.tgz",
-                "reference": null,
-                "shasum": null
+                "url": "http://pear.php.net/get/Structures_Graph-1.1.1.tgz"
             },
             "require": {
                 "php": ">=5.3.0.0"
@@ -394,19 +384,17 @@
         },
         {
             "name": "pear-pear.php.net/XML_Util",
-            "version": "1.4.3",
+            "version": "1.4.4",
             "dist": {
                 "type": "file",
-                "url": "http://pear.php.net/get/XML_Util-1.4.3.tgz",
-                "reference": null,
-                "shasum": null
+                "url": "http://pear.php.net/get/XML_Util-1.4.4.tgz"
             },
             "require": {
                 "ext-pcre": "*",
                 "php": ">=5.4.0.0"
             },
             "replace": {
-                "pear-pear/xml_util": "== 1.4.3.0"
+                "pear-pear/xml_util": "== 1.4.4.0"
             },
             "type": "pear-library",
             "autoload": {
@@ -471,6 +459,53 @@
                 "response"
             ],
             "time": "2016-08-06T14:39:51+00:00"
+        },
+        {
+            "name": "psr/log",
+            "version": "1.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/log.git",
+                "reference": "446d54b4cb6bf489fc9d75f55843658e6f25d801"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/446d54b4cb6bf489fc9d75f55843658e6f25d801",
+                "reference": "446d54b4cb6bf489fc9d75f55843658e6f25d801",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Log\\": "Psr/Log/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for logging libraries",
+            "homepage": "https://github.com/php-fig/log",
+            "keywords": [
+                "log",
+                "psr",
+                "psr-3"
+            ],
+            "time": "2019-11-01T11:05:21+00:00"
         },
         {
             "name": "simple-cas/simple-cas",
@@ -659,16 +694,16 @@
         },
         {
             "name": "unl/php-wdn-templates",
-            "version": "v5.0.0",
+            "version": "v5.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/unl/phpunltemplates.git",
-                "reference": "2928e588f409c2628bfeccb5293ab0dd34a506c5"
+                "reference": "44e42acb1252e41569810660998adb00d108aa06"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/unl/phpunltemplates/zipball/2928e588f409c2628bfeccb5293ab0dd34a506c5",
-                "reference": "2928e588f409c2628bfeccb5293ab0dd34a506c5",
+                "url": "https://api.github.com/repos/unl/phpunltemplates/zipball/44e42acb1252e41569810660998adb00d108aa06",
+                "reference": "44e42acb1252e41569810660998adb00d108aa06",
                 "shasum": ""
             },
             "require": {
@@ -676,8 +711,7 @@
                 "unl/php-dwt-parser": "1.0.*"
             },
             "require-dev": {
-                "phpunit/phpunit": "~4.0",
-                "satooshi/php-coveralls": "^0.7.0"
+                "phpunit/phpunit": "~5.0"
             },
             "type": "library",
             "autoload": {
@@ -691,9 +725,14 @@
             ],
             "authors": [
                 {
+                    "name": "Jeff Sturek (jsturek)",
+                    "email": "jsturek8@unl.edu",
+                    "role": "Developer"
+                },
+                {
                     "name": "Kevin Abel (kabel)",
                     "email": "kabel2@unl.edu",
-                    "role": "Developer"
+                    "role": "Retired Developer"
                 },
                 {
                     "name": "Brett Bieber (saltybeagle)",
@@ -708,7 +747,7 @@
             ],
             "description": "A PHP library for rendering the UNL templates",
             "homepage": "http://wdn.unl.edu/",
-            "time": "2018-12-12T16:32:30+00:00"
+            "time": "2020-03-11T16:55:17+00:00"
         },
         {
             "name": "unl/unl_cache_lite",
@@ -838,6 +877,7 @@
                 "code",
                 "zf2"
             ],
+            "abandoned": "laminas/laminas-code",
             "time": "2016-04-20T17:26:42+00:00"
         },
         {
@@ -892,6 +932,7 @@
                 "events",
                 "zf2"
             ],
+            "abandoned": "laminas/laminas-eventmanager",
             "time": "2018-04-25T15:33:34+00:00"
         }
     ],
