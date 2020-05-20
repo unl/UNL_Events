@@ -2,6 +2,8 @@
 <?php
 if (isset($context->mapurl)) {
     echo '<a class="mapurl" href="'.$savvy->dbStringtoHtml($context->mapurl).'">'.$savvy->dbStringtoHtml($context->name).'</a>';
+} else if (isset($context->webpageurl)) {
+    echo '<a class="webpageurl" href="'.$savvy->dbStringtoHtml($context->webpageurl).'">'.$savvy->dbStringtoHtml($context->name).'</a>';
 } else {
     echo $savvy->dbStringtoHtml($context->name);
 }

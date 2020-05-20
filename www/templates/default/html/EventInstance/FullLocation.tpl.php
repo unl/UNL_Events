@@ -14,6 +14,8 @@ $directions = !empty($context->eventdatetime->directions) ? $context->eventdatet
     </svg>
 <?php if (isset($location->mapurl)): ?>
     <a class="mapurl" href="<?php echo $location->mapurl ?>"><?php echo $location->name; ?></a>
+<?php elseif (isset($location->webpageurl)): ?>
+    <a class="webpageurl" href="<?php echo $location->webpageurl ?>"><?php echo $location->name; ?></a>
 <?php else: ?>
     <?php echo $location->name; ?>
 <?php endif; ?>

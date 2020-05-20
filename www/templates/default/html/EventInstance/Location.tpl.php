@@ -9,6 +9,8 @@
         <span class="dcf-sr-only">Location:</span>
 <?php if (isset($l->mapurl)): ?>
         <a class="mapurl" href="<?php echo $l->mapurl ?>"><?php echo $l->name; ?></a>
+<?php elseif (isset($l->webpageurl)): ?>
+        <a class="webpageurl" href="<?php echo $l->webpageurl ?>"><?php echo $l->name; ?></a>
 <?php else: ?>
         <?php echo $l->name; ?>
 <?php endif; ?>
