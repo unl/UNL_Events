@@ -57,6 +57,7 @@ $page->head .= '<link rel="home" href="' . $context->getCalendarURL() . '" />' .
 $savvy->addGlobal('page', $page);
 $view_class = str_replace('\\', '_', strtolower($context->options['model']));
 
+$page->maincontentarea = ''; // Clear
 if ($context->getCalendar()) {
     $timezoneDisplay = \UNL\UCBCN::getTimezoneDisplay($context->getCalendar()->defaulttimezone);
     $calendarTimezone = array_search($context->getCalendar()->defaulttimezone, \UNL\UCBCN::getTimezoneOptions());
