@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9605ecba332450ef765176bead15aee2",
+    "content-hash": "22a8011e0b7a55c0c724f80647f12fd7",
     "packages": [
         {
             "name": "jasig/phpcas",
@@ -411,6 +411,192 @@
             "description": "Selection of methods that are often needed when working with XML documents.  Functionality includes creating of attribute lists from arrays, creation of tags, validation of XML names and more."
         },
         {
+            "name": "pear/http_request2",
+            "version": "v2.4.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pear/HTTP_Request2.git",
+                "reference": "84da432fbbf615593bd8aa25408aca3478b77502"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pear/HTTP_Request2/zipball/84da432fbbf615593bd8aa25408aca3478b77502",
+                "reference": "84da432fbbf615593bd8aa25408aca3478b77502",
+                "shasum": ""
+            },
+            "require": {
+                "pear/net_url2": "^2.2.0",
+                "pear/pear_exception": "^1.0.0",
+                "php": ">=5.6.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^3.7|^4.8|^5.7"
+            },
+            "suggest": {
+                "ext-curl": "Allows using cURL as a request backend.",
+                "ext-fileinfo": "Adds support for looking up mime-types using finfo.",
+                "ext-openssl": "Allows handling SSL requests when not using cURL.",
+                "ext-zlib": "Allows handling gzip compressed responses."
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "HTTP_Request2": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Alexey Borzov",
+                    "email": "avb@php.net"
+                }
+            ],
+            "description": "Provides an easy way to perform HTTP requests.",
+            "homepage": "https://pear.php.net/package/HTTP_Request2",
+            "keywords": [
+                "PEAR",
+                "curl",
+                "http",
+                "request"
+            ],
+            "support": {
+                "docs": "https://pear.php.net/manual/en/package.http.http-request2.php",
+                "issues": "https://pear.php.net/bugs/search.php?cmd=display&package_name[]=HTTP_Request2",
+                "source": "https://github.com/pear/HTTP_Request2"
+            },
+            "time": "2020-09-24T22:07:33+00:00"
+        },
+        {
+            "name": "pear/net_url2",
+            "version": "v2.2.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pear/Net_URL2.git",
+                "reference": "07fd055820dbf466ee3990abe96d0e40a8791f9d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pear/Net_URL2/zipball/07fd055820dbf466ee3990abe96d0e40a8791f9d",
+                "reference": "07fd055820dbf466ee3990abe96d0e40a8791f9d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.1.4"
+            },
+            "require-dev": {
+                "phpunit/phpunit": ">=3.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.2.x-dev"
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "Net/URL2.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "include-path": [
+                "./"
+            ],
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "David Coallier",
+                    "email": "davidc@php.net"
+                },
+                {
+                    "name": "Tom Klingenberg",
+                    "email": "tkli@php.net"
+                },
+                {
+                    "name": "Christian Schmidt",
+                    "email": "chmidt@php.net"
+                }
+            ],
+            "description": "Class for parsing and handling URL. Provides parsing of URLs into their constituent parts (scheme, host, path etc.), URL generation, and resolving of relative URLs.",
+            "homepage": "https://github.com/pear/Net_URL2",
+            "keywords": [
+                "PEAR",
+                "net",
+                "networking",
+                "rfc3986",
+                "uri",
+                "url"
+            ],
+            "support": {
+                "issues": "https://pear.php.net/bugs/search.php?cmd=display&package_name[]=Net_URL2",
+                "source": "https://github.com/pear/Net_URL2"
+            },
+            "time": "2017-08-25T06:16:11+00:00"
+        },
+        {
+            "name": "pear/pear_exception",
+            "version": "v1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pear/PEAR_Exception.git",
+                "reference": "dbb42a5a0e45f3adcf99babfb2a1ba77b8ac36a7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pear/PEAR_Exception/zipball/dbb42a5a0e45f3adcf99babfb2a1ba77b8ac36a7",
+                "reference": "dbb42a5a0e45f3adcf99babfb2a1ba77b8ac36a7",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=4.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "*"
+            },
+            "type": "class",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "PEAR/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "include-path": [
+                "."
+            ],
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Helgi Thormar",
+                    "email": "dufuz@php.net"
+                },
+                {
+                    "name": "Greg Beaver",
+                    "email": "cellog@php.net"
+                }
+            ],
+            "description": "The PEAR Exception base class.",
+            "homepage": "https://github.com/pear/PEAR_Exception",
+            "keywords": [
+                "exception"
+            ],
+            "support": {
+                "issues": "http://pear.php.net/bugs/search.php?cmd=display&package_name[]=PEAR_Exception",
+                "source": "https://github.com/pear/PEAR_Exception"
+            },
+            "time": "2019-12-10T10:24:42+00:00"
+        },
+        {
             "name": "psr/http-message",
             "version": "1.0.1",
             "source": {
@@ -747,20 +933,24 @@
             ],
             "description": "A PHP library for rendering the UNL templates",
             "homepage": "http://wdn.unl.edu/",
+            "support": {
+                "issues": "https://github.com/unl/phpunltemplates/issues",
+                "source": "https://github.com/unl/phpunltemplates/tree/v5.2.1"
+            },
             "time": "2020-07-16T20:24:35+00:00"
         },
         {
             "name": "unl/unl_cache_lite",
-            "version": "v0.1.1",
+            "version": "v0.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/unlpear/UNL_Cache_Lite.git",
-                "reference": "ead1a59700a52f84250de2820d650e207ee7d698"
+                "reference": "5aa07f2add74ae3864b45a03a1f7fe37a01ac4b4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/unlpear/UNL_Cache_Lite/zipball/ead1a59700a52f84250de2820d650e207ee7d698",
-                "reference": "ead1a59700a52f84250de2820d650e207ee7d698",
+                "url": "https://api.github.com/repos/unlpear/UNL_Cache_Lite/zipball/5aa07f2add74ae3864b45a03a1f7fe37a01ac4b4",
+                "reference": "5aa07f2add74ae3864b45a03a1f7fe37a01ac4b4",
                 "shasum": ""
             },
             "type": "library",
@@ -771,10 +961,10 @@
             },
             "description": "a speedy and safe caching library",
             "support": {
-                "source": "https://github.com/unlpear/UNL_Cache_Lite/tree/v0.1.1",
+                "source": "https://github.com/unlpear/UNL_Cache_Lite/tree/v0.1.2",
                 "issues": "https://github.com/unlpear/UNL_Cache_Lite/issues"
             },
-            "time": "2014-08-25T20:13:04+00:00"
+            "time": "2020-12-10T21:17:32+00:00"
         },
         {
             "name": "zaininnari/html-minifier",
@@ -947,5 +1137,6 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "2.0.0"
 }
