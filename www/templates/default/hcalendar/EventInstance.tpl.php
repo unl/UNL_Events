@@ -41,6 +41,8 @@
             <p class="download">
                 <a class="dcf-btn dcf-btn-primary" href="<?php echo $url ?>.ics">Download this event to my calendar</a>
             </p>
+
+            <?php echo $savvy->render($context, 'EventInstance/OriginCalendar.tpl.php') ?>
         </div>
     </div>
 </div>
