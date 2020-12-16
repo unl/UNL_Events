@@ -238,8 +238,8 @@
             <OriginCalendar>
                 <CalendarID><?php echo $originCalendar->id; ?></CalendarID>
                 <AccountID><?php echo $originCalendar->account_id; ?></AccountID>
-                <Name><?php echo $originCalendar->name; ?></Name>
-                <ShortName><?php echo $originCalendar->shortname; ?></ShortName>
+                <Name><?php echo htmlspecialchars($originCalendar->name); ?></Name>
+                <ShortName><?php echo htmlspecialchars($originCalendar->shortname); ?></ShortName>
                 <URL><?php echo $protocol . $_SERVER['SERVER_NAME'] . '/' . urlencode($originCalendar->shortname);?></URL>
             </OriginCalendar>
         <?php endif; ?>
