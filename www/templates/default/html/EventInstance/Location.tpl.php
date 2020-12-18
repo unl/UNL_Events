@@ -7,9 +7,9 @@
             <path d="M12 4.5c-1.93 0-3.5 1.57-3.5 3.5s1.57 3.5 3.5 3.5 3.5-1.57 3.5-3.5-1.57-3.5-3.5-3.5zm0 6c-1.378 0-2.5-1.122-2.5-2.5s1.122-2.5 2.5-2.5 2.5 1.122 2.5 2.5-1.122 2.5-2.5 2.5z"></path>
         </svg>
         <span class="dcf-sr-only">Location:</span>
-<?php if (isset($l->mapurl)): ?>
+<?php if (isset($l->mapurl) && filter_var($l->mapurl, FILTER_VALIDATE_URL)): ?>
         <a class="mapurl" href="<?php echo $l->mapurl ?>"><?php echo $l->name; ?></a>
-<?php elseif (isset($l->webpageurl)): ?>
+<?php elseif (isset($l->webpageurl) && filter_var($l->webpageurl, FILTER_VALIDATE_URL)): ?>
         <a class="webpageurl" href="<?php echo $l->webpageurl ?>"><?php echo $l->name; ?></a>
 <?php else: ?>
         <?php echo $l->name; ?>

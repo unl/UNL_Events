@@ -1,8 +1,8 @@
 <div class="location">
 <?php
-if (isset($context->mapurl)) {
+if (isset($context->mapurl) && filter_var($context->mapurl, FILTER_VALIDATE_URL)) {
     echo '<a class="mapurl" href="'.$savvy->dbStringtoHtml($context->mapurl).'">'.$savvy->dbStringtoHtml($context->name).'</a>';
-} else if (isset($context->webpageurl)) {
+} else if (isset($context->webpageurl) && filter_var($context->webpageurl, FILTER_VALIDATE_URL)) {
     echo '<a class="webpageurl" href="'.$savvy->dbStringtoHtml($context->webpageurl).'">'.$savvy->dbStringtoHtml($context->name).'</a>';
 } else {
     echo $savvy->dbStringtoHtml($context->name);
