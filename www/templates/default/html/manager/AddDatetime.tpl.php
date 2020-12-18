@@ -148,7 +148,7 @@
         <div class="date-time-select">
           <div class="date-group dcf-d-flex dcf-flex-grow-1 dcf-ai-center dcf-relative dcf-mb-4 dcf-pr-6">
             <span class="dcf-absolute dcf-z-1 wdn-icon-calendar" aria-hidden="true"></span>
-            <input id="start-date"  value="<?php echo $start_date; ?>" name="start_date" aria-label="Start Date in the format of mm/dd/yyyy" type="text" class="dcf-flex-grow-1 datepicker" />
+            <input id="start-date"  value="<?php echo $start_date; ?>" name="start_date" aria-label="Start Date in the format of mm/dd/yyyy" type="text" class="dcf-flex-grow-1 datepicker" autocomplete="off" />
           </div>
 
           <div class="time-group dcf-d-flex dcf-ai-center dcf-flex-grow-1 dcf-mb-4">
@@ -187,7 +187,7 @@
         <div class="date-time-select">
           <div class="date-group dcf-d-flex dcf-flex-grow-1 dcf-ai-center dcf-relative dcf-mb-4 dcf-pr-6">
             <span class="dcf-absolute dcf-z-1 wdn-icon-calendar" aria-hidden="true"></span>
-            <input id="end-date"  value="<?php echo $end_date; ?>" name="end_date" aria-label="End Date in the format of mm/dd/yyyy" type="text" class="datepicker" />
+            <input id="end-date"  value="<?php echo $end_date; ?>" name="end_date" aria-label="End Date in the format of mm/dd/yyyy" type="text" class="datepicker" autocomplete="off" />
           </div>
 
           <div class="time-group dcf-d-flex dcf-ai-center dcf-flex-grow-1 dcf-mb-4">
@@ -239,7 +239,7 @@
                     </select>
                     <label class="dcf-label dcf-d-inline-block" for="recurs-until-date">until </label><br>
                     <span class="wdn-icon-calendar" style="top: .4em" aria-hidden="true"></span>
-                    <input value="<?php if ($datetime->recurringtype != 'none' && $datetime->recurringtype != NULL) echo $recurs_until_date; ?>" id="recurs-until-date" name="recurs_until_date" type="text" class="datepicker" aria-label="Until date in the format of mm/dd/yyyy" />
+                    <input value="<?php if ($datetime->recurringtype != 'none' && $datetime->recurringtype != NULL) echo $recurs_until_date; ?>" id="recurs-until-date" name="recurs_until_date" type="text" class="datepicker" aria-label="Until date in the format of mm/dd/yyyy" autocomplete="off" />
                 </div>
             </div>
         <?php endif; ?>
