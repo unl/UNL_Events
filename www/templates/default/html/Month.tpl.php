@@ -57,7 +57,7 @@ $next = $context->getDateTime()->modify('+1 month');
                 $classes[] = 'selected';
             }
             ?>
-            <td class="unl-bg-cream" data-header="<?php echo $weekdayKeys[$i % $weekdaysCount] ?>" class="<?php echo implode(' ', $classes); ?>">
+            <td class="unl-bg-cream <?php echo implode(' ', $classes); ?>" data-header="<?php echo $weekdayKeys[$i % $weekdaysCount] ?>">
                 <?php echo $savvy->render($day, 'EventListing/Month.tpl.php'); ?>
             </td>
             <?php
