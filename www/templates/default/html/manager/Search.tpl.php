@@ -10,15 +10,19 @@
 <?php
 	$total_pages = ceil(count($context->events) / 10);
 ?>
-<form>
+<?php $eventTypes = new UNL\UCBCN\Calendar\EventTypes(array()); ?>
+<form class="dcf-form">
     <label class="dcf-label" for="events-search">Search</label>
-    <div class="dcf-form-group">
-        <div style="float: right; padding-top: 3px;">
-            <button type="submit" class="dcf-btn wdn-button-triad">Search</button>
-        </div>
-        <div style="margin-right: 100px;">
-            <input class="dcf-input-text" type="text" name="search_term" id="events-search" value="<?php echo $context->search_term ?>" style="width: 97%" />
-        </div>
+    <div class="dcf-input-group">
+        <select class="dcf-d-inline dcf-input-select" id="event_type_id" name="event_type_id">
+            <option value="">Filter Activity Type</option>
+            <?php foreach ($eventTypes as $type) { ?>
+                <?php $selected = !empty($context->event_type_id) && $context->event_type_id == $type->id ? ' selected=selected ' : ''; ?>
+                <option <?php echo $selected; ?> value="<?php echo $type->id ?>"><?php echo $type->name ?></option>
+            <?php } ?>
+        </select>
+        <input type="text" name="search_term" id="events-search"  value="<?php echo $context->search_term ?>"/>
+        <button type="submit" class="dcf-btn dcf-btn-primary">Search</button>
     </div>
 </form>
 

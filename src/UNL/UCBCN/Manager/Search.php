@@ -10,6 +10,7 @@ class Search
     public $options = array();
     public $calendar;
     public $search_term;
+    public $event_type_id;
     public $events;
     public $page;
 
@@ -30,8 +31,10 @@ class Search
 
         if (array_key_exists('search_term', $this->options)) {
             $this->search_term = $this->options['search_term'];
+            $this->event_type_id = array_key_exists('event_type_id', $this->options) ? $this->options['event_type_id'] : 0;
             $this->events = new Events(array(
                 'search_term' => $this->search_term,
+                'event_type_id' => $this->event_type_id,
                 'limit' => 10,
                 'offset' => ($this->page - 1) * 10
             ));

@@ -89,6 +89,7 @@ class Events extends RecordList
             return $sql;
         } else if (array_key_exists('search_term', $this->options)) {
             $term = $this->options['search_term'];
+            $eventTypeID = (array_key_exists('event_type_id', $this->options)) ? trim($this->options['event_type_id']) : 0;
 
             $sql = '
                 SELECT event.id
@@ -114,7 +115,13 @@ class Events extends RecordList
                     'location.name LIKE \'%'.self::escapeString($term).'%\') ';
             }
 
-            $sql.= ')
+            $sql.= ')';
+
+            if (!empty($eventTypeID)) {
+                $sql.= ' AND event_has_eventtype.eventtype_id = ' . self::escapeString($eventTypeID);
+            }
+
+            $sql.= '
                 GROUP BY event.id, eventdatetime.starttime
                 ORDER BY eventdatetime.starttime DESC, event.title ASC';
             $sql.=';';
