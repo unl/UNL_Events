@@ -6,7 +6,7 @@ use UNL\UCBCN\Calendar\Event as CalendarHasEvent;
 use UNL\UCBCN\Event;
 use UNL\UCBCN\Permission;
 
-class BulkAction extends PostHandler
+class BulkMoveAction extends PostHandler
 {
     public $options = array();
     public $calendar;

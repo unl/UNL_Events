@@ -55,12 +55,17 @@ class MoveEvent extends PostHandler
             throw new \Exception("The event_id in the post data must match the event_id in the URL.", 400);
         }
 
+        $source = isset($post['source']) ? $post['source'] : NULL;
+
         $calendar_has_event = CalendarHasEvent::getByIdsStatus($this->calendar->id, $this->event->id, $backend_tab_name);
 
         if ($calendar_has_event == FALSE) {
             $calendar_has_event = new CalendarHasEvent;
             $calendar_has_event->calendar_id = $this->calendar->id;
             $calendar_has_event->event_id = $this->event->id;
+            if (!empty($source)) {
+                $calendar_has_event->source = $source;
+            }
         }
 
         if ($post['new_status'] == 'pending') {

@@ -132,6 +132,31 @@ class Event extends Record
         return $stmt->execute();
     }
 
+    public static function bulkAddEventToCalendar($calendar_id, $event_ids, $status, $source) {
+        if ($status != self::STATUS_PENDING && $status != self::STATUS_POSTED && $status != self::STATUS_ARCHIVED) {
+            return FALSE;
+        }
+
+        if (!is_array($event_ids)) {
+            $event_ids = array();
+        }
+        $filtered_event_ids = array_filter($event_ids, 'is_numeric');
+        foreach($filtered_event_ids as $event_id) {
+            $calendar_has_event = self::getByIds($calendar_id, $calendar_id);
+
+            if ($calendar_has_event == FALSE) {
+                $event = new Event();
+                $event->calendar_id = $calendar_id;
+                $event->event_id = $event_id;
+                $event->status = $status;
+                if (!empty($source)) {
+                    $event->source = $source;
+                }
+                $event->save();
+            }
+        }
+    }
+
     /**
      * Determine if this event is approved (posted or archived)
      * 
