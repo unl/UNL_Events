@@ -5,6 +5,8 @@ use UNL\UCBCN\Calendar;
 use UNL\UCBCN\Calendar\Event as CalendarHasEvent;
 use UNL\UCBCN\Event;
 use UNL\UCBCN\Permission;
+use UNL\UCBCN\UnexpectedValueException;
+use UNL\UCBCN\User\PermissionException;
 
 class BulkMoveAction extends PostHandler
 {
@@ -44,7 +46,7 @@ class BulkMoveAction extends PostHandler
         if ($action == 'move-to-upcoming') {
             $user = Auth::getCurrentUser();
             if (!$user->hasPermission(Permission::EVENT_MOVE_TO_UPCOMING_ID, $this->calendar->id)) {
-                throw new \Exception("You do not have permission to move events to upcoming on this calendar.", 403);
+                throw new PermissionException("You do not have permission to move events to upcoming on this calendar.", 403);
             }
 
             CalendarHasEvent::bulkUpdateStatus($this->calendar->id, $ids, $backend_tab_name, Calendar::STATUS_POSTED);
@@ -53,7 +55,7 @@ class BulkMoveAction extends PostHandler
         } else if ($action == 'move-to-pending') {
             $user = Auth::getCurrentUser();
             if (!$user->hasPermission(Permission::EVENT_MOVE_TO_PENDING_ID, $this->calendar->id)) {
-                throw new \Exception("You do not have permission to move events to pending on this calendar.", 403);
+                throw new PermissionException("You do not have permission to move events to pending on this calendar.", 403);
             }
 
             CalendarHasEvent::bulkUpdateStatus($this->calendar->id, $ids, $backend_tab_name, Calendar::STATUS_PENDING);
@@ -62,7 +64,7 @@ class BulkMoveAction extends PostHandler
         } else if ($action == 'delete') {
             $user = Auth::getCurrentUser();
             if (!$user->hasPermission(Permission::EVENT_DELETE_ID, $this->calendar->id)) {
-                throw new \Exception("You do not have permission to delete events on this calendar.", 403);
+                throw new PermissionException("You do not have permission to delete events on this calendar.", 403);
             }
 
             foreach ($ids as $id) {
@@ -74,7 +76,7 @@ class BulkMoveAction extends PostHandler
             }
             $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Events Deleted', count($ids) . ' events have been deleted.');
         } else {
-            throw new \Exception("Invalid bulk action.", 400);
+            throw new UnexpectedValueException("Invalid bulk action.", 400);
         }
 
         //redirect
