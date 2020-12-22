@@ -144,7 +144,7 @@ class Event extends Record
         foreach($filtered_event_ids as $event_id) {
             $calendar_has_event = self::getByIds($calendar_id, $calendar_id);
 
-            if ($calendar_has_event == FALSE) {
+            if (!$calendar_has_event) {
                 $event = new Event();
                 $event->calendar_id = $calendar_id;
                 $event->event_id = $event_id;

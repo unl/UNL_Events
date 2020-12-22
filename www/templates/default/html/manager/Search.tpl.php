@@ -60,11 +60,11 @@
             <table class="event-list">
                 <thead class="small-hidden">
                     <tr>
-                        <th class="center medium-hidden">Bulk Select</th>
-                        <th>Title</th>
-                        <th>Original Calendar</th>
-                        <th>Date/Location</th>
-                        <th>Actions</th>
+                        <th scope="col" class="center medium-hidden">Bulk Select</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Original Calendar</th>
+                        <th scope="col">Date/Location</th>
+                        <th scope="col">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
