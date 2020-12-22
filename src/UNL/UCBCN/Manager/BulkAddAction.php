@@ -4,6 +4,7 @@ namespace UNL\UCBCN\Manager;
 use UNL\UCBCN\Calendar;
 use UNL\UCBCN\Calendar\Event as CalendarHasEvent;
 use UNL\UCBCN\Event;
+use UNL\UCBCN\NotFoundException;
 use UNL\UCBCN\Permission;
 use UNL\UCBCN\UnexpectedValueException;
 use UNL\UCBCN\User\PermissionException;
@@ -18,7 +19,7 @@ class BulkAddAction extends PostHandler
         $this->options = $options + $this->options;
         $this->calendar = Calendar::getByShortName($this->options['calendar_shortname']);
         if ($this->calendar === FALSE) {
-            throw new \Exception("That calendar could not be found.", 404);
+            throw new NotFoundException("That calendar could not be found.", 404);
         }
     }
 
