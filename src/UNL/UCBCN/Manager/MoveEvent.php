@@ -5,6 +5,7 @@ use UNL\UCBCN\Calendar;
 use UNL\UCBCN\Calendar\Event as CalendarHasEvent;
 use UNL\UCBCN\Event;
 use UNL\UCBCN\Permission;
+use UNL\UCBCN\Manager\ValidationException;
 use UNL\UCBCN\UnexpectedValueException;
 use UNL\UCBCN\User\PermissionException;
 
@@ -30,31 +31,18 @@ class MoveEvent extends PostHandler
 
     public function handlePost(array $get, array $post, array $files)
     {
-        $backend_tab_name = NULL;
-        if (isset($post['status'])) {
-            switch ($post['status']) {
-                case 'pending':
-                    $backend_tab_name = 'pending';
-                    break;
-                case 'upcoming':
-                    $backend_tab_name = 'posted';
-                    break;
-                case 'past':
-                    $backend_tab_name = 'archived';
-                    break;
-            }
-        }
+        $backend_tab_name = $this->getBackendTabNameFromStatus($post['status']);
 
         if (!isset($post['new_status'])) {
-            throw new \Exception("The new_status must be set in the post data.", 400);
+            throw new ValidationException("The new_status must be set in the post data.", 400);
         }
 
         if (!isset($post['event_id'])) {
-            throw new \Exception("The event_id must be set in the post data.", 400);
+            throw new ValidationException("The event_id must be set in the post data.", 400);
         }
 
         if ($post['event_id'] != $this->event->id) {
-            throw new \Exception("The event_id in the post data must match the event_id in the URL.", 400);
+            throw new ValidationException("The event_id in the post data must match the event_id in the URL.", 400);
         }
 
         $source = isset($post['source']) ? $post['source'] : NULL;
@@ -91,8 +79,18 @@ class MoveEvent extends PostHandler
         } else {
             throw new UnexpectedValueException("Invalid status for event.", 400);
         }
-        
+
         //redirect
         return $this->calendar->getManageURL(TRUE);
+    }
+
+    private function getBackendTabNameFromStatus($status) {
+        $map = array(
+            'pending' => 'pending',
+            'upcoming' => 'posted',
+            'past' => 'archived'
+        );
+
+        return array_key_exists($status, $map) ? $map[$status] : NULL;
     }
 }
