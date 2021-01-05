@@ -11,7 +11,7 @@
 	$total_pages = ceil(count($context->events) / 10);
 ?>
 <?php $eventTypes = new UNL\UCBCN\Calendar\EventTypes(array()); ?>
-<form class="dcf-form">
+<form class="dcf-form dcf-mb-6">
     <label class="dcf-label" for="events-search">Search</label>
     <div class="dcf-input-group">
         <select class="dcf-d-inline dcf-input-select" id="event_type_id" name="event_type_id" aria-label="Filter by Activity Type">
@@ -31,7 +31,7 @@
         There are no results.
     <?php else: ?>
         <?php if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_MOVE_TO_PENDING_ID, $context->calendar->id)): ?>
-            <div class="medium-hidden">
+            <div class="medium-hidden dcf-mb-5">
                 <select id="bulk-action" title="Bulk Action" class="bulk-search-event-tools dcf-input-select dcf-txt-sm" aria-label="Event Bulk Move Options">
                     <option value="">Bulk Actions</option>
                     <?php if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_MOVE_TO_UPCOMING_ID, $context->calendar->id)): ?>
@@ -51,16 +51,17 @@
                     <button type="submit">Submit</button>
                 </form>
             </div>
-            <div class="dcf-mt-3 dcf-mb-5 medium-hidden">
-                <a href='#' class="dcf-btn small-button" id="check-all">Check All</a>
-                <a href='#' class="dcf-btn small-button" id="uncheck-all">Uncheck All</a>
-            </div>
         <?php endif; ?>
         <div class="event-page">
             <table class="event-list">
                 <thead class="small-hidden">
                     <tr>
-                        <th scope="col" class="center medium-hidden dcf-w-4">Bulk</th>
+                        <th scope="col" class="medium-hidden dcf-pl-6 dcf-w-4">
+                            <div class="dcf-input-checkbox">
+                                <input type="checkbox" id="checkbox-toggle" title="Toggle All Events">
+                                <label for="checkbox-toggle"><span class="dcf-sr-only">Toggle all events</span></label>
+                            </div>
+                        </th>
                         <th scope="col">Title</th>
                         <th scope="col">Original Calendar</th>
                         <th scope="col">Date/Location</th>

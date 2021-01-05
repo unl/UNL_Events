@@ -135,14 +135,9 @@ require(['jquery', 'wdn', frontend_url + 'templates/default/html/js/vendor/selec
             }
         });
 
-        $('#check-all').click(function (click) {
-            click.preventDefault();
-            $(".select-event").prop("checked", true);
-        });
-
-        $('#uncheck-all').click(function (click) {
-            click.preventDefault();
-            $(".select-event").prop("checked", false);
+        $('#checkbox-toggle').click(function (click) {
+            console.log('click checkbox toggle', $(this).is(":checked"));
+            $(".select-event").prop("checked", $(this).is(":checked"));
         });
 
         $('.pending-event-tools, .upcoming-event-tools, .past-event-tools, .searched-event-tools').change(function () {

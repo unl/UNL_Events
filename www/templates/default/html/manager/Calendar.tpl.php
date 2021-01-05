@@ -42,7 +42,7 @@
     $crumbs->search = TRUE;
     echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
 ?>
-<form class="dcf-form dcf-mb-6" id="search-form" action="<?php echo $context->calendar->getSearchURL(); ?>" style="display: none;">
+<form class="dcf-form" id="search-form" action="<?php echo $context->calendar->getSearchURL(); ?>" style="display: none;">
     <label class="dcf-label" for="events-search">Search</label>
     <div class="dcf-input-group">
         <select class="dcf-d-inline dcf-input-select" id="event_type_id" name="event_type_id" aria-label="Event Bulk Move Options">
@@ -68,7 +68,12 @@
             <?php if (count($events) == 0): ?>
                 There are no <?php echo $context->tab ?> events.
             <?php else: ?>
-                <div class="medium-hidden">
+                <?php if ($context->tab == 'past' && $user->hasPermission(\UNL\UCBCN\Permission::EVENT_DELETE_ID, $context->calendar->id)): ?>
+                    <div class="dcf-mb-5 medium-hidden">
+                        <a class="dcf-btn dcf-btn-secondary" href="<?php echo $context->calendar->getCleanupURL() ?>">Clean Up Old Events</a>
+                    </div>
+                <?php endif; ?>
+                <div class="dcf-mb-5 medium-hidden">
                   <select id="bulk-action" title="Bulk Action" class="bulk-<?php echo $context->tab; ?>-event-tools dcf-input-select dcf-txt-sm">
                       <option value="">Bulk Actions</option>
                       <?php if ($context->tab == 'pending' && $user->hasPermission(\UNL\UCBCN\Permission::EVENT_MOVE_TO_UPCOMING_ID, $context->calendar->id)): ?>
@@ -90,18 +95,16 @@
                       <button type="submit">Submit</button>
                     </form>
                 </div>
-                <div class="dcf-mt-3 dcf-mb-5 medium-hidden">
-                    <a href='#' class="dcf-btn small-button" id="check-all">Check All</a>
-                    <a href='#' class="dcf-btn small-button" id="uncheck-all">Uncheck All</a>
-                    <?php if ($context->tab == 'past' && $user->hasPermission(\UNL\UCBCN\Permission::EVENT_DELETE_ID, $context->calendar->id)): ?>
-                        <a class="dcf-btn dcf-btn-tertiary" href="<?php echo $context->calendar->getCleanupURL() ?>">Clean Up Old Events</a>
-                    <?php endif; ?>
-                </div>
                 <div class="event-page">
                     <table class="event-list">
                         <thead class="small-hidden">
                             <tr>
-                                <th scope="col" class="center medium-hidden dcf-w-4">Bulk</th>
+                                <th scope="col" class="medium-hidden dcf-pl-6 dcf-w-4">
+                                    <div class="dcf-input-checkbox">
+                                        <input type="checkbox" id="checkbox-toggle" title="Toggle All Events">
+                                        <label for="checkbox-toggle"><span class="dcf-sr-only">Toggle all events</span></label>
+                                    </div>
+                                </th>
                                 <th scope="col">Title</th>
                                 <th scope="col">Date/Location</th>
                                 <th scope="col">Actions</th>
