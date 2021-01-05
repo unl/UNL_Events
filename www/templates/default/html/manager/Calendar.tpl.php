@@ -42,7 +42,7 @@
     $crumbs->search = TRUE;
     echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
 ?>
-<form class="dcf-form "id="search-form" action="<?php echo $context->calendar->getSearchURL(); ?>" style="display: none;">
+<form class="dcf-form dcf-mb-6" id="search-form" action="<?php echo $context->calendar->getSearchURL(); ?>" style="display: none;">
     <label class="dcf-label" for="events-search">Search</label>
     <div class="dcf-input-group">
         <select class="dcf-d-inline dcf-input-select" id="event_type_id" name="event_type_id" aria-label="Event Bulk Move Options">

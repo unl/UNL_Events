@@ -200,7 +200,7 @@
             <?php
             $page->addScriptDeclaration("WDN.loadCSS('https://unlcms.unl.edu/wdn/templates_4.1/css/modules/pagination.css');");
             ?>
-            <div class="dcf-mt-2" style="text-align: center;">
+            <div class="dcf-mt-2 dcf-txt-center">
                 <div style="display: inline-block;">
                     <ul id="pending-pagination" class="wdn_pagination" data-tab="pending" style="padding-left: 0;">
                         <?php if($context->page != 1): ?>

@@ -30,7 +30,7 @@
                 <textarea class="dcf-input-text" rows="4" id="description" name="description"><?php echo $event->description; ?></textarea>
 
                 <label class="dcf-label" for="type">Type</label>
-                <select  class="dcf-input-select" id="type" name="type"  style="width: 100%;">
+                <select class="dcf-input-select dcf-w-100%" id="type" name="type">
                     <?php foreach ($context->getEventTypes() as $type) { ?>
                       <option <?php if (isset($post['type']) && $post['type'] == $type->id) echo 'selected="selected"' ?> value="<?php echo $type->id ?>"><?php echo $type->name ?></option>
                   <?php } ?>
