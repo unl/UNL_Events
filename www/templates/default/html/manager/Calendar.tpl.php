@@ -114,7 +114,7 @@
                                     <td class="medium-hidden dcf-pl-6">
                                         <div class="dcf-input-checkbox">
                                             <input type="checkbox" id="select-event-<?php echo $event->id ?>" title="Select Event" class="select-event" data-id="<?php echo $event->id; ?>">
-                                            <label for="select-event-<?php echo $event->id ?>"></label>
+                                            <label for="select-event-<?php echo $event->id ?>"><span class="dcf-sr-only">Check this event</span></label>
                                         </div>
                                     </td>
                                     <td class="small-hidden">
