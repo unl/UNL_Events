@@ -60,7 +60,7 @@
             <table class="event-list">
                 <thead class="small-hidden">
                     <tr>
-                        <th scope="col" class="center medium-hidden">Bulk Select</th>
+                        <th scope="col" class="center medium-hidden dcf-w-4">Bulk</th>
                         <th scope="col">Title</th>
                         <th scope="col">Original Calendar</th>
                         <th scope="col">Date/Location</th>
@@ -70,9 +70,12 @@
                 <tbody>
                     <?php foreach($context->events as $event): ?>
                         <tr>
-                            <td class="center medium-hidden">
+                            <td class="medium-hidden dcf-pl-6">
                                 <?php if (!$event->getStatusWithCalendar($context->calendar->getRawObject())): ?>
-                                <input type="checkbox" id="select-event-<?php echo $event->id ?>" title="Select Event" class="select-event dcf-input-control dcf-txt-md" data-id="<?php echo $event->id; ?>">
+                                <div class="dcf-input-checkbox">
+                                    <input type="checkbox" id="select-event-<?php echo $event->id ?>" title="Select Event" class="select-event" data-id="<?php echo $event->id; ?>">
+                                    <label for="select-event-<?php echo $event->id ?>"></label>
+                                </div>
                                 <?php endif; ?>
                             </td>
                             <td class="small-hidden">

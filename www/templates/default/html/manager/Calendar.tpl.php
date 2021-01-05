@@ -101,7 +101,7 @@
                     <table class="event-list">
                         <thead class="small-hidden">
                             <tr>
-                                <th scope="col" class="center medium-hidden">Bulk Select</th>
+                                <th scope="col" class="center medium-hidden dcf-w-4">Bulk</th>
                                 <th scope="col">Title</th>
                                 <th scope="col">Date/Location</th>
                                 <th scope="col">Actions</th>
@@ -111,8 +111,11 @@
                             <?php try { ?>
                             <?php foreach($events as $event): ?>
                                 <tr>
-                                    <td class="center medium-hidden">
-                                        <input type="checkbox" id="select-event-<?php echo $event->id ?>" title="Select Event" class="select-event dcf-input-control dcf-txt-md" data-id="<?php echo $event->id; ?>">
+                                    <td class="medium-hidden dcf-pl-6">
+                                        <div class="dcf-input-checkbox">
+                                            <input type="checkbox" id="select-event-<?php echo $event->id ?>" title="Select Event" class="select-event" data-id="<?php echo $event->id; ?>">
+                                            <label for="select-event-<?php echo $event->id ?>"></label>
+                                        </div>
                                     </td>
                                     <td class="small-hidden">
                                         <?php if ($event->userCanEdit()): ?>
