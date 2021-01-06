@@ -45,7 +45,7 @@
 <form class="dcf-form" id="search-form" action="<?php echo $context->calendar->getSearchURL(); ?>" style="display: none;">
     <label class="dcf-label" for="events-search">Search</label>
     <div class="dcf-input-group">
-        <select class="dcf-d-inline dcf-input-select" id="event_type_id" name="event_type_id" aria-label="Event Bulk Move Options">
+        <select class="dcf-txt-sm" id="event_type_id" name="event_type_id" aria-label="Event Bulk Move Options">
             <option value="">Activity by Type</option>
             <?php $eventTypes = new UNL\UCBCN\Calendar\EventTypes(array()); ?>
             <?php foreach ($eventTypes as $type) { ?>

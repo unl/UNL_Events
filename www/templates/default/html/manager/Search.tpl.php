@@ -14,7 +14,7 @@
 <form class="dcf-form dcf-mb-6">
     <label class="dcf-label" for="events-search">Search</label>
     <div class="dcf-input-group">
-        <select class="dcf-d-inline dcf-input-select" id="event_type_id" name="event_type_id" aria-label="Filter by Activity Type">
+        <select class="dcf-txt-sm" id="event_type_id" name="event_type_id" aria-label="Filter by Activity Type">
             <option value="">Filter by Activity Type</option>
             <?php foreach ($eventTypes as $type) { ?>
                 <?php $selected = !empty($context->event_type_id) && $context->event_type_id == $type->id ? ' selected=selected ' : ''; ?>
