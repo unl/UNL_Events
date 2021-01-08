@@ -250,6 +250,7 @@ class EventInstance implements RoutableInterface
         $webcasts   = $this->event->getWebcasts();
         $documents  = $this->event->getDocuments();
         $contacts   = $this->event->getPublicContacts();
+        $originCalendar = $this->event->getOriginCalendar();
         $data       = array();
 
 
@@ -452,6 +453,17 @@ class EventInstance implements RoutableInterface
         if (!empty($this->event->privatecomment)) {
             $data['PrivateComments'] = array(
                 0 => $this->event->privatecomment,
+            );
+        }
+
+        if ($originCalendar instanceof \UNL\UCBCN\Calendar) {
+            $protocol = !empty($_SERVER['HTTPS']) ? 'https://' : 'http://';
+            $data['OriginCalendar'] = array(
+                'CalendarID' => $originCalendar->id,
+                'AccountID' => $originCalendar->account_id,
+                'Name' => $originCalendar->name,
+                'ShortName' => $originCalendar->shortname,
+                'URL' =>   $protocol . $_SERVER['SERVER_NAME'] . '/' . urlencode($originCalendar->shortname)
             );
         }
 
