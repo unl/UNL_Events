@@ -35,7 +35,7 @@
 				<td class="small-center table-actions">
 			        <a class="dcf-btn dcf-btn-primary" href="<?php echo $subscription->getEditURL() ?>">Edit</a>
 			        <span class="small-hidden">|</span><br class="dcf-d-none small-block"><br class="dcf-d-none small-block">
-		            <button class="dcf-btn wdn-button-triad" form="delete-subscription-<?php echo $subscription->id ?>" type="submit">Delete</button>
+		            <button class="dcf-btn dcf-btn-secondary" form="delete-subscription-<?php echo $subscription->id ?>" type="submit">Delete</button>
 				</td>
 			</tr>
 	    <?php endforeach; ?>

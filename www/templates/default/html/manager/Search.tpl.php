@@ -10,15 +10,19 @@
 <?php
 	$total_pages = ceil(count($context->events) / 10);
 ?>
-<form>
+<?php $eventTypes = new UNL\UCBCN\Calendar\EventTypes(array()); ?>
+<form class="dcf-form dcf-mb-6">
     <label class="dcf-label" for="events-search">Search</label>
-    <div class="dcf-form-group">
-        <div style="float: right; padding-top: 3px;">
-            <button type="submit" class="dcf-btn wdn-button-triad">Search</button>
-        </div>
-        <div style="margin-right: 100px;">
-            <input class="dcf-input-text" type="text" name="search_term" id="events-search" value="<?php echo $context->search_term ?>" style="width: 97%" />
-        </div>
+    <div class="dcf-input-group">
+        <select class="dcf-txt-sm" id="event_type_id" name="event_type_id" aria-label="Filter by Activity Type">
+            <option value="">Filter by Activity Type</option>
+            <?php foreach ($eventTypes as $type) { ?>
+                <?php $selected = !empty($context->event_type_id) && $context->event_type_id == $type->id ? ' selected=selected ' : ''; ?>
+                <option <?php echo $selected; ?> value="<?php echo $type->id ?>"><?php echo $type->name ?></option>
+            <?php } ?>
+        </select>
+        <input type="text" name="search_term" id="events-search"  value="<?php echo $context->search_term ?>"/>
+        <button type="submit" class="dcf-btn dcf-btn-primary">Search</button>
     </div>
 </form>
 
@@ -26,19 +30,55 @@
     <?php if (count($context->events) == 0): ?>
         There are no results.
     <?php else: ?>
+        <?php if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_MOVE_TO_PENDING_ID, $context->calendar->id)): ?>
+            <div class="medium-hidden dcf-mb-5">
+                <select id="bulk-action" title="Bulk Action" class="bulk-search-event-tools dcf-input-select dcf-txt-sm" aria-label="Event Bulk Move Options">
+                    <option value="">Bulk Actions</option>
+                    <?php if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_MOVE_TO_UPCOMING_ID, $context->calendar->id)): ?>
+                        <option value="move-to-upcoming">Move to Upcoming</option>
+                    <?php endif; ?>
+
+                    <?php if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_MOVE_TO_PENDING_ID, $context->calendar->id)): ?>
+                        <option value="move-to-pending">Move to Pending</option>
+                    <?php endif; ?>
+                </select>
+                <form id="bulk-action-form" method="POST" action="<?php echo $context->calendar->getBulkAddActionURL() ?>" class="dcf-form dcf-d-none">
+                    <input type="text" title="Bulk Action IDs" id="bulk-action-ids" name="ids">
+                    <input type="text" title="Bulk Action Action" id="bulk-action-action" name="action">
+                    <input type="hidden" name="source" value="search">
+                    <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
+                    <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
+                    <button type="submit">Submit</button>
+                </form>
+            </div>
+        <?php endif; ?>
         <div class="event-page">
             <table class="event-list">
                 <thead class="small-hidden">
                     <tr>
-                        <th>Title</th>
-                        <th>Original Calendar</th>
-                        <th>Date/Location</th>
-                        <th>Actions</th>
+                        <th scope="col" class="medium-hidden dcf-pl-6 dcf-w-4">
+                            <div class="dcf-input-checkbox">
+                                <input type="checkbox" id="checkbox-toggle" title="Toggle All Events">
+                                <label for="checkbox-toggle"><span class="dcf-sr-only">Toggle all events</span></label>
+                            </div>
+                        </th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Original Calendar</th>
+                        <th scope="col">Date/Location</th>
+                        <th scope="col">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php foreach($context->events as $event): ?>
                         <tr>
+                            <td class="medium-hidden dcf-pl-6">
+                                <?php if (!$event->getStatusWithCalendar($context->calendar->getRawObject())): ?>
+                                <div class="dcf-input-checkbox">
+                                    <input type="checkbox" id="select-event-<?php echo $event->id ?>" title="Select Event" class="select-event" data-id="<?php echo $event->id; ?>">
+                                    <label for="select-event-<?php echo $event->id ?>"><span class="dcf-sr-only">Check this event</span></label>
+                                </div>
+                                <?php endif; ?>
+                            </td>
                             <td class="small-hidden">
                                 <?php if ($event->userCanEdit()): ?>
                                     <a href="<?php echo $event->getEditURL() ?>"><?php echo $event->title; ?></a>
@@ -109,7 +149,7 @@
                                         <strong><?php echo ucwords($status); ?></strong> on <?php echo $context->calendar->name ?>
                                     <?php else: ?>
                                         <select 
-                                            id="event-action-<?php echo $event->id ?>"
+                                            id="event-action-<?php echo $event->id ?>-small"
                                             class="searched-event-tools" 
                                             data-id="<?php echo $event->id; ?>"
                                             >
@@ -130,8 +170,9 @@
                                 <?php else: ?>
                                     <select
                                         id="event-action-<?php echo $event->id ?>"
-                                        class="dcf-input-select searched-event-tools"
+                                        class="dcf-input-select dcf-txt-md searched-event-tools"
                                         data-id="<?php echo $event->id; ?>"
+                                        aria-label="Event Move Options"
                                     >
                                       <option value="">Select an Action</option>
                                       <?php if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_MOVE_TO_UPCOMING_ID, $context->calendar->id)): ?>
@@ -141,12 +182,12 @@
                                         <option value="move-to-pending">Move to Pending</option>
                                        <?php endif; ?>
                                       </select>
-                                    </div>
                                     <form id="move-<?php echo $event->id; ?>" method="POST" action="<?php echo $event->getMoveURL($context->calendar) ?>" class="delete-form dcf-d-none">
                                         <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
                                         <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
                                         <input class="dcf-input-text" type="text" name="new_status" id="move-target-<?php echo $event->id; ?>">
                                         <input class="dcf-input-text" type="text" name="event_id" value="<?php echo $event->id ?>">
+                                        <input type="hidden" name="source" value="search">
                                     </form>
                                 <?php endif; ?>
                             </td>
@@ -160,7 +201,7 @@
             <?php
             $page->addScriptDeclaration("WDN.loadCSS('https://unlcms.unl.edu/wdn/templates_4.1/css/modules/pagination.css');");
             ?>
-            <div style="text-align: center;">
+            <div class="dcf-mt-2 dcf-txt-center">
                 <div style="display: inline-block;">
                     <ul id="pending-pagination" class="wdn_pagination" data-tab="pending" style="padding-left: 0;">
                         <?php if($context->page != 1): ?>

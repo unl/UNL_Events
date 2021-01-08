@@ -5,6 +5,9 @@ use UNL\UCBCN\Calendar;
 use UNL\UCBCN\Calendar\Event as CalendarHasEvent;
 use UNL\UCBCN\Event;
 use UNL\UCBCN\Permission;
+use UNL\UCBCN\Manager\ValidationException;
+use UNL\UCBCN\UnexpectedValueException;
+use UNL\UCBCN\User\PermissionException;
 
 class MoveEvent extends PostHandler
 {
@@ -28,32 +31,21 @@ class MoveEvent extends PostHandler
 
     public function handlePost(array $get, array $post, array $files)
     {
-        $backend_tab_name = NULL;
-        if (isset($post['status'])) {
-            switch ($post['status']) {
-                case 'pending':
-                    $backend_tab_name = 'pending';
-                    break;
-                case 'upcoming':
-                    $backend_tab_name = 'posted';
-                    break;
-                case 'past':
-                    $backend_tab_name = 'archived';
-                    break;
-            }
-        }
+        $backend_tab_name = $this->getBackendTabNameFromStatus($post['status']);
 
         if (!isset($post['new_status'])) {
-            throw new \Exception("The new_status must be set in the post data.", 400);
+            throw new ValidationException("The new_status must be set in the post data.", 400);
         }
 
         if (!isset($post['event_id'])) {
-            throw new \Exception("The event_id must be set in the post data.", 400);
+            throw new ValidationException("The event_id must be set in the post data.", 400);
         }
 
         if ($post['event_id'] != $this->event->id) {
-            throw new \Exception("The event_id in the post data must match the event_id in the URL.", 400);
+            throw new ValidationException("The event_id in the post data must match the event_id in the URL.", 400);
         }
+
+        $source = isset($post['source']) ? $post['source'] : NULL;
 
         $calendar_has_event = CalendarHasEvent::getByIdsStatus($this->calendar->id, $this->event->id, $backend_tab_name);
 
@@ -61,12 +53,15 @@ class MoveEvent extends PostHandler
             $calendar_has_event = new CalendarHasEvent;
             $calendar_has_event->calendar_id = $this->calendar->id;
             $calendar_has_event->event_id = $this->event->id;
+            if (!empty($source)) {
+                $calendar_has_event->source = $source;
+            }
         }
 
         if ($post['new_status'] == 'pending') {
             $user = Auth::getCurrentUser();
             if (!$user->hasPermission(Permission::EVENT_MOVE_TO_PENDING_ID, $this->calendar->id)) {
-                throw new \Exception("You do not have permission to move events to pending on this calendar.", 403);
+                throw new PermissionException("You do not have permission to move events to pending on this calendar.", 403);
             }
             $calendar_has_event->status = CalendarHasEvent::STATUS_PENDING;
 
@@ -75,17 +70,27 @@ class MoveEvent extends PostHandler
         } else if ($post['new_status'] == 'upcoming') {
             $user = Auth::getCurrentUser();
             if (!$user->hasPermission(Permission::EVENT_MOVE_TO_UPCOMING_ID, $this->calendar->id)) {
-                throw new \Exception("You do not have permission to move events to upcoming on this calendar.", 403);
+                throw new PermissionException("You do not have permission to move events to upcoming on this calendar.", 403);
             }
             $calendar_has_event->status = CalendarHasEvent::STATUS_POSTED;
 
             $calendar_has_event->save();
             $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Event Moved To Upcoming', $this->event->title . ' has been set to "upcoming" status. It will automatically move to "past" after the event.');
         } else {
-            throw new \Exception("Invalid status for event.", 400);
+            throw new UnexpectedValueException("Invalid status for event.", 400);
         }
-        
+
         //redirect
         return $this->calendar->getManageURL(TRUE);
+    }
+
+    private function getBackendTabNameFromStatus($status) {
+        $map = array(
+            'pending' => 'pending',
+            'upcoming' => 'posted',
+            'past' => 'archived'
+        );
+
+        return array_key_exists($status, $map) ? $map[$status] : NULL;
     }
 }
