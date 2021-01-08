@@ -34,6 +34,7 @@
               <?php echo $savvy->render($eventinstance, 'EventInstance/Date.tpl.php') ?>
               <?php echo $savvy->render($eventinstance, 'EventInstance/Location.tpl.php') ?>
               <?php echo $savvy->render($eventinstance, 'EventInstance/Description.tpl.php') ?>
+              <?php echo $savvy->render($eventinstance, 'EventInstance/OriginCalendar.tpl.php') ?>
           <?php } // end else ?>
         </div>
         <?php

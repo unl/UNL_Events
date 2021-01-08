@@ -230,4 +230,17 @@
             <PrivateComment><?php echo htmlspecialchars($context->event->privatecomment); ?></PrivateComment>
         </PrivateComments>
         <?php endif; ?>
+        <?php
+        $originCalendar = $context->event->getOriginCalendar();
+        $protocol = !empty($_SERVER['HTTPS']) ? 'https://' : 'http://';
+        ?>
+        <?php if ($originCalendar instanceof \UNL\UCBCN\Calendar): ?>
+            <OriginCalendar>
+                <CalendarID><?php echo $originCalendar->id; ?></CalendarID>
+                <AccountID><?php echo $originCalendar->account_id; ?></AccountID>
+                <Name><?php echo htmlspecialchars($originCalendar->name); ?></Name>
+                <ShortName><?php echo htmlspecialchars($originCalendar->shortname); ?></ShortName>
+                <URL><?php echo $protocol . $_SERVER['SERVER_NAME'] . '/' . urlencode($originCalendar->shortname);?></URL>
+            </OriginCalendar>
+        <?php endif; ?>
     </Event>
