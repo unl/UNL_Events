@@ -205,7 +205,7 @@
                 <div style="display: inline-block;">
                     <ul id="pending-pagination" class="wdn_pagination" data-tab="pending" style="padding-left: 0;">
                         <?php if($context->page != 1): ?>
-                            <li class="arrow prev"><a href="?search_term=<?php echo $context->search_term?>&amp;page=<?php echo $context->page - 1 ?>" title="Go to the previous page">← prev</a></li>
+                            <li class="arrow prev"><a href="?event_type_id=<?php echo $context->event_type_id ?>&search_term=<?php echo $context->search_term?>&amp;page=<?php echo $context->page - 1 ?>" title="Go to the previous page">← prev</a></li>
                         <?php endif; ?>
                         <?php $before_ellipsis_shown = FALSE; $after_ellipsis_shown = FALSE; ?>
                         <?php for ($i = 1; $i <= $total_pages; $i++): ?>
@@ -213,7 +213,7 @@
                                     <li class="selected"><span><?php echo $i; ?></span></li>
                                 <?php elseif ($i <= 3 || $i >= $total_pages - 2 || $i == $context->page - 1 || 
                                             $i == $context->page - 2 || $i == $context->page + 1 || $i == $context->page + 2): ?>
-                                    <li><a href="?search_term=<?php echo $context->search_term?>&amp;page=<?php echo $i ?>" title="Go to page <?php echo $i; ?>"><?php echo $i; ?></a></li>
+                                    <li><a href="?event_type_id=<?php echo $context->event_type_id ?>&search_term=<?php echo $context->search_term?>&amp;page=<?php echo $i ?>" title="Go to page <?php echo $i; ?>"><?php echo $i; ?></a></li>
                                 <?php elseif ($i < $context->page && !$before_ellipsis_shown): ?>
                                     <li><span class="ellipsis">...</span></li>
                                     <?php $before_ellipsis_shown = TRUE; ?>
@@ -223,7 +223,7 @@
                                 <?php endif; ?>
                         <?php endfor; ?>
                         <?php if($context->page != $total_pages): ?>
-                            <li class="arrow next"><a href="?search_term=<?php echo $context->search_term?>&amp;page=<?php echo $context->page + 1 ?>" title="Go to the next page">next →</a></li>
+                            <li class="arrow next"><a href="?event_type_id=<?php echo $context->event_type_id ?>&search_term=<?php echo $context->search_term?>&amp;page=<?php echo $context->page + 1 ?>" title="Go to the next page">next →</a></li>
                         <?php endif; ?>
                     </ul>
                 </div>
