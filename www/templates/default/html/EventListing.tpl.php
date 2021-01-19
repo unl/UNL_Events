@@ -25,6 +25,7 @@
                   <?php echo $savvy->render($eventinstance, 'EventInstance/Date.tpl.php') ?>
                   <?php echo $savvy->render($eventinstance, 'EventInstance/Location.tpl.php') ?>
                   <?php echo $savvy->render($eventinstance, 'EventInstance/Description.tpl.php') ?>
+                  <?php echo $savvy->render($eventinstance, 'EventInstance/OriginCalendar.tpl.php') ?>
               </div>
               <div class="dcf-col-100% dcf-col-25%-end@sm">
                   <?php echo $savvy->render($eventinstance, 'EventInstance/Thumbnail.tpl.php') ?>
