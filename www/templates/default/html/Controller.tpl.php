@@ -4,9 +4,9 @@ const DISPLAY_TIMEZONE_NOTICE = 'displayTimeZoneNotice';
 
 use UNL\Templates\Templates;
 
-$page = Templates::factory('AppLocal', Templates::VERSION_5_2);
+$page = Templates::factory('AppLocal', Templates::VERSION_5_3);
 
-if (file_exists(\UNL\UCBCN\Util::getWWWRoot() . '/wdn/templates_5.2')) {
+if (file_exists(\UNL\UCBCN\Util::getWWWRoot() . '/wdn/templates_5.3')) {
     $page->setLocalIncludePath(\UNL\UCBCN\Util::getWWWRoot());
 }
 
@@ -33,7 +33,7 @@ $page->affiliation = '';
 $page->addStyleSheet($frontend->getURL().'templates/default/html/css/events.css?v='.UNL\UCBCN\Frontend\Controller::$version);
 
 // Add WDN Deprecated Styles
-$page->head .= '<link rel="preload" href="/wdn/templates_5.2/css/deprecated.css" as="style" onload="this.onload=null;this.rel=\'stylesheet\'"> <noscript><link rel="stylesheet" href="/wdn/templates_5.2/css/deprecated.css"></noscript>';
+$page->head .= '<link rel="preload" href="/wdn/templates_5.3/css/deprecated.css" as="style" onload="this.onload=null;this.rel=\'stylesheet\'"> <noscript><link rel="stylesheet" href="/wdn/templates_5.3/css/deprecated.css"></noscript>';
 
 // no menu items, so hide mobile menu
 $page->addStyleDeclaration("#dcf-mobile-toggle-menu {display: none!important}");
