@@ -83,7 +83,9 @@
                                 <?php if ($event->userCanEdit()): ?>
                                     <a href="<?php echo $event->getEditURL() ?>"><?php echo $event->title; ?></a>
                                 <?php else: ?>
-                                    <?php echo $event->title; ?>
+                                    <a href="<?php echo $event->getViewURL($controller->getCalendar()) ?>">
+                                        <?php echo $event->title; ?>
+                                    </a> (preview)
                                 <?php endif; ?>
                             </td>
                             <td class="small-hidden">
