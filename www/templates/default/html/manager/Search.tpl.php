@@ -70,7 +70,6 @@
                 </thead>
                 <tbody>
                     <?php foreach($context->events as $event): ?>
-                        <?php $calendar = $event->getOriginCalendar() ?>
                         <tr>
                             <td class="medium-hidden dcf-pl-6">
                                 <?php if (!$event->getStatusWithCalendar($context->calendar->getRawObject())): ?>
@@ -83,15 +82,14 @@
                             <td class="small-hidden">
                                 <?php if ($event->userCanEdit()): ?>
                                     <a href="<?php echo $event->getEditURL() ?>"><?php echo $event->title; ?></a>
-                                <?php elseif ($calendar): ?>
-                                    <a href="<?php echo $event->getViewURL($calendar) ?>">
+                                <?php else: ?>
+                                    <a href="<?php echo $event->getViewURL($controller->getCalendar()) ?>">
                                         <?php echo $event->title; ?>
                                     </a> (preview)
-                                <?php else: ?>
-                                    <?php echo $event->title; ?>
                                 <?php endif; ?>
                             </td>
                             <td class="small-hidden">
+                                <?php $calendar = $event->getOriginCalendar() ?>
                                 <?php if ($calendar): ?>
                                     <a href="<?php echo $calendar->getFrontendURL() ?>"><?php echo $calendar->name ?></a>
                                 <?php endif; ?>
