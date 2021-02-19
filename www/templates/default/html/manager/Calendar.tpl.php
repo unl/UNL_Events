@@ -306,5 +306,5 @@
     </div>
 </div>
 <?php
-$page->addScriptDeclaration("WDN.loadCSS('https://wdn.unl.edu/wdn/templates_5.2/js/js-css/tabs.css');");
+$page->addScriptDeclaration("WDN.loadCSS('https://wdn.unl.edu/wdn/templates_5.3/js/js-css/tabs.css');");
 ?>
