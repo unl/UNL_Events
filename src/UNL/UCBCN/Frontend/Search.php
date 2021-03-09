@@ -83,7 +83,7 @@ class Search extends EventListing implements RoutableInterface
                 'e.endtime>\''.date('Y-m-d').' 00:00:00\')';
         }
 
-        $sql.= ') ORDER BY (
+        $sql .= ') ORDER BY (
                         IF (recurringdate.recurringdate IS NULL,
                           e.starttime,
                           CONCAT(DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.starttime," %H:%i:%s"))
