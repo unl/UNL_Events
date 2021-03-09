@@ -55,13 +55,11 @@ class Search extends EventListing implements RoutableInterface
      */
     function getSQL()
     {
-        $sql = '
-                SELECT DISTINCT id, recurringdate_id FROM (
-                SELECT e.id as id, recurringdate.id as recurringdate_id, e.starttime, recurringdate.recurringdate, event.title
+        $sql = 'SELECT e.id as id, recurringdate.id as recurringdate_id
                 FROM eventdatetime as e
                 INNER JOIN event ON e.event_id = event.id
                 INNER JOIN calendar_has_event ON calendar_has_event.event_id = event.id
-                LEFT JOIN recurringdate ON (recurringdate.event_id = event.id AND recurringdate.unlinked = 0)
+                LEFT JOIN recurringdate ON (recurringdate.event_datetime_id = e.id AND recurringdate.unlinked = 0)
                 LEFT JOIN event_has_eventtype ON (event_has_eventtype.event_id = event.id)
                 LEFT JOIN eventtype ON (eventtype.id = event_has_eventtype.eventtype_id)
                 LEFT JOIN location ON (location.id = e.location_id)
@@ -85,8 +83,13 @@ class Search extends EventListing implements RoutableInterface
                 'e.endtime>\''.date('Y-m-d').' 00:00:00\')';
         }
 
-        $sql.= ')
-                ORDER BY e.starttime ASC, recurringdate.recurringdate ASC, event.title ASC) as distinctsearch';
+        $sql.= ') ORDER BY (
+                        IF (recurringdate.recurringdate IS NULL,
+                          e.starttime,
+                          CONCAT(DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.starttime," %H:%i:%s"))
+                        )
+                    ) ASC,
+                    event.title ASC';
 
         return $sql;
     }
