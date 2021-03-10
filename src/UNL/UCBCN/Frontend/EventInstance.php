@@ -68,8 +68,12 @@ class EventInstance implements RoutableInterface
                 '\\UNL\\UCBCN\\Event\\RecurringDate',
                 'recurringdate',
                 $requestedDate,
-                'event_id = ' . (int)$this->eventdatetime->event_id
+                'event_id = ' . (int)$this->eventdatetime->event_id . ' AND unlinked = 0'
             );
+            // Recurring Event must have a valid recurring date
+            if (Occurrence::RECURRING_TYPE_NONE != $this->eventdatetime->recurringtype && empty($this->recurringdate)) {
+              throw new UnexpectedValueException('No recurring event exists for day', 404);
+            }
         }
 
         // Always include images with XML and JSON formats
