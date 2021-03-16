@@ -61,7 +61,7 @@ class CreateEvent extends PostHandler
         $this->event->listingcontactemail = empty($post_data['contact_email']) ? NULL : $post_data['contact_email'];
 
         $this->event->webpageurl = empty($post_data['website']) ? NULL : $post_data['website'];
-        $this->event->approvedforcirculation = $post_data['private_public'] == 'private' ? 0 : 1;
+        $this->event->approvedforcirculation = isset($post_data['private_public']) && $post_data['private_public'] == 'private' ? 0 : 1;
 
         # for extraneous data aside from the event (location, type, etc)
         $this->post = $post_data;
@@ -114,6 +114,11 @@ class CreateEvent extends PostHandler
         # check that a new location has a name
         if ($post_data['location'] == 'new' && empty($post_data['new_location']['name'])) {
             throw new ValidationException('You must give your new location a <a href="#location-name">name</a>.');
+        }
+
+        # website must be a valid url
+        if (!empty($post_data['website']) && !filter_var($post_data['website'], FILTER_VALIDATE_URL)) {
+          throw new ValidationException('Event Website must be a valid URL.');
         }
 
         if (isset($files['imagedata']) && is_uploaded_file($files['imagedata']['tmp_name'])) {

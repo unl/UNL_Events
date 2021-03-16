@@ -109,6 +109,11 @@ class EditEvent extends PostHandler
             }
         }
 
+        # website must be a valid url
+        if (!empty($post_data['website']) && !filter_var($post_data['website'], FILTER_VALIDATE_URL)) {
+          throw new ValidationException('Event Website must be a valid URL.');
+        }
+
         if (array_key_exists('remove_image', $post_data) && $post_data['remove_image'] == 'on') {
             $this->event->imagemime = NULL;
             $this->event->imagedata = NULL;

@@ -70,6 +70,11 @@ class CreateEvent
         if ($start_date > $end_date) {
             throw new ValidationException('Your end date/time must be on or after the start date/time.');
         }
+
+        # website must be a valid url
+        if (!empty($post_data['website']) && !filter_var($post_data['website'], FILTER_VALIDATE_URL)) {
+            throw new ValidationException('Event Website must be a valid URL.');
+        }
     }
 
     private function createEvent($post_data) 
