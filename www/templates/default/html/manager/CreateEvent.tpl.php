@@ -442,7 +442,7 @@ require(['jquery'], function ($) {
             }
         }
 
-        var websiteURL = $('#website').val().trim();
+        var websiteURL = $('#website').val();
         if (websiteURL != '' && !isUrlValid(websiteURL)) {
             notifier.mark_input_invalid($('#website'));
             errors.push('<a href=\"#website\">Event Website</a> is not a valid URL.');
