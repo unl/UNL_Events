@@ -16,7 +16,7 @@ var ordinal = function(number) {
 Date.prototype.isValid = function () {
     // An invalid date object returns NaN for getTime() and NaN is the only
     // object not strictly equal to itself.
-    return this.getTime() === this.getTime();
+    return !isNaN(this.getTime());
 };
 
 // this needs to be global as it gets tapped by the page js
