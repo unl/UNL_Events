@@ -237,7 +237,7 @@
                     </select>
                     <div class="dcf-datepicker">
                         <label class="dcf-label dcf-d-inline-block" for="recurs-until-date">until </label><br>
-                        <input value="<?php if ($datetime->recurringtype != 'none' && $datetime->recurringtype != NULL) echo $recurs_until_date; ?>" id="recurs-until-date" name="recurs_until_date" type="text" aria-label="Until date in the format of mm/dd/yyyy" autocomplete="off" />
+                        <input value="<?php if ($datetime->recurringtype != 'none' && $datetime->recurringtype != NULL) { echo $recurs_until_date; } ?>" id="recurs-until-date" name="recurs_until_date" type="text" aria-label="Until date in the format of mm/dd/yyyy" autocomplete="off" />
                     </div>
                 </div>
             </div>
