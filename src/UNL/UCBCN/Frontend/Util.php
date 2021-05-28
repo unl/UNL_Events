@@ -41,6 +41,6 @@ class Util
             $lines[] = $value;
         }
 
-        return join($lines, "\r\n ");
+        return join("\r\n ", $lines);
     }
 }

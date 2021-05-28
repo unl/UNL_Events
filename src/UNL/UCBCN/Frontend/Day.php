@@ -29,6 +29,7 @@ use UNL\UCBCN\RuntimeException;
  */
 class Day extends EventListing implements RoutableInterface
 {
+	private $isHomepage = FALSE;
 
     /**
      * Constructor for an individual day.
@@ -43,6 +44,10 @@ class Day extends EventListing implements RoutableInterface
         $this->options['y'] = date('Y');
         if (!isset($this->options['includeEventImageData'])) {
             $this->options['includeEventImageData'] = TRUE;
+        }
+
+        if (isset($options[0]) && !preg_match("/^\d{4}\/\d{1,2}\/\d{1,2}\/?/", $options[0])) {
+            $this->isHomepage = TRUE;
         }
 
         parent::__construct($options);
@@ -143,6 +148,10 @@ class Day extends EventListing implements RoutableInterface
         }
 
         return true;
+    }
+
+    public function isHomepage() {
+        return $this->isHomepage;
     }
 
     public function getDateTimeString($endOfDay = FALSE){

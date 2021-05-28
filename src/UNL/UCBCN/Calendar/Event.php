@@ -38,6 +38,8 @@ class Event extends Record
     public $uidcreated;                      // string(100)
     public $datelastupdated;                 // datetime(19)  binary
     public $uidlastupdated;                  // string(100)
+    public $featured;                        // tinyint(0) not_null (boolean)
+    public $pinned;                          // tinyint(0) not_null (boolean)
     
     const SOURCE_CREATE_EVENT_FORM      = 'create event form';
     const SOURCE_CREATE_EVENT_API       = 'create event api';
@@ -88,6 +90,8 @@ class Event extends Record
         $this->datelastupdated = date('Y-m-d H:i:s');
         $this->uidcreated = Auth::getCurrentUser()->uid;
         $this->uidlastupdated = Auth::getCurrentUser()->uid;
+        $this->featured = 0;
+        $this->pinned = 0;
         $result = parent::insert();
 
         return $result;
@@ -167,14 +171,33 @@ class Event extends Record
         return in_array($this->status, array(self::STATUS_POSTED, self::STATUS_ARCHIVED));
     }
 
-
     /**
      * determine if this event is pending
-     * 
+     *
      * @return bool
      */
     public function isPending()
     {
         return self::STATUS_PENDING == $this->status;
+    }
+
+    /**
+     * determine if this event is featured
+     *
+     * @return bool
+     */
+    public function isFeatured()
+    {
+        return $this->featured == 1;
+    }
+
+    /**
+     * determine if this event is pinned
+     *
+     * @return bool
+     */
+    public function isPinned()
+    {
+        return $this->pinned == 1;
     }
 }

@@ -1,8 +1,13 @@
 <?php
+use UNL\UCBCN\Permission;
+
     const ARIA_SELECTED = 'aria-selected="true"';
+    // Disable Promote since not being used on main calendar homepage.
+    const ALLOW_PROMOTE = FALSE;
     $user = \UNL\UCBCN\Manager\Auth::getCurrentUser();
     $events = $context->getEvents();
     $categorized_events = $context->getCategorizedEvents();
+
     $total_pages = NULL;
     switch ($context->tab) {
         case 'pending':
@@ -73,6 +78,28 @@
                         <a class="dcf-btn dcf-btn-secondary" href="<?php echo $context->calendar->getCleanupURL() ?>">Clean Up Old Events</a>
                     </div>
                 <?php endif; ?>
+
+                <div class="small-hidden dcf-mb-4">
+                    <h2 class="dcf-txt-xs">Actions Summary</h2>
+                    <ul class="dcf-txt-2xs">
+                        <?php if ($context->tab != 'pending' && $user->hasPermission(\UNL\UCBCN\Permission::EVENT_MOVE_TO_PENDING_ID, $context->calendar->id)): ?>
+                        <li>Move to Pending - Moves event to pending state and will not display on current calendar.</li>
+	                    <?php elseif ($context->tab == 'pending' && $user->hasPermission(\UNL\UCBCN\Permission::EVENT_MOVE_TO_UPCOMING_ID, $context->calendar->id)): ?>
+                        <li>Move to Upcoming - Moves event to upcoming/past state and will display on current calendar.</li>
+                        <?php endif; ?>
+	                    <?php if ($user->hasPermission(Permission::EVENT_FEATURE_ID, $context->calendar->id)): ?>
+                        <li>Featured - The most current non-pending featured events will display on the featured and home pages.</li>
+                        <li>Pinned - The most current non-pending pinned event will always display on the featured and home pages.</li>
+                        <?php endif; ?>
+	                    <?php if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_RECOMMEND_ID, $context->calendar->id)): ?>
+                        <li>Recommend - You may recommend an event to any calendar you have access to or any calendar with the same account as current calendar which allows it.</li>
+                        <?php endif; ?>
+	                    <?php if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_DELETE_ID, $context->calendar->id)): ?>
+                        <li>Delete - Removes the event from current calendar and if event originated in current calendar it will remove it from all system calendars.</li>
+                        <?php endif; ?>
+                    </ul>
+                </div>
+
                 <div class="dcf-mb-5 medium-hidden">
                   <select id="bulk-action" title="Bulk Action" class="bulk-<?php echo $context->tab; ?>-event-tools dcf-input-select dcf-txt-sm">
                       <option value="">Bulk Actions</option>
@@ -113,6 +140,10 @@
                         <tbody>
                             <?php try { ?>
                             <?php foreach($events as $event): ?>
+                                <?php
+                                    $featured =  $event->isFeaturedWithCalendar($context->calendar->getRawObject());
+                                    $pinned = $event->isPinnedWithCalendar($context->calendar->getRawObject());
+                                ?>
                                 <tr>
                                     <td class="medium-hidden dcf-pl-6">
                                         <div class="dcf-input-checkbox">
@@ -197,7 +228,7 @@
                                               <option value="move-to-pending">Move to Pending</option>
                                             <?php endif; ?>
 
-                                            <?php if ($context->calendar->id == UNL\UCBCN::$main_calendar_id && $context->tab != 'pending' && $user->hasPermission(\UNL\UCBCN\Permission::CALENDAR_EDIT_ID, $context->calendar->id)): ?>
+                                            <?php if (ALLOW_PROMOTE && $context->calendar->id == UNL\UCBCN::$main_calendar_id && $context->tab != 'pending' && $user->hasPermission(\UNL\UCBCN\Permission::CALENDAR_EDIT_ID, $context->calendar->id)): ?>
                                               <option value="promote">Promote Event</option>
                                               <option value="hide-promo">Remove from Promo Bar</option>
                                             <?php endif; ?>
@@ -227,7 +258,7 @@
                                             <option value="move-to-pending">Move to Pending</option>
                                           <?php endif; ?>
 
-                                          <?php if ($context->calendar->id == UNL\UCBCN::$main_calendar_id && $context->tab != 'pending' && $user->hasPermission(\UNL\UCBCN\Permission::CALENDAR_EDIT_ID, $context->calendar->id)): ?>
+                                          <?php if (ALLOW_PROMOTE && $context->calendar->id == UNL\UCBCN::$main_calendar_id && $context->tab != 'pending' && $user->hasPermission(\UNL\UCBCN\Permission::CALENDAR_EDIT_ID, $context->calendar->id)): ?>
                                             <option value="promote">Promote Event</option>
                                             <option value="hide-promo">Remove from Promo Bar</option>
                                           <?php endif; ?>
@@ -240,6 +271,24 @@
                                             <option value="delete">Delete</option>
                                           <?php endif; ?>
                                         </select>
+
+                                        <?php if ($user->hasPermission(Permission::EVENT_FEATURE_ID, $context->calendar->id)): ?>
+                                        <div class="dcf-p-3">
+                                            <?php
+                                                $featuredChecked = ($featured === TRUE) ? ' checked' : '';
+                                                $pinnedChecked = ($pinned === TRUE) ? ' checked' : '';
+                                            ?>
+                                            <div class="dcf-input-checkbox">
+                                                <input class="feature_event_input" id="featured-event-<?php echo $event->id; ?>" data-event-id="<?php echo $event->id; ?>"  data-url="<?php echo $event->getToggleFeatureEventAttributeURL($controller->getCalendar()); ?>" type="checkbox" value="1"<?php echo $featuredChecked; ?>>
+                                                <label for="featured-event-<?php echo $event->id; ?>">Featured</label>
+                                            </div>
+                                            <div class="dcf-input-checkbox">
+                                                <input class="pin_event_input" id="pinned-event-<?php echo $event->id; ?>" data-event-id="<?php echo $event->id; ?>" data-url="<?php echo $event->getToggleFeatureEventAttributeURL($controller->getCalendar()); ?>" type="checkbox" value="1"<?php echo $pinnedChecked; ?>>
+                                                <label for="pinned-event-<?php echo $event->id; ?>">Pinned</label>
+                                            </div>
+                                        </div>
+                                        <?php endif; ?>
+
                                         <form id="move-<?php echo $event->id; ?>" method="POST" action="<?php echo $event->getMoveURL($controller->getCalendar()) ?>" class="delete-form dcf-d-none">
                                           <input type="text" title="New Status" name="new_status" id="move-target-<?php echo $event->id; ?>">
                                           <input type="text" title="Event ID" name="event_id" value="<?php echo $event->id ?>">
@@ -307,4 +356,32 @@
 </div>
 <?php
 $page->addScriptDeclaration("WDN.loadCSS('https://wdn.unl.edu/wdn/templates_5.3/js/js-css/tabs.css');");
+$tokenNameKey = $controller->getCSRFHelper()->getTokenNameKey();
+$tokenNameValue = $controller->getCSRFHelper()->getTokenName();
+$tokenValueKey = $controller->getCSRFHelper()->getTokenValueKey();
+$tokenValueValue = $controller->getCSRFHelper()->getTokenValue();
+$tokenString = $tokenNameKey . '=' . $tokenNameValue . '&' . $tokenValueKey . '=' . $tokenValueValue;
+$page->addScriptDeclaration("
+    var featureEventInputs = document.getElementsByClassName('feature_event_input');
+    var i;
+    for (i = 0; i < featureEventInputs.length; i++) {
+        featureEventInputs[i].addEventListener('change', function() {
+            var token = '" . $tokenString . "';
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', this.dataset.url);
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.send('type=feature&event_id=' + this.dataset.eventId + '&featured=' + this.checked + '&' + token);
+        });
+    }
+    var pinEventInputs = document.getElementsByClassName('pin_event_input');
+    for (i = 0; i < pinEventInputs.length; i++) {
+        pinEventInputs[i].addEventListener('change', function() {
+            var token = '" . $tokenString . "';
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', this.dataset.url);
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.send('type=pin&event_id=' + this.dataset.eventId + '&pinned=' + this.checked + '&' + token);
+        });
+    }
+");
 ?>

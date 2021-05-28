@@ -9,6 +9,7 @@ use UNL\UCBCN\Frontend\Controller as FrontendController;
 use UNL\UCBCN\Manager\Controller as ManagerController;
 use UNL\UCBCN\Calendar\Event as CalendarHasEvent;
 use UNL\UCBCN\Calendar\Events as CalendarHasEvents;
+use UNL\UCBCN\Frontend\Featured as FeaturedEvents;
 use UNL\UCBCN\Calendar\Subscriptions;
 use UNL\UCBCN\Users;
 
@@ -91,6 +92,10 @@ class Calendar extends Record
         return FrontendController::$url . $this->shortname . "/";
     }
 
+	public function getFeaturedURL() {
+		return FrontendController::$url . $this->shortname . '/featured/';
+	}
+
     public function getManageURL($append_page_tab = FALSE) {
         $append = '';
         if ($append_page_tab) {
@@ -102,7 +107,7 @@ class Calendar extends Record
                 $append['page'] = $_SESSION['current_page'];
             }
             if (!empty($append)) {
-                $append = '?' . join(array_map(function ($key, $val) {return $key . '=' . $val;}, array_keys($append), $append), '&');
+                $append = '?' . join('&', array_map(function ($key, $val) {return $key . '=' . $val;}, array_keys($append), $append));
             } else {
                 $append = '';
             }
@@ -354,6 +359,11 @@ class Calendar extends Record
         }
 
         return $eventIDs;
+    }
+
+    public function getFeaturedEvents($pinned_limit = 1, $limit = 10) {
+        $featureEvents = new FeaturedEvents(array('calendar' => $this, 'pinned_limit' => $pinned_limit, 'limit' => $limit));
+        return !empty($featureEvents->options['array']) ? $featureEvents : NULL;
     }
 
     public function archiveEvents($eventIDs = NULL) {
