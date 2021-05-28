@@ -99,7 +99,7 @@ class Upcoming extends EventListing implements RoutableInterface
                         )
                     ) ASC,
                     event.title ASC';
-        if (is_numeric($this->options['limit'] && $this->options['limit'] >= 1)) {
+        if (is_numeric($this->options['limit']) && $this->options['limit'] >= 1) {
             $sql .= ' LIMIT ' . (int)$this->options['limit'];
         }
         return $sql;

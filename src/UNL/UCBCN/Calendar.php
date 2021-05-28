@@ -102,7 +102,7 @@ class Calendar extends Record
                 $append['page'] = $_SESSION['current_page'];
             }
             if (!empty($append)) {
-                $append = '?' . join(array_map(function ($key, $val) {return $key . '=' . $val;}, array_keys($append), $append), '&');
+                $append = '?' . join('&', array_map(function ($key, $val) {return $key . '=' . $val;}, array_keys($append), $append));
             } else {
                 $append = '';
             }
