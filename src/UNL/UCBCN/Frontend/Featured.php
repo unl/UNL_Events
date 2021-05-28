@@ -1,13 +1,12 @@
 <?php
 /**
- * This class contains the information needed for viewing the list of upcoming
+ * This class contains the information needed for viewing the list of featured
  * events within the calendar system.
  *
  * PHP version 5
  *
  * @category  Events
  * @package   UNL_UCBCN_Frontend
- * @author    Brett Bieber <brett.bieber@gmail.com>
  * @copyright 2009 Regents of the University of Nebraska
  * @license   http://www1.unl.edu/wdn/wiki/Software_License BSD License
  * @version   CVS: $id$
@@ -168,7 +167,7 @@ class Featured extends EventListing implements RoutableInterface
     /**
      * Get a permanent URL to this object.
      *
-     * @return string URL to this specific upcoming.
+     * @return string URL to this specific featured.
      */
     public function getURL()
     {
@@ -176,7 +175,7 @@ class Featured extends EventListing implements RoutableInterface
     }
 
     /**
-     * Generate an Upcoming URL for a specific calendar
+     * Generate an Featured URL for a specific calendar
      *
      * @param Calendar $calendar
      * @return string
