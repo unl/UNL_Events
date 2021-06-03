@@ -99,9 +99,7 @@ class Upcoming extends EventListing implements RoutableInterface
                         )
                     ) ASC,
                     event.title ASC';
-        if (is_numeric($this->options['limit']) && $this->options['limit'] >= 1) {
-            $sql .= ' LIMIT ' . (int)$this->options['limit'];
-        }
+        $sql .= $this->setLimitClause($this->options['limit']);
         return $sql;
     }
     
@@ -134,5 +132,12 @@ class Upcoming extends EventListing implements RoutableInterface
     public function getMonthWidget()
     {
         return new MonthWidget($this->options);
+    }
+
+    protected function setLimitClause($limit) {
+        if (is_numeric($limit) && $limit >= 1) {
+            return ' LIMIT ' . (int)$limit;
+        }
+        return '';
     }
 }

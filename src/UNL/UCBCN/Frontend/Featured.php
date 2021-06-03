@@ -20,7 +20,7 @@ namespace UNL\UCBCN\Frontend;
  * @category  Events
  * @package   UNL_UCBCN_Frontend
  */
-class Featured extends EventListing implements RoutableInterface
+class Featured extends Upcoming
 {
     /**
      * Calendar \UNL\UCBCN\Calendar Object
@@ -157,23 +157,6 @@ class Featured extends EventListing implements RoutableInterface
                 ) ASC, event.title ASC';
     }
 
-    private function setLimitClause($limit) {
-        if (is_numeric($limit) && $limit >= 1) {
-            return ' LIMIT ' . (int)$limit;
-        }
-        return '';
-    }
-
-    /**
-     * Get a permanent URL to this object.
-     *
-     * @return string URL to this specific featured.
-     */
-    public function getURL()
-    {
-        return $this->generateURL($this->calendar);
-    }
-
     /**
      * Generate an Featured URL for a specific calendar
      *
@@ -183,15 +166,5 @@ class Featured extends EventListing implements RoutableInterface
     public static function generateURL(Calendar $calendar)
     {
         return $calendar->getURL() . 'featured/';
-    }
-
-    /**
-     * Get the month widget for the context's month
-     *
-     * @return MonthWidget
-     */
-    public function getMonthWidget()
-    {
-        return new MonthWidget($this->options);
     }
 }
