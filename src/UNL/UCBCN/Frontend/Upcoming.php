@@ -37,11 +37,11 @@ class Upcoming extends EventListing implements RoutableInterface
     public $options = array(
             'limit'  => 10,
             'offset' => 0,
-            );
-    
+    );
+
     /**
      * Constructs an upcoming event view for this calendar.
-     * 
+     *
      * @param array $options Associative array of options.
      */
     public function __construct($options = array())
@@ -50,6 +50,9 @@ class Upcoming extends EventListing implements RoutableInterface
         $options['m'] = date('m');
         $options['d'] = date('d');
         $options['y'] = date('Y');
+        $options['H'] = date('H');
+        $options['i'] = date('i');
+        $options['s'] = date('s');
         $options['includeEventImageData'] = TRUE;
 
         parent::__construct($options);
@@ -62,10 +65,10 @@ class Upcoming extends EventListing implements RoutableInterface
      */
     public function getDateTime()
     {
-        return new \DateTime('@'.mktime(0, 0, 0, $this->options['m'], $this->options['d'], $this->options['y']));
+        return new \DateTime('@'.mktime($this->options['H'], $this->options['i'], $this->options['s'], $this->options['m'], $this->options['d'], $this->options['y']));
     }
 
-    /**
+	/**
      * Get the SQL for finding events
      * 
      * @see \UNL\UCBCN\ActiveRecord\RecordList::getSQL()

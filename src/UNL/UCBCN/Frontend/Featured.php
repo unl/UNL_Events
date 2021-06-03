@@ -23,45 +23,16 @@ namespace UNL\UCBCN\Frontend;
 class Featured extends Upcoming
 {
     /**
-     * Calendar \UNL\UCBCN\Calendar Object
-     *
-     * @var \UNL\UCBCN\Calendar
-     */
-    public $calendar;
-
-    public $options = array(
-        'pinned_limit' => 1,
-        'limit'  => 10,
-        'offset' => 0,
-    );
-
-    /**
      * Constructs an featured event view for this calendar.
      *
      * @param array $options Associative array of options.
-     */
+    */
     public function __construct($options = array())
     {
         // Set defaults
-        $options['m'] = date('m');
-        $options['d'] = date('d');
-        $options['y'] = date('Y');
-        $options['H'] = date('H');
-        $options['i'] = date('i');
-        $options['s'] = date('s');
-        $options['includeEventImageData'] = TRUE;
+        $options['pinned_limit'] = 1;
 
         parent::__construct($options);
-    }
-
-    /**
-     * Get the date and time for this day
-     *
-     * @return \DateTime
-     */
-    public function getDateTime()
-    {
-        return new \DateTime('@'.mktime($this->options['H'], $this->options['i'], $this->options['s'], $this->options['m'], $this->options['d'], $this->options['y']));
     }
 
     /**
