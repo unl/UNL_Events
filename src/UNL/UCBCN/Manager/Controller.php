@@ -245,7 +245,8 @@ class Controller {
         static $csrf;
 
         if (!$csrf) {
-            $csrf = new \Slim\Csrf\Guard('csrf');
+            $storage = null;
+            $csrf = new \Slim\Csrf\Guard('csrf', $storage, null, 200, 16, true);
             $csrf->validateStorage();
             $csrf->generateToken();
         }

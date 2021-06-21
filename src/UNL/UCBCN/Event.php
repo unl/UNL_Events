@@ -115,7 +115,7 @@ class Event extends Record
         return new EventListing($options);
     }
 
-    public function getStatusWithCalendar(Calendar $calendar) 
+    public function getStatusWithCalendar(Calendar $calendar)
     {
         $calendar_has_event = CalendarHasEvent::getByIds($calendar->id, $this->id);
         if ($calendar_has_event === FALSE) {
@@ -125,13 +125,55 @@ class Event extends Record
         }
     }
 
-    public function updateStatusWithCalendar(Calendar $calendar, $status) 
+    public function updateStatusWithCalendar(Calendar $calendar, $status)
     {
         $calendar_has_event = CalendarHasEvent::getByIds($calendar->id, $this->id);
         if ($calendar_has_event === FALSE) {
             throw new \Exception('Event does not have status with calendar');
         } else {
             $calendar_has_event->status = $status;
+            $calendar_has_event->update();
+        }
+    }
+
+    public function isFeaturedWithCalendar(Calendar $calendar)
+    {
+        $calendar_has_event = CalendarHasEvent::getByIds($calendar->id, $this->id);
+        if ($calendar_has_event === FALSE) {
+            return false;
+        } else {
+            return $calendar_has_event->isFeatured();
+        }
+    }
+
+    public function updateFeaturedWithCalendar(Calendar $calendar, $featured = FALSE)
+    {
+        $calendar_has_event = CalendarHasEvent::getByIds($calendar->id, $this->id);
+        if ($calendar_has_event === FALSE) {
+            throw new \Exception('Event does not have featured with calendar');
+        } else {
+            $calendar_has_event->featured = ($featured === TRUE) ? 1 : 0;
+            $calendar_has_event->update();
+        }
+    }
+
+    public function isPinnedWithCalendar(Calendar $calendar)
+    {
+        $calendar_has_event = CalendarHasEvent::getByIds($calendar->id, $this->id);
+        if ($calendar_has_event === FALSE) {
+            return false;
+        } else {
+            return $calendar_has_event->isPinned();
+        }
+    }
+
+    public function updatePinnedWithCalendar(Calendar $calendar, $pinned = FALSE)
+    {
+        $calendar_has_event = CalendarHasEvent::getByIds($calendar->id, $this->id);
+        if ($calendar_has_event === FALSE) {
+            throw new \Exception('Event does not have pinned with calendar');
+        } else {
+            $calendar_has_event->pinned = ($pinned === TRUE) ? 1 : 0;
             $calendar_has_event->update();
         }
     }
@@ -182,6 +224,10 @@ class Event extends Record
 
     public function getPromoteURL($calendar) {
         return Controller::$url . $calendar->shortname . '/event/' . $this->id . '/promote/';
+    }
+
+    public function getToggleFeatureEventAttributeURL($calendar) {
+        return Controller::$url . $calendar->shortname . '/event/' . $this->id . '/toggle-feature-event-attribute/';
     }
 
     # events will only have one type. But the database allows them to have more, technically.
