@@ -38,6 +38,7 @@ class Permission extends Record
     const EVENT_MOVE_TO_UPCOMING = 'Event Post';
     const EVENT_MOVE_TO_PENDING = 'Event Send Event to Pending Queue';
     const EVENT_RECOMMEND = 'Event Recommend';
+    const EVENT_FEATURE = 'Event Feature';
 
     const CALENDAR_EDIT = 'Calendar Edit';
     const CALENDAR_DELETE = 'Calendar Delete';
@@ -50,6 +51,7 @@ class Permission extends Record
     const EVENT_MOVE_TO_UPCOMING_ID = 3;
     const EVENT_MOVE_TO_PENDING_ID = 4;
     const EVENT_RECOMMEND_ID = 6;
+    const EVENT_FEATURE_ID = 7;
 
     const CALENDAR_EDIT_ID = 19;
     const CALENDAR_DELETE_ID = 16;

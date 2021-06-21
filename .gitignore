@@ -10,3 +10,4 @@
 /vendor/composer
 install
 */.DS_Store
+.idea
