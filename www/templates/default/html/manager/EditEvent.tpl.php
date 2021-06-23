@@ -27,7 +27,7 @@
     $crumbs->crumbs = array(
         "Events Manager" => "/manager",
         $context->calendar->name => $context->calendar->getManageURL(),
-        'Edit "' . $event->title . '"' => NULL
+        'Edit Event' => NULL
     );
     echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
 ?>
