@@ -10,6 +10,7 @@ use UNL\UCBCN\Event;
 use UNL\UCBCN\Event\EventType;
 use UNL\UCBCN\Event\Occurrence;
 use UNL\UCBCN\User;
+use UNL\UCBCN\FileUpload;
 
 class EditEvent extends PostHandler
 {
@@ -118,11 +119,18 @@ class EditEvent extends PostHandler
             $this->event->imagemime = NULL;
             $this->event->imagedata = NULL;
         } else if (isset($files['imagedata']) && is_uploaded_file($files['imagedata']['tmp_name'])) {
-            if ($files['imagedata']['error'] == UPLOAD_ERR_OK) {
-                $this->event->imagemime = $files['imagedata']['type'];
-                $this->event->imagedata = file_get_contents($files['imagedata']['tmp_name']);
+            $uploadFile = new FileUpload('imagedata', FileUpload::TYPE_IMAGE);
+            if ($uploadFile->isValid()) {
+	            $uploadFile->compressImage();
+                $this->event->imagemime = $uploadFile->getType();
+                $this->event->imagedata = file_get_contents($uploadFile->getPath());
             } else {
-                throw new ValidationException('There was an error uploading your image.');
+                $message = 'Your uploaded image has error(s): <ul>';
+                foreach($uploadFile->getValidationErrors() as $error) {
+                    $message .= '<li>' . $error . '</li>';
+                }
+                $message .= '</ul>';
+                throw new ValidationException($message);
             }
         } else if (isset($files['imagedata']) && $files['imagedata']['error'] == UPLOAD_ERR_INI_SIZE) {
             throw new ValidationException('Your image file size was too large. It must be 2 MB or less. Try a tool like <a target="_blank" href="http://www.imageoptimizer.net">Image Optimizer</a>.');

@@ -4,6 +4,7 @@ namespace UNL\UCBCN\Manager;
 use UNL\UCBCN as BaseUCBCN;
 use UNL\UCBCN\Calendar as CalendarModel;
 use UNL\UCBCN\Calendar\EventTypes;
+use UNL\UCBCN\FileUpload;
 use UNL\UCBCN\Location;
 use UNL\UCBCN\Locations;
 use UNL\UCBCN\Event;
@@ -121,12 +122,22 @@ class CreateEvent extends PostHandler
           throw new ValidationException('Event Website must be a valid URL.');
         }
 
-        if (isset($files['imagedata']) && is_uploaded_file($files['imagedata']['tmp_name'])) {
-            if ($files['imagedata']['error'] == UPLOAD_ERR_OK) {
-                $this->event->imagemime = $files['imagedata']['type'];
-                $this->event->imagedata = file_get_contents($files['imagedata']['tmp_name']);
+        if (array_key_exists('remove_image', $post_data) && $post_data['remove_image'] == 'on') {
+            $this->event->imagemime = NULL;
+            $this->event->imagedata = NULL;
+        } else if (isset($files['imagedata']) && is_uploaded_file($files['imagedata']['tmp_name'])) {
+            $uploadFile = new FileUpload('imagedata', FileUpload::TYPE_IMAGE);
+            if ($uploadFile->isValid()) {
+                $uploadFile->compressImage();
+                $this->event->imagemime = $uploadFile->getType();
+                $this->event->imagedata = file_get_contents($uploadFile->getPath());
             } else {
-                throw new ValidationException('There was an error uploading your image.');
+                $message = 'Your uploaded image has error(s): <ul>';
+                foreach($uploadFile->getValidationErrors() as $error) {
+                    $message .= '<li>' . $error . '</li>';
+                }
+                $message .= '</ul>';
+                throw new ValidationException($message);
             }
         } else if (isset($files['imagedata']) && $files['imagedata']['error'] == UPLOAD_ERR_INI_SIZE) {
             throw new ValidationException('Your image file size was too large. It must be 2 MB or less. Try a tool like <a target="_blank" href="http://www.imageoptimizer.net">Image Optimizer</a>.');
