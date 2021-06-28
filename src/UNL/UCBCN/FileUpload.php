@@ -28,7 +28,7 @@ class FileUpload
 
     public function isValid() {
         $this->validate();
-        return $this->hasErrors();
+        return !$this->hasErrors();
     }
 
     public function getValidationErrors() {
@@ -67,7 +67,7 @@ class FileUpload
         $this->errors = array();
         $this->validateFile();
 
-        if ($this->hasErrors()) {
+        if (!$this->hasErrors()) {
             switch ($this->type) {
                 case self::TYPE_IMAGE:
                     $this->validateImage();
@@ -80,7 +80,7 @@ class FileUpload
     }
 
     private function hasErrors() {
-        return count($this->errors) == 0;
+        return count($this->errors) > 0;
     }
 
     private function allowedMimeTypes() {
