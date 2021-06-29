@@ -67,15 +67,8 @@ class FileUpload
         $this->errors = array();
         $this->validateFile();
 
-        if (!$this->hasErrors()) {
-            switch ($this->type) {
-                case self::TYPE_IMAGE:
-                    $this->validateImage();
-                    break;
-
-                default:
-                    // do nothing
-            }
+        if (!$this->hasErrors() && $this->type === self::TYPE_IMAGE) {
+            $this->validateImage();
         }
     }
 
@@ -84,11 +77,8 @@ class FileUpload
     }
 
     private function allowedMimeTypes() {
-        switch ($this->type) {
-            case self::TYPE_IMAGE:
-            default:
-                return array('image/gif', 'image/jpeg', 'image/jpg', 'image/png');
-                break;
+        if ($this->type ===  self::TYPE_IMAGE) {
+            return array('image/gif', 'image/jpeg', 'image/jpg', 'image/png');
         }
     }
 
@@ -107,11 +97,11 @@ class FileUpload
     private function validateImage() {
         $width =  isset($this->imageInfo[0]) ? intval($this->imageInfo[0]) : -1;
         $height = isset($this->imageInfo[1]) ? intval( $this->imageInfo[1]) : -1;
-        if ($width < -1 || $height < -1) {
+        if ($width === -1 || $height === -1) {
             return;  // size check failed so bail
         }
         if ($width < 150 || $height < 150) {
-            $this->errors[] = 'Image width or height (' . $width . 'x' . $height . ') should be greater than 150 pixels.';
+            $this->errors[] = 'Image width or height (' . $width . 'x' . $height . ') must be greater than 150 pixels.';
         }
     }
 
