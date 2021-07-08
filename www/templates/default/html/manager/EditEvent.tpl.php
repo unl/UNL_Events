@@ -241,9 +241,11 @@
                 <div class="details">
                     <?php if ($event->imagemime != NULL): ?>
                         <img src="<?php echo $base_frontend_url ?>images/<?php echo $event->id; ?>" alt="image for event <?php echo $event->id; ?>">
-                        <br>
-                        <input type="checkbox" name="remove_image" id="remove-image">
-                        <label for="remove-image">Remove Image</label> 
+                        <?php if(!$context->on_main_calendar): ?>
+                            <br>
+                            <input type="checkbox" name="remove_image" id="remove-image">
+                            <label for="remove-image">Remove Image</label>
+	                    <?php endif; ?>
                     <?php endif; ?>
                     <input class="dcf-input-file" style="font-size: 10px;" type="file" name="imagedata" id="imagedata" aria-label="Event Image">
                 </div>

@@ -122,10 +122,8 @@ class CreateEvent extends PostHandler
           throw new ValidationException('Event Website must be a valid URL.');
         }
 
-        if (array_key_exists('remove_image', $post_data) && $post_data['remove_image'] == 'on') {
-            $this->event->imagemime = NULL;
-            $this->event->imagedata = NULL;
-        } else if (isset($files['imagedata']) && is_uploaded_file($files['imagedata']['tmp_name'])) {
+
+        if (isset($files['imagedata']) && is_uploaded_file($files['imagedata']['tmp_name'])) {
             $uploadFile = new FileUpload('imagedata', FileUpload::TYPE_IMAGE);
             if ($uploadFile->isValid()) {
                 $uploadFile->compressImage();
@@ -141,6 +139,8 @@ class CreateEvent extends PostHandler
             }
         } else if (isset($files['imagedata']) && $files['imagedata']['error'] == UPLOAD_ERR_INI_SIZE) {
             throw new ValidationException('Your image file size was too large. It must be 2 MB or less. Try a tool like <a target="_blank" href="http://www.imageoptimizer.net">Image Optimizer</a>.');
+        } else if ($post_data['send_to_main'] === 'on') {
+	        throw new ValidationException('A image is required for events considered for main UNL Calendar');
         }
 
         # send to main is required

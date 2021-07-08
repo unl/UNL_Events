@@ -116,8 +116,12 @@ class EditEvent extends PostHandler
         }
 
         if (array_key_exists('remove_image', $post_data) && $post_data['remove_image'] == 'on') {
-            $this->event->imagemime = NULL;
-            $this->event->imagedata = NULL;
+            if ($this->on_main_calendar || isset($post_data['send_to_main'])) {
+		        throw new ValidationException('Image can not be removed. Image is required for events considered for main UNL Calendar');
+	        } else {
+		        $this->event->imagemime = NULL;
+		        $this->event->imagedata = NULL;
+	        }
         } else if (isset($files['imagedata']) && is_uploaded_file($files['imagedata']['tmp_name'])) {
             $uploadFile = new FileUpload('imagedata', FileUpload::TYPE_IMAGE);
             if ($uploadFile->isValid()) {
@@ -134,6 +138,8 @@ class EditEvent extends PostHandler
             }
         } else if (isset($files['imagedata']) && $files['imagedata']['error'] == UPLOAD_ERR_INI_SIZE) {
             throw new ValidationException('Your image file size was too large. It must be 2 MB or less. Try a tool like <a target="_blank" href="http://www.imageoptimizer.net">Image Optimizer</a>.');
+        } else if ($this->on_main_calendar || isset($post_data['send_to_main'])) {
+	        throw new ValidationException('A image is required for events considered for main UNL Calendar');
         }
     }
 

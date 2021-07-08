@@ -100,8 +100,8 @@ class FileUpload
         if ($width === -1 || $height === -1) {
             return;  // size check failed so bail
         }
-        if ($width < 150 || $height < 150) {
-            $this->errors[] = 'Image width or height (' . $width . 'x' . $height . ') must be greater than 150 pixels.';
+        if ($width != $height) {
+            $this->errors[] = 'Image must have a 1:1 ratio (square) where the image width and height are equal.';
         }
     }
 
