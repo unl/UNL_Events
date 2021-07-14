@@ -30,7 +30,7 @@
             <fieldset>
                 <legend class="dcf-legend dcf-txt-md">Pending Image</legend>
                 <input type="hidden" id="cropped-image-data" name="cropped_image_data" <?php echo $croppedImageData ?>>
-                <img id="cropped-image" src="<?php echo $croppedImageSrc; ?>">
+                <img id="cropped-image" src="<?php echo $croppedImageSrc; ?>" alt="Preview of pending cropped image upload">
             </fieldset>
         </div>
 	</div>
