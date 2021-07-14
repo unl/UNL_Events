@@ -75,11 +75,11 @@ require(['cropperjs/cropper.min', 'css!cropperjs/cropper.min.css'], function(Cro
       } else {
         // Set and display errors in modal
         cropperErrorContainer.innerHTML = '';
-        for (var errorIndex = 0; errorIndex < errors.length; errorIndex++) {
+        errors.forEach(function(error){
           var errorListItem = document.createElement('LI');
-          errorListItem.innerText = errors[errorIndex];
+          errorListItem.innerText = error;
           cropperErrorContainer.append(errorListItem);
-        }
+        });
         cropperErrorContainer.removeAttribute('hidden');
         cropperContentContainer.setAttribute('hidden', '');
         modals.openModal('image-modal');

@@ -43,10 +43,10 @@
 		</div>
 		<div class="dcf-modal-content">
             <ul class="dcf-mb-4" id="cropper-errors" hidden></ul>
-            <div class="dcf-mb-4">
-                <p class="dcf-txt-sm">To crop your image, position and size the blue square to the area to be cropped and press the <strong>Crop</strong> button.</p>
-            </div>
-            <div id="cropper-content"">
+            <div id="cropper-content">
+                <div class="dcf-mb-4">
+                    <p class="dcf-txt-sm">To crop your image, position and size the blue square to the area to be cropped and press the <strong>Crop</strong> button.</p>
+                </div>
                 <div class="img-container">
                     <div class="dcf-grid dcf-col-gap-vw dcf-row-gap-4">
                         <div class="dcf-col-100% dcf-col-75%-start@md">
