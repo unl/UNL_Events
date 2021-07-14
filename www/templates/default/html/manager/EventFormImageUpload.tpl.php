@@ -50,7 +50,7 @@
                 <div class="img-container">
                     <div class="dcf-grid dcf-col-gap-vw dcf-row-gap-4">
                         <div class="dcf-col-100% dcf-col-75%-start@md">
-                            <img class="source-image" id="source-image" src="data:image/gif;base64,R0lGODlhAQABAIAAAP7//wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==">
+                            <img class="source-image" id="source-image" src="data:image/gif;base64,R0lGODlhAQABAIAAAP7//wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Source image to crop.">
                         </div>
                         <div class="dcf-col-100% dcf-col-25%-end@md">
                             <div class="preview-image"></div>
