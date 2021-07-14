@@ -41,36 +41,40 @@ require(['cropperjs/cropper.min', 'css!cropperjs/cropper.min.css'], function(Cro
     return errors.length === 0;
   };
 
-  imageData.addEventListener('change', function(imageDataChangeEvent) {
-    var files = imageDataChangeEvent.target.files;
+  var processCrop = function(file) {
+
     var done = function (imageUrl) {
       image.src = imageUrl;
       modals.openModal('image-modal');
     };
     var reader;
     var file;
-    var url;
+
+    if (file.type === 'image/jpeg') {
+      outputType = file.type;
+    } else {
+      outputType = 'image/png';
+    }
+
+    if (FileReader) {
+      reader = new FileReader();
+      reader.onload = function (readerOnloadEvent) {
+        done(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  imageData.addEventListener('change', function(imageDataChangeEvent) {
+    var files = imageDataChangeEvent.target.files;
 
     if (files && files.length > 0) {
       file = files[0];
 
       if (isValidFile(file)) {
-        if (file.type === 'image/jpeg') {
-          outputType = file.type;
-        } else {
-          outputType = 'image/png';
-        }
-
-        if (url) {
-          done(url.createObjectURL(file));
-        } else if (FileReader) {
-          reader = new FileReader();
-          reader.onload = function (readerOnloadEvent) {
-            done(reader.result);
-          };
-          reader.readAsDataURL(file);
-        }
+        processCrop(file);
       } else {
+        // Set and display errors in modal
         cropperErrorContainer.innerHTML = '';
         for (var errorIndex = 0; errorIndex < errors.length; errorIndex++) {
           var errorListItem = document.createElement('LI');
