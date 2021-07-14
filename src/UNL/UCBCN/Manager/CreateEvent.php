@@ -122,8 +122,15 @@ class CreateEvent extends PostHandler
           throw new ValidationException('Event Website must be a valid URL.');
         }
 
-
-        if (isset($files['imagedata']) && is_uploaded_file($files['imagedata']['tmp_name'])) {
+        if (!empty($post_data['cropped_image_data'])) {
+            $files = null;
+            $image_parts = explode(";base64,", $post_data['cropped_image_data']);
+            $image_type_aux = explode("image/", $image_parts[0]);
+            $image_type = $image_type_aux[1];
+            $image_base64 = base64_decode($image_parts[1]);
+            $this->event->imagemime = $image_type;
+            $this->event->imagedata = $image_base64;
+        } else if (isset($files['imagedata']) && is_uploaded_file($files['imagedata']['tmp_name'])) {
             $uploadFile = new FileUpload('imagedata', FileUpload::TYPE_IMAGE);
             if ($uploadFile->isValid()) {
                 $uploadFile->compressImage();
