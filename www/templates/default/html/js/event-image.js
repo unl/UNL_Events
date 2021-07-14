@@ -41,10 +41,10 @@ require(['cropperjs/cropper.min', 'css!cropperjs/cropper.min.css'], function(Cro
     return errors.length === 0;
   };
 
-  imageData.addEventListener('change', function(e) {
-    var files = e.target.files;
-    var done = function (url) {
-      image.src = url;
+  imageData.addEventListener('change', function(imageDataChangeEvent) {
+    var files = imageDataChangeEvent.target.files;
+    var done = function (imageUrl) {
+      image.src = imageUrl;
       modals.openModal('image-modal');
     };
     var reader;
@@ -65,7 +65,7 @@ require(['cropperjs/cropper.min', 'css!cropperjs/cropper.min.css'], function(Cro
           done(URL.createObjectURL(file));
         } else if (FileReader) {
           reader = new FileReader();
-          reader.onload = function (e) {
+          reader.onload = function (readerOnloadEvent) {
             done(reader.result);
           };
           reader.readAsDataURL(file);
@@ -89,7 +89,7 @@ require(['cropperjs/cropper.min', 'css!cropperjs/cropper.min.css'], function(Cro
   });
 
   cropBtn.addEventListener('click', function(e) {
-    canvas = cropper.getCroppedCanvas({
+    var canvas = cropper.getCroppedCanvas({
       minWidth: 150,
       minHeight: 150,
       maxWidth: 4096,
