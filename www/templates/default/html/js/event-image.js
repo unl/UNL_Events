@@ -61,8 +61,8 @@ require(['cropperjs/cropper.min', 'css!cropperjs/cropper.min.css'], function(Cro
           outputType = 'image/png';
         }
 
-        if (URL) {
-          done(URL.createObjectURL(file));
+        if (url) {
+          done(url.createObjectURL(file));
         } else if (FileReader) {
           reader = new FileReader();
           reader.onload = function (readerOnloadEvent) {
@@ -100,7 +100,6 @@ require(['cropperjs/cropper.min', 'css!cropperjs/cropper.min.css'], function(Cro
     });
 
     canvas.toBlob(function(blob) {
-      url = URL.createObjectURL(blob);
       var reader = new FileReader();
       reader.readAsDataURL(blob);
       reader.onloadend = function() {
