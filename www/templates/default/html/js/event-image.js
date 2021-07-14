@@ -48,7 +48,6 @@ require(['cropperjs/cropper.min', 'css!cropperjs/cropper.min.css'], function(Cro
       modals.openModal('image-modal');
     };
     var reader;
-    var file;
 
     if (file.type === 'image/jpeg') {
       outputType = file.type;
@@ -69,7 +68,7 @@ require(['cropperjs/cropper.min', 'css!cropperjs/cropper.min.css'], function(Cro
     var files = imageDataChangeEvent.target.files;
 
     if (files && files.length > 0) {
-      file = files[0];
+      var file = files[0];
 
       if (isValidFile(file)) {
         processCrop(file);
