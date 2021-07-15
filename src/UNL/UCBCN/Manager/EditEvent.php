@@ -59,7 +59,7 @@ class EditEvent extends EventForm
         if (!$this->on_main_calendar) {
             if (array_key_exists('send_to_main', $post_data) && $post_data['send_to_main'] == 'on') {
                 if (empty($post_data['description']) || empty($post_data['contact_name'])) {
-                    throw new ValidationException('<a href="#contact-name">Contact name</a> and <a href="#description">description</a> are required to recommend to UNL Main Calendar.');
+                    throw new ValidationException('<a href="#contact-name">Contact name</a>, <a href="#description">description</a> and <a href="#imagedata">image</a> are required to recommend to UNL Main Calendar.');
                 }
             }
         }

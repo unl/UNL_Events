@@ -59,13 +59,13 @@ class EventForm extends PostHandler
 		} else if ($this->mode === self::MODE_UPDATE && array_key_exists('remove_image', $post_data) && $post_data['remove_image'] == 'on') {
 			$this->removeImage($post_data);
 		} else if (isset($files['imagedata']) && is_uploaded_file($files['imagedata']['tmp_name'])) {
-			$this->setUploadImage($files);
+			$this->setUploadImage();
 		} else if (isset($files['imagedata']) && $files['imagedata']['error'] == UPLOAD_ERR_INI_SIZE) {
 			throw new ValidationException('Your image file size was too large. It must be 2 MB or less. Try a tool like <a target="_blank" href="http://www.imageoptimizer.net">Image Optimizer</a>.');
 		} else if ($this->mode === self::MODE_CREATE && $post_data['send_to_main'] === 'on') {
-			throw new ValidationException('A image is required for events considered for main UNL Calendar');
+			throw new ValidationException('A image is required for events considered for main UNL Calendar.');
 		} else if ($this->mode === self::MODE_UPDATE && empty($this->event->imagedata) && ($this->on_main_calendar || isset($post_data['send_to_main']))) {
-			throw new ValidationException('A image is required for events considered for main UNL Calendar');
+			throw new ValidationException('A image is required for events considered for main UNL Calendar.');
 		}
 	}
 
@@ -80,7 +80,7 @@ class EventForm extends PostHandler
 
 	private function removeImage($post_data) {
 		if ($this->on_main_calendar || isset($post_data['send_to_main'])) {
-			throw new ValidationException('Image can not be removed. Image is required for events considered for main UNL Calendar');
+			throw new ValidationException('Image can not be removed. Image is required for events considered for main UNL Calendar.');
 		} else {
 			$this->event->imagemime = NULL;
 			$this->event->imagedata = NULL;
