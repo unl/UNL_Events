@@ -55,41 +55,51 @@ class EventForm extends PostHandler
 
 	protected function validateEventImage($post_data, $files) {
 		if (!empty($post_data['cropped_image_data'])) {
-			$files = null;
-			$image_parts = explode(";base64,", $post_data['cropped_image_data']);
-			$image_type_aux = explode("image/", $image_parts[0]);
-			$image_type = $image_type_aux[1];
-			$image_base64 = base64_decode($image_parts[1]);
-			$this->event->imagemime = $image_type;
-			$this->event->imagedata = $image_base64;
+			$this->setCroppedImage($post_data);
 		} else if ($this->mode === self::MODE_UPDATE && array_key_exists('remove_image', $post_data) && $post_data['remove_image'] == 'on') {
-			if ($this->on_main_calendar || isset($post_data['send_to_main'])) {
-				throw new ValidationException('Image can not be removed. Image is required for events considered for main UNL Calendar');
-			} else {
-				$this->event->imagemime = NULL;
-				$this->event->imagedata = NULL;
-			}
+			$this->removeImage($post_data);
 		} else if (isset($files['imagedata']) && is_uploaded_file($files['imagedata']['tmp_name'])) {
-			$uploadFile = new FileUpload('imagedata', FileUpload::TYPE_IMAGE);
-			if ($uploadFile->isValid()) {
-				$uploadFile->compressImage();
-				$this->event->imagemime = $uploadFile->getType();
-				$this->event->imagedata = file_get_contents($uploadFile->getPath());
-			} else {
-				$message = 'Your uploaded image has error(s): <ul>';
-				foreach($uploadFile->getValidationErrors() as $error) {
-					$message .= '<li>' . $error . '</li>';
-				}
-				$message .= '</ul>';
-				throw new ValidationException($message);
-			}
+			$this->setUploadImage($files);
 		} else if (isset($files['imagedata']) && $files['imagedata']['error'] == UPLOAD_ERR_INI_SIZE) {
 			throw new ValidationException('Your image file size was too large. It must be 2 MB or less. Try a tool like <a target="_blank" href="http://www.imageoptimizer.net">Image Optimizer</a>.');
-		}  else if ($this->mode === self::MODE_CREATE && $post_data['send_to_main'] === 'on') {
+		} else if ($this->mode === self::MODE_CREATE && $post_data['send_to_main'] === 'on') {
 			throw new ValidationException('A image is required for events considered for main UNL Calendar');
 		} else if ($this->mode === self::MODE_UPDATE && empty($this->event->imagedata) && ($this->on_main_calendar || isset($post_data['send_to_main']))) {
 			throw new ValidationException('A image is required for events considered for main UNL Calendar');
 		}
+	}
 
+	private function setCroppedImage($post_data) {
+		$image_parts = explode(";base64,", $post_data['cropped_image_data']);
+		$image_type_aux = explode("image/", $image_parts[0]);
+		$image_type = $image_type_aux[1];
+		$image_base64 = base64_decode($image_parts[1]);
+		$this->event->imagemime = $image_type;
+		$this->event->imagedata = $image_base64;
+	}
+
+	private function removeImage($post_data) {
+		if ($this->on_main_calendar || isset($post_data['send_to_main'])) {
+			throw new ValidationException('Image can not be removed. Image is required for events considered for main UNL Calendar');
+		} else {
+			$this->event->imagemime = NULL;
+			$this->event->imagedata = NULL;
+		}
+	}
+
+	private function setUploadImage() {
+		$uploadFile = new FileUpload('imagedata', FileUpload::TYPE_IMAGE);
+		if ($uploadFile->isValid()) {
+			$uploadFile->compressImage();
+			$this->event->imagemime = $uploadFile->getType();
+			$this->event->imagedata = file_get_contents($uploadFile->getPath());
+		} else {
+			$message = 'Your uploaded image has error(s): <ul>';
+			foreach($uploadFile->getValidationErrors() as $error) {
+				$message .= '<li>' . $error . '</li>';
+			}
+			$message .= '</ul>';
+			throw new ValidationException($message);
+		}
 	}
 }
