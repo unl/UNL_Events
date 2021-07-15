@@ -18,12 +18,12 @@ class EventForm extends PostHandler
 		$this->calendar = CalendarModel::getByShortName($this->options['calendar_shortname']);
 
 		if ($this->calendar === FALSE) {
-			throw new \Exception("That calendar could not be found.", 404);
+			throw new EventFormException("That calendar could not be found.", 404);
 		}
 
 		$user = Auth::getCurrentUser();
 		if (!$user->hasPermission(Permission::EVENT_CREATE_ID, $this->calendar->id)) {
-			throw new \Exception("You do not have permission to create an event on this calendar.", 403);
+			throw new EventFormException("You do not have permission to create an event on this calendar.", 403);
 		}
 	}
 
@@ -32,7 +32,7 @@ class EventForm extends PostHandler
 		return new EventTypes(array());
 	}
 
-	protected function setEventData($post_data, $files)
+	protected function setEventData($post_data)
 	{
 		$this->event->title = empty($post_data['title']) ? NULL : $post_data['title'];
 		$this->event->subtitle = empty($post_data['subtitle']) ? NULL : $post_data['subtitle'];

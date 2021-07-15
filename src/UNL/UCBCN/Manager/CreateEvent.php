@@ -3,7 +3,6 @@ namespace UNL\UCBCN\Manager;
 
 use UNL\UCBCN\Manager\EventForm as EventForm;
 use UNL\UCBCN as BaseUCBCN;
-use UNL\UCBCN\Locations;
 use UNL\UCBCN\Event;
 use UNL\UCBCN\Event\EventType;
 use UNL\UCBCN\Event\Occurrence;
@@ -165,8 +164,7 @@ class CreateEvent extends EventForm
         # check if this is to use a new location
         if ($post_data['location'] == 'new') {
             # create a new location
-            $location = $this->addLocation($post_data, $user);
-            
+	        $location = LocationUtility::addLocation($post_data, $user);
             $event_datetime->location_id = $location->id;
         } else {
             $event_datetime->location_id = $post_data['location'];
@@ -210,63 +208,5 @@ class CreateEvent extends EventForm
         }
 
         return $this->event;
-    }
-
-    public function getUserLocations()
-    {
-        $user = Auth::getCurrentUser();
-        return new Locations(array('user_id' => $user->uid));
-    }
-
-	public function getStandardLocations($display_order)
-	{
-		return new Locations(array(
-			'standard' => true,
-			'display_order' => $display_order,
-		));
-	}
-
-    /**
-     * Add a location
-     * 
-     * @param array $post_data
-     * @return Location
-     */
-    protected function addLocation(array $post_data, $user)
-    {
-        $allowed_fields = array(
-            'name',
-            'streetaddress1',
-            'streetaddress2',
-            'room',
-            'city',
-            'state',
-            'zip',
-            'mapurl',
-            'webpageurl',
-            'hours',
-            'directions',
-            'additionalpublicinfo',
-            'type',
-            'phone',
-        );
-
-        $location = new Location;
-
-        foreach ($allowed_fields as $field) {
-            $value = $post_data['new_location'][$field];
-            if (!empty($value)) {
-                $location->$field = $value;
-            }
-        }
-
-        if (array_key_exists('location_save', $post_data) && $post_data['location_save'] == 'on') {
-            $location->user_id = $user->uid;
-        }
-        $location->standard = 0;
-
-        $location->insert();
-        
-        return $location;
     }
 }
