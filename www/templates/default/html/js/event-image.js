@@ -4,7 +4,7 @@ require.config({
   }
 });
 
-require(['cropperjs/cropper.min', 'css!cropperjs/cropper.min.css'], function(Cropper) {
+require(['dcf-modal', 'cropperjs/cropper.min', 'css!cropperjs/cropper.min.css'], function(DCFModalModule, Cropper) {
   var cropperErrorContainer = document.getElementById('cropper-errors');
   var cropperContentContainer = document.getElementById('cropper-content');
   var image = document.getElementById('source-image');
@@ -15,7 +15,7 @@ require(['cropperjs/cropper.min', 'css!cropperjs/cropper.min.css'], function(Cro
   var modal = document.getElementById('image-modal');
   var cancelBtn = document.getElementById('cancel-crop-btn');
   var cropBtn = document.getElementById('crop-btn');
-  var modals = new DCFModal([]);
+  var modals = (DCFModalModule) ? new DCFModalModule.DCFModal([]) : new DCFModal([]);
   var cropper;
   var outputType;
   var errors = [];
