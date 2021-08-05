@@ -2,10 +2,6 @@
 include __DIR__ . '/../config.inc.php';
 
 use UNL\UCBCN\ActiveRecord\Database;
-
-ini_set('display_errors', true);
-error_reporting(E_ALL & ~E_STRICT & ~E_DEPRECATED & ~E_NOTICE);
-
 $mysqli = Database::getDB();
 
 $sql = "
