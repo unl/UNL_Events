@@ -70,7 +70,8 @@ class Event extends Record
     public $uidcreated;                      // string(100)
     public $datelastupdated;                 // datetime(19)  binary
     public $uidlastupdated;                  // string(100)
-    public $promoted;
+    public $promoted;                        // string(255)
+    public $canceled;                        // tiny(1) boolean
 
     const ONE_DAY = 86400;
     const ONE_WEEK = 604800;
@@ -624,4 +625,16 @@ class Event extends Record
 
         return false;
     }
+
+    public function isCanceled() {
+        return !empty($this->canceled);
+    }
+
+    public function displayTitle() {
+        return $this->isCanceled() ? 'Canceled: ' . $this->title : $this->title;
+    }
+
+	public function icalStatus() {
+		return $this->isCanceled() ? 'CANCELLED' : 'CONFIRMED';
+	}
 }
