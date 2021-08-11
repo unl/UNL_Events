@@ -71,7 +71,7 @@ class Event extends Record
     public $datelastupdated;                 // datetime(19)  binary
     public $uidlastupdated;                  // string(100)
     public $promoted;                        // string(255)
-    public $canceled;                        // tiny(1) boolean
+    public $canceled;                        // tinyint(1) boolean
 
     const ONE_DAY = 86400;
     const ONE_WEEK = 604800;
