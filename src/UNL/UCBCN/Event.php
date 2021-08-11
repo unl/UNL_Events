@@ -634,7 +634,7 @@ class Event extends Record
         return $this->isCanceled() ? 'Canceled: ' . $this->title : $this->title;
     }
 
-	public function icalStatus() {
-		return $this->isCanceled() ? 'CANCELLED' : 'CONFIRMED';
-	}
+    public function icalStatus() {
+        return $this->isCanceled() ? 'CANCELLED' : 'CONFIRMED';
+    }
 }
