@@ -74,6 +74,23 @@ class EventForm extends PostHandler
 		$image_type_aux = explode("image/", $image_parts[0]);
 		$image_type = $image_type_aux[1];
 		$image_base64 = base64_decode($image_parts[1]);
+
+		// compress image if applicable
+		if ($image_type == 'image/jpeg') {
+			$image = imagecreatefromjpeg($image_base64);
+			imagejpeg($image, $image_base64, 90);
+		} elseif ($image_type == 'image/gif') {
+			$image = imagecreatefromgif($image_base64);
+			imagegif($image, $image_base64);
+		} elseif ($image_type == 'image/png') {
+			$image = imagecreatefrompng($image_base64);
+			imagepng($image, $image_base64, 9, PNG_NO_FILTER);
+		}
+
+		if (!empty($image)) {
+			imagedestroy($image);
+		}
+
 		$this->event->imagemime = $image_type;
 		$this->event->imagedata = $image_base64;
 	}
