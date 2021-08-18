@@ -79,7 +79,7 @@ class Controller
         'format' => 'html',
     );
 
-    public static $version = '2021818';
+    public static $version = '20210825';
 
     /**
      * Constructor for the frontend.
