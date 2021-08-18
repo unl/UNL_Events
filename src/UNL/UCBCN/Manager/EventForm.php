@@ -76,13 +76,13 @@ class EventForm extends PostHandler
 		$image_base64 = base64_decode($image_parts[1]);
 
 		// compress image if applicable
-		if ($image_type == 'image/jpeg') {
+		if ($image_type == 'jpeg') {
 			$image = imagecreatefromjpeg($image_base64);
 			imagejpeg($image, $image_base64, 90);
-		} elseif ($image_type == 'image/gif') {
+		} elseif ($image_type == 'gif') {
 			$image = imagecreatefromgif($image_base64);
 			imagegif($image, $image_base64);
-		} elseif ($image_type == 'image/png') {
+		} elseif ($image_type == 'png') {
 			$image = imagecreatefrompng($image_base64);
 			imagepng($image, $image_base64, 9, PNG_NO_FILTER);
 		}
