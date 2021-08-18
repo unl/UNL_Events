@@ -79,7 +79,6 @@ class EventForm extends PostHandler
 		if ($image_type == 'jpeg' || $image_type == 'gif' || $image_type == 'png') {
 			ob_start();
 			$image = imagecreatefromstring($raw_image_base64);
-			// compress image if applicable
 			if ($image_type == 'jpeg') {
 				imagejpeg($image, NULL, 90);
 			} elseif ($image_type == 'gif') {
