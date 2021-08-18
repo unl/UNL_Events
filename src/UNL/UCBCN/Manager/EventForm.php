@@ -73,7 +73,26 @@ class EventForm extends PostHandler
 		$image_parts = explode(";base64,", $post_data['cropped_image_data']);
 		$image_type_aux = explode("image/", $image_parts[0]);
 		$image_type = $image_type_aux[1];
-		$image_base64 = base64_decode($image_parts[1]);
+		$raw_image_base64 = base64_decode($image_parts[1]);
+
+		// Compress image if possible
+		if ($image_type == 'jpeg' || $image_type == 'gif' || $image_type == 'png') {
+			ob_start();
+			$image = imagecreatefromstring($raw_image_base64);
+			if ($image_type == 'jpeg') {
+				imagejpeg($image, NULL, 90);
+			} elseif ($image_type == 'gif') {
+				imagegif($image);
+			} elseif ($image_type == 'png') {
+				imagepng($image, NULL, 9, PNG_NO_FILTER);
+			}
+
+			$image_base64 = ob_get_clean();
+			imagedestroy($image);
+		} else {
+			$image_base64 = $raw_image_base64;
+		}
+
 		$this->event->imagemime = $image_type;
 		$this->event->imagedata = $image_base64;
 	}
