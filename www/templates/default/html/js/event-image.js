@@ -118,7 +118,7 @@ require(['dcf-modal', 'cropperjs/cropper.min', 'css!cropperjs/cropper.min.css'],
   document.addEventListener('ModalOpenEvent_' + modal.id, function (e) {
     cropper = new Cropper(image, {
       aspectRatio: 1,
-      viewMode: 3,
+      viewMode: 2,
       preview: '.preview-image'
     });
   });
