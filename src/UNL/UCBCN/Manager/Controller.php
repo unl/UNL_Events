@@ -92,10 +92,7 @@ class Controller {
     {
         // See if already logged in via PHP CAS
         $auth = new Auth();
-        if (array_key_exists('unl_sso', $_COOKIE) && !$auth->isAuthenticated()) {
-            // Run PHPCAS checkAuthentication
-            $auth->checkAuthentication();
-        }
+        $auth->checkAuthentication();
 
         if (is_callable($this->options['model'])) {
             $this->output = call_user_func($this->options['model'], $this->options);

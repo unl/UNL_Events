@@ -7,6 +7,7 @@ use UNL\Templates\Auth\AuthCAS;
 
 class Auth
 {
+    const UNL_EVENTS_SESSION = 'UNL_EVENTS_SESSION';
     public static $directory_url = 'https://directory.unl.edu/';
     public static $cert_path = '/etc/pki/tls/cert.pem';
     private $auth;
@@ -17,7 +18,7 @@ class Auth
             self::$cert_path = GuzzleHttp\default_ca_bundle();
         }
 
-        $this->auth = new AuthCAS('2.0', 'shib.unl.edu', 443, '/idp/profile/cas', self::$cert_path, 'unl-events');
+        $this->auth = new AuthCAS('2.0', 'shib.unl.edu', 443, '/idp/profile/cas', self::$cert_path, self::UNL_EVENTS_SESSION);
     }
 
     /**
@@ -78,7 +79,7 @@ class Auth
      */
     public function logout()
     {
-        unset($_SESSION['UNL_Events_Username']);
+        setcookie(self::UNL_EVENTS_SESSION, "", time() - 3600);
         if ($this->auth->isAuthenticated()) {
             $this->auth->logout();
         }

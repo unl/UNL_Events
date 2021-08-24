@@ -13,7 +13,7 @@ require_once __DIR__ . '/../../vendor/composer/autoload.php';
 
 use RegExpRouter as RegExpRouter;
 
-$auth = new Auth;
+$auth = new Auth();
 $auth->authenticate();
 
 $routes = include __DIR__ . '/../../data/manager_routes.php';
