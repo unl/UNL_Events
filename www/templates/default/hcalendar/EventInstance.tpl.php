@@ -43,6 +43,8 @@
             </p>
 
             <?php echo $savvy->render($context, 'EventInstance/OriginCalendar.tpl.php') ?>
+
+            <?php echo $savvy->render($context, 'EventInstance/EditButton.tpl.php') ?>
         </div>
     </div>
 </div>

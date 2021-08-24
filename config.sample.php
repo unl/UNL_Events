@@ -20,6 +20,8 @@ set_include_path(
     . __DIR__ . '/vendor/unl_submodules/RegExpRouter/src'
 );
 
+require __DIR__ . '/vendor/composer/autoload.php';
+
 ini_set('display_errors', true);
 error_reporting(E_ALL);
 

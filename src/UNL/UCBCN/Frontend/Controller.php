@@ -18,8 +18,8 @@
 namespace UNL\UCBCN\Frontend;
 
 use UNL\UCBCN\RuntimeException;
-
 use UNL\UCBCN\UnexpectedValueException;
+use UNL\UCBCN\Manager\Auth;
 
 /**
  * This is the basic frontend output class through which all output to the public is
@@ -117,6 +117,10 @@ class Controller
      */
     public function run()
     {
+        // See if already logged in via PHP CAS
+        $auth = new Auth();
+        $auth->checkAuthentication();
+
         $this->determineCalendar();
 
         if (!isset($this->options['model']) || false === $this->options['model']) {

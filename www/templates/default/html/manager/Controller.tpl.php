@@ -1,5 +1,6 @@
 <?php
 use UNL\Templates\Templates;
+use UNL\UCBCN\Util;
 
 $page = Templates::factory('AppLocal', Templates::VERSION_5_3);
 
@@ -40,6 +41,7 @@ $page->addStyleSheet($base_frontend_url.'templates/default/html/js/vendor/select
 $page->addStyleDeclaration("#dcf-mobile-toggle-menu {display: none!important}");
 
 //javascript
+$page->addScriptDeclaration('WDN.setPluginParam("idm", "logout", "' .  Util::getBaseURL() . '/manager/logout");');
 $page->addScriptDeclaration('var frontend_url = "'.$base_frontend_url.'";');
 $page->addScriptDeclaration('var manager_url = "'.$base_manager_url.'";');
 $page->addScriptDeclaration("WDN.initializePlugin('notice');");
