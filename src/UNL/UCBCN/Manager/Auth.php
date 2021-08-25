@@ -8,9 +8,11 @@ use UNL\Templates\Auth\AuthCAS;
 class Auth
 {
     const UNL_EVENTS_SESSION = 'UNL_EVENTS_SESSION';
+
+    private $auth;
+
     public static $directory_url = 'https://directory.unl.edu/';
     public static $cert_path = '/etc/pki/tls/cert.pem';
-    private $auth;
 
     public function __construct()
     {
@@ -79,7 +81,11 @@ class Auth
      */
     public function logout()
     {
-        setcookie(self::UNL_EVENTS_SESSION, "", time() - 3600);
+        if (isset($_COOKIE[self::UNL_EVENTS_SESSION])) {
+            unset($_COOKIE[self::UNL_EVENTS_SESSION]);
+            setcookie(self::UNL_EVENTS_SESSION, null, time()-3600);
+        }
+
         if ($this->auth->isAuthenticated()) {
             $this->auth->logout();
         }
