@@ -7,20 +7,19 @@ use UNL\Templates\Auth\AuthCAS;
 
 class Auth
 {
-    const UNL_EVENTS_SESSION = 'UNL_EVENTS_SESSION';
-
     private $auth;
 
     public static $directory_url = 'https://directory.unl.edu/';
-    public static $cert_path = '/etc/pki/tls/cert.pem';
+    public static $certPath = '/etc/pki/tls/cert.pem';
+    public static $eventsAuthSessionName = NULL;
 
     public function __construct()
     {
-        if (!file_exists(self::$cert_path)) {
-            self::$cert_path = GuzzleHttp\default_ca_bundle();
+        if (!file_exists(self::$certPath)) {
+            self::$certPath = GuzzleHttp\default_ca_bundle();
         }
 
-        $this->auth = new AuthCAS('2.0', 'shib.unl.edu', 443, '/idp/profile/cas', self::$cert_path, self::UNL_EVENTS_SESSION);
+        $this->auth = new AuthCAS('2.0', 'shib.unl.edu', 443, '/idp/profile/cas', self::$certPath, self::$eventsAuthSessionName);
     }
 
     /**
@@ -81,9 +80,9 @@ class Auth
      */
     public function logout()
     {
-        if (isset($_COOKIE[self::UNL_EVENTS_SESSION])) {
-            unset($_COOKIE[self::UNL_EVENTS_SESSION]);
-            setcookie(self::UNL_EVENTS_SESSION, null, time()-3600);
+        if (isset($_COOKIE[self::$eventsAuthSessionName])) {
+            unset($_COOKIE[self::$eventsAuthSessionName]);
+            setcookie(self::$eventsAuthSessionName, null, time()-3600);
         }
 
         if ($this->auth->isAuthenticated()) {
