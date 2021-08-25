@@ -82,7 +82,7 @@ class User extends Record
     public function update()
     {
         $auth = new Auth();
-        $this->uidlastupdated = $auth->getCASUserId();;
+        $this->uidlastupdated = $auth->getCASUserId();
         $this->datelastupdated = date('Y-m-d H:i:s');
         return parent::update();
     }
