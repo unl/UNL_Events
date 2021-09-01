@@ -35,6 +35,11 @@
                       <option <?php if (isset($post['type']) && $post['type'] == $type->id) echo 'selected="selected"' ?> value="<?php echo $type->id ?>"><?php echo $type->name ?></option>
                   <?php } ?>
                 </select>
+
+                <div class="dcf-input-checkbox dcf-mt-2">
+                    <input id="canceled" name="canceled" type="checkbox" <?php if ($event->isCanceled()) { ?>checked=checked<?php } ?>value="1">
+                    <label for="canceled">Event Canceled</label>
+                </div>
             </fieldset>
 
             <fieldset>
