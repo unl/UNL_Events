@@ -25,7 +25,8 @@ $contactName = !empty($context->event->listingcontactname) ? $context->event->li
 $contactEmail = !empty($context->event->listingcontactemail) ? 'MAILTO:' . $context->event->listingcontactemail : '';
 $organizer = icalFormatString('CN=' . $contactName) . ":" . $contactEmail;
 $out[] = 'ORGANIZER;' . $organizer;
-$out[] = 'SUMMARY:' . icalFormatString($context->event->title);
+$out[] = 'SUMMARY:' . icalFormatString($context->event->displayTitle());
+$out[] = 'STATUS:' . icalFormatString($context->event->icalStatus());
 $out[] = 'DESCRIPTION:' . icalFormatString($context->event->description);
 if (isset($context->eventdatetime->location_id) && $context->eventdatetime->location_id) {
     $l = $context->eventdatetime->getLocation();

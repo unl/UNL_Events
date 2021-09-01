@@ -259,7 +259,8 @@ class EventInstance implements RoutableInterface
 
 
         $data['EventID']       = $this->event->id;
-        $data['EventTitle']    = $this->event->title;
+        $data['Status']        = $this->event->icalStatus();
+        $data['EventTitle']    = $this->event->displayTitle();
         $data['EventSubtitle'] = $this->event->subtitle;
         $data['DateTime'] = array(
             'Start' => $timezoneDateTime->format($this->getStartTime(),'c'),
@@ -268,7 +269,7 @@ class EventInstance implements RoutableInterface
             'EventTimezone' => $this->eventdatetime->timezone,
             'CalendarTimezone' => $this->calendar->defaulttimezone
         );
-        $data['EventStatus']           = 'Happening As Scheduled';
+        $data['EventStatus']           = $this->event->isCanceled() ? 'Canceled' : 'Happening As Scheduled';
         $data['Classification']        = 'Public';
         $data['Languages']['Language'] = 'en-US';
         $data['EventTransparency']     = $this->event->transparency;
