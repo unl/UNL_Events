@@ -73,6 +73,11 @@
                   <option <?php if ($event_type != NULL && $event_type->id == $type->id) echo 'selected="selected"'; ?> value="<?php echo $type->id ?>"><?php echo $type->name ?></option>
                 <?php } ?>
                 </select>
+
+                <div class="dcf-input-checkbox dcf-mt-2">
+                    <input id="canceled" name="canceled" type="checkbox" <?php if ($event->isCanceled()) { ?>checked=checked<?php } ?>value="1">
+                    <label for="canceled">Event Canceled</label>
+                </div>
             </fieldset>
             <fieldset class="event-datetimes">
 	            <legend class="dcf-legend dcf-txt-md">Location, Date, and Time</legend>
