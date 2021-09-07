@@ -4,7 +4,8 @@ namespace UNL\UCBCN;
 class Util
 {
     public static function getBaseURL() {
-        return !empty($_SERVER['HTTPS']) ? 'https' : 'http' . '://' . $_SERVER['HTTP_HOST'];
+        $protocol = !empty($_SERVER['HTTPS']) ? 'https' : 'http';
+        return $protocol . '://' . $_SERVER['HTTP_HOST'];
     }
 
     public static function getWWWRoot()

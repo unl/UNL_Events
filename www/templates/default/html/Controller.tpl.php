@@ -40,7 +40,7 @@ $page->head .= '<link rel="preload" href="/wdn/templates_5.3/css/deprecated.css"
 $page->addStyleDeclaration("#dcf-mobile-toggle-menu {display: none!important}");
 
 //javascript
-$page->addScriptDeclaration('WDN.setPluginParam("idm", "logout", "/manager/logout");');
+$page->addScriptDeclaration('WDN.setPluginParam("idm", "logout", "' . Util::getBaseURL() . '/manager/logout");');
 $page->addScriptDeclaration('var frontend_url = "'.$frontend->getURL().'";');
 $page->addScript($frontend->getURL().'templates/default/html/js/events.min.js?v='.UNL\UCBCN\Frontend\Controller::$version);
 
