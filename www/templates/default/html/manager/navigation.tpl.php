@@ -29,7 +29,7 @@
             <?php endif; ?>
 
             <?php if ($user->hasPermission(\UNL\UCBCN\Permission::CALENDAR_EDIT_PERMISSIONS_ID, $calendar->id)): ?>
-                <li><a class="dcf-txt-decor-hover" href="/manager/logout">Logout</a></li>
+                <li><a class="dcf-txt-decor-hover" href="<?php echo $base_manager_url ?>logout">Logout</a></li>
             <?php endif; ?>
         </ul>
     </div>
