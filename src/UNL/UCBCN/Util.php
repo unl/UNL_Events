@@ -3,6 +3,11 @@ namespace UNL\UCBCN;
 
 class Util
 {
+    public static function getBaseURL() {
+        $protocol = !empty($_SERVER['HTTPS']) ? 'https' : 'http';
+        return $protocol . '://' . $_SERVER['HTTP_HOST'];
+    }
+
     public static function getWWWRoot()
     {
         return dirname(dirname(dirname(__DIR__))) . '/www';

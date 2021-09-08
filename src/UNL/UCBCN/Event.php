@@ -613,14 +613,16 @@ class Event extends Record
             $user = Auth::getCurrentUser();
         }
 
-        $origin_calendar = $this->getOriginCalendar();
-        if ($origin_calendar != NULL && $this->getStatusWithCalendar($origin_calendar) && $user->hasPermission(Permission::EVENT_EDIT_ID, $origin_calendar->id)) {
-            return true;
-        }
+        if (!empty($user) && $user instanceof User) {
+            $origin_calendar = $this->getOriginCalendar();
+            if ($origin_calendar != NULL && $this->getStatusWithCalendar($origin_calendar) && $user->hasPermission(Permission::EVENT_EDIT_ID, $origin_calendar->id)) {
+                return true;
+            }
 
-        $main_calendar = Calendar::getByID(\UNL\UCBCN::$main_calendar_id);
-        if ($this->getStatusWithCalendar($main_calendar) && $user->hasPermission(Permission::EVENT_EDIT_ID, $main_calendar->id)) {
-            return true;
+            $main_calendar = Calendar::getByID(\UNL\UCBCN::$main_calendar_id);
+            if ($this->getStatusWithCalendar($main_calendar) && $user->hasPermission(Permission::EVENT_EDIT_ID, $main_calendar->id)) {
+               return true;
+            }
         }
 
         return false;
