@@ -20,6 +20,8 @@ set_include_path(
     . __DIR__ . '/vendor/unl_submodules/RegExpRouter/src'
 );
 
+require __DIR__ . '/vendor/composer/autoload.php';
+
 ini_set('display_errors', true);
 error_reporting(E_ALL);
 
@@ -45,3 +47,8 @@ UNL\UCBCN::setTimezoneOptions(
         'Pacific' => 'America/Los_Angeles'
     )
 );
+
+// CAS Auth Configuration
+UNL\UCBCN\Manager\Auth::$eventsAuthSessionName = 'DEV_EVENTS_AUTH_SESSION_NAME';
+UNL\UCBCN\Manager\Auth::$certPath = '/etc/pki/tls/cert.pem';
+UNL\UCBCN\Manager\Auth::$directory_url = 'https://directory.unl.edu/';

@@ -90,6 +90,10 @@ class Controller {
      */
     public function run()
     {
+        // See if already logged in via PHP CAS
+        $auth = new Auth();
+        $auth->checkAuthentication();
+
         if (is_callable($this->options['model'])) {
             $this->output = call_user_func($this->options['model'], $this->options);
         } else {
