@@ -267,6 +267,10 @@ class AddDatetime extends PostHandler
         $this->setDatetimeData($post_data);
         $this->validateDatetimeData($post_data);
 
+        if (!isset($this->event_datetime->canceled)) {
+            $this->event_datetime->canceled = 0;
+        }
+
         $this->event_datetime->save();
 
         # if we are editing a datetime, we need to check whether to revamp the recurrences

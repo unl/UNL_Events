@@ -136,6 +136,7 @@ class CreateEvent extends EventForm
         # add the event date time record
         $event_datetime = new Occurrence;
         $event_datetime->event_id = $this->event->id;
+        $event_datetime->canceled = 0;
 
         # check if this is to use a new location
         if ($post_data['location'] == 'new') {
