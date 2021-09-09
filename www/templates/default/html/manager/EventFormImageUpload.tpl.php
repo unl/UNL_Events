@@ -12,7 +12,7 @@
             </div>
 		<?php endif; ?>
         <label class="dcf-label" for="imagedata"><span class="required-for-main-calendar dcf-required" style="display: none">* </span>Image Upload</label>
-		<input class="dcf-mt-4 dcf-input-file" style="font-size: 10px;" type="file" name="imagedata" id="imagedata" accept="image/gif, image/jpeg, image/png, image/avif, image/webp" aria-label="Select an Image">
+		<input class="dcf-mt-4 dcf-input-file" type="file" name="imagedata" id="imagedata" accept="image/gif, image/jpeg, image/png, image/avif, image/webp" aria-label="Select an Image">
         <div class="dcf-mt-4 dcf-form-help">
             <p>Do not include text on image. Any text should be included in title and description of event. Image should be descriptive of event.</p>
         </div>
