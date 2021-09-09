@@ -2,13 +2,13 @@
 $timezoneDateTime = new \UNL\UCBCN\TimezoneDateTime($context->eventdatetime->timezone);
 ?>
 <item>
-    <title><?php echo $context->event->displayTitle(); ?></title>
+    <title><?php echo $context->event->displayTitle($context); ?></title>
     <link><?php echo $context->getURL(); ?></link>
     <description>
         <?php
         echo '&lt;div&gt;'.$context->event->description.'&lt;/div&gt;';
         if (isset($context->event->subtitle)) echo '&lt;div&gt;'.$context->event->subtitle.'&lt;/div&gt;';
-        echo '&lt;div&gt;Status: ' . $context->event->icalStatus() . '&lt;/div&gt;';
+        echo '&lt;div&gt;Status: ' . $context->event->icalStatus($context) . '&lt;/div&gt;';
         echo '&lt;small&gt;' . $timezoneDateTime->format($context->getStartTime(),'l, F jS') . '&lt;/small&gt;';
 
         if (isset($context->eventdatetime->starttime)) {

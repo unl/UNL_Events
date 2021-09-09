@@ -29,7 +29,7 @@ foreach ($context as $e) {
     ?>
     <li class="<?php echo implode(' ', $classes); ?>">
         <?php echo $savvy->render($e, 'EventInstance/TimeOnly.tpl.php') ?>
-        <a href="<?php echo $e->getURL(); ?>"><?php echo $savvy->dbStringtoHtml($e->event->displayTitle())?></a>
+        <a href="<?php echo $e->getURL(); ?>"><?php echo $savvy->dbStringtoHtml($e->event->displayTitle($e))?></a>
     </li>
     <?php
 }

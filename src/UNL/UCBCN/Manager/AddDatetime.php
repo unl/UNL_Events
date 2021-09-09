@@ -85,33 +85,64 @@ class AddDatetime extends PostHandler
 
     public function handlePost(array $get, array $post, array $files)
     {
-        $new = $this->event_datetime->id == NULL;
+        if (isset($post['toggle-cancel'])) {
+            $this->processCancelToggle($post);
+            die();
+        } else {
+            $this->processEdit($post);
+            return $this->event->getEditURL($this->calendar);
+        }
+    }
+
+    private function processCancelToggle($post) {
         try {
-            $this->editDatetime($post);
-        } catch (ValidationException $e) {
-            $this->flashNotice(parent::NOTICE_LEVEL_ALERT, 'Sorry! We couldn\'t ' . ($new ? 'create' : 'update') . ' this location/date/time', $e->getMessage());
+            if (array_key_exists('recurrence_id', $this->options)) {
+                $recurring_dates = new RecurringDates(array(
+                    'event_datetime_id' => $this->original_event_datetime_id,
+                    'recurrence_id' => $this->options['recurrence_id']
+                ));
+
+                foreach ($recurring_dates as $recurring_date) {
+                    $recurring_date->canceled = $post['canceled'] === 'true' ? 1 : 0;
+                    $recurring_date->save();
+                }
+            } else {
+                $this->event_datetime->canceled = $post['canceled'] === 'true' ? 1 : 0;
+                $this->event_datetime->save();
+            }
+        }  catch (ValidationException $e) {
+            $this->flashNotice(parent::NOTICE_LEVEL_ALERT, 'Sorry! We couldn\'t toggle the cancel state of the event instance', $e->getMessage());
             throw $e;
         }
+    }
 
-        # if we are editing a single recurrence, we need to unlink the current one in the DB
-        # set unlinked on all recurring dates with the recurrence id and event id
-        if (array_key_exists('recurrence_id', $this->options)) {
-            $recurring_dates = new RecurringDates(array(
-                'event_datetime_id' => $this->original_event_datetime_id,
-                'recurrence_id' => $this->options['recurrence_id']
-            ));
+    private function processEdit($post) {
+	    $new = $this->event_datetime->id == NULL;
+	    try {
+		    $this->editDatetime($post);
+	    } catch (ValidationException $e) {
+		    $this->flashNotice(parent::NOTICE_LEVEL_ALERT, 'Sorry! We couldn\'t ' . ($new ? 'create' : 'update') . ' this location/date/time', $e->getMessage());
+		    throw $e;
+	    }
 
-            foreach ($recurring_dates as $recurring_date) {
-                $recurring_date->unlinked = 1;
-                $recurring_date->save();
-            }
-        }
-        if ($new) {
-            $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Location/Date/Time Added', 'Another location, date, and time has been added.');
-        } else {
-            $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Location/Date/Time Updated', 'Your location, date, and time has been updated.');
-        }
-        return $this->event->getEditURL($this->calendar);
+	    # if we are editing a single recurrence, we need to unlink the current one in the DB
+	    # set unlinked on all recurring dates with the recurrence id and event id
+	    if (array_key_exists('recurrence_id', $this->options)) {
+		    $recurring_dates = new RecurringDates(array(
+			    'event_datetime_id' => $this->original_event_datetime_id,
+			    'recurrence_id' => $this->options['recurrence_id']
+		    ));
+
+		    foreach ($recurring_dates as $recurring_date) {
+			    $recurring_date->unlinked = 1;
+			    $recurring_date->save();
+		    }
+	    }
+	    if ($new) {
+		    $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Location/Date/Time Added', 'Another location, date, and time has been added.');
+	    } else {
+		    $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Location/Date/Time Updated', 'Your location, date, and time has been updated.');
+	    }
     }
 
     private function calculateDate($date, $hour, $minute, $am_or_pm)

@@ -4,7 +4,9 @@
     $post = $context->post;
     $event_type = $event->getFirstType();
 
-    $total_pages = ceil(count($event->getDatetimes()) / 5);
+    $datetimeCount = count($event->getDatetimes());
+    $allowCanceledDatetime = $datetimeCount > 1;
+    $total_pages = ceil($datetimeCount / 5);
 
     function ordinal($number) {
     	$mod = $number % 100;
@@ -129,6 +131,12 @@
                         <div class="dcf-btn-group controls">
                             <a href="<?php echo $datetime->getEditURL($context->calendar); ?>" class="dcf-btn dcf-btn-primary small dcf-mb-2">Edit</a>
                             <button class="dcf-btn  dcf-btn-primary small dcf-mb-2" form="delete-datetime-<?php echo $datetime->id; ?>" type="submit">Delete</button>
+                            <?php if ($allowCanceledDatetime === TRUE && $datetime->recurringtype === 'none') : ?>
+                            <div class="dcf-input-checkbox dcf-mt-4 dcf-txt-xs dcf-float-right dcf-txt-middle">
+                                <input class="datetime-cancel-toggle" id="datetime-canceled-<?php echo $datetime->id; ?>" name="canceled" type="checkbox" <?php if ($datetime->isCanceled()) { ?>checked=checked<?php } ?> data-url="<?php echo $datetime->getEditURL($context->calendar); ?>" value="1">
+                                <label for="datetime-canceled-<?php echo $datetime->id; ?>">Canceled</label>
+                            </div>
+                            <?php endif; ?>
                         </div>
                 	</div>
                     <?php if ($datetime->recurringtype != 'none') : ?>
@@ -142,6 +150,10 @@
                                     <div class="dcf-btn-group controls recurring">
                                         <a href="<?php echo $datetime->getEditRecurrenceURL($context->calendar, $recurring_date->recurrence_id); ?>" class="dcf-btn dcf-btn-primary small edit-recurring-edt">Edit</a>
                                         <button type="submit" form="delete-datetime-<?php echo $datetime->id ?>-recurrence-<?php echo $recurring_date->recurrence_id ?>" class="dcf-btn dcf-btn-primary small delete-datetime-recurrence">Delete</button>
+                                        <div class="dcf-input-checkbox dcf-ml-2 dcf-mt-4 dcf-txt-2xs dcf-float-right dcf-txt-middle">
+                                            <input class="recurrence-instance-cancel-toggle" id="recurrence-instance-canceled-<?php echo $recurring_date->recurrence_id; ?>" name="canceled" type="checkbox" <?php if ($recurring_date->isCanceled()) { ?>checked=checked<?php } ?> data-url="<?php echo $datetime->getEditRecurrenceURL($context->calendar, $recurring_date->recurrence_id); ?>" value="1">
+                                            <label for="recurrence-instance-canceled-<?php echo $recurring_date->recurrence_id; ?>">Canceled</label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -277,4 +289,33 @@ require(['jquery'], function($) {
         }
     });
 });");
+
+$tokenNameKey = $controller->getCSRFHelper()->getTokenNameKey();
+$tokenNameValue = $controller->getCSRFHelper()->getTokenName();
+$tokenValueKey = $controller->getCSRFHelper()->getTokenValueKey();
+$tokenValueValue = $controller->getCSRFHelper()->getTokenValue();
+$tokenString = $tokenNameKey . '=' . $tokenNameValue . '&' . $tokenValueKey . '=' . $tokenValueValue;
+$page->addScriptDeclaration("
+    var datetimeCancelToggles = document.getElementsByClassName('datetime-cancel-toggle');
+    var i;
+    for (i = 0; i < datetimeCancelToggles.length; i++) {
+        datetimeCancelToggles[i].addEventListener('change', function() {
+            var token = '" . $tokenString . "';
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', this.dataset.url);
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.send('toggle-cancel=1&canceled=' + this.checked + '&' + token);
+        });
+    }
+    var instanceCancelToggles = document.getElementsByClassName('recurrence-instance-cancel-toggle');
+    for (i = 0; i < instanceCancelToggles.length; i++) {
+        instanceCancelToggles[i].addEventListener('change', function() {
+            var token = '" . $tokenString . "';
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', this.dataset.url);
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.send('toggle-cancel=1&canceled=' + this.checked + '&' + token);
+        });
+    }
+");
 ?>

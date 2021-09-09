@@ -632,11 +632,16 @@ class Event extends Record
         return !empty($this->canceled);
     }
 
-    public function displayTitle() {
-        return $this->isCanceled() ? 'Canceled: ' . $this->title : $this->title;
+    public function eventInstanceIsCanceled($eventInstance) {
+        return (isset($eventInstance->eventdatetime) && $eventInstance->eventdatetime->isCanceled()) ||
+            (($eventInstance->recurringdate) && $eventInstance->recurringdate->isCanceled());
     }
 
-    public function icalStatus() {
-        return $this->isCanceled() ? 'CANCELLED' : 'CONFIRMED';
+    public function displayTitle($eventInstance = NULL) {
+        return $this->isCanceled() || $this->eventInstanceIsCanceled($eventInstance) ? 'Canceled: ' . $this->title : $this->title;
+    }
+
+    public function icalStatus($eventInstance = NULL) {
+        return $this->isCanceled() || $this->eventInstanceIsCanceled($eventInstance) ? 'CANCELLED' : 'CONFIRMED';
     }
 }

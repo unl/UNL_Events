@@ -1,8 +1,8 @@
 	<Event>
         <EventID><?php echo $context->event->id; ?></EventID>
-        <EventTitle><?php echo htmlspecialchars($context->event->displayTitle()); ?></EventTitle>
+        <EventTitle><?php echo htmlspecialchars($context->event->displayTitle($context)); ?></EventTitle>
         <EventSubtitle><?php echo htmlspecialchars($context->event->subtitle); ?></EventSubtitle>
-        <Status><?php echo $context->event->icalStatus(); ?></Status>
+        <Status><?php echo $context->event->icalStatus($context); ?></Status>
         <?php
         $timezoneDateTime = new \UNL\UCBCN\TimezoneDateTime($context->eventdatetime->timezone);
 		    ?>
