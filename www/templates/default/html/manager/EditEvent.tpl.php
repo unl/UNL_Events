@@ -36,6 +36,12 @@
 <br>
 
 <?php foreach($event->getDatetimes() as $datetime) : ?>
+    <?php
+        if ($datetime->isCanceled()) {
+            // Allow cancel toggle if any datetimes are canceled to allow them to be toggled off
+            $allowCanceledDatetime = TRUE;
+        }
+    ?>
     <form id="delete-datetime-<?php echo $datetime->id; ?>" class="delete-datetime delete-form" method="POST" action="<?php echo $datetime->getDeleteURL($context->calendar) ?>" class="delete-form dcf-d-none">
       <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
       <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">  
