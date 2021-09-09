@@ -348,6 +348,7 @@ class Event extends Record
         if (!empty($new_rows)) {
             foreach ($new_rows as $row) {
                 $recurring_date = new RecurringDate;
+                $recurring_date->canceled = 0;
                 $recurring_date->recurringdate = $row[0];
                 $recurring_date->event_id = $row[1];
                 $recurring_date->recurrence_id = $row[2];
