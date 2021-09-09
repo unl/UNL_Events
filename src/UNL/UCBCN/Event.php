@@ -628,20 +628,20 @@ class Event extends Record
         return false;
     }
 
-    public function isCanceled() {
-        return !empty($this->canceled);
+    public function isCanceled($eventInstance = NULL) {
+        return !empty($this->canceled) || $this->eventInstanceIsCanceled($eventInstance);
     }
 
-    public function eventInstanceIsCanceled($eventInstance) {
-        return (isset($eventInstance->eventdatetime) && $eventInstance->eventdatetime->isCanceled()) ||
-            (($eventInstance->recurringdate) && $eventInstance->recurringdate->isCanceled());
+    public function eventInstanceIsCanceled($eventInstance = NULL) {
+        return !empty($eventInstance) && !empty($eventInstance->eventdatetime) && ($eventInstance->eventdatetime->isCanceled() ||
+            ($eventInstance->eventdatetime->isRecurring() && !empty($eventInstance->recurringdate) && $eventInstance->recurringdate->isCanceled()));
     }
 
     public function displayTitle($eventInstance = NULL) {
-        return $this->isCanceled() || $this->eventInstanceIsCanceled($eventInstance) ? 'Canceled: ' . $this->title : $this->title;
+        return $this->isCanceled($eventInstance) ? 'Canceled: ' . $this->title : $this->title;
     }
 
     public function icalStatus($eventInstance = NULL) {
-        return $this->isCanceled() || $this->eventInstanceIsCanceled($eventInstance) ? 'CANCELLED' : 'CONFIRMED';
+        return $this->isCanceled($eventInstance) ? 'CANCELLED' : 'CONFIRMED';
     }
 }

@@ -133,7 +133,7 @@
                             <button class="dcf-btn  dcf-btn-primary small dcf-mb-2" form="delete-datetime-<?php echo $datetime->id; ?>" type="submit">Delete</button>
                             <?php if ($allowCanceledDatetime === TRUE && $datetime->recurringtype === 'none') : ?>
                             <div class="dcf-input-checkbox dcf-mt-4 dcf-txt-xs dcf-float-right dcf-txt-middle">
-                                <input class="datetime-cancel-toggle" id="datetime-canceled-<?php echo $datetime->id; ?>" name="canceled" type="checkbox" <?php if ($datetime->isCanceled()) { ?>checked=checked<?php } ?> data-url="<?php echo $datetime->getEditURL($context->calendar); ?>" value="1">
+                                <input class="datetime-cancel-toggle" id="datetime-canceled-<?php echo $datetime->id; ?>" type="checkbox" <?php if ($datetime->isCanceled()) { ?>checked=checked<?php } ?> data-url="<?php echo $datetime->getEditURL($context->calendar); ?>" value="1">
                                 <label for="datetime-canceled-<?php echo $datetime->id; ?>">Canceled</label>
                             </div>
                             <?php endif; ?>
@@ -151,7 +151,7 @@
                                         <a href="<?php echo $datetime->getEditRecurrenceURL($context->calendar, $recurring_date->recurrence_id); ?>" class="dcf-btn dcf-btn-primary small edit-recurring-edt">Edit</a>
                                         <button type="submit" form="delete-datetime-<?php echo $datetime->id ?>-recurrence-<?php echo $recurring_date->recurrence_id ?>" class="dcf-btn dcf-btn-primary small delete-datetime-recurrence">Delete</button>
                                         <div class="dcf-input-checkbox dcf-ml-2 dcf-mt-4 dcf-txt-2xs dcf-float-right dcf-txt-middle">
-                                            <input class="recurrence-instance-cancel-toggle" id="recurrence-instance-canceled-<?php echo $recurring_date->recurrence_id; ?>" name="canceled" type="checkbox" <?php if ($recurring_date->isCanceled()) { ?>checked=checked<?php } ?> data-url="<?php echo $datetime->getEditRecurrenceURL($context->calendar, $recurring_date->recurrence_id); ?>" value="1">
+                                            <input class="recurrence-instance-cancel-toggle" id="recurrence-instance-canceled-<?php echo $recurring_date->recurrence_id; ?>" type="checkbox" <?php if ($recurring_date->isCanceled()) { ?>checked=checked<?php } ?> data-url="<?php echo $datetime->getEditRecurrenceURL($context->calendar, $recurring_date->recurrence_id); ?>" value="1">
                                             <label for="recurrence-instance-canceled-<?php echo $recurring_date->recurrence_id; ?>">Canceled</label>
                                         </div>
                                     </div>
@@ -302,8 +302,12 @@ $page->addScriptDeclaration("
         datetimeCancelToggles[i].addEventListener('change', function() {
             var token = '" . $tokenString . "';
             var xhr = new XMLHttpRequest();
+            xhr.responseType = 'json';
             xhr.open('POST', this.dataset.url);
             xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.onload = function() {
+                displayCancelToggleMessage(xhr.response);
+            };
             xhr.send('toggle-cancel=1&canceled=' + this.checked + '&' + token);
         });
     }
@@ -312,10 +316,23 @@ $page->addScriptDeclaration("
         instanceCancelToggles[i].addEventListener('change', function() {
             var token = '" . $tokenString . "';
             var xhr = new XMLHttpRequest();
+            xhr.responseType = 'json';
             xhr.open('POST', this.dataset.url);
             xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.onload = function() {
+                displayCancelToggleMessage(xhr.response);
+            };
             xhr.send('toggle-cancel=1&canceled=' + this.checked + '&' + token);
         });
+    }
+
+    function displayCancelToggleMessage(response) {
+        if (response.success) {
+            var cancelAction = response.canceled ? 'canceled' : 'uncanceled';
+            notifier.success('Event Instance Updated', 'Event has been successfully ' + cancelAction + '.');
+        } else {
+            notifier.alert('Event Instance Update Error', 'Update of cancel state failed.');
+        }
     }
 ");
 ?>

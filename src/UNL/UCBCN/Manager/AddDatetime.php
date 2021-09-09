@@ -95,25 +95,37 @@ class AddDatetime extends PostHandler
     }
 
     private function processCancelToggle($post) {
+        $result = new \stdClass();
+        $result->success = TRUE;
+        $result->error = NULL;
+
         try {
+            $canceled = $post['canceled'] === 'true' ? 1 : 0;
             if (array_key_exists('recurrence_id', $this->options)) {
                 $recurring_dates = new RecurringDates(array(
                     'event_datetime_id' => $this->original_event_datetime_id,
                     'recurrence_id' => $this->options['recurrence_id']
                 ));
-
                 foreach ($recurring_dates as $recurring_date) {
-                    $recurring_date->canceled = $post['canceled'] === 'true' ? 1 : 0;
+                    $recurring_date->canceled = $canceled;
+                    $result->canceled = $canceled;
                     $recurring_date->save();
                 }
             } else {
-                $this->event_datetime->canceled = $post['canceled'] === 'true' ? 1 : 0;
+                $this->event_datetime->canceled = $canceled;
+                $result->canceled = $canceled;
                 $this->event_datetime->save();
             }
-        }  catch (ValidationException $e) {
-            $this->flashNotice(parent::NOTICE_LEVEL_ALERT, 'Sorry! We couldn\'t toggle the cancel state of the event instance', $e->getMessage());
-            throw $e;
+        }  catch (\Exception $e) {
+            $result->success = FALSE;
+            $error = new \stdClass();
+            $error->code = $e->getCode();
+            $error->message = $e->getMessage();
+            $result->error = $error;
         }
+
+        // display result as json for ajax
+        echo json_encode($result);
     }
 
     private function processEdit($post) {

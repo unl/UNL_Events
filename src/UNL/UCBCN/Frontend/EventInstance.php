@@ -269,7 +269,7 @@ class EventInstance implements RoutableInterface
             'EventTimezone' => $this->eventdatetime->timezone,
             'CalendarTimezone' => $this->calendar->defaulttimezone
         );
-        $data['EventStatus']           = $this->event->isCanceled() ? 'Canceled' : 'Happening As Scheduled';
+        $data['EventStatus']           = $this->event->isCanceled($this) ? 'Canceled' : 'Happening As Scheduled';
         $data['Classification']        = 'Public';
         $data['Languages']['Language'] = 'en-US';
         $data['EventTransparency']     = $this->event->transparency;
