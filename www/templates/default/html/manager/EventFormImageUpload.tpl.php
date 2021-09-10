@@ -1,5 +1,5 @@
 <fieldset>
-	<legend class="dcf-legend dcf-txt-md">Image</legend>
+	<legend class="dcf-legend">Image</legend>
 	<div class="details">
 		<?php if ($context->event->imagemime != NULL): ?>
             <div class="dcf-mb-4">
