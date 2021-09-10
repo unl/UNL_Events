@@ -94,7 +94,7 @@ class EventForm extends PostHandler
 			$image_base64 = $raw_image_base64;
 		}
 
-		$this->event->imagemime = $image_type;
+		$this->event->imagemime = 'image/' . $image_type;
 		$this->event->imagedata = $image_base64;
 	}
 
