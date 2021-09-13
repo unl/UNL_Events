@@ -86,43 +86,43 @@
             <legend>New Location</legend>
             <div class="dcf-form-group">
                 <label for="location-name">Name <small class="dcf-required">Required</small></label>
-                <input type="text" id="location-name" name="new_location[name]">
+                <input id="location-name" name="new_location[name]" type="text">
             </div>
             <div class="dcf-form-group">
                 <label for="location-address-1">Address</label>
-                <input type="text" id="location-address-1" name="new_location[streetaddress1]">
+                <input id="location-address-1" name="new_location[streetaddress1]" type="text">
             </div>
             <div class="dcf-form-group">
                 <label for="location-address-2">Address 2</label>
-                <input type="text" id="location-address-2" name="new_location[streetaddress2]">
+                <input id="location-address-2" name="new_location[streetaddress2]" type="text">
             </div>
             <div class="dcf-form-group">
                 <label for="location-room">Room</label>
-                <input type="text" id="location-room" name="new_location[room]">
+                <input id="location-room" name="new_location[room]" type="text">
             </div>
             <div class="dcf-form-group">
                 <label for="location-city">City</label>
-                <input type="text" id="location-city" name="new_location[city]">
+                <input id="location-city" name="new_location[city]" type="text">
             </div>
             <div class="dcf-form-group">
                 <label for="location-state">State</label>
-                <input type="text" id="location-state" name="new_location[state]">
+                <input id="location-state" name="new_location[state]" type="text">
             </div>
             <div class="dcf-form-group">
                 <label for="location-zip"><abbr title="Zone Improvement Plan">ZIP</abbr> Code</label>
-                <input type="text" id="location-zip" name="new_location[zip]">
+                <input id="location-zip" name="new_location[zip]" type="text">
             </div>
             <div class="dcf-form-group">
                 <label for="location-map-url">Map <abbr title="Uniform Resource Locator">URL</abbr></label>
-                <input type="text" id="location-map-url" name="new_location[mapurl]">
+                <input id="location-map-url" name="new_location[mapurl]" type="text">
             </div>
             <div class="dcf-form-group">
                 <label for="location-webpage">Web Page</label>
-                <input type="text" id="location-webpage" name="new_location[webpageurl]">
+                <input id="location-webpage" name="new_location[webpageurl]" type="text">
             </div>
             <div class="dcf-form-group">
                 <label for="location-hours">Hours</label>
-                <input type="text" id="location-hours" name="new_location[hours]">
+                <input id="location-hours" name="new_location[hours]" type="text">
             </div>
             <div class="dcf-form-group">
                 <label for="location-directions">Directions</label>
@@ -130,19 +130,19 @@
             </div>
             <div class="dcf-form-group">
                 <label for="location-additional-public-info">Additional Public Info</label>
-                <input type="text" id="location-additional-public-info" name="new_location[additionalpublicinfo]">
+                <input id="location-additional-public-info" name="new_location[additionalpublicinfo]" type="text">
             </div>
             <div class="dcf-form-group">
                 <label for="location-type">Type</label>
-                <input type="text" id="location-type" name="new_location[type]">
+                <input id="location-type" name="new_location[type]" type="text">
             </div>
             <div class="dcf-form-group">
                 <label for="location-phone">Phone</label>
-                <input type="text" id="location-phone" name="new_location[phone]">
+                <input id="location-phone" name="new_location[phone]" type="text">
             </div>
             <div class="dcf-form-group">
                 <div class="dcf-input-checkbox">
-                    <input type="checkbox" id="location-save" name="location_save">
+                    <input id="location-save" name="location_save" type="checkbox">
                     <label for="location-save">Save this location for future events</label>
                 </div>
             </div>
@@ -150,7 +150,7 @@
 
         <div class="dcf-form-group">
             <label for="room">Room</label>
-            <input type="text" id="room" name="room" value="<?php echo $datetime->room; ?>" />
+            <input id="room" name="room" type="text" value="<?php echo $datetime->room; ?>" />
         </div>
         <div class="dcf-form-group">
             <label class="dcf-label" for="timezone">Time Zone <small class="dcf-required">Required</small></label>
@@ -170,7 +170,7 @@
             <legend>Start Date &amp; Time <small class="dcf-required">Required</small></legend>
             <div class="dcf-d-flex dcf-flex-wrap dcf-ai-center dcf-col-gap-4">
                 <div class="dcf-form-group dcf-datepicker dcf-flex-grow-1">
-                    <input id="start-date" value="<?php echo $start_date; ?>" name="start_date" aria-label="Start Date in the format of mm/dd/yyyy" type="text" class="" autocomplete="off" /
+                    <input id="start-date" name="start_date" type="text" value="<?php echo $start_date; ?>" aria-label="Start Date in the format of mm/dd/yyyy"  autocomplete="off" /
                 </div>
                 <div class="dcf-form-group dcf-d-flex dcf-ai-center dcf-flex-grow-1">
                     <span class="dcf-pr-2">@</span>
@@ -190,11 +190,11 @@
                     <fieldset class="dcf-d-flex dcf-ai-center dcf-col-gap-3 dcf-mb-0 dcf-ml-4 dcf-p-0 dcf-b-0 dcf-txt-sm" id="start-time-am-pm">
                         <legend class="dcf-sr-only">AM/PM</legend>
                         <div class="dcf-input-radio dcf-mb-0">
-                            <input id="start-time-am-pm-am" <?php if ($start_am_pm == 'am') echo 'checked="checked"'; ?> title="AM" type="radio" value="am" name="start_time_am_pm">
+                            <input id="start-time-am-pm-am" name="start_time_am_pm" type="radio" value="am" <?php if ($start_am_pm == 'am') echo 'checked="checked"'; ?>>
                             <label class="dcf-mt-0" for="start-time-am-pm-am">AM</label>
                         </div>
                         <div class="dcf-input-radio dcf-mb-0">
-                            <input id="start-time-am-pm-pm" <?php if ($start_am_pm == 'pm') echo 'checked="checked"'; ?> type="radio" value="pm" name="start_time_am_pm">
+                            <input id="start-time-am-pm-pm" name="start_time_am_pm" type="radio" value="pm" <?php if ($start_am_pm == 'pm') echo 'checked="checked"'; ?>>
                             <label class="dcf-mt-0" for="start-time-am-pm-pm">PM</label>
                         </div>
                     </fieldset>
@@ -206,7 +206,7 @@
             <legend>End Date &amp; Time <small class="dcf-pl-1 dcf-txt-xs dcf-italic">Optional</small></legend>
             <div class="dcf-d-flex dcf-flex-wrap dcf-ai-center dcf-col-gap-4">
                 <div class="dcf-form-group dcf-datepicker dcf-flex-grow-1">
-                    <input id="end-date"  value="<?php echo $end_date; ?>" name="end_date" aria-label="End Date in the format of mm/dd/yyyy" type="text" autocomplete="off" />
+                    <input id="end-date" name="end_date" type="text" value="<?php echo $end_date; ?>" aria-label="End Date in the format of mm/dd/yyyy" autocomplete="off" />
                 </div>
                 <div class="dcf-form-group dcf-d-flex dcf-ai-center dcf-flex-grow-1">
                     <span class="dcf-pr-2">@</span>
@@ -226,11 +226,11 @@
                     <fieldset class="dcf-d-flex dcf-ai-center dcf-col-gap-3 dcf-mb-0 dcf-ml-4 dcf-p-0 dcf-b-0 dcf-txt-sm" id="end-time-am-pm">
                         <legend class="dcf-sr-only">AM/PM</legend>
                         <div class="dcf-input-radio dcf-mb-0">
-                            <input id="end-time-am-pm-am" <?php if ($end_am_pm == 'am') echo 'checked="checked"'; ?> type="radio" value="am" name="end_time_am_pm">
+                            <input id="end-time-am-pm-am" name="end_time_am_pm" type="radio" value="am" <?php if ($end_am_pm == 'am') echo 'checked="checked"'; ?>>
                             <label class="dcf-mt-0" for="end-time-am-pm-am">AM</label>
                         </div>
                         <div class="dcf-input-radio dcf-mb-0">
-                            <input id="end-time-am-pm-pm" <?php if ($end_am_pm == 'pm') echo 'checked="checked"'; ?> type="radio" value="pm" name="end_time_am_pm">
+                            <input id="end-time-am-pm-pm" name="end_time_am_pm" type="radio" value="pm" <?php if ($end_am_pm == 'pm') echo 'checked="checked"'; ?>>
                             <label class="dcf-mt-0" for="end-time-am-pm-pm">PM</label>
                         </div>
                     </fieldset>
@@ -241,7 +241,7 @@
         <?php if ($context->recurrence_id == NULL) : ?>
             <div class="section-container">
                 <div class="dcf-input-checkbox">
-                    <input id="recurring" <?php if ($datetime->recurringtype != 'none' && $datetime->recurringtype != NULL) echo 'checked="checked"' ?> type="checkbox" name="recurring" >
+                    <input id="recurring" name="recurring" type="checkbox" <?php if ($datetime->recurringtype != 'none' && $datetime->recurringtype != NULL) echo 'checked="checked"' ?>>
                     <?php $recurringType = (empty($datetime->recurringtype) || strtolower($datetime->recurringtype) == 'none') ? '' : $datetime->recurringtype; ?>
                     <label for="recurring">This is a recurring <?php echo $recurringType; ?> event</label>
                 </div>
@@ -262,7 +262,7 @@
                       </div>
                       <div class="dcf-form-group dcf-datepicker">
                         <label for="recurs-until-date">until </label>
-                        <input id="recurs-until-date" value="<?php if ($datetime->recurringtype != 'none' && $datetime->recurringtype != NULL) { echo $recurs_until_date; } ?>" name="recurs_until_date" type="text" aria-label="Until date in the format of mm/dd/yyyy" autocomplete="off" />
+                        <input id="recurs-until-date" name="recurs_until_date" type="text" value="<?php if ($datetime->recurringtype != 'none' && $datetime->recurringtype != NULL) { echo $recurs_until_date; } ?>" aria-label="Until date in the format of mm/dd/yyyy" autocomplete="off" />
                     </div>
                 </fieldset>
             </div>
