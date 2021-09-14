@@ -90,7 +90,7 @@
                     <tr>
                         <th class="dates">Dates</th>
                         <th class="location">Location</th>
-                        <th></th>
+                        <th class="dcf-txt-right dcf-pr-0">Actions</th>
                     </tr>
                 </thead>
                 <?php foreach($event->getDatetimes(5, ($context->page - 1)*5) as $datetime) : ?>
