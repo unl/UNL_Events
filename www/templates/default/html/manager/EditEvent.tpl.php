@@ -203,14 +203,14 @@
                     </div>
                 </fieldset>
                 <fieldset class="dcf-col-100% dcf-col-75%-end@sm dcf-mb-0 dcf-p-0 dcf-b-0" id="send_to_main">
-                    <legend class="dcf-pb-2">Consider for Main <abbr title="University of Nebraska–Lincoln"">UNL</abbr> Calendar <small class="dcf-required">Required</small></legend>
+                    <legend class="dcf-pb-2">Consider for Main <abbr title="University of Nebraska–Lincoln"">UNL</abbr> Calendar</legend>
                     <?php if ($context->on_main_calendar): ?>
                         <img src="<?php echo $base_frontend_url ?>templates/default/html/images/checkmark-16.png" alt="">
                         (event has been sent to main UNL calendar for approval)
                     <?php else: ?>
                         <div class="dcf-input-checkbox">
-                          <input type="checkbox" <?php if (isset($post['send_to_main'])) echo 'checked="checked"'; ?> name="send_to_main" id="send-to-main">
-                          <label>Yes</label>
+                          <input id="send-to-main" name="send_to_main" type="checkbox" <?php if (isset($post['send_to_main'])) echo 'checked="checked"'; ?>>
+                          <label for="send-to-main">Yes</label>
                         </div>
                     <?php endif; ?>
                 </fieldset>
