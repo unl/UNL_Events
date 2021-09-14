@@ -28,7 +28,10 @@
                 <?php if ($arr['status'] == 'pending') { ?>
                     <img src="<?php echo $base_frontend_url ?>templates/default/html/images/checkmark-16.png" alt="Event is Pending">
                 <?php } else if ($arr['can_pending']) { ?>
-                    <input class="dcf-input-control" name="calendar_<?php echo $calendar->id ?>" type="radio" value="pending" title="<?php echo $calendar->name ?>: Pending">
+                    <div class="dcf-input-checkbox">
+                        <input id="event-<?php echo $calendar->id ?>-is-pending" name="calendar_<?php echo $calendar->id ?>" type="radio" value="pending" title="<?php echo $calendar->name ?>: Pending">
+                        <label class="dcf-sr-only" for="event-<?php echo $calendar->id ?>-is-pending">Pending</label>
+                    </div>
                 <?php } else { ?>
                     &nbsp;
                 <?php } ?>
@@ -38,7 +41,10 @@
                 <?php if ($arr['status'] == 'posted' || $arr['status'] == 'archived') { ?>
                     <img src="<?php echo $base_frontend_url ?>templates/default/html/images/checkmark-16.png" alt="Event is Upcoming">
                 <?php } else if ($arr['can_posted']) { ?>
-                    <input class="dcf-input-control" name="calendar_<?php echo $calendar->id ?>" type="radio" value="posted" title="<?php echo $calendar->name ?>: Upcoming">
+                    <div class="dcf-input-checkbox">
+                        <input id="event-<?php echo $calendar->id ?>-is-upcoming" name="calendar_<?php echo $calendar->id ?>" type="radio" value="posted" title="<?php echo $calendar->name ?>: Upcoming">
+                        <label class="dcf-sr-only" for="event-<?php echo $calendar->id ?>-is-upcoming">Upcoming</label>
+                    </div>
                 <?php } else { ?>
                     &nbsp;
                 <?php } ?>
