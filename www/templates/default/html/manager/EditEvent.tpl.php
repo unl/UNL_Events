@@ -82,22 +82,20 @@
                 <label for="canceled">Event Canceled</label>
             </div>
         </fieldset>
-        <fieldset class="event-datetimes">
+        <fieldset>
             <legend>Location, Date, and Time</legend>
             <a class="dcf-btn dcf-btn-primary" href="<?php echo $event->getAddDatetimeURL($context->calendar) ?>">Add Location, Date, and/or Time</a>
-            <br><br>
-            <div class="edt-header dcf-txt-sm">
-                <div class="dates">
-                    Dates
-                </div>
-                <div class="location">
-                    Location
-                </div>
-            </div>
-
-            <?php foreach($event->getDatetimes(5, ($context->page - 1)*5) as $datetime) : ?>
-                <div class="edt-record dcf-txt-sm <?php if ($datetime->recurringtype != 'none') echo 'has-recurring' ?>">
-                    <div class="dates">
+            <table class="dcf-mt-6 dcf-table dcf-table-striped dcf-table-fixed dcf-w-100% dcf-txt-sm">
+                <thead class="edt-header">
+                    <tr>
+                        <th class="dates">Dates</th>
+                        <th class="location">Location</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <?php foreach($event->getDatetimes(5, ($context->page - 1)*5) as $datetime) : ?>
+                <tr class="edt-record <?php if ($datetime->recurringtype != 'none') echo 'has-recurring' ?>">
+                    <td class="dcf-txt-middle dates">
                         <?php
                         {
                             if ($datetime->recurringtype == 'none') {
@@ -125,33 +123,39 @@
                             }
                         }
                         ?>
-                    </div>
-                    <div class="location with-controls">
+                    </td>
+                    <td class="dcf-txt-middle location with-controls">
                         <?php echo $datetime->getLocation()->name; ?>
-                    </div>
-                    <div class="dcf-btn-group controls">
-                        <a class="dcf-btn dcf-btn-primary small dcf-mb-2" href="<?php echo $datetime->getEditURL($context->calendar); ?>">Edit</a>
-                        <button class="dcf-btn dcf-btn-primary small dcf-mb-2" form="delete-datetime-<?php echo $datetime->id; ?>" type="submit">Delete</button>
-                    </div>
-                </div>
-                <?php if ($datetime->recurringtype != 'none') : ?>
-                <div>
-                    <?php foreach ($datetime->getRecurrences() as $recurring_date) : ?>
-                        <div class="recurring-record">
-                            <div class="edt-record recurring">
-                                <div class="dates recurring">
-                                    <?php echo date('n/d/y', strtotime($recurring_date->recurringdate)) . ' @ ' . date('g:ia', strtotime($datetime->starttime)); ?>
-                                </div>
-                                <div class="dcf-btn-group controls recurring">
-                                    <a class="dcf-btn dcf-btn-primary small edit-recurring-edt" href="<?php echo $datetime->getEditRecurrenceURL($context->calendar, $recurring_date->recurrence_id); ?>">Edit</a>
-                                    <button class="dcf-btn dcf-btn-primary small delete-datetime-recurrence" type="submit" form="delete-datetime-<?php echo $datetime->id ?>-recurrence-<?php echo $recurring_date->recurrence_id ?>">Delete</button>
-                                </div>
+                    </td>
+                    <td class="dcf-pr-0 dcf-txt-middle controls">
+                        <div class="dcf-d-flex dcf-jc-flex-end">
+                            <div>
+                                <a class="dcf-btn dcf-btn-primary" href="<?php echo $datetime->getEditURL($context->calendar); ?>">Edit</a>
+                                <button class="dcf-btn dcf-btn-secondary" form="delete-datetime-<?php echo $datetime->id; ?>" type="submit">Delete</button>
                             </div>
                         </div>
+                    </td>
+                </tr>
+                <?php if ($datetime->recurringtype != 'none') : ?>
+                    <?php foreach ($datetime->getRecurrences() as $recurring_date) : ?>
+                        <tr class="edt-record">
+                            <td class="dcf-pl-7 dcf-txt-middle dates recurring" colspan="2">
+                                <?php echo date('n/d/y', strtotime($recurring_date->recurringdate)) . ' @ ' . date('g:ia', strtotime($datetime->starttime)); ?>
+                            </td>
+                            <td class="dcf-pr-0 dcf-txt-middle controls recurring">
+                                <div class="dcf-d-flex dcf-jc-flex-end">
+                                    <div>
+                                        <a class="dcf-btn dcf-btn-primary edit-recurring-edt" href="<?php echo $datetime->getEditRecurrenceURL($context->calendar, $recurring_date->recurrence_id); ?>">Edit</a>
+                                        <button class="dcf-btn dcf-btn-secondary delete-datetime-recurrence" type="submit" form="delete-datetime-<?php echo $datetime->id ?>-recurrence-<?php echo $recurring_date->recurrence_id ?>">Delete</button>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
                     <?php endforeach; ?>
-                </div>
+
                 <?php endif; ?>
             <?php endforeach; ?>
+            </table>
 
             <?php if ($total_pages > 1): ?>
             <?php
