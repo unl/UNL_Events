@@ -26,12 +26,12 @@
                 </td>
                 <td class="small-center table-actions">
                     <a class="dcf-btn dcf-btn-primary" href="<?php echo $user->getEditPermissionsURL($context->calendar) ?>">Edit Permissions</a>
-                    <span class="small-hidden">|</span><br class="dcf-d-none small-block" /><br class="dcf-d-none small-block" />
+                    <br class="dcf-d-none small-block" /><br class="dcf-d-none small-block" />
                     <form method="post" action="<?php echo $user->getDeletePermissionsURL($context->calendar) ?>" class="delete-form">
                         <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
                         <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
                         <input type="hidden" name="user_uid" value="<?php echo $user->uid ?>" />
-                        <button class="dcf-btn dcf-btn-primary" type="submit">Remove</button>
+                        <button class="dcf-btn dcf-btn-secondary" type="submit">Remove</button>
                     </form>
                 </td>
             </tr>
