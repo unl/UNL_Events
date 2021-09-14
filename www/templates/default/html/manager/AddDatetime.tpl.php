@@ -170,7 +170,7 @@
             <legend>Start Date &amp; Time <small class="dcf-required">Required</small></legend>
             <div class="dcf-d-flex dcf-flex-wrap dcf-ai-center dcf-col-gap-4">
                 <div class="dcf-form-group dcf-datepicker dcf-flex-grow-1">
-                    <input id="start-date" name="start_date" type="text" value="<?php echo $start_date; ?>" aria-label="Start Date in the format of mm/dd/yyyy"  autocomplete="off" /
+                    <input id="start-date" name="start_date" type="text" value="<?php echo $start_date; ?>" aria-label="Start Date in the format of mm/dd/yyyy" autocomplete="off" />
                 </div>
                 <div class="dcf-form-group dcf-d-flex dcf-ai-center dcf-flex-grow-1">
                     <span class="dcf-pr-2">@</span>
