@@ -19,7 +19,7 @@ class AddDatetime extends PostHandler
     public $recurrence_id;
     public $original_event_datetime_id;
 
-    public function __construct($options = array()) 
+    public function __construct($options = array())
     {
         $this->options = $options + $this->options;
         $this->calendar = CalendarModel::getByShortName($this->options['calendar_shortname']);
@@ -107,9 +107,9 @@ class AddDatetime extends PostHandler
             }
         }
         if ($new) {
-            $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Location/Date/Time Added', 'Another location, date, and time has been added.');
+            $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Location/Date/Time Added', 'Another location, date and time has been added.');
         } else {
-            $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Location/Date/Time Updated', 'Your location, date, and time has been updated.');
+            $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Location/Date/Time Updated', 'Your location, date and time has been updated.');
         }
         return $this->event->getEditURL($this->calendar);
     }
@@ -129,23 +129,23 @@ class AddDatetime extends PostHandler
     {
         # set the start date and end date
         $this->event_datetime->timezone = empty($post_data['timezone']) ? BaseUCBCN::$defaultTimezone : $post_data['timezone'];
-        $this->event_datetime->starttime = $this->calculateDate($post_data['start_date'], 
-            $post_data['start_time_hour'], $post_data['start_time_minute'], 
+        $this->event_datetime->starttime = $this->calculateDate($post_data['start_date'],
+            $post_data['start_time_hour'], $post_data['start_time_minute'],
             $post_data['start_time_am_pm']);
 
-        $this->event_datetime->endtime = $this->calculateDate($post_data['end_date'], 
-            $post_data['end_time_hour'], $post_data['end_time_minute'], 
+        $this->event_datetime->endtime = $this->calculateDate($post_data['end_date'],
+            $post_data['end_time_hour'], $post_data['end_time_minute'],
             $post_data['end_time_am_pm']);
 
         if (array_key_exists('recurring', $post_data) && $post_data['recurring'] == 'on') {
             $this->event_datetime->recurringtype = $post_data['recurring_type'];
             $this->event_datetime->recurs_until = $this->calculateDate(
                 $post_data['recurs_until_date'], 11, 59, 'pm');
-            if ($this->event_datetime->recurringtype == 'date' || 
-                $this->event_datetime->recurringtype == 'lastday' || 
+            if ($this->event_datetime->recurringtype == 'date' ||
+                $this->event_datetime->recurringtype == 'lastday' ||
                 $this->event_datetime->recurringtype == 'first' ||
                 $this->event_datetime->recurringtype == 'second' ||
-                $this->event_datetime->recurringtype == 'third'|| 
+                $this->event_datetime->recurringtype == 'third'||
                 $this->event_datetime->recurringtype == 'fourth' ||
                 $this->event_datetime->recurringtype == 'last') {
                     $this->event_datetime->rectypemonth = $this->event_datetime->recurringtype;
@@ -172,12 +172,12 @@ class AddDatetime extends PostHandler
         }
 
         # end date must be after start date
-        $start_date = $this->calculateDate($post_data['start_date'], 
-            $post_data['start_time_hour'], $post_data['start_time_minute'], 
+        $start_date = $this->calculateDate($post_data['start_date'],
+            $post_data['start_time_hour'], $post_data['start_time_minute'],
             $post_data['start_time_am_pm']);
 
-        $end_date = $this->calculateDate($post_data['end_date'], 
-            $post_data['end_time_hour'], $post_data['end_time_minute'], 
+        $end_date = $this->calculateDate($post_data['end_date'],
+            $post_data['end_time_hour'], $post_data['end_time_minute'],
             $post_data['end_time_am_pm']);
 
         if ($start_date > $end_date) {
@@ -202,7 +202,7 @@ class AddDatetime extends PostHandler
         }
     }
 
-    public function editDatetime($post_data) 
+    public function editDatetime($post_data)
     {
         $user = Auth::getCurrentUser();
 
@@ -251,10 +251,10 @@ class AddDatetime extends PostHandler
                 # start time, end time, frequency and recurs until must all remain the same
                 # or we wipe it and start over
 
-                if ($datetime_copy->starttime != $this->event_datetime->starttime || 
-                        $datetime_copy->endtime != $this->event_datetime->endtime || 
-                        $datetime_copy->recurringtype != $this->event_datetime->recurringtype || 
-                        $datetime_copy->rectypemonth != $this->event_datetime->rectypemonth || 
+                if ($datetime_copy->starttime != $this->event_datetime->starttime ||
+                        $datetime_copy->endtime != $this->event_datetime->endtime ||
+                        $datetime_copy->recurringtype != $this->event_datetime->recurringtype ||
+                        $datetime_copy->rectypemonth != $this->event_datetime->rectypemonth ||
                         $datetime_copy->recurs_until != $this->event_datetime->recurs_until) {
                     $this->event_datetime->deleteRecurrences();
                     $this->event_datetime->insertRecurrences();

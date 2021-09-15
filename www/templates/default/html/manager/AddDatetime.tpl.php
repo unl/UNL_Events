@@ -1,7 +1,10 @@
 <?php
+    const CHECKED_INPUT = 'checked="checked"';
+
     $calendar = $context->calendar;
     $event = $context->event;
     $datetime = $context->event_datetime;
+    $recurringType = '';
 
     if ($datetime->starttime == NULL) {
         $start_time = '';
@@ -38,7 +41,7 @@
     if ($context->recurrence_id != NULL) {
         $last_crumb = 'Edit a Single Instance from Recurring Event';
     } else {
-        $last_crumb = $datetime->id == NULL ? 'Add a Location, Date, and Time' : 'Edit Location, Date, and Time'; 
+        $last_crumb = $datetime->id == NULL ? 'Add a Location, Date & Time' : 'Edit Location, Date & Time';
     }
 
     $crumbs = new stdClass;
@@ -50,208 +53,234 @@
     );
     echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
 ?>
-<h2 class="wdn-brand">
-<?php echo $last_crumb ?>
-</h2>
-<form id="add-datetime-form" action="" method="POST">
+<h1><?php echo $last_crumb ?></h1>
+<form class="dcf-form" id="add-datetime-form" action="" method="POST">
   <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
   <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
-    <fieldset class="dcf-b-0">
-        <label class="dcf-label" for="location"><span class="dcf-required">*</span> Location</label>
-        <select class="dcf-input-select" id="location" name="location" style="width: 100%;">
-              <?php if ($datetime->id != NULL): ?>
-              <optgroup label="Current location">
-                  <option selected="selected" value="<?php echo $datetime->location_id ?>"><?php echo $datetime->getLocation()->name; ?></option>
-              <?php endif; ?>
-              <optgroup label="Your saved locations">
-                  <?php foreach (\UNL\UCBCN\Manager\LocationUtility::getUserLocations() as $location): ?>
-                      <option value="<?php echo $location->id ?>"><?php echo $location->name ?></option>
-                  <?php endforeach; ?>
-                  <option value="new">-- New Location --</option>
-              </optgroup>
-              <optgroup label="UNL Campus locations">
-                  <?php foreach (\UNL\UCBCN\Manager\LocationUtility::getStandardLocations(\UNL\UCBCN\Location::DISPLAY_ORDER_MAIN) as $location): ?>
-                      <option value="<?php echo $location->id ?>"><?php echo $location->name ?></option>
-                  <?php endforeach; ?>
-              </optgroup>
-              <optgroup label="Extension locations">
-                  <?php foreach (\UNL\UCBCN\Manager\LocationUtility::getStandardLocations(\UNL\UCBCN\Location::DISPLAY_ORDER_EXTENSION) as $location): ?>
-                      <option value="<?php echo $location->id ?>"><?php echo $location->name ?></option>
-                  <?php endforeach; ?>
-              </optgroup>
-        </select>
-
-        <div id="new-location-fields" style="display: none;">
-            <h6>New Location</h6>
-            <label class="dcf-label" for="location-name"><span class="required">*</span> Name</label>
-            <input class="dcf-input-text" type="text" id="location-name" name="new_location[name]">
-
-            <label class="dcf-label" for="location-address-1">Address</label>
-            <input class="dcf-input-text" type="text" id="location-address-1" name="new_location[streetaddress1]">
-
-            <label class="dcf-label" for="location-address-2">Address 2</label>
-            <input class="dcf-input-text" type="text" id="location-address-2" name="new_location[streetaddress2]">
-
-            <label class="dcf-label" for="location-room">Room</label>
-            <input class="dcf-input-text" type="text" id="location-room" name="new_location[room]">
-
-            <label class="dcf-label" for="location-city">City</label>
-            <input class="dcf-input-text" type="text" id="location-city" name="new_location[city]">
-
-            <label class="dcf-label" for="location-state">State</label>
-            <input class="dcf-input-text" type="text" id="location-state" name="new_location[state]">
-
-            <label class="dcf-label" for="location-zip">Zip</label>
-            <input class="dcf-input-text" type="text" id="location-zip" name="new_location[zip]">
-
-            <label class="dcf-label" for="location-map-url">Map URL</label>
-            <input class="dcf-input-text" type="text" id="location-map-url" name="new_location[mapurl]">
-
-            <label class="dcf-label" for="location-webpage">Webpage</label>
-            <input class="dcf-input-text" type="text" id="location-webpage" name="new_location[webpageurl]">
-
-            <label class="dcf-label" for="location-hours">Hours</label>
-            <input class="dcf-input-text" type="text" id="location-hours" name="new_location[hours]">
-
-            <label class="dcf-label" for="location-directions">Directions</label>
-            <textarea class="dcf-input-text" id="location-directions" name="new_location[directions]"></textarea>
-
-            <label class="dcf-label" for="location-additional-public-info">Additional Public Info</label>
-            <input class="dcf-input-text" type="text" id="location-additional-public-info" name="new_location[additionalpublicinfo]">
-
-            <label class="dcf-label" for="location-type">Type</label>
-            <input class="dcf-input-text" type="text" id="location-type" name="new_location[type]">
-
-            <label class="dcf-label" for="location-phone">Phone</label>
-            <input class="dcf-input-text" type="text" id="location-phone" name="new_location[phone]">
-
-            <input class="dcf-input-control" type="checkbox" id="location-save" name="location_save">
-            <label class="dcf-label" for="location-save">Save this location for future events</label>
+    <fieldset class="dcf-mt-6">
+        <legend>Location, Date &amp; Time</legend>
+        <div class="dcf-form-group">
+            <label for="location">Location <small class="dcf-required">Required</small></label>
+            <select class="dcf-input-select" id="location" name="location" style="width: 100%;">
+                  <?php if ($datetime->id != NULL): ?>
+                  <optgroup label="Current location">
+                      <option selected="selected" value="<?php echo $datetime->location_id ?>"><?php echo $datetime->getLocation()->name; ?></option>
+                  <?php endif; ?>
+                  <optgroup label="Your saved locations">
+                      <?php foreach (\UNL\UCBCN\Manager\LocationUtility::getUserLocations() as $location): ?>
+                          <option value="<?php echo $location->id ?>"><?php echo $location->name ?></option>
+                      <?php endforeach; ?>
+                      <option value="new">-- New Location --</option>
+                  </optgroup>
+                  <optgroup label="UNL Campus locations">
+                      <?php foreach (\UNL\UCBCN\Manager\LocationUtility::getStandardLocations(\UNL\UCBCN\Location::DISPLAY_ORDER_MAIN) as $location): ?>
+                          <option value="<?php echo $location->id ?>"><?php echo $location->name ?></option>
+                      <?php endforeach; ?>
+                  </optgroup>
+                  <optgroup label="Extension locations">
+                      <?php foreach (\UNL\UCBCN\Manager\LocationUtility::getStandardLocations(\UNL\UCBCN\Location::DISPLAY_ORDER_EXTENSION) as $location): ?>
+                          <option value="<?php echo $location->id ?>"><?php echo $location->name ?></option>
+                      <?php endforeach; ?>
+                  </optgroup>
+            </select>
         </div>
 
-        <label class="dcf-label" for="room">Room</label>
-        <input class="dcf-input-text" type="text" id="room" name="room" value="<?php echo $datetime->room; ?>" />
+        <fieldset class="dcf-mt-6" id="new-location-fields" style="display: none;">
+            <legend>New Location</legend>
+            <div class="dcf-form-group">
+                <label for="location-name">Name <small class="dcf-required">Required</small></label>
+                <input id="location-name" name="new_location[name]" type="text">
+            </div>
+            <div class="dcf-form-group">
+                <label for="location-address-1">Address</label>
+                <input id="location-address-1" name="new_location[streetaddress1]" type="text">
+            </div>
+            <div class="dcf-form-group">
+                <label for="location-address-2">Address 2</label>
+                <input id="location-address-2" name="new_location[streetaddress2]" type="text">
+            </div>
+            <div class="dcf-form-group">
+                <label for="location-room">Room</label>
+                <input id="location-room" name="new_location[room]" type="text">
+            </div>
+            <div class="dcf-form-group">
+                <label for="location-city">City</label>
+                <input id="location-city" name="new_location[city]" type="text">
+            </div>
+            <div class="dcf-form-group">
+                <label for="location-state">State</label>
+                <input id="location-state" name="new_location[state]" type="text">
+            </div>
+            <div class="dcf-form-group">
+                <label for="location-zip"><abbr title="Zone Improvement Plan">ZIP</abbr> Code</label>
+                <input id="location-zip" name="new_location[zip]" type="text">
+            </div>
+            <div class="dcf-form-group">
+                <label for="location-map-url">Map <abbr title="Uniform Resource Locator">URL</abbr></label>
+                <input id="location-map-url" name="new_location[mapurl]" type="text">
+            </div>
+            <div class="dcf-form-group">
+                <label for="location-webpage">Web Page</label>
+                <input id="location-webpage" name="new_location[webpageurl]" type="text">
+            </div>
+            <div class="dcf-form-group">
+                <label for="location-hours">Hours</label>
+                <input id="location-hours" name="new_location[hours]" type="text">
+            </div>
+            <div class="dcf-form-group">
+                <label for="location-directions">Directions</label>
+                <textarea id="location-directions" name="new_location[directions]"></textarea>
+            </div>
+            <div class="dcf-form-group">
+                <label for="location-additional-public-info">Additional Public Info</label>
+                <input id="location-additional-public-info" name="new_location[additionalpublicinfo]" type="text">
+            </div>
+            <div class="dcf-form-group">
+                <label for="location-type">Type</label>
+                <input id="location-type" name="new_location[type]" type="text">
+            </div>
+            <div class="dcf-form-group">
+                <label for="location-phone">Phone</label>
+                <input id="location-phone" name="new_location[phone]" type="text">
+            </div>
+            <div class="dcf-form-group">
+                <div class="dcf-input-checkbox">
+                    <input id="location-save" name="location_save" type="checkbox">
+                    <label for="location-save">Save this location for future events</label>
+                </div>
+            </div>
+        </fieldset>
 
-        <label class="dcf-label dcf-mt-2" for="timezone"><span class="dcf-required">*</span> Timezone</label>
-        <select class="dcf-input-select" id="timezone"" name="timezone" aria-label="Timezone">
-          <?php
-          $timezone = $calendar->defaulttimezone;
-          if (!empty($datetime->timezone)) {
-              $timezone = $datetime->timezone;
-          };
-          foreach (UNL\UCBCN::getTimezoneOptions() as $tzName => $tzValue) { ?>
-            <option <?php if ($timezone == $tzValue) echo 'selected="selected"'; ?> value="<?php echo $tzValue ?>"><?php echo $tzName ?></option>
-          <?php } ?>
-        </select>
-
-        <label class="dcf-label" for="start-date" ><span class="dcf-required">*</span> Start Date &amp; Time</label>
-        <div class="date-time-select">
-          <div class="date-group dcf-d-flex dcf-flex-grow-1 dcf-ai-center dcf-relative dcf-mb-4 dcf-pr-6">
-            <span class="dcf-absolute dcf-z-1 wdn-icon-calendar" aria-hidden="true"></span>
-            <input id="start-date"  value="<?php echo $start_date; ?>" name="start_date" aria-label="Start Date in the format of mm/dd/yyyy" type="text" class="dcf-flex-grow-1 datepicker" autocomplete="off" />
-          </div>
-
-          <div class="time-group dcf-d-flex dcf-ai-center dcf-flex-grow-1 dcf-mb-4">
-
-            <span class="dcf-pr-2">@</span>
-
-            <select class="dcf-flex-grow-1 dcf-input-select"  id="start-time-hour" name="start_time_hour" aria-label="Start time hour">
-              <option value="">Hour</option>
-              <?php for ($i = 1; $i <= 12; $i++) { ?>
-                <option <?php if ($i == $start_hour) echo 'selected="selected"'; ?> value="<?php echo $i ?>"><?php echo $i ?></option>
+        <div class="dcf-form-group">
+            <label for="room">Room</label>
+            <input id="room" name="room" type="text" value="<?php echo $datetime->room; ?>" />
+        </div>
+        <div class="dcf-form-group">
+            <label class="dcf-label" for="timezone">Time Zone <small class="dcf-required">Required</small></label>
+            <select id="timezone"" name="timezone" aria-label="Timezone">
+              <?php
+              $timezone = $calendar->defaulttimezone;
+              if (!empty($datetime->timezone)) {
+                  $timezone = $datetime->timezone;
+              };
+              foreach (UNL\UCBCN::getTimezoneOptions() as $tzName => $tzValue) { ?>
+                <option <?php if ($timezone == $tzValue) echo 'selected="selected"'; ?> value="<?php echo $tzValue ?>"><?php echo $tzName ?></option>
               <?php } ?>
-            </select> :
-
-            <select class="dcf-flex-grow-1 dcf-input-select" id="start-time-minute" name="start_time_minute" aria-label="End time minute">
-              <option value="">Minute</option>
-              <?php for ($i = 0; $i < 60; $i+=5): ?>
-                <option <?php if ($i == $start_minute) echo 'selected="selected"'; ?> value="<?php echo $i; ?>"><?php echo str_pad($i, 2, '0', STR_PAD_LEFT); ?></option>
-              <?php endfor; ?>
             </select>
-
-            <fieldset id="start-time-am-pm" class="am_pm dcf-mb-0 dcf-pl-3 dcf-b-0">
-              <legend class="dcf-sr-only">AM/PM</legend>
-              <div class="dcf-d-flex dcf-ai-center">
-                <label class="dcf-label dcf-2nd dcf-mt-0" for="start-time-am-pm-am">AM</label>
-                <input <?php if ($start_am_pm == 'am') echo 'checked="checked"'; ?> class="dcf-input-control dcf-flex-shrink-0" id="start-time-am-pm-am" title="AM" type="radio" value="am" name="start_time_am_pm">
-              </div>
-              <div class="dcf-d-flex dcf-ai-center">
-                <label class="dcf-label dcf-2nd dcf-mt-0" for="start-time-am-pm-pm">PM</label>
-                <input <?php if ($start_am_pm == 'pm') echo 'checked="checked"'; ?> class="dcf-input-control dcf-flex-shrink-0" id="start-time-am-pm-pm" type="radio" value="pm" name="start_time_am_pm">
-              </div>
-            </fieldset>
-          </div>
         </div>
 
-        <label class="dcf-label" for="end-date">End Date &amp; Time (Optional)</label>
-        <div class="date-time-select">
-          <div class="date-group dcf-d-flex dcf-flex-grow-1 dcf-ai-center dcf-relative dcf-mb-4 dcf-pr-6">
-            <span class="dcf-absolute dcf-z-1 wdn-icon-calendar" aria-hidden="true"></span>
-            <input id="end-date"  value="<?php echo $end_date; ?>" name="end_date" aria-label="End Date in the format of mm/dd/yyyy" type="text" class="datepicker" autocomplete="off" />
-          </div>
+        <fieldset>
+            <legend>Start Date &amp; Time <small class="dcf-required">Required</small></legend>
+            <div class="dcf-d-flex dcf-flex-wrap dcf-ai-center dcf-col-gap-4">
+                <div class="dcf-form-group dcf-datepicker dcf-flex-grow-1">
+                    <input id="start-date" name="start_date" type="text" value="<?php echo $start_date; ?>" aria-label="Start Date in the format of mm/dd/yyyy" autocomplete="off" />
+                </div>
+                <div class="dcf-form-group dcf-d-flex dcf-ai-center dcf-flex-grow-1">
+                    <span class="dcf-pr-2">@</span>
+                    <select class="dcf-flex-grow-1" id="start-time-hour" name="start_time_hour" aria-label="Start Time Hour">
+                        <option value="">Hour</option>
+                        <?php for ($i = 1; $i <= 12; $i++) { ?>
+                          <option <?php if ($i == $start_hour) echo 'selected="selected"'; ?> value="<?php echo $i ?>"><?php echo $i ?></option>
+                        <?php } ?>
+                    </select>
+                    <span class="dcf-pr-1 dcf-pl-1">:</span>
+                    <select class="dcf-flex-grow-1" id="start-time-minute" name="start_time_minute" aria-label="Start Time Minute">
+                        <option value="">Minute</option>
+                        <?php for ($i = 0; $i < 60; $i+=5): ?>
+                          <option <?php if ($i == $start_minute) echo 'selected="selected"'; ?> value="<?php echo $i; ?>"><?php echo str_pad($i, 2, '0', STR_PAD_LEFT); ?></option>
+                        <?php endfor; ?>
+                    </select>
+                    <fieldset class="dcf-d-flex dcf-ai-center dcf-col-gap-3 dcf-mb-0 dcf-ml-4 dcf-p-0 dcf-b-0 dcf-txt-sm" id="start-time-am-pm">
+                        <legend class="dcf-sr-only">AM/PM</legend>
+                        <div class="dcf-input-radio dcf-mb-0">
+                            <input id="start-time-am-pm-am" name="start_time_am_pm" type="radio" value="am" <?php if ($start_am_pm == 'am') { echo CHECKED_INPUT; } ?>>
+                            <label class="dcf-mt-0" for="start-time-am-pm-am">AM</label>
+                        </div>
+                        <div class="dcf-input-radio dcf-mb-0">
+                            <input id="start-time-am-pm-pm" name="start_time_am_pm" type="radio" value="pm" <?php if ($start_am_pm == 'pm') { echo CHECKED_INPUT; } ?>>
+                            <label class="dcf-mt-0" for="start-time-am-pm-pm">PM</label>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </fieldset>
 
-          <div class="time-group dcf-d-flex dcf-ai-center dcf-flex-grow-1 dcf-mb-4">
-
-            <span class="dcf-pr-2">@</span>
-
-            <select class="dcf-flex-grow-1 dcf-input-select" id="end-time-hour" name="end_time_hour" aria-label="End time hour">
-                <option value="">Hour</option>
-                <?php for ($i = 1; $i <= 12; $i++) { ?>
-                  <option <?php if ($i == $end_hour) echo 'selected="selected"'; ?> value="<?php echo $i ?>"><?php echo $i ?></option>
-                <?php } ?>
-            </select> :
-
-            <select class="dcf-flex-grow-1 dcf-input-select" id="end-time-minute" name="end_time_minute" aria-label="End time minute">
-                <option value="">Minute</option>
-                <?php for ($i = 0; $i < 60; $i+=5): ?>
-                    <option <?php if ($i == $end_minute) echo 'selected="selected"'; ?> value="<?php echo $i; ?>"><?php echo str_pad($i, 2, '0', STR_PAD_LEFT); ?></option>
-                <?php endfor; ?>
-            </select>
-
-            <fieldset id="start-time-am-pm" class="am_pm dcf-mb-0 dcf-pl-3 dcf-b-0">
-              <legend class="dcf-sr-only">AM/PM</legend>
-              <div class="dcf-d-flex dcf-ai-center">
-                <label class="dcf-label dcf-2nd dcf-mt-0" for="end-time-am-pm-am">AM</label>
-                <input <?php if ($end_am_pm == 'am') echo 'checked="checked"'; ?> class="dcf-input-control dcf-flex-shrink-0" id="end-time-am-pm-am" type="radio" value="am" name="end_time_am_pm">
-              </div>
-              <div class="dcf-d-flex dcf-ai-center">
-                <label class="dcf-label dcf-2nd dcf-mt-0" for="end-time-am-pm-pm">PM</label>
-                <input <?php if ($end_am_pm == 'pm') echo 'checked="checked"'; ?> class="dcf-input-control dcf-flex-shrink-0" id="end-time-am-pm-pm" type="radio" value="pm" name="end_time_am_pm">
-              </div>
-            </fieldset>
-          </div>
-        </div>
+        <fieldset>
+            <legend>End Date &amp; Time <small class="dcf-pl-1 dcf-txt-xs dcf-italic">Optional</small></legend>
+            <div class="dcf-d-flex dcf-flex-wrap dcf-ai-center dcf-col-gap-4">
+                <div class="dcf-form-group dcf-datepicker dcf-flex-grow-1">
+                    <input id="end-date" name="end_date" type="text" value="<?php echo $end_date; ?>" aria-label="End Date in the format of mm/dd/yyyy" autocomplete="off" />
+                </div>
+                <div class="dcf-form-group dcf-d-flex dcf-ai-center dcf-flex-grow-1">
+                    <span class="dcf-pr-2">@</span>
+                    <select class="dcf-flex-grow-1"  id="end-time-hour" name="end_time_hour" aria-label="End time hour">
+                        <option value="">Hour</option>
+                        <?php for ($i = 1; $i <= 12; $i++) { ?>
+                          <option <?php if ($i == $end_hour) echo 'selected="selected"'; ?> value="<?php echo $i ?>"><?php echo $i ?></option>
+                        <?php } ?>
+                    </select>
+                    <span class="dcf-pr-1 dcf-pl-1">:</span>
+                    <select class="dcf-flex-grow-1" id="end-time-minute" name="end_time_minute" aria-label="End Time Minute">
+                        <option value="">Minute</option>
+                        <?php for ($i = 0; $i < 60; $i+=5): ?>
+                            <option <?php if ($i == $end_minute) echo 'selected="selected"'; ?> value="<?php echo $i; ?>"><?php echo str_pad($i, 2, '0', STR_PAD_LEFT); ?></option>
+                        <?php endfor; ?>
+                    </select>
+                    <fieldset class="dcf-d-flex dcf-ai-center dcf-col-gap-3 dcf-mb-0 dcf-ml-4 dcf-p-0 dcf-b-0 dcf-txt-sm" id="end-time-am-pm">
+                        <legend class="dcf-sr-only">AM/PM</legend>
+                        <div class="dcf-input-radio dcf-mb-0">
+                            <input id="end-time-am-pm-am" name="end_time_am_pm" type="radio" value="am" <?php if ($end_am_pm == 'am') { echo CHECKED_INPUT; } ?>>
+                            <label class="dcf-mt-0" for="end-time-am-pm-am">AM</label>
+                        </div>
+                        <div class="dcf-input-radio dcf-mb-0">
+                            <input id="end-time-am-pm-pm" name="end_time_am_pm" type="radio" value="pm" <?php if ($end_am_pm == 'pm') { echo CHECKED_INPUT; } ?>>
+                            <label class="dcf-mt-0" for="end-time-am-pm-pm">PM</label>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </fieldset>
 
         <?php if ($context->recurrence_id == NULL) : ?>
             <div class="section-container">
-                <input <?php if ($datetime->recurringtype != 'none' && $datetime->recurringtype != NULL) echo 'checked="checked"' ?> type="checkbox" name="recurring" id="recurring">
-                <?php $recurringType = (empty($datetime->recurringtype) || strtolower($datetime->recurringtype) == 'none') ? '' : $datetime->recurringtype; ?>
-                <label class="dcf-label" for="recurring">This is a recurring <?php echo $recurringType; ?> event</label>
-                <div class="recurring-container date-time-select">                        
-                    <label class="dcf-label dcf-d-inline-block" for="recurring-type">This event recurs </label>
-                    <select class="dcf-input-select" id="recurring-type" name="recurring_type">
-                      <option value="daily" <?php if($datetime->recurringtype == "daily") { echo 'selected="selected"'; } ?>>Daily</option>
-                      <option value="weekly" <?php if($datetime->recurringtype == "weekly") { echo 'selected="selected"'; } ?>>Weekly</option>
-                      <option value="biweekly" <?php if($datetime->recurringtype == "biweekly") { echo 'selected="selected"'; } ?>>Biweekly</option>
-                      <optgroup label="Monthly" id="monthly-group">
-                      </optgroup>
-                      <option value="annually" <?php if($datetime->recurringtype == "biweekly") { echo 'selected="selected"'; } ?>>Yearly</option>
-                    </select>
-                    <label class="dcf-label dcf-d-inline-block" for="recurs-until-date">until </label><br>
-                    <span class="wdn-icon-calendar" style="top: .4em" aria-hidden="true"></span>
-                    <input value="<?php if ($datetime->recurringtype != 'none' && $datetime->recurringtype != NULL) echo $recurs_until_date; ?>" id="recurs-until-date" name="recurs_until_date" type="text" class="datepicker" aria-label="Until date in the format of mm/dd/yyyy" autocomplete="off" />
+                <div class="dcf-input-checkbox">
+                    <input id="recurring" name="recurring" type="checkbox" <?php if ($datetime->recurringtype != 'none' && $datetime->recurringtype != NULL) { echo CHECKED_INPUT; } ?>>
+                    <?php $recurringType = (empty($datetime->recurringtype) || strtolower($datetime->recurringtype) == 'none') ? '' : $datetime->recurringtype; ?>
+                    <label for="recurring">This is a recurring <?php echo $recurringType; ?> event</label>
                 </div>
+
+                <fieldset class="recurring-container date-time-select">
+                    <legend class="dcf-sr-only">Recurring Event Details</legend>
+                    <div class="dcf-d-flex dcf-flex-wrap dcf-ai-center dcf-col-gap-4">
+                      <div class="dcf-form-group">
+                          <label class="dcf-label dcf-d-inline-block" for="recurring-type">This event recurs </label>
+                          <select class="dcf-input-select" id="recurring-type" name="recurring_type">
+                            <option value="daily" <?php if($datetime->recurringtype == "daily") { echo 'selected="selected"'; } ?>>Daily</option>
+                            <option value="weekly" <?php if($datetime->recurringtype == "weekly") { echo 'selected="selected"'; } ?>>Weekly</option>
+                            <option value="biweekly" <?php if($datetime->recurringtype == "biweekly") { echo 'selected="selected"'; } ?>>Biweekly</option>
+                            <optgroup label="Monthly" id="monthly-group">
+                            </optgroup>
+                            <option value="annually" <?php if($datetime->recurringtype == "biweekly") { echo 'selected="selected"'; } ?>>Yearly</option>
+                          </select>
+                      </div>
+                      <div class="dcf-form-group dcf-datepicker">
+                        <label for="recurs-until-date">until </label>
+                        <input id="recurs-until-date" name="recurs_until_date" type="text" value="<?php if ($datetime->recurringtype != 'none' && $datetime->recurringtype != NULL) { echo $recurs_until_date; } ?>" aria-label="Until date in the format of mm/dd/yyyy" autocomplete="off" />
+                    </div>
+                </fieldset>
             </div>
         <?php endif; ?>
 
-        <label class="dcf-label" for="directions">Directions</label>
-        <textarea class="dcf-input-text" id="directions" name="directions"><?php echo $datetime->directions; ?></textarea>
-
-        <label class="dcf-label" for="additional-public-info">Additional Public Info</label>
-        <textarea class="dcf-input-text" id="additional-public-info" name="additional_public_info"><?php echo $datetime->additionalpublicinfo; ?></textarea>
+        <div class="dcf-form-group">
+            <label for="directions">Directions</label>
+            <textarea id="directions" name="directions"><?php echo $datetime->directions; ?></textarea>
+        </div>
+        <div class="dcf-form-group">
+            <label for="additional-public-info">Additional Public Info</label>
+            <textarea id="additional-public-info" name="additional_public_info"><?php echo $datetime->additionalpublicinfo; ?></textarea>
+        </div>
     </fieldset>
-
-    <button class="dcf-btn dcf-btn-primary dcf-float-left" type="submit">Submit</button>
+    <button class="dcf-btn dcf-btn-primary" type="submit">Submit</button>
 </form>
 <br>
 
@@ -265,11 +294,10 @@ if ($datetime->recurringtype != 'none' && $datetime->recurringtype != NULL) {
   $recurringCode = "setRecurringOptions($('#start-date'), $('#monthly-group'), '" . $rectypemonth. "');";
 }
 $page->addScriptDeclaration("
-WDN.initializePlugin('jqueryui', [function() {  
-    $ = require('jquery');
+require(['jquery'], function ($) {
 
-    $('.datepicker').datepicker();
-    $(\"LINK[href^='//unlcms.unl.edu/wdn/templates_4.0/scripts/plugins/ui/css/jquery-ui.min.css']\").remove();
+    // DCF Date Picker
+    WDN.initializePlugin('datepickers');
 
     $('#location').change(function(change) {
         if ($('#location').val() == 'new') {
@@ -280,6 +308,12 @@ WDN.initializePlugin('jqueryui', [function() {
     });
 
     $('#location').change();
+
+    $('#recurring').change(function () {
+        if (this.checked) {
+            setRecurringOptions($('#start-date'), $('#monthly-group'), '" . $recurringType . "');
+        }
+    });
 
     $('#start-date').change(function (change) {
         setRecurringOptions($(this), $('#monthly-group'), '" . $rectypemonth. "');
@@ -366,6 +400,6 @@ WDN.initializePlugin('jqueryui', [function() {
             notifier.alert('Sorry! We couldn\'t create your event', '<ul><li>' + errors.join('</li><li>') + '</li></ul>');
         }
     });
-}]);");
+});");
 
 ?>
