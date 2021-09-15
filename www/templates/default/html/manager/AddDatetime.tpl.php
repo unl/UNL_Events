@@ -38,7 +38,7 @@
     if ($context->recurrence_id != NULL) {
         $last_crumb = 'Edit a Single Instance from Recurring Event';
     } else {
-        $last_crumb = $datetime->id == NULL ? 'Add a Location, Date, and Time' : 'Edit Location, Date, and Time';
+        $last_crumb = $datetime->id == NULL ? 'Add a Location, Date & Time' : 'Edit Location, Date & Time';
     }
 
     $crumbs = new stdClass;
@@ -54,8 +54,8 @@
 <form class="dcf-form" id="add-datetime-form" action="" method="POST">
   <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
   <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
-    <fieldset class="dcf-b-0">
-        <legend></legend>
+    <fieldset class="dcf-mt-6">
+        <legend>Location, Date &amp; Time</legend>
         <div class="dcf-form-group">
             <label for="location">Location <small class="dcf-required">Required</small></label>
             <select class="dcf-input-select" id="location" name="location" style="width: 100%;">

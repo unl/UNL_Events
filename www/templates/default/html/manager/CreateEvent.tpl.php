@@ -46,7 +46,7 @@
             </div>
         </fieldset>
         <fieldset>
-            <legend>Location, Date, and Time</legend>
+            <legend>Location, Date &amp; Time</legend>
             <div class="dcf-form-group">
                 <label for="location">Location <small class="dcf-required">Required</small></label>
                 <select id="location" name="location">
