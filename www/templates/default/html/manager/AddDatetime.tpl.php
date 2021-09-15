@@ -4,6 +4,7 @@
     $calendar = $context->calendar;
     $event = $context->event;
     $datetime = $context->event_datetime;
+    $recurringType = '';
 
     if ($datetime->starttime == NULL) {
         $start_time = '';
