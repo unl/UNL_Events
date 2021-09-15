@@ -47,7 +47,7 @@ echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
         <dd><?php echo ($event_type)?$event_type->name:'(empty)'; ?></dd>
     </dl>
 
-    <h2>Location, Date, and Time</h2>
+    <h2>Location, Date &amp; Time</h2>
     <table>
         <thead>
             <tr>

@@ -83,7 +83,7 @@
             </div>
         </fieldset>
         <fieldset>
-            <legend>Location, Date, and Time</legend>
+            <legend>Location, Date &amp; Time</legend>
             <a class="dcf-btn dcf-btn-primary" href="<?php echo $event->getAddDatetimeURL($context->calendar) ?>">Add Location, Date, and/or Time</a>
             <table class="dcf-mt-6 dcf-table dcf-table-striped dcf-table-fixed dcf-w-100% dcf-txt-sm">
                 <thead class="edt-header">
@@ -249,7 +249,7 @@
 $page->addScriptDeclaration("
 require(['jquery'], function($) {
     $('.delete-datetime').submit(function (submit) {
-        if (!window.confirm('Are you sure you want to delete this location, date, and time?')) {
+        if (!window.confirm('Are you sure you want to delete this location, date and time?')) {
             submit.preventDefault();
         }
     });
@@ -261,7 +261,7 @@ require(['jquery'], function($) {
     });
 
     $('.edit-recurring-edt').click(function (click) {
-        if (!window.confirm('You are editing a single instance of a recurring location, date, and time.')) {
+        if (!window.confirm('You are editing a single instance of a recurring location, date and time.')) {
             click.preventDefault();
         }
     });
