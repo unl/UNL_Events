@@ -48,7 +48,7 @@ echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
     </dl>
 
     <h2>Location, Date &amp; Time</h2>
-    <table>
+    <table class="dcf-mb-6">
         <thead>
             <tr>
                 <th>Dates</th>
