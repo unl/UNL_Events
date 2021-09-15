@@ -25,7 +25,7 @@
         <p class="dcf-form-help">Note: This is a list of users who have previously logged into the system. If you do not see someone in this list, please have him or her navigate to <a href="http://events.unl.edu/manager">http://events.unl.edu/manager</a> and login. His or her username will then be present in this list.</p>
     <?php } else { ?>
         <p>Editing for User:</label><br>
-        <b><?php echo $context->user->uid ?></b></p>
+        <strong><?php echo $context->user->uid ?></strong></p>
     <?php } ?>
 
     <fieldset>

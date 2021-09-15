@@ -86,11 +86,12 @@
             <legend>Location, Date &amp; Time</legend>
             <a class="dcf-btn dcf-btn-primary" href="<?php echo $event->getAddDatetimeURL($context->calendar) ?>">Add Location, Date, and/or Time</a>
             <table class="dcf-mt-6 dcf-table dcf-table-striped dcf-table-fixed dcf-w-100% dcf-txt-sm">
+                <caption class="dcf-sr-only">Current Location, Date &amp; Times</caption>
                 <thead class="edt-header">
                     <tr>
-                        <th class="dates">Dates</th>
-                        <th class="location">Location</th>
-                        <th class="dcf-txt-right dcf-pr-0">Actions</th>
+                        <th class="dates" scope="col">Dates</th>
+                        <th class="location" scope="col">Location</th>
+                        <th class="dcf-txt-right dcf-pr-0" scope="col">Actions</th>
                     </tr>
                 </thead>
                 <?php foreach($event->getDatetimes(5, ($context->page - 1)*5) as $datetime) : ?>

@@ -47,12 +47,12 @@ echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
         <dd><?php echo ($event_type)?$event_type->name:'(empty)'; ?></dd>
     </dl>
 
-    <h2>Location, Date &amp; Time</h2>
-    <table class="dcf-mb-6">
+    <h2 id="location-date-time-header">Location, Date &amp; Time</h2>
+    <table class="dcf-mb-6" aria-labelledby="location-date-time-header">
         <thead>
             <tr>
-                <th>Dates</th>
-                <th>Location</th>
+                <th scope="col">Dates</th>
+                <th scope="col">Location</th>
             </tr>
         </thead>
         <tbody>

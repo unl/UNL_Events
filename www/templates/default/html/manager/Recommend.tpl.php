@@ -12,10 +12,11 @@
     <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
     <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
     <table class="recommend-list dcf-mb-5">
+        <caption class="dcf-sr-only">Recommend event actions for calendars.</caption>
         <thead>
-            <th>&nbsp;</th>
-            <th class="center">Pending</th>
-            <th class="center">Approved</th>
+            <th scope="col">Calendar</th>
+            <th class="center" scope="col">Pending</th>
+            <th class="center" scope="col">Approved</th>
         </thead>
         <tbody>
         <?php foreach($context->getRecommendableCalendars() as $id => $arr): ?>
