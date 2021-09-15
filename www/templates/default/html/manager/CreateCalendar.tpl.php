@@ -59,7 +59,7 @@
         <textarea id="email-lists" name="email_lists"><?php echo $context->calendar->emaillists ?></textarea>
     </div>
     <div class="dcf-input-checkbox">
-        <input type="checkbox" name="recommend_within_account" id="recommend-within-account" <?php if ($context->calendar->recommendationswithinaccount) echo 'checked="checked"' ?>>
+        <input type="checkbox" name="recommend_within_account" id="recommend-within-account" <?php if ($context->calendar->recommendationswithinaccount) { echo 'checked="checked"'; } ?>>
         <label for="recommend-within-account">Allow event recommendations within this account</label>
     </div>
     <div class="dcf-mt-6">

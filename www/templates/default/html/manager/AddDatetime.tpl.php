@@ -1,4 +1,6 @@
 <?php
+    const CHECKED_INPUT = 'checked="checked"';
+
     $calendar = $context->calendar;
     $event = $context->event;
     $datetime = $context->event_datetime;
@@ -190,11 +192,11 @@
                     <fieldset class="dcf-d-flex dcf-ai-center dcf-col-gap-3 dcf-mb-0 dcf-ml-4 dcf-p-0 dcf-b-0 dcf-txt-sm" id="start-time-am-pm">
                         <legend class="dcf-sr-only">AM/PM</legend>
                         <div class="dcf-input-radio dcf-mb-0">
-                            <input id="start-time-am-pm-am" name="start_time_am_pm" type="radio" value="am" <?php if ($start_am_pm == 'am') echo 'checked="checked"'; ?>>
+                            <input id="start-time-am-pm-am" name="start_time_am_pm" type="radio" value="am" <?php if ($start_am_pm == 'am') { echo CHECKED_INPUT; } ?>>
                             <label class="dcf-mt-0" for="start-time-am-pm-am">AM</label>
                         </div>
                         <div class="dcf-input-radio dcf-mb-0">
-                            <input id="start-time-am-pm-pm" name="start_time_am_pm" type="radio" value="pm" <?php if ($start_am_pm == 'pm') echo 'checked="checked"'; ?>>
+                            <input id="start-time-am-pm-pm" name="start_time_am_pm" type="radio" value="pm" <?php if ($start_am_pm == 'pm') { echo CHECKED_INPUT; } ?>>
                             <label class="dcf-mt-0" for="start-time-am-pm-pm">PM</label>
                         </div>
                     </fieldset>
@@ -226,11 +228,11 @@
                     <fieldset class="dcf-d-flex dcf-ai-center dcf-col-gap-3 dcf-mb-0 dcf-ml-4 dcf-p-0 dcf-b-0 dcf-txt-sm" id="end-time-am-pm">
                         <legend class="dcf-sr-only">AM/PM</legend>
                         <div class="dcf-input-radio dcf-mb-0">
-                            <input id="end-time-am-pm-am" name="end_time_am_pm" type="radio" value="am" <?php if ($end_am_pm == 'am') echo 'checked="checked"'; ?>>
+                            <input id="end-time-am-pm-am" name="end_time_am_pm" type="radio" value="am" <?php if ($end_am_pm == 'am') { echo CHECKED_INPUT; } ?>>
                             <label class="dcf-mt-0" for="end-time-am-pm-am">AM</label>
                         </div>
                         <div class="dcf-input-radio dcf-mb-0">
-                            <input id="end-time-am-pm-pm" name="end_time_am_pm" type="radio" value="pm" <?php if ($end_am_pm == 'pm') echo 'checked="checked"'; ?>>
+                            <input id="end-time-am-pm-pm" name="end_time_am_pm" type="radio" value="pm" <?php if ($end_am_pm == 'pm') { echo CHECKED_INPUT; } ?>>
                             <label class="dcf-mt-0" for="end-time-am-pm-pm">PM</label>
                         </div>
                     </fieldset>
@@ -241,7 +243,7 @@
         <?php if ($context->recurrence_id == NULL) : ?>
             <div class="section-container">
                 <div class="dcf-input-checkbox">
-                    <input id="recurring" name="recurring" type="checkbox" <?php if ($datetime->recurringtype != 'none' && $datetime->recurringtype != NULL) echo 'checked="checked"' ?>>
+                    <input id="recurring" name="recurring" type="checkbox" <?php if ($datetime->recurringtype != 'none' && $datetime->recurringtype != NULL) { echo CHECKED_INPUT; } ?>>
                     <?php $recurringType = (empty($datetime->recurringtype) || strtolower($datetime->recurringtype) == 'none') ? '' : $datetime->recurringtype; ?>
                     <label for="recurring">This is a recurring <?php echo $recurringType; ?> event</label>
                 </div>

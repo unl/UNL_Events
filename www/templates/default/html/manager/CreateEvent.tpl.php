@@ -1,4 +1,6 @@
 <?php
+    const CHECKED_INPUT = 'checked="checked"';
+
     $calendar = $context->calendar;
     $event = $context->event;
     $post = $context->post;
@@ -128,7 +130,7 @@
                 </div>
                 <div class="dcf-form-group">
                     <div class="dcf-input-checkbox">
-                        <input id="location-save" name="location_save" type="checkbox" <?php if (isset($post['location_save']) && $post['location_save'] == 'on') echo 'checked="checked"'; ?>>
+                        <input id="location-save" name="location_save" type="checkbox" <?php if (isset($post['location_save']) && $post['location_save'] == 'on') { echo CHECKED_INPUT; } ?>>
                         <label for="location-save">Save this location for future events</label>
                     </div>
                 </div>
@@ -183,11 +185,11 @@
                         <fieldset class="dcf-d-flex dcf-ai-center dcf-col-gap-3 dcf-mb-0 dcf-ml-4 dcf-p-0 dcf-b-0 dcf-txt-sm" id="start-time-am-pm">
                             <legend class="dcf-sr-only">AM/PM</legend>
                             <div class="dcf-input-radio dcf-mb-0">
-                                <input id="start-time-am-pm-am" name="start_time_am_pm" type="radio" value="am" <?php if (!isset($post) || $post['start_time_am_pm'] == 'am') echo 'checked="checked"'; ?>>
+                                <input id="start-time-am-pm-am" name="start_time_am_pm" type="radio" value="am" <?php if (!isset($post) || $post['start_time_am_pm'] == 'am') { echo CHECKED_INPUT; } ?>>
                                 <label class="dcf-mb-0" for="start-time-am-pm-am">AM</label>
                             </div>
                             <div class="dcf-input-radio dcf-mb-0">
-                                <input id="start-time-am-pm-pm" name="start_time_am_pm" type="radio" value="pm" <?php if (isset($post['start_time_am_pm']) && $post['start_time_am_pm'] == 'pm') echo 'checked="checked"'; ?>>
+                                <input id="start-time-am-pm-pm" name="start_time_am_pm" type="radio" value="pm" <?php if (isset($post['start_time_am_pm']) && $post['start_time_am_pm'] == 'pm') { echo CHECKED_INPUT; } ?>>
                                 <label class="dcf-mb-0" for="start-time-am-pm-pm">PM</label>
                             </div>
                         </fieldset>
@@ -228,11 +230,11 @@
                         <fieldset class="dcf-d-flex dcf-ai-center dcf-col-gap-3 dcf-mb-0 dcf-ml-4 dcf-p-0 dcf-b-0 dcf-txt-sm" id="end-time-am-pm">
                             <legend class="dcf-sr-only">AM/PM</legend>
                             <div class="dcf-input-radio dcf-mb-0">
-                                <input id="end-time-am-pm-am" name="end_time_am_pm" type="radio" value="am" <?php if (empty($post) || $post['end_time_am_pm'] == 'am') echo 'checked="checked"'; ?>>
+                                <input id="end-time-am-pm-am" name="end_time_am_pm" type="radio" value="am" <?php if (empty($post) || $post['end_time_am_pm'] == 'am') { echo CHECKED_INPUT; } ?>>
                                 <label class="dcf-mb-0" for="end-time-am-pm-am">AM</label>
                           </div>
                           <div class="dcf-input-radio dcf-mb-0">
-                                <input id="end-time-am-pm-pm" name="end_time_am_pm" type="radio" value="pm" <?php if (isset($post['end_time_am_pm']) && $post['end_time_am_pm'] == 'pm') echo 'checked="checked"'; ?>>
+                                <input id="end-time-am-pm-pm" name="end_time_am_pm" type="radio" value="pm" <?php if (isset($post['end_time_am_pm']) && $post['end_time_am_pm'] == 'pm') { echo CHECKED_INPUT; } ?>>
                                 <label class="dcf-mb-0" for="end-time-am-pm-pm">PM</label>
                           </div>
                         </fieldset>
@@ -241,7 +243,7 @@
             </fieldset>
             <div class="section-container">
                 <div class="dcf-input-checkbox">
-                    <input id="recurring" name="recurring" type="checkbox" <?php if (isset($post['recurring'])) echo 'checked="checked"'; ?>>
+                    <input id="recurring" name="recurring" type="checkbox" <?php if (isset($post['recurring'])) { echo CHECKED_INPUT; } ?>>
                     <label for="recurring">This is a recurring event</label>
                 </div>
                 <fieldset class="recurring-container date-time-select">
@@ -281,22 +283,22 @@
                 <fieldset class="dcf-col-100% dcf-col-25%-start@sm dcf-p-0 dcf-b-0">
                     <legend class="dcf-pb-2">Privacy</legend>
                     <div class="dcf-input-radio">
-                        <input id="sharing-private" name="private_public" type="radio" value="private" <?php if (!empty($post['private_public']) && $post['private_public'] == 'private') echo 'checked="checked"'; ?>>
+                        <input id="sharing-private" name="private_public" type="radio" value="private" <?php if (!empty($post['private_public']) && $post['private_public'] == 'private') { echo CHECKED_INPUT; } ?>>
                         <label for="sharing-private">Private</label>
                     </div>
                     <div class="dcf-input-radio">
-                        <input id="sharing-public" name="private_public" type="radio" value="public" <?php if (!empty($post['private_public']) && $post['private_public'] != 'private') echo 'checked="checked"'; ?>>
+                        <input id="sharing-public" name="private_public" type="radio" value="public" <?php if (!empty($post['private_public']) && $post['private_public'] != 'private') { echo CHECKED_INPUT; } ?>>
                         <label for="sharing-public">Public</label>
                     </div>
                 </fieldset>
                 <fieldset class="dcf-col-100% dcf-col-75%-end@sm dcf-mb-0 dcf-p-0 dcf-b-0" id="send_to_main">
                     <legend class="dcf-pb-2">Consider for Main <abbr title="University of Nebraska–Lincoln"">UNL</abbr> Calendar <small class="dcf-required">Required</small></legend>
                     <div class="dcf-input-radio">
-                        <input id="send_to_main_on" name="send_to_main" type="radio" value="on" <?php if (!empty($post['send_to_main']) && $post['send_to_main'] == 'on') echo 'checked="checked"'; ?>/>
+                        <input id="send_to_main_on" name="send_to_main" type="radio" value="on" <?php if (!empty($post['send_to_main']) && $post['send_to_main'] == 'on') { echo CHECKED_INPUT; } ?>/>
                         <label for="send_to_main_on">Yes</label>
                     </div>
                     <div class="dcf-input-radio">
-                        <input id="send_to_main_off" name="send_to_main" type="radio" value="off" <?php if (!empty($post['send_to_main']) && $post['send_to_main'] == 'off') echo 'checked="checked"'; ?>/>
+                        <input id="send_to_main_off" name="send_to_main" type="radio" value="off" <?php if (!empty($post['send_to_main']) && $post['send_to_main'] == 'off') { echo CHECKED_INPUT; } ?>/>
                         <label for="send_to_main_off">No</label>
                     </div>
                 </fieldset>

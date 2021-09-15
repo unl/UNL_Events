@@ -34,7 +34,7 @@
           <div class="dcf-input-checkbox">
             <input id="permission-<?php echo $permission->id ?>" name="permission_<?php echo $permission->id ?>" type="checkbox"
             <?php if (($context->user != NULL && $context->user->hasPermission($permission->id, $context->calendar->id)) ||
-                ($context->user == NULL && $permission->standard)) echo 'checked="checked"'; ?>>
+                ($context->user == NULL && $permission->standard)) { echo 'checked="checked"'; } ?>>
             <label for="permission-<?php echo $permission->id ?>"><?php echo $permission->description ?></label>
           </div>
       <?php } ?>

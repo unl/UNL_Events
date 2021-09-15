@@ -1,4 +1,5 @@
 <?php
+    const CHECKED_INPUT = 'checked="checked"';
     $calendar = $context->calendar;
     $event = $context->event;
     $post = $context->post;
@@ -95,7 +96,7 @@
                     </tr>
                 </thead>
                 <?php foreach($event->getDatetimes(5, ($context->page - 1)*5) as $datetime) : ?>
-                <tr class="edt-record <?php if ($datetime->recurringtype != 'none') echo 'has-recurring' ?>">
+                <tr class="edt-record <?php if ($datetime->recurringtype != 'none') { echo 'has-recurring'; } ?>">
                     <td class="dcf-txt-middle dates">
                         <?php
                         {
@@ -199,11 +200,11 @@
                 <fieldset class="dcf-col-100% dcf-col-25%-start@sm dcf-p-0 dcf-b-0">
                     <legend class="dcf-pb-2">Privacy</legend>
                     <div class="dcf-input-radio">
-                        <input id="sharing-private" name="private_public" type="radio" value="private" <?php if (!$event->approvedforcirculation) echo 'checked="checked"' ?>>
+                        <input id="sharing-private" name="private_public" type="radio" value="private" <?php if (!$event->approvedforcirculation) { echo CHECKED_INPUT; } ?>>
                         <label for="sharing-private">Private</label>
                     </div>
                     <div class="dcf-input-radio">
-                        <input id="sharing-public" name="private_public" type="radio" value="public" <?php if ($event->approvedforcirculation) echo 'checked="checked"' ?>>
+                        <input id="sharing-public" name="private_public" type="radio" value="public" <?php if ($event->approvedforcirculation) { echo CHECKED_INPUT; } ?>>
                         <label for="sharing-public">Public</label>
                     </div>
                 </fieldset>
@@ -214,7 +215,7 @@
                         (event has been sent to main UNL calendar for approval)
                     <?php else: ?>
                         <div class="dcf-input-checkbox">
-                          <input id="send-to-main" name="send_to_main" type="checkbox" <?php if (isset($post['send_to_main'])) echo 'checked="checked"'; ?>>
+                          <input id="send-to-main" name="send_to_main" type="checkbox" <?php if (isset($post['send_to_main'])) { echo CHECKED_INPUT; } ?>>
                           <label for="send-to-main">Yes</label>
                         </div>
                     <?php endif; ?>
