@@ -12,7 +12,7 @@
 ?>
 <?php $eventTypes = new UNL\UCBCN\Calendar\EventTypes(array()); ?>
 <form class="dcf-form dcf-mb-6">
-    <label class="dcf-label" for="events-search">Search</label>
+    <label for="events-search">Search</label>
     <div class="dcf-input-group">
         <select class="dcf-txt-sm" id="event_type_id" name="event_type_id" aria-label="Filter by Activity Type">
             <option value="">Filter by Activity Type</option>
@@ -21,8 +21,8 @@
                 <option <?php echo $selected; ?> value="<?php echo $type->id ?>"><?php echo $type->name ?></option>
             <?php } ?>
         </select>
-        <input type="text" name="search_term" id="events-search"  value="<?php echo $context->search_term ?>"/>
-        <button type="submit" class="dcf-btn dcf-btn-primary">Search</button>
+        <input id="events-search" name="search_term" type="text" value="<?php echo $context->search_term ?>"/>
+        <button class="dcf-btn dcf-btn-primary" type="submit">Search</button>
     </div>
 </form>
 
@@ -110,28 +110,28 @@
                                 <?php foreach($datetimes as $datetime): ?>
                                     <li>
                                         <?php if (++$count <= 3) : ?>
-                                            <?php 
+                                            <?php
                                             {
                                                 if ($datetime->recurringtype == 'none') {
                                                     echo date('n/d/y @ g:ia', strtotime($datetime->starttime));
                                                 } else if ($datetime->recurringtype == 'daily' || $datetime->recurringtype == 'weekly' || $datetime->recurringtype == 'biweekly' ||
                                                         $datetime->recurringtype == 'annually') {
                                                     echo ucwords($datetime->recurringtype) . ' @ ' . date('g:ia', strtotime($datetime->starttime)) .
-                                                        ':<br>' . date('n/d/y', strtotime($datetime->starttime)) . 
+                                                        ':<br>' . date('n/d/y', strtotime($datetime->starttime)) .
                                                         ' - ' . date('n/d/y', strtotime($datetime->recurs_until));
                                                 } else if ($datetime->recurringtype == 'monthly') {
                                                     if ($datetime->rectypemonth == 'lastday') {
-                                                        echo 'Last day of every month @ ' . date('g:ia', strtotime($datetime->starttime)) . 
-                                                            ':<br>' . date('n/d/y', strtotime($datetime->starttime)) . 
+                                                        echo 'Last day of every month @ ' . date('g:ia', strtotime($datetime->starttime)) .
+                                                            ':<br>' . date('n/d/y', strtotime($datetime->starttime)) .
                                                             ' - ' . date('n/d/y', strtotime($datetime->recurs_until));
                                                     } else if ($datetime->rectypemonth == 'date') {
-                                                        echo ordinal(date('d', strtotime($datetime->starttime))) . 
-                                                            ' of every month @ ' . date('g:ia', strtotime($datetime->starttime)) . 
-                                                            ':<br>' . date('n/d/y', strtotime($datetime->starttime)) . 
+                                                        echo ordinal(date('d', strtotime($datetime->starttime))) .
+                                                            ' of every month @ ' . date('g:ia', strtotime($datetime->starttime)) .
+                                                            ':<br>' . date('n/d/y', strtotime($datetime->starttime)) .
                                                             ' - ' . date('n/d/y', strtotime($datetime->recurs_until));
                                                     } else {
-                                                        echo ucwords($datetime->rectypemonth) . date(' l', strtotime($datetime->starttime)) . ' of every month' . 
-                                                            ':<br>' . date('n/d/y', strtotime($datetime->starttime)) . 
+                                                        echo ucwords($datetime->rectypemonth) . date(' l', strtotime($datetime->starttime)) . ' of every month' .
+                                                            ':<br>' . date('n/d/y', strtotime($datetime->starttime)) .
                                                             ' - ' . date('n/d/y', strtotime($datetime->recurs_until));
                                                     }
                                                 }
@@ -150,9 +150,9 @@
                                     <?php if ($status = $event->getStatusWithCalendar($context->calendar->getRawObject())): ?>
                                         <strong><?php echo ucwords($status); ?></strong> on <?php echo $context->calendar->name ?>
                                     <?php else: ?>
-                                        <select 
+                                        <select
                                             id="event-action-<?php echo $event->id ?>-small"
-                                            class="searched-event-tools" 
+                                            class="searched-event-tools"
                                             data-id="<?php echo $event->id; ?>"
                                             >
                                                 <option value="">Select an Action</option>
@@ -213,7 +213,7 @@
                         <?php for ($i = 1; $i <= $total_pages; $i++): ?>
                                 <?php if ($i == $context->page): ?>
                                     <li class="selected"><span><?php echo $i; ?></span></li>
-                                <?php elseif ($i <= 3 || $i >= $total_pages - 2 || $i == $context->page - 1 || 
+                                <?php elseif ($i <= 3 || $i >= $total_pages - 2 || $i == $context->page - 1 ||
                                             $i == $context->page - 2 || $i == $context->page + 1 || $i == $context->page + 2): ?>
                                     <li><a href="?event_type_id=<?php echo $context->event_type_id ?>&search_term=<?php echo $context->search_term?>&amp;page=<?php echo $i ?>" title="Go to page <?php echo $i; ?>"><?php echo $i; ?></a></li>
                                 <?php elseif ($i < $context->page && !$before_ellipsis_shown): ?>

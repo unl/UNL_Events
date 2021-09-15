@@ -25,12 +25,12 @@ setRecurringOptions = function(start_elem, month_group_elem, rectypemonth) {
 
     // get startdate info
     var weekdays = [
-        "Sunday", 
-        "Monday", 
+        "Sunday",
+        "Monday",
         "Tuesday",
-        "Wednesday", 
-        "Thursday", 
-        "Friday", 
+        "Wednesday",
+        "Thursday",
+        "Friday",
         "Saturday"
     ];
 
@@ -146,6 +146,18 @@ require(['jquery', 'wdn', frontend_url + 'templates/default/html/js/vendor/selec
 
         $('#checkbox-toggle').click(function (click) {
             $(".select-event").prop("checked", $(this).is(":checked"));
+        });
+
+        if ($('#recurring').is(":checked")) {
+            $(".recurring-container").show();
+        }
+
+        $('#recurring').click(function (click) {
+            if ($(this).is(":checked")) {
+                $(".recurring-container").show();
+            } else {
+                $(".recurring-container").hide();
+            }
         });
 
         $('.pending-event-tools, .upcoming-event-tools, .past-event-tools, .searched-event-tools').change(function () {

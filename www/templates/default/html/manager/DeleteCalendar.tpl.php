@@ -11,12 +11,12 @@
 	$user = \UNL\UCBCN\Manager\Auth::getCurrentUser();
 ?>
 
-<h2 class="wdn-brand">Delete <?php echo $context->calendar->name ?></h2>
-<h3 class="wdn-brand">Are you sure?</h3>
-<p>Deleting this calendar will delete all of the events associated with it. Permanently.</p>
+<h1>Delete <?php echo $context->calendar->name ?></h1>
+<p><strong>Are you sure?</strong></p>
+<p>Deleting this calendar will <strong>permanently</strong> delete all of the events associated with it.</p>
 <form method="POST" action="<?php echo $context->calendar->getDeleteFinalURL() ?>" class="delete-form">
     <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
     <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
-    <button class="dcf-btn dcf-btn-primary" type="submit">Yes, Delete</button>
-    <a href="<?php echo $context->calendar->getEditURL() ?>" class="dcf-btn" style="vertical-align: middle;">No, let's not</a>
+    <button class="dcf-btn dcf-btn-primary" type="submit">Yes, delete</button>
+    <a class="dcf-btn dcf-btn-secondary" href="<?php echo $context->calendar->getEditURL() ?>">No, do not delete</a>
 </form>
