@@ -5,7 +5,7 @@
             <?php if (isset($context->event->subtitle)): ?><header><?php endif; ?>
                 <h2 id="heading-date" class='summary' data-datetime="<?php echo (new DateTime($context->getStartTime()))->format('c') ?>">
                     <a class="dcf-txt-decor-none" href="<?php echo $url; ?>">
-                        <?php echo $savvy->dbStringtoHtml($context->event->displayTitle()); ?>
+                        <?php echo $savvy->dbStringtoHtml($context->event->displayTitle($context)); ?>
                     </a>
                 </h2>
                 <?php if (isset($context->event->subtitle)): ?><p class="dcf-subhead"><?php echo $savvy->dbStringtoHtml($context->event->subtitle) ?></p><?php endif; ?>

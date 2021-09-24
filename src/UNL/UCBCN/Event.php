@@ -348,6 +348,7 @@ class Event extends Record
         if (!empty($new_rows)) {
             foreach ($new_rows as $row) {
                 $recurring_date = new RecurringDate;
+                $recurring_date->canceled = 0;
                 $recurring_date->recurringdate = $row[0];
                 $recurring_date->event_id = $row[1];
                 $recurring_date->recurrence_id = $row[2];
@@ -628,15 +629,20 @@ class Event extends Record
         return false;
     }
 
-    public function isCanceled() {
-        return !empty($this->canceled);
+    public function isCanceled($eventInstance = NULL) {
+        return !empty($this->canceled) || $this->eventInstanceIsCanceled($eventInstance);
     }
 
-    public function displayTitle() {
-        return $this->isCanceled() ? 'Canceled: ' . $this->title : $this->title;
+    public function eventInstanceIsCanceled($eventInstance = NULL) {
+        return !empty($eventInstance) && !empty($eventInstance->eventdatetime) && ($eventInstance->eventdatetime->isCanceled() ||
+            ($eventInstance->eventdatetime->isRecurring() && !empty($eventInstance->recurringdate) && $eventInstance->recurringdate->isCanceled()));
     }
 
-    public function icalStatus() {
-        return $this->isCanceled() ? 'CANCELLED' : 'CONFIRMED';
+    public function displayTitle($eventInstance = NULL) {
+        return $this->isCanceled($eventInstance) ? 'Canceled: ' . $this->title : $this->title;
+    }
+
+    public function icalStatus($eventInstance = NULL) {
+        return $this->isCanceled($eventInstance) ? 'CANCELLED' : 'CONFIRMED';
     }
 }

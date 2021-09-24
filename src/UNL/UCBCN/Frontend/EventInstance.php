@@ -196,7 +196,7 @@ class EventInstance implements RoutableInterface
     {
         $time = $this->eventdatetime->starttime;
         
-        if (isset($this->recurringdate) && $this->recurringdate instanceof \UNL\UCBCN\Event\RecurringDate) {
+        if ($this->eventdatetime->isRecurring() && isset($this->recurringdate) && $this->recurringdate instanceof \UNL\UCBCN\Event\RecurringDate) {
             $first_recurring_date = $this->recurringdate->getFirstRecordInOngoingSeries();
             if (isset($first_recurring_date->recurringdate)) {
                 $time = $first_recurring_date->recurringdate . ' ' . substr($time, 11);
@@ -220,7 +220,7 @@ class EventInstance implements RoutableInterface
             return $time;
         }
 
-        if ($this->recurringdate) {
+        if ($this->eventdatetime->isRecurring() && isset($this->recurringdate) && $this->recurringdate instanceof \UNL\UCBCN\Event\RecurringDate) {
             $diff = strtotime($this->eventdatetime->endtime) - strtotime($this->eventdatetime->starttime);
             
             $time = date('Y-m-d H:i:s', strtotime($this->getStartTime()) + $diff);
@@ -259,8 +259,8 @@ class EventInstance implements RoutableInterface
 
 
         $data['EventID']       = $this->event->id;
-        $data['Status']        = $this->event->icalStatus();
-        $data['EventTitle']    = $this->event->displayTitle();
+        $data['Status']        = $this->event->icalStatus($this);
+        $data['EventTitle']    = $this->event->displayTitle($this);
         $data['EventSubtitle'] = $this->event->subtitle;
         $data['DateTime'] = array(
             'Start' => $timezoneDateTime->format($this->getStartTime(),'c'),
@@ -269,7 +269,7 @@ class EventInstance implements RoutableInterface
             'EventTimezone' => $this->eventdatetime->timezone,
             'CalendarTimezone' => $this->calendar->defaulttimezone
         );
-        $data['EventStatus']           = $this->event->isCanceled() ? 'Canceled' : 'Happening As Scheduled';
+        $data['EventStatus']           = $this->event->isCanceled($this) ? 'Canceled' : 'Happening As Scheduled';
         $data['Classification']        = 'Public';
         $data['Languages']['Language'] = 'en-US';
         $data['EventTransparency']     = $this->event->transparency;

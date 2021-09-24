@@ -13,6 +13,7 @@ class RecurringDate extends Record
     public $ongoing;                         // int(1)  
     public $unlinked;                        // int(1)
     public $event_datetime_id;
+    public $canceled;
 
     public static function getTable()
     {
@@ -61,5 +62,9 @@ class RecurringDate extends Record
             $date->unlinked = 1;
             $date->save();
         }
+    }
+
+    public function isCanceled() {
+        return !empty($this->canceled);
     }
 }

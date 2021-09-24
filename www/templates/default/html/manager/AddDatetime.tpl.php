@@ -62,7 +62,7 @@
         <div class="dcf-form-group">
             <label for="location">Location <small class="dcf-required">Required</small></label>
             <select class="dcf-input-select" id="location" name="location" style="width: 100%;">
-                  <?php if ($datetime->id != NULL): ?>
+                  <?php if ($datetime->location_id != NULL): ?>
                   <optgroup label="Current location">
                       <option selected="selected" value="<?php echo $datetime->location_id ?>"><?php echo $datetime->getLocation()->name; ?></option>
                   <?php endif; ?>

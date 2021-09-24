@@ -34,7 +34,7 @@
 		}
 		?>
             <li class="unl-event-teaser">
-                <header class="unl-event-title"><h3 class="dcf-mb-0 dcf-lh-3 dcf-bold dcf-txt-h6 unl-lh-crop"><a class="dcf-txt-decor-hover unl-darker-gray" href="<?php echo $url; ?>"><?php echo $event->displayTitle(); ?></a></h3><?php echo $subTitle; ?><?php echo $location; ?></header>
+                <header class="unl-event-title"><h3 class="dcf-mb-0 dcf-lh-3 dcf-bold dcf-txt-h6 unl-lh-crop"><a class="dcf-txt-decor-hover unl-darker-gray" href="<?php echo $url; ?>"><?php echo $event->displayTitle($eventinstance); ?></a></h3><?php echo $subTitle; ?><?php echo $location; ?></header>
                 <div class="unl-event-datetime dcf-flex-shrink-0 dcf-w-8 dcf-mr-5 dcf-txt-center">
                     <span class="dcf-d-block dcf-txt-3xs dcf-pt-2 dcf-pb-1 dcf-uppercase dcf-bold unl-ls-2 unl-cream unl-bg-scarlet"><?php echo $month; ?></span>
                     <span class="dcf-d-block dcf-txt-h5 dcf-bold dcf-br-1 dcf-bb-1 dcf-bl-1 dcf-br-solid dcf-bb-solid dcf-bl-solid unl-br-light-gray unl-bb-light-gray unl-bl-light-gray unl-darker-gray dcf-bg-white"><?php echo $day; ?></span>

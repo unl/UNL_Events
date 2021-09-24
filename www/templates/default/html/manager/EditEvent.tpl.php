@@ -5,7 +5,9 @@
     $post = $context->post;
     $event_type = $event->getFirstType();
 
-    $total_pages = ceil(count($event->getDatetimes()) / 5);
+    $datetimeCount = count($event->getDatetimes());
+    $allowCanceledDatetime = $datetimeCount > 1;
+    $total_pages = ceil($datetimeCount / 5);
 
     function ordinal($number) {
     	$mod = $number % 100;
@@ -35,6 +37,12 @@
 <br>
 
 <?php foreach($event->getDatetimes() as $datetime) : ?>
+    <?php
+        if ($datetime->isCanceled()) {
+            // Allow cancel toggle if any datetimes are canceled to allow them to be toggled off
+            $allowCanceledDatetime = TRUE;
+        }
+    ?>
     <form class="delete-datetime delete-form dcf-d-none" id="delete-datetime-<?php echo $datetime->id; ?>" method="POST" action="<?php echo $datetime->getDeleteURL($context->calendar) ?>" >
       <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
       <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
@@ -130,11 +138,15 @@
                         <?php echo $datetime->getLocation()->name; ?>
                     </td>
                     <td class="dcf-pr-0 dcf-txt-middle controls">
-                        <div class="dcf-d-flex dcf-jc-flex-end">
-                            <div>
-                                <a class="dcf-btn dcf-btn-primary" href="<?php echo $datetime->getEditURL($context->calendar); ?>">Edit</a>
-                                <button class="dcf-btn dcf-btn-secondary" form="delete-datetime-<?php echo $datetime->id; ?>" type="submit">Delete</button>
-                            </div>
+                        <div class="dcf-d-flex dcf-ai-center dcf-jc-flex-end">
+                            <a class="dcf-btn dcf-btn-primary" href="<?php echo $datetime->getEditURL($context->calendar); ?>">Edit</a>
+                            <button class="dcf-btn dcf-btn-secondary dcf-ml-1" form="delete-datetime-<?php echo $datetime->id; ?>" type="submit">Delete</button>
+                            <?php if ($allowCanceledDatetime === TRUE && $datetime->recurringtype === 'none') : ?>
+                                  <div class="dcf-input-checkbox dcf-mr-4 dcf-mb-0 dcf-ml-3 dcf-txt-sm">
+                                      <input class="datetime-cancel-toggle" id="datetime-canceled-<?php echo $datetime->id; ?>" type="checkbox" <?php if ($datetime->isCanceled()) { ?>checked=checked<?php } ?> data-url="<?php echo $datetime->getEditURL($context->calendar); ?>" value="1">
+                                      <label for="datetime-canceled-<?php echo $datetime->id; ?>">Canceled</label>
+                                  </div>
+                            <?php endif; ?>
                         </div>
                     </td>
                 </tr>
@@ -145,10 +157,12 @@
                                 <?php echo date('n/d/y', strtotime($recurring_date->recurringdate)) . ' @ ' . date('g:ia', strtotime($datetime->starttime)); ?>
                             </td>
                             <td class="dcf-pr-0 dcf-txt-middle controls recurring">
-                                <div class="dcf-d-flex dcf-jc-flex-end">
-                                    <div>
-                                        <a class="dcf-btn dcf-btn-primary edit-recurring-edt" href="<?php echo $datetime->getEditRecurrenceURL($context->calendar, $recurring_date->recurrence_id); ?>">Edit</a>
-                                        <button class="dcf-btn dcf-btn-secondary delete-datetime-recurrence" type="submit" form="delete-datetime-<?php echo $datetime->id ?>-recurrence-<?php echo $recurring_date->recurrence_id ?>">Delete</button>
+                                <div class="dcf-d-flex dcf-ai-center dcf-jc-flex-end">
+                                    <a class="dcf-btn dcf-btn-primary edit-recurring-edt" href="<?php echo $datetime->getEditRecurrenceURL($context->calendar, $recurring_date->recurrence_id); ?>">Edit</a>
+                                    <button class="dcf-btn dcf-btn-secondary dcf-ml-1 delete-datetime-recurrence" type="submit" form="delete-datetime-<?php echo $datetime->id ?>-recurrence-<?php echo $recurring_date->recurrence_id ?>">Delete</button>
+                                    <div class="dcf-input-checkbox dcf-mr-4 dcf-mb-0 dcf-ml-3 dcf-txt-sm">
+                                        <input class="recurrence-instance-cancel-toggle" id="recurrence-instance-canceled-<?php echo $recurring_date->recurrence_id; ?>" name="canceled" type="checkbox" <?php if ($recurring_date->isCanceled()) { ?>checked=checked<?php } ?> data-url="<?php echo $datetime->getEditRecurrenceURL($context->calendar, $recurring_date->recurrence_id); ?>" value="1">
+                                        <label for="recurrence-instance-canceled-<?php echo $recurring_date->recurrence_id; ?>">Canceled</label>
                                     </div>
                                 </div>
                             </td>
@@ -277,4 +291,50 @@ require(['jquery'], function($) {
         }
     });
 });");
+
+$tokenNameKey = $controller->getCSRFHelper()->getTokenNameKey();
+$tokenNameValue = $controller->getCSRFHelper()->getTokenName();
+$tokenValueKey = $controller->getCSRFHelper()->getTokenValueKey();
+$tokenValueValue = $controller->getCSRFHelper()->getTokenValue();
+$tokenString = $tokenNameKey . '=' . $tokenNameValue . '&' . $tokenValueKey . '=' . $tokenValueValue;
+$page->addScriptDeclaration("
+    var datetimeCancelToggles = document.getElementsByClassName('datetime-cancel-toggle');
+    var i;
+    for (i = 0; i < datetimeCancelToggles.length; i++) {
+        datetimeCancelToggles[i].addEventListener('change', function() {
+            var token = '" . $tokenString . "';
+            var xhr = new XMLHttpRequest();
+            xhr.responseType = 'json';
+            xhr.open('POST', this.dataset.url);
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.onload = function() {
+                displayCancelToggleMessage(xhr.response);
+            };
+            xhr.send('toggle-cancel=1&canceled=' + this.checked + '&' + token);
+        });
+    }
+    var instanceCancelToggles = document.getElementsByClassName('recurrence-instance-cancel-toggle');
+    for (i = 0; i < instanceCancelToggles.length; i++) {
+        instanceCancelToggles[i].addEventListener('change', function() {
+            var token = '" . $tokenString . "';
+            var xhr = new XMLHttpRequest();
+            xhr.responseType = 'json';
+            xhr.open('POST', this.dataset.url);
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.onload = function() {
+                displayCancelToggleMessage(xhr.response);
+            };
+            xhr.send('toggle-cancel=1&canceled=' + this.checked + '&' + token);
+        });
+    }
+
+    function displayCancelToggleMessage(response) {
+        if (response.success) {
+            var cancelAction = response.canceled ? 'canceled' : 'uncanceled';
+            notifier.success('Event Instance Updated', 'Event instance has been successfully ' + cancelAction + '.');
+        } else {
+            notifier.alert('Event Instance Update Error', 'Update of cancel state has failed.');
+        }
+    }
+");
 ?>
