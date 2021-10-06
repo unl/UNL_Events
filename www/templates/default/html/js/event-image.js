@@ -119,6 +119,7 @@ require(['dcf-modal', 'cropperjs/cropper.min', 'css!cropperjs/cropper.min.css'],
     cropper = new Cropper(image, {
       aspectRatio: 1,
       viewMode: 2,
+      autoCropArea: 1,
       preview: '.preview-image'
     });
   });
