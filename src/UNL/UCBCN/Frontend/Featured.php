@@ -47,7 +47,9 @@ class Featured extends Upcoming
 
         // Want to always include the pinned limit of pinned events
         $pinnedResults = $this->getPinnedEvents($timestamp);
+        $pinnedEventIDs = array();
         foreach ($pinnedResults as $result) {
+            $pinnedEventIDs[] = $result['eventID'];
             $filter = '(event.id = ' . $result['eventID'] . ' AND e.id = ' . $result['eventDatetimeID'];
             if (!empty($result['recurringDateID'])) {
                 $filter .= ' AND recurringdate.id = ' . $result['recurringDateID'];
@@ -59,8 +61,8 @@ class Featured extends Upcoming
         // Want to include the limit of Featured Events including pinned events within the limit
         $featuredResults = $this->getFeaturedEvents($timestamp);
         foreach ($featuredResults as $result) {
-            if ($this->options['limit'] > 0 && count($eventFilters) < $this->options['limit']) {
-                $filter = '(event.id = ' . $result['eventID'] . ' AND e.id = ' . $result['eventDatetimeID'];
+            if (!in_array($result['eventID'], $pinnedEventIDs) && $this->options['limit'] > 0 && count($eventFilters) < $this->options['limit']) {
+	            $filter = '(event.id = ' . $result['eventID'] . ' AND e.id = ' . $result['eventDatetimeID'];
                 if (!empty($result['recurringDateID'])) {
                     $filter .= ' AND recurringdate.id = ' . $result['recurringDateID'];
                 }
