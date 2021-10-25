@@ -62,7 +62,7 @@ class Featured extends Upcoming
         $featuredResults = $this->getFeaturedEvents($timestamp);
         foreach ($featuredResults as $result) {
             if (!in_array($result['eventID'], $pinnedEventIDs) && $this->options['limit'] > 0 && count($eventFilters) < $this->options['limit']) {
-	            $filter = '(event.id = ' . $result['eventID'] . ' AND e.id = ' . $result['eventDatetimeID'];
+                $filter = '(event.id = ' . $result['eventID'] . ' AND e.id = ' . $result['eventDatetimeID'];
                 if (!empty($result['recurringDateID'])) {
                     $filter .= ' AND recurringdate.id = ' . $result['recurringDateID'];
                 }
