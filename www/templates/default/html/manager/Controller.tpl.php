@@ -63,17 +63,10 @@ $page->maincontentarea = '
 <div class="dcf-bleed view-' . $view_class . ' events-manager">
     <div class="dcf-wrapper">';
 if ($_SERVER['SERVER_NAME'] == 'events-dev.unl.edu') {
-    $page->maincontentarea .=
-        '<div class="wdn_notice">
-            <div class="close">
-            <a href="#" title="Close this notice">Close this notice</a>
-            </div>
-            <div class="message">
-            <h4>UNL Events Test</h4>
-            <div class="message-content">
-            This is the test server for UNL Events. Events created and published here will not affect the main UNL calendar or your site\'s sub-calendar. Please send all feedback to <a href="mailto:dxg@listserv.unl.edu">the dev team</a> at dxg@listserv.unl.edu.</div>
-            </div>
-        </div>';
+    $page->maincontentarea .= '<div class="dcf-notice dcf-d-none">
+    <h2>UNL Events Test</h2>
+    <p>This is the test server for UNL Events. Events created and published here will not affect the main UNL calendar or your site\'s sub-calendar. Please send all feedback to <a href="mailto:dxg@listserv.unl.edu">the dev team</a> at dxg@listserv.unl.edu.</p>
+</div>';
 }
 
 $page->maincontentarea .= '
@@ -85,38 +78,26 @@ if (($notice = $context->getNotice()) != NULL) {
     $class = '';
     switch ($notice['level']) {
         case 'success':
-            $class = 'affirm';
+            $class = 'dcf-notice-success';
             break;
         case 'failure':
-            $class = 'negate';
+            $class = 'dcf-notice-danger';
             break;
         case 'alert':
-            $class = 'alert';
+            $class = 'dcf-notice-warning';
             break;
+	    default:
+		    $class = 'dcf-notice-info';
     }
-    $page->maincontentarea .= '
-                <div id="notice" class="wdn_notice ' . $class . '">
-                    <div class="close">
-                    <a href="#" title="Close this notice">Close this notice</a>
-                    </div>
-                    <div class="message">
-                    <h4>' . $notice['header'] . '</h4>
-                    <div class="message-content">' . html_entity_decode($notice['messageHTML']) . '</div>
-                    </div>
-                </div>
-    ';
+    $page->maincontentarea .= '<div id="noticeContainer"><div id="notice" class="dcf-notice dcf-d-none ' . $class . '">
+    <h2>' . $notice['header'] . '</h2>
+    <p>' . html_entity_decode($notice['messageHTML']) . '</p>
+</div></div>';
 } else {
-    $page->maincontentarea .= '
-                <div id="notice" class="wdn_notice" style="display: none;">
-                    <div class="close">
-                    <a href="#" title="Close this notice">Close this notice</a>
-                    </div>
-                    <div class="message">
-                    <h4>Message Header</h4>
-                    <div class="message-content">Message Content</div>
-                    </div>
-                </div>
-    ';
+    $page->maincontentarea .= '<div id="noticeContainer"><div id="notice" class="dcf-notice dcf-d-none" style="display: none!important">
+    <h2>Message Header</h2>
+    <p>Message Content</p>
+</div></div>';
 }
 $page->maincontentarea .= $savvy->render($context->output, $template) . '
             <br>

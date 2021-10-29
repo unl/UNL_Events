@@ -11,13 +11,7 @@ $savvy->setReplacementData('sitetitle', 'Sorry, an error occurred');
 $page->addScriptDeclaration("WDN.initializePlugin('notice');");
 ?>
 
-<div class="wdn_notice alert">
-    <div class="close">
-        <a href="#" title="Close this notice">Close this notice</a>
-    </div>
-    <div class="message">
-        <h4>Whoops! Sorry, there was an error:</h4>
-        <p><?php echo $context->getMessage(); ?></p>
-    </div>
-    <!-- <?php echo $context; ?> -->
+<div class="dcf-notice dcf-notice-warning dcf-d-none">
+    <h2>Whoops! Sorry, there was an error:</h2>
+    <p><?php echo $context->getMessage(); ?></p>
 </div>

@@ -197,36 +197,51 @@ require(['jquery', 'wdn', frontend_url + 'templates/default/html/js/vendor/selec
                 input.addClass('validation-failed');
             },
             failure: function(header, message) {
-                $('#notice').removeClass('affirm').addClass('negate').removeClass('alert');
-                $('#notice h4').text(header);
-                $('#notice .message-content').html(message);
+                notifier.check(header, message, 'dcf-notice-danger');
+                $('#notice').removeClass('dcf-notice-info').removeClass('dcf-notice-success').removeClass('dcf-notice-warning').addClass('dcf-notice-danger');
+                $('#notice h2').text(header);
+                $('#notice .dcf-notice-message').html(message);
                 $('#notice').fadeIn();
 
                 window.scrollTo(0,0);
             },
             info: function(header, message) {
-                $('#notice').removeClass('affirm').removeClass('negate').removeClass('alert');
-                $('#notice h4').text(header);
-                $('#notice .message-content').html(message);
+                notifier.check(header, message, 'dcf-notice-info');
+                $('#notice').addClass('dcf-notice-info').removeClass('dcf-notice-success').removeClass('dcf-notice-warning').removeClass('dcf-notice-danger');
+                $('#notice h2').text(header);
+                $('#notice .dcf-notice-message').html(message);
                 $('#notice').fadeIn();
 
                 window.scrollTo(0,0);
             },
             success: function(header, message) {
-                $('#notice').addClass('affirm').removeClass('negate').removeClass('alert');
-                $('#notice h4').text(header);
-                $('#notice .message-content').html(message);
+                notifier.check(header, message, 'dcf-notice-success');
+                $('#notice').removeClass('dcf-notice-info').addClass('dcf-notice-success').removeClass('dcf-notice-warning').removeClass('dcf-notice-danger');
+                $('#notice h2').text(header);
+                $('#notice .dcf-notice-message').html(message);
                 $('#notice').fadeIn();
 
                 window.scrollTo(0,0);
             },
             alert: function(header, message) {
-                $('#notice').removeClass('affirm').removeClass('negate').addClass('alert');
-                $('#notice h4').text(header);
-                $('#notice .message-content').html(message);
+                notifier.check(header, message, 'dcf-notice-warning');
+                $('#notice').removeClass('dcf-notice-info').removeClass('dcf-notice-success').addClass('dcf-notice-warning').removeClass('dcf-notice-danger');
+                $('#notice h2').text(header);
+                $('#notice .dcf-notice-message').html(message);
                 $('#notice').fadeIn();
 
                 window.scrollTo(0,0);
+            },
+            check: function(header, message, type) {
+                var noticeContainer = document.getElementById('noticeContainer');
+                var notice = document.getElementById('notice');
+                if (noticeContainer && !notice) {
+                    require(['dcf-notice'], function(DCFNoticeModule) {
+                        var dummyNotice = new DCFNoticeModule.DCFNotice();
+                        notice = dummyNotice.appendNotice(noticeContainer, header, message, type);
+                        notice.setAttribute('id', 'notice');
+                    });
+                }
             }
         };
     });
