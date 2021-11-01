@@ -63,7 +63,7 @@ $page->maincontentarea = '
 <div class="dcf-bleed view-' . $view_class . ' events-manager">
     <div class="dcf-wrapper">';
 if ($_SERVER['SERVER_NAME'] == 'events-dev.unl.edu') {
-    $page->maincontentarea .= '<div class="dcf-notice dcf-d-none">
+    $page->maincontentarea .= '<div class="dcf-notice" hidden>
     <h2>UNL Events Test</h2>
     <p>This is the test server for UNL Events. Events created and published here will not affect the main UNL calendar or your site\'s sub-calendar. Please send all feedback to <a href="mailto:dxg@listserv.unl.edu">the dev team</a> at dxg@listserv.unl.edu.</p>
 </div>';
@@ -89,12 +89,12 @@ if (($notice = $context->getNotice()) != NULL) {
 	    default:
 		    $class = 'dcf-notice-info';
     }
-    $page->maincontentarea .= '<div id="noticeContainer"><div id="notice" class="dcf-notice dcf-d-none ' . $class . '">
+    $page->maincontentarea .= '<div id="noticeContainer"><div id="notice" class="dcf-notice ' . $class . '" hidden>
     <h2>' . $notice['header'] . '</h2>
     <p>' . html_entity_decode($notice['messageHTML']) . '</p>
 </div></div>';
 } else {
-    $page->maincontentarea .= '<div id="noticeContainer"><div id="notice" class="dcf-notice dcf-d-none" style="display: none!important">
+    $page->maincontentarea .= '<div id="noticeContainer"><div id="notice" class="dcf-notice" hidden style="display: none!important">
     <h2>Message Header</h2>
     <p>Message Content</p>
 </div></div>';
