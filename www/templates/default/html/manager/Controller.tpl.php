@@ -65,7 +65,7 @@ $page->maincontentarea = '
 if ($_SERVER['SERVER_NAME'] == 'events-dev.unl.edu') {
     $page->maincontentarea .= '<div class="dcf-notice" hidden>
     <h2>UNL Events Test</h2>
-    <p>This is the test server for UNL Events. Events created and published here will not affect the main UNL calendar or your site\'s sub-calendar. Please send all feedback to <a href="mailto:dxg@listserv.unl.edu">the dev team</a> at dxg@listserv.unl.edu.</p>
+    <div>This is the test server for UNL Events. Events created and published here will not affect the main UNL calendar or your site\'s sub-calendar. Please send all feedback to <a href="mailto:dxg@listserv.unl.edu">the dev team</a> at dxg@listserv.unl.edu.</div>
 </div>';
 }
 
@@ -89,14 +89,14 @@ if (($notice = $context->getNotice()) != NULL) {
 	    default:
 		    $class = 'dcf-notice-info';
     }
-    $page->maincontentarea .= '<div id="noticeContainer"><div id="notice" class="dcf-notice ' . $class . '" hidden>
+    $page->maincontentarea .= '<div id="noticeContainer"><div id="notice" class="dcf-notice ' . $class . '" hidden data-no-close-button>
     <h2>' . $notice['header'] . '</h2>
-    <p>' . html_entity_decode($notice['messageHTML']) . '</p>
+    <div>' . html_entity_decode($notice['messageHTML']) . '</div>
 </div></div>';
 } else {
-    $page->maincontentarea .= '<div id="noticeContainer"><div id="notice" class="dcf-notice" hidden style="display: none!important">
+    $page->maincontentarea .= '<div id="noticeContainer"><div id="notice" class="dcf-notice" hidden data-no-close-button style="display: none!important">
     <h2>Message Header</h2>
-    <p>Message Content</p>
+    <div>Message Content</div>
 </div></div>';
 }
 $page->maincontentarea .= $savvy->render($context->output, $template) . '

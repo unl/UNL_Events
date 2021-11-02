@@ -13,5 +13,5 @@ $page->addScriptDeclaration("WDN.initializePlugin('notice');");
 
 <div class="dcf-notice dcf-notice-warning" hidden>
     <h2>Whoops! Sorry, there was an error:</h2>
-    <p><?php echo $context->getMessage(); ?></p>
+    <div><?php echo $context->getMessage(); ?></div>
 </div>

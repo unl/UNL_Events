@@ -76,7 +76,7 @@ if ($context->getCalendar()) {
     if ($context->getCalendar()->defaulttimezone != UNL\UCBCN::$defaultTimezone && (empty($_COOKIE[DISPLAY_TIMEZONE_NOTICE]) || $_COOKIE[DISPLAY_TIMEZONE_NOTICE] != $context->getCalendar()->defaulttimezone)) {
         setcookie(DISPLAY_TIMEZONE_NOTICE, $context->getCalendar()->defaulttimezone);
         $page->addScriptDeclaration("WDN.initializePlugin('notice');");
-        $page->maincontentarea .= '<div id="timezone-notice" class="dcf-notice dcf-notice-info" hidden><h2>Timezone Display</h2><p>' . $timezoneMessage . '</p></div>';
+        $page->maincontentarea .= '<div id="timezone-notice" class="dcf-notice dcf-notice-info" hidden><h2>Timezone Display</h2><div>' . $timezoneMessage . '</div></div>';
 	}
 
     $page->maincontentarea .= '
