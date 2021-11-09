@@ -72,6 +72,10 @@ class CreateEvent extends EventForm
             if ($start_date > $recurs_until) {
                 throw new ValidationException('The <a href="#recurs-until-date">"recurs until date"</a> must be on or after the start date.');
             }
+
+            if (date('d', strtotime($start_date)) !== date('d', strtotime($end_date))) {
+                throw new ValidationException('A recurring event instance start and end date must be the same day. If you need multiple multi-day (ongoing) occurrences, you must define them as separate datetime instances.');
+            }
         }
 
         # check that a new location has a name

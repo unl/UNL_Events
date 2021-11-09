@@ -432,6 +432,14 @@ require(['jquery'], function ($) {
                     errors.push('Recurring events require a <a href=\"#recurring-type\">recurring type</a> and <a href=\"#recurs-until-date\">date</a> that they recur until.');
                 }
 
+                if ($('#end-date').val() != '') {
+                    var instanceStart = new Date($('#start-date').val());
+                    var instanceEnd = new Date($('#end-date').val());
+                    if (instanceStart && instanceEnd && instanceStart.getDate() != instanceEnd.getDate()) {
+                        errors.push('A recurring event instance start and end date must be the same day. If you need multiple multi-day (ongoing) occurrences, you must define them as separate datetime instances.');
+                    }
+                }
+
                 // check that the recurs until date is on or after the start date
                 start.setHours(0);
                 start.setMinutes(0);
