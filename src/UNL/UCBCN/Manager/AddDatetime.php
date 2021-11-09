@@ -227,6 +227,15 @@ class AddDatetime extends PostHandler
             throw new ValidationException('Your <a href="#end-date">end date/time</a> must be on or after the <a href="#start-date">start date/time</a>.');
         }
 
+        # check that a new location has a name
+        if ($post_data['location'] == 'new' && empty($post_data['new_location']['name'])) {
+            throw new ValidationException('You must give your new location a <a href="#location-name">name</a>.');
+        }
+
+        $this->validateRecurringEvent($post_data, $start_date, $end_date);
+    }
+
+	private function validateRecurringEvent($post_data, $start_date, $end_date) {
         # check that recurring events have recurring type and correct recurs until date
         if (array_key_exists('recurring', $post_data) && $post_data['recurring'] == 'on') {
             if (empty($post_data['recurring_type']) || empty($post_data['recurs_until_date'])) {
@@ -241,11 +250,6 @@ class AddDatetime extends PostHandler
             if (date('d', strtotime($start_date)) !== date('d', strtotime($end_date))) {
                 throw new ValidationException('A recurring event instance start and end date must be the same day. If you need multiple multi-day (ongoing) occurrences, you must define them as separate datetime instances.');
             }
-        }
-
-        # check that a new location has a name
-        if ($post_data['location'] == 'new' && empty($post_data['new_location']['name'])) {
-            throw new ValidationException('You must give your new location a <a href="#location-name">name</a>.');
         }
     }
 
