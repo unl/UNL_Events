@@ -138,13 +138,11 @@ class Occurrence extends Record
 
     public function deleteRecurrences()
     {
-        $recurring_dates = $this->getRecurrences();
+        $recurring_dates = $this->getAllDates();
 
         foreach ($recurring_dates as $recurring_date) {
             $recurring_date->delete();
         }
-
-        return;
     }
 
     public function insertRecurrences()
