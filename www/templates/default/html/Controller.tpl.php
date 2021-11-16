@@ -75,20 +75,9 @@ if ($context->getCalendar()) {
     // Display timezone notice when calendar timezone is not app default and DISPLAY_TIMEZONE_NOTICE cookie not set or has changed
     if ($context->getCalendar()->defaulttimezone != UNL\UCBCN::$defaultTimezone && (empty($_COOKIE[DISPLAY_TIMEZONE_NOTICE]) || $_COOKIE[DISPLAY_TIMEZONE_NOTICE] != $context->getCalendar()->defaulttimezone)) {
         setcookie(DISPLAY_TIMEZONE_NOTICE, $context->getCalendar()->defaulttimezone);
-        $page->addScriptDeclaration("
-            WDN.initializePlugin('notice');
-            document.getElementById('timezone-notice').style.display = 'block';");
-        $page->maincontentarea .=
-            '<div id="timezone-notice" class="wdn_notice" style="display:none">
-            <div class="close">
-            <a href="#" title="Close this notice">Close this notice</a>
-            </div>
-            <div class="message">
-            <h4>Timezone Display</h4>
-            <div class="message-content">' . $timezoneMessage . '</div>
-            </div>
-        </div>';
-    }
+        $page->addScriptDeclaration("WDN.initializePlugin('notice');");
+        $page->maincontentarea .= '<div id="timezone-notice" class="dcf-notice dcf-notice-info" hidden><h2>Timezone Display</h2><div>' . $timezoneMessage . '</div></div>';
+	}
 
     $page->maincontentarea .= '
                     <div class="dcf-grid">
