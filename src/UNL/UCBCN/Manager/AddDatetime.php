@@ -157,17 +157,6 @@ class AddDatetime extends PostHandler
         }
     }
 
-    private function calculateDate($date, $hour, $minute, $am_or_pm)
-    {
-        # defaults if NULL is passed in
-        $hour = $hour == NULL ? 12 : $hour;
-        $minute = $minute == NULL ? 0 : $minute;
-        $am_or_pm = $am_or_pm == NULL ? 'am' : $am_or_pm;
-
-        $date = strtotime($date . ' ' . $hour . ':' . $minute . ':00 ' . $am_or_pm);
-        return date('Y-m-d H:i:s', $date);
-    }
-
     private function setDatetimeData($post_data)
     {
         # set the start date and end date
@@ -227,22 +216,13 @@ class AddDatetime extends PostHandler
             throw new ValidationException('Your <a href="#end-date">end date/time</a> must be on or after the <a href="#start-date">start date/time</a>.');
         }
 
-        # check that recurring events have recurring type and correct recurs until date
-        if (array_key_exists('recurring', $post_data) && $post_data['recurring'] == 'on') {
-            if (empty($post_data['recurring_type']) || empty($post_data['recurs_until_date'])) {
-                throw new ValidationException('Recurring events require a <a href="#recurring-type">recurring type</a> and <a href="#recurs-until-date">date</a> that they recur until.');
-            }
-
-            $recurs_until = $this->calculateDate($post_data['recurs_until_date'], 11, 59, 'PM');
-            if ($start_date > $recurs_until) {
-                throw new ValidationException('The <a href="#recurs-until-date">"recurs until date"</a> must be on or after the start date.');
-            }
-        }
-
         # check that a new location has a name
         if ($post_data['location'] == 'new' && empty($post_data['new_location']['name'])) {
             throw new ValidationException('You must give your new location a <a href="#location-name">name</a>.');
         }
+
+        # Validate Recurring Event (if applicable)
+        $this->validateRecurringEvent($post_data, $start_date, $end_date);
     }
 
     public function editDatetime($post_data)
