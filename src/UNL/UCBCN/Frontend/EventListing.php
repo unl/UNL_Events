@@ -38,8 +38,15 @@ class EventListing extends RecordList
 
     public function current()
     {
-        $options = $this->options + \LimitIterator::current();
-        
-        return new $this->options['itemClass']($options);
+        try {
+            if (\LimitIterator::valid()) {
+                $options = $this->options + \LimitIterator::current();
+                return new $this->options['itemClass']($options);
+            }
+        } catch (Exception $e) {
+            // Exception thrown with current item so skip and process next item
+            \LimitIterator::next();
+            return $this->current();
+        }
     }
 }
