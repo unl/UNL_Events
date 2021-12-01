@@ -109,7 +109,7 @@ class Featured extends Upcoming
                 FROM eventdatetime as e
                 INNER JOIN event ON e.event_id = event.id
                 INNER JOIN calendar_has_event ON calendar_has_event.event_id = event.id
-                LEFT JOIN recurringdate ON (recurringdate.event_datetime_id = e.id AND recurringdate.unlinked = 0)
+                LEFT JOIN recurringdate ON (recurringdate.event_datetime_id = e.id AND recurringdate.unlinked = 0 AND recurringdate.ongoing = 0)
                 WHERE calendar_has_event.calendar_id = ' . (int)$this->calendar->id . '
                     AND ' . $specialFilter . '
                     AND (

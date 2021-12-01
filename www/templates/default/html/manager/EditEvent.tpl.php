@@ -10,18 +10,18 @@
     $total_pages = ceil($datetimeCount / 5);
 
     function ordinal($number) {
-    	$mod = $number % 100;
-    	if ($mod >= 11 && $mod <= 13) {
-    		return $number . 'th';
-    	} else if ($mod % 10 == 1) {
-    		return $number . 'st';
-    	} else if ($mod % 10 == 2) {
-    		return $number . 'nd';
-    	} else if ($mod % 10 == 3) {
-    		return $number . 'rd';
-    	} else {
-    		return $number . 'th';
-    	}
+        $mod = $number % 100;
+        if ($mod >= 11 && $mod <= 13) {
+            return $number . 'th';
+        } else if ($mod % 10 == 1) {
+            return $number . 'st';
+        } else if ($mod % 10 == 2) {
+            return $number . 'nd';
+        } else if ($mod % 10 == 3) {
+            return $number . 'rd';
+        } else {
+            return $number . 'th';
+        }
     }
 
 ?>
@@ -151,24 +151,27 @@
                     </td>
                 </tr>
                 <?php if ($datetime->recurringtype != 'none') : ?>
-                    <?php foreach ($datetime->getRecurrences() as $recurring_date) : ?>
-                        <tr class="edt-record">
-                            <td class="dcf-pl-7 dcf-txt-middle dates recurring" colspan="2">
-                                <?php echo date('n/d/y', strtotime($recurring_date->recurringdate)) . ' @ ' . date('g:ia', strtotime($datetime->starttime)); ?>
-                            </td>
-                            <td class="dcf-pr-0 dcf-txt-middle controls recurring">
-                                <div class="dcf-d-flex dcf-ai-center dcf-jc-flex-end">
-                                    <a class="dcf-btn dcf-btn-primary edit-recurring-edt" href="<?php echo $datetime->getEditRecurrenceURL($context->calendar, $recurring_date->recurrence_id); ?>">Edit</a>
-                                    <button class="dcf-btn dcf-btn-secondary dcf-ml-1 delete-datetime-recurrence" type="submit" form="delete-datetime-<?php echo $datetime->id ?>-recurrence-<?php echo $recurring_date->recurrence_id ?>">Delete</button>
-                                    <div class="dcf-input-checkbox dcf-mr-4 dcf-mb-0 dcf-ml-3 dcf-txt-sm">
-                                        <input class="recurrence-instance-cancel-toggle" id="recurrence-instance-canceled-<?php echo $recurring_date->recurrence_id; ?>" name="canceled" type="checkbox" <?php if ($recurring_date->isCanceled()) { ?>checked=checked<?php } ?> data-url="<?php echo $datetime->getEditRecurrenceURL($context->calendar, $recurring_date->recurrence_id); ?>" value="1">
-                                        <label for="recurrence-instance-canceled-<?php echo $recurring_date->recurrence_id; ?>">Canceled</label>
+                    <?php if (is_countable($datetime->getRecurrences()) && count($datetime->getRecurrences()) > 0): ?>
+                        <?php foreach ($datetime->getRecurrences() as $recurring_date) : ?>
+                            <tr class="edt-record">
+                                <td class="dcf-pl-7 dcf-txt-middle dates recurring" colspan="2">
+                                    <?php echo date('n/d/y', strtotime($recurring_date->recurringdate)) . ' @ ' . date('g:ia', strtotime($datetime->starttime)); ?>
+                                </td>
+                                <td class="dcf-pr-0 dcf-txt-middle controls recurring">
+                                    <div class="dcf-d-flex dcf-ai-center dcf-jc-flex-end">
+                                        <a class="dcf-btn dcf-btn-primary edit-recurring-edt" href="<?php echo $datetime->getEditRecurrenceURL($context->calendar, $recurring_date->recurrence_id); ?>">Edit</a>
+                                        <button class="dcf-btn dcf-btn-secondary dcf-ml-1 delete-datetime-recurrence" type="submit" form="delete-datetime-<?php echo $datetime->id ?>-recurrence-<?php echo $recurring_date->recurrence_id ?>">Delete</button>
+                                        <div class="dcf-input-checkbox dcf-mr-4 dcf-mb-0 dcf-ml-3 dcf-txt-sm">
+                                            <input class="recurrence-instance-cancel-toggle" id="recurrence-instance-canceled-<?php echo $recurring_date->recurrence_id; ?>" name="canceled" type="checkbox" <?php if ($recurring_date->isCanceled()) { ?>checked=checked<?php } ?> data-url="<?php echo $datetime->getEditRecurrenceURL($context->calendar, $recurring_date->recurrence_id); ?>" value="1">
+                                            <label for="recurrence-instance-canceled-<?php echo $recurring_date->recurrence_id; ?>">Canceled</label>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr><td colspan="3">Notice: The above recurrence definition does not have any recurrences and may be deleted.</td></tr>
+                    <?php endif; ?>
                 <?php endif; ?>
             <?php endforeach; ?>
             </table>
