@@ -324,27 +324,27 @@ use UNL\UCBCN\Permission;
                         <div style="display: inline-block;">
                             <nav class="dcf-pagination">
                                 <ol class="dcf-list-bare dcf-list-inline">
-                                    <?php if($context->page != 1): ?>
-                                        <li><a class="dcf-pagination-prev" href="?tab=<?php echo $context->tab?>&amp;page=<?php echo $context->page - 1 ?>">Prev</a></li>
-                                    <?php endif; ?>
-                                    <?php $before_ellipsis_shown = FALSE; $after_ellipsis_shown = FALSE; ?>
-                                    <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-                                            <?php if ($i == $context->page): ?>
-                                                <li><span class="dcf-pagination-selected"><?php echo $i; ?></span></li>
-                                            <?php elseif ($i <= 3 || $i >= $total_pages - 2 || $i == $context->page - 1 ||
-                                                        $i == $context->page - 2 || $i == $context->page + 1 || $i == $context->page + 2): ?>
-                                                <li><a href="?tab=<?php echo $context->tab?>&amp;page=<?php echo $i ?>"><?php echo $i; ?></a></li>
-                                            <?php elseif ($i < $context->page && !$before_ellipsis_shown): ?>
-                                                <li><span class="dcf-pagination-ellipsis">...</span></li>
-                                                <?php $before_ellipsis_shown = TRUE; ?>
-                                            <?php elseif ($i > $context->page && !$after_ellipsis_shown): ?>
-                                                <li><span class="dcf-pagination-ellipsis">...</span></li>
-                                                <?php $after_ellipsis_shown = TRUE; ?>
-                                            <?php endif; ?>
-                                    <?php endfor; ?>
-                                    <?php if($context->page != $total_pages): ?>
-                                        <li><a class="dcf-pagination-next" href="?tab=<?php echo $context->tab?>&amp;page=<?php echo $context->page + 1 ?>">Next</a></li>
-                                    <?php endif; ?>
+                                <?php if($context->page != 1): ?>
+                                    <li><a class="dcf-pagination-prev" href="?tab=<?php echo $context->tab?>&amp;page=<?php echo $context->page - 1 ?>">Prev</a></li>
+                                <?php endif; ?>
+                                <?php $before_ellipsis_shown = FALSE; $after_ellipsis_shown = FALSE; ?>
+                                <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                                        <?php if ($i == $context->page): ?>
+                                            <li><span class="dcf-pagination-selected"><?php echo $i; ?></span></li>
+                                        <?php elseif ($i <= 3 || $i >= $total_pages - 2 || $i == $context->page - 1 ||
+                                                    $i == $context->page - 2 || $i == $context->page + 1 || $i == $context->page + 2): ?>
+                                            <li><a href="?tab=<?php echo $context->tab?>&amp;page=<?php echo $i ?>"><?php echo $i; ?></a></li>
+                                        <?php elseif ($i < $context->page && !$before_ellipsis_shown): ?>
+                                            <li><span class="dcf-pagination-ellipsis">...</span></li>
+                                            <?php $before_ellipsis_shown = TRUE; ?>
+                                        <?php elseif ($i > $context->page && !$after_ellipsis_shown): ?>
+                                            <li><span class="dcf-pagination-ellipsis">...</span></li>
+                                            <?php $after_ellipsis_shown = TRUE; ?>
+                                        <?php endif; ?>
+                                <?php endfor; ?>
+                                <?php if($context->page != $total_pages): ?>
+                                    <li><a class="dcf-pagination-next" href="?tab=<?php echo $context->tab?>&amp;page=<?php echo $context->page + 1 ?>">Next</a></li>
+                                <?php endif; ?>
                                 </ol>
                             </nav>
                         </div>
