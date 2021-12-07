@@ -1,4 +1,16 @@
 <?php
+    // Polyfill for is_countable
+    if (! function_exists('is_countable')) {
+        /**
+         * @param mixed $value The value to check
+         * @return bool
+         */
+        function is_countable($value): bool
+        {
+            return is_array($value) || (is_object($value) && $value instanceof Countable);
+        }
+    }
+
     const CHECKED_INPUT = 'checked="checked"';
     $calendar = $context->calendar;
     $event = $context->event;
