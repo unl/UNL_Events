@@ -90,7 +90,9 @@ class Featured extends Upcoming
             if (!empty($result['recurringDateID']) && !empty($pinnedResult['recurringDateID']) && $result['recurringDateID'] !== $pinnedResult['recurringDateID']) {
                 continue;
             }
-            if ($result['eventID'] === $pinnedResult['eventID']) return true;
+            if ($result['eventID'] === $pinnedResult['eventID']) {
+                return true;
+            }
         }
         return false;
     }
