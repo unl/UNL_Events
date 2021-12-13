@@ -49,7 +49,7 @@ class Featured extends Upcoming
         $pinnedResults = $this->getPinnedEvents($timestamp);
         $pinnedEventIDs = array();
         foreach ($pinnedResults as $result) {
-            $pinnedEventIDs[] = $result['eventID'];
+            $pinnedEventIDs[] = $result;
             $filter = '(event.id = ' . $result['eventID'] . ' AND e.id = ' . $result['eventDatetimeID'];
             if (!empty($result['recurringDateID'])) {
                 $filter .= ' AND recurringdate.id = ' . $result['recurringDateID'];
@@ -59,9 +59,9 @@ class Featured extends Upcoming
         }
 
         // Want to include the limit of Featured Events including pinned events within the limit
-        $featuredResults = $this->getFeaturedEvents($timestamp);
+        $featuredResults = $this->getFeaturedEvents($timestamp, count($pinnedResults));
         foreach ($featuredResults as $result) {
-            if (!in_array($result['eventID'], $pinnedEventIDs) && $this->options['limit'] > 0 && count($eventFilters) < $this->options['limit']) {
+            if (!$this->isPinnedEventResult($result, $pinnedResults) && $this->options['limit'] > 0 && count($eventFilters) < $this->options['limit']) {
                 $filter = '(event.id = ' . $result['eventID'] . ' AND e.id = ' . $result['eventDatetimeID'];
                 if (!empty($result['recurringDateID'])) {
                     $filter .= ' AND recurringdate.id = ' . $result['recurringDateID'];
@@ -82,9 +82,24 @@ class Featured extends Upcoming
         return trim($sql);
     }
 
-    private function getFeaturedEvents($timestamp) {
+    private function isPinnedEventResult($result, $pinnedResults) {
+        foreach ($pinnedResults as $pinnedResult) {
+            if ($result['eventID'] !== $pinnedResult['eventID']) {
+                continue;
+            }
+            if (!empty($result['recurringDateID']) && !empty($pinnedResult['recurringDateID']) && $result['recurringDateID'] !== $pinnedResult['recurringDateID']) {
+                continue;
+            }
+            if ($result['eventID'] === $pinnedResult['eventID']) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private function getFeaturedEvents($timestamp, $limitAdjustment = 0) {
         $sql = $this->setFeaturedSelect('calendar_has_event.featured = 1', $timestamp, FALSE);
-        $sql .= $this->setLimitClause($this->options['limit']);
+        $sql .= $this->setLimitClause($this->options['limit'] + $limitAdjustment);
 
         $options['sql']         = $sql;
         $options['returnArray'] = true;
@@ -115,6 +130,11 @@ class Featured extends Upcoming
                     AND (
                         calendar_has_event.status =\'posted\'
                         OR calendar_has_event.status =\'archived\'
+                    )
+                    AND (
+                        (recurringdate.recurringdate IS NULL AND e.recurringtype = \'none\')
+                        OR
+                        (recurringdate.recurringdate IS NOT NULL AND e.recurringtype != \'none\')
                     )
                     AND (
                         IF (recurringdate.recurringdate IS NULL,
