@@ -29,7 +29,7 @@ use UNL\UCBCN\RuntimeException;
  */
 class Day extends EventListing implements RoutableInterface
 {
-	private $isHomepage = FALSE;
+    private $isHomepage = FALSE;
 
     /**
      * Constructor for an individual day.
@@ -73,6 +73,11 @@ class Day extends EventListing implements RoutableInterface
                 WHERE
                     calendar_has_event.calendar_id = ' . (int)$this->calendar->id . '
                     AND calendar_has_event.status IN ("posted", "archived")
+                    AND (
+                        (recurringdate.recurringdate IS NULL AND e.recurringtype = \'none\')
+                        OR
+                        (recurringdate.recurringdate IS NOT NULL AND e.recurringtype != \'none\')
+                    )
                     AND  (
                         (e.endtime >= "' . $startDateTime . '" AND e.starttime <= "' . $endDateTime . '")
                        OR (recurringdate.recurringdate >= "' . $startDateTime . '" AND recurringdate.recurringdate <= "' . $endDateTime . '")
