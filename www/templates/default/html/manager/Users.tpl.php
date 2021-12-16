@@ -11,7 +11,7 @@
 
 <h1>Users on this Calendar</h1>
 <div>
-    <table>
+    <table class="dcf-table dcf-table-bordered dcf-w-100%">
         <thead>
             <tr>
                 <th>User</th>

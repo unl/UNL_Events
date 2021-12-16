@@ -19,7 +19,7 @@
 <?php endforeach; ?>
 <h1>Current Subscriptions</h1>
 <div>
-    <table>
+    <table class="dcf-table dcf-table-bordered dcf-w-100%">
         <thead>
             <tr>
                 <th>Title</th>

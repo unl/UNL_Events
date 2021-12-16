@@ -15,12 +15,6 @@ LESS_LIB = www/templates/default/html/less/lib
 
 # External Dependencies
 LESSHAT := $(LESS_LIB)/lesshat.less
-WDN_MIXINS := \
-	$(LESS_LIB)/breakpoints.less \
-	$(LESS_LIB)/colors.less \
-	$(LESS_LIB)/fonts.less
-
-WDN_LIB_RAW = https://raw.githubusercontent.com/unl/wdntemplates/master/wdn/templates_4.1/less/_mixins/
 LESSHAT_RAW = https://raw.githubusercontent.com/csshat/lesshat/c8c211b2442734bfc1ae2509ff0ccebdc2e73664/build/lesshat.less
 
 # Built Files
@@ -52,7 +46,6 @@ $(LESSC):
 
 $(LESS_LIB)/%.less:
 	@mkdir -p $(@D)
-	$(CURL) -s $(WDN_LIB_RAW)$(@F) -o $@
 
 $(LESSHAT):
 	@mkdir -p $(@D)

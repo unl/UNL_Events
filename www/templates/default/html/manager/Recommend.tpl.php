@@ -11,7 +11,7 @@
 <form class="dcf-form" action="" method="POST">
     <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
     <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
-    <table class="recommend-list dcf-mb-5">
+    <table class="dcf-table dcf-table-bordered dcf-w-100% recommend-list dcf-mb-5">
         <caption class="dcf-sr-only">Recommend event actions for calendars.</caption>
         <thead>
             <th scope="col">Calendar</th>

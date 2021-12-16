@@ -3,7 +3,7 @@ $prev = $context->getDateTime()->modify('-1 month');
 $next = $context->getDateTime()->modify('+1 month');
 ?>
 <div class="monthwidget">
-    <table class="wp-calendar dcf-txt-sm unl-font-sans" data-datetime="<?php echo $context->getDateTime()->format('c') ?>">
+    <table class="wp-calendar dcf-table dcf-table-fixed dcf-table-bordered dcf-txt-sm dcf-w-100% unl-font-sans" data-datetime="<?php echo $context->getDateTime()->format('c') ?>">
         <caption class="dcf-pb-0 dcf-txt-sm dcf-regular unl-ls-0 unl-bg-darker-gray">
             <span class="dcf-d-flex dcf-flex-nowrap dcf-ai-center">
                 <a class="dcf-p-4 unl-cream prev" href="<?php echo $context->getPreviousMonthURL(); ?>" aria-label="View events for <?php echo $prev->format('F'); ?>"><svg class="dcf-d-block dcf-h-4 dcf-w-4 dcf-fill-current" focusable="false" width="24" height="24" viewBox="0 0 24 24"><path d="M12 .004c-6.617 0-12 5.383-12 12s5.383 12 12 12 12-5.383 12-12-5.384-12-12-12zm3 8.5a.5.5 0 01-.193.395l-3.993 3.105 3.993 3.106c.122.094.193.24.193.394v4a.5.5 0 01-.82.384l-9-7.5a.499.499 0 010-.768l9-7.5a.5.5 0 01.82.384v4z"></path></svg></a>

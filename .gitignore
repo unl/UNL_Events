@@ -4,6 +4,7 @@
 /.settings
 /www/templates/default/html/css
 /www/templates/default/html/less/lib
+!/www/templates/default/html/less/lib/4-1carryoverhack.less
 /www/wdn
 /.buildpath
 /node_modules

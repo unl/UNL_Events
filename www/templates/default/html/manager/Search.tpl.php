@@ -52,8 +52,8 @@
                 </form>
             </div>
         <?php endif; ?>
-        <div class="event-page">
-            <table class="event-list">
+        <div class="dcf-table dcf-table-bordered dcf-w-100% event-page">
+            <table class="dcf-table dcf-table-bordered dcf-w-100% event-list">
                 <thead class="small-hidden">
                     <tr>
                         <th scope="col" class="medium-hidden dcf-pl-6 dcf-w-4">
