@@ -55,14 +55,14 @@
             $allowCanceledDatetime = TRUE;
         }
     ?>
-    <form class="delete-datetime delete-form dcf-d-none" id="delete-datetime-<?php echo $datetime->id; ?>" method="POST" action="<?php echo $datetime->getDeleteURL($context->calendar) ?>" >
+    <form class="dcf-form delete-datetime delete-form dcf-d-none" id="delete-datetime-<?php echo $datetime->id; ?>" method="POST" action="<?php echo $datetime->getDeleteURL($context->calendar) ?>" >
       <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
       <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
       <input type="hidden" name="event_datetime_id" value="<?php echo $datetime->id ?>" />
     </form>
     <?php if ($datetime->recurringtype != 'none') : ?>
         <?php foreach ($datetime->getRecurrences() as $recurring_date) : ?>
-            <form class="delete-datetime-recurrence delete-form dcf-d-none" id="delete-datetime-<?php echo $datetime->id; ?>-recurrence-<?php echo $recurring_date->recurrence_id ?>" method="POST" action="<?php echo $datetime->getDeleteRecurrenceURL($context->calendar, $recurring_date->recurrence_id) ?>">
+            <form class="dcf-form delete-datetime-recurrence delete-form dcf-d-none" id="delete-datetime-<?php echo $datetime->id; ?>-recurrence-<?php echo $recurring_date->recurrence_id ?>" method="POST" action="<?php echo $datetime->getDeleteRecurrenceURL($context->calendar, $recurring_date->recurrence_id) ?>">
                 <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
                 <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
                 <input type="hidden" name="event_datetime_id" value="<?php echo $datetime->id ?>" />

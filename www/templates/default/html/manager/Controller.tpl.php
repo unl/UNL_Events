@@ -25,11 +25,7 @@ $view_class = str_replace('\\', '_', strtolower($context->options['model']));
 //Document titles
 $page->doctitle = '<title>' . $title . '</title>';
 $page->titlegraphic = '<a class="dcf-txt-h5" href="/">' . $site_title . '</a>';
-$page->setParam('class', 'hide-wdn_navigation_wrapper');
 $page->affiliation = '';
-
-// Add WDN Deprecated Styles
-$page->head .= '<link rel="preload" href="/wdn/templates_5.3/css/deprecated.css" as="style" onload="this.onload=null;this.rel=\'stylesheet\'"> <noscript><link rel="stylesheet" href="/wdn/templates_5.3/css/deprecated.css"></noscript>';
 
 //css
 $page->addStyleSheet($base_frontend_url.'templates/default/html/css/events.css?v='.UNL\UCBCN\Frontend\Controller::$version);

@@ -48,7 +48,7 @@ echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
     </dl>
 
     <h2 id="location-date-time-header">Location, Date &amp; Time</h2>
-    <table class="dcf-mb-6" aria-labelledby="location-date-time-header">
+    <table class="dcf-table dcf-table-bordered dcf-mb-6" aria-labelledby="location-date-time-header">
         <thead>
             <tr>
                 <th scope="col">Dates</th>
