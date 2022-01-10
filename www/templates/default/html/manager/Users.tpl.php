@@ -27,7 +27,7 @@
                 <td class="small-center table-actions">
                     <a class="dcf-btn dcf-btn-primary" href="<?php echo $user->getEditPermissionsURL($context->calendar) ?>">Edit Permissions</a>
                     <br class="dcf-d-none small-block" /><br class="dcf-d-none small-block" />
-                    <form method="post" action="<?php echo $user->getDeletePermissionsURL($context->calendar) ?>" class="delete-form">
+                    <form method="post" action="<?php echo $user->getDeletePermissionsURL($context->calendar) ?>" class="dcf-form delete-form">
                         <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
                         <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
                         <input type="hidden" name="user_uid" value="<?php echo $user->uid ?>" />

@@ -113,13 +113,13 @@ use UNL\UCBCN\Permission;
                         <option value="delete">Delete</option>
                       <?php endif; ?>
                   </select>
-                    <form id="bulk-action-form" method="POST" action="<?php echo $context->calendar->getBulkMoveActionURL() ?>" class="delete-form dcf-d-none">
+                    <form id="bulk-action-form" method="POST" action="<?php echo $context->calendar->getBulkMoveActionURL() ?>" class="dcf-form delete-form dcf-d-none">
                       <input type="text" title="Bulk Action IDs" id="bulk-action-ids" name="ids">
                       <input type="text" title="Bulk Action Action" id="bulk-action-action" name="action">
                       <input type="text" name="status" value="<?php echo $context->tab ?>">
                       <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
                       <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
-                      <button type="submit">Submit</button>
+                      <button class="dcf-btn dcf-btn-primary" type="submit">Submit</button>
                     </form>
                 </div>
                 <div class="event-page">
@@ -289,26 +289,26 @@ use UNL\UCBCN\Permission;
                                         </div>
                                         <?php endif; ?>
 
-                                        <form id="move-<?php echo $event->id; ?>" method="POST" action="<?php echo $event->getMoveURL($controller->getCalendar()) ?>" class="delete-form dcf-d-none">
+                                        <form id="move-<?php echo $event->id; ?>" method="POST" action="<?php echo $event->getMoveURL($controller->getCalendar()) ?>" class="dcf-form delete-form dcf-d-none">
                                           <input type="text" title="New Status" name="new_status" id="move-target-<?php echo $event->id; ?>">
                                           <input type="text" title="Event ID" name="event_id" value="<?php echo $event->id ?>">
                                           <input type="text" name="status" value="<?php echo $context->tab ?>">
                                           <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
                                           <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
-                                          <button type="submit">Submit</button>
+                                          <button class="dcf-btn dcf-btn-primary" type="submit">Submit</button>
                                         </form>
-                                        <form id="delete-<?php echo $event->id; ?>" method="POST" action="<?php echo $event->getDeleteURL($controller->getCalendar()) ?>" class="delete-form dcf-d-none">
+                                        <form id="delete-<?php echo $event->id; ?>" method="POST" action="<?php echo $event->getDeleteURL($controller->getCalendar()) ?>" class="dcf-form delete-form dcf-d-none">
                                           <input type="text" name="status" value="<?php echo $context->tab ?>">
                                           <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
                                           <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
-                                          <button type="submit">Submit</button>
+                                          <button class="dcf-btn dcf-btn-primary" type="submit">Submit</button>
                                         </form>
-                                        <form id="promote-<?php echo $event->id; ?>" method="POST" action="<?php echo $event->getPromoteURL($controller->getCalendar()) ?>" class="delete-form dcf-d-none">
+                                        <form id="promote-<?php echo $event->id; ?>" method="POST" action="<?php echo $event->getPromoteURL($controller->getCalendar()) ?>" class="dcf-form delete-form dcf-d-none">
                                           <input type="text" id="promote-target-<?php echo $event->id; ?>" name="status" value="promote">
                                           <input type="text" title="Event ID" name="event_id" value="<?php echo $event->id ?>">
                                           <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
                                           <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
-                                          <button type="submit">Submit</button>
+                                          <button class="dcf-btn dcf-btn-primary" type="submit">Submit</button>
                                         </form>
                                     </td>
                                 </tr>

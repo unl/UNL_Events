@@ -13,11 +13,10 @@ if ($context->calendar->id != $GLOBALS['_UNL_UCBCN']['default_calendar_id']) {
 <!-- InstanceEndEditable -->
 </head>
 <body id="mobilecal">
-<form id="event_search" name="event_search" method="get" action="<?php echo UNL_UCBCN_Frontend::formatURL(array('calendar'=>$context->calendar->id,'search'=>'search')); ?>">
+<form class="dcf-form" id="event_search" name="event_search" method="get" action="<?php echo UNL_UCBCN_Frontend::formatURL(array('calendar'=>$context->calendar->id,'search'=>'search')); ?>">
     <input type='text' name='q' id='searchinput' alt='Search for events' value="<?php if (isset($_GET['q'])) { echo htmlentities($_GET['q']); } ?>" />
-    <input type='submit' name='submit' value="Search" />
+    <input class="dcf-btn dcf-btn-primary" type='submit' name='submit' value="Search" />
     <input type='hidden' name='search' value='search' />
-
 </form>
 <ul id="frontend_view_selector" class="<?php echo $context->view; ?>">
     <li id="todayview"><a href="<?php echo UNL_UCBCN_Frontend::formatURL(array('calendar'=>$context->calendar->id)); ?>">Today</a></li>

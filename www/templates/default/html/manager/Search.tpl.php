@@ -48,7 +48,7 @@
                     <input type="hidden" name="source" value="search">
                     <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
                     <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
-                    <button type="submit">Submit</button>
+                    <button class="dcf-btn dcf-btn-primary" type="submit">Submit</button>
                 </form>
             </div>
         <?php endif; ?>
@@ -184,7 +184,7 @@
                                         <option value="move-to-pending">Move to Pending</option>
                                        <?php endif; ?>
                                       </select>
-                                    <form id="move-<?php echo $event->id; ?>" method="POST" action="<?php echo $event->getMoveURL($context->calendar) ?>" class="delete-form dcf-d-none">
+                                    <form id="move-<?php echo $event->id; ?>" method="POST" action="<?php echo $event->getMoveURL($context->calendar) ?>" class="dcf-form delete-form dcf-d-none">
                                         <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
                                         <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
                                         <input class="dcf-input-text" type="text" name="new_status" id="move-target-<?php echo $event->id; ?>">
