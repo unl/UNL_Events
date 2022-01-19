@@ -6,6 +6,7 @@ use UNL\Templates\Templates;
 use UNL\UCBCN\Util;
 
 $page = Templates::factory('AppLocal', Templates::VERSION_5_3);
+$savvy->addGlobal('page', $page);
 
 if (file_exists(\UNL\UCBCN\Util::getWWWRoot() . '/wdn/templates_5.3')) {
     $page->setLocalIncludePath(\UNL\UCBCN\Util::getWWWRoot());
@@ -52,7 +53,6 @@ if ($context->getRaw('output') instanceof UNL\UCBCN\Frontend\RoutableInterface) 
 $page->head .= '<link rel="home" href="' . $context->getCalendarURL() . '" />' . PHP_EOL;
 
 //Render output
-$savvy->addGlobal('page', $page);
 $view_class = str_replace('\\', '_', strtolower($context->options['model']));
 
 $page->maincontentarea = ''; // Clear

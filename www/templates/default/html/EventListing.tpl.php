@@ -17,30 +17,30 @@
         }
 
         ?>
-        <div class="<?php echo implode(' ', $row_classes) ?>">
-          <?php echo $savvy->render($eventinstance, 'EventInstance/Summary.tpl.php') ?>
-          <?php if ($eventinstance->getImageURL()) { ?>
-            <div class="dcf-grid dcf-col-gap-vw dcf-row-gap-4">
-              <div class="dcf-col-100% dcf-col-75%-start@sm">
-                  <?php echo $savvy->render($eventinstance, 'EventInstance/Date.tpl.php') ?>
-                  <?php echo $savvy->render($eventinstance, 'EventInstance/Location.tpl.php') ?>
-                  <?php echo $savvy->render($eventinstance, 'EventInstance/Description.tpl.php') ?>
-                  <?php echo $savvy->render($eventinstance, 'EventInstance/OriginCalendar.tpl.php') ?>
-                  <?php echo $savvy->render($eventinstance, 'EventInstance/EditButton.tpl.php') ?>
-              </div>
-              <div class="dcf-col-100% dcf-col-25%-end@sm">
-                  <?php echo $savvy->render($eventinstance, 'EventInstance/Thumbnail.tpl.php') ?>
-              </div>
+        <div class="dcf-card dcf-card-as-link <?php echo implode(' ', $row_classes) ?>">
+            <?php echo $savvy->render($eventinstance, 'EventInstance/Summary.tpl.php') ?>
+            <a class="dcf-card-link dcf-d-none" href="<?php echo $eventinstance->getURL(); ?>">Go to Home Page</a>
+            <div class="dcf-d-flex">
+                <?php if ($eventinstance->getImageURL()): ?>
+                <div class="dcf-flex-shrink-0 dcf-pr-4 dcf-pb-4">
+                    <?php echo $savvy->render($eventinstance, 'EventInstance/Thumbnail.tpl.php') ?>
+                </div>
+                <?php endif; ?>
+                <div class="dcf-flex-auto">
+                    <?php echo $savvy->render($eventinstance, 'EventInstance/Date.tpl.php') ?>
+                    <?php echo $savvy->render($eventinstance, 'EventInstance/Location.tpl.php') ?>
+                    <?php echo $savvy->render($eventinstance, 'EventInstance/Description.tpl.php') ?>
+                    <?php echo $savvy->render($eventinstance, 'EventInstance/OriginCalendar.tpl.php') ?>
+                    <?php echo $savvy->render($eventinstance, 'EventInstance/EditButton.tpl.php') ?>
+                </div>
             </div>
-          <?php } else { ?>
-              <?php echo $savvy->render($eventinstance, 'EventInstance/Date.tpl.php') ?>
-              <?php echo $savvy->render($eventinstance, 'EventInstance/Location.tpl.php') ?>
-              <?php echo $savvy->render($eventinstance, 'EventInstance/Description.tpl.php') ?>
-              <?php echo $savvy->render($eventinstance, 'EventInstance/OriginCalendar.tpl.php') ?>
-	          <?php echo $savvy->render($eventinstance, 'EventInstance/EditButton.tpl.php') ?>
-          <?php } // end else ?>
         </div>
         <?php
     }
     ?>
 </div>
+<?php
+ if (isset($page)) {
+    $page->addScriptDeclaration(" WDN.initializePlugin('card-as-link');");
+ }
+?>

@@ -1,3 +1,5 @@
 <?php if ($imageURL = $context->getImageURL()): ?>
-    <img class="event_description_img" src="<?php echo $imageURL ?>" aria-hidden="true" alt="">
+    <div class="thumbnail-container">
+        <img class="event-thumbnail" src="<?php echo $imageURL ?>" aria-hidden="true" alt="">
+    </div>
 <?php endif; ?>

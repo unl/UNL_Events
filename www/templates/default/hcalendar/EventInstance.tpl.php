@@ -4,15 +4,23 @@
         <div class='vevent'>
             <?php if (isset($context->event->subtitle)): ?><header><?php endif; ?>
                 <h2 id="heading-date" class='summary' data-datetime="<?php echo (new DateTime($context->getStartTime()))->format('c') ?>">
-                    <a class="dcf-txt-decor-none" href="<?php echo $url; ?>">
-                        <?php echo $savvy->dbStringtoHtml($context->event->displayTitle($context)); ?>
-                    </a>
+                    <?php echo $savvy->dbStringtoHtml($context->event->displayTitle($context)); ?>
                 </h2>
                 <?php if (isset($context->event->subtitle)): ?><p class="dcf-subhead"><?php echo $savvy->dbStringtoHtml($context->event->subtitle) ?></p><?php endif; ?>
             <?php if (isset($context->event->subtitle)): ?></header><?php endif; ?>
-            <?php echo $savvy->render($context, 'EventInstance/Date.tpl.php') ?>
-            <?php echo $savvy->render($context, 'EventInstance/FullLocation.tpl.php') ?>
-            <?php echo $savvy->render($context, 'EventInstance/Contact.tpl.php') ?>
+            <div class="dcf-d-flex">
+                <?php if ($imageURL = $context->getImageURL()): ?>
+                <div class="dcf-flex-shrink-0 dcf-pr-6 image-container">
+                    <img class="event-image" src="<?php echo $imageURL ?>" aria-hidden="true" alt="">
+                </div>
+                <?php endif; ?>
+                <div class="dcf-flex-auto">
+                    <?php echo $savvy->render($context, 'EventInstance/Date.tpl.php') ?>
+                    <?php echo $savvy->render($context, 'EventInstance/FullLocation.tpl.php') ?>
+                    <?php echo $savvy->render($context, 'EventInstance/Contact.tpl.php') ?>
+                </div>
+            </div>
+
             <div class="description">
                 <?php
                 $description = $savvy->dbStringtoHtml($context->event->description);
@@ -34,9 +42,6 @@
             <p class="website">
                 <a class="url external" href="<?php echo $context->event->webpageurl ?>"><?php echo $context->event->webpageurl ?></a>
             </p>
-            <?php endif; ?>
-            <?php if ($imageURL = $context->getImageURL()): ?>
-            <img class="event_description_img" src="<?php echo $imageURL ?>" aria-hidden="true" alt="">
             <?php endif; ?>
             <p class="download">
                 <a class="dcf-btn dcf-btn-primary" href="<?php echo $url ?>.ics">Download this event to my calendar</a>

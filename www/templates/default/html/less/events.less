@@ -372,6 +372,26 @@
           margin-top: .75em;
         }
 
+        .thumbnail-container {
+          max-height: 200px;
+          max-width: 200px;
+
+          @media @under-bp2 {
+            max-height: 150px;
+            max-width: 150px;
+          }
+        }
+
+        .image-container {
+          max-height: 300px;
+          max-width: 300px;
+
+          @media @under-bp2 {
+            max-height: 200px;
+            max-width: 200px;
+          }
+        }
+
         .date-wrapper,
         .time-wrapper,
         .location,
