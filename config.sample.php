@@ -52,3 +52,13 @@ UNL\UCBCN::setTimezoneOptions(
 UNL\UCBCN\Manager\Auth::$eventsAuthSessionName = 'DEV_EVENTS_AUTH_SESSION_NAME';
 UNL\UCBCN\Manager\Auth::$certPath = '/etc/pki/tls/cert.pem';
 UNL\UCBCN\Manager\Auth::$directory_url = 'https://directory.unl.edu/';
+
+// Site Notice
+$siteNotice = new stdClass();
+$siteNotice->display = false;
+$siteNotice->noticePath = 'dcf-notice';
+$siteNotice->containerID = 'dcf-main';
+$siteNotice->type = 'dcf-notice-info';
+$siteNotice->title = 'Maintenance Notice';
+$siteNotice->message = 'We will be performing site maintenance on February 7th from 4:30 to 5:00 pm CST.  This site may not be available during this time.';
+global $siteNotice;
