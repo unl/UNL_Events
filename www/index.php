@@ -41,6 +41,10 @@ try {
     $savvy = new OutputController($frontend);
     $savvy->addGlobal('frontend', $frontend);
 
+    if (isset($siteNotice)) {
+        $savvy->addGlobal('siteNotice', $siteNotice);
+    }
+
     echo $savvy->render($frontend);
 }  catch (\Exception $e) {
 

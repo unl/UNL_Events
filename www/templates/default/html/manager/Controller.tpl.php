@@ -82,8 +82,8 @@ if (($notice = $context->getNotice()) != NULL) {
         case 'alert':
             $class = 'dcf-notice-warning';
             break;
-	    default:
-		    $class = 'dcf-notice-info';
+        default:
+            $class = 'dcf-notice-info';
     }
     $page->maincontentarea .= '<div id="noticeContainer"><div id="notice" class="dcf-notice ' . $class . '" hidden data-no-close-button>
     <h2>' . $notice['header'] . '</h2>
@@ -110,6 +110,9 @@ $page->maincontentarea .= $savvy->render($context->output, $template) . '
 
 $page->contactinfo = $savvy->render($context, 'html/localfooter.tpl.php');
 
+if (isset($siteNotice) && $siteNotice->display) {
+    $page->displayDCFNoticeMessage($siteNotice->title, $siteNotice->message, $siteNotice->type, $siteNotice->noticePath, $siteNotice->containerID);
+}
 
 //echo everything
 echo $page;
