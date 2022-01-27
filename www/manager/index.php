@@ -29,4 +29,7 @@ $savvy->addGlobal('controller', $controller);
 $savvy->addGlobal('base_manager_url', Controller::$url);
 $savvy->addGlobal('base_frontend_url', \UNL\UCBCN\Frontend\Controller::$url);
 $savvy->addGlobal('user', $auth->getCurrentUser());
+if (isset($siteNotice)) {
+    $savvy->addGlobal('siteNotice', $siteNotice);
+}
 echo $savvy->render($controller);

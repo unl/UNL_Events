@@ -73,7 +73,7 @@ if ($context->getCalendar()) {
         setcookie(DISPLAY_TIMEZONE_NOTICE, $context->getCalendar()->defaulttimezone);
         $page->addScriptDeclaration("WDN.initializePlugin('notice');");
         $page->maincontentarea .= '<div id="timezone-notice" class="dcf-notice dcf-notice-info" hidden><h2>Timezone Display</h2><div>' . $timezoneMessage . '</div></div>';
-	}
+    }
 
     $page->maincontentarea .= '
                     <div class="dcf-grid">
@@ -122,6 +122,10 @@ $page->maincontentarea .= '
     </div>';
 
 $page->contactinfo = $savvy->render($context, 'localfooter.tpl.php');
+
+if (isset($siteNotice) && $siteNotice->display) {
+    $page->displayDCFNoticeMessage($siteNotice->title, $siteNotice->message, $siteNotice->type, $siteNotice->noticePath, $siteNotice->containerID);
+}
 
 //echo everything
 echo $page;
