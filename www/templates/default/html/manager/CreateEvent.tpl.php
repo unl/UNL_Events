@@ -42,7 +42,7 @@
             </div>
             <div class="dcf-form-group">
                 <div class="dcf-input-checkbox">
-                    <input id="canceled" name="canceled" type="checkbox" value="1" <?php if ($event->isCanceled()) { echo 'checked="checked"'; } ?>>
+                    <input id="canceled" name="canceled" type="checkbox" value="1" <?php if ($event->isCanceled()) { echo CHECKED_INPUT; } ?>>
                     <label for="canceled">Event Canceled</label>
                 </div>
             </div>
