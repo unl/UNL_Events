@@ -21,15 +21,16 @@
     $allowCanceledDatetime = $datetimeCount > 1;
     $total_pages = ceil($datetimeCount / 5);
 
-    function ordinal($number) {
+    function ordinal($number)
+    {
         $mod = $number % 100;
         if ($mod >= 11 && $mod <= 13) {
             return $number . 'th';
-        } else if ($mod % 10 == 1) {
+        } elseif ($mod % 10 == 1) {
             return $number . 'st';
-        } else if ($mod % 10 == 2) {
+        } elseif ($mod % 10 == 2) {
             return $number . 'nd';
-        } else if ($mod % 10 == 3) {
+        } elseif ($mod % 10 == 3) {
             return $number . 'rd';
         } else {
             return $number . 'th';
@@ -42,7 +43,7 @@
     $crumbs->crumbs = array(
         "Events Manager" => "/manager",
         $context->calendar->name => $context->calendar->getManageURL(),
-        'Edit Event' => NULL
+        'Edit Event' => null
     );
     echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
 ?>
@@ -52,19 +53,45 @@
     <?php
         if ($datetime->isCanceled()) {
             // Allow cancel toggle if any datetimes are canceled to allow them to be toggled off
-            $allowCanceledDatetime = TRUE;
+            $allowCanceledDatetime = true;
         }
     ?>
-    <form class="dcf-form delete-datetime delete-form dcf-d-none" id="delete-datetime-<?php echo $datetime->id; ?>" method="POST" action="<?php echo $datetime->getDeleteURL($context->calendar) ?>" >
-      <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
-      <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
-      <input type="hidden" name="event_datetime_id" value="<?php echo $datetime->id ?>" />
+    <form
+        class="dcf-form delete-datetime delete-form dcf-d-none"
+        id="delete-datetime-<?php echo $datetime->id; ?>"
+        method="POST"
+        action="<?php echo $datetime->getDeleteURL($context->calendar) ?>"
+    >
+        <input
+            type="hidden"
+            name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>"
+            value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>"
+        />
+        <input
+            type="hidden"
+            name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>"
+            value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>"
+        />
+        <input type="hidden" name="event_datetime_id" value="<?php echo $datetime->id ?>" />
     </form>
     <?php if ($datetime->recurringtype != 'none') : ?>
         <?php foreach ($datetime->getRecurrences() as $recurring_date) : ?>
-            <form class="dcf-form delete-datetime-recurrence delete-form dcf-d-none" id="delete-datetime-<?php echo $datetime->id; ?>-recurrence-<?php echo $recurring_date->recurrence_id ?>" method="POST" action="<?php echo $datetime->getDeleteRecurrenceURL($context->calendar, $recurring_date->recurrence_id) ?>">
-                <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
-                <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
+            <form
+                class="dcf-form delete-datetime-recurrence delete-form dcf-d-none"
+                id="delete-datetime-<?php echo $datetime->id; ?>-recurrence-<?php echo $recurring_date->recurrence_id ?>"
+                method="POST"
+                action="<?php echo $datetime->getDeleteRecurrenceURL($context->calendar, $recurring_date->recurrence_id) ?>"
+            >
+                <input
+                    type="hidden"
+                    name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>"
+                    value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>"
+                />
+                <input
+                    type="hidden"
+                    name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>"
+                    value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>"
+                />
                 <input type="hidden" name="event_datetime_id" value="<?php echo $datetime->id ?>" />
                 <input type="hidden" name="recurrence_id" value="<?php echo $recurring_date->recurrence_id ?>" />
             </form>
@@ -73,8 +100,16 @@
 <?php endforeach; ?>
 
 <form class="dcf-form" id="edit-event-form" action="" method="POST" enctype="multipart/form-data">
-    <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
-    <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
+    <input
+        type="hidden"
+        name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>"
+        value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>"
+    />
+    <input
+        type="hidden"
+        name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>"
+        value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>"
+    />
     <div style="margin-top: -2.5rem">
         <fieldset>
             <legend>Event Details</legend>
@@ -94,18 +129,34 @@
                 <label for="type">Type</label>
                 <select id="type" name="type">
                 <?php foreach ($context->getEventTypes() as $type) { ?>
-                  <option <?php if ($event_type != NULL && $event_type->id == $type->id) echo 'selected="selected"'; ?> value="<?php echo $type->id ?>"><?php echo $type->name ?></option>
+                    <option
+                        <?php if ($event_type != null && $event_type->id == $type->id) echo 'selected="selected"'; ?>
+                        value="<?php echo $type->id ?>"
+                    >
+                        <?php echo $type->name ?>
+                    </option>
                 <?php } ?>
                 </select>
             </div>
             <div class="dcf-input-checkbox">
-                <input id="canceled" name="canceled" type="checkbox" value="1" <?php if ($event->isCanceled()) { echo CHECKED_INPUT; } ?>>
+                <input
+                    id="canceled"
+                    name="canceled"
+                    type="checkbox"
+                    value="1"
+                    <?php if ($event->isCanceled()) { echo CHECKED_INPUT; } ?>
+                />
                 <label for="canceled">Event Canceled</label>
             </div>
         </fieldset>
         <fieldset>
             <legend>Location, Date &amp; Time</legend>
-            <a class="dcf-btn dcf-btn-primary" href="<?php echo $event->getAddDatetimeURL($context->calendar) ?>">Add Location, Date, and/or Time</a>
+            <a
+                class="dcf-btn dcf-btn-primary"
+                href="<?php echo $event->getAddDatetimeURL($context->calendar) ?>"
+            >
+                Add Location, Date, and/or Time
+            </a>
             <table class="dcf-mt-6 dcf-table dcf-table-striped dcf-table-fixed dcf-w-100% dcf-txt-sm">
                 <caption class="dcf-sr-only">Current Location, Date &amp; Times</caption>
                 <thead class="edt-header">
@@ -122,23 +173,30 @@
                         {
                             if ($datetime->recurringtype == 'none') {
                                 echo date('n/d/y @ g:ia', strtotime($datetime->starttime));
-                            } else if ($datetime->recurringtype == 'daily' || $datetime->recurringtype == 'weekly' || $datetime->recurringtype == 'biweekly' || $datetime->recurringtype == 'annually') {
-                                echo ucwords($datetime->recurringtype) . ' @ ' . date('g:ia', strtotime($datetime->starttime)) .
+                            } elseif ($datetime->recurringtype == 'daily' ||
+                                        $datetime->recurringtype == 'weekly' ||
+                                        $datetime->recurringtype == 'biweekly' ||
+                                        $datetime->recurringtype == 'annually') {
+
+                                echo ucwords($datetime->recurringtype)
+                                . ' @ ' . date('g:ia', strtotime($datetime->starttime)) .
                                 ' from ' . date('n/d/y', strtotime($datetime->starttime)) .
                                 ' to ' . date('n/d/y', strtotime($datetime->recurs_until));
-                            } else if ($datetime->recurringtype == 'monthly') {
+                            } elseif ($datetime->recurringtype == 'monthly') {
                                 if ($datetime->rectypemonth == 'lastday') {
-                                    echo 'Last day of each month @ ' . date('g:ia', strtotime($datetime->starttime)) .
+                                    echo 'Last day of each month @ ' .
+                                    date('g:ia', strtotime($datetime->starttime)) .
                                     ' from ' . date('n/d/y', strtotime($datetime->starttime)) .
                                     ' from ' . date('n/d/y', strtotime($datetime->starttime)) .
                                     ' to ' . date('n/d/y', strtotime($datetime->recurs_until));
-                                } else if ($datetime->rectypemonth == 'date') {
+                                } elseif ($datetime->rectypemonth == 'date') {
                                     echo ordinal(date('d', strtotime($datetime->starttime))) .
                                     ' of each month @ ' . date('g:ia', strtotime($datetime->starttime)) .
                                     ' from ' . date('n/d/y', strtotime($datetime->starttime)) .
                                     ' to ' . date('n/d/y', strtotime($datetime->recurs_until));
                                 } else {
-                                    echo ucwords($datetime->rectypemonth) . date(' l', strtotime($datetime->starttime)) . ' of every month' .
+                                    echo ucwords($datetime->rectypemonth) .
+                                    date(' l', strtotime($datetime->starttime)) . ' of every month' .
                                     ' from ' . date('n/d/y', strtotime($datetime->starttime)) .
                                     ' to ' . date('n/d/y', strtotime($datetime->recurs_until));
                                 }
@@ -151,13 +209,31 @@
                     </td>
                     <td class="dcf-pr-0 dcf-txt-middle controls">
                         <div class="dcf-d-flex dcf-ai-center dcf-jc-flex-end">
-                            <a class="dcf-btn dcf-btn-primary" href="<?php echo $datetime->getEditURL($context->calendar); ?>">Edit</a>
-                            <button class="dcf-btn dcf-btn-secondary dcf-ml-1" form="delete-datetime-<?php echo $datetime->id; ?>" type="submit">Delete</button>
-                            <?php if ($allowCanceledDatetime === TRUE && $datetime->recurringtype === 'none') : ?>
-                                  <div class="dcf-input-checkbox dcf-mr-4 dcf-mb-0 dcf-ml-3 dcf-txt-sm">
-                                      <input class="datetime-cancel-toggle" id="datetime-canceled-<?php echo $datetime->id; ?>" type="checkbox" value="1" <?php if ($datetime->isCanceled()) { echo CHECKED_INPUT; } ?> data-url="<?php echo $datetime->getEditURL($context->calendar); ?>">
-                                      <label for="datetime-canceled-<?php echo $datetime->id; ?>">Canceled</label>
-                                  </div>
+                            <a
+                                class="dcf-btn dcf-btn-primary"
+                                href="<?php echo $datetime->getEditURL($context->calendar); ?>"
+                            >
+                                Edit
+                            </a>
+                            <button
+                                class="dcf-btn dcf-btn-secondary dcf-ml-1"
+                                form="delete-datetime-<?php echo $datetime->id; ?>"
+                                type="submit"
+                            >
+                                Delete
+                            </button>
+                            <?php if ($allowCanceledDatetime === true && $datetime->recurringtype === 'none') : ?>
+                                    <div class="dcf-input-checkbox dcf-mr-4 dcf-mb-0 dcf-ml-3 dcf-txt-sm">
+                                        <input
+                                            class="datetime-cancel-toggle"
+                                            id="datetime-canceled-<?php echo $datetime->id; ?>"
+                                            type="checkbox"
+                                            value="1"
+                                            <?php if ($datetime->isCanceled()) { echo CHECKED_INPUT; } ?>
+                                            data-url="<?php echo $datetime->getEditURL($context->calendar); ?>"
+                                        >
+                                        <label for="datetime-canceled-<?php echo $datetime->id; ?>">Canceled</label>
+                                    </div>
                             <?php endif; ?>
                         </div>
                     </td>
@@ -167,22 +243,53 @@
                         <?php foreach ($datetime->getRecurrences() as $recurring_date) : ?>
                             <tr class="edt-record">
                                 <td class="dcf-pl-7 dcf-txt-middle dates recurring" colspan="2">
-                                    <?php echo date('n/d/y', strtotime($recurring_date->recurringdate)) . ' @ ' . date('g:ia', strtotime($datetime->starttime)); ?>
+                                    <?php
+                                        echo date('n/d/y', strtotime($recurring_date->recurringdate)) .
+                                        ' @ ' . date('g:ia', strtotime($datetime->starttime));
+                                        ?>
                                 </td>
                                 <td class="dcf-pr-0 dcf-txt-middle controls recurring">
                                     <div class="dcf-d-flex dcf-ai-center dcf-jc-flex-end">
-                                        <a class="dcf-btn dcf-btn-primary edit-recurring-edt" href="<?php echo $datetime->getEditRecurrenceURL($context->calendar, $recurring_date->recurrence_id); ?>">Edit</a>
-                                        <button class="dcf-btn dcf-btn-secondary dcf-ml-1 delete-datetime-recurrence" type="submit" form="delete-datetime-<?php echo $datetime->id ?>-recurrence-<?php echo $recurring_date->recurrence_id ?>">Delete</button>
+                                        <a
+                                            class="dcf-btn dcf-btn-primary edit-recurring-edt"
+                                            href="<?php echo $datetime->getEditRecurrenceURL($context->calendar, $recurring_date->recurrence_id); ?>"
+                                        >
+                                            Edit
+                                        </a>
+                                        <button
+                                            class="dcf-btn dcf-btn-secondary dcf-ml-1 delete-datetime-recurrence"
+                                            type="submit"
+                                            form="delete-datetime-<?php echo $datetime->id ?>-recurrence-<?php echo $recurring_date->recurrence_id ?>"
+                                        >
+                                            Delete
+                                        </button>
                                         <div class="dcf-input-checkbox dcf-mr-4 dcf-mb-0 dcf-ml-3 dcf-txt-sm">
-                                            <input class="recurrence-instance-cancel-toggle" id="recurrence-instance-canceled-<?php echo $recurring_date->recurrence_id; ?>" name="recurring-canceled" type="checkbox" value="1" <?php if ($recurring_date->isCanceled()) { echo CHECKED_INPUT; } ?> data-url="<?php echo $datetime->getEditRecurrenceURL($context->calendar, $recurring_date->recurrence_id); ?>">
-                                            <label for="recurrence-instance-canceled-<?php echo $recurring_date->recurrence_id; ?>">Canceled</label>
+                                            <input
+                                                class="recurrence-instance-cancel-toggle"
+                                                id="recurrence-instance-canceled-<?php echo $recurring_date->recurrence_id; ?>"
+                                                name="recurring-canceled"
+                                                type="checkbox"
+                                                value="1"
+                                                <?php if ($recurring_date->isCanceled()) { echo CHECKED_INPUT; } ?>
+                                                data-url="<?php echo $datetime->getEditRecurrenceURL($context->calendar, $recurring_date->recurrence_id); ?>"
+                                            >
+                                            <label
+                                                for="recurrence-instance-canceled-<?php echo $recurring_date->recurrence_id; ?>"
+                                            >
+                                                Canceled
+                                            </label>
                                         </div>
                                     </div>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
                     <?php else: ?>
-                        <tr><td colspan="3">Notice: The above recurrence definition does not have any recurrences and may be deleted.</td></tr>
+                        <tr>
+                            <td colspan="3">
+                                Notice: The above recurrence definition does not
+                                have any recurrences and may be deleted.
+                            </td>
+                        </tr>
                     <?php endif; ?>
                 <?php endif; ?>
             <?php endforeach; ?>
@@ -195,25 +302,43 @@
                     <nav class="dcf-pagination">
                         <ol class="dcf-list-bare dcf-list-inline">
                         <?php if($context->page != 1): ?>
-                            <li><a class="dcf-pagination-prev" href="?page=<?php echo $context->page - 1 ?>">Prev</a></li>
+                            <li>
+                                <a
+                                    class="dcf-pagination-prev"
+                                    href="?page=<?php echo $context->page - 1 ?>"
+                                >
+                                    Prev
+                                </a>
+                            </li>
                         <?php endif; ?>
-                        <?php $before_ellipsis_shown = FALSE; $after_ellipsis_shown = FALSE; ?>
+                        <?php $before_ellipsis_shown = false; $after_ellipsis_shown = false; ?>
                         <?php for ($i = 1; $i <= $total_pages; $i++): ?>
                                 <?php if ($i == $context->page): ?>
                                     <li><span class="dcf-pagination-selected"><?php echo $i; ?></span></li>
-                                <?php elseif ($i <= 3 || $i >= $total_pages - 2 || $i == $context->page - 1 ||
-                                            $i == $context->page - 2 || $i == $context->page + 1 || $i == $context->page + 2): ?>
+                                <?php elseif ($i <= 3 ||
+                                                $i >= $total_pages - 2 ||
+                                                $i == $context->page - 1 ||
+                                                $i == $context->page - 2 ||
+                                                $i == $context->page + 1 ||
+                                                $i == $context->page + 2): ?>
                                     <li><a href="?page=<?php echo $i ?>"><?php echo $i; ?></a></li>
                                 <?php elseif ($i < $context->page && !$before_ellipsis_shown): ?>
                                     <li><span class="dcf-pagination-ellipsis">...</span></li>
-                                    <?php $before_ellipsis_shown = TRUE; ?>
+                                    <?php $before_ellipsis_shown = true; ?>
                                 <?php elseif ($i > $context->page && !$after_ellipsis_shown): ?>
                                     <li><span class="dcf-pagination-ellipsis">...</span></li>
-                                    <?php $after_ellipsis_shown = TRUE; ?>
+                                    <?php $after_ellipsis_shown = true; ?>
                                 <?php endif; ?>
                         <?php endfor; ?>
                         <?php if($context->page != $total_pages): ?>
-                            <li><a class="dcf-pagination-next" href="?page=<?php echo $context->page + 1 ?>">Next</a></li>
+                            <li>
+                                <a
+                                    class="dcf-pagination-next"
+                                    href="?page=<?php echo $context->page + 1 ?>"
+                                >
+                                    Next
+                                </a>
+                            </li>
                         <?php endif; ?>
                         </ol>
                     </nav>
@@ -229,23 +354,49 @@
                 <fieldset class="dcf-col-100% dcf-col-25%-start@sm dcf-p-0 dcf-b-0">
                     <legend class="dcf-pb-2">Privacy</legend>
                     <div class="dcf-input-radio">
-                        <input id="sharing-private" name="private_public" type="radio" value="private" <?php if (!$event->approvedforcirculation) { echo CHECKED_INPUT; } ?>>
+                        <input
+                            id="sharing-private"
+                            name="private_public"
+                            type="radio"
+                            value="private"
+                            <?php if (!$event->approvedforcirculation) { echo CHECKED_INPUT; } ?>
+                        />
                         <label for="sharing-private">Private</label>
                     </div>
                     <div class="dcf-input-radio">
-                        <input id="sharing-public" name="private_public" type="radio" value="public" <?php if ($event->approvedforcirculation) { echo CHECKED_INPUT; } ?>>
+                        <input
+                            id="sharing-public"
+                            name="private_public"
+                            type="radio"
+                            value="public"
+                            <?php if ($event->approvedforcirculation) { echo CHECKED_INPUT; } ?>
+                        />
                         <label for="sharing-public">Public</label>
                     </div>
                 </fieldset>
                 <fieldset class="dcf-col-100% dcf-col-75%-end@sm dcf-mb-0 dcf-p-0 dcf-b-0" id="send_to_main">
-                    <legend class="dcf-pb-2">Consider for Main <abbr title="University of Nebraska–Lincoln"">UNL</abbr> Calendar</legend>
+                    <legend
+                        class="dcf-pb-2"
+                    >
+                        Consider for Main
+                            <abbr title="University of Nebraska–Lincoln"">UNL</abbr>
+                        Calendar
+                    </legend>
                     <?php if ($context->on_main_calendar): ?>
-                        <img src="<?php echo $base_frontend_url ?>templates/default/html/images/checkmark-16.png" alt="">
+                        <img
+                            src="<?php echo $base_frontend_url ?>templates/default/html/images/checkmark-16.png"
+                            alt=""
+                        >
                         (event has been sent to main UNL calendar for approval)
                     <?php else: ?>
                         <div class="dcf-input-checkbox">
-                          <input id="send-to-main" name="send_to_main" type="checkbox" <?php if (isset($post['send_to_main'])) { echo CHECKED_INPUT; } ?>>
-                          <label for="send-to-main">Yes</label>
+                            <input
+                                id="send-to-main"
+                                name="send_to_main"
+                                type="checkbox"
+                                <?php if (isset($post['send_to_main'])) { echo CHECKED_INPUT; } ?>
+                            />
+                            <label for="send-to-main">Yes</label>
                         </div>
                     <?php endif; ?>
                 </fieldset>
@@ -256,19 +407,39 @@
             <div class="details">
                 <div class="dcf-form-group">
                     <label for="contact-name">Name</label>
-                    <input id="contact-name" name="contact_name" type="text" value="<?php echo $event->listingcontactname; ?>" />
+                    <input
+                        id="contact-name"
+                        name="contact_name"
+                        type="text"
+                        value="<?php echo $event->listingcontactname; ?>"
+                    />
                 </div>
                 <div class="dcf-form-group">
                     <label for="contact-phone">Phone</label>
-                    <input id="contact-phone" name="contact_phone" type="text" value="<?php echo $event->listingcontactphone; ?>" />
+                    <input
+                        id="contact-phone"
+                        name="contact_phone"
+                        type="text"
+                        value="<?php echo $event->listingcontactphone; ?>"
+                    />
                 </div>
                 <div class="dcf-form-group">
                     <label for="contact-email">Email</label>
-                    <input id="contact-email" name="contact_email" type="text" value="<?php echo $event->listingcontactemail; ?>" />
+                    <input
+                        id="contact-email"
+                        name="contact_email"
+                        type="text"
+                        value="<?php echo $event->listingcontactemail; ?>"
+                    />
                 </div>
                 <div class="dcf-form-group">
                     <label for="website">Event Website</label>
-                    <input id="website" name="website" type="text" value="<?php echo $event->webpageurl; ?>" />
+                    <input
+                        id="website"
+                        name="website"
+                        type="text"
+                        value="<?php echo $event->webpageurl; ?>"
+                    />
                 </div>
             </div>
         </fieldset>
