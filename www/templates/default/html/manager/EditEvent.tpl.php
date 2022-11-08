@@ -264,9 +264,9 @@
                                             class="dcf-btn dcf-btn-primary edit-recurring-edt"
                                             href="<?php
                                                 echo $datetime->getEditRecurrenceURL(
-                                                        $context->calendar,
-                                                        $recurring_date->recurrence_id
-                                                    );
+                                                    $context->calendar,
+                                                    $recurring_date->recurrence_id
+                                                );
                                             ?>"
                                         >
                                             Edit
@@ -294,9 +294,9 @@
                                                 <?php if ($recurring_date->isCanceled()) { echo CHECKED_INPUT; } ?>
                                                 data-url="<?php
                                                     echo $datetime->getEditRecurrenceURL(
-                                                            $context->calendar,
-                                                            $recurring_date->recurrence_id
-                                                        );
+                                                        $context->calendar,
+                                                        $recurring_date->recurrence_id
+                                                    );
                                                 ?>"
                                             >
                                             <label
