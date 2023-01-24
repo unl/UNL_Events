@@ -1,7 +1,8 @@
 <?php
-namespace UNL\UCBCN;
+namespace UNL\UCBCN\Event;
 
 use UNL\UCBCN\ActiveRecord\Record;
+use UNL\UCBCN\Event;
 /**
  * Table Definition for audience
  *
@@ -28,21 +29,12 @@ class Audience extends Record
 {
 
     public $id;                              // int(10)  not_null primary_key unsigned auto_increment
-    public $name;                            // string(100)
-    public $standard;                        // int(1)
+    public $event_id;                        // int(10)  not_null multiple_key unsigned
+    public $audience_id;                    // int(10)  not_null multiple_key unsigned
 
-    function getTable()
+    public static function getTable()
     {
-        return 'audience';
-    }
-
-    function table()
-    {
-        return array(
-            'id'=>129,
-            'name'=>2,
-            'standard'=>17,
-        );
+        return 'event_targets_audience';
     }
 
     function keys()
@@ -52,9 +44,23 @@ class Audience extends Record
         );
     }
     
-    function sequenceKey()
+    /**
+     * Get the event type record (details) for this link
+     * 
+     * @return false|\UNL\UCBCN\Calendar\Audience - the event type record or false
+     */
+    public function getAudience()
     {
-        return array('id',true);
+        return \UNL\UCBCN\Calendar\Audience::getById($this->audience_id);
     }
-    
+
+    /**
+     * Get the event for this link
+     * 
+     * @return false|Event - the event record or false
+     */
+    public function getEvent()
+    {
+        return Event::getById($this->event_id);
+    }
 }
