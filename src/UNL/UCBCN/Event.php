@@ -6,6 +6,7 @@ use UNL\UCBCN\Calendar;
 use UNL\UCBCN\Calendar\Event as CalendarHasEvent;
 use UNL\UCBCN\Calendar\Events as CalendarHasEvents;
 use UNL\UCBCN\Calendar\EventType;
+use UNL\UCBCN\Calendar\Audiences;
 use UNL\UCBCN\Event\Occurrences;
 use UNL\UCBCN\Event\RecurringDate;
 use UNL\UCBCN\Event\RecurringDates;
@@ -247,6 +248,8 @@ class Event extends Record
         return $first_type;
     }
 
+    
+
     public function getSource(Calendar $calendar)
     {
         $calendar_has_event = CalendarHasEvent::getByIds($calendar->id, $this->id);
@@ -461,6 +464,12 @@ class Event extends Record
             $record->delete();
         }
 
+        # delete the event has eventtype record(s)
+        $target_audiences = $this->getAudiences();
+        foreach ($target_audiences as $record) {
+            $record->delete();
+        }
+
         # delete all calendar_has_events
         $calendar_has_events = new CalendarHasEvents(array('event_id' => $this->id));
         foreach ($calendar_has_events as $record) {
@@ -562,6 +571,16 @@ class Event extends Record
     public function getEventTypes()
     {
         return new Event\EventTypes(array('event_id' => $this->id));
+    }
+
+    /**
+     * Get event_targets_audience records for this event
+     *
+     * @return Event\Audiences
+     */
+    public function getAudiences()
+    {
+        return new Event\Audiences(array('event_id' => $this->id));
     }
 
     /**

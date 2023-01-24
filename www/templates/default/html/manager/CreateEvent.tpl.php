@@ -40,6 +40,24 @@
                   <?php } ?>
                 </select>
             </div>
+            <fieldset>
+                <legend>Target Audience</legend>
+                <?php foreach ($context->getAudiences() as $audience): ?>
+                    <?php $target_audience_id = 'target-audience-' . $audience->id; ?>
+                    <div class="dcf-input-checkbox">
+                        <input 
+                            id="<?php echo($target_audience_id); ?>"
+                            name="<?php echo($target_audience_id); ?>"
+                            type="checkbox"
+                            value="<?php echo($audience->id); ?>"
+                            <?php if (isset($post[$target_audience_id]) && $post[$target_audience_id] == $audience->id) echo CHECKED_INPUT; ?>
+                        >
+                        <label for="<?php echo($target_audience_id); ?>">
+                            <?php echo($audience->name); ?>
+                        </label>
+                    </div>
+                <?php endforeach; ?>
+            </fieldset>
             <div class="dcf-form-group">
                 <div class="dcf-input-checkbox">
                     <input id="canceled" name="canceled" type="checkbox" value="1" <?php if ($event->isCanceled()) { echo CHECKED_INPUT; } ?>>

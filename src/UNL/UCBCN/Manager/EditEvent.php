@@ -4,6 +4,7 @@ namespace UNL\UCBCN\Manager;
 use UNL\UCBCN\Manager\EventForm as EventForm;
 use UNL\UCBCN\Event;
 use UNL\UCBCN\Event\EventType;
+use UNL\UCBCN\Event\Audience;
 use UNL\UCBCN\Calendar as CalendarModel;
 
 class EditEvent extends EventForm
@@ -92,6 +93,42 @@ class EditEvent extends EventForm
             $event_has_type->eventtype_id = $post_data['type'];
 
             $event_has_type->insert();
+        }
+
+        // Update Audience Records
+        $all_audiences = $this->getAudiences();
+
+        foreach ($all_audiences as $current_audience) {
+            $target_audience_id = 'target-audience-' . $current_audience->id;
+            
+            // get the audiences currently associated with the event (these will change since we are adding and deleting)
+            // we then check and store the audience that matches the one we are looking for
+            $event_audiences = $this->event->getAudiences();
+            $target_audience_record = FALSE;
+            foreach ($event_audiences as $target_audience) {
+                if ($current_audience->id === $target_audience->audience_id) {
+                    $target_audience_record = $target_audience;
+                    break;
+                }
+            }
+
+            // if the audience has been checked but the event does not have it yet
+            if (isset($post_data[$target_audience_id]) && 
+                $post_data[$target_audience_id] === $current_audience->id &&
+                $target_audience_record === FALSE) {
+
+                $event_targets_audience = new Audience;
+                $event_targets_audience->event_id = $this->event->id;
+                $event_targets_audience->audience_id = $post_data[$target_audience_id];
+
+                $event_targets_audience->insert();
+
+            // if the audience has not been checked and the audience has it
+            } else if (!isset($post_data[$target_audience_id]) &&
+                $target_audience_record !== FALSE) {
+
+                $target_audience_record->delete();
+            }
         }
 
         # send to main calendar if selected and not already on main calendar
