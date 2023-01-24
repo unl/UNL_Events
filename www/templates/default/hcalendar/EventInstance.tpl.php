@@ -12,6 +12,7 @@
             <?php if (isset($context->event->subtitle)): ?></header><?php endif; ?>
             <?php echo $savvy->render($context, 'EventInstance/Date.tpl.php') ?>
             <?php echo $savvy->render($context, 'EventInstance/FullLocation.tpl.php') ?>
+            <?php echo $savvy->render($context, 'EventInstance/TargetAudience.tpl.php') ?>
             <?php echo $savvy->render($context, 'EventInstance/Contact.tpl.php') ?>
             <div class="description">
                 <?php
