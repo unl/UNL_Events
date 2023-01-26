@@ -116,15 +116,11 @@ class CreateEvent extends EventForm
 
         $event_has_type->insert();
 
-        // Get all the Audiences
-        // Loop through the audiences
-            // if we have one in the post request
-                // create a new Audience and set the value and insert it
-
+        // Insert the audience if it is set
         $all_audiences = $this->getAudiences();
         foreach ($all_audiences as $current_audience) {
             $target_audience_id = 'target-audience-' . $current_audience->id;
-            if (!isset($post_data[$target_audience_id]) && $post_data[$target_audience_id] === $current_audience->id) {
+            if (isset($post_data[$target_audience_id]) && $post_data[$target_audience_id] === $current_audience->id) {
                 $event_targets_audience = new Audience;
                 $event_targets_audience->event_id = $this->event->id;
                 $event_targets_audience->audience_id = $post_data[$target_audience_id];
