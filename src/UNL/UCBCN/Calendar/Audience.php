@@ -2,6 +2,7 @@
 namespace UNL\UCBCN\Calendar;
 
 use UNL\UCBCN\ActiveRecord\Record;
+
 /**
  * Table Definition for audience
  *
@@ -36,7 +37,7 @@ class Audience extends Record
         return 'audience';
     }
 
-    function table()
+    public function table()
     {
         return array(
             'id'=>129,
@@ -45,19 +46,19 @@ class Audience extends Record
         );
     }
 
-    function keys()
+    public function keys()
     {
         return array(
             'id',
         );
     }
     
-    function sequenceKey()
+    public function sequenceKey()
     {
         return array('id',true);
     }
 
-    function links()
+    public function links()
     {
         return array('calendar_id' => 'calendar:id');
     }

@@ -158,7 +158,7 @@
                             // Find whether the audience is associated with the event
                             // If so it will be used to check the input
                             $audience_match = false;
-                            foreach ($event_targets_audience as $target_audience){
+                            foreach ($event_targets_audience as $target_audience) {
                                 if ($audience->id === $target_audience->audience_id) {
                                     $audience_match = true;
                                     break;
@@ -168,15 +168,15 @@
 
                         <?php $target_audience_id = 'target-audience-' . $audience->id; ?>
                         <div class="dcf-input-checkbox">
-                            <input 
-                                id="<?php echo($target_audience_id); ?>"
-                                name="<?php echo($target_audience_id); ?>"
+                            <input
+                                id="<?php echo $target_audience_id; ?>"
+                                name="<?php echo $target_audience_id; ?>"
                                 type="checkbox"
                                 value="<?php echo($audience->id); ?>"
-                                <?php if ($audience_match) echo CHECKED_INPUT; ?>
+                                <?php if ($audience_match) { echo CHECKED_INPUT; } ?>
                             >
-                            <label for="<?php echo($target_audience_id); ?>">
-                                <?php echo($audience->name); ?>
+                            <label for="<?php echo $target_audience_id; ?>">
+                                <?php echo $audience->name; ?>
                             </label>
                         </div>
                 <?php endforeach; ?>

@@ -3,6 +3,7 @@ namespace UNL\UCBCN\Event;
 
 use UNL\UCBCN\ActiveRecord\Record;
 use UNL\UCBCN\Event;
+
 /**
  * Table Definition for audience
  *
@@ -37,7 +38,7 @@ class Audience extends Record
         return 'event_targets_audience';
     }
 
-    function keys()
+    public function keys()
     {
         return array(
             'id',
@@ -46,7 +47,7 @@ class Audience extends Record
     
     /**
      * Get the event type record (details) for this link
-     * 
+     *
      * @return false|\UNL\UCBCN\Calendar\Audience - the event type record or false
      */
     public function getAudience()
@@ -56,7 +57,7 @@ class Audience extends Record
 
     /**
      * Get the event for this link
-     * 
+     *
      * @return false|Event - the event record or false
      */
     public function getEvent()

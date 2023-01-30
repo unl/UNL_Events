@@ -2,6 +2,7 @@
 namespace UNL\UCBCN\Calendar;
 
 use UNL\UCBCN\ActiveRecord\RecordList;
+
 /**
  * Table Definition for audience
  *

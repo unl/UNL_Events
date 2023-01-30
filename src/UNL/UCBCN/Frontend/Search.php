@@ -17,6 +17,7 @@ namespace UNL\UCBCN\Frontend;
 
 use UNL\UCBCN\Calendar\Audiences;
 use UNL\UCBCN\Calendar\EventTypes;
+use UNL\UCBCN\Event;
 
 /**
  * Container for search results for the frontend.
@@ -112,12 +113,19 @@ class Search extends EventListing implements RoutableInterface
     }
 
 
-    public function getEventTypes(){
+    public function getEventTypes()
+    {
         return new EventTypes(array());
     }
 
-    public function getAudiences(){
+    public function getAudiences()
+    {
         return new Audiences(array());
+    }
+
+    public function getEvent($eventInstance)
+    {
+        return new Event(array('id' => $eventInstance->eventdatetime->event_id));
     }
 
     /**

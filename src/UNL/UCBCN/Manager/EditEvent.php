@@ -101,10 +101,11 @@ class EditEvent extends EventForm
         foreach ($all_audiences as $current_audience) {
             $target_audience_id = 'target-audience-' . $current_audience->id;
             
-            // get the audiences currently associated with the event (these will change since we are adding and deleting)
+            // get the audiences currently associated with the event
+            // (these will change since we are adding and deleting)
             // we then check and store the audience that matches the one we are looking for
             $event_audiences = $this->event->getAudiences();
-            $target_audience_record = FALSE;
+            $target_audience_record = false;
             foreach ($event_audiences as $target_audience) {
                 if ($current_audience->id === $target_audience->audience_id) {
                     $target_audience_record = $target_audience;
@@ -113,9 +114,9 @@ class EditEvent extends EventForm
             }
 
             // if the audience has been checked but the event does not have it yet
-            if (isset($post_data[$target_audience_id]) && 
+            if (isset($post_data[$target_audience_id]) &&
                 $post_data[$target_audience_id] === $current_audience->id &&
-                $target_audience_record === FALSE) {
+                $target_audience_record === false) {
 
                 $event_targets_audience = new Audience;
                 $event_targets_audience->event_id = $this->event->id;
@@ -124,8 +125,8 @@ class EditEvent extends EventForm
                 $event_targets_audience->insert();
 
             // if the audience has not been checked and the audience has it
-            } else if (!isset($post_data[$target_audience_id]) &&
-                $target_audience_record !== FALSE) {
+            } elseif (!isset($post_data[$target_audience_id]) &&
+                $target_audience_record !== false) {
 
                 $target_audience_record->delete();
             }

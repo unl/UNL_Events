@@ -89,8 +89,6 @@ class CreateEvent extends EventForm
     {
         $user = Auth::getCurrentUser();
 
-        // var_dump($post_data);
-
         # tricky: if end date is empty, we want that to be the same as the start date
         # if the end time is also empty, then be sure to set the am/pm appropriately
         if (empty($post_data['end_date'])) {

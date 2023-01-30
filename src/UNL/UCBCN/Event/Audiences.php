@@ -2,6 +2,7 @@
 namespace UNL\UCBCN\Event;
 
 use UNL\UCBCN\ActiveRecord\RecordList;
+
 /**
  * Table Definition for audience
  *
@@ -26,7 +27,7 @@ use UNL\UCBCN\ActiveRecord\RecordList;
  */
 class Audiences extends RecordList
 {
-    function __construct($options = array())
+    public function __construct($options = array())
     {
         parent::__construct($options);
     }
@@ -42,7 +43,8 @@ class Audiences extends RecordList
     public function getSQL()
     {
         if (array_key_exists('event_id', $this->options)) {
-            return 'SELECT id FROM event_targets_audience WHERE event_targets_audience.event_id = ' . (int)$this->options['event_id'];
+            return 'SELECT id FROM event_targets_audience WHERE event_targets_audience.event_id = ' .
+                (int)$this->options['event_id'];
         } else {
             return 'SELECT id FROM audience;';
         }
