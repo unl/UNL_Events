@@ -23,6 +23,7 @@ $to   = '(?P<to>[\d]{4}-([0-1])?[0-9]-([0-3])?[0-9])';
 $format   = '(\.(?P<format>[\w]+))?';
 
 $routes['/^images\/(?P<id>[\d]+)$/']                                                                       = 'UNL\UCBCN\Frontend\Image';
+$routes['/^'.'audience'.'(\/)?$/']                                                                            = 'UNL\UCBCN\Frontend\Audience';
 $routes['/^'.$calendar_slash_required.'upcoming'.'(\/)?'.$format.'$/']                                     = 'UNL\UCBCN\Frontend\Upcoming';
 $routes['/^'.$calendar_slash_required.'featured'.'(\/)?'.$format.'$/']                                     = 'UNL\UCBCN\Frontend\Featured';
 $routes['/^'.$calendar_slash_required.'range'.'(\/)?'.$format.'$/']                                        = 'UNL\UCBCN\Frontend\Range';
@@ -30,7 +31,7 @@ $routes['/^'.$calendar_slash_required.'range'.'(\/)?'.$from.'(\/)?'.$format.'$/'
 $routes['/^'.$calendar_slash_required.'range'.'(\/)?'.$from.'\/'.$to.'(\/)?'.$format.'$/']                 = 'UNL\UCBCN\Frontend\Range';
 $routes['/^'.$calendar_slash_required.'range'.'(\/)?'.$from.'(\/)?'.$format.'$/']                          = 'UNL\UCBCN\Frontend\Range';
 $routes['/^'.$calendar_slash_required.'week'.'(\/)?'.$format.'$/']                                         = 'UNL\UCBCN\Frontend\Week';
-$routes['/^'.$calendar_slash_required.'search'.'\/$/']                                                     = 'UNL\UCBCN\Frontend\Search';
+$routes['/^'.$calendar_slash_required.'search'.'(\/)?$/']                                                     = 'UNL\UCBCN\Frontend\Search';
 $routes['/^'.$calendar_slash_required.$year.'(\/)?'.$format.'$/']                                          = 'UNL\UCBCN\Frontend\Year';
 $routes['/^'.$calendar_slash_required.$year.'\/'.$month.'(\/)?'.$format.'$/']                              = 'UNL\UCBCN\Frontend\Month';
 $routes['/^'.$calendar_slash_required.$year.'\/'.$month.'\/widget(\/)?'.$format.'$/']                      = 'UNL\UCBCN\Frontend\MonthWidget';

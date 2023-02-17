@@ -15,10 +15,6 @@
  */
 namespace UNL\UCBCN\Frontend;
 
-use UNL\UCBCN\Calendar\Audiences;
-use UNL\UCBCN\Calendar\EventTypes;
-use UNL\UCBCN\Event;
-
 /**
  * Container for search results for the frontend.
  *
@@ -31,11 +27,11 @@ use UNL\UCBCN\Event;
  * @license   http://www1.unl.edu/wdn/wiki/Software_License BSD License 
  * @link      http://code.google.com/p/unl-event-publisher/
  */
-class Search extends EventListing implements RoutableInterface
+class Audience extends EventListing implements RoutableInterface
 {
     public $search_query = '';
     public $search_event_type = '';
-    public $search_event_audience = '';
+    public $search_event_calendar = '';
 
     /**
      * Constructs this search output.
@@ -45,13 +41,13 @@ class Search extends EventListing implements RoutableInterface
      */
     public function __construct($options=array())
     {
-        // if (empty($options['q'])) {
-        //     throw new UnexpectedValueException('Enter a search string to search for events.', 400);
-        // }
+        if (empty($options['q'])) {
+            throw new UnexpectedValueException('Enter an audience to search for events.', 400);
+        }
         
         $this->search_query = $options['q'] ?? "";
         $this->search_event_type = $options['type'] ?? "";
-        $this->search_event_audience = $options['audience'] ?? "";
+        $this->search_event_calendar = $options['calendar_id'] ?? "";
         
         parent::__construct($options);
     }
@@ -73,38 +69,39 @@ class Search extends EventListing implements RoutableInterface
                 LEFT JOIN event_targets_audience ON (event_targets_audience.event_id = event.id)
                 LEFT JOIN audience ON (audience.id = event_targets_audience.audience_id)
                 LEFT JOIN location ON (location.id = e.location_id)
-                WHERE
-                    calendar_has_event.calendar_id = ' . (int)$this->calendar->id . '
-                    AND calendar_has_event.status IN ("posted", "archived")
-                    AND  (';
+                WHERE calendar_has_event.status IN ("posted", "archived") AND 
+                    (
+                        e.starttime>=\''. date('Y-m-d') .' 00:00:00\' OR
+                        e.endtime>\''. date('Y-m-d') .' 00:00:00\'
+                    )
+                ';
 
-        if ($t = $this->getSearchTimestamp()) {
-            // This is a time...
-            $sql .= 'e.starttime LIKE \''.date('Y-m-d', $t).'%\'';
-        } else {
-            // Do a textual search.
-            $sql .=
-                '(event.title LIKE \'%'.self::escapeString($this->search_query).'%\' OR '.
-                '(eventtype.name LIKE \'%'.self::escapeString($this->search_query).'%\') OR '.
+        if (!empty($this->search_query)) {
+            $audiences_explode = explode(',', $this->search_query);
+            $audiences_explode = array_map('trim', $audiences_explode);
 
-                'event.description LIKE \'%'.self::escapeString($this->search_query).'%\' OR '.
-                '(location.name LIKE \'%'.self::escapeString($this->search_query).'%\')) AND '.
-                '(e.starttime>=\''.date('Y-m-d').' 00:00:00\' OR '.
-                'e.endtime>\''.date('Y-m-d').' 00:00:00\')';
+            $sql .= ' AND (';
+            foreach($audiences_explode as $index=>$audience_single){
+                if ($index > 0) {
+                    $sql .= ' OR ';
+                }
+                $sql .= 'audience.name = \'' . self::escapeString($audience_single) . '\'';
+            }
+            $sql .= ') ';
         }
 
         if (!empty($this->search_event_type)) {
-            $sql .= ') AND ( eventtype.name = \'' . self::escapeString($this->search_event_type) .'\'';
+            $sql .= ' AND ( eventtype.name = \'' . self::escapeString($this->search_event_type) .'\')';
         }
 
-        if (!empty($this->search_event_audience)) {
-            $sql .= ') AND ( audience.name = \'' . self::escapeString($this->search_event_audience) . '\'';
+        if (!empty($this->search_event_calendar)) {
+            $sql .= ' AND ( calendar_has_event.calendar_id = \'' . (int)$this->search_event_calendar . '\') ';
         }
 
-        $sql .= ') ORDER BY (
+        $sql .= 'ORDER BY (
                         IF (recurringdate.recurringdate IS NULL,
-                          e.starttime,
-                          CONCAT(DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.starttime," %H:%i:%s"))
+                            e.starttime,
+                            CONCAT(DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.starttime," %H:%i:%s"))
                         )
                     ) ASC,
                     event.title ASC';
@@ -112,32 +109,28 @@ class Search extends EventListing implements RoutableInterface
         return $sql;
     }
 
-
-    public function getEventTypes()
+    public function getFormattedAudiences()
     {
-        return new EventTypes(array());
-    }
+        $output_string = '';
+        $audiences_explode = explode(',', $this->search_query);
+        $audiences_explode = array_map('trim', $audiences_explode);
+        $last_index = count($audiences_explode) - 1;
 
-    public function getAudiences()
-    {
-        return new Audiences(array());
-    }
-
-    /**
-     * Determine the unix timestamp of the search
-     * 
-     * @return bool|int - false if not a date search, otherwise return the unix timestamp of the date search
-     */
-    public function getSearchTimestamp()
-    {
-        if (($t = strtotime($this->search_query)) && ($this->search_query != 'art')) {
-            // This is a time...
-            return $t;
+        foreach($audiences_explode as $index=>$audience_single){
+            if ($index > 0 && $last_index >= 2) {
+                $output_string .= ', ';
+            }else if($index > 0){
+                $output_string .= ' ';
+            }
+            if ($index === $last_index){
+                $output_string .= 'and ';
+            }
+            $output_string .= $audience_single;
         }
-        
-        return false;
+
+        return $output_string;
     }
-    
+
     /**
      * returns the url to this search page.
      *
@@ -145,12 +138,12 @@ class Search extends EventListing implements RoutableInterface
      */
     public function getURL()
     {
-        $url = $this->options['calendar']->getURL() . 'search/';
+        $url = 'audience/';
         
         if (!empty($this->search_query)) {
             $url .= '?q=' . urlencode($this->search_query);
         }
-        
+
         return $url;
     }
     
