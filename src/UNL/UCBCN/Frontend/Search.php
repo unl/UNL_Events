@@ -1,14 +1,14 @@
 <?php
 /**
  * Search class for frontend users to search for events.
- * 
+ *
  * PHP version 5
- * 
+ *
  * @category  Events
  * @package   UNL_UCBCN_Frontend
  * @author    Brett Bieber <brett.bieber@gmail.com>
  * @copyright 2009 Regents of the University of Nebraska
- * @license   http://www1.unl.edu/wdn/wiki/Software_License BSD License 
+ * @license   http://www1.unl.edu/wdn/wiki/Software_License BSD License
  * @version   CVS: $id$
  * @link      http://code.google.com/p/unl-event-publisher/
  * @todo      Add searching by eventtype.
@@ -23,12 +23,12 @@ use UNL\UCBCN\Event;
  * Container for search results for the frontend.
  *
  * PHP version 5
- * 
+ *
  * @category  Events
  * @package   UNL_UCBCN_Frontend
  * @author    Brett Bieber <brett.bieber@gmail.com>
  * @copyright 2009 Regents of the University of Nebraska
- * @license   http://www1.unl.edu/wdn/wiki/Software_License BSD License 
+ * @license   http://www1.unl.edu/wdn/wiki/Software_License BSD License
  * @link      http://code.google.com/p/unl-event-publisher/
  */
 class Search extends EventListing implements RoutableInterface
@@ -47,11 +47,10 @@ class Search extends EventListing implements RoutableInterface
     {
 
         // Removed error for when search query is empty because I think it would be useful
-
         $this->search_query = $options['q'] ?? "";
         $this->search_event_type = $options['type'] ?? "";
         $this->search_event_audience = $options['audience'] ?? "";
-        
+
         parent::__construct($options);
     }
 
@@ -60,7 +59,7 @@ class Search extends EventListing implements RoutableInterface
      *
      * @see \UNL\UCBCN\ActiveRecord\RecordList::getSQL()
      */
-    function getSQL()
+    protected function getSQL()
     {
         $sql = 'SELECT DISTINCT e.id as id, recurringdate.id as recurringdate_id
                 FROM eventdatetime as e
@@ -92,7 +91,7 @@ class Search extends EventListing implements RoutableInterface
                 'e.endtime>\''.date('Y-m-d').' 00:00:00\')';
         }
 
-        // Adds filter for event type 
+        // Adds filter for event type
         if (!empty($this->search_event_type)) {
             $sql .= ') AND ( eventtype.name = \'' . self::escapeString($this->search_event_type) .'\'';
         }
@@ -115,7 +114,7 @@ class Search extends EventListing implements RoutableInterface
 
     /**
      * Gets list of all event types
-     * 
+     *
      * @return bool|EventTypes - false if no event type, otherwise return recordList of all event types
      */
     public function getEventTypes()
@@ -125,7 +124,7 @@ class Search extends EventListing implements RoutableInterface
 
     /**
      * Gets list of all audiences
-     * 
+     *
      * @return bool|Audiences - false if no audiences, otherwise return recordList of all audiences
      */
     public function getAudiences()
@@ -135,7 +134,7 @@ class Search extends EventListing implements RoutableInterface
 
     /**
      * Determine the unix timestamp of the search
-     * 
+     *
      * @return bool|int - false if not a date search, otherwise return the unix timestamp of the date search
      */
     public function getSearchTimestamp()
@@ -144,10 +143,10 @@ class Search extends EventListing implements RoutableInterface
             // This is a time...
             return $t;
         }
-        
+
         return false;
     }
-    
+
     /**
      * returns the url to this search page.
      *
@@ -156,12 +155,12 @@ class Search extends EventListing implements RoutableInterface
     public function getURL()
     {
         $url = $this->options['calendar']->getURL() . 'search/';
-        
+
         if (!empty($this->search_query)) {
             $url .= '?q=' . urlencode($this->search_query);
         }
-        
+
         return $url;
     }
-    
+
 }

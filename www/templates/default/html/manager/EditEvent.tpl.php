@@ -172,7 +172,7 @@
                                 id="<?php echo $target_audience_id; ?>"
                                 name="<?php echo $target_audience_id; ?>"
                                 type="checkbox"
-                                value="<?php echo($audience->id); ?>"
+                                value="<?php echo $audience->id; ?>"
                                 <?php if ($audience_match) { echo CHECKED_INPUT; } ?>
                             >
                             <label for="<?php echo $target_audience_id; ?>">

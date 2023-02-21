@@ -51,11 +51,11 @@
                                 name="<?php echo $target_audience_id; ?>"
                                 type="checkbox"
                                 value="<?php echo $audience->id; ?>"
-                                <?php 
+                                <?php
                                     if (isset($post[$target_audience_id]) &&
                                         $post[$target_audience_id] == $audience->id) {
-                                            echo CHECKED_INPUT; 
-                                    } 
+                                            echo CHECKED_INPUT;
+                                    }
                                 ?>
                             >
                             <label for="<?php echo $target_audience_id; ?>">

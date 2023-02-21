@@ -1,4 +1,6 @@
 <?php
+    $selected_html = 'selected="selected"';
+
     $audiences_available_names = array(); // These are only here so we can check if we have already stored them
     $audiences_available = array();
     $audiences_unavailable = $context->getAudiences();
@@ -15,7 +17,7 @@
         $event_audiences = $event->getAudiences();
 
         // check and store the event type
-        if ($event_eventType !== NULL && !in_array($event_eventType->name, $event_types_available_names)) {
+        if ($event_eventType !== null && !in_array($event_eventType->name, $event_types_available_names)) {
             $event_types_available_names[] = $event_eventType->name;
             $event_types_available[] = $event_eventType;
         }
@@ -24,7 +26,7 @@
         foreach ($event_audiences as $event_audience) {
             $audience = $event_audience->getAudience();
 
-            if (!in_array($audience->name, $audiences_available_names)){
+            if (!in_array($audience->name, $audiences_available_names)) {
                 $audiences_available_names[] = $audience->name;
                 $audiences_available[] = $audience;
             }
@@ -47,8 +49,8 @@
             <a class="permalink"
             <?php
                 if ($dt = $context->getSearchTimestamp()) {
-                    echo 'href="'.$context->getURL().'">'.date('F jS',$dt);
-                } else if (empty($context->search_query)) {
+                    echo 'href="'.$context->getURL().'">'.date('F jS', $dt);
+                } elseif (empty($context->search_query)) {
                     echo 'href="'.$context->getURL().'"> \'Any\'';
                 } else {
                     echo 'href="'.$context->getURL().'">'.htmlentities($context->search_query);
@@ -71,15 +73,17 @@
                     <label for="type">Type</label>
                     <select class="dcf-w-100%" id="type" name="type">
                         <option
-                            <?php if ($context->search_event_type == "") { echo 'selected="selected"'; } ?>
+                            <?php if ($context->search_event_type == "") { echo $selected_html; } ?>
                             value=""
                         >
                             N/A
                         </option>
-                        <optgroup label="Available Types <?php if (count($event_types_available) === 0) { echo "(None Available)"; }?>">
+                        <optgroup label="Available Types 
+                            <?php if (count($event_types_available) === 0) { echo "(None Available)"; }?>"
+                        >
                             <?php foreach ($event_types_available as $type) { ?>
                                 <option
-                                    <?php if ($context->search_event_type == $type->name) { echo 'selected="selected"'; } ?>
+                                    <?php if ($context->search_event_type == $type->name) { echo $selected_html; } ?>
                                     value="<?php echo $type->name; ?>"
                                 >
                                     <?php echo $type->name; ?>
@@ -89,7 +93,11 @@
                         <optgroup label="All Types">
                             <?php foreach ($context->getEventTypes() as $type) { ?>
                                 <option
-                                    <?php if ($context->search_event_type == $type->name && count($event_types_available) === 0) { echo 'selected="selected"'; } ?>
+                                    <?php if ($context->search_event_type == $type->name && 
+                                        count($event_types_available) === 0) { 
+                                            echo $selected_html; 
+                                        } 
+                                    ?>
                                     value="<?php echo $type->name; ?>"
                                 >
                                     <?php echo $type->name; ?>
@@ -102,15 +110,20 @@
                     <label for="audience">Target Audience</label>
                     <select class="dcf-w-100%" id="audience" name="audience">
                         <option
-                            <?php if ($context->search_event_audience == "") { echo 'selected="selected"'; } ?>
+                            <?php if ($context->search_event_audience == "") { echo $selected_html; } ?>
                             value=""
                         >
                             N/A
                         </option>
-                        <optgroup label="Available Audiences <?php if (count($audiences_available) === 0) { echo "(None Available)"; }?>">
+                        <optgroup label="Available Audiences 
+                            <?php if (count($audiences_available) === 0) { echo "(None Available)"; }?>"
+                        >
                             <?php foreach ($audiences_available as $audience) { ?>
                                 <option
-                                    <?php if ($context->search_event_audience == $audience->name) { echo 'selected="selected"'; } ?>
+                                    <?php if ($context->search_event_audience == $audience->name) { 
+                                            echo $selected_html; 
+                                        } 
+                                    ?>
                                     value="<?php echo $audience->name; ?>"
                                 >
                                     <?php echo $audience->name; ?>
@@ -120,7 +133,11 @@
                         <optgroup label="All Audiences">
                             <?php foreach ($context->getAudiences() as $audience) { ?>
                                 <option
-                                    <?php if ($context->search_event_audience == $audience->name && count($audiences_available) === 0) { echo 'selected="selected"'; } ?>
+                                    <?php if ($context->search_event_audience == $audience->name && 
+                                        count($audiences_available) === 0) { 
+                                            echo $selected_html; 
+                                        }
+                                    ?>
                                     value="<?php echo $audience->name; ?>"
                                 >
                                     <?php echo $audience->name; ?>

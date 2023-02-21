@@ -1,1 +1,1 @@
-<?php echo $savvy->render($context, 'EventListing.tpl.php'); ?>
+<?php echo $savvy->render($context, 'EventListing.tpl.php');

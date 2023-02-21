@@ -84,7 +84,19 @@ if ($context->getCalendar()) {
                                     <form class="dcf-form" id="event_search" method="get" action="' . $frontend->getCalendarURL() . 'search/" role="search">
                                         <label for="searchinput">Search Events</label>
                                         <div class="dcf-input-group">
-                                            <input type="text" name="q" id="searchinput" placeholder="e.g., Monday, tomorrow" value="' . ((isset($context->options['q']) && (strpos($context->output->getURL(), '/audience') !== 0 && strpos($context->output->getURL(), '/eventtype') !== 0))?$context->options['q']:'') . '"/>
+                                            <input
+                                                type="text"
+                                                name="q"
+                                                id="searchinput"
+                                                placeholder="e.g., Monday, tomorrow"
+                                                value="' .
+                                                    (
+                                                        (isset($context->options['q']
+                                                    ) && (
+                                                        strpos($context->output->getURL(), '/audience') !== 0 &&
+                                                        strpos($context->output->getURL(), '/eventtype') !== 0)
+                                                    )?$context->options['q']:'') .
+                                                '"/>
 
                                             <button class="dcf-btn dcf-btn-primary">
                                                 <svg class="dcf-h-5 dcf-w-5 dcf-fill-current" aria-hidden="true" focusable="false" height="16" width="16" viewBox="0 0 48 48">

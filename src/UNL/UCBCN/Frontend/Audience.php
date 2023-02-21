@@ -1,17 +1,16 @@
 <?php
 /**
  * Audience search class for frontend users to search for events from all calendars
- * 
+ *
  * PHP version 5
- * 
+ *
  * @category  Events
  * @package   UNL_UCBCN_Frontend
  * @author    Thomas Neumann <tneumann9@unl.edu>
  * @copyright 2023 Regents of the University of Nebraska
- * @license   http://www1.unl.edu/wdn/wiki/Software_License BSD License 
+ * @license   http://www1.unl.edu/wdn/wiki/Software_License BSD License
  * @version   CVS: $id$
  * @link      http://code.google.com/p/unl-event-publisher/
- * @todo      Add searching by eventtype.
  */
 namespace UNL\UCBCN\Frontend;
 
@@ -19,12 +18,12 @@ namespace UNL\UCBCN\Frontend;
  * Container for audience search results for the frontend.
  *
  * PHP version 5
- * 
+ *
  * @category  Events
  * @package   UNL_UCBCN_Frontend
  * @author    Thomas Neumann <tneumann9@unl.edu>
  * @copyright 2023 Regents of the University of Nebraska
- * @license   http://www1.unl.edu/wdn/wiki/Software_License BSD License 
+ * @license   http://www1.unl.edu/wdn/wiki/Software_License BSD License
  * @link      http://code.google.com/p/unl-event-publisher/
  */
 class Audience extends EventListing implements RoutableInterface
@@ -44,13 +43,13 @@ class Audience extends EventListing implements RoutableInterface
         if (empty($options['q'])) {
             throw new UnexpectedValueException('Enter an audience to search for events.', 400);
         }
-        
+
         // List of audiences (Comma separated)
         $this->search_query = $options['q'] ?? "";
 
         $this->search_event_type = $options['type'] ?? "";
         $this->search_event_calendar = $options['calendar_id'] ?? "";
-        
+
         parent::__construct($options);
     }
 
@@ -59,7 +58,7 @@ class Audience extends EventListing implements RoutableInterface
      *
      * @see \UNL\UCBCN\ActiveRecord\RecordList::getSQL()
      */
-    function getSQL()
+    protected function getSQL()
     {
         $sql = 'SELECT DISTINCT e.id as id, recurringdate.id as recurringdate_id
                 FROM eventdatetime as e
@@ -71,7 +70,7 @@ class Audience extends EventListing implements RoutableInterface
                 LEFT JOIN event_targets_audience ON (event_targets_audience.event_id = event.id)
                 LEFT JOIN audience ON (audience.id = event_targets_audience.audience_id)
                 LEFT JOIN location ON (location.id = e.location_id)
-                WHERE calendar_has_event.status IN ("posted", "archived") AND 
+                WHERE calendar_has_event.status IN ("posted", "archived") AND
                     (
                         e.starttime>=\''. date('Y-m-d') .' 00:00:00\' OR
                         e.endtime>\''. date('Y-m-d') .' 00:00:00\'
@@ -84,7 +83,7 @@ class Audience extends EventListing implements RoutableInterface
             $audiences_explode = array_map('trim', $audiences_explode);
 
             $sql .= ' AND (';
-            foreach($audiences_explode as $index=>$audience_single){
+            foreach ($audiences_explode as $index => $audience_single) {
                 if ($index > 0) {
                     $sql .= ' OR ';
                 }
@@ -107,7 +106,10 @@ class Audience extends EventListing implements RoutableInterface
         $sql .= 'ORDER BY (
                         IF (recurringdate.recurringdate IS NULL,
                             e.starttime,
-                            CONCAT(DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.starttime," %H:%i:%s"))
+                            CONCAT(
+                                DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),
+                                DATE_FORMAT(e.starttime," %H:%i:%s")
+                            )
                         )
                     ) ASC,
                     event.title ASC';
@@ -127,13 +129,13 @@ class Audience extends EventListing implements RoutableInterface
         $audiences_explode = array_map('trim', $audiences_explode);
         $last_index = count($audiences_explode) - 1;
 
-        foreach($audiences_explode as $index=>$audience_single){
+        foreach ($audiences_explode as $index => $audience_single) {
             if ($index > 0 && $last_index >= 2) {
                 $output_string .= ', ';
-            }else if($index > 0){
+            } else if($index > 0) {
                 $output_string .= ' ';
             }
-            if ($index === $last_index && $index > 0){
+            if ($index === $last_index && $index > 0) {
                 $output_string .= 'and ';
             }
             $output_string .= $audience_single;
@@ -150,7 +152,7 @@ class Audience extends EventListing implements RoutableInterface
     public function getURL()
     {
         $url = '/audience/';
-        
+
         if (!empty($this->search_query)) {
             $url .= '?q=' . urlencode($this->search_query);
         }

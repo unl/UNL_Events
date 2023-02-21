@@ -22,7 +22,7 @@
     <span class="dcf-sr-only">Target Audiences:</span>
     <?php
         $output = "";
-        foreach ($event_target_audience as $index=>$audience) {
+        foreach ($event_target_audience as $index => $audience) {
             $current_audience = $audience->getAudience();
             $output .= '<a href="' . $frontend->getAudienceURL() . '?q=' . $current_audience->name . '" >';
             $output .= $current_audience->name;
