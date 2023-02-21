@@ -290,6 +290,11 @@ class Controller
         return Week::generateURL($this->options['calendar'], new \DateTime);
     }
 
+    public function getAudienceURL()
+    {
+        return $this->getURL() . 'audience/';
+    }
+
     /**
      * Gets the specified event instance.
      *

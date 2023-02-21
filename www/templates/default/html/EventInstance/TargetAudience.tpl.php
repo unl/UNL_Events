@@ -2,21 +2,9 @@
     // Gets the event and audience
     $event = $context->eventdatetime->getEvent();
     $event_target_audience = $event->getAudiences();
-
-    // creates a list of target audience
-    $audience_text = "";
-    foreach ($event_target_audience as $audience) {
-        $current_audience = $audience->getAudience();
-
-        if (!empty($audience_text)) {
-            $audience_text .= ", ";
-        }
-
-        $audience_text .= $current_audience->name;
-    }
 ?>
 
-<?php if (!empty($audience_text)): ?>
+<?php if (isset($event_target_audience) && count($event_target_audience) > 0): ?>
 <span class="target-audience">
     <svg
         class="dcf-mr-1 dcf-h-4 dcf-w-4 dcf-fill-current"
@@ -32,6 +20,19 @@
         </g>
     </svg>
     <span class="dcf-sr-only">Target Audiences:</span>
-    <?php echo $audience_text; ?>
+    <?php
+        $output = "";
+        foreach ($event_target_audience as $index=>$audience) {
+            $current_audience = $audience->getAudience();
+            $output .= '<a href="' . $frontend->getAudienceURL() . '?q=' . $current_audience->name . '" >';
+            $output .= $current_audience->name;
+            $output .= '</a>';
+
+            if ($index + 1 < count($event_target_audience)) {
+                $output .= ', ';
+            }
+        }
+        echo $output;
+    ?>
 </span>
 <?php endif; ?>
