@@ -464,7 +464,7 @@ class Event extends Record
             $record->delete();
         }
 
-        # delete the event has eventtype record(s)
+        # delete the event has target audience record(s)
         $target_audiences = $this->getAudiences();
         foreach ($target_audiences as $record) {
             $record->delete();

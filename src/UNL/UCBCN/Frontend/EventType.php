@@ -1,13 +1,13 @@
 <?php
 /**
- * Search class for frontend users to search for events.
+ * Event type search class for frontend users to search for events for all calendars
  * 
  * PHP version 5
  * 
  * @category  Events
  * @package   UNL_UCBCN_Frontend
- * @author    Brett Bieber <brett.bieber@gmail.com>
- * @copyright 2009 Regents of the University of Nebraska
+ * @author    Thomas Neumann <tneumann9@unl.edu>
+ * @copyright 2023 Regents of the University of Nebraska
  * @license   http://www1.unl.edu/wdn/wiki/Software_License BSD License 
  * @version   CVS: $id$
  * @link      http://code.google.com/p/unl-event-publisher/
@@ -16,14 +16,14 @@
 namespace UNL\UCBCN\Frontend;
 
 /**
- * Container for search results for the frontend.
+ * Container for event type search results for the frontend.
  *
  * PHP version 5
  * 
  * @category  Events
  * @package   UNL_UCBCN_Frontend
- * @author    Brett Bieber <brett.bieber@gmail.com>
- * @copyright 2009 Regents of the University of Nebraska
+ * @author    Thomas Neumann <tneumann9@unl.edu>
+ * @copyright 2023 Regents of the University of Nebraska
  * @license   http://www1.unl.edu/wdn/wiki/Software_License BSD License 
  * @link      http://code.google.com/p/unl-event-publisher/
  */
@@ -44,8 +44,10 @@ class EventType extends EventListing implements RoutableInterface
         if (empty($options['q'])) {
             throw new UnexpectedValueException('Enter an event type to search for events.', 400);
         }
-        
+
+        // List of event types (comma separated)
         $this->search_query = $options['q'] ?? "";
+
         $this->search_event_audience = $options['audience'] ?? "";
         $this->search_event_calendar = $options['calendar_id'] ?? "";
         
@@ -76,6 +78,7 @@ class EventType extends EventListing implements RoutableInterface
                     )
                 ';
 
+        // splits the event types by comma and creates the SQL for those
         if (!empty($this->search_query)) {
             $eventtype_explode = explode(',', $this->search_query);
             $eventtype_explode = array_map('trim', $eventtype_explode);
@@ -90,14 +93,17 @@ class EventType extends EventListing implements RoutableInterface
             $sql .= ') ';
         }
 
+        // Adds any filters for target audience
         if (!empty($this->search_event_audience)) {
             $sql .= ' AND ( audience.name = \'' . self::escapeString($this->search_event_audience) .'\')';
         }
 
+        // Adds any filters for calendar id
         if (!empty($this->search_event_calendar)) {
             $sql .= ' AND ( calendar_has_event.calendar_id = \'' . (int)$this->search_event_calendar . '\') ';
         }
 
+        // Adds remaining sql
         $sql .= 'ORDER BY (
                         IF (recurringdate.recurringdate IS NULL,
                             e.starttime,
@@ -109,6 +115,11 @@ class EventType extends EventListing implements RoutableInterface
         return $sql;
     }
 
+    /**
+     * returns nicely formatted string of the audiences from the search query
+     *
+     * @return string
+     */
     public function getFormattedEventTypes()
     {
         $output_string = '';
@@ -132,7 +143,7 @@ class EventType extends EventListing implements RoutableInterface
     }
 
     /**
-     * returns the url to this search page.
+     * returns the url to this eventtype page.
      *
      * @return string
      */

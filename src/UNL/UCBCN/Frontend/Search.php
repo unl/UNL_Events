@@ -45,10 +45,9 @@ class Search extends EventListing implements RoutableInterface
      */
     public function __construct($options=array())
     {
-        // if (empty($options['q'])) {
-        //     throw new UnexpectedValueException('Enter a search string to search for events.', 400);
-        // }
-        
+
+        // Removed error for when search query is empty because I think it would be useful
+
         $this->search_query = $options['q'] ?? "";
         $this->search_event_type = $options['type'] ?? "";
         $this->search_event_audience = $options['audience'] ?? "";
@@ -93,10 +92,12 @@ class Search extends EventListing implements RoutableInterface
                 'e.endtime>\''.date('Y-m-d').' 00:00:00\')';
         }
 
+        // Adds filter for event type 
         if (!empty($this->search_event_type)) {
             $sql .= ') AND ( eventtype.name = \'' . self::escapeString($this->search_event_type) .'\'';
         }
 
+        // Adds filters for target audience
         if (!empty($this->search_event_audience)) {
             $sql .= ') AND ( audience.name = \'' . self::escapeString($this->search_event_audience) . '\'';
         }
@@ -112,12 +113,21 @@ class Search extends EventListing implements RoutableInterface
         return $sql;
     }
 
-
+    /**
+     * Gets list of all event types
+     * 
+     * @return bool|EventTypes - false if no event type, otherwise return recordList of all event types
+     */
     public function getEventTypes()
     {
         return new EventTypes(array());
     }
 
+    /**
+     * Gets list of all audiences
+     * 
+     * @return bool|Audiences - false if no audiences, otherwise return recordList of all audiences
+     */
     public function getAudiences()
     {
         return new Audiences(array());

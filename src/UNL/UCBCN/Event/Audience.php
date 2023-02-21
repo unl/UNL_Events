@@ -11,8 +11,8 @@ use UNL\UCBCN\Event;
  *
  * @category  Events
  * @package   UNL_UCBCN
- * @author    Brett Bieber <brett.bieber@gmail.com>
- * @copyright 2009 Regents of the University of Nebraska
+ * @author    Thomas Neumann <tneumann9@unl.edu>
+ * @copyright 2023 Regents of the University of Nebraska
  * @license   http://www1.unl.edu/wdn/wiki/Software_License BSD License
  * @link      http://code.google.com/p/unl-event-publisher/
  */
@@ -21,8 +21,8 @@ use UNL\UCBCN\Event;
  * ORM for a record within the database.
  *
  * @package   UNL_UCBCN
- * @author    Brett Bieber <brett.bieber@gmail.com>
- * @copyright 2009 Regents of the University of Nebraska
+ * @author    Thomas Neumann <tneumann9@unl.edu>
+ * @copyright 2023 Regents of the University of Nebraska
  * @license   http://www1.unl.edu/wdn/wiki/Software_License BSD License
  * @link      http://code.google.com/p/unl-event-publisher/
  */
@@ -46,9 +46,9 @@ class Audience extends Record
     }
     
     /**
-     * Get the event type record (details) for this link
+     * Get the audience record (details) for this link
      *
-     * @return false|\UNL\UCBCN\Calendar\Audience - the event type record or false
+     * @return false|\UNL\UCBCN\Calendar\Audience - the audience record or false
      */
     public function getAudience()
     {
