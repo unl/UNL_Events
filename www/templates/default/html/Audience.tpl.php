@@ -2,7 +2,7 @@
     <section class="dcf-col-100% dcf-col-33%-start@md">
         <h2 class="results clear-top">
             <span class="dcf-subhead dcf-d-block">
-                <?php echo $context->count().' search results for audience(s)'; ?>
+                <?php echo $context->count().' search results from all calendars for audience(s)'; ?>
             </span>
             <a class="permalink dcf-d-block"
                 <?php
