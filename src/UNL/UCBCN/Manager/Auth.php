@@ -15,12 +15,11 @@ class Auth
 
     public function __construct()
     {
-        // Taken out for better searches
-        // if (!file_exists(self::$certPath)) {
-        //     self::$certPath = GuzzleHttp\default_ca_bundle();
-        // }
+        if (!file_exists(self::$certPath)) {
+            self::$certPath = GuzzleHttp\default_ca_bundle();
+        }
 
-        $this->auth = new AuthCAS('2.0', 'shib.unl.edu', 443, '/idp/profile/cas', false, self::$eventsAuthSessionName);
+        $this->auth = new AuthCAS('2.0', 'shib.unl.edu', 443, '/idp/profile/cas', self::$certPath, self::$eventsAuthSessionName);
     }
 
     /**
