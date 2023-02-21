@@ -6,8 +6,12 @@
 
 <?php if (isset($context->event->subtitle)): ?><header><?php endif; ?>
     <?php if (isset($event_event_type) && !empty($event_event_type)): ?>
-        <small class="dcf-badge dcf-badge-roundrect">
-            <a href="<?php echo $frontend->getEventTypeURL() . '?q=' . $event_event_type->name; ?>" style="color: inherit;">
+        <small class="dcf-badge dcf-badge-roundrect dcf-mb-4">
+            <a
+                class="dcf-txt-decor-hover"
+                href="<?php echo $frontend->getEventTypeURL() . '?q=' . $event_event_type->name; ?>"
+                style="color: inherit;"
+            >
                 <?php echo $event_event_type->name; ?>
             </a>
         </small>
