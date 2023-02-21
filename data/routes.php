@@ -24,6 +24,7 @@ $format   = '(\.(?P<format>[\w]+))?';
 
 $routes['/^images\/(?P<id>[\d]+)$/']                                                                       = 'UNL\UCBCN\Frontend\Image';
 $routes['/^'.'audience'.'(\/)?$/']                                                                         = 'UNL\UCBCN\Frontend\Audience';
+$routes['/^'.'eventtype'.'(\/)?$/']                                                                        = 'UNL\UCBCN\Frontend\EventType';
 $routes['/^'.$calendar_slash_required.'upcoming'.'(\/)?'.$format.'$/']                                     = 'UNL\UCBCN\Frontend\Upcoming';
 $routes['/^'.$calendar_slash_required.'featured'.'(\/)?'.$format.'$/']                                     = 'UNL\UCBCN\Frontend\Featured';
 $routes['/^'.$calendar_slash_required.'range'.'(\/)?'.$format.'$/']                                        = 'UNL\UCBCN\Frontend\Range';

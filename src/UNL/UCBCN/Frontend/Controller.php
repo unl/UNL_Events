@@ -295,6 +295,11 @@ class Controller
         return $this->getURL() . 'audience/';
     }
 
+    public function getEventTypeURL()
+    {
+        return $this->getURL() . 'eventtype/';
+    }
+
     /**
      * Gets the specified event instance.
      *
