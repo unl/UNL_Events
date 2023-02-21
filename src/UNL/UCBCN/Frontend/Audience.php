@@ -138,7 +138,7 @@ class Audience extends EventListing implements RoutableInterface
      */
     public function getURL()
     {
-        $url = 'audience/';
+        $url = '/audience/';
         
         if (!empty($this->search_query)) {
             $url .= '?q=' . urlencode($this->search_query);
@@ -146,5 +146,4 @@ class Audience extends EventListing implements RoutableInterface
 
         return $url;
     }
-    
 }
