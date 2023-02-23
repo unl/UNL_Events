@@ -31,8 +31,8 @@ class Audience extends EventListing implements RoutableInterface
     public $search_query = '';
     public $search_event_type = '';
     public $search_event_calendar = '';
-    public $search_limit = 100;
-    public $search_offset = 0;
+    public $limit = 100;
+    public $offset = 0;
 
     /**
      * Constructs this search output.
@@ -52,12 +52,22 @@ class Audience extends EventListing implements RoutableInterface
         $this->search_event_type = $options['type'] ?? "";
         $this->search_event_calendar = $options['calendar_id'] ?? "";
 
-        $this->search_limit = $options['q_limit'] ?? 100;
-        $this->search_offset = $options['q_offset'] ?? 0;
+        if (!isset($options['format']) || $options['format'] !== 'json') {
+            if (!isset($options['limit']) ||
+                empty($options['limit']) ||
+                intval($options['limit']) > 100 ||
+                intval($options['limit']) <= 0
+            ) {
+                $options['limit'] = 100;
+            }
 
-        if (intval($this->search_limit) > 100) { $this->search_limit = 100; }
-        if (intval($this->search_limit) <= 0)  { $this->search_limit = 1; }
-        if (intval($this->search_offset) < 0) { $this->search_offset = 0; }
+            if (!isset($options['offset']) || empty($options['offset']) ||  intval($options['offset']) <= 0) {
+                $options['offset'] = 0;
+            }
+        }
+
+        $this->limit = $options['limit'];
+        $this->offset = $options['offset'];
 
         parent::__construct($options);
     }
@@ -122,9 +132,6 @@ class Audience extends EventListing implements RoutableInterface
                         )
                     ) ASC,
                     event.title ASC';
-
-        $sql .= " limit " . (int) $this->search_limit;
-        $sql .= " offset " . (int) $this->search_offset;
 
         return $sql;
     }

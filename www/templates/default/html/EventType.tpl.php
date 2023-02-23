@@ -20,48 +20,63 @@
 
         <?php if($context->count() > 0): ?>
             <div class="dcf-d-flex dcf-flex-row dcf-flex-nowrap dcf-jc-between dcf-ai-end dcf-mt-3">
-                <?php 
-                    $previous_offset = $context->search_offset - $context->search_limit;
-                    $next_offset     = $context->search_offset + $context->search_limit;
+                <?php
+                    $previous_offset = $context->offset - $context->limit;
+                    $next_offset     = $context->offset + $context->limit;
 
                     $previous_link = $context->getURL();
                     $next_link     = $context->getURL();
 
-                    if ($context->search_limit != 100) {
-                        $previous_link .= '&q_limit=' . $context->search_limit;
-                        $next_link     .= '&q_limit=' . $context->search_limit;
+                    if ($context->limit != 100) {
+                        $previous_link .= '&limit=' . $context->limit;
+                        $next_link     .= '&limit=' . $context->limit;
                     }
 
-                    if ($previous_offset != 0) {
-                        $previous_link .= '&q_offset=' . $previous_offset;
+                    if ($previous_offset > 0) {
+                        $previous_link .= '&offset=' . $previous_offset;
                     }
 
-                    $next_link     .= '&q_offset=' . $next_offset;
+                    if ($next_offset < $context->count()) {
+                        $next_link .= '&offset=' . $next_offset;
+                    }
                 ?>
+
                 <?php if ($previous_offset < 0): ?>
                     <?php // We wanted to be able to disable this but you can not disable a link ?>
-                    <button 
-                        class="dcf-btn dcf-btn-primary"
+                    <button
+                        class="dcf-btn dcf-btn-secondary"
                         disabled
                     >
-                        Previous <?php echo $context->search_limit; ?> 
+                        Previous <?php echo $context->limit; ?>
                     </button>
                 <?php else: ?>
                     <a
-                        class="dcf-btn dcf-btn-primary"
+                        class="dcf-btn dcf-btn-secondary"
                         href="<?php echo $previous_link; ?>"
                     >
-                        Previous <?php echo $context->search_limit; ?> 
+                        Previous <?php echo $context->limit; ?>
                     </a>
                 <?php endif; ?>
-                    
-                <p>Only Displaying <?php echo $context->search_limit; ?> Results at a time</p>
-                <a
-                    class="dcf-btn dcf-btn-primary"
-                    href="<?php echo $next_link; ?>"
-                >
-                    Next <?php echo $context->search_limit; ?> 
-                </a>
+
+                <p class="dcf-txt-xs">Only Displaying <?php echo $context->limit; ?> Results at a time</p>
+
+                <?php if ($next_offset > $context->count()): ?>
+                    <?php // We wanted to be able to disable this but you can not disable a link ?>
+                    <button
+                        class="dcf-btn dcf-btn-secondary"
+                        disabled
+                    >
+                        Next <?php echo $context->limit; ?>
+                    </button>
+                <?php else: ?>
+                    <a
+                        class="dcf-btn dcf-btn-secondary"
+                        href="<?php echo $next_link; ?>"
+                    >
+                        Next <?php echo $context->limit; ?>
+                    </a>
+                <?php endif; ?>
+
             </div>
         <?php endif; ?>
     </section>
