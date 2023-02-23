@@ -33,8 +33,9 @@
                 <textarea id="description" name="description" rows="4" ><?php echo $event->description; ?></textarea>
             </div>
             <div class="dcf-form-group">
-                <label for="type">Type</label>
-                <select class="dcf-w-100%" id="type" name="type">
+                <label for="type">Type <small class="dcf-required">Required</small></label>
+                <select class="dcf-w-100%" id="type" name="type" required>
+                    <option <?php if (!isset($post['type'])) echo 'selected="selected"' ?> disabled="disabled" value="">Please Select One</option>
                     <?php foreach ($context->getEventTypes() as $type) { ?>
                       <option <?php if (isset($post['type']) && $post['type'] == $type->id) echo 'selected="selected"' ?> value="<?php echo $type->id ?>"><?php echo $type->name ?></option>
                   <?php } ?>

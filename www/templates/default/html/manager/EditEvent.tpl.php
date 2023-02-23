@@ -133,20 +133,21 @@
                 <textarea id="description" name="description" rows="4"><?php echo $event->description; ?></textarea>
             </div>
             <div class="dcf-form-group">
-                <label for="type">Type</label>
+                <label for="type">Type <small class="dcf-required">Required</small></label>
                 <select id="type" name="type">
-                <?php foreach ($context->getEventTypes() as $type) { ?>
-                    <option
-                        <?php
-                            if ($event_type != null && $event_type->id == $type->id) {
-                                echo 'selected="selected"';
-                            }
-                        ?>
-                        value="<?php echo $type->id; ?>"
-                    >
-                        <?php echo $type->name; ?>
-                    </option>
-                <?php } ?>
+                    <option <?php if (empty($context->getEventTypes())) echo 'selected="selected"' ?> disabled="disabled" value="">Please Select One</option>
+                    <?php foreach ($context->getEventTypes() as $type) { ?>
+                        <option
+                            <?php
+                                if ($event_type != null && $event_type->id == $type->id) {
+                                    echo 'selected="selected"';
+                                }
+                            ?>
+                            value="<?php echo $type->id; ?>"
+                        >
+                            <?php echo $type->name; ?>
+                        </option>
+                    <?php } ?>
                 </select>
             </div>
             <fieldset>
