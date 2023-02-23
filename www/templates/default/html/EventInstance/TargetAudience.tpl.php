@@ -5,7 +5,7 @@
 ?>
 
 <?php if (isset($event_target_audience) && count($event_target_audience) > 0): ?>
-<span class="target-audience">
+<span class="target-audience dcf-d-flex dcf-flex-row dcf-flex-nowrap">
     <svg
         class="dcf-mr-1 dcf-h-4 dcf-w-4 dcf-fill-current"
         aria-hidden="true"
@@ -20,19 +20,21 @@
         </g>
     </svg>
     <span class="dcf-sr-only">Target Audiences:</span>
-    <?php
-        $output = "";
-        foreach ($event_target_audience as $index => $audience) {
-            $current_audience = $audience->getAudience();
-            $output .= '<a href="' . $frontend->getAudienceURL() . '?q=' . $current_audience->name . '" >';
-            $output .= $current_audience->name;
-            $output .= '</a>';
+    <div>
+        <?php
+            $output = "";
+            foreach ($event_target_audience as $index => $audience) {
+                $current_audience = $audience->getAudience();
+                $output .= '<a class="dcf-d-inline-block" href="' . $frontend->getAudienceURL() . '?q=' . $current_audience->name . '" >';
+                $output .= $current_audience->name;
+                $output .= '</a>';
 
-            if ($index + 1 < count($event_target_audience)) {
-                $output .= ', ';
+                if ($index + 1 < count($event_target_audience)) {
+                    $output .= ', ';
+                }
             }
-        }
-        echo $output;
-    ?>
+            echo $output;
+        ?>
+    </div>
 </span>
 <?php endif; ?>
