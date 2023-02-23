@@ -78,8 +78,8 @@
                         >
                             N/A
                         </option>
-                        <optgroup label="Available Types 
-                            <?php if (count($event_types_available) === 0) { echo "(None Available)"; }?>"
+                        <optgroup label="Available Types
+                            <?php if (empty($event_types_available)) { echo "(None Available)"; }?>"
                         >
                             <?php foreach ($event_types_available as $type) { ?>
                                 <option
@@ -93,10 +93,10 @@
                         <optgroup label="All Types">
                             <?php foreach ($context->getEventTypes() as $type) { ?>
                                 <option
-                                    <?php if ($context->search_event_type == $type->name && 
-                                        count($event_types_available) === 0) { 
-                                            echo $selected_html; 
-                                        } 
+                                    <?php if ($context->search_event_type == $type->name &&
+                                        empty($event_types_available)) {
+                                            echo $selected_html;
+                                        }
                                     ?>
                                     value="<?php echo $type->name; ?>"
                                 >
@@ -115,14 +115,14 @@
                         >
                             N/A
                         </option>
-                        <optgroup label="Available Audiences 
-                            <?php if (count($audiences_available) === 0) { echo "(None Available)"; }?>"
+                        <optgroup label="Available Audiences
+                            <?php if (empty($audiences_available)) { echo "(None Available)"; }?>"
                         >
                             <?php foreach ($audiences_available as $audience) { ?>
                                 <option
-                                    <?php if ($context->search_event_audience == $audience->name) { 
-                                            echo $selected_html; 
-                                        } 
+                                    <?php if ($context->search_event_audience == $audience->name) {
+                                            echo $selected_html;
+                                        }
                                     ?>
                                     value="<?php echo $audience->name; ?>"
                                 >
@@ -133,9 +133,9 @@
                         <optgroup label="All Audiences">
                             <?php foreach ($context->getAudiences() as $audience) { ?>
                                 <option
-                                    <?php if ($context->search_event_audience == $audience->name && 
-                                        count($audiences_available) === 0) { 
-                                            echo $selected_html; 
+                                    <?php if ($context->search_event_audience == $audience->name &&
+                                        empty($audiences_available)) {
+                                            echo $selected_html;
                                         }
                                     ?>
                                     value="<?php echo $audience->name; ?>"
@@ -150,7 +150,7 @@
                     Clear Filters
                 </button>
             </fieldset>
-            
+
         </form>
         <script>
             const form = document.querySelector('form#filter_form');

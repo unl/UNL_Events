@@ -151,10 +151,10 @@ class EventType extends EventListing implements RoutableInterface
         foreach ($eventtype_explode as $index => $eventtype_single) {
             if ($index > 0 && $last_index >= 2) {
                 $output_string .= ', ';
-            } else if($index > 0) {
+            } elseif ($index > 0) {
                 $output_string .= ' ';
             }
-            if ($index === $last_index && $index > 0){
+            if ($index === $last_index && $index > 0) {
                 $output_string .= 'and ';
             }
             $output_string .= ucwords($eventtype_single);

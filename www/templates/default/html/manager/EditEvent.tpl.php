@@ -135,7 +135,13 @@
             <div class="dcf-form-group">
                 <label for="type">Type <small class="dcf-required">Required</small></label>
                 <select id="type" name="type">
-                    <option <?php if (empty($context->getEventTypes())) echo 'selected="selected"' ?> disabled="disabled" value="">Please Select One</option>
+                    <option
+                        <?php if (empty($context->getEventTypes())) { echo 'selected="selected"'; } ?>
+                        disabled="disabled"
+                        value=""
+                    >
+                        Please Select One
+                    </option>
                     <?php foreach ($context->getEventTypes() as $type) { ?>
                         <option
                             <?php

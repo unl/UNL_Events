@@ -151,7 +151,7 @@ class Audience extends EventListing implements RoutableInterface
         foreach ($audiences_explode as $index => $audience_single) {
             if ($index > 0 && $last_index >= 2) {
                 $output_string .= ', ';
-            } else if($index > 0) {
+            } elseif ($index > 0) {
                 $output_string .= ' ';
             }
             if ($index === $last_index && $index > 0) {
