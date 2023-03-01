@@ -1,0 +1,254 @@
+
+function isUrlValid(url) {
+    return /^(https?|s?ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(url);
+}
+
+const location_buttons = document.querySelectorAll('.events-btn-location');
+location_buttons.forEach((location_button) => {
+    location_button.addEventListener('click', () => {
+        if (location_button.dataset.add === 'true') {
+            location_button.dataset.add = 'false';
+            location_button.innerHTML = location_button.innerHTML.replace('Add', 'Remove');
+            location_button.classList.remove('dcf-btn-primary');
+            location_button.classList.add('dcf-btn-secondary');
+
+            document.querySelector(`input[type='hidden'][name='${location_button.dataset.controls}_check']`).value = "1";
+
+            const location_template = document.getElementById(`${location_button.dataset.controls}_template`);
+            const location_form_group = location_template.content.cloneNode('true');
+            document.getElementById(`${location_button.dataset.controls}_container`).append(location_form_group);
+
+            setUpLocationListeners(location_button.dataset.controls);
+
+        } else {
+            location_button.dataset.add = 'true';
+            location_button.innerHTML = location_button.innerHTML.replace('Remove', 'Add');
+            location_button.classList.remove('dcf-btn-secondary');
+            location_button.classList.add('dcf-btn-primary');
+
+            document.querySelector(`input[type='hidden'][name='${location_button.dataset.controls}']`).value = "0";
+
+            document.getElementById(`${location_button.dataset.controls}_container`).innerHTML = "";
+        }
+    });
+});
+
+function setUpLocationListeners(location_id) {
+    if (location_id == "physical_location") {
+        let location_input = document.getElementById('location');
+
+        location_input.addEventListener('change', () => {
+            if (location_input.value == 'new') {
+                document.getElementById('new-location-fields').style.display = "block";
+            } else {
+                document.getElementById('new-location-fields').style.display = "none";
+            }
+        });
+
+        if (location_input.value == 'new') {
+            document.getElementById('new-location-fields').style.display = "block";
+        } else {
+            document.getElementById('new-location-fields').style.display = "none";
+        }
+    } else if (location_id == "virtual_location") {
+        let location_input = document.getElementById('v-location');
+
+        location_input.addEventListener('change', () => {
+            if (location_input.value == 'new') {
+                document.getElementById('v-location-fields').style.display = "block";
+            } else {
+                document.getElementById('v-location-fields').style.display = "none";
+            }
+        });
+
+        if (location_input.value == 'new') {
+            document.getElementById('v-location-fields').style.display = "block";
+        } else {
+            document.getElementById('v-location-fields').style.display = "none";
+        }
+    }
+}
+
+require(['jquery', 'wdn'], function ($, WDN) {
+
+    // DCF Date Picker
+    WDN.initializePlugin('datepickers');
+
+    $('#recurring').change(function () {
+        if (this.checked) {
+            setRecurringOptions($('#start-date'), $('#monthly-group'), recurringType);
+        }
+    });
+
+    $('#start-date').change(function () {
+        setRecurringOptions($(this), $('#monthly-group'), recurringType);
+    });
+
+    setRecurringOptions($('#start-date'), $('#monthly-group'));
+    $('#recurring-type').val(recurringType);
+
+    $('input[type=radio][name=send_to_main]').change(function() {
+        if (this.value == 'on') {
+            $('.required-for-main-calendar').show();
+        }
+        else if (this.value == 'off') {
+            $('.required-for-main-calendar').hide();
+        }
+    });
+
+    $('#create-event-form').submit(function (submit) {
+        var errors = [];
+
+        // validate required fields
+        if ($('#title').val() == '' || $('#start-date').val() == '') {
+            if ($('#title').val() == '') {
+                notifier.mark_input_invalid($('#title'));
+            }
+            if ($('#start-date').val() == '') {
+                notifier.mark_input_invalid($('#start-date'));
+            }
+            errors.push('<a href=\"#title\">Title</a>, and <a href=\"#start-date\">start date</a> are required.');
+        }
+
+        // Make sure at least one of the locations has been added
+        if ($('#physical_location_check').val() != '1' && $('#virtual_location_check').val() != '1') {
+            errors.push('A <a href=\"#physical_location_add_button\">physical</a> or <a href=\"virtual_location_add_button\">virtual</a> location must be provided');
+        }
+
+        var start = new Date($('#start-date').val());
+        if ($('#start-date').val() != '') {
+            // validate end date is after start date and the time is afterward accordingly
+            if ($('#end-date').val() != '') {
+                var end = new Date($('#end-date').val());
+
+                // translate times from inputs. Blank hour = 12, blank minute = 0, blank am/pm = am
+                var start_am_pm = $('#start-time-am-pm-pm').is(':checked') ? 'pm' : 'am';
+                var start_hour = $('#start-time-hour').val() != '' ? parseInt($('#start-time-hour').val()) % 12 : 0;
+                start_hour = start_am_pm == 'pm' ? start_hour + 12 : start_hour;
+                var start_minute = $('#start-time-minute').val() != '' ? parseInt($('#start-time-minute').val()) : 0;
+                start.setHours(start_hour);
+                start.setMinutes(start_minute);
+
+                var end_am_pm = $('#end-time-am-pm-pm').is(':checked') ? 'pm' : 'am';
+                var end_hour = $('#end-time-hour').val() != '' ? parseInt($('#end-time-hour').val()) % 12 : 0;
+                end_hour = end_am_pm == 'pm' ? end_hour + 12 : end_hour;
+                var end_minute = $('#end-time-minute').val() != '' ? parseInt($('#end-time-minute').val()) : 0;
+                end.setHours(end_hour);
+                end.setMinutes(end_minute);
+
+                if (start > end) {
+                    notifier.mark_input_invalid($('#end-date'));
+                    errors.push('Your <a href=\"#end-date\">end date/time</a> must be on or after the <a href=\"#start-date\">start date/time</a>.');
+                }
+            }
+        }
+
+        // if recurring is checked, there must be a recurring type and the recurs_until date must be on
+        // or after the start date
+        if ($('#start-date').val() != '') {
+            if ($('#recurring').is(':checked')) {
+                if ($('#recurring-type').val() == '' || $('#recurs-until-date').val() == '') {
+                    if ($('#recurring-type').val() == '') {
+                        notifier.mark_input_invalid($('#recurring-type'));
+                    }
+                    if ($('#recurs-until-date').val() == '') {
+                        notifier.mark_input_invalid($('#recurs-until-date'));
+                    }
+                    errors.push('Recurring events require a <a href=\"#recurring-type\">recurring type</a> and <a href=\"#recurs-until-date\">date</a> that they recur until.');
+                }
+
+                if ($('#end-date').val() != '') {
+                    var instanceStart = new Date($('#start-date').val());
+                    var instanceEnd = new Date($('#end-date').val());
+                    if (instanceStart && instanceEnd && instanceStart.getDate() != instanceEnd.getDate()) {
+                        errors.push('A recurring event instance start and end date must be the same day. If you need multiple multi-day (ongoing) occurrences, you must define them as separate datetime instances.');
+                    }
+                }
+
+                // check that the recurs until date is on or after the start date
+                start.setHours(0);
+                start.setMinutes(0);
+                var until = new Date($('#recurs-until-date').val());
+
+                if (start > until) {
+                    notifier.mark_input_invalid($('#recurs-until-date'));
+                    errors.push('The <a href=\"#recurs-until-date\">\"recurs until date\"</a> must be on or after the start date.');
+                }
+            }
+        }
+
+        // new locations must have a name, address, city, state, and zip
+        if ($('#physical_location_check').val() == '1') {
+            if ($('#location').val() == 'new' && $('#location-name').val() == '') {
+                notifier.mark_input_invalid($('#location-name'));
+                errors.push('You must give your new location a <a href=\"#location-name\">name</a>.');
+            }
+
+            if ($('#location').val() == 'new' && $('#location-address-1').val() == '') {
+                notifier.mark_input_invalid($('#location-address-1'));
+                errors.push('You must give your new location a <a href=\"#location-address-1\">address</a>.');
+            }
+
+            if ($('#location').val() == 'new' && $('#location-city').val() == '') {
+                notifier.mark_input_invalid($('#location-city'));
+                errors.push('You must give your new location a <a href=\"#location-city\">city</a>.');
+            }
+
+            if ($('#location').val() == 'new' && $('#location-state').val() == '') {
+                notifier.mark_input_invalid($('#location-state'));
+                errors.push('You must give your new location a <a href=\"#location-state\">state</a>.');
+            }
+
+            if ($('#location').val() == 'new' && $('#location-zip').val() == '') {
+                notifier.mark_input_invalid($('#location-zip'));
+                errors.push('You must give your new location a <a href=\"#location-zip\">zip</a>.');
+            }
+        }
+
+        // new virtual locations must have a name, URL
+        if ($('#virtual_location_check').val() == '1') {
+            if ($('#v-location').val() == 'new' && $('#v-location-name').val() == '') {
+                notifier.mark_input_invalid($('#v-location-name'));
+                errors.push('You must give your new virtual location a <a href=\"#v-location-name\">name</a>.');
+            }
+
+            if ($('#v-location').val() == 'new' && $('#v-location-url').val() == '') {
+                notifier.mark_input_invalid($('#v-location-url'));
+                errors.push('You must give your new virtual location a <a href=\"#v-location-url\">URL</a>.');
+            } else if ($('#v-location').val() == 'new' && $('#v-location-url').val() == '' && !isUrlValid(websiteURL)) {
+                notifier.mark_input_invalid($('#v-location-url'));
+                errors.push('<a href=\"#v-location-url\">Virtual Location URL</a> is not a valid URL.');
+            }
+        }
+
+        // Must select whether to consider for main calendar
+        if ($('input[name=\"send_to_main\"]:checked').val() === undefined) {
+            notifier.mark_input_invalid($('#send_to_main_on'));
+            errors.push('<a href=\"#send_to_main\">Consider for main calendar</a> is required.');
+        } else if ($('input[name=\"send_to_main\"]:checked').val() === 'on') {
+            if ($('#description').val().trim() == '') {
+                notifier.mark_input_invalid($('#description'));
+                errors.push('<a href=\"#description\">Description</a> is required when event is considered for main calendar.');
+            }
+            if ($('#contact-name').val().trim() == '') {
+                notifier.mark_input_invalid($('#contact-name'));
+                errors.push('<a href=\"#contact-name\">Contact Name</a> is required when event is considered for main calendar.');
+            }
+            if ($('#cropped-image-data').val().trim() == '' && $('#imagedata').val().trim() == '') {
+                notifier.mark_input_invalid($('#imagedata'));
+                errors.push('<a href=\"#imagedata\">Image</a> is required when event is considered for main calendar.');
+            }
+        }
+
+        var websiteURL = $('#website').val();
+        if (websiteURL != '' && !isUrlValid(websiteURL)) {
+            notifier.mark_input_invalid($('#website'));
+            errors.push('<a href=\"#website\">Event Website</a> is not a valid URL.');
+        }
+
+        if (errors.length > 0) {
+            submit.preventDefault();
+            notifier.alert('Sorry! We couldn\'t create your event', '<ul><li>' + errors.join('</li><li>') + '</li></ul>');
+        }
+    });
+});
