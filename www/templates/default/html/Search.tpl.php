@@ -58,7 +58,7 @@
             ?>
             </a>
             <?php if (!empty($context->search_event_type) || !empty($context->search_event_audience)): ?>
-                <div class="dcf-subhead">
+                <div class="dcf-subhead dcf-mt-2 dcf-ml-3">
                     <?php if (!empty($context->search_event_type)): ?>
                         <span class='dcf-d-block'>
                             Type: <?php echo $context->search_event_type ?>
@@ -66,7 +66,7 @@
                     <?php endif; ?>
                     <?php if (!empty($context->search_event_audience)): ?>
                         <span class='dcf-d-block'>
-                            Type: <?php echo $context->search_event_audience ?>
+                            Audience: <?php echo $context->search_event_audience ?>
                         </span>
                     <?php endif; ?>
                 </div>
