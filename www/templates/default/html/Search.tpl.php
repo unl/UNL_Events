@@ -46,7 +46,7 @@
                 }
                 ?>
             </span>
-            <a class="permalink"
+            <a class="permalink dcf-d-block"
             <?php
                 if ($dt = $context->getSearchTimestamp()) {
                     echo 'href="'.$context->getURL().'">'.date('F jS', $dt);
@@ -57,7 +57,7 @@
                 }
 
                 if (!empty($context->search_event_type) || !empty($context->search_event_audience)) {
-                    echo '<span class="dcf-txt-sm"> (';
+                    echo '<span class="dcf-txt-xs"> (';
                     if (!empty($context->search_event_type)) {
                         echo "Type: " . $context->search_event_type;
                     }
