@@ -66,8 +66,8 @@ class Audience extends EventListing implements RoutableInterface
             }
         }
 
-        $this->limit = $options['limit'];
-        $this->offset = $options['offset'];
+        $this->limit = $options['limit'] ?? $this->limit;
+        $this->offset = $options['offset'] ?? $this->offset;
 
         parent::__construct($options);
     }
