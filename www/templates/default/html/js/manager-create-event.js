@@ -205,9 +205,9 @@ function testMicrodata(modal_output=true) {
         google_microdata_button.style.borderColor = "var(--bg-brand-eta)";
     }else{
         if (modal_output) {
-            google_microdata_modal_output.innerHTML = "Your event is fulfilling all google's requirements";
+            google_microdata_modal_output.innerHTML = "<span class='dcf-bold'>Your event is fulfilling all google's requirements</span>";
         }
-        google_microdata_button.innerHTML = "<span class='dcf-bold'>Your event does reach google microdata requirements</span>";
+        google_microdata_button.innerHTML = "Your event does reach google microdata requirements";
         google_microdata_button.style.backgroundColor = "var(--bg-brand-zeta)";
         google_microdata_button.style.borderColor = "var(--bg-brand-zeta)";
     }
