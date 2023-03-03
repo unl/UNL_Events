@@ -55,6 +55,20 @@
                 } else {
                     echo 'href="'.$context->getURL().'">'.htmlentities($context->search_query);
                 }
+
+                if (!empty($context->search_event_type) || !empty($context->search_event_audience)) {
+                    echo '<span class="dcf-txt-sm"> (';
+                    if (!empty($context->search_event_type)) {
+                        echo "Type: " . $context->search_event_type;
+                    }
+                    if (!empty($context->search_event_type) && !empty($context->search_event_audience)) {
+                        echo ", ";
+                    }
+                    if (!empty($context->search_event_audience)) {
+                        echo "Audience: " . $context->search_event_audience;
+                    }
+                    echo ')</span>';
+                }
             ?>
             </a>
         </h2>
