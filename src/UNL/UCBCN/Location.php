@@ -106,4 +106,33 @@ class Location extends Record
         }
     }
     
+
+    public function microdata_check()
+    {
+        if (!isset($this->name) || empty($this->name)) {
+            return false;
+        }
+
+        if (!isset($this->streetaddress1) || empty($this->streetaddress1)) {
+            return false;
+        }
+
+        if (!isset($this->city) || empty($this->city)) {
+            return false;
+        }
+
+        if (!isset($this->state) || empty($this->state)) {
+            return false;
+        }
+
+        if (!isset($this->state) || empty($this->state)) {
+            return false;
+        }
+
+        if (!isset($this->zip) || empty($this->zip)) {
+            return false;
+        }
+
+        return true;
+    }
 }

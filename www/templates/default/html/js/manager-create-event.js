@@ -26,7 +26,7 @@ location_buttons.forEach((location_button) => {
             location_button.classList.remove('dcf-btn-secondary');
             location_button.classList.add('dcf-btn-primary');
 
-            document.querySelector(`input[type='hidden'][name='${location_button.dataset.controls}']`).value = "0";
+            document.querySelector(`input[type='hidden'][name='${location_button.dataset.controls}_check']`).value = "0";
 
             document.getElementById(`${location_button.dataset.controls}_container`).innerHTML = "";
         }
@@ -55,17 +55,161 @@ function setUpLocationListeners(location_id) {
 
         location_input.addEventListener('change', () => {
             if (location_input.value == 'new') {
-                document.getElementById('v-location-fields').style.display = "block";
+                document.getElementById('new-v-location-fields').style.display = "block";
             } else {
-                document.getElementById('v-location-fields').style.display = "none";
+                document.getElementById('new-v-location-fields').style.display = "none";
             }
         });
 
         if (location_input.value == 'new') {
-            document.getElementById('v-location-fields').style.display = "block";
+            document.getElementById('new-v-location-fields').style.display = "block";
         } else {
-            document.getElementById('v-location-fields').style.display = "none";
+            document.getElementById('new-v-location-fields').style.display = "none";
         }
+    }
+}
+
+const google_microdata_button = document.getElementById('google-microdata-button');
+document.addEventListener(`ModalOpenEvent_${google_microdata_button.dataset.togglesModal}`, () => {
+    testMicrodata(true);
+});
+
+document.addEventListener('input', (e) => {
+    testMicrodata(false);
+});
+
+// We need this because the dcf-datepicker
+document.getElementById('start-date').addEventListener('change', (e) => {
+    testMicrodata(false);
+})
+
+function testMicrodata(modal_output=true) {
+    let microdata_pass = true;
+    const google_microdata_button = document.getElementById('google-microdata-button');
+    const google_microdata_modal_output = document.getElementById('google-microdata-modal-output');
+    let modal_error_output_html = "";
+
+    const title_input = document.getElementById('title');
+    const start_date_input = document.getElementById('start-date');
+
+    const location_check_input = document.getElementById('physical_location_check');
+    const virtual_location_check_input = document.getElementById('virtual_location_check');
+
+    if (title_input.value == "") {
+        if (modal_output) {
+            modal_error_output_html += "<li>Missing title</li>";
+        }
+        microdata_pass = false;
+    }
+
+    if (start_date_input.value == "") {
+        if (modal_output) {
+            modal_error_output_html += "<li>Missing start date</li>";
+        }
+        microdata_pass = false;
+    }
+
+    if (location_check_input.value == "0" && virtual_location_check_input.value == "0") {
+        if (modal_output) {
+            modal_error_output_html += "<li>Missing a location (Could be virtual, physical, or both)</li>";
+        }
+        microdata_pass = false;
+    }
+
+    if (location_check_input.value == "1") {
+        const location_input = document.getElementById('location');
+
+        if (location_input.value == "new") {
+            const location_name_input = document.getElementById('location-name');
+            const location_address_input = document.getElementById('location-address-1');
+            const location_city_input = document.getElementById('location-city');
+            const location_state_input = document.getElementById('location-state');
+            const location_zip_input = document.getElementById('location-zip');
+
+            if (location_name_input.value == "") {
+                if (modal_output) {
+                    modal_error_output_html += "<li>Missing a location name</li>";
+                }
+                microdata_pass = false;
+            }
+            if (location_address_input.value == "") {
+                if (modal_output) {
+                    modal_error_output_html += "<li>Missing a location address</li>";
+                }
+                microdata_pass = false;
+            }
+            if (location_city_input.value == "") {
+                if (modal_output) {
+                    modal_error_output_html += "<li>Missing a location city</li>";
+                }
+                microdata_pass = false;
+            }
+            if (location_state_input.value == "") {
+                if (modal_output) {
+                    modal_error_output_html += "<li>Missing a location state</li>";
+                }
+                microdata_pass = false;
+            }
+            if (location_zip_input.value == "") {
+                if (modal_output) {
+                    modal_error_output_html += "<li>Missing a location zip</li>";
+                }
+                microdata_pass = false;
+            }
+        } else {
+            const location_microdata_check = location_input.options[location_input.selectedIndex].dataset.microdata == "true";
+            if (!location_microdata_check) {
+                if (modal_output) {
+                    modal_error_output_html += "<li>The Location you selected does not meet the requirements for google microdata</li>";
+                }
+                microdata_pass = false;
+            }
+        }
+    }
+
+    if (virtual_location_check_input.value == "1") {
+        const v_location_input = document.getElementById('v-location');
+
+        if (v_location_input.value == "new") {
+            const location_name_input = document.getElementById('new-v-location-name');
+            const location_url_input = document.getElementById('new-v-location-url');
+
+            if (location_name_input.value == "") {
+                if (modal_output) {
+                    modal_error_output_html += "<li>Missing a virtual location name</li>";
+                }
+                microdata_pass = false;
+            }
+            if (location_url_input.value == "") {
+                if (modal_output) {
+                    modal_error_output_html += "<li>Missing a virtual location URL</li>";
+                }
+                microdata_pass = false;
+            }
+
+            if (location_url_input.value != "" && !isUrlValid($('#new-v-location-url').val())) {
+                if (modal_output) {
+                    modal_error_output_html += "<li>Virtual location's URL is invalid</li>";
+                }
+                microdata_pass = false;
+            }
+        }
+    }
+
+    if (!microdata_pass) {
+        if (modal_output) {
+            google_microdata_modal_output.innerHTML = "<span class='dcf-bold'>Your event is missing these requirements:</span> <ul>" + modal_error_output_html + "</ul>";
+        }
+        google_microdata_button.innerHTML = "! Your event does not reach google microdata requirements !";
+        google_microdata_button.style.backgroundColor = "var(--bg-brand-eta)";
+        google_microdata_button.style.borderColor = "var(--bg-brand-eta)";
+    }else{
+        if (modal_output) {
+            google_microdata_modal_output.innerHTML = "Your event is fulfilling all google's requirements";
+        }
+        google_microdata_button.innerHTML = "<span class='dcf-bold'>Your event does reach google microdata requirements</span>";
+        google_microdata_button.style.backgroundColor = "var(--bg-brand-zeta)";
+        google_microdata_button.style.borderColor = "var(--bg-brand-zeta)";
     }
 }
 
@@ -73,6 +217,7 @@ require(['jquery', 'wdn'], function ($, WDN) {
 
     // DCF Date Picker
     WDN.initializePlugin('datepickers');
+    WDN.initializePlugin('modals');
 
     $('#recurring').change(function () {
         if (this.checked) {
@@ -203,21 +348,26 @@ require(['jquery', 'wdn'], function ($, WDN) {
                 notifier.mark_input_invalid($('#location-zip'));
                 errors.push('You must give your new location a <a href=\"#location-zip\">zip</a>.');
             }
+
+            if ($('#location').val() == 'new' && $('#location-webpage').val() !== '' && !isUrlValid($('#location-webpage').val())) {
+                notifier.mark_input_invalid($('#location-webpage'));
+                errors.push('<a href=\"#location-webpage\"> Location URL</a> is not a valid URL.');
+            }
         }
 
         // new virtual locations must have a name, URL
         if ($('#virtual_location_check').val() == '1') {
-            if ($('#v-location').val() == 'new' && $('#v-location-name').val() == '') {
-                notifier.mark_input_invalid($('#v-location-name'));
-                errors.push('You must give your new virtual location a <a href=\"#v-location-name\">name</a>.');
+            if ($('#v-location').val() == 'new' && $('#new-v-location-name').val() == '') {
+                notifier.mark_input_invalid($('#new-v-location-name'));
+                errors.push('You must give your new virtual location a <a href=\"#new-v-location-name\">name</a>.');
             }
 
-            if ($('#v-location').val() == 'new' && $('#v-location-url').val() == '') {
-                notifier.mark_input_invalid($('#v-location-url'));
-                errors.push('You must give your new virtual location a <a href=\"#v-location-url\">URL</a>.');
-            } else if ($('#v-location').val() == 'new' && $('#v-location-url').val() == '' && !isUrlValid(websiteURL)) {
-                notifier.mark_input_invalid($('#v-location-url'));
-                errors.push('<a href=\"#v-location-url\">Virtual Location URL</a> is not a valid URL.');
+            if ($('#v-location').val() == 'new' && $('#new-v-location-url').val() == '') {
+                notifier.mark_input_invalid($('#new-v-location-url'));
+                errors.push('You must give your new virtual location a <a href=\"#new-v-location-url\">URL</a>.');
+            } else if ($('#v-location').val() == 'new' && $('#new-v-location-url').val() !== '' && !isUrlValid($('#new-v-location-url').val())) {
+                notifier.mark_input_invalid($('#new-v-location-url'));
+                errors.push('<a href=\"#new-v-location-url\">Virtual Location URL</a> is not a valid URL.');
             }
         }
 

@@ -18,8 +18,9 @@
     <form class="dcf-form" id="create-event-form" action="" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
         <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
-        <fieldset>
-            <legend>Event Details</legend>
+
+        <h2>Event Details</h2>
+        <section class="dcf-mb-8 dcf-ml-5">
             <div class="dcf-form-group">
                 <label for="title">Title <small class="dcf-required">Required</small></label>
                 <input id="title" name="title" type="text" class="dcf-w-100%" value="<?php echo $event->title; ?>" />
@@ -36,8 +37,8 @@
                 <label for="type">Type</label>
                 <select class="dcf-w-100%" id="type" name="type">
                     <?php foreach ($context->getEventTypes() as $type) { ?>
-                      <option <?php if (isset($post['type']) && $post['type'] == $type->id) echo 'selected="selected"' ?> value="<?php echo $type->id ?>"><?php echo $type->name ?></option>
-                  <?php } ?>
+                        <option <?php if (isset($post['type']) && $post['type'] == $type->id) echo 'selected="selected"' ?> value="<?php echo $type->id ?>"><?php echo $type->name ?></option>
+                    <?php } ?>
                 </select>
             </div>
             <div class="dcf-form-group">
@@ -46,193 +47,172 @@
                     <label for="canceled">Event Canceled</label>
                 </div>
             </div>
-        </fieldset>
-        <fieldset>
-            <legend>Location, Date &amp; Time</legend>
+            <hr>
+        </section>
+        
 
-            <div id="date_time_section" class="dcf-mb-5">
-                <div class="dcf-grid dcf-ai-center dcf-jc-center dcf-col-gap-1" style="grid-template-columns: 1fr auto 5fr;">
-                    <hr>
-                    <p class="dcf-txt-lg dcf-txt-bold dcf-m-auto">Time & Date</p>
-                    <hr>
+        <h2>Date &amp; Time</h2>
+        <section class="dcf-mb-8 dcf-ml-5">
+            <div id="datetime_container">
+                <div class="dcf-form-group">
+                    <label class="dcf-mt-2" for="timezone">Time Zone <small class="dcf-required">Required</small></label>
+                    <select id="timezone"" name="timezone" aria-label="Time Zone">
+                    <?php
+                    $timezone = $calendar->defaulttimezone;
+                    if (!empty($post['timezone'])) {
+                        $timezone = $post['timezone'];
+                    };
+                    foreach (UNL\UCBCN::getTimezoneOptions() as $tzName => $tzValue) { ?>
+                    <option <?php if ($timezone == $tzValue) echo 'selected="selected"'; ?> value="<?php echo $tzValue ?>"><?php echo $tzName ?></option>
+                    <?php } ?>
+                    </select>
                 </div>
-                <div id="datetime_container">
-                    <div class="dcf-form-group">
-                        <label class="dcf-mt-2" for="timezone">Time Zone <small class="dcf-required">Required</small></label>
-                        <select id="timezone"" name="timezone" aria-label="Time Zone">
-                        <?php
-                        $timezone = $calendar->defaulttimezone;
-                        if (!empty($post['timezone'])) {
-                            $timezone = $post['timezone'];
-                        };
-                        foreach (UNL\UCBCN::getTimezoneOptions() as $tzName => $tzValue) { ?>
-                        <option <?php if ($timezone == $tzValue) echo 'selected="selected"'; ?> value="<?php echo $tzValue ?>"><?php echo $tzName ?></option>
-                        <?php } ?>
-                        </select>
-                    </div>
-                    <fieldset>
-                        <legend>Start Date &amp; Time <small class="dcf-required">Required</small></legend>
-                        <div class="dcf-d-flex dcf-flex-wrap dcf-ai-center dcf-col-gap-4">
-                            <div class="dcf-form-group dcf-datepicker dcf-flex-grow-1">
-                                <input id="start-date" name="start_date" type="text" value="<?php if (isset($post['start_date'])) { echo $post['start_date']; } ?>" aria-label="Start Date in the format of mm/dd/yyyy" autocomplete="off" />
-                            </div>
-                            <div class="dcf-form-group dcf-d-flex dcf-ai-center dcf-flex-grow-1">
-                                <span class="dcf-pr-2">@</span>
-                                <select class="dcf-flex-grow-1" id="start-time-hour" name="start_time_hour" aria-label="Start Time Hour">
-                                    <option value="">Hour</option>
-                                <?php for ($i = 1; $i <= 12; $i++) { ?>
-                                    <option <?php if (isset($post['start_time_hour']) && $post['start_time_hour'] == $i) echo 'selected="selected"'; ?> value="<?php echo $i ?>"><?php echo $i ?></option>
-                                <?php } ?>
-                                </select>
-                                <span class="dcf-pr-1 dcf-pl-1">:</span>
-                                <select class="dcf-flex-grow-1" id="start-time-minute" name="start_time_minute" aria-label="Start Time Minute">
-                                    <option value="">Minute</option>
-                                    <option <?php if (isset($post['start_time_minute']) && ($post['start_time_minute'] === 0 || $post['start_time_minute'] === '0')) echo 'selected="selected"'; ?> value="0">00</option>
-                                    <option <?php if (isset($post['start_time_minute']) && $post['start_time_minute'] == 5) echo 'selected="selected"'; ?> value="5">05</option>
-                                    <option <?php if (isset($post['start_time_minute']) && $post['start_time_minute'] == 10) echo 'selected="selected"'; ?> value="10">10</option>
-                                    <option <?php if (isset($post['start_time_minute']) && $post['start_time_minute'] == 15) echo 'selected="selected"'; ?> value="15">15</option>
-                                    <option <?php if (isset($post['start_time_minute']) && $post['start_time_minute'] == 20) echo 'selected="selected"'; ?> value="20">20</option>
-                                    <option <?php if (isset($post['start_time_minute']) && $post['start_time_minute'] == 25) echo 'selected="selected"'; ?> value="25">25</option>
-                                    <option <?php if (isset($post['start_time_minute']) && $post['start_time_minute'] == 30) echo 'selected="selected"'; ?> value="30">30</option>
-                                    <option <?php if (isset($post['start_time_minute']) && $post['start_time_minute'] == 35) echo 'selected="selected"'; ?> value="35">35</option>
-                                    <option <?php if (isset($post['start_time_minute']) && $post['start_time_minute'] == 40) echo 'selected="selected"'; ?> value="40">40</option>
-                                    <option <?php if (isset($post['start_time_minute']) && $post['start_time_minute'] == 45) echo 'selected="selected"'; ?> value="45">45</option>
-                                    <option <?php if (isset($post['start_time_minute']) && $post['start_time_minute'] == 50) echo 'selected="selected"'; ?> value="50">50</option>
-                                    <option <?php if (isset($post['start_time_minute']) && $post['start_time_minute'] == 55) echo 'selected="selected"'; ?> value="55">55</option>
-                                </select>
-                                <fieldset class="dcf-d-flex dcf-flex-col dcf-row-gap-3 dcf-ai-center dcf-col-gap-3 dcf-mb-0 dcf-ml-4 dcf-p-0 dcf-b-0 dcf-txt-sm" id="start-time-am-pm">
-                                    <legend class="dcf-sr-only">AM/PM</legend>
-                                    <div class="dcf-input-radio dcf-mb-0">
-                                        <input id="start-time-am-pm-am" name="start_time_am_pm" type="radio" value="am" <?php if (!isset($post) || $post['start_time_am_pm'] == 'am') { echo CHECKED_INPUT; } ?>>
-                                        <label class="dcf-mb-0" for="start-time-am-pm-am">AM</label>
-                                    </div>
-                                    <div class="dcf-input-radio dcf-mb-0">
-                                        <input id="start-time-am-pm-pm" name="start_time_am_pm" type="radio" value="pm" <?php if (isset($post['start_time_am_pm']) && $post['start_time_am_pm'] == 'pm') { echo CHECKED_INPUT; } ?>>
-                                        <label class="dcf-mb-0" for="start-time-am-pm-pm">PM</label>
-                                    </div>
-                                </fieldset>
-                            </div>
-
+                <fieldset>
+                    <legend>Start Date &amp; Time <small class="dcf-required">Required</small></legend>
+                    <div class="dcf-d-flex dcf-flex-wrap dcf-ai-center dcf-col-gap-4">
+                        <div class="dcf-form-group dcf-datepicker dcf-flex-grow-1">
+                            <input id="start-date" name="start_date" type="text" value="<?php if (isset($post['start_date'])) { echo $post['start_date']; } ?>" aria-label="Start Date in the format of mm/dd/yyyy" autocomplete="off" />
                         </div>
-                    </fieldset>
-                    <fieldset>
-                        <legend>End Date &amp; Time <small class="dcf-pl-1 dcf-txt-xs dcf-italic">Optional</small></legend>
-                        <div class="dcf-d-flex dcf-flex-wrap dcf-ai-center dcf-col-gap-4">
-                            <div class="dcf-form-group dcf-datepicker dcf-flex-grow-1">
-                                <input id="end-date" name="end_date" type="text" value="<?php if (isset($post['end_date'])) { echo $post['end_date']; } ?>" aria-label="End Date in the format of mm/dd/yyyy" autocomplete="off" />
-                            </div>
-                            <div class="dcf-form-group dcf-d-flex dcf-ai-center dcf-flex-grow-1">
-                                <span class="dcf-pr-2">@</span>
-                                <select class="dcf-flex-grow-1" id="end-time-hour" name="end_time_hour" aria-label="End Time Hour">
-                                    <option value="">Hour</option>
-                                <?php for ($i = 1; $i <= 12; $i++) { ?>
-                                    <option <?php if (isset($post['end_time_hour']) && $post['end_time_hour'] == $i) echo 'selected="selected"'; ?> value="<?php echo $i ?>"><?php echo $i ?></option>
-                                <?php } ?>
-                                </select>
-                                <span class="dcf-pr-1 dcf-pl-1">:</span>
-                                <select class="dcf-flex-grow-1" id="end-time-minute" name="end_time_minute" aria-label="End Time Minute">
-                                    <option value="">Minute</option>
-                                    <option <?php if (isset($post['end_time_minute']) && ($post['end_time_minute'] === 0 || $post['end_time_minute'] === '0')) echo 'selected="selected"'; ?> value="0">00</option>
-                                    <option <?php if (isset($post['end_time_minute']) && $post['end_time_minute'] == 5) echo 'selected="selected"'; ?> value="5">05</option>
-                                    <option <?php if (isset($post['end_time_minute']) && $post['end_time_minute'] == 10) echo 'selected="selected"'; ?> value="10">10</option>
-                                    <option <?php if (isset($post['end_time_minute']) && $post['end_time_minute'] == 15) echo 'selected="selected"'; ?> value="15">15</option>
-                                    <option <?php if (isset($post['end_time_minute']) && $post['end_time_minute'] == 20) echo 'selected="selected"'; ?> value="20">20</option>
-                                    <option <?php if (isset($post['end_time_minute']) && $post['end_time_minute'] == 25) echo 'selected="selected"'; ?> value="25">25</option>
-                                    <option <?php if (isset($post['end_time_minute']) && $post['end_time_minute'] == 30) echo 'selected="selected"'; ?> value="30">30</option>
-                                    <option <?php if (isset($post['end_time_minute']) && $post['end_time_minute'] == 35) echo 'selected="selected"'; ?> value="35">35</option>
-                                    <option <?php if (isset($post['end_time_minute']) && $post['end_time_minute'] == 40) echo 'selected="selected"'; ?> value="40">40</option>
-                                    <option <?php if (isset($post['end_time_minute']) && $post['end_time_minute'] == 45) echo 'selected="selected"'; ?> value="45">45</option>
-                                    <option <?php if (isset($post['end_time_minute']) && $post['end_time_minute'] == 50) echo 'selected="selected"'; ?> value="50">50</option>
-                                    <option <?php if (isset($post['end_time_minute']) && $post['end_time_minute'] == 55) echo 'selected="selected"'; ?> value="55">55</option>
-                                </select>
-                                <fieldset class="dcf-d-flex dcf-flex-col dcf-row-gap-3 dcf-ai-center dcf-col-gap-3 dcf-mb-0 dcf-ml-4 dcf-p-0 dcf-b-0 dcf-txt-sm" id="end-time-am-pm">
-                                    <legend class="dcf-sr-only">AM/PM</legend>
-                                    <div class="dcf-input-radio dcf-mb-0">
-                                        <input id="end-time-am-pm-am" name="end_time_am_pm" type="radio" value="am" <?php if (empty($post) || $post['end_time_am_pm'] == 'am') { echo CHECKED_INPUT; } ?>>
-                                        <label class="dcf-mb-0" for="end-time-am-pm-am">AM</label>
+                        <div class="dcf-form-group dcf-d-flex dcf-ai-center dcf-flex-grow-1">
+                            <span class="dcf-pr-2">@</span>
+                            <select class="dcf-flex-grow-1" id="start-time-hour" name="start_time_hour" aria-label="Start Time Hour">
+                                <option value="">Hour</option>
+                            <?php for ($i = 1; $i <= 12; $i++) { ?>
+                                <option <?php if (isset($post['start_time_hour']) && $post['start_time_hour'] == $i) echo 'selected="selected"'; ?> value="<?php echo $i ?>"><?php echo $i ?></option>
+                            <?php } ?>
+                            </select>
+                            <span class="dcf-pr-1 dcf-pl-1">:</span>
+                            <select class="dcf-flex-grow-1" id="start-time-minute" name="start_time_minute" aria-label="Start Time Minute">
+                                <?php //TODO: Change this to a loop ?>
+                                <option value="">Minute</option>
+                                <option <?php if (isset($post['start_time_minute']) && ($post['start_time_minute'] === 0 || $post['start_time_minute'] === '0')) echo 'selected="selected"'; ?> value="0">00</option>
+                                <option <?php if (isset($post['start_time_minute']) && $post['start_time_minute'] == 5) echo 'selected="selected"'; ?> value="5">05</option>
+                                <option <?php if (isset($post['start_time_minute']) && $post['start_time_minute'] == 10) echo 'selected="selected"'; ?> value="10">10</option>
+                                <option <?php if (isset($post['start_time_minute']) && $post['start_time_minute'] == 15) echo 'selected="selected"'; ?> value="15">15</option>
+                                <option <?php if (isset($post['start_time_minute']) && $post['start_time_minute'] == 20) echo 'selected="selected"'; ?> value="20">20</option>
+                                <option <?php if (isset($post['start_time_minute']) && $post['start_time_minute'] == 25) echo 'selected="selected"'; ?> value="25">25</option>
+                                <option <?php if (isset($post['start_time_minute']) && $post['start_time_minute'] == 30) echo 'selected="selected"'; ?> value="30">30</option>
+                                <option <?php if (isset($post['start_time_minute']) && $post['start_time_minute'] == 35) echo 'selected="selected"'; ?> value="35">35</option>
+                                <option <?php if (isset($post['start_time_minute']) && $post['start_time_minute'] == 40) echo 'selected="selected"'; ?> value="40">40</option>
+                                <option <?php if (isset($post['start_time_minute']) && $post['start_time_minute'] == 45) echo 'selected="selected"'; ?> value="45">45</option>
+                                <option <?php if (isset($post['start_time_minute']) && $post['start_time_minute'] == 50) echo 'selected="selected"'; ?> value="50">50</option>
+                                <option <?php if (isset($post['start_time_minute']) && $post['start_time_minute'] == 55) echo 'selected="selected"'; ?> value="55">55</option>
+                            </select>
+                            <fieldset class="dcf-d-flex dcf-flex-col dcf-row-gap-3 dcf-ai-center dcf-col-gap-3 dcf-mb-0 dcf-ml-4 dcf-p-0 dcf-b-0 dcf-txt-sm" id="start-time-am-pm">
+                                <legend class="dcf-sr-only">AM/PM</legend>
+                                <div class="dcf-input-radio dcf-mb-0">
+                                    <input id="start-time-am-pm-am" name="start_time_am_pm" type="radio" value="am" <?php if (!isset($post) || $post['start_time_am_pm'] == 'am') { echo CHECKED_INPUT; } ?>>
+                                    <label class="dcf-mb-0" for="start-time-am-pm-am">AM</label>
                                 </div>
                                 <div class="dcf-input-radio dcf-mb-0">
-                                        <input id="end-time-am-pm-pm" name="end_time_am_pm" type="radio" value="pm" <?php if (isset($post['end_time_am_pm']) && $post['end_time_am_pm'] == 'pm') { echo CHECKED_INPUT; } ?>>
-                                        <label class="dcf-mb-0" for="end-time-am-pm-pm">PM</label>
+                                    <input id="start-time-am-pm-pm" name="start_time_am_pm" type="radio" value="pm" <?php if (isset($post['start_time_am_pm']) && $post['start_time_am_pm'] == 'pm') { echo CHECKED_INPUT; } ?>>
+                                    <label class="dcf-mb-0" for="start-time-am-pm-pm">PM</label>
                                 </div>
-                                </fieldset>
+                            </fieldset>
+                        </div>
+
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend>End Date &amp; Time <small class="dcf-pl-1 dcf-txt-xs dcf-italic">Optional</small></legend>
+                    <div class="dcf-d-flex dcf-flex-wrap dcf-ai-center dcf-col-gap-4">
+                        <div class="dcf-form-group dcf-datepicker dcf-flex-grow-1">
+                            <input id="end-date" name="end_date" type="text" value="<?php if (isset($post['end_date'])) { echo $post['end_date']; } ?>" aria-label="End Date in the format of mm/dd/yyyy" autocomplete="off" />
+                        </div>
+                        <div class="dcf-form-group dcf-d-flex dcf-ai-center dcf-flex-grow-1">
+                            <span class="dcf-pr-2">@</span>
+                            <select class="dcf-flex-grow-1" id="end-time-hour" name="end_time_hour" aria-label="End Time Hour">
+                                <option value="">Hour</option>
+                            <?php for ($i = 1; $i <= 12; $i++) { ?>
+                                <option <?php if (isset($post['end_time_hour']) && $post['end_time_hour'] == $i) echo 'selected="selected"'; ?> value="<?php echo $i ?>"><?php echo $i ?></option>
+                            <?php } ?>
+                            </select>
+                            <span class="dcf-pr-1 dcf-pl-1">:</span>
+                            <select class="dcf-flex-grow-1" id="end-time-minute" name="end_time_minute" aria-label="End Time Minute">
+                                <?php //TODO: Change this to a loop ?>
+                                <option value="">Minute</option>
+                                <option <?php if (isset($post['end_time_minute']) && ($post['end_time_minute'] === 0 || $post['end_time_minute'] === '0')) echo 'selected="selected"'; ?> value="0">00</option>
+                                <option <?php if (isset($post['end_time_minute']) && $post['end_time_minute'] == 5) echo 'selected="selected"'; ?> value="5">05</option>
+                                <option <?php if (isset($post['end_time_minute']) && $post['end_time_minute'] == 10) echo 'selected="selected"'; ?> value="10">10</option>
+                                <option <?php if (isset($post['end_time_minute']) && $post['end_time_minute'] == 15) echo 'selected="selected"'; ?> value="15">15</option>
+                                <option <?php if (isset($post['end_time_minute']) && $post['end_time_minute'] == 20) echo 'selected="selected"'; ?> value="20">20</option>
+                                <option <?php if (isset($post['end_time_minute']) && $post['end_time_minute'] == 25) echo 'selected="selected"'; ?> value="25">25</option>
+                                <option <?php if (isset($post['end_time_minute']) && $post['end_time_minute'] == 30) echo 'selected="selected"'; ?> value="30">30</option>
+                                <option <?php if (isset($post['end_time_minute']) && $post['end_time_minute'] == 35) echo 'selected="selected"'; ?> value="35">35</option>
+                                <option <?php if (isset($post['end_time_minute']) && $post['end_time_minute'] == 40) echo 'selected="selected"'; ?> value="40">40</option>
+                                <option <?php if (isset($post['end_time_minute']) && $post['end_time_minute'] == 45) echo 'selected="selected"'; ?> value="45">45</option>
+                                <option <?php if (isset($post['end_time_minute']) && $post['end_time_minute'] == 50) echo 'selected="selected"'; ?> value="50">50</option>
+                                <option <?php if (isset($post['end_time_minute']) && $post['end_time_minute'] == 55) echo 'selected="selected"'; ?> value="55">55</option>
+                            </select>
+                            <fieldset class="dcf-d-flex dcf-flex-col dcf-row-gap-3 dcf-ai-center dcf-col-gap-3 dcf-mb-0 dcf-ml-4 dcf-p-0 dcf-b-0 dcf-txt-sm" id="end-time-am-pm">
+                                <legend class="dcf-sr-only">AM/PM</legend>
+                                <div class="dcf-input-radio dcf-mb-0">
+                                    <input id="end-time-am-pm-am" name="end_time_am_pm" type="radio" value="am" <?php if (empty($post) || $post['end_time_am_pm'] == 'am') { echo CHECKED_INPUT; } ?>>
+                                    <label class="dcf-mb-0" for="end-time-am-pm-am">AM</label>
                             </div>
+                            <div class="dcf-input-radio dcf-mb-0">
+                                    <input id="end-time-am-pm-pm" name="end_time_am_pm" type="radio" value="pm" <?php if (isset($post['end_time_am_pm']) && $post['end_time_am_pm'] == 'pm') { echo CHECKED_INPUT; } ?>>
+                                    <label class="dcf-mb-0" for="end-time-am-pm-pm">PM</label>
+                            </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="section-container">
+                    <div class="dcf-input-checkbox">
+                        <input id="recurring" name="recurring" type="checkbox" <?php if (isset($post['recurring'])) { echo CHECKED_INPUT; } ?>>
+                        <label for="recurring">This is a recurring event</label>
+                    </div>
+                    <fieldset class="recurring-container date-time-select">
+                        <legend class="dcf-sr-only">Recurring Event Details</legend>
+                        <div class="dcf-d-flex dcf-flex-wrap dcf-ai-center dcf-col-gap-4">
+                        <div class="dcf-form-group">
+                            <label for="recurring-type">This event recurs</label>
+                            <select id="recurring-type" name="recurring_type">
+                                <option value="daily">Daily</option>
+                                <option value="weekly">Weekly</option>
+                                <option value="biweekly">Biweekly</option>
+                                <optgroup label="Monthly" id="monthly-group">
+                                </optgroup>
+                                <option value="annually">Yearly</option>
+                            </select>
+                        </div>
+                        <div class="dcf-form-group dcf-datepicker">
+                            <label for="recurs-until-date">until </label>
+                            <input id="recurs-until-date" name="recurs_until_date" type="text" value="<?php if (isset($post['recurs_until_date'])) { echo $post['recurs_until_date']; } ?>" aria-label="until this date in the format of mm/dd/yyyy" autocomplete="off" />
+                        </div>
                         </div>
                     </fieldset>
-                    <div class="section-container">
-                        <div class="dcf-input-checkbox">
-                            <input id="recurring" name="recurring" type="checkbox" <?php if (isset($post['recurring'])) { echo CHECKED_INPUT; } ?>>
-                            <label for="recurring">This is a recurring event</label>
-                        </div>
-                        <fieldset class="recurring-container date-time-select">
-                            <legend class="dcf-sr-only">Recurring Event Details</legend>
-                            <div class="dcf-d-flex dcf-flex-wrap dcf-ai-center dcf-col-gap-4">
-                            <div class="dcf-form-group">
-                                <label for="recurring-type">This event recurs</label>
-                                <select id="recurring-type" name="recurring_type">
-                                    <option value="daily">Daily</option>
-                                    <option value="weekly">Weekly</option>
-                                    <option value="biweekly">Biweekly</option>
-                                    <optgroup label="Monthly" id="monthly-group">
-                                    </optgroup>
-                                    <option value="annually">Yearly</option>
-                                </select>
-                            </div>
-                            <div class="dcf-form-group dcf-datepicker">
-                                <label for="recurs-until-date">until </label>
-                                <input id="recurs-until-date" name="recurs_until_date" type="text" value="<?php if (isset($post['recurs_until_date'])) { echo $post['recurs_until_date']; } ?>" aria-label="until this date in the format of mm/dd/yyyy" autocomplete="off" />
-                            </div>
-                            </div>
-                        </fieldset>
-                    </div>
-                </div>
-                
-            </div>
-
-            <div id="physical_location_section" class="dcf-mb-5">
-                <div class="dcf-grid dcf-ai-center dcf-jc-center dcf-col-gap-1" style="grid-template-columns: 1fr auto 5fr;">
-                    <hr>
-                    <p class="dcf-txt-lg dcf-txt-bold dcf-m-auto">Physical Location</p>
-                    <hr>
-                </div>
-                <button id="physical_location_add_button" class="dcf-btn dcf-btn-primary events-btn-location" type="button" data-controls="physical_location" data-add="true">Add Physical Location</button>
-                <input type="hidden" id="physical_location_check" name="physical_location_check" value="0">
-                <div id="physical_location_container" class="dcf-mt-3">
-
                 </div>
             </div>
+            <hr>
+        </section>
 
-            <div id="virtual_location_section" class="dcf-mb-5">
-                <div class="dcf-grid dcf-ai-center dcf-jc-center dcf-col-gap-1" style="grid-template-columns: 1fr auto 5fr;">
-                    <hr>
-                    <p class="dcf-txt-lg dcf-txt-bold dcf-m-auto">Virtual Location</p>
-                    <hr>
-                </div>
-                <button id="virtual_location_add_button" class="dcf-btn dcf-btn-primary events-btn-location" type="button" data-controls="virtual_location" data-add="true">Add Virtual Location</button>
-                <input type="hidden" id="virtual_location_check" name="virtual_location_check" value="0">
-                <div id="virtual_location_container" class="dcf-mt-3">
+        <h2>Physical Location</h2>
+        <section id="physical_location_section" class="dcf-mb-8 dcf-ml-5">
+            <button id="physical_location_add_button" class="dcf-btn dcf-btn-primary events-btn-location" type="button" data-controls="physical_location" data-add="true">Add Physical Location</button>
+            <input type="hidden" id="physical_location_check" name="physical_location_check" value="0">
+            <div id="physical_location_container" class="dcf-mt-3">
 
-                </div>
             </div>
-
             <template id="physical_location_template">
                 <div class="dcf-form-group">
                     <label for="location">Location <small class="dcf-required">Required</small></label>
                     <select id="location" name="location">
                         <optgroup label="Your saved locations">
                             <?php foreach (\UNL\UCBCN\Manager\LocationUtility::getUserLocations() as $location): ?>
-                                <option <?php if (isset($post['location']) && $post['location'] == $location->id) echo 'selected="selected"' ?> value="<?php echo $location->id ?>"><?php echo $location->name ?></option>
+                                <option <?php if (isset($post['location']) && $post['location'] == $location->id) echo 'selected="selected"' ?> value="<?php echo $location->id ?>" data-microdata="<?php echo json_encode($location->microdata_check()); ?>"><?php echo $location->name ?></option>
                             <?php endforeach ?>
                         <option <?php if (isset($post['location']) && $post['location'] == 'new') echo 'selected="selected"' ?>value="new">-- New Location --</option>
                         </optgroup>
                         <optgroup label="UNL Campus locations">
                             <?php foreach (\UNL\UCBCN\Manager\LocationUtility::getStandardLocations(\UNL\UCBCN\Location::DISPLAY_ORDER_MAIN) as $location): ?>
-                                <option <?php if (isset($post['location']) && $post['location'] == $location->id) echo 'selected="selected"' ?> value="<?php echo $location->id ?>"><?php echo $location->name ?></option>
+                                <option <?php if (isset($post['location']) && $post['location'] == $location->id) echo 'selected="selected"' ?> value="<?php echo $location->id ?>" data-microdata="<?php echo json_encode($location->microdata_check()); ?>"><?php echo $location->name ?></option>
                             <?php endforeach ?>
                         </optgroup>
                         <optgroup label="Extension locations">
                             <?php foreach (\UNL\UCBCN\Manager\LocationUtility::getStandardLocations(\UNL\UCBCN\Location::DISPLAY_ORDER_EXTENSION) as $location): ?>
-                                <option <?php if (isset($post['location']) && $post['location'] == $location->id) echo 'selected="selected"' ?> value="<?php echo $location->id ?>"><?php echo $location->name ?></option>
+                                <option <?php if (isset($post['location']) && $post['location'] == $location->id) echo 'selected="selected"' ?> value="<?php echo $location->id ?>" data-microdata="<?php echo json_encode($location->microdata_check()); ?>"><?php echo $location->name ?></option>
                             <?php endforeach ?>
                         </optgroup>
                     </select>
@@ -392,38 +372,43 @@
                     <textarea id="additional-public-info" name="additional_public_info"><?php if (isset($post['additional_public_info'])) { echo $post['additional_public_info']; } ?></textarea>
                 </div>
             </template>
+            <hr>
+        </section>
 
+        <h2>Virtual Location</h2>
+        <section id="virtual_location_section" class="dcf-mb-8 dcf-ml-5">
+            <button id="virtual_location_add_button" class="dcf-btn dcf-btn-primary events-btn-location" type="button" data-controls="virtual_location" data-add="true">Add Virtual Location</button>
+            <input type="hidden" id="virtual_location_check" name="virtual_location_check" value="0">
+            <div id="virtual_location_container" class="dcf-mt-3">
+
+            </div>
             <template id="virtual_location_template">
                 <div class="dcf-form-group">
                     <label for="v-location">Virtual Location <small class="dcf-required">Required</small></label>
-                    <select id="v-location" name="v-location">
+                    <select id="v-location" name="v_location">
                         <optgroup label="Your saved virtual locations">
-                            <option <?php if (isset($post['v-location']) && $post['v-location'] == 'new') echo 'selected="selected"' ?>value="new">-- New Location --</option>
+                            <option <?php if (isset($post['v_location']) && $post['v_location'] == 'new') echo 'selected="selected"' ?>value="new">-- New Location --</option>
                             <option value="tn_zoom">Tommy Neumann Zoom</option>
                         </optgroup>
                     </select>
                 </div>
-                <fieldset class="dcf-mt-6" id="v-location-fields">
+                <fieldset class="dcf-mt-6" id="new-v-location-fields">
                     <legend>New Virtual Location</legend>
                     <div class="dcf-form-group">
-                        <label for="v-location-name">Name <small class="dcf-required">Required</small></label>
-                        <input id="v-location-name" name="v_location[name]" type="text" class="dcf-w-100%" value="<?php echo isset($post['v_location']['name']) ? $post['v_location']['name']: ''; ?>">
+                        <label for="new-v-location-name">Name <small class="dcf-required">Required</small></label>
+                        <input id="new-v-location-name" name="new_v_location[name]" type="text" class="dcf-w-100%" value="<?php echo isset($post['new_v_location']['name']) ? $post['new_v_location']['name']: ''; ?>">
                     </div>
                     <div class="dcf-form-group">
-                        <label for="v-location-url">URL<small class="dcf-required">Required</small></label>
-                        <input id="v-location-url" name="v_location[url]" type="text" class="dcf-w-100%" value="<?php echo isset($post['v_location']['url']) ? $post['v_location']['url']: ''; ?>">
+                        <label for="new-v-location-url">URL<small class="dcf-required">Required</small></label>
+                        <input id="new-v-location-url" name="new_v_location[url]" type="text" class="dcf-w-100%" value="<?php echo isset($post['new_v_location']['url']) ? $post['new_v_location']['url']: ''; ?>">
                     </div>
                     <div class="dcf-form-group">
-                        <label for="v-location-time">Time Available</label>
-                        <input id="v-location-time" name="v_location[time]" type="text" value="<?php echo isset($post['v_location']['time']) ? $post['v_location']['time']: ''; ?>">
-                    </div>
-                    <div class="dcf-form-group">
-                        <label for="v-location-additional-public-info">Location Default - Additional Public Info</label>
-                        <textarea id="v-location-additional-public-info" name="v-location[additional_public_info]"><?php if (isset($post['v_location']['additional_public_info'])) { echo $post['v_location']['additional_public_info']; } ?></textarea>
+                        <label for="new-v-location-additional-public-info">Location Default - Additional Public Info</label>
+                        <textarea id="new-v-location-additional-public-info" name="new_v_location[additional_public_info]"><?php if (isset($post['new_v_location']['additional_public_info'])) { echo $post['new_v_location']['additional_public_info']; } ?></textarea>
                     </div>
                     <div class="dcf-form-group dcf-mt-3">
                         <div class="dcf-input-checkbox">
-                            <input id="v-location-save" name="v-location[save]" type="checkbox" <?php if (isset($post['v_location']['save']) && $post['v_location']['save'] == 'on') { echo CHECKED_INPUT; } ?>>
+                            <input id="v-location-save" name="new_v_location[save]" type="checkbox" <?php if (isset($post['new_v_location']['save']) && $post['new_v_location']['save'] == 'on') { echo CHECKED_INPUT; } ?>>
                             <label for="v-location-save">Save this location for your future events</label>
                         </div>
                     </div>
@@ -433,12 +418,14 @@
                     <textarea id="v-additional-public-info" name="v_additional_public_info"><?php if (isset($post['v_additional_public_info'])) { echo $post['v_additional_public_info']; } ?></textarea>
                 </div>
             </template>
+            <hr>
+        </section>
 
-        </fieldset>
-        <?php echo $savvy->render($context ,
- 'EventFormImageUpload.tpl.php'); ?>
-        <fieldset>
-            <legend>Sharing</legend>
+
+        <?php echo $savvy->render($context , 'EventFormImageUpload.tpl.php'); ?>
+
+        <h2>Sharing</h2>
+        <section class="dcf-mb-8 dcf-ml-5">
             <div class="details dcf-grid dcf-col-gap-vw">
                 <fieldset class="dcf-col-100% dcf-col-25%-start@sm dcf-p-0 dcf-b-0">
                     <legend class="dcf-pb-2">Privacy</legend>
@@ -463,9 +450,11 @@
                     </div>
                 </fieldset>
             </div>
-        </fieldset>
-        <fieldset>
-            <legend>Contact Info</legend>
+            <hr>
+        </section>
+
+        <h2>Contact Info</h2>
+        <section class="dcf-mb-8 dcf-ml-5">
             <div class="details dcf-d-grid dcf-grid-full dcf-grid-halves@md dcf-col-gap-vw">
                 <div class="dcf-form-group">
                     <label for="contact-name">Name <small class="required-for-main-calendar dcf-required" style="display: none">Required</small></label>
@@ -484,10 +473,30 @@
                     <input id="website" name="website" type="text" class="dcf-w-100%" value="<?php echo $event->webpageurl ?>" />
                 </div>
             </div>
-        </fieldset>
+            <hr>
+        </section>
         <button class="dcf-btn dcf-btn-primary" type="submit">Submit Event</button>
+        <button id="google-microdata-button" class="dcf-btn-toggle-modal dcf-btn unl-cream unl-cream@dark dcf-mt-3" title="Learn More" style="background-color:var(--bg-brand-eta); border-color: var(--bg-brand-eta);" type="button" data-toggles-modal="google-microdata-modal" disabled>
+            ! Your event does not reach google microdata requirements !
+        </button>
+
+        <div class="dcf-modal" id="google-microdata-modal" hidden>
+            <div class="dcf-modal-wrapper">
+                <div class="dcf-modal-header">
+                    <h2>Info About Google Microdata</h2>
+                    <button class="dcf-btn-close-modal">Close</button>
+                </div>
+                <div class="dcf-modal-content">
+                    Info about google microdata
+                    <div class="dcf-mt-5" id="google-microdata-modal-output">
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </form>
 </div>
+
 <?php
 $recurringType = !empty($post['recurring_type']) ? $post['recurring_type'] : 'none';
 $page->addScriptDeclaration("const recurringType = '" . $recurringType . "';");
