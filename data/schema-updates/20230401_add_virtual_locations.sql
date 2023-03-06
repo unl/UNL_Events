@@ -1,0 +1,18 @@
+-- Unneeded table
+DROP TABLE `webcastlink`;
+
+-- Edit webcast table to have columns (id, title, url, additionalpublicinfo, and user_id)
+ALTER TABLE `webcast` DROP COLUMN `event_id`;
+ALTER TABLE `webcast` DROP COLUMN `dateavailable`;
+ALTER TABLE `webcast` DROP COLUMN `status`;
+ALTER TABLE `webcast` DROP COLUMN `playertype`;
+ALTER TABLE `webcast` DROP COLUMN `bandwidth`;
+ALTER TABLE `webcast` ADD `url` longtext NOT NULL AFTER `title`;
+ALTER TABLE `webcast` MODIFY `title` VARCHAR(100) DEFAULT "" NOT NULL;
+ALTER TABLE `webcast` ADD `user_id` VARCHAR(100) DEFAULT NULL;
+
+-- Edit eventdatetime table to have webcast_id that is nullable and location_id to be nullable
+-- Also adds event specific addtional public info for webcast
+ALTER TABLE `eventdatetime` MODIFY `location_id` int(10) unsigned DEFAULT NULL;
+ALTER TABLE `eventdatetime` ADD `webcast_id` int(10) unsigned DEFAULT NULL AFTER `location_id`;
+ALTER TABLE `eventdatetime` ADD `webcast_additionalpublicinfo` longtext DEFAULT NULL AFTER `additionalpublicinfo`;
