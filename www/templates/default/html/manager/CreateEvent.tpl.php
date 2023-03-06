@@ -219,6 +219,7 @@
                 </div>
                 <fieldset class="dcf-mt-6" id="new-location-fields" style="display: none;">
                     <legend>New Location</legend>
+                    <?php //These names need to match /UNL/UCBCN/Manager/LocationUtility ?>
                     <div class="dcf-d-grid dcf-grid-full dcf-grid-halves@md dcf-col-gap-5">
                         <div class="dcf-form-group" style="grid-column: span 2;">
                             <label for="location-name">Name <small class="dcf-required">Required</small></label>
@@ -394,9 +395,10 @@
                 </div>
                 <fieldset class="dcf-mt-6" id="new-v-location-fields">
                     <legend>New Virtual Location</legend>
+                    <?php //These names need to match /UNL/UCBCN/Manager/WebcastUtility ?>
                     <div class="dcf-form-group">
                         <label for="new-v-location-name">Name <small class="dcf-required">Required</small></label>
-                        <input id="new-v-location-name" name="new_v_location[name]" type="text" class="dcf-w-100%" value="<?php echo isset($post['new_v_location']['name']) ? $post['new_v_location']['name']: ''; ?>">
+                        <input id="new-v-location-name" name="new_v_location[title]" type="text" class="dcf-w-100%" value="<?php echo isset($post['new_v_location']['title']) ? $post['new_v_location']['title']: ''; ?>">
                     </div>
                     <div class="dcf-form-group">
                         <label for="new-v-location-url">URL<small class="dcf-required">Required</small></label>
@@ -404,11 +406,11 @@
                     </div>
                     <div class="dcf-form-group">
                         <label for="new-v-location-additional-public-info">Location Default - Additional Public Info</label>
-                        <textarea id="new-v-location-additional-public-info" name="new_v_location[additional_public_info]"><?php if (isset($post['new_v_location']['additional_public_info'])) { echo $post['new_v_location']['additional_public_info']; } ?></textarea>
+                        <textarea id="new-v-location-additional-public-info" name="new_v_location[additionalinfo]"><?php if (isset($post['new_v_location']['additionalinfo'])) { echo $post['new_v_location']['additionalinfo']; } ?></textarea>
                     </div>
                     <div class="dcf-form-group dcf-mt-3">
                         <div class="dcf-input-checkbox">
-                            <input id="v-location-save" name="new_v_location[save]" type="checkbox" <?php if (isset($post['new_v_location']['save']) && $post['new_v_location']['save'] == 'on') { echo CHECKED_INPUT; } ?>>
+                            <input id="v-location-save" name="v_location_save" type="checkbox" <?php if (isset($post['v_location_save']) && $post['v_location_save'] == 'on') { echo CHECKED_INPUT; } ?>>
                             <label for="v-location-save">Save this location for your future events</label>
                         </div>
                     </div>

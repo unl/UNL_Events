@@ -65,7 +65,7 @@ class CreateEvent extends EventForm
         # Validate Recurring Event (if applicable)
         $this->validateRecurringEvent($post_data, $start_date, $end_date);
 
-        //TODO: add checks here for new functionality for location and virtual location
+        // If there is a physical location make sure these are set
         if (isset($post_data['physical_location_check']) && $post_data['physical_location_check'] == '1') {
             if ($post_data['location'] == 'new' && empty($post_data['new_location']['name'])) {
                 throw new ValidationException('You must give your new location a <a href="#location-name">name</a>.');
@@ -92,27 +92,28 @@ class CreateEvent extends EventForm
             }
         }
 
+        // If there is a virtual location make sure these are set
         if (isset($post_data['virtual_location_check']) && $post_data['virtual_location_check'] == '1') {
-            if ($post_data['v_location'] == 'new' && empty($post_data['new_v_location']['name'])) {
-                throw new ValidationException('You must give your new virtual location a <a href=\"#new-v-location-url\">URL</a>.');
+            if ($post_data['v_location'] == 'new' && empty($post_data['new_v_location']['title'])) {
+                throw new ValidationException('You must give your new virtual location a <a href=\"#new-v-location-name\">name</a>.');
             }
 
-            if ($post_data['v_location'] == 'new' && empty($post_data['new_v_location']['URL'])) {
+            if ($post_data['v_location'] == 'new' && empty($post_data['new_v_location']['url'])) {
                 throw new ValidationException('You must give your new virtual location a <a href=\"#new-v-location-url\">URL</a>.');
-            } else if ($post_data['v_location'] == 'new' && !empty($post_data['new_v_location']['URL']) && !filter_var($post_data['new_v_location']['URL'], FILTER_VALIDATE_URL)) {
+            } else if ($post_data['v_location'] == 'new' && !empty($post_data['new_v_location']['url']) && !filter_var($post_data['new_v_location']['url'], FILTER_VALIDATE_URL)) {
                 throw new ValidationException('<a href=\"#new-v-location-url\">Virtual Location URL</a> is not a valid URL.');
             }
         }
 
         # website must be a valid url
         if (!empty($post_data['website']) && !filter_var($post_data['website'], FILTER_VALIDATE_URL)) {
-          throw new ValidationException('Event Website must be a valid URL.');
+            throw new ValidationException('Event Website must be a valid URL.');
         }
 
-	    # send to main is required
-	    if (empty($post_data['send_to_main'])) {
-		    throw new ValidationException('<a href="send_to_main">Consider for main calendar</a> is required.');
-	    }
+        # send to main is required
+        if (empty($post_data['send_to_main'])) {
+            throw new ValidationException('<a href="send_to_main">Consider for main calendar</a> is required.');
+        }
 
         # Validate Image
         $this->validateEventImage($post_data, $files);
@@ -152,13 +153,30 @@ class CreateEvent extends EventForm
         $event_datetime->event_id = $this->event->id;
         $event_datetime->canceled = 0;
 
-        # check if this is to use a new location
-        if ($post_data['location'] == 'new') {
-            # create a new location
-	        $location = LocationUtility::addLocation($post_data, $user);
-            $event_datetime->location_id = $location->id;
-        } else {
-            $event_datetime->location_id = $post_data['location'];
+        // check if physical location has been added
+        if ($post_data['physical_location_check'] == "1") {
+
+            // if a physical location is there then create a new one or set it to the selected one
+            if ($post_data['location'] == 'new') {
+                # create a new location
+                $location = LocationUtility::addLocation($post_data, $user);
+                $event_datetime->location_id = $location->id;
+            } else {
+                $event_datetime->location_id = $post_data['location'];
+            }
+        }
+
+        // check if physical location has been added
+        if ($post_data['virtual_location_check'] == "1") {
+
+            // if a virtual location is there then create a new one or set it to the selected one
+            if ($post_data['v_location'] == 'new') {
+                # create a new location
+                $webcast = WebcastUtility::addWebcast($post_data, $user);
+                $event_datetime->webcast_id = $webcast->id;
+            } else {
+                $event_datetime->webcast_id = $post_data['v_location'];
+            }
         }
 
         # set the start date and end date
@@ -191,6 +209,7 @@ class CreateEvent extends EventForm
         $event_datetime->room = $post_data['room'];
         $event_datetime->directions = $post_data['directions'];
         $event_datetime->additionalpublicinfo = $post_data['additional_public_info'];
+        $event_datetime->webcast_additionalpublicinfo = $post_data['v_additional_public_info'];
 
         $event_datetime->insert();
 
