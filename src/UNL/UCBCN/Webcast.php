@@ -1,16 +1,16 @@
 <?php
-namespace UNL\UCBCN\Event\Webcast;
+namespace UNL\UCBCN;
 
 use UNL\UCBCN\ActiveRecord\Record;
 /**
- * Table Definition for webcastlink
+ * Table Definition for webcast
  *
  * PHP version 5
  *
  * @category  Events
  * @package   UNL_UCBCN
- * @author    Brett Bieber <brett.bieber@gmail.com>
- * @copyright 2009 Regents of the University of Nebraska
+ * @author    Thomas Neumann <tneumann9@unl.edu>
+ * @copyright 2023 Regents of the University of Nebraska
  * @license   http://www1.unl.edu/wdn/wiki/Software_License BSD License
  * @link      http://code.google.com/p/unl-event-publisher/
  */
@@ -19,23 +19,23 @@ use UNL\UCBCN\ActiveRecord\Record;
  * ORM for a record within the database.
  *
  * @package   UNL_UCBCN
- * @author    Brett Bieber <brett.bieber@gmail.com>
- * @copyright 2009 Regents of the University of Nebraska
+ * @author    Thomas Neumann <tneumann9@unl.edu>
+ * @copyright 2023 Regents of the University of Nebraska
  * @license   http://www1.unl.edu/wdn/wiki/Software_License BSD License
  * @link      http://code.google.com/p/unl-event-publisher/
  */
-class Link extends Record
+class Webcast extends Record
 {
 
     public $id;                              // int(10)  not_null primary_key unsigned auto_increment
-    public $webcast_id;                      // int(10)  not_null unsigned
+    public $title;                           // string(100)
     public $url;                             // blob(4294967295)  blob
-    public $sequencenumber;                  // int(10)  unsigned
-    public $related;                         // string(1)
+    public $additionalinfo;                  // blob(4294967295)  blob
+    public $user_id;                         // string(100)
 
     public static function getTable()
     {
-        return 'webcastlink';
+        return 'webcast';
     }
 
     
@@ -43,10 +43,10 @@ class Link extends Record
     {
         return array(
             'id'=>129,
-            'webcast_id'=>129,
+            'title'=>2,
             'url'=>66,
-            'sequencenumber'=>1,
-            'related'=>2,
+            'additionalinfo'=>66,
+            'user_id'=>2,
         );
     }
 
@@ -60,10 +60,5 @@ class Link extends Record
     function sequenceKey()
     {
         return array('id',true);
-    }
-    
-    function links()
-    {
-        return array('webcast_id' => 'webcast:id');
     }
 }

@@ -575,16 +575,6 @@ class Event extends Record
     }
 
     /**
-     * Get all webcasts for this event
-     *
-     * @return Event\Webcasts
-     */
-    public function getWebcasts()
-    {
-        return new Event\Webcasts(array('event_id' => $this->id));
-    }
-
-    /**
      * Get documents for this event
      *
      * @return Event\Documents

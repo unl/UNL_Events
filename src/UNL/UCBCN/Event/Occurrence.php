@@ -7,7 +7,7 @@ use UNL\UCBCN\Location;
 use UNL\UCBCN\Event\RecurringDate;
 use UNL\UCBCN\Event\RecurringDates;
 use UNL\UCBCN\Manager\Controller;
-
+use UNL\UCBCN\Webcast;
 
 /**
  * Table Definition for eventdatetime
@@ -36,7 +36,8 @@ class Occurrence extends Record
 
     public $id;                              // int(10)  not_null primary_key unsigned auto_increment
     public $event_id;                        // int(10)  not_null multiple_key unsigned
-    public $location_id;                     // int(10)  not_null multiple_key unsigned
+    public $location_id;                     // int(10)  multiple_key unsigned
+    public $webcast_id;                      // int(10)  multiple_key unsigned
     public $timezone;                        // string(30)
     public $starttime;                       // datetime(19)  multiple_key binary
     public $endtime;                         // datetime(19)  multiple_key binary
@@ -47,6 +48,7 @@ class Occurrence extends Record
     public $hours;                           // string(255)
     public $directions;                      // blob(4294967295)  blob
     public $additionalpublicinfo;            // blob(4294967295)  blob
+    public $webcast_additionalpublicinfo;    // blob(4294967295)  blob
     public $canceled;
 
     const ONE_DAY = 86400;
@@ -235,13 +237,31 @@ class Occurrence extends Record
     }
     
     /**
-     * Gets an object for the location of this event date and time.
+     * Gets an object for the location of this event date and time if set.
      *
-     * @return UNL\UCBCN\Location
+     * @return UNL\UCBCN\Location|null
      */
     public function getLocation()
     {
-        return Location::getById($this->location_id);
+        if (isset($this->location_id)) {
+            return Location::getById($this->location_id);
+        }
+
+        return null;
+    }
+
+    /**
+     * Gets an object for the webcast of this event date and time if set.
+     *
+     * @return UNL\UCBCN\Webcast|null
+     */
+    public function getWebcast()
+    {
+        if (isset($this->webcast_id)) {
+            return Webcast::getById($this->webcast_id);
+        }
+
+        return null;
     }
 
     /**
