@@ -418,7 +418,7 @@ require(['jquery'], function ($) {
         var errors = [];
 
         // validate required fields
-        if ($('#title').val() == '' || $('#location').val() == '' || $('#start-date').val() == '') {
+        if ($('#title').val() == '' || $('#location').val() == '' || $('#start-date').val() == '' || $('#type').val() == '') {
             if ($('#title').val() == '') {
                 notifier.mark_input_invalid($('#title'));
             }
@@ -428,7 +428,10 @@ require(['jquery'], function ($) {
             if ($('#start-date').val() == '') {
                 notifier.mark_input_invalid($('#start-date'));
             }
-            errors.push('<a href=\"#title\">Title</a>, <a href=\"#location\">location</a>, and <a href=\"#start-date\">start date</a> are required.');
+            if ($('#type').val() == '') {
+                notifier.mark_input_invalid($('#type'));
+            }
+            errors.push('<a href=\"#title\">Title</a>, <a href=\"#type\">Type</a>, <a href=\"#location\">location</a>, and <a href=\"#start-date\">start date</a> are required.');
         }
 
         var start = new Date($('#start-date').val());
