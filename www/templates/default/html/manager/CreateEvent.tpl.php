@@ -417,9 +417,9 @@ require(['jquery'], function ($) {
     $('#create-event-form').submit(function (submit) {
         var errors = [];
 
-        console.log('val', $('#type').val());
+        console.log('val', $('#type').find(':selected').val() );
         // validate required fields
-        if ($('#title').val() == '' || $('#location').val() == '' || $('#start-date').val() == '' || $('#type').find(':selecte').val() == '') {
+        if ($('#title').val() == '' || $('#location').val() == '' || $('#start-date').val() == '' || $('#type').find(':selected').val() == '') {
             if ($('#title').val() == '') {
                 notifier.mark_input_invalid($('#title'));
             }
@@ -433,9 +433,10 @@ require(['jquery'], function ($) {
                 console.log('TYPE');
                 notifier.mark_input_invalid($('#type'));
             }
-            console.log('HERE');
+            console.log('INSIDE');
             errors.push('<a href=\"#title\">Title</a>, <a href=\"#type\">Type</a>, <a href=\"#location\">location</a>, and <a href=\"#start-date\">start date</a> are required.');
         }
+        console.log('errors', errors);
 
         var start = new Date($('#start-date').val());
         if ($('#start-date').val() != '') {
@@ -530,7 +531,7 @@ require(['jquery'], function ($) {
             errors.push('<a href=\"#website\">Event Website</a> is not a valid URL.');
         }
 
-        if (errors.length > 0) {
+        if (errors.length >= 0) {
             submit.preventDefault();
             notifier.alert('Sorry! We couldn\'t create your event', '<ul><li>' + errors.join('</li><li>') + '</li></ul>');
         }
