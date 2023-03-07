@@ -419,7 +419,7 @@ require(['jquery'], function ($) {
 
         console.log('val', $('#type').val());
         // validate required fields
-        if ($('#title').val() == '' || $('#location').val() == '' || $('#start-date').val() == '' || $('#type').val() == '') {
+        if ($('#title').val() == '' || $('#location').val() == '' || $('#start-date').val() == '' || $('#type').find(":selected").val() == '') {
             if ($('#title').val() == '') {
                 notifier.mark_input_invalid($('#title'));
             }
@@ -429,7 +429,7 @@ require(['jquery'], function ($) {
             if ($('#start-date').val() == '') {
                 notifier.mark_input_invalid($('#start-date'));
             }
-            if ($('#type').val() == '') {
+            if ($('#type').find(":selected").val() == '') {
                 console.log('TYPE');
                 notifier.mark_input_invalid($('#type'));
             }
