@@ -187,7 +187,6 @@ class Event extends Record
             // get the origin calendar for the event. If the user has editing permissions there,
             // we will send them to edit it there
             $origin_calendar = $this->getOriginCalendar();
-            error_log(print_r($origin_calendar,1));
             if (!empty($origin_calendar) && $this->getStatusWithCalendar($origin_calendar) && $user->hasPermission(Permission::EVENT_EDIT_ID, $origin_calendar->id)) {
                 return Controller::$url . $origin_calendar->shortname . '/event/' . $this->id . '/edit/';
             }
