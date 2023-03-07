@@ -215,7 +215,12 @@
                         ?>
                     </td>
                     <td class="dcf-txt-middle location with-controls">
-                        <?php echo $datetime->getLocation()->name; ?>
+                        <?php $location = $datetime->getLocation(); ?>
+                        <?php if (isset($location) && !empty($location)): ?>
+                            <?php echo $location->name; ?>
+                        <?php else: ?>
+                            <?php echo "No Physical Location" ?>
+                        <?php endif;?>
                     </td>
                     <td class="dcf-pr-0 dcf-txt-middle controls">
                         <div class="dcf-d-flex dcf-ai-center dcf-jc-flex-end">

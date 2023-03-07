@@ -33,8 +33,8 @@ class CreateEvent extends EventForm
     private function validateEventData($post_data, $files) 
     {
         # title, start date, location are required
-        if (empty($post_data['title']) || empty($post_data['location']) || empty($post_data['start_date'])) {
-            throw new ValidationException('<a href="#title">Title</a>, <a href="#location">location</a>, and <a href="#start-date">start date</a> are required.');
+        if (empty($post_data['title']) || empty($post_data['start_date'])) {
+            throw new ValidationException('<a href="#title">Title</a>, and <a href="#start-date">start date</a> are required.');
         }
 
         # if we are sending this to UNL Main Calendar, description and contact info must be given
@@ -72,7 +72,7 @@ class CreateEvent extends EventForm
             }
 
             if ($post_data['location'] == 'new' && empty($post_data['new_location']['streetaddress1'])) {
-                throw new ValidationException('You must give your new location a <a href=\"#location-address-1\">address</a>.');
+                throw new ValidationException('You must give your new location an <a href=\"#location-address-1\">address</a>.');
             }
 
             if ($post_data['location'] == 'new' && empty($post_data['new_location']['city'])) {
@@ -80,7 +80,7 @@ class CreateEvent extends EventForm
             }
 
             if ($post_data['location'] == 'new' && empty($post_data['new_location']['state'])) {
-                throw new ValidationException('You must give your new location a <a href=\"#location-city\">city</a>.');
+                throw new ValidationException('You must give your new location a <a href=\"#location-state\">state</a>.');
             }
 
             if ($post_data['location'] == 'new' && empty($post_data['new_location']['zip'])) {

@@ -278,7 +278,7 @@ class EventInstance implements RoutableInterface
         $data['Refreshments']          = $this->event->refreshments;
 
         $data['Locations'] = array();
-        if ($location) {
+        if (isset($location) && !empty($location)) {
             $data['Locations'][0] = array(
                 'LocationID'    => $location->id,
                 'LocationName'  => $location->name,

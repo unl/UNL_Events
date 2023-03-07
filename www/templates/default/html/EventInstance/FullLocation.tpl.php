@@ -1,5 +1,8 @@
 <?php 
 $location = $context->eventdatetime->getLocation();
+
+if (isset($location)) :
+
 $locationName = isset($location->name) ? $location->name : '';
 $locationRoom = isset($location->room) ? $location->room : '';
 $locationDirections = isset($location->directions) ? $location->directions : '';
@@ -43,4 +46,5 @@ $directions = !empty($context->eventdatetime->directions) ? $context->eventdatet
     <div class="additionalinfo">Additional Info: <?php echo $savvy->dbStringtoHtml($location->additionalpublicinfo) ?></div>
 <?php endif ?>
 </div>
+<?php endif; ?>
 <?php endif; ?>

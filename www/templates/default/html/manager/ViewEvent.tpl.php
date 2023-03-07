@@ -86,7 +86,12 @@ echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
                         ?>
                     </td>
                     <td>
-                        <?php echo $datetime->getLocation()->name; ?>
+                        <?php $location = $datetime->getLocation(); ?>
+                        <?php if (isset($location) && !empty($location)): ?>
+                            <?php echo $location->name; ?>
+                        <?php else: ?>
+                            <?php echo "No Physical Location" ?>
+                        <?php endif;?>
                     </td>
                 </tr>
             <?php endforeach; ?>

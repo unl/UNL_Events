@@ -50,14 +50,10 @@ class CreateEvent
     private function validateEventData($post_data) 
     {
         # title, start date, location are required
-        if (empty($post_data['title']) || empty($post_data['location']) || empty($post_data['start_time']) || empty($post_data['end_time'])) {
+        if (empty($post_data['title']) || empty($post_data['start_time']) || empty($post_data['end_time'])) {
             throw new ValidationException('Title, location, start time, and end time are required.');
         }
 
-        # check that this location ID is legit
-        if (Location::getByID($post_data['location']) === FALSE) {
-            throw new ValidationException('That location ID is invalid.');
-        }
 
         # timezone must be valid
         if (!empty($post_data['timezone']) && !(in_array($post_data['timezone'], \UNL\UCBCN::getTimezoneOptions()))) {
@@ -69,6 +65,51 @@ class CreateEvent
         $end_date = date('Y-m-d H:i:s', strtotime($post_data['end_time']));
         if ($start_date > $end_date) {
             throw new ValidationException('Your end date/time must be on or after the start date/time.');
+        }
+
+        // If there is a physical location make sure these are set
+        if (isset($post_data['physical_location_check']) && $post_data['physical_location_check'] == '1') {
+            # check that this location ID is legit
+            if ($post_data['location'] !== 'new' && Location::getByID($post_data['location']) === FALSE) {
+                throw new ValidationException('That location ID is invalid.');
+            }
+
+            if ($post_data['location'] == 'new' && empty($post_data['new_location']['name'])) {
+                throw new ValidationException('You must give your new location a name.');
+            }
+
+            if ($post_data['location'] == 'new' && empty($post_data['new_location']['streetaddress1'])) {
+                throw new ValidationException('You must give your new location an address.');
+            }
+
+            if ($post_data['location'] == 'new' && empty($post_data['new_location']['city'])) {
+                throw new ValidationException('You must give your new location a city.');
+            }
+
+            if ($post_data['location'] == 'new' && empty($post_data['new_location']['state'])) {
+                throw new ValidationException('You must give your new location a state.');
+            }
+
+            if ($post_data['location'] == 'new' && empty($post_data['new_location']['zip'])) {
+                throw new ValidationException('You must give your new location a zip.');
+            }
+
+            if ($post_data['location'] == 'new' && !empty($post_data['new_location']['webpageurl']) && !filter_var($post_data['new_location']['webpageurl'], FILTER_VALIDATE_URL)) {
+                throw new ValidationException('Location URL is not a valid URL.');
+            }
+        }
+
+        // If there is a virtual location make sure these are set
+        if (isset($post_data['virtual_location_check']) && $post_data['virtual_location_check'] == '1') {
+            if ($post_data['v_location'] == 'new' && empty($post_data['new_v_location']['title'])) {
+                throw new ValidationException('You must give your new virtual location a name.');
+            }
+
+            if ($post_data['v_location'] == 'new' && empty($post_data['new_v_location']['url'])) {
+                throw new ValidationException('You must give your new virtual location a URL.');
+            } else if ($post_data['v_location'] == 'new' && !empty($post_data['new_v_location']['url']) && !filter_var($post_data['new_v_location']['url'], FILTER_VALIDATE_URL)) {
+                throw new ValidationException('Virtual Location URL is not a valid URL.');
+            }
         }
 
         # website must be a valid url

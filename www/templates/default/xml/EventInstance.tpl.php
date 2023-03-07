@@ -18,7 +18,7 @@
         </DateTime>
         <Locations>
         	<?php
-			if ($context->eventdatetime->location_id) :
+			if (isset($context->eventdatetime->location_id) && !empty($context->eventdatetime->location_id)) :
                 $loc = $context->eventdatetime->getLocation();
 			?>
             <Location>
