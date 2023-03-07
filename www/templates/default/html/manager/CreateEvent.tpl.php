@@ -34,7 +34,7 @@
             </div>
             <div class="dcf-form-group">
                 <label for="type">Type <small class="dcf-required">Required</small></label>
-                <select class="dcf-w-100%" id="type" name="type" required>
+                <select class="dcf-w-100%" id="type" name="type">
                     <option
                         <?php if (!isset($post['type'])) { echo 'selected="selected"'; }?>
                         disabled="disabled"
@@ -417,7 +417,6 @@ require(['jquery'], function ($) {
     $('#create-event-form').submit(function (submit) {
         var errors = [];
 
-        console.log('val', $('#type').find(':selected').val() );
         // validate required fields
         if ($('#title').val() == '' || $('#location').val() == '' || $('#start-date').val() == '' || $('#type').find(':selected').val() == '') {
             if ($('#title').val() == '') {
@@ -430,10 +429,8 @@ require(['jquery'], function ($) {
                 notifier.mark_input_invalid($('#start-date'));
             }
             if ($('#type').find(':selected').val() == '') {
-                console.log('TYPE');
                 notifier.mark_input_invalid($('#type'));
             }
-            console.log('INSIDE');
             errors.push('<a href=\"#title\">Title</a>, <a href=\"#type\">Type</a>, <a href=\"#location\">location</a>, and <a href=\"#start-date\">start date</a> are required.');
         }
         console.log('errors', errors);
@@ -531,7 +528,7 @@ require(['jquery'], function ($) {
             errors.push('<a href=\"#website\">Event Website</a> is not a valid URL.');
         }
 
-        if (errors.length >= 0) {
+        if (errors.length > 0) {
             submit.preventDefault();
             notifier.alert('Sorry! We couldn\'t create your event', '<ul><li>' + errors.join('</li><li>') + '</li></ul>');
         }
