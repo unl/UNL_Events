@@ -38,6 +38,13 @@ class Locations extends RecordList
               WHERE user_id = "' . $this->escapeString($this->options['user_id']) . '" 
               ORDER BY display_order ASC, name ASC;
             ';
+        } else if (array_key_exists('calendar_id', $this->options)) {
+            return '
+              SELECT id
+              FROM location 
+              WHERE calendar_id = "' . $this->escapeString($this->options['calendar_id']) . '" 
+              ORDER BY display_order ASC, name ASC;
+            ';
         } else if (array_key_exists('standard', $this->options)) {
             if (!array_key_exists('display_order', $this->options)) {
                 throw new \Exception('You must also provide a display_order filter', 500);

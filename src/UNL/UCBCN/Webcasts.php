@@ -45,7 +45,14 @@ class Webcasts extends RecordList
                 SELECT id
                 FROM webcast
                 WHERE user_id = "' . $this->escapeString($this->options['user_id']) . '"
-                ORDER BY display_order ASC, name ASC;
+                ORDER BY title ASC;
+            ';
+        } else if (array_key_exists('calendar_id', $this->options)) {
+            return '
+                SELECT id
+                FROM webcast
+                WHERE calendar_id = "' . $this->escapeString($this->options['calendar_id']) . '"
+                ORDER BY title ASC;
             ';
         } else {
             return parent::getSQL();

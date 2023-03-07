@@ -32,6 +32,7 @@ class Webcast extends Record
     public $url;                             // blob(4294967295)  blob
     public $additionalinfo;                  // blob(4294967295)  blob
     public $user_id;                         // string(100)
+    public $calendar_id;                     // string(100)
 
     public static function getTable()
     {
@@ -47,6 +48,7 @@ class Webcast extends Record
             'url'=>66,
             'additionalinfo'=>66,
             'user_id'=>2,
+            'calendar_id'=>2,
         );
     }
 

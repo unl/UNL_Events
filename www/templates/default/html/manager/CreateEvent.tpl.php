@@ -49,7 +49,7 @@
             </div>
             <hr>
         </section>
-        
+
 
         <h2>Date &amp; Time</h2>
         <section class="dcf-mb-8 dcf-ml-5">
@@ -199,21 +199,45 @@
                 <div class="dcf-form-group">
                     <label for="location">Location <small class="dcf-required">Required</small></label>
                     <select id="location" name="location">
-                        <optgroup label="Your saved locations">
-                            <?php foreach (\UNL\UCBCN\Manager\LocationUtility::getUserLocations() as $location): ?>
-                                <option <?php if (isset($post['location']) && $post['location'] == $location->id) echo 'selected="selected"' ?> value="<?php echo $location->id ?>" data-microdata="<?php echo json_encode($location->microdata_check()); ?>"><?php echo $location->name ?></option>
-                            <?php endforeach ?>
-                        <option <?php if (isset($post['location']) && $post['location'] == 'new') echo 'selected="selected"' ?>value="new">-- New Location --</option>
-                        </optgroup>
+                        <option <?php if (!isset($post['location']) || $post['location'] == 'new') echo 'selected="selected"' ?>value="new">-- New Location --</option>
+
+                        <?php
+                            $user_locations = \UNL\UCBCN\Manager\LocationUtility::getUserLocations();
+                            $calendar_locations = \UNL\UCBCN\Manager\LocationUtility::getCalendarLocations($calendar->id);
+                            $campus_locations = \UNL\UCBCN\Manager\LocationUtility::getStandardLocations(\UNL\UCBCN\Location::DISPLAY_ORDER_MAIN);
+                            $extensions_locations = \UNL\UCBCN\Manager\LocationUtility::getStandardLocations(\UNL\UCBCN\Location::DISPLAY_ORDER_EXTENSION);
+                        ?>
+
+                        <?php if (count($user_locations) == 0): ?>
+                            <optgroup label="Your saved locations (None Available)"></optgroup>
+                        <?php else: ?>
+                            <optgroup label="Your saved locations">
+                                <?php foreach ($user_locations as $location): ?>
+                                    <option <?php if (isset($post['location']) && $post['location'] == $location->id) { echo 'selected="selected"'; } ?> value="<?php echo $location->id ?>" data-microdata="<?php echo json_encode($location->microdata_check()); ?>"><?php echo $location->name ?></option>
+                                <?php endforeach; ?>
+                            </optgroup>
+                        <?php endif; ?>
+
+                        <?php if (count($calendar_locations) == 0): ?>
+                            <optgroup label="This calendar's saved locations (None Available)"></optgroup>
+                        <?php else: ?>
+                            <optgroup label="This calendar's saved locations">
+                                <?php foreach ($calendar_locations as $location): ?>
+                                    <option <?php if (isset($post['location']) && $post['location'] == $location->id) echo 'selected="selected"' ?> value="<?php echo $location->id ?>" data-microdata="<?php echo json_encode($location->microdata_check()); ?>"><?php echo $location->name ?></option>
+                                <?php endforeach; ?>
+                            </optgroup>
+                        <?php endif; ?>
+
                         <optgroup label="UNL Campus locations">
-                            <?php foreach (\UNL\UCBCN\Manager\LocationUtility::getStandardLocations(\UNL\UCBCN\Location::DISPLAY_ORDER_MAIN) as $location): ?>
+                            <?php foreach ($campus_locations as $location): ?>
                                 <option <?php if (isset($post['location']) && $post['location'] == $location->id) echo 'selected="selected"' ?> value="<?php echo $location->id ?>" data-microdata="<?php echo json_encode($location->microdata_check()); ?>"><?php echo $location->name ?></option>
-                            <?php endforeach ?>
+                            <?php endforeach; ?>
                         </optgroup>
+
                         <optgroup label="Extension locations">
-                            <?php foreach (\UNL\UCBCN\Manager\LocationUtility::getStandardLocations(\UNL\UCBCN\Location::DISPLAY_ORDER_EXTENSION) as $location): ?>
+                            <?php foreach ($extensions_locations as $location): ?>
                                 <option <?php if (isset($post['location']) && $post['location'] == $location->id) echo 'selected="selected"' ?> value="<?php echo $location->id ?>" data-microdata="<?php echo json_encode($location->microdata_check()); ?>"><?php echo $location->name ?></option>
-                            <?php endforeach ?>
+                            <?php endforeach; ?>
                         </optgroup>
                     </select>
                 </div>
@@ -221,7 +245,7 @@
                     <legend>New Location</legend>
                     <?php //These names need to match /UNL/UCBCN/Manager/LocationUtility ?>
                     <div class="dcf-d-grid dcf-grid-full dcf-grid-halves@md dcf-col-gap-5">
-                        <div class="dcf-form-group" style="grid-column: span 2;">
+                        <div class="dcf-form-group events-col-full-width">
                             <label for="location-name">Name <small class="dcf-required">Required</small></label>
                             <input id="location-name" class="dcf-w-100%" name="new_location[name]" type="text" value="<?php echo isset($post['location']['name']) ? $post['location']['name']: ''; ?>">
                         </div>
@@ -234,7 +258,7 @@
                             <label for="location-address-2">Address 2</label>
                             <input id="location-address-2" class="dcf-w-100%" name="new_location[streetaddress2]" type="text" value="<?php echo isset($post['location']['streetaddress2']) ? $post['location']['streetaddress2']: ''; ?>">
                         </div>
-                        
+
                         <div class="dcf-form-group">
                             <label for="location-city">City <small class="dcf-required">Required</small></label>
                             <input id="location-city" class="dcf-w-100%" name="new_location[city]" type="text" value="<?php echo isset($post['location']['city']) ? $post['location']['city']: ''; ?>">
@@ -311,11 +335,11 @@
 
                         <div class="dcf-form-group">
                             <label for="location-zip"><abbr title="Zone Improvement Plan">ZIP</abbr> Code <small class="dcf-required">Required</small></label>
-                            <input id="location-zip" class="dcf-w-100%" name="new_location[zip]" type="text" value="<?php echo isset($post['location']['zip']) ? $post['location']['zip']: ''; ?>">
+                            <input id="location-zip" class="dcf-w-100%" name="new_location[zip]" type="text" maxlength="10" value="<?php echo isset($post['location']['zip']) ? $post['location']['zip']: ''; ?>">
                         </div>
-                        
 
-                        <hr class="dcf-mb-5" style="grid-column: span 2;">
+
+                        <hr class="dcf-mb-5 events-col-full-width">
 
                         <div class="dcf-form-group">
                             <label for="location-map-url">Map <abbr title="Uniform Resource Locator">URL</abbr></label>
@@ -335,27 +359,34 @@
                             <input id="location-phone" class="dcf-w-100%" name="new_location[phone]" type="text" value="<?php echo isset($post['location']['phone']) ? $post['location']['phone']: ''; ?>">
                         </div>
 
-                        <hr class="dcf-mb-5" style="grid-column: span 2;">
+                        <hr class="dcf-mb-5 events-col-full-width">
 
-                        <div class="dcf-form-group" style="grid-column: span 2;">
+                        <div class="dcf-form-group events-col-full-width">
                             <label for="location-room">Location Default - Room</label>
                             <input id="location-room" name="new_location[room]" type="text" value="<?php echo isset($post['location']['room']) ? $post['location']['room']: ''; ?>">
                         </div>
-                        
-                        <div class="dcf-form-group" style="grid-column: span 2;">
+
+                        <div class="dcf-form-group events-col-full-width">
                             <label for="location-directions">Location Default - Directions</label>
                             <textarea id="location-directions" name="new_location[directions]"><?php echo isset($post['location']['directions']) ? $post['location']['directions']: ''; ?></textarea>
                         </div>
 
-                        <div class="dcf-form-group" style="grid-column: span 2;">
+                        <div class="dcf-form-group events-col-full-width">
                             <label for="location-additional-public-info">Location Default - Additional Public Info</label>
                             <textarea id="location-additional-public-info" name="new_location[additionalpublicinfo]"><?php echo isset($post['location']['additionalpublicinfo']) ? $post['location']['additionalpublicinfo']: ''; ?></textarea>
                         </div>
-                        
-                        <div class="dcf-form-group dcf-mt-3" style="grid-column: span 2;">
+
+                        <div class="dcf-form-group dcf-mt-3">
                             <div class="dcf-input-checkbox">
                                 <input id="location-save" name="location_save" type="checkbox" <?php if (isset($post['location_save']) && $post['location_save'] == 'on') { echo CHECKED_INPUT; } ?>>
                                 <label for="location-save">Save this location for your future events</label>
+                            </div>
+                        </div>
+
+                        <div class="dcf-form-group dcf-mt-3">
+                            <div class="dcf-input-checkbox">
+                                <input id="location-save-calendar" name="location_save_calendar" type="checkbox" <?php if (isset($post['location_save_calendar']) && $post['location_save_calendar'] == 'on') { echo CHECKED_INPUT; } ?>>
+                                <label for="location-save-calendar">Save this location for this calendar's future events</label>
                             </div>
                         </div>
                     </div>
@@ -387,31 +418,61 @@
                 <div class="dcf-form-group">
                     <label for="v-location">Virtual Location <small class="dcf-required">Required</small></label>
                     <select id="v-location" name="v_location">
-                        <optgroup label="Your saved virtual locations">
-                            <option <?php if (isset($post['v_location']) && $post['v_location'] == 'new') echo 'selected="selected"' ?>value="new">-- New Location --</option>
-                            <option value="tn_zoom">Tommy Neumann Zoom</option>
-                        </optgroup>
+                        <option <?php if (!isset($post['v_location']) || $post['v_location'] == 'new') { echo 'selected="selected"'; } ?>value="new">-- New Location --</option>
+                        <?php
+                            $user_webcasts = \UNL\UCBCN\Manager\WebcastUtility::getUserWebcasts();
+                            $calendar_webcasts = \UNL\UCBCN\Manager\WebcastUtility::getCalendarWebcasts($calendar->id);
+                        ?>
+
+                        <?php if (count($user_webcasts) == 0):?>
+                            <optgroup label="Your saved locations (None Available)"></optgroup>
+                        <?php else: ?>
+                            <optgroup label="Your saved locations">
+                                <?php foreach ($user_webcasts as $webcast): ?>
+                                    <option <?php if (isset($post['v_location']) && $post['v_location'] == $webcast->id) echo 'selected="selected"' ?> value="<?php echo $webcast->id ?>"><?php echo $webcast->title ?></option>
+                                <?php endforeach; ?>
+                            </optgroup>
+                        <?php endif; ?>
+
+                        <?php if (count($calendar_webcasts) == 0):?>
+                            <optgroup label="This calendar's saved locations (None Available)"></optgroup>
+                        <?php else: ?>
+                            <optgroup label="This calendar's saved locations">
+                                <?php foreach ($calendar_webcasts as $webcast): ?>
+                                    <option <?php if (isset($post['v_location']) && $post['v_location'] == $webcast->id) echo 'selected="selected"' ?> value="<?php echo $webcast->id ?>"><?php echo $webcast->title ?></option>
+                                <?php endforeach; ?>
+                            </optgroup>
+                        <?php endif; ?>
+
                     </select>
                 </div>
                 <fieldset class="dcf-mt-6" id="new-v-location-fields">
                     <legend>New Virtual Location</legend>
                     <?php //These names need to match /UNL/UCBCN/Manager/WebcastUtility ?>
-                    <div class="dcf-form-group">
-                        <label for="new-v-location-name">Name <small class="dcf-required">Required</small></label>
-                        <input id="new-v-location-name" name="new_v_location[title]" type="text" class="dcf-w-100%" value="<?php echo isset($post['new_v_location']['title']) ? $post['new_v_location']['title']: ''; ?>">
-                    </div>
-                    <div class="dcf-form-group">
-                        <label for="new-v-location-url">URL<small class="dcf-required">Required</small></label>
-                        <input id="new-v-location-url" name="new_v_location[url]" type="text" class="dcf-w-100%" value="<?php echo isset($post['new_v_location']['url']) ? $post['new_v_location']['url']: ''; ?>">
-                    </div>
-                    <div class="dcf-form-group">
-                        <label for="new-v-location-additional-public-info">Location Default - Additional Public Info</label>
-                        <textarea id="new-v-location-additional-public-info" name="new_v_location[additionalinfo]"><?php if (isset($post['new_v_location']['additionalinfo'])) { echo $post['new_v_location']['additionalinfo']; } ?></textarea>
-                    </div>
-                    <div class="dcf-form-group dcf-mt-3">
-                        <div class="dcf-input-checkbox">
-                            <input id="v-location-save" name="v_location_save" type="checkbox" <?php if (isset($post['v_location_save']) && $post['v_location_save'] == 'on') { echo CHECKED_INPUT; } ?>>
-                            <label for="v-location-save">Save this location for your future events</label>
+                    <div class="dcf-d-grid dcf-grid-full dcf-grid-halves@md">
+                        <div class="dcf-form-group events-col-full-width">
+                            <label for="new-v-location-name">Name <small class="dcf-required">Required</small></label>
+                            <input id="new-v-location-name" name="new_v_location[title]" type="text" class="dcf-w-100%" value="<?php echo isset($post['new_v_location']['title']) ? $post['new_v_location']['title']: ''; ?>">
+                        </div>
+                        <div class="dcf-form-group events-col-full-width">
+                            <label for="new-v-location-url">URL<small class="dcf-required">Required</small></label>
+                            <input id="new-v-location-url" name="new_v_location[url]" type="text" class="dcf-w-100%" value="<?php echo isset($post['new_v_location']['url']) ? $post['new_v_location']['url']: ''; ?>">
+                        </div>
+                        <div class="dcf-form-group events-col-full-width">
+                            <label for="new-v-location-additional-public-info">Location Default - Additional Public Info</label>
+                            <textarea id="new-v-location-additional-public-info" name="new_v_location[additionalinfo]"><?php if (isset($post['new_v_location']['additionalinfo'])) { echo $post['new_v_location']['additionalinfo']; } ?></textarea>
+                        </div>
+                        <div class="dcf-form-group dcf-mt-3">
+                            <div class="dcf-input-checkbox">
+                                <input id="v-location-save" name="v_location_save" type="checkbox" <?php if (isset($post['v_location_save']) && $post['v_location_save'] == 'on') { echo CHECKED_INPUT; } ?>>
+                                <label for="v-location-save">Save this location for your future events</label>
+                            </div>
+                        </div>
+                        <div class="dcf-form-group dcf-mt-3">
+                            <div class="dcf-input-checkbox">
+                                <input id="v-location-save-calendar" name="v_location_save_calendar" type="checkbox" <?php if (isset($post['v_location_save_calendar']) && $post['v_location_save_calendar'] == 'on') { echo CHECKED_INPUT; } ?>>
+                                <label for="v-location-save-calendar">Save this location for this calendar's future events</label>
+                            </div>
                         </div>
                     </div>
                 </fieldset>

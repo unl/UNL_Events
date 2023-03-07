@@ -159,7 +159,7 @@ class CreateEvent extends EventForm
             // if a physical location is there then create a new one or set it to the selected one
             if ($post_data['location'] == 'new') {
                 # create a new location
-                $location = LocationUtility::addLocation($post_data, $user);
+                $location = LocationUtility::addLocation($post_data, $user, $this->calendar);
                 $event_datetime->location_id = $location->id;
             } else {
                 $event_datetime->location_id = $post_data['location'];
@@ -172,7 +172,7 @@ class CreateEvent extends EventForm
             // if a virtual location is there then create a new one or set it to the selected one
             if ($post_data['v_location'] == 'new') {
                 # create a new location
-                $webcast = WebcastUtility::addWebcast($post_data, $user);
+                $webcast = WebcastUtility::addWebcast($post_data, $user, $this->calendar);
                 $event_datetime->webcast_id = $webcast->id;
             } else {
                 $event_datetime->webcast_id = $post_data['v_location'];

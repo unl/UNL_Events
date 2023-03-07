@@ -250,7 +250,7 @@ class AddDatetime extends PostHandler
         # check if this is to use a new location
         if ($post_data['location'] == 'new') {
             # create a new location
-	        $location = LocationUtility::addLocation($post_data, $user);
+	        $location = LocationUtility::addLocation($post_data, $user, $this->calendar);
             $this->event_datetime->location_id = $location->id;
         } else {
             $this->event_datetime->location_id = $post_data['location'];

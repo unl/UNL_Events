@@ -45,6 +45,7 @@ class Location extends Record
     public $phone;                           // string(50)
     public $standard;                        // int(1)
     public $user_id;                         // string(255)
+    public $calendar_id;                     // string(255)
     public $display_order;                   // int(1)
     
     const DISPLAY_ORDER_MAIN      = NULL;
