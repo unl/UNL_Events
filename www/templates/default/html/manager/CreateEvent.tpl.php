@@ -417,6 +417,7 @@ require(['jquery'], function ($) {
     $('#create-event-form').submit(function (submit) {
         var errors = [];
 
+        console.log("val", $('#type').val());
         // validate required fields
         if ($('#title').val() == '' || $('#location').val() == '' || $('#start-date').val() == '' || $('#type').val() == '') {
             if ($('#title').val() == '') {
@@ -429,8 +430,10 @@ require(['jquery'], function ($) {
                 notifier.mark_input_invalid($('#start-date'));
             }
             if ($('#type').val() == '') {
+                console.log("TYPE");
                 notifier.mark_input_invalid($('#type'));
             }
+            console.log("HERE");
             errors.push('<a href=\"#title\">Title</a>, <a href=\"#type\">Type</a>, <a href=\"#location\">location</a>, and <a href=\"#start-date\">start date</a> are required.');
         }
 
