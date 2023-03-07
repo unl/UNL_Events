@@ -77,6 +77,21 @@
             endforeach; ?>
         </EventTypes>
         <?php endif; ?>
+        <?php
+        $audiences = $context->event->getAudiences();
+        if ($audiences->count()) : ?>
+        <Audiences>
+            <?php foreach ($audiences as $audience) : ?>
+                <?php $current_audience = $audience->getAudience(); ?>
+                <?php if($current_audience): ?>
+	            <Audience>
+	                <AudienceID><?php echo $current_audience->id; ?></AudienceID>
+	                <AudienceName><?php echo htmlspecialchars($current_audience->name); ?></AudienceName>
+	            </Audience>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </Audiences>
+        <?php endif; ?>
         <Languages>
             <Language>en-US</Language>
         </Languages>
