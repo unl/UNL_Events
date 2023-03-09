@@ -39,15 +39,16 @@
 
 ?>
 <?php
+    $last_crumb = 'Edit "' . $event->title . '"';
     $crumbs = new stdClass;
     $crumbs->crumbs = array(
         "Events Manager" => "/manager",
         $context->calendar->name => $context->calendar->getManageURL(),
-        'Edit Event' => null
+        $last_crumb => null
     );
     echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
 ?>
-<br>
+<h1><?php echo $last_crumb; ?></h1>
 
 <?php foreach($event->getDatetimes() as $datetime) : ?>
     <?php
@@ -116,68 +117,69 @@
         name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>"
         value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>"
     />
-    <div style="margin-top: -2.5rem">
-        <fieldset>
-            <legend>Event Details</legend>
-            <div class="dcf-form-group">
-                <label for="title">Title <small class="dcf-required">Required</small></label>
-                <input id="title" name="title" type="text" value="<?php echo $event->title; ?>" />
-            </div>
-            <div class="dcf-form-group">
-                <label for="subtitle">Subtitle</label>
-                <input id="subtitle" name="subtitle" type="text" value="<?php echo $event->subtitle; ?>" />
-            </div>
-            <div class="dcf-form-group">
-                <label for="description">Description</label>
-                <textarea id="description" name="description" rows="4"><?php echo $event->description; ?></textarea>
-            </div>
-            <div class="dcf-form-group">
-                <label for="type">Type</label>
-                <select id="type" name="type">
-                <?php foreach ($context->getEventTypes() as $type) { ?>
-                    <option
-                        <?php
-                            if ($event_type != null && $event_type->id == $type->id) {
-                                echo 'selected="selected"';
-                            }
-                        ?>
-                        value="<?php echo $type->id; ?>"
-                    >
-                        <?php echo $type->name; ?>
-                    </option>
-                <?php } ?>
-                </select>
-            </div>
-            <div class="dcf-input-checkbox">
-                <input
-                    id="canceled"
-                    name="canceled"
-                    type="checkbox"
-                    value="1"
-                    <?php if ($event->isCanceled()) { echo CHECKED_INPUT; } ?>
-                />
-                <label for="canceled">Event Canceled</label>
-            </div>
-        </fieldset>
-        <fieldset>
-            <legend>Location, Date &amp; Time</legend>
-            <a
-                class="dcf-btn dcf-btn-primary"
-                href="<?php echo $event->getAddDatetimeURL($context->calendar) ?>"
-            >
-                Add Location, Date, and/or Time
-            </a>
-            <table class="dcf-mt-6 dcf-table dcf-table-striped dcf-table-fixed dcf-w-100% dcf-txt-sm">
-                <caption class="dcf-sr-only">Current Location, Date &amp; Times</caption>
-                <thead class="edt-header">
-                    <tr>
-                        <th class="dates" scope="col">Dates</th>
-                        <th class="location" scope="col">Physical Location</th>
-                        <th class="v_location" scope="col">Virtual Location</th>
-                        <th class="dcf-txt-right dcf-pr-0" scope="col">Actions</th>
-                    </tr>
-                </thead>
-                <?php foreach($event->getDatetimes(5, ($context->page - 1)*5) as $datetime) : ?>
+    <h2>Event Details</h2>
+    <section  class="dcf-mb-8 dcf-ml-5">
+        <div class="dcf-form-group">
+            <label for="title">Title <small class="dcf-required">Required</small></label>
+            <input id="title" name="title" type="text" class="dcf-w-100%" value="<?php echo $event->title; ?>" />
+        </div>
+        <div class="dcf-form-group">
+            <label for="subtitle">Subtitle</label>
+            <input id="subtitle" name="subtitle" type="text" class="dcf-w-100%" value="<?php echo $event->subtitle; ?>" />
+        </div>
+        <div class="dcf-form-group">
+            <label for="description">Description</label>
+            <textarea id="description" name="description" rows="4"><?php echo $event->description; ?></textarea>
+        </div>
+        <div class="dcf-form-group">
+            <label for="type">Type</label>
+            <select id="type" name="type">
+            <?php foreach ($context->getEventTypes() as $type) { ?>
+                <option
+                    <?php
+                        if ($event_type != null && $event_type->id == $type->id) {
+                            echo 'selected="selected"';
+                        }
+                    ?>
+                    value="<?php echo $type->id; ?>"
+                >
+                    <?php echo $type->name; ?>
+                </option>
+            <?php } ?>
+            </select>
+        </div>
+        <div class="dcf-input-checkbox">
+            <input
+                id="canceled"
+                name="canceled"
+                type="checkbox"
+                value="1"
+                <?php if ($event->isCanceled()) { echo CHECKED_INPUT; } ?>
+            />
+            <label for="canceled">Event Canceled</label>
+        </div>
+        <hr>
+    </section>
+
+    <h2>Event Instances</h2>
+    <section  class="dcf-mb-8 dcf-ml-5">
+        <a
+            class="dcf-btn dcf-btn-primary"
+            href="<?php echo $event->getAddDatetimeURL($context->calendar) ?>"
+        >
+            Add New Instance
+        </a>
+        <table class="dcf-mt-6 dcf-table dcf-table-striped dcf-table-fixed dcf-w-100% dcf-txt-sm">
+            <caption class="dcf-sr-only">Current Event Instances</caption>
+            <thead class="edt-header">
+                <tr>
+                    <th class="dates" scope="col">Dates</th>
+                    <th class="location" scope="col">Physical Location</th>
+                    <th class="v_location" scope="col">Virtual Location</th>
+                    <th class="dcf-txt-right dcf-pr-0" scope="col">Actions</th>
+                </tr>
+            </thead>
+            <?php foreach($event->getDatetimes(5, ($context->page - 1)*5) as $datetime) : ?>
                 <tr class="edt-record <?php if ($datetime->recurringtype != 'none') { echo 'has-recurring'; } ?>">
                     <td class="dcf-txt-middle dates">
                         <?php
@@ -335,9 +337,9 @@
                     <?php endif; ?>
                 <?php endif; ?>
             <?php endforeach; ?>
-            </table>
+        </table>
 
-            <?php if ($total_pages > 1): ?>
+        <?php if ($total_pages > 1): ?>
             <?php $page->addScriptDeclaration("WDN.initializePlugin('pagination');"); ?>
             <div style="text-align: center;">
                 <div style="display: inline-block;">
@@ -387,125 +389,134 @@
                 </div>
             </div>
         <?php endif; ?>
-        </fieldset>
-        <?php echo $savvy->render($context, 'EventFormImageUpload.tpl.php'); ?>
+        <hr>
+    </section>
 
-        <fieldset>
-            <legend>Sharing</legend>
-            <div class="details dcf-grid dcf-col-gap-vw">
-                <fieldset class="dcf-col-100% dcf-col-25%-start@sm dcf-p-0 dcf-b-0">
-                    <legend class="dcf-pb-2">Privacy</legend>
-                    <div class="dcf-input-radio">
-                        <input
-                            id="sharing-private"
-                            name="private_public"
-                            type="radio"
-                            value="private"
-                            <?php if (!$event->approvedforcirculation) { echo CHECKED_INPUT; } ?>
-                        />
-                        <label for="sharing-private">Private</label>
-                    </div>
-                    <div class="dcf-input-radio">
-                        <input
-                            id="sharing-public"
-                            name="private_public"
-                            type="radio"
-                            value="public"
-                            <?php if ($event->approvedforcirculation) { echo CHECKED_INPUT; } ?>
-                        />
-                        <label for="sharing-public">Public</label>
-                    </div>
-                </fieldset>
-                <fieldset class="dcf-col-100% dcf-col-75%-end@sm dcf-mb-0 dcf-p-0 dcf-b-0" id="send_to_main">
-                    <legend
-                        class="dcf-pb-2"
+    <?php echo $savvy->render($context, 'EventFormImageUpload.tpl.php'); ?>
+
+    <h2>Sharing</h2>
+    <section class="dcf-mb-8 dcf-ml-5">
+        <div class="details dcf-grid dcf-col-gap-vw">
+            <fieldset class="dcf-col-100% dcf-col-25%-start@sm dcf-p-0 dcf-b-0">
+                <legend class="dcf-pb-2">Privacy</legend>
+                <div class="dcf-input-radio">
+                    <input
+                        id="sharing-private"
+                        name="private_public"
+                        type="radio"
+                        value="private"
+                        <?php if (!$event->approvedforcirculation) { echo CHECKED_INPUT; } ?>
+                    />
+                    <label for="sharing-private">Private</label>
+                </div>
+                <div class="dcf-input-radio">
+                    <input
+                        id="sharing-public"
+                        name="private_public"
+                        type="radio"
+                        value="public"
+                        <?php if ($event->approvedforcirculation) { echo CHECKED_INPUT; } ?>
+                    />
+                    <label for="sharing-public">Public</label>
+                </div>
+            </fieldset>
+            <fieldset class="dcf-col-100% dcf-col-75%-end@sm dcf-mb-0 dcf-p-0 dcf-b-0" id="send_to_main">
+                <legend
+                    class="dcf-pb-2"
+                >
+                    Consider for Main
+                        <abbr title="University of Nebraska–Lincoln"">UNL</abbr>
+                    Calendar
+                </legend>
+                <?php if ($context->on_main_calendar): ?>
+                    <img
+                        src="<?php echo $base_frontend_url ?>templates/default/html/images/checkmark-16.png"
+                        alt=""
                     >
-                        Consider for Main
-                            <abbr title="University of Nebraska–Lincoln"">UNL</abbr>
-                        Calendar
-                    </legend>
-                    <?php if ($context->on_main_calendar): ?>
-                        <img
-                            src="<?php echo $base_frontend_url ?>templates/default/html/images/checkmark-16.png"
-                            alt=""
-                        >
-                        (event has been sent to main UNL calendar for approval)
-                    <?php else: ?>
-                        <div class="dcf-input-checkbox">
-                            <input
-                                id="send-to-main"
-                                name="send_to_main"
-                                type="checkbox"
-                                <?php if (isset($post['send_to_main'])) { echo CHECKED_INPUT; } ?>
-                            />
-                            <label for="send-to-main">Yes</label>
-                        </div>
-                    <?php endif; ?>
-                </fieldset>
+                    (event has been sent to main UNL calendar for approval)
+                <?php else: ?>
+                    <div class="dcf-input-checkbox">
+                        <input
+                            id="send-to-main"
+                            name="send_to_main"
+                            type="checkbox"
+                            <?php if (isset($post['send_to_main'])) { echo CHECKED_INPUT; } ?>
+                        />
+                        <label for="send-to-main">Yes</label>
+                    </div>
+                <?php endif; ?>
+            </fieldset>
+        </div>
+        <hr>
+    </section>
+
+    <h2>Contact Info</h2>
+    <section class="dcf-mb-8 dcf-ml-5">
+        <div class="details dcf-d-grid dcf-grid-full dcf-grid-halves@md dcf-col-gap-vw">
+            <div class="dcf-form-group">
+                <label for="contact-name">Name</label>
+                <input
+                    id="contact-name"
+                    name="contact_name"
+                    type="text"
+                    class="dcf-w-100%"
+                    value="<?php echo $event->listingcontactname; ?>"
+                />
             </div>
-        </fieldset>
-        <fieldset>
-            <legend>Contact Info</legend>
-            <div class="details">
-                <div class="dcf-form-group">
-                    <label for="contact-name">Name</label>
-                    <input
-                        id="contact-name"
-                        name="contact_name"
-                        type="text"
-                        value="<?php echo $event->listingcontactname; ?>"
-                    />
-                </div>
-                <div class="dcf-form-group">
-                    <label for="contact-phone">Phone</label>
-                    <input
-                        id="contact-phone"
-                        name="contact_phone"
-                        type="text"
-                        value="<?php echo $event->listingcontactphone; ?>"
-                    />
-                </div>
-                <div class="dcf-form-group">
-                    <label for="contact-email">Email</label>
-                    <input
-                        id="contact-email"
-                        name="contact_email"
-                        type="text"
-                        value="<?php echo $event->listingcontactemail; ?>"
-                    />
-                </div>
-                <div class="dcf-form-group">
-                    <label for="website">Event Website</label>
-                    <input
-                        id="website"
-                        name="website"
-                        type="text"
-                        value="<?php echo $event->webpageurl; ?>"
-                    />
-                </div>
+            <div class="dcf-form-group">
+                <label for="contact-email">Email</label>
+                <input
+                    id="contact-email"
+                    name="contact_email"
+                    type="text"
+                    class="dcf-w-100%"
+                    value="<?php echo $event->listingcontactemail; ?>"
+                />
             </div>
-        </fieldset>
-        <button class="dcf-btn dcf-btn-primary" type="submit">Save Event</button>
-    </div>
+            <div class="dcf-form-group">
+                <label for="contact-phone">Phone</label>
+                <input
+                    id="contact-phone"
+                    name="contact_phone"
+                    type="text"
+                    class="dcf-w-100%"
+                    value="<?php echo $event->listingcontactphone; ?>"
+                />
+            </div>
+            <div class="dcf-form-group">
+                <label for="website">Event Website</label>
+                <input
+                    id="website"
+                    name="website"
+                    type="text"
+                    class="dcf-w-100%"
+                    value="<?php echo $event->webpageurl; ?>"
+                />
+            </div>
+        </div>
+        <hr>
+    </section>
+
+    <button class="dcf-btn dcf-btn-primary" type="submit">Save Event</button>
 </form>
 
 <?php
 $page->addScriptDeclaration("
 require(['jquery'], function($) {
     $('.delete-datetime').submit(function (submit) {
-        if (!window.confirm('Are you sure you want to delete this location, date and time?')) {
+        if (!window.confirm('Are you sure you want to delete this instance?')) {
             submit.preventDefault();
         }
     });
 
     $('.delete-datetime-recurrence').submit(function (submit) {
-        if (!window.confirm('Are you sure you want to delete instance of your recurring event? The rest of the recurrences will remain.')) {
+        if (!window.confirm('Are you sure you want to delete this occurrence of your recurring instance? The rest of the recurrences will remain.')) {
             submit.preventDefault();
         }
     });
 
     $('.edit-recurring-edt').click(function (click) {
-        if (!window.confirm('You are editing a single instance of a recurring location, date and time.')) {
+        if (!window.confirm('You are editing a single occurrence of a recurring instance.')) {
             click.preventDefault();
         }
     });

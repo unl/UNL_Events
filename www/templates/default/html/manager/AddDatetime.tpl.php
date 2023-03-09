@@ -40,9 +40,9 @@
 <?php
     $last_crumb = NULL;
     if ($context->recurrence_id != NULL) {
-        $last_crumb = 'Edit a Single Instance from Recurring Event';
+        $last_crumb = 'Edit a Single Occurrence of a Recurring Instance';
     } else {
-        $last_crumb = $datetime->id == NULL ? 'Add a Location, Date & Time' : 'Edit Location, Date & Time';
+        $last_crumb = $datetime->id == NULL ? 'Add a New Instance' : 'Edit Existing Instance';
     }
 
     $crumbs = new stdClass;
