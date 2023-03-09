@@ -172,7 +172,8 @@
                 <thead class="edt-header">
                     <tr>
                         <th class="dates" scope="col">Dates</th>
-                        <th class="location" scope="col">Location</th>
+                        <th class="location" scope="col">Physical Location</th>
+                        <th class="v_location" scope="col">Virtual Location</th>
                         <th class="dcf-txt-right dcf-pr-0" scope="col">Actions</th>
                     </tr>
                 </thead>
@@ -219,7 +220,15 @@
                         <?php if (isset($location) && !empty($location)): ?>
                             <?php echo $location->name; ?>
                         <?php else: ?>
-                            <?php echo "No Physical Location" ?>
+                            <?php echo "None"; ?>
+                        <?php endif;?>
+                    </td>
+                    <td class="dcf-txt-middle v_location with-controls">
+                        <?php $getWebcast = $datetime->getWebcast(); ?>
+                        <?php if (isset($getWebcast) && !empty($getWebcast)): ?>
+                            <?php echo $getWebcast->title; ?>
+                        <?php else: ?>
+                            <?php echo "None"; ?>
                         <?php endif;?>
                     </td>
                     <td class="dcf-pr-0 dcf-txt-middle controls">
@@ -257,7 +266,7 @@
                     <?php if (is_countable($datetime->getRecurrences()) && count($datetime->getRecurrences()) > 0): ?>
                         <?php foreach ($datetime->getRecurrences() as $recurring_date) : ?>
                             <tr class="edt-record">
-                                <td class="dcf-pl-7 dcf-txt-middle dates recurring" colspan="2">
+                                <td class="dcf-pl-7 dcf-txt-middle dates recurring" colspan="3">
                                     <?php
                                         echo date('n/d/y', strtotime($recurring_date->recurringdate)) .
                                         ' @ ' . date('g:ia', strtotime($datetime->starttime));

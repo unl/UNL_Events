@@ -18,6 +18,7 @@ class AddDatetime extends PostHandler
     public $event_datetime;
     public $recurrence_id;
     public $original_event_datetime_id;
+    public $post;
 
     public function __construct($options = array())
     {
@@ -85,6 +86,8 @@ class AddDatetime extends PostHandler
 
     public function handlePost(array $get, array $post, array $files)
     {
+        $this->post = $post;
+
         if (isset($post['toggle-cancel'])) {
             $this->processCancelToggle($post);
             die();
@@ -186,9 +189,6 @@ class AddDatetime extends PostHandler
         } else {
             $this->event_datetime->recurringtype = 'none';
         }
-        $this->event_datetime->room = $post_data['room'];
-        $this->event_datetime->directions = $post_data['directions'];
-        $this->event_datetime->additionalpublicinfo = $post_data['additional_public_info'];
     }
 
     private function validateDatetimeData($post_data)
@@ -199,8 +199,8 @@ class AddDatetime extends PostHandler
         }
 
         # start date, location are required
-        if (empty($post_data['location']) || empty($post_data['start_date'])) {
-            throw new ValidationException('<a href="#location">Location</a> and <a href="#start-date">start date</a> are required.');
+        if (empty($post_data['start_date'])) {
+            throw new ValidationException('<a href="#start-date">start date</a> are required.');
         }
 
         # end date must be after start date
@@ -216,9 +216,44 @@ class AddDatetime extends PostHandler
             throw new ValidationException('Your <a href="#end-date">end date/time</a> must be on or after the <a href="#start-date">start date/time</a>.');
         }
 
-        # check that a new location has a name
-        if ($post_data['location'] == 'new' && empty($post_data['new_location']['name'])) {
-            throw new ValidationException('You must give your new location a <a href="#location-name">name</a>.');
+        // If there is a physical location make sure these are set
+        if (isset($post_data['physical_location_check']) && $post_data['physical_location_check'] == '1') {
+            if ($post_data['location'] == 'new' && empty($post_data['new_location']['name'])) {
+                throw new ValidationException('You must give your new location a <a href="#location-name">name</a>.');
+            }
+
+            if ($post_data['location'] == 'new' && empty($post_data['new_location']['streetaddress1'])) {
+                throw new ValidationException('You must give your new location an <a href=\"#location-address-1\">address</a>.');
+            }
+
+            if ($post_data['location'] == 'new' && empty($post_data['new_location']['city'])) {
+                throw new ValidationException('You must give your new location a <a href=\"#location-city\">city</a>.');
+            }
+
+            if ($post_data['location'] == 'new' && empty($post_data['new_location']['state'])) {
+                throw new ValidationException('You must give your new location a <a href=\"#location-state\">state</a>.');
+            }
+
+            if ($post_data['location'] == 'new' && empty($post_data['new_location']['zip'])) {
+                throw new ValidationException('You must give your new location a <a href=\"#location-zip\">zip</a>.');
+            }
+
+            if ($post_data['location'] == 'new' && !empty($post_data['new_location']['webpageurl']) && !filter_var($post_data['new_location']['webpageurl'], FILTER_VALIDATE_URL)) {
+                throw new ValidationException('<a href=\"#location-webpage\">Location URL</a> is not a valid URL.');
+            }
+        }
+
+        // If there is a virtual location make sure these are set
+        if (isset($post_data['virtual_location_check']) && $post_data['virtual_location_check'] == '1') {
+            if ($post_data['v_location'] == 'new' && empty($post_data['new_v_location']['title'])) {
+                throw new ValidationException('You must give your new virtual location a <a href=\"#new-v-location-name\">name</a>.');
+            }
+
+            if ($post_data['v_location'] == 'new' && empty($post_data['new_v_location']['url'])) {
+                throw new ValidationException('You must give your new virtual location a <a href=\"#new-v-location-url\">URL</a>.');
+            } else if ($post_data['v_location'] == 'new' && !empty($post_data['new_v_location']['url']) && !filter_var($post_data['new_v_location']['url'], FILTER_VALIDATE_URL)) {
+                throw new ValidationException('<a href=\"#new-v-location-url\">Virtual Location URL</a> is not a valid URL.');
+            }
         }
 
         # Validate Recurring Event (if applicable)
@@ -247,13 +282,56 @@ class AddDatetime extends PostHandler
             $post_data['end_time_am_pm'] = $post_data['start_time_am_pm'];
         }
 
-        # check if this is to use a new location
-        if ($post_data['location'] == 'new') {
-            # create a new location
-	        $location = LocationUtility::addLocation($post_data, $user, $this->calendar);
-            $this->event_datetime->location_id = $location->id;
+        // Checks if we have a physical location
+        if ($post_data['physical_location_check'] == '0') {
+
+            // if not we check if we need to set the location to null and delete the old location
+            if (isset($this->event_datetime->location_id) && !empty($this->event_datetime->location_id)) {
+                $location_to_be_deleted = $this->event_datetime->getLocation();
+                $this->event_datetime->location_id = null;
+                if (isset($location_to_be_deleted) && !$location_to_be_deleted->is_saved_or_standard()) {
+                    $location_to_be_deleted->delete();
+                }
+            }
         } else {
-            $this->event_datetime->location_id = $post_data['location'];
+            // check if this is to use a new location
+            if ($post_data['location'] == 'new') {
+                // create a new location
+                $location = LocationUtility::addLocation($post_data, $user, $this->calendar);
+                $this->event_datetime->location_id = $location->id;
+            } else {
+                $this->event_datetime->location_id = $post_data['location'];
+            }
+
+            // set other location related fields
+            $this->event_datetime->room = $post_data['room'];
+            $this->event_datetime->directions = $post_data['directions'];
+            $this->event_datetime->additionalpublicinfo = $post_data['additional_public_info'];
+        }
+
+         // Checks if we have a virtual location
+        if ($post_data['virtual_location_check'] == '0') {
+
+            // if not we check if we need to set the webcast to null and delete the old webcast
+            if (isset($this->event_datetime->webcast_id) && !empty($this->event_datetime->webcast_id)) {
+                $webcast_to_be_deleted = $this->event_datetime->getWebcast();
+                $this->event_datetime->webcast_id = null;
+                if (isset($webcast_to_be_deleted) && !$webcast_to_be_deleted->is_saved()) {
+                    $webcast_to_be_deleted->delete();
+                }
+            }
+        } else {
+            // if a virtual location is there then create a new one or set it to the selected one
+            if ($post_data['v_location'] == 'new') {
+                // create a new location
+                $webcast = WebcastUtility::addWebcast($post_data, $user, $this->calendar);
+                $this->event_datetime->webcast_id = $webcast->id;
+            } else {
+                $this->event_datetime->webcast_id = $post_data['v_location'];
+            }
+
+            // set other webcast related fields
+            $this->event_datetime->webcast_additionalpublicinfo = $post_data['v_additional_public_info'];
         }
 
         $this->setDatetimeData($post_data);
@@ -290,5 +368,16 @@ class AddDatetime extends PostHandler
         }
 
         return $this->event_datetime;
+    }
+
+
+    /**
+     * Get the original datetime unmodified.
+     * 
+     * @return UNL\UCBCN\Event\Occurrence
+     */
+    public function getOriginalDatetime()
+    {
+        return Occurrence::getByID($this->event_datetime->id);
     }
 }

@@ -47,7 +47,7 @@ class Location extends Record
     public $user_id;                         // string(255)
     public $calendar_id;                     // string(255)
     public $display_order;                   // int(1)
-    
+
     const DISPLAY_ORDER_MAIN      = NULL;
     const DISPLAY_ORDER_EXTENSION = 1;
 
@@ -84,7 +84,7 @@ class Location extends Record
             'id',
         );
     }
-    
+
     function sequenceKey()
     {
         return array('id',true);
@@ -108,6 +108,23 @@ class Location extends Record
     }
     
 
+
+    /**
+     * Checks to see if the location is saved to anyone or any calendar.
+     * It also checks to see if it is a standard location
+     * 
+     * @return bool
+     */
+    public function is_saved_or_standard()
+    {
+        return (isset($this->user_id) || isset($this->calendar_id) || $this->standard == 1);
+    }
+
+    /**
+     * Checks to see if the location has all information necessary for Google's microdata.
+     * 
+     * @return bool
+     */
     public function microdata_check()
     {
         if (!isset($this->name) || empty($this->name)) {

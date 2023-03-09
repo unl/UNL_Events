@@ -1,73 +1,5 @@
-
 function isUrlValid(url) {
     return /^(https?|s?ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(url);
-}
-
-//TODO: if the checks are checked then display them automatically
-const location_buttons = document.querySelectorAll('.events-btn-location');
-location_buttons.forEach((location_button) => {
-    location_button.addEventListener('click', () => {
-        if (location_button.dataset.add === 'true') {
-            location_button.dataset.add = 'false';
-            location_button.innerHTML = location_button.innerHTML.replace('Add', 'Remove');
-            location_button.classList.remove('dcf-btn-primary');
-            location_button.classList.add('dcf-btn-secondary');
-
-            document.querySelector(`input[type='hidden'][name='${location_button.dataset.controls}_check']`).value = "1";
-
-            const location_template = document.getElementById(`${location_button.dataset.controls}_template`);
-            const location_form_group = location_template.content.cloneNode('true');
-            document.getElementById(`${location_button.dataset.controls}_container`).append(location_form_group);
-
-            setUpLocationListeners(location_button.dataset.controls);
-
-        } else {
-            location_button.dataset.add = 'true';
-            location_button.innerHTML = location_button.innerHTML.replace('Remove', 'Add');
-            location_button.classList.remove('dcf-btn-secondary');
-            location_button.classList.add('dcf-btn-primary');
-
-            document.querySelector(`input[type='hidden'][name='${location_button.dataset.controls}_check']`).value = "0";
-
-            document.getElementById(`${location_button.dataset.controls}_container`).innerHTML = "";
-        }
-    });
-});
-
-function setUpLocationListeners(location_id) {
-    if (location_id == "physical_location") {
-        let location_input = document.getElementById('location');
-
-        location_input.addEventListener('change', () => {
-            if (location_input.value == 'new') {
-                document.getElementById('new-location-fields').style.display = "block";
-            } else {
-                document.getElementById('new-location-fields').style.display = "none";
-            }
-        });
-
-        if (location_input.value == 'new') {
-            document.getElementById('new-location-fields').style.display = "block";
-        } else {
-            document.getElementById('new-location-fields').style.display = "none";
-        }
-    } else if (location_id == "virtual_location") {
-        let location_input = document.getElementById('v-location');
-
-        location_input.addEventListener('change', () => {
-            if (location_input.value == 'new') {
-                document.getElementById('new-v-location-fields').style.display = "block";
-            } else {
-                document.getElementById('new-v-location-fields').style.display = "none";
-            }
-        });
-
-        if (location_input.value == 'new') {
-            document.getElementById('new-v-location-fields').style.display = "block";
-        } else {
-            document.getElementById('new-v-location-fields').style.display = "none";
-        }
-    }
 }
 
 const google_microdata_button = document.getElementById('google-microdata-button');
@@ -75,6 +7,9 @@ document.addEventListener(`ModalOpenEvent_${google_microdata_button.dataset.togg
     testMicrodata(true);
 });
 
+document.addEventListener('click', (e) => {
+    testMicrodata(false);
+});
 document.addEventListener('input', (e) => {
     testMicrodata(false);
 });
@@ -83,6 +18,9 @@ document.addEventListener('input', (e) => {
 document.getElementById('start-date').addEventListener('change', (e) => {
     testMicrodata(false);
 })
+
+// This is for when we first load the page
+testMicrodata(false);
 
 function testMicrodata(modal_output=true) {
     let microdata_pass = true;
@@ -217,21 +155,7 @@ function testMicrodata(modal_output=true) {
 require(['jquery', 'wdn'], function ($, WDN) {
 
     // DCF Date Picker
-    WDN.initializePlugin('datepickers');
     WDN.initializePlugin('modals');
-
-    $('#recurring').change(function () {
-        if (this.checked) {
-            setRecurringOptions($('#start-date'), $('#monthly-group'), recurringType);
-        }
-    });
-
-    $('#start-date').change(function () {
-        setRecurringOptions($(this), $('#monthly-group'), recurringType);
-    });
-
-    setRecurringOptions($('#start-date'), $('#monthly-group'));
-    $('#recurring-type').val(recurringType);
 
     $('input[type=radio][name=send_to_main]').change(function() {
         if (this.value == 'on') {
@@ -254,11 +178,6 @@ require(['jquery', 'wdn'], function ($, WDN) {
                 notifier.mark_input_invalid($('#start-date'));
             }
             errors.push('<a href=\"#title\">Title</a>, and <a href=\"#start-date\">start date</a> are required.');
-        }
-
-        // Make sure at least one of the locations has been added
-        if ($('#physical_location_check').val() != '1' && $('#virtual_location_check').val() != '1') {
-            errors.push('A <a href=\"#physical_location_add_button\">physical</a> or <a href=\"virtual_location_add_button\">virtual</a> location must be provided');
         }
 
         var start = new Date($('#start-date').val());

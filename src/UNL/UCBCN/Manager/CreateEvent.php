@@ -9,7 +9,7 @@ use UNL\UCBCN\Event\Occurrence;
 
 class CreateEvent extends EventForm
 {
-    public function __construct($options = array()) 
+    public function __construct($options = array())
     {
         parent::__construct($options);
         $this->mode = self::MODE_CREATE;
@@ -30,7 +30,7 @@ class CreateEvent extends EventForm
         return $this->calendar->getManageURL(TRUE);
     }
 
-    private function validateEventData($post_data, $files) 
+    private function validateEventData($post_data, $files)
     {
         # title, start date, location are required
         if (empty($post_data['title']) || empty($post_data['start_date'])) {
@@ -50,12 +50,12 @@ class CreateEvent extends EventForm
         }
 
         # end date must be after start date
-        $start_date = $this->calculateDate($post_data['start_date'], 
-            $post_data['start_time_hour'], $post_data['start_time_minute'], 
+        $start_date = $this->calculateDate($post_data['start_date'],
+            $post_data['start_time_hour'], $post_data['start_time_minute'],
             $post_data['start_time_am_pm']);
 
-        $end_date = $this->calculateDate($post_data['end_date'], 
-            $post_data['end_time_hour'], $post_data['end_time_minute'], 
+        $end_date = $this->calculateDate($post_data['end_date'],
+            $post_data['end_time_hour'], $post_data['end_time_minute'],
             $post_data['end_time_am_pm']);
 
         if ($start_date > $end_date) {
@@ -119,7 +119,7 @@ class CreateEvent extends EventForm
         $this->validateEventImage($post_data, $files);
     }
 
-    private function createEvent($post_data, $files) 
+    private function createEvent($post_data, $files)
     {
         $user = Auth::getCurrentUser();
 
@@ -164,6 +164,11 @@ class CreateEvent extends EventForm
             } else {
                 $event_datetime->location_id = $post_data['location'];
             }
+
+            // Set other location related fields
+            $event_datetime->room = $post_data['room'];
+            $event_datetime->directions = $post_data['directions'];
+            $event_datetime->additionalpublicinfo = $post_data['additional_public_info'];
         }
 
         // check if physical location has been added
@@ -177,26 +182,29 @@ class CreateEvent extends EventForm
             } else {
                 $event_datetime->webcast_id = $post_data['v_location'];
             }
+
+            // Set other webcast related fields
+            $event_datetime->webcast_additionalpublicinfo = $post_data['v_additional_public_info'];
         }
 
         # set the start date and end date
-        $event_datetime->starttime = $this->calculateDate($post_data['start_date'], 
-            $post_data['start_time_hour'], $post_data['start_time_minute'], 
+        $event_datetime->starttime = $this->calculateDate($post_data['start_date'],
+            $post_data['start_time_hour'], $post_data['start_time_minute'],
             $post_data['start_time_am_pm']);
 
-        $event_datetime->endtime = $this->calculateDate($post_data['end_date'], 
-            $post_data['end_time_hour'], $post_data['end_time_minute'], 
+        $event_datetime->endtime = $this->calculateDate($post_data['end_date'],
+            $post_data['end_time_hour'], $post_data['end_time_minute'],
             $post_data['end_time_am_pm']);
 
         if (array_key_exists('recurring', $post_data) && $post_data['recurring'] == 'on') {
             $event_datetime->recurringtype = $post_data['recurring_type'];
             $event_datetime->recurs_until = $this->calculateDate(
                 $post_data['recurs_until_date'], 11, 59, 'PM');
-            if ($event_datetime->recurringtype == 'date' || 
-                $event_datetime->recurringtype == 'lastday' || 
+            if ($event_datetime->recurringtype == 'date' ||
+                $event_datetime->recurringtype == 'lastday' ||
                 $event_datetime->recurringtype == 'first' ||
                 $event_datetime->recurringtype == 'second' ||
-                $event_datetime->recurringtype == 'third'|| 
+                $event_datetime->recurringtype == 'third'||
                 $event_datetime->recurringtype == 'fourth' ||
                 $event_datetime->recurringtype == 'last') {
                     $event_datetime->rectypemonth = $event_datetime->recurringtype;
@@ -206,10 +214,6 @@ class CreateEvent extends EventForm
             $event_datetime->recurringtype = 'none';
         }
         $event_datetime->timezone = $post_data['timezone'];
-        $event_datetime->room = $post_data['room'];
-        $event_datetime->directions = $post_data['directions'];
-        $event_datetime->additionalpublicinfo = $post_data['additional_public_info'];
-        $event_datetime->webcast_additionalpublicinfo = $post_data['v_additional_public_info'];
 
         $event_datetime->insert();
 

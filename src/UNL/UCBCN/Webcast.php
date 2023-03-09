@@ -63,4 +63,14 @@ class Webcast extends Record
     {
         return array('id',true);
     }
+
+    /**
+     * Checks to see if the location is saved to anyone or any calendar.
+     * 
+     * @return bool
+     */
+    public function is_saved()
+    {
+        return (isset($this->user_id) || isset($this->calendar_id));
+    }
 }
