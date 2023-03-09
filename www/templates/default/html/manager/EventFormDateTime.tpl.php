@@ -3,6 +3,7 @@
     $event = $context->event;
     $post = $context->post;
 
+    // We need todo this since the event_datetime gets edited when post is being handled
     if (isset($context->event_datetime)) {
         $datetime = $context->getOriginalDatetime();
     }
@@ -27,7 +28,7 @@
     $end_minute = $post['end_time_minute'] ?? ( !empty($datetime_end_time) ? date('i'    , $datetime_end_time) : -1   );
     $end_am_pm  = $post['end_time_am_pm']  ?? ( !empty($datetime_end_time) ? date('a'    , $datetime_end_time) : 'am' );
 
-    $datetime_recurring_check = (isset($context->recurrence_id) && !empty($context->recurrence_id));
+    $datetime_recurring_check = (isset($context->recurrence_id));
     $is_recurring             = $post['recurring'] ?? ( (isset($datetime) && isset($datetime->recurringtype) && strtolower($datetime->recurringtype) !== 'none') );
     $recurring_type       = $post['recurring_type']    ?? ( ($is_recurring) ? $datetime->recurringtype : ''                          );
     $recurs_until_date    = $post['recurs_until_date'] ?? ( ($is_recurring) ? date('m/d/Y', strtotime($datetime->recurs_until)) : '' );

@@ -378,6 +378,24 @@ class AddDatetime extends PostHandler
      */
     public function getOriginalDatetime()
     {
-        return Occurrence::getByID($this->event_datetime->id);
+        $temp_event_datetime = Occurrence::getByID($this->original_event_datetime_id);
+
+        # now we check for if we are editing a specific recurrence
+        if (isset($this->recurrence_id)) {
+            $recurrence = RecurringDate::getByEventDatetimeIDRecurrenceID($this->original_event_datetime_id, $this->recurrence_id);
+
+            $temp_event_datetime->id = NULL;
+
+            # set the start and end time based on the recurring date record
+            $event_length = strtotime($temp_event_datetime->endtime) - strtotime($temp_event_datetime->starttime);
+            $temp_event_datetime->starttime = $recurrence->recurringdate . ' ' . date('H:i:s', strtotime($temp_event_datetime->starttime));
+            $temp_event_datetime->endtime = date('Y-m-d H:i:s', strtotime($temp_event_datetime->starttime) + $event_length);
+
+            $temp_event_datetime->recurringtype = 'none';
+            $temp_event_datetime->rectypemonth = NULL;
+            $temp_event_datetime->recurs_until = NULL;
+        }
+
+        return $temp_event_datetime;
     }
 }
