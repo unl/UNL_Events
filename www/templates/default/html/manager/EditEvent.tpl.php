@@ -132,6 +132,16 @@
             <textarea id="description" name="description" rows="4"><?php echo $event->description; ?></textarea>
         </div>
         <div class="dcf-form-group">
+            <label for="website">Website</label>
+            <input
+                id="website"
+                name="website"
+                type="text"
+                class="dcf-w-100%"
+                value="<?php echo $event->webpageurl; ?>"
+            />
+        </div>
+        <div class="dcf-form-group">
             <label for="type">Type</label>
             <select id="type" name="type">
             <?php foreach ($context->getEventTypes() as $type) { ?>
@@ -481,16 +491,6 @@
                     type="text"
                     class="dcf-w-100%"
                     value="<?php echo $event->listingcontactphone; ?>"
-                />
-            </div>
-            <div class="dcf-form-group">
-                <label for="website">Event Website</label>
-                <input
-                    id="website"
-                    name="website"
-                    type="text"
-                    class="dcf-w-100%"
-                    value="<?php echo $event->webpageurl; ?>"
                 />
             </div>
         </div>

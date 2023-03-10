@@ -113,6 +113,18 @@ class Occurrence extends Record
         //delete the actual event.
         $r = parent::delete();
         if ($r) {
+            if (isset($this->location_id)) {
+                $location = $this->getLocation();
+                if (isset($location) && !$location->is_saved_or_standard()) {
+                    $location->delete();
+                }
+            }
+            if (isset($this->webcast_id)) {
+                $webcast = $this->getWebcast();
+                if (isset($webcast) && !$webcast->is_saved()) {
+                    $webcast->delete();
+                }
+            }
             $this->deleteRecurrences();
         }
         return $r;

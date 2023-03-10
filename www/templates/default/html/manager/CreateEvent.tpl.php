@@ -35,6 +35,10 @@
                 <textarea id="description" name="description" rows="4" ><?php echo $event->description; ?></textarea>
             </div>
             <div class="dcf-form-group">
+                <label for="website">Website</label>
+                <input id="website" name="website" type="text" class="dcf-w-100%" value="<?php echo $event->webpageurl ?>" />
+            </div>
+            <div class="dcf-form-group">
                 <label for="type">Type</label>
                 <select class="dcf-w-100%" id="type" name="type">
                     <?php foreach ($context->getEventTypes() as $type) { ?>
@@ -98,10 +102,6 @@
                 <div class="dcf-form-group">
                     <label for="contact-phone">Phone</label>
                     <input id="contact-phone" name="contact_phone" type="text" class="dcf-w-100%" value="<?php if (isset($post['contact_phone'])) { echo $post['contact_phone']; } ?>" />
-                </div>
-                <div class="dcf-form-group">
-                    <label for="website">Event Website</label>
-                    <input id="website" name="website" type="text" class="dcf-w-100%" value="<?php echo $event->webpageurl ?>" />
                 </div>
             </div>
             <hr>
