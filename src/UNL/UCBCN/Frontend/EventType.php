@@ -33,6 +33,11 @@ class EventType extends EventListing implements RoutableInterface
     public $search_event_calendar = '';
     public $limit = 100;
     public $offset = 0;
+    public $max_limit = array(
+        'json' => 1000,
+        'xml' => 1000,
+        'default' => 100
+    );
 
     /**
      * Constructs this search output.
@@ -52,18 +57,21 @@ class EventType extends EventListing implements RoutableInterface
         $this->search_event_audience = $options['audience'] ?? "";
         $this->search_event_calendar = $options['calendar_id'] ?? "";
 
-        if (!isset($options['format']) || $options['format'] !== 'json') {
-            if (!isset($options['limit']) ||
-                empty($options['limit']) ||
-                intval($options['limit']) > 100 ||
-                intval($options['limit']) <= 0
-            ) {
-                $options['limit'] = 100;
-            }
+        $format_max_limit = $max_limit['default'];
+        if (array_key_exists($options['format'], $max_limit)) {
+            $format_max_limit = $max_limit[$options['format']];
+        }
 
-            if (!isset($options['offset']) || empty($options['offset']) ||  intval($options['offset']) <= 0) {
-                $options['offset'] = 0;
-            }
+        if (!isset($options['limit']) ||
+            empty($options['limit']) ||
+            intval($options['limit']) > $format_max_limit ||
+            intval($options['limit']) <= 0
+        ) {
+            $options['limit'] = $format_max_limit;
+        }
+
+        if (!isset($options['offset']) || empty($options['offset']) ||  intval($options['offset']) <= 0) {
+            $options['offset'] = 0;
         }
 
         $this->limit = $options['limit'] ?? $this->limit;
