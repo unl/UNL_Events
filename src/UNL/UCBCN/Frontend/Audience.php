@@ -34,8 +34,8 @@ class Audience extends EventListing implements RoutableInterface
     public $limit = 100;
     public $offset = 0;
     public $max_limit = array(
-        'json' => 1000,
-        'xml' => 1000,
+        'json' => 2,
+        'xml' => 2,
         'default' => 100
     );
 
