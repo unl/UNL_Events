@@ -3,6 +3,20 @@
     <div class='vcalendar'>
         <div class='vevent'>
             <?php if (isset($context->event->subtitle)): ?><header><?php endif; ?>
+                <?php
+                    $event_event_type = $event->getFirstType();
+                    if (isset($event_event_type) && !empty($event_event_type)): 
+                ?>
+                    <small class="dcf-badge dcf-badge-roundrect dcf-mb-4">
+                        <a
+                            class="dcf-txt-decor-hover"
+                            href="<?php echo $frontend->getEventTypeURL() . '?q=' . $event_event_type->name; ?>"
+                            style="color: inherit;"
+                        >
+                            <?php echo $event_event_type->name; ?>
+                        </a>
+                    </small>
+                <?php endif; ?>
                 <h2 id="heading-date" class='summary' data-datetime="<?php echo (new DateTime($context->getStartTime()))->format('c') ?>">
                     <a class="dcf-txt-decor-none" href="<?php echo $url; ?>">
                         <?php echo $savvy->dbStringtoHtml($context->event->displayTitle($context)); ?>
