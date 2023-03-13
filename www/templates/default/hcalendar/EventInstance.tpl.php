@@ -4,7 +4,7 @@
         <div class='vevent'>
             <?php if (isset($context->event->subtitle)): ?><header><?php endif; ?>
                 <?php
-                    $event_event_type = $event->getFirstType();
+                    $event_event_type = $context->event->getFirstType();
                     if (isset($event_event_type) && !empty($event_event_type)): 
                 ?>
                     <small class="dcf-badge dcf-badge-roundrect dcf-mb-4">
