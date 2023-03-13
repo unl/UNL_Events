@@ -57,9 +57,9 @@ class EventType extends EventListing implements RoutableInterface
         $this->search_event_audience = $options['audience'] ?? "";
         $this->search_event_calendar = $options['calendar_id'] ?? "";
 
-        $format_max_limit = $max_limit['default'];
-        if (array_key_exists($options['format'], $max_limit)) {
-            $format_max_limit = $max_limit[$options['format']];
+        $format_max_limit = $this->max_limit['default'];
+        if (array_key_exists($options['format'], $this->max_limit)) {
+            $format_max_limit = $this->max_limit[$options['format']];
         }
 
         if (!isset($options['limit']) ||
