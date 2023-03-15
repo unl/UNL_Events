@@ -168,7 +168,7 @@ class CreateEvent extends EventForm
             // Set other location related fields
             $event_datetime->room = $post_data['room'];
             $event_datetime->directions = $post_data['directions'];
-            $event_datetime->additionalpublicinfo = $post_data['additional_public_info'];
+            $event_datetime->location_additionalpublicinfo = $post_data['l_additional_public_info'];
         }
 
         // check if physical location has been added
@@ -214,6 +214,8 @@ class CreateEvent extends EventForm
             $event_datetime->recurringtype = 'none';
         }
         $event_datetime->timezone = $post_data['timezone'];
+
+        $event_datetime->additionalpublicinfo = $post_data['additional_public_info'];
 
         $event_datetime->insert();
 

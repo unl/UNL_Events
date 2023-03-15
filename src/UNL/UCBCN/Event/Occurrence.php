@@ -48,6 +48,7 @@ class Occurrence extends Record
     public $hours;                           // string(255)
     public $directions;                      // blob(4294967295)  blob
     public $additionalpublicinfo;            // blob(4294967295)  blob
+    public $location_additionalpublicinfo;   // blob(4294967295)  blob
     public $webcast_additionalpublicinfo;    // blob(4294967295)  blob
     public $canceled;
 

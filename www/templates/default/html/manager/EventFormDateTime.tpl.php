@@ -34,6 +34,8 @@
     $recurs_until_date    = $post['recurs_until_date'] ?? ( ($is_recurring) ? date('m/d/Y', strtotime($datetime->recurs_until)) : '' );
     $recurring_month_type = ($is_recurring && $recurring_type == 'monthly') ? $datetime->rectypemonth : '';
 
+    $additional_public_info = $post['additional_public_info'] ?? $datetime->additionalpublicinfo ?? '';
+
     $datetime_physical_location_check = $post['physical_location_check'] ?? ( (isset($datetime) && isset($datetime->location_id)) ? '1' : '0' );
     $datetime_virtual_location_check  = $post['virtual_location_check']  ?? ( (isset($datetime) && isset($datetime->webcast_id)) ? '1' : '0'  );
 
@@ -41,7 +43,7 @@
     $location          = $post['location'] ?? ( (!empty($datetime_location)) ? $datetime_location->id : '' );
     $location_room                   = $post['room'] ?? $datetime->room ?? '';
     $location_directions             = $post['directions'] ?? $datetime->directions ?? '';
-    $location_additional_public_info = $post['additional_public_info'] ?? $datetime->additionalpublicinfo ?? '';
+    $location_additional_public_info = $post['l_additional_public_info'] ?? $datetime->location_additionalpublicinfo ?? '';
 
     $datetime_v_location = (isset($datetime) && isset($datetime->webcast_id)) ? $datetime->getWebcast() : '';
     $v_location          = $post['v_location'] ?? ( (!empty($datetime_v_location)) ? $datetime_v_location->id : '' );
@@ -163,6 +165,11 @@
                 </fieldset>
             </div>
         <?php endif; ?>
+        
+        <div class="dcf-form-group">
+            <label for="additional-public-info">Additional Public Info For This Date & Time</label>
+            <textarea id="additional-public-info" name="additional_public_info"><?php echo $additional_public_info; ?></textarea>
+        </div>
     </div>
     <hr>
 </section>
@@ -343,7 +350,6 @@
                     <input id="location-zip" class="dcf-w-100%" name="new_location[zip]" type="text" maxlength="10" value="<?php echo isset($post['new_location']['zip']) ? $post['new_location']['zip']: ''; ?>">
                 </div>
 
-
                 <hr class="dcf-mb-5 events-col-full-width">
 
                 <div class="dcf-form-group">
@@ -406,7 +412,7 @@
         </div>
         <div class="dcf-form-group">
             <label for="additional-public-info">Event Specific - Additional Public Info</label>
-            <textarea id="additional-public-info" name="additional_public_info"><?php echo $location_additional_public_info;?></textarea>
+            <textarea id="additional-public-info" name="l_additional_public_info"><?php echo $location_additional_public_info;?></textarea>
         </div>
     </template>
     <hr>

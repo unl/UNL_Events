@@ -17,3 +17,16 @@
     </span>
 <?php endif; ?>
 <?php endif; ?>
+
+<?php if (isset($context->eventdatetime->webcast_id) && $context->eventdatetime->webcast_id): ?>
+    <?php $webcast = $context->eventdatetime->getWebcast(); ?>
+    <div class="location">
+        <svg xmlns="http://www.w3.org/2000/svg" class="dcf-mr-1 dcf-h-4 dcf-w-4 dcf-fill-current" aria-hidden="true" focusable="false" height="24" width="24" viewBox="0 0 24 24">
+            <path d="M22,1H2C0.897,1,0,1.937,0,3.088v14.824C0,19.063,0.897,20,2,20h9.5v1H5c-0.276,0-0.5,0.224-0.5,0.5S4.724,22,5,22h14 c0.276,0,0.5-0.224,0.5-0.5S19.276,21,19,21h-6.5v-1H22c1.103,0,2-0.937,2-2.088V3.088C24,1.937,23.103,1,22,1z M2,2h20 c0.551,0,1,0.488,1,1.088V15H1V3.088C1,2.488,1.449,2,2,2z M22,19H2c-0.551,0-1-0.488-1-1.088V16h22v1.912 C23,18.512,22.551,19,22,19z"></path>
+            <path d="M12,16.5c-0.551,0-1,0.448-1,1s0.449,1,1,1s1-0.448,1-1S12.551,16.5,12,16.5z M12,17.5L12,17.5h0.5H12z"></path>
+            <g><path fill="none" d="M0 0H24V24H0z"></path></g>
+        </svg>
+        <span class="dcf-sr-only">Virtual Location:</span>
+        <a href="<?php echo $webcast->url; ?>"><?php echo $webcast->title; ?></a>
+    </div>
+<?php endif; ?>

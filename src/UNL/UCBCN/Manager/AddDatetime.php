@@ -189,6 +189,8 @@ class AddDatetime extends PostHandler
         } else {
             $this->event_datetime->recurringtype = 'none';
         }
+
+        $this->event_datetime->additionalpublicinfo = $post_data['additional_public_info'];
     }
 
     private function validateDatetimeData($post_data)
@@ -306,7 +308,7 @@ class AddDatetime extends PostHandler
             // set other location related fields
             $this->event_datetime->room = $post_data['room'];
             $this->event_datetime->directions = $post_data['directions'];
-            $this->event_datetime->additionalpublicinfo = $post_data['additional_public_info'];
+            $this->event_datetime->location_additionalpublicinfo = $post_data['l_additional_public_info'];
         }
 
          // Checks if we have a virtual location
