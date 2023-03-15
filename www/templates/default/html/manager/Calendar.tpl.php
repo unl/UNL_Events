@@ -206,7 +206,10 @@ use UNL\UCBCN\Permission;
                                                     }
                                                     ?><br>
                                                     <?php $location = $datetime->getLocation(); ?>
+                                                    <?php $webcast = $datetime->getWebcast(); ?>
                                                     <?php if (isset($location) && !empty($location)) echo $location->name; ?>
+                                                    <?php if (isset($location) && !empty($location) && isset($webcast) && !empty($webcast)) echo "<br>"; ?>
+                                                    <?php if (isset($webcast) && !empty($webcast)) echo $webcast->title; ?>
                                                 <?php else: ?>
                                                     ...and <?php echo (count($datetimes) - 3); ?> more
                                                 <?php break; ?>
