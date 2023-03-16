@@ -1,7 +1,8 @@
 <?php
-namespace UNL\UCBCN;
+namespace UNL\UCBCN\Calendar;
 
 use UNL\UCBCN\ActiveRecord\Record;
+
 /**
  * Table Definition for audience
  *
@@ -9,8 +10,8 @@ use UNL\UCBCN\ActiveRecord\Record;
  *
  * @category  Events
  * @package   UNL_UCBCN
- * @author    Brett Bieber <brett.bieber@gmail.com>
- * @copyright 2009 Regents of the University of Nebraska
+ * @author    Tommy Neumann <tneumann9@unl.edu>
+ * @copyright 2023 Regents of the University of Nebraska
  * @license   http://www1.unl.edu/wdn/wiki/Software_License BSD License
  * @link      http://code.google.com/p/unl-event-publisher/
  */
@@ -19,8 +20,8 @@ use UNL\UCBCN\ActiveRecord\Record;
  * ORM for a record within the database.
  *
  * @package   UNL_UCBCN
- * @author    Brett Bieber <brett.bieber@gmail.com>
- * @copyright 2009 Regents of the University of Nebraska
+ * @author    Tommy Neumann <tneumann9@unl.edu>
+ * @copyright 2023 Regents of the University of Nebraska
  * @license   http://www1.unl.edu/wdn/wiki/Software_License BSD License
  * @link      http://code.google.com/p/unl-event-publisher/
  */
@@ -31,12 +32,12 @@ class Audience extends Record
     public $name;                            // string(100)
     public $standard;                        // int(1)
 
-    function getTable()
+    public static function getTable()
     {
         return 'audience';
     }
 
-    function table()
+    public function table()
     {
         return array(
             'id'=>129,
@@ -45,16 +46,20 @@ class Audience extends Record
         );
     }
 
-    function keys()
+    public function keys()
     {
         return array(
             'id',
         );
     }
     
-    function sequenceKey()
+    public function sequenceKey()
     {
         return array('id',true);
     }
-    
+
+    public function links()
+    {
+        return array('calendar_id' => 'calendar:id');
+    }
 }

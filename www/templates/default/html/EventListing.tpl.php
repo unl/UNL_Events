@@ -24,6 +24,7 @@
               <div class="dcf-col-100% dcf-col-75%-start@sm">
                   <?php echo $savvy->render($eventinstance, 'EventInstance/Date.tpl.php') ?>
                   <?php echo $savvy->render($eventinstance, 'EventInstance/Location.tpl.php') ?>
+                  <?php echo $savvy->render($eventinstance, 'EventInstance/TargetAudience.tpl.php') ?>
                   <?php echo $savvy->render($eventinstance, 'EventInstance/Description.tpl.php') ?>
                   <?php echo $savvy->render($eventinstance, 'EventInstance/OriginCalendar.tpl.php') ?>
                   <?php echo $savvy->render($eventinstance, 'EventInstance/EditButton.tpl.php') ?>
@@ -35,6 +36,7 @@
           <?php } else { ?>
               <?php echo $savvy->render($eventinstance, 'EventInstance/Date.tpl.php') ?>
               <?php echo $savvy->render($eventinstance, 'EventInstance/Location.tpl.php') ?>
+              <?php echo $savvy->render($eventinstance, 'EventInstance/TargetAudience.tpl.php') ?>
               <?php echo $savvy->render($eventinstance, 'EventInstance/Description.tpl.php') ?>
               <?php echo $savvy->render($eventinstance, 'EventInstance/OriginCalendar.tpl.php') ?>
 	          <?php echo $savvy->render($eventinstance, 'EventInstance/EditButton.tpl.php') ?>

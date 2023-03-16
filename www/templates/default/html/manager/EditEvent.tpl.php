@@ -16,6 +16,7 @@
     $event = $context->event;
     $post = $context->post;
     $event_type = $event->getFirstType();
+    $event_targets_audience = $event->getAudiences();
 
     $datetimeCount = count($event->getDatetimes());
     $allowCanceledDatetime = $datetimeCount > 1;
@@ -132,22 +133,62 @@
                 <textarea id="description" name="description" rows="4"><?php echo $event->description; ?></textarea>
             </div>
             <div class="dcf-form-group">
-                <label for="type">Type</label>
+                <label for="type">Type <small class="dcf-required">Required</small></label>
                 <select id="type" name="type">
-                <?php foreach ($context->getEventTypes() as $type) { ?>
                     <option
-                        <?php
-                            if ($event_type != null && $event_type->id == $type->id) {
-                                echo 'selected="selected"';
-                            }
-                        ?>
-                        value="<?php echo $type->id; ?>"
+                        <?php if (empty($context->getEventTypes())) { echo 'selected="selected"'; } ?>
+                        disabled="disabled"
+                        value=""
                     >
-                        <?php echo $type->name; ?>
+                        Please Select One
                     </option>
-                <?php } ?>
+                    <?php foreach ($context->getEventTypes() as $type) { ?>
+                        <option
+                            <?php
+                                if ($event_type != null && $event_type->id == $type->id) {
+                                    echo 'selected="selected"';
+                                }
+                            ?>
+                            value="<?php echo $type->id; ?>"
+                        >
+                            <?php echo $type->name; ?>
+                        </option>
+                    <?php } ?>
                 </select>
             </div>
+            <fieldset>
+                <legend>Target Audience</legend>
+                <div class="target-audience-grid">
+                    <?php foreach ($context->getAudiences() as $audience): ?>
+
+                        <?php
+                            // Find whether the audience is associated with the event
+                            // If so it will be used to check the input
+                            $audience_match = false;
+                            foreach ($event_targets_audience as $target_audience) {
+                                if ($audience->id === $target_audience->audience_id) {
+                                    $audience_match = true;
+                                    break;
+                                }
+                            }
+                        ?>
+
+                        <?php $target_audience_id = 'target-audience-' . $audience->id; ?>
+                        <div class="dcf-input-checkbox">
+                            <input
+                                id="<?php echo $target_audience_id; ?>"
+                                name="<?php echo $target_audience_id; ?>"
+                                type="checkbox"
+                                value="<?php echo $audience->id; ?>"
+                                <?php if ($audience_match) { echo CHECKED_INPUT; } ?>
+                            >
+                            <label for="<?php echo $target_audience_id; ?>">
+                                <?php echo $audience->name; ?>
+                            </label>
+                        </div>
+                <?php endforeach; ?>
+                </div>
+            </fieldset>
             <div class="dcf-input-checkbox">
                 <input
                     id="canceled"

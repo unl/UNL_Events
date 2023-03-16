@@ -33,13 +33,54 @@
                 <textarea id="description" name="description" rows="4" ><?php echo $event->description; ?></textarea>
             </div>
             <div class="dcf-form-group">
-                <label for="type">Type</label>
+                <label for="type">Type <small class="dcf-required">Required</small></label>
                 <select class="dcf-w-100%" id="type" name="type">
-                    <?php foreach ($context->getEventTypes() as $type) { ?>
-                      <option <?php if (isset($post['type']) && $post['type'] == $type->id) echo 'selected="selected"' ?> value="<?php echo $type->id ?>"><?php echo $type->name ?></option>
-                  <?php } ?>
+                    <option
+                        <?php if (!isset($post['type'])) { echo 'selected="selected"'; }?>
+                        disabled="disabled"
+                        value=""
+                    >
+                        Please Select One
+                    </option>
+                    <?php foreach ($context->getEventTypes() as $type): ?>
+                        <option
+                            <?php
+                                if (isset($post['type']) && $post['type'] == $type->id) {
+                                    echo 'selected="selected"';
+                                }
+                            ?>
+                            value="<?php echo $type->id; ?>"
+                        >
+                            <?php echo $type->name; ?>
+                        </option>
+                    <?php endforeach; ?>
                 </select>
             </div>
+            <fieldset>
+                <legend>Target Audience</legend>
+                <div class="target-audience-grid">
+                    <?php foreach ($context->getAudiences() as $audience): ?>
+                        <?php $target_audience_id = 'target-audience-' . $audience->id; ?>
+                        <div class="dcf-input-checkbox">
+                            <input
+                                id="<?php echo $target_audience_id; ?>"
+                                name="<?php echo $target_audience_id; ?>"
+                                type="checkbox"
+                                value="<?php echo $audience->id; ?>"
+                                <?php
+                                    if (isset($post[$target_audience_id]) &&
+                                        $post[$target_audience_id] == $audience->id) {
+                                            echo CHECKED_INPUT;
+                                    }
+                                ?>
+                            >
+                            <label for="<?php echo $target_audience_id; ?>">
+                                <?php echo $audience->name; ?>
+                            </label>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </fieldset>
             <div class="dcf-form-group">
                 <div class="dcf-input-checkbox">
                     <input id="canceled" name="canceled" type="checkbox" value="1" <?php if ($event->isCanceled()) { echo CHECKED_INPUT; } ?>>
@@ -377,7 +418,7 @@ require(['jquery'], function ($) {
         var errors = [];
 
         // validate required fields
-        if ($('#title').val() == '' || $('#location').val() == '' || $('#start-date').val() == '') {
+        if ($('#title').val() == '' || $('#location').val() == '' || $('#start-date').val() == '' || $('#type').find(':selected').val() == '') {
             if ($('#title').val() == '') {
                 notifier.mark_input_invalid($('#title'));
             }
@@ -387,8 +428,12 @@ require(['jquery'], function ($) {
             if ($('#start-date').val() == '') {
                 notifier.mark_input_invalid($('#start-date'));
             }
-            errors.push('<a href=\"#title\">Title</a>, <a href=\"#location\">location</a>, and <a href=\"#start-date\">start date</a> are required.');
+            if ($('#type').find(':selected').val() == '') {
+                notifier.mark_input_invalid($('#type'));
+            }
+            errors.push('<a href=\"#title\">Title</a>, <a href=\"#type\">Type</a>, <a href=\"#location\">location</a>, and <a href=\"#start-date\">start date</a> are required.');
         }
+        console.log('errors', errors);
 
         var start = new Date($('#start-date').val());
         if ($('#start-date').val() != '') {
