@@ -676,6 +676,23 @@ class Savvy
         $method = 'render'.gettype($mixed);
         return $this->$method($mixed, $template);
     }
+
+    /**
+     * Return the original object if the given object is a proxy
+     *
+     * @param mixed $object
+     * @return mixed
+     */
+    public function getRawObject($object)
+    {
+        $rawObject = $object;
+
+        if ($object instanceof Savvy_ObjectProxy) {
+            $rawObject = $object->getRawObject();
+        }
+
+        return $rawObject;
+    }
     
     /**
      * Called when a resource is rendered
