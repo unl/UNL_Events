@@ -245,6 +245,35 @@ class EventInstance implements RoutableInterface
         
         return $fullDescription[0];
     }
+
+    /**
+     * Checks to see if the location has all information necessary for Google's microdata.
+     * 
+     * @return bool
+     */
+    function microdata_check()
+    {
+        if (!isset($this->event->title) || empty($this->event->title)) {
+            return false;
+        }
+
+        if (!isset($this->eventdatetime->starttime) || empty($this->eventdatetime->starttime)) {
+            return false;
+        }
+
+        if (!isset($this->eventdatetime->location_id) && !isset($this->eventdatetime->webcast_id)) {
+            return false;
+        }
+
+        if (isset($this->eventdatetime->location_id)) {
+            $location = $this->eventdatetime->getLocation();
+            if (!$location->microdata_check()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
     
     public function toJSONData()
     {
@@ -474,6 +503,84 @@ class EventInstance implements RoutableInterface
 
         return $data;
 	}
+
+     /**
+     * Formats event data in google microdata standard for events.
+     * 
+     * @return Array
+     */
+    public function getFormattedMicrodata()
+    {
+        $timezoneDateTime = new \UNL\UCBCN\TimezoneDateTime($this->eventdatetime->timezone);
+        $location   = $this->eventdatetime->getLocation();
+        $eventTypes = $this->event->getEventTypes();
+        $webcast    = $this->eventdatetime->getWebcast();
+        $documents  = $this->event->getDocuments();
+        $contacts   = $this->event->getPublicContacts();
+        $originCalendar = $this->event->getOriginCalendar();
+        $data       = array();
+
+        $data['@context'] = "https://schema.org";
+        $data['@type'] = "Event";
+        $data['name'] = $this->event->title;
+
+        if (isset($this->event->description)) {
+            $data['description'] = $this->event->description;
+        }
+
+        if (isset($this->event->imageurl)) {
+            $data['image'] = array(
+                $this->event->imageurl,
+            );
+        }
+        
+        if ($this->isAllDay()) {
+            $data['startDate'] =  date('m-d-Y', strtotime( $this->getStartTime()));
+        } else {
+            $start_date_iso1801 = $timezoneDateTime->format($this->getStartTime(), DATE_ATOM);
+            $end_date_iso1801 = $timezoneDateTime->format($this->getEndTime(), DATE_ATOM);
+            $data['startDate'] = $start_date_iso1801;
+            if ($start_date_iso1801 != $end_date_iso1801) {
+                $data['endDate'] = $end_date_iso1801;
+            }
+        }
+
+        $data['eventStatus'] = $this->event->isCanceled($this) ? 'https://schema.org/EventCancelled' : 'https://schema.org/EventScheduled';
+
+        if (isset($this->eventdatetime->location_id) && isset($this->eventdatetime->webcast_id)) {
+            $data['eventAttendanceMode'] = "https://schema.org/MixedEventAttendanceMode";
+        } elseif (isset($this->eventdatetime->location_id) && !isset($this->eventdatetime->webcast_id)) {
+            $data['eventAttendanceMode'] = "https://schema.org/OfflineEventAttendanceMode";
+        } else {
+            $data['eventAttendanceMode'] = "https://schema.org/OnlineEventAttendanceMode";
+        }
+
+        $data['location'] = array();
+        if (isset($this->eventdatetime->location_id)) {
+            $location_data = array();
+            $location_data["@type"] = "Place";
+            $location_data["name"] = $location->name;
+            $location_data["address"] = array(
+                "@type" => "PostalAddress",
+                "streetAddress" => $location->streetaddress1 . ((isset($location->streetaddress2)) ? " " . $location->streetaddress2 : ""),
+                "postalCode" => $location->zip,
+                "addressRegion" => $location->state,
+                "addressCountry" => "US",
+            );
+
+            $data["location"][] = $location_data;
+        }
+
+        if (isset($this->eventdatetime->webcast_id)) {
+            $webcast_data = array();
+            $webcast_data["@type"] = "VirtualLocation";
+            $webcast_data["url"] = $webcast->url;
+
+            $data["location"][] = $webcast_data;
+        }
+
+        return $data;
+    }
 
     public function getMonthWidget()
     {

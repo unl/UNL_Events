@@ -1,7 +1,17 @@
 <?php $url = $context->getURL(); ?>
+<?php $microdata_check = $context->microdata_check(); ?>
 <div class="event_cal">
     <div class='vcalendar'>
         <div class='vevent'>
+
+            <?php if($microdata_check): ?>
+                <script type="application/ld+json">
+                    <?php $event_microdata = $context->getFormattedMicrodata(); ?>
+                    <?php $raw_microdata = $savvy->getRawObject($event_microdata); ?>
+                    <?php echo json_encode($raw_microdata, JSON_UNESCAPED_SLASHES); ?>
+                </script>
+            <?php endif; ?>
+
             <?php if (isset($context->event->subtitle)): ?><header><?php endif; ?>
                 <h2 id="heading-date" class='summary' data-datetime="<?php echo (new DateTime($context->getStartTime()))->format('c') ?>">
                     <a class="dcf-txt-decor-none" href="<?php echo $url; ?>">
