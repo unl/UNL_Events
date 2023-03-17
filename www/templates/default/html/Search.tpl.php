@@ -32,6 +32,14 @@
             }
         }
     }
+
+    usort($audiences_available, function($a, $b) {
+        return strcmp($a->name, $b->name);
+    });
+
+    usort($event_types_available, function($a, $b) {
+        return strcmp($a->name, $b->name);
+    });
 ?>
 
 <div class="dcf-grid dcf-col-gap-vw">
