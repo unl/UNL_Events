@@ -42,6 +42,6 @@ class EventTypes extends RecordList
         if (array_key_exists('order_name', $this->options) && $this->options['order_name'] !== NULL) {
             $sql .= ' ORDER BY name';
         }
-        return $sql;
+        return $sql . ';';
     }
 }
