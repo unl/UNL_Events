@@ -119,7 +119,7 @@ class Search extends EventListing implements RoutableInterface
      */
     public function getEventTypes()
     {
-        return new EventTypes(array());
+        return new EventTypes(array('order_name' => true));
     }
 
     /**
@@ -129,7 +129,7 @@ class Search extends EventListing implements RoutableInterface
      */
     public function getAudiences()
     {
-        return new Audiences(array());
+        return new Audiences(array('order_name' => true));
     }
 
     /**

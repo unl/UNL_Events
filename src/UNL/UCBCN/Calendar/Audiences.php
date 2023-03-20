@@ -27,12 +27,30 @@ use UNL\UCBCN\ActiveRecord\RecordList;
  */
 class Audiences extends RecordList
 {
-    
+    function __construct($options = array())
+    {
+        parent::__construct($options);
+    }
+
     public function getDefaultOptions()
     {
         return array(
             'listClass' =>  __CLASS__,
             'itemClass' => __NAMESPACE__ . '\\Audience',
         );
+    }
+
+    public function getSQL()
+    {
+        if (array_key_exists('event_id', $this->options)) {
+            return 'SELECT id FROM event_targets_audience WHERE event_targets_audience.event_id = ' .
+                (int)$this->options['event_id'];
+        }
+
+        $sql = 'SELECT id FROM audience';
+        if (array_key_exists('order_name', $this->options) && $this->options['order_name'] !== NULL) {
+            $sql .= 'ORDER BY name';
+        }
+        return $sql;
     }
 }
