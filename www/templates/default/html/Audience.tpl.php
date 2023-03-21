@@ -19,7 +19,6 @@
         </h2>
         <form class="dcf-form dcf-mt-5">
             <?php $all_audiences = $context->getAudiences(); ?>
-            <?php $split_audiences = (array) $context->getSplitAudiences() ?>
 
             <fieldset>
                 <legend>Target Audiences</legend>
@@ -32,7 +31,7 @@
                                 type="checkbox"
                                 value="<?php echo $single_audience->name; ?>"
                                 <?php
-                                    if (in_array($single_audience->name, $split_audiences)) {
+                                    if (strpos($context->search_query ?? "", $single_audience->name)) {
                                         echo CHECKED_INPUT;
                                     }
                                 ?>
