@@ -1,4 +1,6 @@
 <?php
+    $selected_html = 'selected="selected"';
+
     $audiences_available_names = array(); // These are only here so we can check if we have already stored them
     $audiences_available = array();
     $audiences_unavailable = $context->getAudiences();

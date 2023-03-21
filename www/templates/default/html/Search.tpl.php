@@ -1,7 +1,3 @@
-<?php
-    $selected_html = 'selected="selected"';
-?>
-
 <div class="dcf-grid dcf-col-gap-vw">
     <section class="dcf-col-100% dcf-col-33%-start@md">
         <h2 class="results clear-top dcf-mb-0">
