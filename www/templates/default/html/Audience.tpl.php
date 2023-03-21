@@ -19,7 +19,13 @@
         </h2>
         <form class="dcf-form dcf-mt-5">
             <?php $all_audiences = $context->getAudiences(); ?>
-            <?php $split_audiences = $context->getSplitAudiences(); ?>
+            <?php $split_audiences = array_map(
+                function($single_audience)
+                {
+                    return $single_audience->name;
+                },
+                $context->getSplitAudiences()
+            ); ?>
 
             <fieldset>
                 <legend>Target Audiences</legend>
