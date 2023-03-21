@@ -107,8 +107,7 @@ class Audience extends EventListing implements RoutableInterface
 
         // splits the audiences by comma and creates the SQL for those
         if (!empty($this->search_query)) {
-            $audiences_explode = explode(',', $this->search_query);
-            $audiences_explode = array_map('trim', $audiences_explode);
+            $audiences_explode = $this->getSplitAudiences();
 
             $sql .= ' AND (';
             foreach ($audiences_explode as $index => $audience_single) {
@@ -145,6 +144,21 @@ class Audience extends EventListing implements RoutableInterface
         return $sql;
     }
 
+
+    public function getSplitAudiences()
+    {
+        if (empty($this->search_query)) {
+            return [];
+        }
+
+        // splits the audiences by comma and creates the SQL for those
+        $audiences_explode = explode(',', $this->search_query);
+        $audiences_explode = array_map('trim', $audiences_explode);
+
+        return $audiences_explode;
+    }
+
+
     /**
      * returns nicely formatted string of the audiences from the search query
      *
@@ -153,8 +167,7 @@ class Audience extends EventListing implements RoutableInterface
     public function getFormattedAudiences()
     {
         $output_string = '';
-        $audiences_explode = explode(',', $this->search_query);
-        $audiences_explode = array_map('trim', $audiences_explode);
+        $audiences_explode = $this->getSplitAudiences();
         $last_index = count($audiences_explode) - 1;
 
         foreach ($audiences_explode as $index => $audience_single) {
@@ -187,4 +200,15 @@ class Audience extends EventListing implements RoutableInterface
 
         return $url;
     }
+
+    /**
+     * Gets list of all audiences
+     *
+     * @return bool|Audiences - false if no audiences, otherwise return recordList of all audiences
+     */
+    public function getAudiences()
+    {
+        return new Audiences(array('order_name' => true));
+    }
+
 }

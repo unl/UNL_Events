@@ -1,3 +1,6 @@
+<?php
+    const CHECKED_INPUT = 'checked="checked"';
+?>
 <div class="dcf-grid dcf-col-gap-vw">
     <section class="dcf-col-100% dcf-col-33%-start@md">
         <h2 class="results clear-top">
@@ -14,6 +17,33 @@
                 ?>
             </a>
         </h2>
+        <form class="dcf-form dcf-mt-5">
+            <?php $all_audiences = $context->getAudiences(); ?>
+            <?php $split_audiences = $context->getSplitAudiences(); ?>
+
+            <fieldset>
+                <legend>Target Audiences</legend>
+                <?php foreach ($all_audiences as $single_audience) : ?>
+                    <?php $target_audience_id = 'target-audience-' . $single_audience->id; ?>
+                        <div class="dcf-input-checkbox">
+                            <input
+                                id="<?php echo $target_audience_id; ?>"
+                                name="audiences[]"
+                                type="checkbox"
+                                value="<?php echo $single_audience->name; ?>"
+                                <?php
+                                    if (in_array($single_audience->name, $split_audiences)) {
+                                        echo CHECKED_INPUT;
+                                    }
+                                ?>
+                            >
+                            <label for="<?php echo $target_audience_id; ?>">
+                                <?php echo $single_audience->name; ?>
+                            </label>
+                        </div>
+                <?php endforeach; ?>
+            </fieldset>
+        </form>
     </section>
     <section id="updatecontent" class="day_cal dcf-col-100% dcf-col-67%-end@md">
         <?php echo $savvy->render($context, 'hcalendar/Audience.tpl.php'); ?>
