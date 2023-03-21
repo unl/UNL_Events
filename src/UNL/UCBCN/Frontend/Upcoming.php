@@ -15,6 +15,9 @@
  */
 namespace UNL\UCBCN\Frontend;
 
+use UNL\UCBCN\Calendar\Audiences;
+use UNL\UCBCN\Calendar\EventTypes;
+
 /**
  * A list of upcoming events for a calendar.
  * 
