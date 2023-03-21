@@ -1,6 +1,17 @@
 <?php
     $selected_html = 'selected="selected"';
 
+    // Get previous inputs without using context
+    $query = $context->options['q'] ?? "";
+    $selected_audience = $context->options['audience'] ?? "";
+    $selected_type = $context->options['type'] ?? "";
+
+    // Format inputs
+    $query = strtolower($query);
+    $selected_audience = strtolower($selected_audience);
+    $selected_type = strtolower($selected_type);
+
+    // set up variables for available optgroups
     $audiences_available_names = array(); // These are only here so we can check if we have already stored them
     $audiences_available = array();
     $audiences_unavailable = $context->getAudiences();
@@ -33,6 +44,7 @@
         }
     }
 
+    // sort so they are in alphabetical order
     usort($audiences_available, function($a, $b) {
         return strcmp($a->name, $b->name);
     });
@@ -43,8 +55,8 @@
 ?>
 
 <form id="filter_form" class="dcf-form dcf-mt-5">
-    <?php if (isset($context->search_query)): ?>
-        <input type="hidden" name="q" value="<?php echo htmlentities($context->search_query); ?>"/>
+    <?php if (empty($query)): ?>
+        <input type="hidden" name="q" value="<?php echo htmlentities($query); ?>"/>
     <?php endif;?>
     <fieldset>
         <legend>Filter Results</legend>
@@ -52,7 +64,7 @@
             <label for="type">Type</label>
             <select class="dcf-w-100%" id="type" name="type">
                 <option
-                    <?php if ($context->search_event_type == "") { echo $selected_html; } ?>
+                    <?php if (empty($selected_type)) { echo $selected_html; } ?>
                     value=""
                 >
                     N/A
@@ -62,7 +74,7 @@
                 >
                     <?php foreach ($event_types_available as $type) { ?>
                         <option
-                            <?php if ($context->search_event_type == $type->name) { echo $selected_html; } ?>
+                            <?php if ($selected_type == $type->name) { echo $selected_html; } ?>
                             value="<?php echo $type->name; ?>"
                         >
                             <?php echo $type->name; ?>
@@ -72,7 +84,7 @@
                 <optgroup label="All Types">
                     <?php foreach ($context->getEventTypes() as $type) { ?>
                         <option
-                            <?php if ($context->search_event_type == $type->name &&
+                            <?php if ($selected_type == $type->name &&
                                 empty($event_types_available)) {
                                     echo $selected_html;
                                 }
@@ -89,7 +101,7 @@
             <label for="audience">Target Audience</label>
             <select class="dcf-w-100%" id="audience" name="audience">
                 <option
-                    <?php if ($context->search_event_audience == "") { echo $selected_html; } ?>
+                    <?php if ($selected_audience == "") { echo $selected_html; } ?>
                     value=""
                 >
                     N/A
@@ -99,7 +111,7 @@
                 >
                     <?php foreach ($audiences_available as $audience) { ?>
                         <option
-                            <?php if ($context->search_event_audience == $audience->name) {
+                            <?php if ($selected_audience == $audience->name) {
                                     echo $selected_html;
                                 }
                             ?>
@@ -112,7 +124,7 @@
                 <optgroup label="All Audiences">
                     <?php foreach ($context->getAudiences() as $audience) { ?>
                         <option
-                            <?php if ($context->search_event_audience == $audience->name &&
+                            <?php if ($selected_audience == $audience->name &&
                                 empty($audiences_available)) {
                                     echo $selected_html;
                                 }
