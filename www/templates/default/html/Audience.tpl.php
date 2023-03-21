@@ -31,7 +31,7 @@
                                 type="checkbox"
                                 value="<?php echo $single_audience->name; ?>"
                                 <?php
-                                    if (strpos($context->search_query ?? "", $single_audience->name)) {
+                                    if (strpos($context->search_query ?? "", $single_audience->name) !== false) {
                                         echo CHECKED_INPUT;
                                     }
                                 ?>
