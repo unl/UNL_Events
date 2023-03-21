@@ -134,18 +134,21 @@
         const form = document.querySelector('form#filter_form');
         const filter_reset = form.querySelector('#filter_reset');
 
+        // Submit if select changes
         form.querySelectorAll('select').forEach((input) => {
             input.addEventListener('input', () => {
                 form.submit();
             });
         });
 
+        // Set inputs to empty and submit if reset button is clicked
         filter_reset.addEventListener('click', (e) => {
             const type_select = form.querySelector('#type');
             const type_audience = form.querySelector('#audience');
 
-            type_select.value = ""
-            type_audience.value = ""
+            type_select.value = '';
+            type_audience.value = '';
 
             form.submit();
-        })");
+        });
+    ");
