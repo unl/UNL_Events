@@ -56,7 +56,9 @@
                 input.addEventListener('input', () => {
                     const checkedCheckboxes = form.querySelectorAll('input[type="checkbox"]:checked');
                     hidden_query.value = Array.from(checkedCheckboxes).map((checkbox) => checkbox.value).join(", ");
-                    form.submit();
+                    if (checkedCheckboxes.length > 0) {
+                        form.submit();
+                    }
                 });
             });
         </script>
