@@ -178,7 +178,7 @@ class EventType extends EventListing implements RoutableInterface
             if ($index === $last_index && $index > 0) {
                 $output_string .= 'and ';
             }
-            $output_string .= ucwords($eventtype_single);
+            $output_string .= '<span class="dcf-d-inline-block">' . ucwords($eventtype_single) . '</span>';
         }
 
         return $output_string;
