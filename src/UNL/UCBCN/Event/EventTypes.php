@@ -48,10 +48,10 @@ class EventTypes extends RecordList
                 (int)$this->options['event_id'];
         }
 
-        $sql = 'SELECT id FROM eventtype';
+        $sql_output = 'SELECT id FROM eventtype';
         if (array_key_exists('order_name', $this->options) && $this->options['order_name'] !== NULL) {
-            $sql .= ' ORDER BY name';
+            $sql_output .= ' ORDER BY name';
         }
-        return $sql . ';';
+        return $sql_output;
     }
 }
