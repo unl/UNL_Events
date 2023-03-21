@@ -1,3 +1,6 @@
+<?php
+    const CHECKED_INPUT = 'checked="checked"';
+?>
 <div class="dcf-grid dcf-col-gap-vw">
     <section class="dcf-col-100% dcf-col-33%-start@md">
         <h2 class="results clear-top">
