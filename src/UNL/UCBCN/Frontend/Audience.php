@@ -75,7 +75,6 @@ class Audience extends EventListing implements RoutableInterface
         if (!isset($options['offset']) || empty($options['offset']) ||  intval($options['offset']) <= 0) {
             $options['offset'] = 0;
         }
-        
 
         $this->limit = $options['limit'] ?? $this->limit;
         $this->offset = $options['offset'] ?? $this->offset;
@@ -153,7 +152,7 @@ class Audience extends EventListing implements RoutableInterface
             return [];
         }
 
-        // splits the audiences by comma and creates the SQL for those
+        // splits the audiences by comma
         $audiences_explode = explode(',', $this->search_query);
         $audiences_explode = array_map('trim', $audiences_explode);
 

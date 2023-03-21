@@ -14,6 +14,51 @@
                 ?>
             </a>
         </h2>
+        <form id="eventtype_form" class="dcf-form dcf-mt-5">
+            <?php $all_eventtypes = $context->getEventTypes(); ?>
+
+            <input type="hidden" id="hidden_query" name="q" value="<?php echo $context->search_query ?? ""; ?>">
+
+            <fieldset>
+                <legend>Event Types</legend>
+                <?php foreach ($all_eventtypes as $single_type) : ?>
+                    <?php $event_type_id = 'event-type-' . $single_type->id; ?>
+                        <div class="dcf-input-checkbox">
+                            <input
+                                id="<?php echo $event_type_id; ?>"
+                                type="checkbox"
+                                value="<?php echo $single_type->name; ?>"
+                                <?php
+                                    // I only have this like this becuase savvy would not give me an actual array
+                                    if (strpos(strtolower($context->search_query ?? ""), strtolower($single_type->name)) !== false) {
+                                        echo CHECKED_INPUT;
+                                    }
+                                ?>
+                            >
+                            <label for="<?php echo $event_type_id; ?>">
+                                <?php echo $single_type->name; ?>
+                            </label>
+                        </div>
+                <?php endforeach; ?>
+            </fieldset>
+        </form>
+
+        <script>
+            const form = document.getElementById('eventtype_form');
+            const checkboxes = form.querySelectorAll('input[type="checkbox"]');
+            const hidden_query = document.getElementById('hidden_query');
+
+            // Submit if select changes
+            checkboxes.forEach((input) => {
+                input.addEventListener('input', () => {
+                    const checkedCheckboxes = form.querySelectorAll('input[type="checkbox"]:checked');
+                    hidden_query.value = Array.from(checkedCheckboxes).map((checkbox) => checkbox.value).join(", ");
+                    if (checkedCheckboxes.length > 0) {
+                        form.submit();
+                    }
+                });
+            });
+        </script>
     </section>
     <section id="updatecontent" class="day_cal dcf-col-100% dcf-col-67%-end@md">
         <?php echo $savvy->render($context, 'hcalendar/EventType.tpl.php'); ?>

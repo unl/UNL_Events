@@ -14,6 +14,8 @@
  */
 namespace UNL\UCBCN\Frontend;
 
+use UNL\UCBCN\Calendar\EventTypes;
+
 /**
  * Container for event type search results for the frontend.
  *
@@ -106,8 +108,7 @@ class EventType extends EventListing implements RoutableInterface
 
         // splits the event types by comma and creates the SQL for those
         if (!empty($this->search_query)) {
-            $eventtype_explode = explode(',', $this->search_query);
-            $eventtype_explode = array_map('trim', $eventtype_explode);
+            $eventtype_explode = $this->getSplitEventtypes();
 
             $sql .= ' AND (';
             foreach ($eventtype_explode as $index => $eventtype_single) {
@@ -144,16 +145,28 @@ class EventType extends EventListing implements RoutableInterface
         return $sql;
     }
 
+    public function getSplitEventtypes()
+    {
+        if (empty($this->search_query)) {
+            return [];
+        }
+
+        // splits the eventtypes by comma
+        $types_explode = explode(',', $this->search_query);
+        $types_explode = array_map('trim', $types_explode);
+
+        return $types_explode;
+    }
+
     /**
-     * returns nicely formatted string of the audiences from the search query
+     * returns nicely formatted string of the eventtypess from the search query
      *
      * @return string
      */
     public function getFormattedEventTypes()
     {
         $output_string = '';
-        $eventtype_explode = explode(',', $this->search_query);
-        $eventtype_explode = array_map('trim', $eventtype_explode);
+        $eventtype_explode = $this->getSplitEventtypes();
         $last_index = count($eventtype_explode) - 1;
 
         foreach ($eventtype_explode as $index => $eventtype_single) {
@@ -185,6 +198,16 @@ class EventType extends EventListing implements RoutableInterface
         }
 
         return $url;
+    }
+
+    /**
+     * Gets list of all event types
+     *
+     * @return bool|EventTypes - false if no event type, otherwise return recordList of all event types
+     */
+    public function getEventTypes()
+    {
+        return new EventTypes(array('order_name' => true));
     }
 
 }
