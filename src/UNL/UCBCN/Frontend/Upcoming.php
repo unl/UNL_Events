@@ -34,6 +34,9 @@ class Upcoming extends EventListing implements RoutableInterface
      */
     public $calendar;
 
+    public $search_event_type = '';
+    public $search_event_audience = '';
+
     public $options = array(
             'limit'  => 10,
             'offset' => 0,
@@ -55,6 +58,9 @@ class Upcoming extends EventListing implements RoutableInterface
         $options['s'] = date('s');
         $options['includeEventImageData'] = TRUE;
 
+        $this->upcoming_event_type = $options['type'] ?? "";
+        $this->upcoming_event_audience = $options['audience'] ?? "";
+
         parent::__construct($options);
     }
 
@@ -68,6 +74,26 @@ class Upcoming extends EventListing implements RoutableInterface
         return new \DateTime('@'.mktime($this->options['H'], $this->options['i'], $this->options['s'], $this->options['m'], $this->options['d'], $this->options['y']));
     }
 
+    /**
+     * Gets list of all event types
+     *
+     * @return bool|EventTypes - false if no event type, otherwise return recordList of all event types
+     */
+    public function getEventTypes()
+    {
+        return new EventTypes(array('order_name' => true));
+    }
+
+    /**
+     * Gets list of all audiences
+     *
+     * @return bool|Audiences - false if no audiences, otherwise return recordList of all audiences
+     */
+    public function getAudiences()
+    {
+        return new Audiences(array('order_name' => true));
+    }
+
 	/**
      * Get the SQL for finding events
      * 
@@ -78,11 +104,15 @@ class Upcoming extends EventListing implements RoutableInterface
         $timestamp = $this->getDateTime()->getTimestamp();
 
         $sql = '
-                SELECT e.id as id, recurringdate.id as recurringdate_id
+                SELECT DISTINCT e.id as id, recurringdate.id as recurringdate_id
                 FROM eventdatetime as e
                 INNER JOIN event ON e.event_id = event.id
                 INNER JOIN calendar_has_event ON calendar_has_event.event_id = event.id
                 LEFT JOIN recurringdate ON (recurringdate.event_datetime_id = e.id AND recurringdate.unlinked = 0 AND recurringdate.ongoing = 0)
+                LEFT JOIN event_has_eventtype ON (event_has_eventtype.event_id = event.id)
+                LEFT JOIN eventtype ON (eventtype.id = event_has_eventtype.eventtype_id)
+                LEFT JOIN event_targets_audience ON (event_targets_audience.event_id = event.id)
+                LEFT JOIN audience ON (audience.id = event_targets_audience.audience_id)
                 WHERE
                     calendar_has_event.calendar_id = ' . (int)$this->calendar->id . '
                     AND (
@@ -95,6 +125,19 @@ class Upcoming extends EventListing implements RoutableInterface
                             recurringdate.recurringdate
                         ) >=  "'.date('Y-m-d', $timestamp).'"
                     )
+                ';
+
+         // Adds filter for event type
+         if (!empty($this->upcoming_event_type)) {
+            $sql .= ' AND ( eventtype.name = \'' . self::escapeString($this->upcoming_event_type) .'\')';
+        }
+
+        // Adds filters for target audience
+        if (!empty($this->upcoming_event_audience)) {
+            $sql .= ' AND ( audience.name = \'' . self::escapeString($this->upcoming_event_audience) . '\')';
+        }
+
+        $sql .= '
                 ORDER BY (
                         IF (recurringdate.recurringdate IS NULL,
                           e.starttime,
