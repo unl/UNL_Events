@@ -159,6 +159,11 @@ class Audience extends EventListing implements RoutableInterface
         return $audiences_explode;
     }
 
+    public function countQuery()
+    {
+        return $this->getSplitAudiences()->count();
+    }
+
 
     /**
      * returns nicely formatted string of the audiences from the search query
