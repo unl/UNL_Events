@@ -47,7 +47,6 @@
                     const checkedCheckboxes = form.querySelectorAll('input[type="checkbox"]:checked');
                     hidden_query.value = Array.from(checkedCheckboxes).map((checkbox) => checkbox.value).join(", ");
                     if (checkedCheckboxes.length > 0) {
-                        form.
                         form.submit();
                     }
                 });
