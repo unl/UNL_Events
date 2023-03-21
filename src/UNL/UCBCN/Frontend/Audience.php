@@ -14,6 +14,8 @@
  */
 namespace UNL\UCBCN\Frontend;
 
+use UNL\UCBCN\Calendar\Audiences;
+
 /**
  * Container for audience search results for the frontend.
  *
