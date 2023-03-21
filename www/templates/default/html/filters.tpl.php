@@ -74,7 +74,7 @@
                 >
                     <?php foreach ($event_types_available as $type) { ?>
                         <option
-                            <?php if ($selected_type == $type->name) { echo $selected_html; } ?>
+                            <?php if ($selected_type == strtolower($type->name)) { echo $selected_html; } ?>
                             value="<?php echo $type->name; ?>"
                         >
                             <?php echo $type->name; ?>
@@ -84,7 +84,7 @@
                 <optgroup label="All Types">
                     <?php foreach ($context->getEventTypes() as $type) { ?>
                         <option
-                            <?php if ($selected_type == $type->name &&
+                            <?php if ($selected_type == strtolower($type->name) &&
                                 empty($event_types_available)) {
                                     echo $selected_html;
                                 }
@@ -101,7 +101,7 @@
             <label for="audience">Target Audience</label>
             <select class="dcf-w-100%" id="audience" name="audience">
                 <option
-                    <?php if ($selected_audience == "") { echo $selected_html; } ?>
+                    <?php if (empty($selected_audience)) { echo $selected_html; } ?>
                     value=""
                 >
                     N/A
@@ -111,7 +111,7 @@
                 >
                     <?php foreach ($audiences_available as $audience) { ?>
                         <option
-                            <?php if ($selected_audience == $audience->name) {
+                            <?php if ($selected_audience == strtolower($audience->name)) {
                                     echo $selected_html;
                                 }
                             ?>
@@ -124,7 +124,7 @@
                 <optgroup label="All Audiences">
                     <?php foreach ($context->getAudiences() as $audience) { ?>
                         <option
-                            <?php if ($selected_audience == $audience->name &&
+                            <?php if ($selected_audience == strtolower($audience->name) &&
                                 empty($audiences_available)) {
                                     echo $selected_html;
                                 }
