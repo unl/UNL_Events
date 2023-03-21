@@ -178,7 +178,7 @@ class Audience extends EventListing implements RoutableInterface
                 $output_string .= ' ';
             }
             if ($index === $last_index && $index > 0) {
-                $output_string .= 'and ';
+                $output_string .= 'or ';
             }
             $output_string .= ucwords($audience_single);
         }
