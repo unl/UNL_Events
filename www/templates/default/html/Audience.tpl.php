@@ -17,8 +17,10 @@
                 ?>
             </a>
         </h2>
-        <form class="dcf-form dcf-mt-5">
+        <form id="audience_form" class="dcf-form dcf-mt-5">
             <?php $all_audiences = $context->getAudiences(); ?>
+
+            <input type="hidden" id="hidden_query" name="q" value="<?php echo $context->search_query ?? ""; ?>">
 
             <fieldset>
                 <legend>Target Audiences</legend>
@@ -27,11 +29,10 @@
                         <div class="dcf-input-checkbox">
                             <input
                                 id="<?php echo $target_audience_id; ?>"
-                                name="audiences[]"
                                 type="checkbox"
                                 value="<?php echo $single_audience->name; ?>"
                                 <?php
-                                    if (strpos($context->search_query ?? "", $single_audience->name) !== false) {
+                                    if (strpos(strtolower($context->search_query ?? ""), strtolower($single_audience->name)) !== false) {
                                         echo CHECKED_INPUT;
                                     }
                                 ?>
@@ -43,6 +44,20 @@
                 <?php endforeach; ?>
             </fieldset>
         </form>
+
+        <script>
+            const form = document.getElementById('audience_form');
+            const checkboxes = form.querySelectorAll('input[type="checkbox"]');
+            const hidden_query = document.getElementById('hidden_query');
+
+            // Submit if select changes
+            checkboxes.forEach((input) => {
+                input.addEventListener('input', () => {
+                    hidden_query.value = Array.from(checkboxes).map((checkbox) => checkbox.value).join(", ");
+                    form.submit();
+                });
+            });
+        </script>
     </section>
     <section id="updatecontent" class="day_cal dcf-col-100% dcf-col-67%-end@md">
         <?php echo $savvy->render($context, 'hcalendar/Audience.tpl.php'); ?>
