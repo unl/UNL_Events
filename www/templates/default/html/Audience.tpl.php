@@ -32,6 +32,7 @@
                                 type="checkbox"
                                 value="<?php echo $single_audience->name; ?>"
                                 <?php
+                                    // I only have this like this becuase savvy would not give me an actual array
                                     if (strpos(strtolower($context->search_query ?? ""), strtolower($single_audience->name)) !== false) {
                                         echo CHECKED_INPUT;
                                     }
@@ -53,7 +54,8 @@
             // Submit if select changes
             checkboxes.forEach((input) => {
                 input.addEventListener('input', () => {
-                    hidden_query.value = Array.from(checkboxes).map((checkbox) => checkbox.value).join(", ");
+                    const checkedCheckboxes = form.querySelectorAll('input[type="checkbox"]:checked');
+                    hidden_query.value = Array.from(checkedCheckboxes).map((checkbox) => checkbox.value).join(", ");
                     form.submit();
                 });
             });
