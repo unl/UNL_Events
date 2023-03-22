@@ -28,7 +28,7 @@
         <?php endif; ?>
     </p>
     <?php if ($dt = $context->getSearchTimestamp()): ?>
-        <h2 class="dcf-mt-0" id="heading-date" data-datetime="<?php echo date(DATE_ATOM, $dt); ?>">
+        <h2 class="dcf-mt-0" id="heading-date" data-datetime="<?php echo date(DATE_ATOM, $dt); ?>">Search Results</h2>
     <?php else: ?>
         <h2 class="dcf-mt-0" id="heading-date">Search Results</h2>
     <?php endif; ?>
