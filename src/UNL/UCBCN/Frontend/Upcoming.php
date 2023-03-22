@@ -125,8 +125,12 @@ class Upcoming extends EventListing implements RoutableInterface
                     AND (
                         IF (recurringdate.recurringdate IS NULL,
                             e.starttime,
-                            recurringdate.recurringdate
-                        ) >=  "'.date('Y-m-d', $timestamp).'"
+                            CONCAT(DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.starttime," %H:%i:%s"))
+                        ) >= NOW() OR
+                        IF (recurringdate.recurringdate IS NULL,
+                            e.endtime,
+                            CONCAT(DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.endtime," %H:%i:%s"))
+                        ) >= NOW()
                     )
                 ';
 
