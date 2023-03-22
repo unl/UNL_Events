@@ -163,4 +163,14 @@ class Search extends EventListing implements RoutableInterface
         return $url;
     }
 
+    /**
+     * Get the month widget for the context's month
+     *
+     * @return MonthWidget
+     */
+    public function getMonthWidget()
+    {
+        return new MonthWidget($this->options);
+    }
+
 }
