@@ -1,9 +1,14 @@
 <div id="results">
-    <p class="dcf-txt-xs unl-font-sans unl-dark-gray">Displaying Search:
+    <p class="dcf-txt-xs unl-font-sans unl-dark-gray">
+        <?php if ($dt = $context->getSearchTimestamp()): ?>
+            Displaying Search for Date:
+        <?php else: ?>
+            Displaying Search:
+        <?php endif; ?>
         <span>
             <?php
                 if ($dt = $context->getSearchTimestamp()) {
-                    echo 'Date:' . date('F jS', $dt);
+                    echo date('F jS', $dt);
                 } elseif (empty($context->search_query)) {
                     echo '\'Any\'';
                 } else {
@@ -13,12 +18,12 @@
         </span>
         <?php if (!empty($context->search_event_type)): ?>
             <span class='dcf-d-block'>
-                Filter Type: <?php echo $context->search_event_type ?>
+                Filter Type: <?php echo htmlentities($context->search_event_type); ?>
             </span>
         <?php endif; ?>
         <?php if (!empty($context->search_event_audience)): ?>
             <span class='dcf-d-block'>
-                Filter Audience: <?php echo $context->search_event_audience ?>
+                Filter Audience: <?php echo htmlentities($context->search_event_audience); ?>
             </span>
         <?php endif; ?>
     </p>
@@ -27,9 +32,9 @@
         <?php echo $context->count(); ?>
 
         <?php if ($context->count() != 1): ?>
-            results from the calendar "<?php echo $context->calendar->name; ?>" matching search query
+            results from the calendar "<?php echo htmlentities($context->calendar->name); ?>" matching search query
         <?php else: ?>
-            results from the calendar "<?php echo $context->calendar->name; ?>" matching search query
+            results from the calendar "<?php echo htmlentities($context->calendar->name); ?>" matching search query
         <?php endif; ?>
     </p>
 </div>
