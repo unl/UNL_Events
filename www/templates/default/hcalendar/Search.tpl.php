@@ -27,9 +27,9 @@
         <?php echo $context->count(); ?>
 
         <?php if ($context->count() != 1): ?>
-            results from "<?php echo $context->calendar->name; ?>" matching search query
+            results from the calendar "<?php echo $context->calendar->name; ?>" matching search query
         <?php else: ?>
-            results from "<?php echo $context->calendar->name; ?>" matching search query
+            results from the calendar "<?php echo $context->calendar->name; ?>" matching search query
         <?php endif; ?>
     </p>
 </div>
