@@ -158,6 +158,11 @@ class EventType extends EventListing implements RoutableInterface
         return $types_explode;
     }
 
+    public function countQuery()
+    {
+        return count($this->getSplitAudiences());
+    }
+
     /**
      * returns nicely formatted string of the eventtypess from the search query
      *
