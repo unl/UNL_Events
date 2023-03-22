@@ -145,10 +145,15 @@ class EventType extends EventListing implements RoutableInterface
         return $sql;
     }
 
-    public function getSplitEventtypes()
+    /**
+     * Splits the search query by commas and trims whitespace from all the items
+     *
+     * @return string[]
+     */
+    public function getSplitEventtypes(): array
     {
         if (empty($this->search_query)) {
-            return [];
+            return array();
         }
 
         // splits the eventtypes by comma
@@ -158,7 +163,13 @@ class EventType extends EventListing implements RoutableInterface
         return $types_explode;
     }
 
-    public function countQuery()
+    /**
+     * Returns the count of the items in the query
+     * This is only here becuase savvy will mess up the array
+     *
+     * @return int
+     */
+    public function countQuery():int
     {
         return count($this->getSplitEventtypes());
     }

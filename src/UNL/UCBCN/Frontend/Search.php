@@ -51,12 +51,6 @@ class Search extends EventListing implements RoutableInterface
         $this->search_event_type = $options['type'] ?? "";
         $this->search_event_audience = $options['audience'] ?? "";
 
-        if ($t = $this->getSearchTimestamp()) {
-            $options['m'] = date('m', $t);
-            $options['d'] = date('d', $t);
-            $options['y'] = date('Y', $t);
-        }
-
         parent::__construct($options);
     }
 

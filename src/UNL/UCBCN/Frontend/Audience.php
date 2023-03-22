@@ -145,11 +145,15 @@ class Audience extends EventListing implements RoutableInterface
         return $sql;
     }
 
-
-    public function getSplitAudiences()
+    /**
+     * Splits the search query by commas and trims whitespace from all the items
+     *
+     * @return string[]
+     */
+    public function getSplitAudiences(): array
     {
         if (empty($this->search_query)) {
-            return [];
+            return array();
         }
 
         // splits the audiences by comma
@@ -159,7 +163,13 @@ class Audience extends EventListing implements RoutableInterface
         return $audiences_explode;
     }
 
-    public function countQuery()
+    /**
+     * Returns the count of the items in the query
+     * This is only here becuase savvy will mess up the array
+     *
+     * @return int
+     */
+    public function countQuery():int
     {
         return count($this->getSplitAudiences());
     }
