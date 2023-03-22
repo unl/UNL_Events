@@ -37,8 +37,8 @@ class Upcoming extends EventListing implements RoutableInterface
      */
     public $calendar;
 
-    public $search_event_type = '';
-    public $search_event_audience = '';
+    public $upcoming_event_type = '';
+    public $upcoming_event_audience = '';
 
     public $options = array(
             'limit'  => 10,

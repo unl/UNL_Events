@@ -1,43 +1,7 @@
 <div class="dcf-grid dcf-col-gap-vw">
     <section class="dcf-col-100% dcf-col-33%-start@md">
         <div class="dcf-sticky dcf-pin-top">
-            <h2 class="results clear-top dcf-mb-0">
-                <span class="dcf-subhead">
-                    <?php
-                    if ($dt = $context->getSearchTimestamp()) {
-                        echo $context->count().' search results for events dated';
-                    } else {
-                        echo $context->count().' search results for';
-                    }
-                    ?>
-                </span>
-                <a class="permalink dcf-d-block"
-                <?php
-                    if ($dt = $context->getSearchTimestamp()) {
-                        echo 'href="'.$context->getURL().'">'.date('F jS', $dt);
-                    } elseif (empty($context->search_query)) {
-                        echo 'href="'.$context->getURL().'"> \'Any\'';
-                    } else {
-                        echo 'href="'.$context->getURL().'">'.htmlentities($context->search_query);
-                    }
-                ?>
-                </a>
-            </h2>
-            <?php if (!empty($context->search_event_type) || !empty($context->search_event_audience)): ?>
-                <div class="dcf-txt-xs dcf-mt-2">
-                    <?php if (!empty($context->search_event_type)): ?>
-                        <span class='dcf-d-block'>
-                            Type: <?php echo $context->search_event_type ?>
-                        </span>
-                    <?php endif; ?>
-                    <?php if (!empty($context->search_event_audience)): ?>
-                        <span class='dcf-d-block'>
-                            Audience: <?php echo $context->search_event_audience ?>
-                        </span>
-                    <?php endif; ?>
-                </div>
-            <?php endif; ?>
-            
+
             <div class="dcf-d-flex dcf-flex-wrap dcf-ai-baseline dcf-jc-between dcf-mt-5 dcf-pt-2 dcf-bt-1 dcf-bt-solid unl-bt-light-gray unl-font-sans" id="subscribe">
                 <h2 class="dcf-mb-0 dcf-mr-6 dcf-flex-shrink-0 dcf-txt-xs dcf-lh-3 dcf-regular dcf-uppercase unl-dark-gray title" id="heading-subscribe">Subscribe to this calendar</h2>
                 <ul class="dcf-mb-0 dcf-flex-grow-1 dcf-list-bare dcf-list-inline" id="droplist" aria-labelledby="heading-subscribe">
