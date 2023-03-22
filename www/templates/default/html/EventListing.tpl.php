@@ -1,4 +1,4 @@
-<div id="results" class="vcalendar">
+<div class="vcalendar">
     <?php
     foreach ($context as $eventinstance) {
         //Start building an array of row classes

@@ -1,4 +1,4 @@
-<div>
+<div id="results">
     <?php if ($context->countQuery() > 1): ?>
         <p class="dcf-txt-xs unl-font-sans unl-dark-gray">Displaying Event Types:
     <?php else: ?>
