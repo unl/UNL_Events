@@ -94,7 +94,7 @@ class Search extends EventListing implements RoutableInterface
                 IF (recurringdate.recurringdate IS NULL,
                     e.endtime,
                     CONCAT(DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.endtime," %H:%i:%s"))
-                ) >= NOW()'
+                ) >= NOW()';
         }
 
         // Adds filter for event type
