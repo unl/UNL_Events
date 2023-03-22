@@ -1,5 +1,6 @@
 <?php
     const CHECKED_INPUT = 'checked="checked"';
+    $query = strtolower($context->search_query ?? "");
 ?>
 <div class="dcf-grid dcf-col-gap-vw">
     <section class="dcf-col-100% dcf-col-33%-start@md">
@@ -15,26 +16,25 @@
             <fieldset>
                 <legend>Target Audiences</legend>
                 <?php foreach ($all_audiences as $single_audience) : ?>
-                    <?php $target_audience_id = 'target-audience-' . $single_audience->id; ?>
-                        <div class="dcf-input-checkbox">
-                            <input
-                                id="<?php echo $target_audience_id; ?>"
-                                type="checkbox"
-                                value="<?php echo $single_audience->name; ?>"
-                                <?php
-                                    // I only have this like this becuase savvy would not give me an actual array
-                                    if (strpos(
-                                            strtolower($context->search_query ?? ""), 
-                                            strtolower($single_audience->name)
-                                        ) !== false) {
-                                        echo CHECKED_INPUT;
-                                    }
-                                ?>
-                            >
-                            <label for="<?php echo $target_audience_id; ?>">
-                                <?php echo $single_audience->name; ?>
-                            </label>
-                        </div>
+                    <?php
+                        $target_audience_id = 'target-audience-' . $single_audience->id;
+                        $in_query = strpos($query, strtolower($single_audience->name));
+                    ?>
+                    <div class="dcf-input-checkbox">
+                        <input
+                            id="<?php echo $target_audience_id; ?>"
+                            type="checkbox"
+                            value="<?php echo $single_audience->name; ?>"
+                            <?php
+                                if ($in_query !== false) {
+                                    echo CHECKED_INPUT;
+                                }
+                            ?>
+                        >
+                        <label for="<?php echo $target_audience_id; ?>">
+                            <?php echo $single_audience->name; ?>
+                        </label>
+                    </div>
                 <?php endforeach; ?>
             </fieldset>
         </form>

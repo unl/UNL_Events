@@ -1,5 +1,6 @@
 <?php
     const CHECKED_INPUT = 'checked="checked"';
+    $query = strtolower($context->search_query ?? "");
 ?>
 <div class="dcf-grid dcf-col-gap-vw">
     <section class="dcf-col-100% dcf-col-33%-start@md">
@@ -15,26 +16,25 @@
             <fieldset>
                 <legend>Event Types</legend>
                 <?php foreach ($all_eventtypes as $single_type) : ?>
-                    <?php $event_type_id = 'event-type-' . $single_type->id; ?>
-                        <div class="dcf-input-checkbox">
-                            <input
-                                id="<?php echo $event_type_id; ?>"
-                                type="checkbox"
-                                value="<?php echo $single_type->name; ?>"
-                                <?php
-                                    // I only have this like this becuase savvy would not give me an actual array
-                                    if (strpos(
-                                            strtolower($context->search_query ?? ""), 
-                                            strtolower($single_type->name)
-                                        ) !== false) {
-                                        echo CHECKED_INPUT;
-                                    }
-                                ?>
-                            >
-                            <label for="<?php echo $event_type_id; ?>">
-                                <?php echo $single_type->name; ?>
-                            </label>
-                        </div>
+                    <?php 
+                        $event_type_id = 'event-type-' . $single_type->id;
+                        $in_query = strpos($query, strtolower($event_type_id->name));
+                    ?>
+                    <div class="dcf-input-checkbox">
+                        <input
+                            id="<?php echo $event_type_id; ?>"
+                            type="checkbox"
+                            value="<?php echo $single_type->name; ?>"
+                            <?php
+                                if ($in_query !== false) {
+                                    echo CHECKED_INPUT;
+                                }
+                            ?>
+                        >
+                        <label for="<?php echo $event_type_id; ?>">
+                            <?php echo $single_type->name; ?>
+                        </label>
+                    </div>
                 <?php endforeach; ?>
             </fieldset>
         </form>
