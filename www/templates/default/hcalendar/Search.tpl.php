@@ -27,7 +27,7 @@
             </span>
         <?php endif; ?>
     </p>
-    <h2 class="dcf-mt-0" id="heading-date" data-datetime="<?php echo (new DateTime($context->getSearchTimestamp()))->format('c'); ?>" >Search Results</h2>
+    <h2 class="dcf-mt-0" id="heading-date">Search Results</h2>
     <p class="dcf-txt-xs unl-font-sans unl-dark-gray">
         <?php echo $context->count(); ?>
 
