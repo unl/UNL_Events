@@ -45,11 +45,11 @@
     }
 
     // sort so they are in alphabetical order
-    usort($audiences_available, function($a, $b) {
+    usort($audiences_available, function ($a, $b) {
         return strcmp($a->name, $b->name);
     });
 
-    usort($event_types_available, function($a, $b) {
+    usort($event_types_available, function ($a, $b) {
         return strcmp($a->name, $b->name);
     });
 ?>

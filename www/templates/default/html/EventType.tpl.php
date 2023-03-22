@@ -23,7 +23,10 @@
                                 value="<?php echo $single_type->name; ?>"
                                 <?php
                                     // I only have this like this becuase savvy would not give me an actual array
-                                    if (strpos(strtolower($context->search_query ?? ""), strtolower($single_type->name)) !== false) {
+                                    if (strpos(
+                                            strtolower($context->search_query ?? ""), 
+                                            strtolower($single_type->name)
+                                        ) !== false) {
                                         echo CHECKED_INPUT;
                                     }
                                 ?>

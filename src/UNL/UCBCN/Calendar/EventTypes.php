@@ -19,7 +19,7 @@ use UNL\UCBCN\ActiveRecord\Record;
 class EventTypes extends RecordList
 {
 
-    function __construct($options = array())
+    public function __construct($options = array())
     {
         parent::__construct($options);
     }
