@@ -15,7 +15,7 @@
     <p class="dcf-txt-xs unl-font-sans unl-dark-gray">
         <?php echo $context->count(); ?>
 
-        <?php if ($context->count() != 1 ?>
+        <?php if ($context->count() != 1: ?>
             events
         <?php else: ?>
             event
@@ -23,4 +23,4 @@
     </p>
 </div>
 
-<?php echo $savvy->render($context, 'EventListing.tpl.php');?>
+<?php echo $savvy->render($context, 'EventListing.tpl.php');
