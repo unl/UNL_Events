@@ -26,7 +26,7 @@
     <p class="dcf-txt-xs unl-font-sans unl-dark-gray">
         <?php echo $context->count(); ?>
 
-        <?php if ($context->count() != 1: ?>
+        <?php if ($context->count() != 1): ?>
             results from "<?php echo $context->calendar->name; ?>" matching search query
         <?php else: ?>
             results from "<?php echo $context->calendar->name; ?>" matching search query
