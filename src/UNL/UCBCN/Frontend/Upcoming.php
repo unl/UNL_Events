@@ -74,13 +74,15 @@ class Upcoming extends EventListing implements RoutableInterface
      */
     public function getDateTime()
     {
-        return new \DateTime('@'.mktime(
-            $this->options['H'],
-            $this->options['i'],
-            $this->options['s'],
-            $this->options['m'],
-            $this->options['d'],
-            $this->options['y'])
+        return new \DateTime('@'.
+            mktime(
+                $this->options['H'],
+                $this->options['i'],
+                $this->options['s'],
+                $this->options['m'],
+                $this->options['d'],
+                $this->options['y']
+            )
         );
     }
 
