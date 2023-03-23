@@ -13,10 +13,10 @@
 
             <input type="hidden" id="hidden_query" name="q" value="<?php echo $context->search_query ?? ""; ?>">
             <?php if (isset($context->options['limit'])): ?>
-                <input type="hidden" id="hidden_query" name="limit" value="<?php echo $context->options['limit'] ?? ""; ?>">
+                <input type="hidden" name="limit" value="<?php echo $context->options['limit'] ?? ""; ?>">
             <?php endif; ?>
             <?php if (isset($context->options['offset'])): ?>
-                <input type="hidden" id="hidden_query" name="offset" value="<?php echo $context->options['offset'] ?? ""; ?>">
+                <input type="hidden" name="offset" value="<?php echo $context->options['offset'] ?? ""; ?>">
             <?php endif; ?>
 
             <fieldset>

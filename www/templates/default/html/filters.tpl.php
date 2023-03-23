@@ -62,6 +62,12 @@
     <?php if (!empty($query)): ?>
         <input type="hidden" name="q" value="<?php echo htmlentities($query); ?>"/>
     <?php endif;?>
+    <?php if (isset($context->options['limit'])): ?>
+        <input type="hidden" name="limit" value="<?php echo $context->options['limit'] ?? ""; ?>">
+    <?php endif; ?>
+    <?php if (isset($context->options['offset'])): ?>
+        <input type="hidden" name="offset" value="<?php echo $context->options['offset'] ?? ""; ?>">
+    <?php endif; ?>
     <fieldset>
         <legend>Filter Results</legend>
         <div class="dcf-form-group">
