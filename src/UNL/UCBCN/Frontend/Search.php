@@ -113,21 +113,24 @@ class Search extends EventListing implements RoutableInterface
                 ) LIKE \''.date('Y-m-d', $t).'%\'
             ';
         } else {
-            // Do a textual search.
-            $sql .=
+            if (!empty($this->search_query)) {
+                // Do a textual search.
+                $sql .=
                 '(event.title LIKE \'%'.self::escapeString($this->search_query).'%\' OR '.
                 '(eventtype.name LIKE \'%'.self::escapeString($this->search_query).'%\') OR '.
 
                 'event.description LIKE \'%'.self::escapeString($this->search_query).'%\' OR '.
-                '(location.name LIKE \'%'.self::escapeString($this->search_query).'%\')) AND '.
-                'IF (recurringdate.recurringdate IS NULL,
-                    e.starttime,
-                    CONCAT(DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.starttime," %H:%i:%s"))
-                ) >= NOW() OR
-                IF (recurringdate.recurringdate IS NULL,
-                    e.endtime,
-                    CONCAT(DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.endtime," %H:%i:%s"))
-                ) >= NOW()';
+                '(location.name LIKE \'%'.self::escapeString($this->search_query).'%\')) AND ';
+            }
+
+            $sql .= 'IF (recurringdate.recurringdate IS NULL,
+                e.starttime,
+                CONCAT(DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.starttime," %H:%i:%s"))
+            ) >= NOW() OR
+            IF (recurringdate.recurringdate IS NULL,
+                e.endtime,
+                CONCAT(DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.endtime," %H:%i:%s"))
+            ) >= NOW()';
         }
 
         // Adds filter for event type
