@@ -1,5 +1,5 @@
 <div>
-    <h2 class="dcf-mt-0">Featured Events</h2>
+    <h1 class="dcf-txt-h3 dcf-mt-0">Featured Events</h1>
     <p class="dcf-txt-xs unl-font-sans unl-dark-gray">
         <a href="<?php echo $frontend->getCalendarURL(); ?>featured/.ics">
             <svg class="dcf-h-4 dcf-w-4 dcf-fill-current" focusable="false" width="24" height="24" viewBox="0 0 24 24">

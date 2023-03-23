@@ -11,7 +11,7 @@
             </span>
         <?php endif; ?>
     </p>
-    <h2 class="dcf-mt-0">Upcoming Events</h2>
+    <h1 class="dcf-txt-h3 dcf-mt-0">Upcoming Events</h1>
     <p class="dcf-txt-xs unl-font-sans unl-dark-gray">
         <?php if ($context->count() != 1): ?>
             Next <?php echo $context->count(); ?> events that are coming up

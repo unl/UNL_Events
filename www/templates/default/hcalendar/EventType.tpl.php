@@ -6,7 +6,7 @@
     <?php endif; ?>
         <span><?php echo $context->getFormattedEventTypes(); ?></span>
     </p>
-    <h2 class="dcf-mt-0">Event Type Results</h2>
+    <h1 class="dcf-txt-h3 dcf-mt-0">Event Type Results</h1>
     <p class="dcf-txt-xs unl-font-sans unl-dark-gray">
         <?php echo $context->count(); ?>
 

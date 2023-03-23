@@ -6,13 +6,12 @@
   $formattedDate = $context->getDateTime($timezoneDisplay)->format('l, F j');
 ?>
 <div>
-    <h2
-        class="dcf-mt-0"
+    <h1 class="dcf-txt-h3 dcf-mt-0"
         id="heading-date"
         data-datetime="<?php echo $context->getDateTime()->format('c') ?>"
     >
         <?php echo $formattedDate ?>
-    </h2>
+    </h1>
 
     <p class="dcf-txt-xs unl-font-sans unl-dark-gray">
         <a href="<?php echo $context->getURL() ?>.ics">
@@ -44,7 +43,7 @@ foreach ($context->getRawObject() as $event) {
 <?php echo $savvy->render(new ArrayIterator($events['today']), 'EventListing.tpl.php'); ?>
 <?php if (!empty($events['ongoing'])): ?>
     <div>
-        <h2 class="dcf-mt-0">Ongoing Events</h2>
+        <h1 class="dcf-txt-h3 dcf-mt-0">Ongoing Events</h1>
     </div>
 
     <?php echo $savvy->render(new ArrayIterator($events['ongoing']), 'EventListing.tpl.php'); ?>
