@@ -6,7 +6,13 @@
   $formattedDate = $context->getDateTime($timezoneDisplay)->format('l, F j');
 ?>
 <div>
-    <h2 class="dcf-mt-0" id="heading-date" data-datetime="<?php echo $context->getDateTime()->format('c') ?>"><?php echo $formattedDate ?></h2>
+    <h2
+        class="dcf-mt-0"
+        id="heading-date"
+        data-datetime="<?php echo $context->getDateTime()->format('c') ?>"
+    >
+        <?php echo $formattedDate ?>
+    </h2>
 </div>
 
 <p class="day-nav">
