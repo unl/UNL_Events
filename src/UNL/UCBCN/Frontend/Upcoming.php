@@ -2,14 +2,14 @@
 /**
  * This class contains the information needed for viewing the list of upcoming
  * events within the calendar system.
- * 
+ *
  * PHP version 5
- * 
+ *
  * @category  Events
  * @package   UNL_UCBCN_Frontend
  * @author    Brett Bieber <brett.bieber@gmail.com>
  * @copyright 2009 Regents of the University of Nebraska
- * @license   http://www1.unl.edu/wdn/wiki/Software_License BSD License 
+ * @license   http://www1.unl.edu/wdn/wiki/Software_License BSD License
  * @version   CVS: $id$
  * @link      http://code.google.com/p/unl-event-publisher/
  */
@@ -20,19 +20,19 @@ use UNL\UCBCN\Calendar\EventTypes;
 
 /**
  * A list of upcoming events for a calendar.
- * 
+ *
  * @category  Events
  * @package   UNL_UCBCN_Frontend
  * @author    Brett Bieber <brett.bieber@gmail.com>
  * @copyright 2009 Regents of the University of Nebraska
- * @license   http://www1.unl.edu/wdn/wiki/Software_License BSD License 
+ * @license   http://www1.unl.edu/wdn/wiki/Software_License BSD License
  * @link      http://code.google.com/p/unl-event-publisher/
  */
 class Upcoming extends EventListing implements RoutableInterface
 {
     /**
      * Calendar \UNL\UCBCN\Calendar Object
-     * 
+     *
      * @var \UNL\UCBCN\Calendar
      */
     public $calendar;
@@ -74,7 +74,14 @@ class Upcoming extends EventListing implements RoutableInterface
      */
     public function getDateTime()
     {
-        return new \DateTime('@'.mktime($this->options['H'], $this->options['i'], $this->options['s'], $this->options['m'], $this->options['d'], $this->options['y']));
+        return new \DateTime('@'.mktime(
+            $this->options['H'],
+            $this->options['i'],
+            $this->options['s'],
+            $this->options['m'],
+            $this->options['d'],
+            $this->options['y'])
+        );
     }
 
     /**
@@ -99,19 +106,21 @@ class Upcoming extends EventListing implements RoutableInterface
 
 	/**
      * Get the SQL for finding events
-     * 
+     *
      * @see \UNL\UCBCN\ActiveRecord\RecordList::getSQL()
      */
     function getSQL()
     {
-        $timestamp = $this->getDateTime()->getTimestamp();
-
         $sql = '
                 SELECT DISTINCT e.id as id, recurringdate.id as recurringdate_id
                 FROM eventdatetime as e
                 INNER JOIN event ON e.event_id = event.id
                 INNER JOIN calendar_has_event ON calendar_has_event.event_id = event.id
-                LEFT JOIN recurringdate ON (recurringdate.event_datetime_id = e.id AND recurringdate.unlinked = 0 AND recurringdate.ongoing = 0)
+                LEFT JOIN recurringdate ON (
+                    recurringdate.event_datetime_id = e.id AND
+                    recurringdate.unlinked = 0 AND
+                    recurringdate.ongoing = 0
+                )
                 LEFT JOIN event_has_eventtype ON (event_has_eventtype.event_id = event.id)
                 LEFT JOIN eventtype ON (eventtype.id = event_has_eventtype.eventtype_id)
                 LEFT JOIN event_targets_audience ON (event_targets_audience.event_id = event.id)
@@ -119,17 +128,23 @@ class Upcoming extends EventListing implements RoutableInterface
                 WHERE
                     calendar_has_event.calendar_id = ' . (int)$this->calendar->id . '
                     AND (
-                         calendar_has_event.status =\'posted\'
-                         OR calendar_has_event.status =\'archived\'
+                        calendar_has_event.status =\'posted\'
+                        OR calendar_has_event.status =\'archived\'
                     )
                     AND (
                         IF (recurringdate.recurringdate IS NULL,
                             e.starttime,
-                            CONCAT(DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.starttime," %H:%i:%s"))
+                            CONCAT(
+                                DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),
+                                DATE_FORMAT(e.starttime," %H:%i:%s")
+                            )
                         ) >= NOW() OR
                         IF (recurringdate.recurringdate IS NULL,
                             e.endtime,
-                            CONCAT(DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.endtime," %H:%i:%s"))
+                            CONCAT(
+                                DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),
+                                DATE_FORMAT(e.endtime," %H:%i:%s")
+                            )
                         ) >= NOW()
                     )
                 ';
@@ -147,18 +162,21 @@ class Upcoming extends EventListing implements RoutableInterface
         $sql .= '
                 ORDER BY (
                         IF (recurringdate.recurringdate IS NULL,
-                          e.starttime,
-                          CONCAT(DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.starttime," %H:%i:%s"))
+                            e.starttime,
+                            CONCAT(
+                                DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),
+                                DATE_FORMAT(e.starttime," %H:%i:%s")
+                            )
                         )
                     ) ASC,
                     event.title ASC';
         $sql .= $this->setLimitClause($this->options['limit']);
         return $sql;
     }
-    
+
     /**
      * Get a permanent URL to this object.
-     * 
+     *
      * @return string URL to this specific upcoming.
      */
     public function getURL()
