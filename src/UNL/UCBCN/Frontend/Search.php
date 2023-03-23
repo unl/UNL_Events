@@ -37,6 +37,14 @@ class Search extends EventListing implements RoutableInterface
     public $search_event_type = '';
     public $search_event_audience = '';
 
+    public $limit = 100;
+    public $offset = 0;
+    public $max_limit = array(
+        'json' => 500,
+        'xml' => 500,
+        'default' => 100
+    );
+
     /**
      * Constructs this search output.
      *
@@ -50,6 +58,26 @@ class Search extends EventListing implements RoutableInterface
         $this->search_query = $options['q'] ?? "";
         $this->search_event_type = $options['type'] ?? "";
         $this->search_event_audience = $options['audience'] ?? "";
+
+        $format_max_limit = $this->max_limit['default'];
+        if (array_key_exists($options['format'], $this->max_limit)) {
+            $format_max_limit = $this->max_limit[$options['format']];
+        }
+
+        if (!isset($options['limit']) ||
+            empty($options['limit']) ||
+            intval($options['limit']) > $format_max_limit ||
+            intval($options['limit']) <= 0
+        ) {
+            $options['limit'] = $format_max_limit;
+        }
+
+        if (!isset($options['offset']) || empty($options['offset']) ||  intval($options['offset']) <= 0) {
+            $options['offset'] = 0;
+        }
+
+        $this->limit = $options['limit'] ?? $this->limit;
+        $this->offset = $options['offset'] ?? $this->offset;
 
         parent::__construct($options);
     }
@@ -164,6 +192,14 @@ class Search extends EventListing implements RoutableInterface
 
         if (!empty($this->search_query)) {
             $url .= '?q=' . urlencode($this->search_query);
+        }
+
+        if (!empty($this->search_event_type)) {
+            $url .= '&type=' . urlencode($this->search_event_type);
+        }
+
+        if (!empty($this->search_event_audience)) {
+            $url .= '&audience=' . urlencode($this->search_event_audience);
         }
 
         return $url;

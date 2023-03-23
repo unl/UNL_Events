@@ -5,5 +5,6 @@
     </aside>
     <section id="updatecontent" class="day_cal dcf-col-100% dcf-col-67%-end@md">
         <?php echo $savvy->render($context, 'hcalendar/Search.tpl.php'); ?>
+        <?php echo $savvy->render($context, 'prev_next_buttons.tpl.php'); ?>
     </section>
 </div>
