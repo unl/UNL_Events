@@ -18,7 +18,7 @@
                 <?php foreach ($all_eventtypes as $single_type) : ?>
                     <?php 
                         $event_type_id = 'event-type-' . $single_type->id;
-                        $in_query = strpos($query, strtolower($event_type_id->name));
+                        $in_query = strpos($query, strtolower($single_type->name));
                     ?>
                     <div class="dcf-input-checkbox">
                         <input
