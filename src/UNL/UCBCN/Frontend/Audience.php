@@ -100,11 +100,16 @@ class Audience extends EventListing implements RoutableInterface
                 LEFT JOIN audience ON (audience.id = event_targets_audience.audience_id)
                 LEFT JOIN location ON (location.id = e.location_id)
                 WHERE calendar_has_event.status IN ("posted", "archived") AND
-                    (
-                        e.starttime>=\''. date('Y-m-d') .' 00:00:00\' OR
-                        e.endtime>\''. date('Y-m-d') .' 00:00:00\'
-                    )
-                ';
+                (
+                    IF (recurringdate.recurringdate IS NULL,
+                        e.starttime,
+                        CONCAT(DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.starttime," %H:%i:%s"))
+                    ) >= NOW() OR
+                    IF (recurringdate.recurringdate IS NULL,
+                        e.endtime,
+                        CONCAT(DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.endtime," %H:%i:%s"))
+                    ) >= NOW()
+                )';
 
         // splits the audiences by comma and creates the SQL for those
         if (!empty($this->search_query)) {
