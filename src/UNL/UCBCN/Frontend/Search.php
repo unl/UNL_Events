@@ -190,7 +190,7 @@ class Search extends EventListing implements RoutableInterface
     {
         $url = $this->options['calendar']->getURL() . 'search/';
 
-        if (!empty($this->search_query)) {
+        if (isset($this->search_query)) {
             $url .= '?q=' . urlencode($this->search_query);
         }
 
