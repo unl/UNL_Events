@@ -2,7 +2,7 @@
     const CHECKED_INPUT = 'checked="checked"';
     $query = strtolower($context->search_query ?? "");
 ?>
-<div class="dcf-grid dcf-col-gap-vw">
+<div class="dcf-grid dcf-col-gap-vw dcf-row-gap-6">
     <section class="dcf-col-100% dcf-col-33%-start@md">
         <nav>
             <a class="dcf-show-on-focus" href="#updatecontent">Skip Sidebar</a>
