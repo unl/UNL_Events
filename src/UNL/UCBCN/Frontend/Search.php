@@ -106,7 +106,12 @@ class Search extends EventListing implements RoutableInterface
 
         if ($t = $this->getSearchTimestamp()) {
             // This is a time...
-            $sql .= 'e.starttime LIKE \''.date('Y-m-d', $t).'%\'';
+            $sql .= '
+                IF (recurringdate.recurringdate IS NULL,
+                    e.starttime,
+                    recurringdate.recurringdate
+                ) LIKE \''.date('Y-m-d', $t).'%\'
+            ';
         } else {
             // Do a textual search.
             $sql .=
