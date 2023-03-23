@@ -1,21 +1,21 @@
 <div id="results">
     <p class="dcf-txt-xs unl-font-sans unl-dark-gray">
-        <?php if ($dt = $context->getSearchTimestamp()): ?>
-            Displaying Search for Date:
-        <?php else: ?>
-            Displaying Search:
-        <?php endif; ?>
-        <span>
-            <?php
-                if ($dt = $context->getSearchTimestamp()) {
-                    echo date('F jS', $dt);
-                } elseif (empty($context->search_query)) {
-                    echo '\'Any\'';
-                } else {
-                    echo htmlentities($context->search_query);
-                }
-            ?>
-        </span>
+            <?php if ($dt = $context->getSearchTimestamp()): ?>
+                Displaying Search for Date:
+                    <span>
+                        <?php echo date('F jS', $dt); ?>
+                    </span>
+            <?php elseif (empty($context->search_query)): ?>
+                Displaying Search:
+                    <span>
+                        Any Event
+                    </span>
+            <?php else: ?>
+                Displaying Search:
+                    <span>
+                        <?php echo htmlentities($context->search_query); ?>
+                    </span>
+            <?php endif; ?>
         <?php if (!empty($context->search_event_type)): ?>
             <span class='dcf-d-block'>
                 Filter Type: <?php echo htmlentities($context->search_event_type); ?>

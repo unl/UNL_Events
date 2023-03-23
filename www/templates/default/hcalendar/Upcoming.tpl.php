@@ -13,12 +13,10 @@
     </p>
     <h2 class="dcf-mt-0">Upcoming Events</h2>
     <p class="dcf-txt-xs unl-font-sans unl-dark-gray">
-        <?php echo $context->count(); ?>
-
         <?php if ($context->count() != 1): ?>
-            events
+            Next <?php echo $context->count(); ?> events that are coming up
         <?php else: ?>
-            event
+            Next event that is coming up
         <?php endif; ?>
     </p>
 </div>
