@@ -54,10 +54,6 @@
     });
 ?>
 
-<nav>
-    <a class="dcf-show-on-focus" href="#results">Skip filters</a>
-</nav>
-
 <form id="filter_form" class="dcf-form dcf-mt-5">
     <?php if (!empty($query)): ?>
         <input type="hidden" name="q" value="<?php echo htmlentities($query); ?>"/>

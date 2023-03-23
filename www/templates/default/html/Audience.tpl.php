@@ -5,7 +5,7 @@
 <div class="dcf-grid dcf-col-gap-vw">
     <section class="dcf-col-100% dcf-col-33%-start@md">
         <nav>
-            <a class="dcf-show-on-focus" href="#results">Skip filters</a>
+            <a class="dcf-show-on-focus" href="#updatecontent">Skip Sidebar</a>
         </nav>
         <h2 class="dcf-txt-h4">Filter Results</h2>
         <form id="audience_form" class="dcf-form dcf-mt-5">
