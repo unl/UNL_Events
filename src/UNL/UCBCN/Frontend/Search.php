@@ -101,7 +101,7 @@ class Search extends EventListing implements RoutableInterface
                 "parsed" => $this->date_parser->parsed,
                 "single" => $this->date_parser->single,
             )
-        )
+        );
     }
 
     /**
