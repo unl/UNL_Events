@@ -218,9 +218,9 @@ class Search extends EventListing implements RoutableInterface
     /**
      * Returns bool if no date found or string of unix timestamp
      *
-     * @return string|bool
+     * @return int|bool
      */
-    public function getStartDate():mixed
+    public function getStartDate()
     {
         return $this->date_parser->start_date;
     }
@@ -228,9 +228,9 @@ class Search extends EventListing implements RoutableInterface
     /**
      * Returns bool if no date range found or string of unix timestamp
      *
-     * @return string|bool
+     * @return int|bool
      */
-    public function getEndDate():mixed
+    public function getEndDate()
     {
         return $this->date_parser->end_date;
     }
