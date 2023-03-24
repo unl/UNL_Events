@@ -1,9 +1,16 @@
 <div id="results">
     <p class="dcf-txt-xs unl-font-sans unl-dark-gray">
-            <?php if ($dt = $context->getSearchTimestamp()): ?>
+            <?php if ($context->isDateRange()): ?>
+                Displaying Search for Date Range:
+                    <span>
+                        <?php echo date('F jS', $context->getStartDate()); ?>
+                        <?php echo "-"; ?>
+                        <?php echo date('F jS', $context->getEndDate()); ?>
+                    </span>
+            <?php if ($context->isSingleDate()): ?>
                 Displaying Search for Date:
                     <span>
-                        <?php echo date('F jS', $dt); ?>
+                        <?php echo date('F jS', $context->getStartDate()); ?>
                     </span>
             <?php elseif (empty($context->search_query)): ?>
                 Displaying Search:
@@ -27,11 +34,11 @@
             </span>
         <?php endif; ?>
     </p>
-    <?php if ($dt = $context->getSearchTimestamp()): ?>
+    <?php if ($context->isDateRange() || $context->isSingleDate()): ?>
         <h1
             class="dcf-txt-h3 dcf-mt-0"
             id="heading-date"
-            data-datetime="<?php echo date(DATE_ATOM, $dt); ?>"
+            data-datetime="<?php echo date(DATE_ATOM, $context->getStartDate()); ?>"
         >
             Search Results
         </h1>

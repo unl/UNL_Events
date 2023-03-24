@@ -92,18 +92,6 @@ class Search extends EventListing implements RoutableInterface
         parent::__construct($options);
     }
 
-    public function getParsedDates()
-    {
-        return json_encode(
-            array(
-                "start_date" => date('Y-m-d', $this->date_parser->start_date),
-                "end_date" => date('Y-m-d', $this->date_parser->end_date),
-                "parsed" => $this->date_parser->parsed,
-                "single" => $this->date_parser->single,
-            )
-        );
-    }
-
     /**
      * Get the SQL for finding events
      *
@@ -208,18 +196,43 @@ class Search extends EventListing implements RoutableInterface
     }
 
     /**
-     * Determine the unix timestamp of the search
+     * Returns bool for if the parser found a range
      *
-     * @return bool|int - false if not a date search, otherwise return the unix timestamp of the date search
+     * @return bool
      */
-    public function getSearchTimestamp()
+    public function isDateRange():bool
     {
-        if (($t = strtotime($this->search_query)) && ($this->search_query != 'art')) {
-            // This is a time...
-            return $t;
-        }
+        return $this->date_parser->parsed && !$this->date_parser->single;
+    }
 
-        return false;
+    /**
+     * Returns bool for if the parser found a single date
+     *
+     * @return bool
+     */
+    public function isSingleDate():bool
+    {
+        return $this->date_parser->parsed && $this->date_parser->single;
+    }
+
+    /**
+     * Returns bool if no date found or string of unix timestamp
+     *
+     * @return string|bool
+     */
+    public function getStartDate():mixed
+    {
+        return $this->date_parser->start_date;
+    }
+
+    /**
+     * Returns bool if no date range found or string of unix timestamp
+     *
+     * @return string|bool
+     */
+    public function getEndDate():mixed
+    {
+        return $this->date_parser->end_date;
     }
 
     /**
