@@ -138,7 +138,7 @@ class Search extends EventListing implements RoutableInterface
                 $sql .= 'IF (recurringdate.recurringdate IS NULL,
                     e.starttime,
                     CONCAT(DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.starttime," %H:%i:%s"))
-                ) >= STR_TO_DATE(\'' . date('Y-m-d', $this->date_parser->start_date) . '\')
+                ) >= STR_TO_DATE(\'' . date('Y-m-d', $this->date_parser->start_date) . '\', \'%Y-%m-%d\')
                 AND
                 IF (recurringdate.recurringdate IS NULL,
                     e.endtime,
