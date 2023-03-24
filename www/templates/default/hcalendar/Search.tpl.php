@@ -7,7 +7,7 @@
                         <?php echo "-"; ?>
                         <?php echo date('F jS', $context->getEndDate()); ?>
                     </span>
-            <?php if ($context->isSingleDate()): ?>
+            <?php elseif ($context->isSingleDate()): ?>
                 Displaying Search for Date:
                     <span>
                         <?php echo date('F jS', $context->getStartDate()); ?>
