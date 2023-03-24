@@ -143,7 +143,7 @@ class Search extends EventListing implements RoutableInterface
                 IF (recurringdate.recurringdate IS NULL,
                     e.endtime,
                     CONCAT(DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.endtime," %H:%i:%s"))
-                ) <= STR_TO_DATE(\'' . date('Y-m-d', $this->date_parser->end_date) . '\', \'%Y-%m-%d\');
+                ) <= STR_TO_DATE(\'' . date('Y-m-d', $this->date_parser->end_date) . '\', \'%Y-%m-%d\')';
             }
         } else {
             if (!empty($this->search_query)) {
