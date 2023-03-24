@@ -31,9 +31,9 @@
     <p class="dcf-txt-xs unl-font-sans unl-dark-gray">
         <span>
             <?php if ($context->count() != 1): ?>
-                Next <?php echo $context->count(); ?> events that are coming up
+                Next <?php echo $context->count(); ?> events
             <?php else: ?>
-                Next event that is coming up
+                Next event
             <?php endif; ?>
         </span>
     </p>

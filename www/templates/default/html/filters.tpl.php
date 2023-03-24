@@ -69,7 +69,7 @@
                 >
                     N/A
                 </option>
-                <optgroup label="Available Types
+                <optgroup label="Types Listed
                     <?php if (empty($event_types_available)) { echo "(None Available)"; }?>"
                 >
                     <?php foreach ($event_types_available as $type) { ?>
@@ -106,7 +106,7 @@
                 >
                     N/A
                 </option>
-                <optgroup label="Available Audiences
+                <optgroup label="Audiences Listed
                     <?php if (empty($audiences_available)) { echo "(None Available)"; }?>"
                 >
                     <?php foreach ($audiences_available as $audience) { ?>
