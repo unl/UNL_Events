@@ -2,24 +2,24 @@
     <p class="dcf-txt-xs unl-font-sans unl-dark-gray">
             <?php if ($context->isDateRange()): ?>
                 Displaying Search for Date Range:
-                    <span>
+                    <span class="dcf-bold">
                         <?php echo date('F jS, Y', $context->getStartDate()); ?>
                         <?php echo "-"; ?>
                         <?php echo date('F jS, Y', $context->getEndDate()); ?>
                     </span>
             <?php elseif ($context->isSingleDate()): ?>
                 Displaying Search for Date:
-                    <span>
+                    <span class="dcf-bold">
                         <?php echo date('F jS, Y', $context->getStartDate()); ?>
                     </span>
             <?php elseif (empty($context->search_query)): ?>
                 Displaying Search:
-                    <span>
+                    <span class="dcf-bold">
                         Any Event
                     </span>
             <?php else: ?>
                 Displaying Search:
-                    <span>
+                    <span class="dcf-bold">
                         <?php echo htmlentities($context->search_query); ?>
                     </span>
             <?php endif; ?>
