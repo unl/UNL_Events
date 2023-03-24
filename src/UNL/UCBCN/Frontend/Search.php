@@ -109,7 +109,7 @@ class Search extends EventListing implements RoutableInterface
      *
      * @see \UNL\UCBCN\ActiveRecord\RecordList::getSQL()
      */
-    protected function getSQL()
+    public function getSQL()
     {
         $sql = 'SELECT DISTINCT e.id as id, recurringdate.id as recurringdate_id
                 FROM eventdatetime as e
