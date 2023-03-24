@@ -3,14 +3,14 @@
             <?php if ($context->isDateRange()): ?>
                 Displaying Search for Date Range:
                     <span>
-                        <?php echo date('F jS', $context->getStartDate()); ?>
+                        <?php echo date('F jS, Y', $context->getStartDate()); ?>
                         <?php echo "-"; ?>
-                        <?php echo date('F jS', $context->getEndDate()); ?>
+                        <?php echo date('F jS, Y', $context->getEndDate()); ?>
                     </span>
             <?php elseif ($context->isSingleDate()): ?>
                 Displaying Search for Date:
                     <span>
-                        <?php echo date('F jS', $context->getStartDate()); ?>
+                        <?php echo date('F jS, Y', $context->getStartDate()); ?>
                     </span>
             <?php elseif (empty($context->search_query)): ?>
                 Displaying Search:
