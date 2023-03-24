@@ -7,6 +7,14 @@
         <?php echo $savvy->render($context, 'filters.tpl.php'); ?>
     </aside>
     <section id="updatecontent" class="day_cal dcf-col-100% dcf-col-67%-end@md">
+        <?php
+            if ($context->isHomepage()) {
+                $featuredEvents = $context->calendar->getFeaturedEvents(1, 6);
+                if ($featuredEvents) {
+                    echo $savvy->render($featuredEvents, 'hcalendar/FeaturedSummary.tpl.php');
+                }
+            }
+        ?>
         <?php echo $savvy->render($context, 'hcalendar/Upcoming.tpl.php'); ?>
     </section>
 </div>
