@@ -13,7 +13,7 @@
  */
 namespace UNL\UCBCN\Frontend;
 
-Class DateStringParser
+class DateStringParser
 {
     public $parsed = false;
     public $single = false;
@@ -23,7 +23,7 @@ Class DateStringParser
     // All the regex that is used multiple places
     private $word_or_dash = "\s*[\w-]+\s*";
     private $year_regex = "(\d{4})";
-    private $month_regex = "(january|february|march|april|may|june|july|august|september|october|november|december" . 
+    private $month_regex = "(january|february|march|april|may|june|july|august|september|october|november|december" .
         "|jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)";
     private $day_regex = "(sunday|monday|tuesday|wednesday|thursday|friday|saturday)";
     private $this_regex = "(?:this|the)\s+(?:current\s+)?";
@@ -67,29 +67,24 @@ Class DateStringParser
         }
 
         // If the values are flipped then swap them
-        if ($this->parsed && !$this->single) {
-            if ($this->start_date > $this->end_date) {
-                $temp = $this->start_date;
-                $this->start_date = $this->end_date;
-                $this->end_date = $temp;
-            }
+        if ($this->parsed && !$this->single && $this->start_date > $this->end_date) {
+            $temp = $this->start_date;
+            $this->start_date = $this->end_date;
+            $this->end_date = $temp;
         }
     }
 
     private function covertToWeekRange($input):bool
     {
-        // this week
         if (preg_match('/^' . $this->this_regex . 'week$/i', $input)) {
-            //echo "This week\n";
+            // this week
             $currentDayOfWeek = date('w');
             $daysToSunday = $currentDayOfWeek;
             $daysToSaturday = 6 - $currentDayOfWeek;
             $this->start_date = strtotime("-{$daysToSunday} days");
             $this->end_date = strtotime("+{$daysToSaturday} days");
-        }
-        // Next week
-        elseif (preg_match('/^' . $this->next_regex . 'week$/i', $input)) {
-            //echo "Next week\n";
+        } elseif (preg_match('/^' . $this->next_regex . 'week$/i', $input)) {
+            // Next week
             $currentDayOfWeek = date('w');
             $daysToSunday = $currentDayOfWeek;
             $daysToSaturday = 6 - $currentDayOfWeek;
@@ -98,10 +93,8 @@ Class DateStringParser
 
             $this->start_date = strtotime('+1 week', $this->start_date);
             $this->end_date = strtotime('+1 weeks', $this->end_date);
-        }
-        // last week
-        elseif (preg_match('/^' . $this->last_regex . 'week$/i', $input)) {
-            //echo "last week\n";
+        } elseif (preg_match('/^' . $this->last_regex . 'week$/i', $input)) {
+            // last week
             $currentDayOfWeek = date('w');
             $daysToSunday = $currentDayOfWeek;
             $daysToSaturday = 6 - $currentDayOfWeek;
@@ -110,20 +103,15 @@ Class DateStringParser
 
             $this->start_date = strtotime('-1 week', $this->start_date);
             $this->end_date = strtotime('-1 week', $this->end_date);
-        }
-        // Next x weeks
-        elseif (preg_match('/' . $this->next_regex . '(\d+) weeks?$/i', $input, $matches)) {
-            //echo "Next X weeks\n";
+        } elseif (preg_match('/' . $this->next_regex . '(\d+) weeks?$/i', $input, $matches)) {
+            // Next x weeks
             $this->start_date = strtotime("today");
             $this->end_date = strtotime("+ ". $matches[1] . " weeks", $this->start_date);
-        }
-        // last X week
-        elseif (preg_match('/^' . $this->last_regex . '(\d+) weeks?$/i', $input, $matches)) {
-            //echo "last X week\n";
+        } elseif (preg_match('/^' . $this->last_regex . '(\d+) weeks?$/i', $input, $matches)) {
+            // last X week
             $this->start_date = strtotime("today");
             $this->end_date = strtotime("- ". $matches[1] . " weeks", $this->start_date);
-        }
-        else {
+        } else {
             return false;
         }
         return true;
@@ -131,48 +119,42 @@ Class DateStringParser
 
     private function covertToMonthRange($input):bool
     {
-        // This month
         if (preg_match('/^' . $this->this_regex . 'month$/i', $input)) {
-            //echo "This month\n";
+            // This month
             $this->start_date = strtotime('first day of this month');
             $this->end_date = strtotime('last day of this month');
-        }
-        // Next month
-        elseif (preg_match('/^' . $this->next_regex . 'month$/i', $input)) {
-            //echo "Next month\n";
+        } elseif (preg_match('/^' . $this->next_regex . 'month$/i', $input)) {
+            // Next month
             $this->start_date = strtotime('first day of next month');
             $this->end_date = strtotime('last day of next month');
-        }
-        // last month
-        elseif (preg_match('/^' . $this->last_regex . 'month$/i', $input)) {
-            //echo "last month\n";
+        } elseif (preg_match('/^' . $this->last_regex . 'month$/i', $input)) {
+            // last month
             $this->start_date = strtotime('first day of last month');
             $this->end_date = strtotime('last day of last month');
-        }
-        // Next x months
-        elseif (preg_match('/' . $this->next_regex . '(\d+) months?$/i', $input, $matches)) {
-            //echo "Next X months\n";
+        } elseif (preg_match('/' . $this->next_regex . '(\d+) months?$/i', $input, $matches)) {
+            // Next x months
             $this->start_date = strtotime("today");
             $this->end_date = strtotime(" + ". $matches[1] . " months", $this->start_date);
-        }
-        // last x months
-        elseif (preg_match('/' . $this->last_regex . '(\d+) months?$/i', $input, $matches)) {
-            //echo "lasy X months\n";
+        } elseif (preg_match('/' . $this->last_regex . '(\d+) months?$/i', $input, $matches)) {
+            // last x months
             $this->start_date = strtotime("today");
             $this->end_date = strtotime("- ". $matches[1] . " months", $this->start_date);
-        }
-        // Month or Month to Month
-        elseif (preg_match('/^' . $this->month_regex . '(?:' . $this->word_or_dash .'' . $this->month_regex . ')?$/i', $input, $matches)) {
+        } elseif (
+            preg_match(
+                '/^' . $this->month_regex . '(?:' . $this->word_or_dash .'' . $this->month_regex . ')?$/i',
+                $input,
+                $matches
+            )
+        ) {
+            // Month or Month to Month
             $now = time();
 
             if (isset($matches[2])) {
-                //echo "month to month\n";
                 $this->start_date = strtotime('first day of ' . $matches[1]);
                 $this->end_date = strtotime('last day of ' . $matches[2]);
             } else {
-                //echo "month\n";
                 $this->start_date = strtotime('first day of ' . $matches[1]);
-                $this->end_date = strtotime('last day of ' . $matches[1]); 
+                $this->end_date = strtotime('last day of ' . $matches[1]);
             }
 
             if ($now > $this->start_date) {
@@ -181,47 +163,58 @@ Class DateStringParser
             if ($now > $this->end_date) {
                 $end_date = strtotime('+1 year', $this->end_date);
             }
-        }
-        elseif (preg_match('/^' . $this->this_regex . '' . $this->month_regex . '(?:' . $this->word_or_dash .'' . $this->month_regex . ')?$/i', $input, $matches)) {
+        } elseif (
+            preg_match(
+                '/^' . $this->this_regex . '' . $this->month_regex . '(?:' . $this->word_or_dash
+                . '' . $this->month_regex . ')?$/i',
+                $input,
+                $matches
+            )
+        ) {
             if (isset($matches[2])) {
-                //echo "this month to month\n";
                 $this->start_date = strtotime('first day of ' . $matches[1]);
                 $this->end_date = strtotime('last day of ' . $matches[2]);
             } else {
-                //echo "this month\n";
                 $this->start_date = strtotime('first day of ' . $matches[1]);
-                $this->end_date = strtotime('last day of ' . $matches[1]); 
+                $this->end_date = strtotime('last day of ' . $matches[1]);
             }
-        }
-        elseif (preg_match('/^' . $this->next_regex . '' . $this->month_regex . '(?:' . $this->word_or_dash .'' . $this->month_regex . ')?$/i', $input, $matches)) {
+        } elseif (
+            preg_match(
+                '/^' . $this->next_regex . '' . $this->month_regex . '(?:' . $this->word_or_dash
+                . '' . $this->month_regex . ')?$/i',
+                $input,
+                $matches
+            )
+        ) {
             if (isset($matches[2])) {
-                //echo "next month to month\n";
                 $this->start_date = strtotime('first day of ' . $matches[1]);
                 $this->end_date = strtotime('last day of ' . $matches[2]);
             } else {
-                //echo "next month\n";
                 $this->start_date = strtotime('first day of ' . $matches[1]);
-                $this->end_date = strtotime('last day of ' . $matches[1]); 
+                $this->end_date = strtotime('last day of ' . $matches[1]);
             }
 
             $this->start_date = strtotime('+1 year', $this->start_date);
             $this->end_date = strtotime('+1 year', $this->end_date);
-        }
-        elseif (preg_match('/^' . $this->last_regex . '' . $this->month_regex . '(?:' . $this->word_or_dash .'' . $this->month_regex . ')?$/i', $input, $matches)) {
+        } elseif (
+            preg_match(
+                '/^' . $this->last_regex . '' . $this->month_regex . '(?:' . $this->word_or_dash
+                . '' . $this->month_regex . ')?$/i',
+                $input,
+                $matches
+            )
+        ) {
             if (isset($matches[2])) {
-                //echo "last month to month\n";
                 $this->start_date = strtotime('first day of ' . $matches[1]);
                 $this->end_date = strtotime('last day of ' . $matches[2]);
             } else {
-                //echo "last month\n";
                 $this->start_date = strtotime('first day of ' . $matches[1]);
-                $this->end_date = strtotime('last day of ' . $matches[1]); 
+                $this->end_date = strtotime('last day of ' . $matches[1]);
             }
 
             $this->start_date = strtotime('-1 year', $this->start_date);
             $this->end_date = strtotime('-1 year', $this->end_date);
-        }
-        else {
+        }else {
             return false;
         }
 
@@ -230,52 +223,46 @@ Class DateStringParser
 
     private function convertToYearRange($input):bool
     {
-        // This year
         if (preg_match('/^' . $this->this_regex . 'year$/i', $input)) {
-            //echo "this year\n";
+            // This year
             $year = date('Y');
             $this->start_date = strtotime('january 1st, ' . $year);
             $this->end_date = strtotime('december 31st, ' . $year);
-        }
-        // Next year
-        elseif (preg_match('/^' . $this->next_regex . 'year$/i', $input)) {
-            //echo "next year\n";
+        } elseif (preg_match('/^' . $this->next_regex . 'year$/i', $input)) {
+            // Next year
             $year = date('Y');
             $this->start_date = strtotime('january 1st, ' . $year . ' +1 year');
             $this->end_date = strtotime('december 31st, ' . $year . ' +1 year');
-        }
-        // last year
-        elseif (preg_match('/^' . $this->last_regex . 'year$/i', $input)) {
-            //echo "last year\n";
+        } elseif (preg_match('/^' . $this->last_regex . 'year$/i', $input)) {
+            // last year
             $year = date('Y');
             $this->start_date = strtotime('january 1st, ' . $year . ' -1 year');
             $this->end_date = strtotime('december 31st, ' . $year . ' -1 year');
-        }
-        // Next x years
-        elseif (preg_match('/^' . $this->next_regex . '(\d+) years?$/i', $input, $matches)) {
-            //echo "Next X years\n";
+        } elseif (preg_match('/^' . $this->next_regex . '(\d+) years?$/i', $input, $matches)) {
+            // Next x years
             $this->start_date = strtotime("today");
             $this->end_date = strtotime(" + ". $matches[1] . " years", $this->start_date);
-        }
-        // last x years
-        elseif (preg_match('/^' . $this->last_regex . '(\d+) years?$/i', $input, $matches)) {
-            //echo "last X years\n";
+        } elseif (preg_match('/^' . $this->last_regex . '(\d+) years?$/i', $input, $matches)) {
+            // last x years
             $this->start_date = strtotime("today");
             $this->end_date = strtotime("- ". $matches[1] . " years", $this->start_date);
-        }
-        // Year or Year to Year
-        elseif (preg_match('/^' . $this->year_regex . '(?:' . $this->word_or_dash .'' . $this->year_regex . ')?$/i', $input, $matches)) {
+        } elseif (
+            preg_match(
+                '/^' . $this->year_regex . '(?:' . $this->word_or_dash .'' . $this->year_regex . ')?$/i',
+                $input,
+                $matches
+            )
+        ) {
             if (isset($matches[2])) {
-                //echo "year to year\n";
+                // Year or Year to Year
                 $this->start_date = strtotime('january 1st, ' . $matches[1]);
                 $this->end_date = strtotime('december 31st, ' . $matches[2]);
             } else {
-                //echo "year\n";
+                // Year or Year to Year
                 $this->start_date = strtotime('january 1st, ' . $matches[1]);
                 $this->end_date = strtotime('december 31st, ' . $matches[1]);
             }
-        }
-        else {
+        } else {
             return false;
         }
         return true;
@@ -283,9 +270,14 @@ Class DateStringParser
 
     private function convertToDaysRange($input):bool
     {
-        // day to day
-        if (preg_match('/^' . $this->day_regex . '' . $this->word_or_dash .'' . $this->day_regex . '$/i', $input, $matches)) {
-            //echo "day to day\n";
+        if (
+            preg_match(
+                '/^' . $this->day_regex . '' . $this->word_or_dash .'' . $this->day_regex . '$/i',
+                $input,
+                $matches
+            )
+        ) {
+            // day to day
             $now = time();
             $currentDayOfWeek = date('w');
             $days_of_week = array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
@@ -298,10 +290,15 @@ Class DateStringParser
                 $this->start_date = strtotime('+1 week', $this->start_date);
             }
             $this->end_date = strtotime($matches[2], $this->start_date);
-        }
-        // this day to day
-        elseif (preg_match('/^' . $this->this_regex . '' . $this->day_regex . '' . $this->word_or_dash .'' . $this->day_regex . '$/i', $input, $matches)) {
-            //echo "this day to day\n";
+        } elseif (
+            preg_match(
+                '/^' . $this->this_regex . '' . $this->day_regex . '' . $this->word_or_dash
+                . '' . $this->day_regex . '$/i',
+                $input,
+                $matches
+            )
+        ) {
+            // this day to day
             $now = time();
             $currentDayOfWeek = date('w');
             $days_of_week = array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
@@ -311,10 +308,15 @@ Class DateStringParser
             $this->start_date = strtotime("+{$day_index} days", $this->start_date);
 
             $this->end_date = strtotime($matches[2], $this->start_date);
-        }
-        // next day to day
-        elseif (preg_match('/^' . $this->next_regex . '' . $this->day_regex . '' . $this->word_or_dash .'' . $this->day_regex . '$/i', $input, $matches)) {
-            //echo "next day to day\n";
+        } elseif (
+            preg_match(
+                '/^' . $this->next_regex . '' . $this->day_regex . '' . $this->word_or_dash
+                . '' . $this->day_regex . '$/i',
+                $input,
+                $matches
+            )
+        ) {
+            // next day to day
             $now = time();
             $currentDayOfWeek = date('w');
             $days_of_week = array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
@@ -326,10 +328,15 @@ Class DateStringParser
             $this->start_date = strtotime('+1 week', $this->start_date);
 
             $this->end_date = strtotime($matches[2], $this->start_date);
-        }
-        // last day to day
-        elseif (preg_match('/^' . $this->last_regex . '' . $this->day_regex . '' . $this->word_or_dash .'' . $this->day_regex . '$/i', $input, $matches)) {
-            //echo "last day to day\n";
+        } elseif (
+            preg_match(
+                '/^' . $this->last_regex . '' . $this->day_regex . '' . $this->word_or_dash
+                . '' . $this->day_regex . '$/i',
+                $input,
+                $matches
+            )
+        ) {
+            // last day to day
             $now = time();
             $currentDayOfWeek = date('w');
             $days_of_week = array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
@@ -341,8 +348,7 @@ Class DateStringParser
             $this->start_date = strtotime('-1 week', $this->start_date);
 
             $this->end_date = strtotime($matches[2], $this->start_date);
-        }
-        else {
+        } else {
             return false;
         }
 
@@ -353,7 +359,7 @@ Class DateStringParser
     {
         $start_date = false;
         $end_date = false;
-        
+
         // Attempt to extract the start and end dates from the input string
         $date_range_parts = preg_split('/\s*(?:to|through)\s+/i', $input);
         if (count($date_range_parts) == 2) {
@@ -367,13 +373,12 @@ Class DateStringParser
                 $end_date = strtotime(trim($date_range_parts[1]));
             }
         }
-        
+
         // If the start or end date could not be parsed, return false
         if ($start_date === false || $end_date === false) {
             return false;
         }
 
-        //echo "general\n";
         $this->start_date = $start_date;
         $this->end_date = $end_date;
 
@@ -386,7 +391,6 @@ Class DateStringParser
         // Check if the end date was calculated successfully
         if ($this->start_date !== false) {
             // Convert the end date to a string and return it
-            //echo "single date\n";
             return true;
         }
         return false;
@@ -404,10 +408,10 @@ Class DateStringParser
             'year',
             'years',
         ];
-    
+
         // Split the input string into words
         $words = explode(' ', $dateString);
-    
+
         // Check if the string starts with a number
         if (is_numeric($words[0])) {
             // Get the number and time interval
@@ -421,7 +425,7 @@ Class DateStringParser
 
                 if (preg_match('/' . $this->from_regex . '/i', $relative_date)) {
                     $relation = "+";
-                } else if(preg_match('/' . $this->before_regex . '/i', $relative_date)) {
+                } elseif (preg_match('/' . $this->before_regex . '/i', $relative_date)) {
                     $relation = "-";
                 } else {
                     $relation = "+";
@@ -441,13 +445,12 @@ Class DateStringParser
                 // Check if the end date was calculated successfully
                 if ($endDate !== false) {
                     // Convert the end date to a string and return it
-                    //echo "relative end\n";
                     $this->start_date = $endDate;
                     return true;
                 }
             }
         }
-    
+
         // Return false if the input string could not be parsed
         return false;
     }

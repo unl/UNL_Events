@@ -36,7 +36,7 @@ class Upcoming extends EventListing implements RoutableInterface
      * @var \UNL\UCBCN\Calendar
      */
     public $calendar;
-    private $isHomepage = FALSE;
+    private $isHomepage = false;
 
     public $upcoming_event_type = '';
     public $upcoming_event_audience = '';
@@ -66,7 +66,7 @@ class Upcoming extends EventListing implements RoutableInterface
         $this->upcoming_event_audience = $options['audience'] ?? "";
 
         if (isset($options[0]) && !preg_match("/^\d{4}\/\d{1,2}\/\d{1,2}\/?/", $options[0])) {
-            $this->isHomepage = TRUE;
+            $this->isHomepage = true;
         }
 
         parent::__construct($options);
@@ -191,7 +191,8 @@ class Upcoming extends EventListing implements RoutableInterface
         return $this->generateURL($this->calendar);
     }
 
-    public function isHomepage() {
+    public function isHomepage()
+    {
         return $this->isHomepage;
     }
 
