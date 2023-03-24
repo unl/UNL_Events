@@ -42,6 +42,7 @@ $routes['/^'.$calendar_slash_required.$year.'\/'.$month.'\/widget(\/)?'.$format.
 $routes['/^'.$calendar_slash_required.$year.'\/'.$week.'(\/)?'.$format.'$/']                               = 'UNL\UCBCN\Frontend\Week';
 $routes['/^'.$calendar_slash_required.$year.'\/'.$month.'\/'.$day.'(\/)?'.$format.'$/']                    = 'UNL\UCBCN\Frontend\Day';
 $routes['/^'.$calendar_slash_required.$year.'\/'.$month.'\/'.$day.'\/(?P<id>[\d]+)'.'(\/)?'.$format.'$/']  = 'UNL\UCBCN\Frontend\EventInstance';
-$routes['/^'.$calendar_slash_optional.'$/']                                                                = 'UNL\UCBCN\Frontend\Upcoming';
+$routes['/^'.$calendar.$optional_trailing_slash.'$/']                                                      = 'UNL\UCBCN\Frontend\Upcoming';
+$routes['/^'.$optional_trailing_slash.'$/']                                                                = 'UNL\UCBCN\Frontend\Day';
 
 return $routes;
