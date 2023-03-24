@@ -115,7 +115,6 @@ class Search extends EventListing implements RoutableInterface
 
         if ($this->date_parser->parsed) {
             if ($this->date_parser->single) {
-                echo "DATE";
                 $sql .= ' AND (
                     IF (recurringdate.recurringdate IS NULL,
                         DATE_FORMAT(e.starttime,"%Y-%m-%d"),
@@ -123,7 +122,6 @@ class Search extends EventListing implements RoutableInterface
                     ) = STR_TO_DATE(\'' . date('Y-m-d', $this->date_parser->start_date) . '\', \'%Y-%m-%d\')
                 )';
             } else {
-                echo "DATE RANGE";
                 $sql .= 'AND (
                     IF (recurringdate.recurringdate IS NULL,
                         DATE_FORMAT(e.starttime,"%Y-%m-%d"),
