@@ -14,6 +14,8 @@
  */
 namespace UNL\UCBCN\Frontend;
 
+use UNL\UCBCN\Calendar\Audiences;
+
 /**
  * Container for audience search results for the frontend.
  *
@@ -73,7 +75,6 @@ class Audience extends EventListing implements RoutableInterface
         if (!isset($options['offset']) || empty($options['offset']) ||  intval($options['offset']) <= 0) {
             $options['offset'] = 0;
         }
-        
 
         $this->limit = $options['limit'] ?? $this->limit;
         $this->offset = $options['offset'] ?? $this->offset;
@@ -99,16 +100,20 @@ class Audience extends EventListing implements RoutableInterface
                 LEFT JOIN audience ON (audience.id = event_targets_audience.audience_id)
                 LEFT JOIN location ON (location.id = e.location_id)
                 WHERE calendar_has_event.status IN ("posted", "archived") AND
-                    (
-                        e.starttime>=\''. date('Y-m-d') .' 00:00:00\' OR
-                        e.endtime>\''. date('Y-m-d') .' 00:00:00\'
-                    )
-                ';
+                (
+                    IF (recurringdate.recurringdate IS NULL,
+                        e.starttime,
+                        CONCAT(DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.starttime," %H:%i:%s"))
+                    ) >= NOW() OR
+                    IF (recurringdate.recurringdate IS NULL,
+                        e.endtime,
+                        CONCAT(DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.endtime," %H:%i:%s"))
+                    ) >= NOW()
+                )';
 
         // splits the audiences by comma and creates the SQL for those
         if (!empty($this->search_query)) {
-            $audiences_explode = explode(',', $this->search_query);
-            $audiences_explode = array_map('trim', $audiences_explode);
+            $audiences_explode = $this->getSplitAudiences();
 
             $sql .= ' AND (';
             foreach ($audiences_explode as $index => $audience_single) {
@@ -146,6 +151,36 @@ class Audience extends EventListing implements RoutableInterface
     }
 
     /**
+     * Splits the search query by commas and trims whitespace from all the items
+     *
+     * @return string[]
+     */
+    public function getSplitAudiences(): array
+    {
+        if (empty($this->search_query)) {
+            return array();
+        }
+
+        // splits the audiences by comma
+        $audiences_explode = explode(',', $this->search_query);
+        $audiences_explode = array_map('trim', $audiences_explode);
+
+        return $audiences_explode;
+    }
+
+    /**
+     * Returns the count of the items in the query
+     * This is only here becuase savvy will mess up the array
+     *
+     * @return int
+     */
+    public function countQuery():int
+    {
+        return count($this->getSplitAudiences());
+    }
+
+
+    /**
      * returns nicely formatted string of the audiences from the search query
      *
      * @return string
@@ -153,8 +188,7 @@ class Audience extends EventListing implements RoutableInterface
     public function getFormattedAudiences()
     {
         $output_string = '';
-        $audiences_explode = explode(',', $this->search_query);
-        $audiences_explode = array_map('trim', $audiences_explode);
+        $audiences_explode = $this->getSplitAudiences();
         $last_index = count($audiences_explode) - 1;
 
         foreach ($audiences_explode as $index => $audience_single) {
@@ -187,4 +221,15 @@ class Audience extends EventListing implements RoutableInterface
 
         return $url;
     }
+
+    /**
+     * Gets list of all audiences
+     *
+     * @return bool|Audiences - false if no audiences, otherwise return recordList of all audiences
+     */
+    public function getAudiences()
+    {
+        return new Audiences(array('order_name' => true));
+    }
+
 }

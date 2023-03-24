@@ -1,4 +1,4 @@
-<div class="events-sidebar dcf-sticky dcf-pin-top">
+<div class="events-sidebar">
     <div class="calendar">
         <?php echo $savvy->render($context->getMonthWidget()); ?>
     </div>

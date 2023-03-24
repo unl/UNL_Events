@@ -17,6 +17,7 @@ namespace UNL\UCBCN\Frontend;
 
 use UNL\UCBCN\Calendar\Audiences;
 use UNL\UCBCN\Calendar\EventTypes;
+use UNL\UCBCN\Frontend\DateStringParser;
 use UNL\UCBCN\Event;
 
 /**
@@ -37,6 +38,21 @@ class Search extends EventListing implements RoutableInterface
     public $search_event_type = '';
     public $search_event_audience = '';
 
+    public $limit = 100;
+    public $offset = 0;
+    public $max_limit = array(
+        'json' => 500,
+        'xml' => 500,
+        'default' => 100
+    );
+
+    /**
+     * Calendar \UNL\UCBCN\Calendar Object
+     *
+     * @var \UNL\UCBCN\DateStringParser
+     */
+    private $date_parser;
+
     /**
      * Constructs this search output.
      *
@@ -51,6 +67,28 @@ class Search extends EventListing implements RoutableInterface
         $this->search_event_type = $options['type'] ?? "";
         $this->search_event_audience = $options['audience'] ?? "";
 
+        $format_max_limit = $this->max_limit['default'];
+        if (array_key_exists($options['format'], $this->max_limit)) {
+            $format_max_limit = $this->max_limit[$options['format']];
+        }
+
+        if (!isset($options['limit']) ||
+            empty($options['limit']) ||
+            intval($options['limit']) > $format_max_limit ||
+            intval($options['limit']) <= 0
+        ) {
+            $options['limit'] = $format_max_limit;
+        }
+
+        if (!isset($options['offset']) || empty($options['offset']) ||  intval($options['offset']) <= 0) {
+            $options['offset'] = 0;
+        }
+
+        $this->limit = $options['limit'] ?? $this->limit;
+        $this->offset = $options['offset'] ?? $this->offset;
+
+        $this->date_parser = new DateStringParser($this->search_query);
+
         parent::__construct($options);
     }
 
@@ -59,7 +97,7 @@ class Search extends EventListing implements RoutableInterface
      *
      * @see \UNL\UCBCN\ActiveRecord\RecordList::getSQL()
      */
-    protected function getSQL()
+    public function getSQL()
     {
         $sql = 'SELECT DISTINCT e.id as id, recurringdate.id as recurringdate_id
                 FROM eventdatetime as e
@@ -73,35 +111,62 @@ class Search extends EventListing implements RoutableInterface
                 LEFT JOIN location ON (location.id = e.location_id)
                 WHERE
                     calendar_has_event.calendar_id = ' . (int)$this->calendar->id . '
-                    AND calendar_has_event.status IN ("posted", "archived")
-                    AND  (';
+                    AND calendar_has_event.status IN ("posted", "archived")';
 
-        if ($t = $this->getSearchTimestamp()) {
-            // This is a time...
-            $sql .= 'e.starttime LIKE \''.date('Y-m-d', $t).'%\'';
+        if ($this->date_parser->parsed) {
+            if ($this->date_parser->single) {
+                $sql .= ' AND (
+                    IF (recurringdate.recurringdate IS NULL,
+                        DATE_FORMAT(e.starttime,"%Y-%m-%d"),
+                        recurringdate.recurringdate
+                    ) = STR_TO_DATE(\'' . date('Y-m-d', $this->date_parser->start_date) . '\', \'%Y-%m-%d\')
+                )';
+            } else {
+                $sql .= 'AND (
+                    IF (recurringdate.recurringdate IS NULL,
+                        DATE_FORMAT(e.starttime,"%Y-%m-%d"),
+                        recurringdate.recurringdate
+                    ) >= STR_TO_DATE(\'' . date('Y-m-d', $this->date_parser->start_date) . '\', \'%Y-%m-%d\')
+                    AND
+                    IF (recurringdate.recurringdate IS NULL,
+                        DATE_FORMAT(e.starttime,"%Y-%m-%d"),
+                        recurringdate.recurringdate
+                    ) <= STR_TO_DATE(\'' . date('Y-m-d', $this->date_parser->end_date) . '\', \'%Y-%m-%d\')
+                )';
+            }
         } else {
-            // Do a textual search.
-            $sql .=
-                '(event.title LIKE \'%'.self::escapeString($this->search_query).'%\' OR '.
-                '(eventtype.name LIKE \'%'.self::escapeString($this->search_query).'%\') OR '.
+            if (!empty($this->search_query)) {
+                // Do a textual search.
+                $sql .= 'AND (
+                    (event.title LIKE \'%'.self::escapeString($this->search_query).'%\') OR
+                    (eventtype.name LIKE \'%'.self::escapeString($this->search_query).'%\') OR
+                    (audience.name LIKE \'%'.self::escapeString($this->search_query).'%\') OR
+                    (event.description LIKE \'%'.self::escapeString($this->search_query).'%\') OR
+                    (location.name LIKE \'%'.self::escapeString($this->search_query).'%\')
+                )';
+            }
 
-                'event.description LIKE \'%'.self::escapeString($this->search_query).'%\' OR '.
-                '(location.name LIKE \'%'.self::escapeString($this->search_query).'%\')) AND '.
-                '(e.starttime>=\''.date('Y-m-d').' 00:00:00\' OR '.
-                'e.endtime>\''.date('Y-m-d').' 00:00:00\')';
+            $sql .= 'AND (IF (recurringdate.recurringdate IS NULL,
+                e.starttime,
+                CONCAT(DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.starttime," %H:%i:%s"))
+            ) >= NOW() OR
+            IF (recurringdate.recurringdate IS NULL,
+                e.endtime,
+                CONCAT(DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.endtime," %H:%i:%s"))
+            ) >= NOW())';
         }
 
         // Adds filter for event type
         if (!empty($this->search_event_type)) {
-            $sql .= ') AND ( eventtype.name = \'' . self::escapeString($this->search_event_type) .'\'';
+            $sql .= 'AND ( eventtype.name = \'' . self::escapeString($this->search_event_type) .'\')';
         }
 
         // Adds filters for target audience
         if (!empty($this->search_event_audience)) {
-            $sql .= ') AND ( audience.name = \'' . self::escapeString($this->search_event_audience) . '\'';
+            $sql .= 'AND ( audience.name = \'' . self::escapeString($this->search_event_audience) . '\')';
         }
 
-        $sql .= ') ORDER BY (
+        $sql .= 'ORDER BY (
                         IF (recurringdate.recurringdate IS NULL,
                           e.starttime,
                           CONCAT(DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.starttime," %H:%i:%s"))
@@ -119,7 +184,7 @@ class Search extends EventListing implements RoutableInterface
      */
     public function getEventTypes()
     {
-        return new EventTypes(array());
+        return new EventTypes(array('order_name' => true));
     }
 
     /**
@@ -129,22 +194,47 @@ class Search extends EventListing implements RoutableInterface
      */
     public function getAudiences()
     {
-        return new Audiences(array());
+        return new Audiences(array('order_name' => true));
     }
 
     /**
-     * Determine the unix timestamp of the search
+     * Returns bool for if the parser found a range
      *
-     * @return bool|int - false if not a date search, otherwise return the unix timestamp of the date search
+     * @return bool
      */
-    public function getSearchTimestamp()
+    public function isDateRange():bool
     {
-        if (($t = strtotime($this->search_query)) && ($this->search_query != 'art')) {
-            // This is a time...
-            return $t;
-        }
+        return $this->date_parser->parsed && !$this->date_parser->single;
+    }
 
-        return false;
+    /**
+     * Returns bool for if the parser found a single date
+     *
+     * @return bool
+     */
+    public function isSingleDate():bool
+    {
+        return $this->date_parser->parsed && $this->date_parser->single;
+    }
+
+    /**
+     * Returns bool if no date found or string of unix timestamp
+     *
+     * @return int|bool
+     */
+    public function getStartDate()
+    {
+        return $this->date_parser->start_date;
+    }
+
+    /**
+     * Returns bool if no date range found or string of unix timestamp
+     *
+     * @return int|bool
+     */
+    public function getEndDate()
+    {
+        return $this->date_parser->end_date;
     }
 
     /**
@@ -156,11 +246,29 @@ class Search extends EventListing implements RoutableInterface
     {
         $url = $this->options['calendar']->getURL() . 'search/';
 
-        if (!empty($this->search_query)) {
+        if (isset($this->search_query)) {
             $url .= '?q=' . urlencode($this->search_query);
         }
 
+        if (!empty($this->search_event_type)) {
+            $url .= '&type=' . urlencode($this->search_event_type);
+        }
+
+        if (!empty($this->search_event_audience)) {
+            $url .= '&audience=' . urlencode($this->search_event_audience);
+        }
+
         return $url;
+    }
+
+    /**
+     * Get the month widget for the context's month
+     *
+     * @return MonthWidget
+     */
+    public function getMonthWidget()
+    {
+        return new MonthWidget($this->options);
     }
 
 }

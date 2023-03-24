@@ -34,12 +34,12 @@ class EventForm extends PostHandler
 
 	public function getEventTypes()
 	{
-		return new EventTypes(array());
+		return new EventTypes(array('order_name' => true));
 	}
 
 	public function getAudiences()
 	{
-		return new Audiences(array());
+		return new Audiences(array('order_name' => true));
 	}
 
 	protected function setEventData($post_data)

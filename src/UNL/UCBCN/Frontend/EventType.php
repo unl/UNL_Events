@@ -14,6 +14,8 @@
  */
 namespace UNL\UCBCN\Frontend;
 
+use UNL\UCBCN\Calendar\EventTypes;
+
 /**
  * Container for event type search results for the frontend.
  *
@@ -98,16 +100,20 @@ class EventType extends EventListing implements RoutableInterface
                 LEFT JOIN audience ON (audience.id = event_targets_audience.audience_id)
                 LEFT JOIN location ON (location.id = e.location_id)
                 WHERE calendar_has_event.status IN ("posted", "archived") AND
-                    (
-                        e.starttime>=\''. date('Y-m-d') .' 00:00:00\' OR
-                        e.endtime>\''. date('Y-m-d') .' 00:00:00\'
-                    )
-                ';
+                (
+                    IF (recurringdate.recurringdate IS NULL,
+                        e.starttime,
+                        CONCAT(DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.starttime," %H:%i:%s"))
+                    ) >= NOW() OR
+                    IF (recurringdate.recurringdate IS NULL,
+                        e.endtime,
+                        CONCAT(DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.endtime," %H:%i:%s"))
+                    ) >= NOW()
+                )';
 
         // splits the event types by comma and creates the SQL for those
         if (!empty($this->search_query)) {
-            $eventtype_explode = explode(',', $this->search_query);
-            $eventtype_explode = array_map('trim', $eventtype_explode);
+            $eventtype_explode = $this->getSplitEventtypes();
 
             $sql .= ' AND (';
             foreach ($eventtype_explode as $index => $eventtype_single) {
@@ -145,15 +151,43 @@ class EventType extends EventListing implements RoutableInterface
     }
 
     /**
-     * returns nicely formatted string of the audiences from the search query
+     * Splits the search query by commas and trims whitespace from all the items
+     *
+     * @return string[]
+     */
+    public function getSplitEventtypes(): array
+    {
+        if (empty($this->search_query)) {
+            return array();
+        }
+
+        // splits the eventtypes by comma
+        $types_explode = explode(',', $this->search_query);
+        $types_explode = array_map('trim', $types_explode);
+
+        return $types_explode;
+    }
+
+    /**
+     * Returns the count of the items in the query
+     * This is only here becuase savvy will mess up the array
+     *
+     * @return int
+     */
+    public function countQuery():int
+    {
+        return count($this->getSplitEventtypes());
+    }
+
+    /**
+     * returns nicely formatted string of the eventtypess from the search query
      *
      * @return string
      */
     public function getFormattedEventTypes()
     {
         $output_string = '';
-        $eventtype_explode = explode(',', $this->search_query);
-        $eventtype_explode = array_map('trim', $eventtype_explode);
+        $eventtype_explode = $this->getSplitEventtypes();
         $last_index = count($eventtype_explode) - 1;
 
         foreach ($eventtype_explode as $index => $eventtype_single) {
@@ -185,6 +219,16 @@ class EventType extends EventListing implements RoutableInterface
         }
 
         return $url;
+    }
+
+    /**
+     * Gets list of all event types
+     *
+     * @return bool|EventTypes - false if no event type, otherwise return recordList of all event types
+     */
+    public function getEventTypes()
+    {
+        return new EventTypes(array('order_name' => true));
     }
 
 }

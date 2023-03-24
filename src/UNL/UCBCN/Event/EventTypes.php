@@ -44,9 +44,14 @@ class EventTypes extends RecordList
     public function getSQL()
     {
         if (array_key_exists('event_id', $this->options)) {
-            return 'SELECT id FROM event_has_eventtype WHERE event_has_eventtype.event_id = ' . (int)$this->options['event_id'];
-        } else {
-            return 'SELECT id FROM eventtype;';
+            return 'SELECT id FROM event_has_eventtype WHERE event_has_eventtype.event_id = ' .
+                (int)$this->options['event_id'];
         }
+
+        $sql_output = 'SELECT id FROM eventtype';
+        if (array_key_exists('order_name', $this->options) && $this->options['order_name'] === true) {
+            $sql_output .= ' ORDER BY name';
+        }
+        return $sql_output;
     }
 }

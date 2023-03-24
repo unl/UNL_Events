@@ -45,8 +45,12 @@ class Audiences extends RecordList
         if (array_key_exists('event_id', $this->options)) {
             return 'SELECT id FROM event_targets_audience WHERE event_targets_audience.event_id = ' .
                 (int)$this->options['event_id'];
-        } else {
-            return 'SELECT id FROM audience;';
         }
+
+        $sql_output = 'SELECT id FROM audience';
+        if (array_key_exists('order_name', $this->options) && $this->options['order_name'] === true) {
+            $sql_output .= ' ORDER BY name';
+        }
+        return $sql_output;
     }
 }
