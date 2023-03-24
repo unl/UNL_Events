@@ -96,8 +96,8 @@ class Search extends EventListing implements RoutableInterface
     {
         return json_encode(
             array(
-                "start_date" => $this->date_parser->start_date,
-                "end_date" => $this->date_parser->end_date,
+                "start_date" => date('Y-m-d', $this->date_parser->start_date),
+                "end_date" => date('Y-m-d', $this->date_parser->end_date),
                 "parsed" => $this->date_parser->parsed,
                 "single" => $this->date_parser->single,
             )
