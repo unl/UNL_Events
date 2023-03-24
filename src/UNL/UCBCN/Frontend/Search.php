@@ -127,20 +127,23 @@ class Search extends EventListing implements RoutableInterface
                     AND  (';
 
         if ($this->date_parser->parsed) {
-            $sql .= '
-                IF (recurringdate.recurringdate IS NULL,
-                    DATE_FORMAT(e.starttime, "%Y-%m-%d"),
-                    DATE_FORMAT(recurringdate.recurringdate, "%Y-%m-%d")
-                ) >= DATE_FORMAT(\'' . date('Y-m-d', $this->date_parser->start_date) . '\',"%Y-%m-%d")
-            ';
-
-            if (!$this->date_parser->single) {
-                $sql .= ' OR
+            if ($this->date_parser->single) {
+                $sql .= '
                     IF (recurringdate.recurringdate IS NULL,
-                        DATE_FORMAT(e.starttime, "%Y-%m-%d"),
-                        DATE_FORMAT(recurringdate.recurringdate, "%Y-%m-%d")
-                    ) <= DATE_FORMAT(\'' . date('Y-m-d', $this->date_parser->end_date) . '\',"%Y-%m-%d")
+                        e.starttime,
+                        recurringdate.recurringdate
+                    ) LIKE \'' . date('Y-m-d', $this->date_parser->end_date) . '\'
                 ';
+            } else {
+                $sql .= 'IF (recurringdate.recurringdate IS NULL,
+                    e.starttime,
+                    CONCAT(DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.starttime," %H:%i:%s"))
+                ) >= STR_TO_DATE(\'' . date('Y-m-d', $this->date_parser->start_date) . '\')
+                AND
+                IF (recurringdate.recurringdate IS NULL,
+                    e.endtime,
+                    CONCAT(DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.endtime," %H:%i:%s"))
+                ) <= STR_TO_DATE(\'' . date('Y-m-d', $this->date_parser->end_date) . '\', \'%Y-%m-%d\');
             }
         } else {
             if (!empty($this->search_query)) {
