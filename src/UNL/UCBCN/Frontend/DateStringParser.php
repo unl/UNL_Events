@@ -161,7 +161,7 @@ class DateStringParser
                 $this->start_date = strtotime('+1 year', $this->start_date);
             }
             if ($now > $this->end_date) {
-                $end_date = strtotime('+1 year', $this->end_date);
+                $this->end_date = strtotime('+1 year', $this->end_date);
             }
         } elseif (
             preg_match(
@@ -299,7 +299,6 @@ class DateStringParser
             )
         ) {
             // this day to day
-            $now = time();
             $currentDayOfWeek = date('w');
             $days_of_week = array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
             $day_index = array_search($matches[1], $days_of_week);
@@ -317,7 +316,6 @@ class DateStringParser
             )
         ) {
             // next day to day
-            $now = time();
             $currentDayOfWeek = date('w');
             $days_of_week = array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
             $day_index = array_search($matches[1], $days_of_week);
@@ -337,7 +335,6 @@ class DateStringParser
             )
         ) {
             // last day to day
-            $now = time();
             $currentDayOfWeek = date('w');
             $days_of_week = array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
             $day_index = array_search($matches[1], $days_of_week);
@@ -385,7 +382,7 @@ class DateStringParser
         return true;
     }
 
-    private function convertToSingleDate($input)
+    private function convertToSingleDate($input):bool
     {
         $this->start_date = strtotime($input);
         // Check if the end date was calculated successfully
@@ -396,7 +393,8 @@ class DateStringParser
         return false;
     }
 
-    private function convertRelativeDateString($dateString) {
+    private function convertRelativeDateString($dateString):bool
+    {
         // Map time intervals to their corresponding strtotime format characters
         $intervalMap = [
             'day',
