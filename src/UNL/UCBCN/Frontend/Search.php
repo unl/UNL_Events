@@ -130,7 +130,7 @@ class Search extends EventListing implements RoutableInterface
             $sql .= '
                 IF (recurringdate.recurringdate IS NULL,
                     DATE_FORMAT(e.starttime, "%Y-%m-%d"),
-                    recurringdate.recurringdate
+                    DATE_FORMAT(recurringdate.recurringdate, "%Y-%m-%d")
                 ) >= DATE_FORMAT(\'' . date('Y-m-d', $this->date_parser->start_date) . '\',"%Y-%m-%d")
             ';
 
@@ -138,7 +138,7 @@ class Search extends EventListing implements RoutableInterface
                 $sql .= ' OR
                     IF (recurringdate.recurringdate IS NULL,
                         DATE_FORMAT(e.starttime, "%Y-%m-%d"),
-                        recurringdate.recurringdate
+                        DATE_FORMAT(recurringdate.recurringdate, "%Y-%m-%d")
                     ) <= DATE_FORMAT(\'' . date('Y-m-d', $this->date_parser->end_date) . '\',"%Y-%m-%d")
                 ';
             }
