@@ -111,60 +111,62 @@ class Search extends EventListing implements RoutableInterface
                 LEFT JOIN location ON (location.id = e.location_id)
                 WHERE
                     calendar_has_event.calendar_id = ' . (int)$this->calendar->id . '
-                    AND calendar_has_event.status IN ("posted", "archived")
-                    AND  (';
+                    AND calendar_has_event.status IN ("posted", "archived")';
 
         if ($this->date_parser->parsed) {
             if ($this->date_parser->single) {
-                $sql .= '
+                $sql .= ' AND (
                     IF (recurringdate.recurringdate IS NULL,
                         e.starttime,
                         recurringdate.recurringdate
                     ) LIKE \'' . date('Y-m-d', $this->date_parser->end_date) . '\'
-                ';
+                )';
             } else {
-                $sql .= 'IF (recurringdate.recurringdate IS NULL,
-                    DATE_FORMAT(e.starttime,"%Y-%m-%d"),
-                    recurringdate.recurringdate
-                ) >= STR_TO_DATE(\'' . date('Y-m-d', $this->date_parser->start_date) . '\', \'%Y-%m-%d\')
-                AND
-                IF (recurringdate.recurringdate IS NULL,
-                    DATE_FORMAT(e.starttime,"%Y-%m-%d"),
-                    recurringdate.recurringdate
-                ) <= STR_TO_DATE(\'' . date('Y-m-d', $this->date_parser->end_date) . '\', \'%Y-%m-%d\')';
+                $sql .= 'AND (
+                    IF (recurringdate.recurringdate IS NULL,
+                        DATE_FORMAT(e.starttime,"%Y-%m-%d"),
+                        recurringdate.recurringdate
+                    ) >= STR_TO_DATE(\'' . date('Y-m-d', $this->date_parser->start_date) . '\', \'%Y-%m-%d\')
+                    AND
+                    IF (recurringdate.recurringdate IS NULL,
+                        DATE_FORMAT(e.starttime,"%Y-%m-%d"),
+                        recurringdate.recurringdate
+                    ) <= STR_TO_DATE(\'' . date('Y-m-d', $this->date_parser->end_date) . '\', \'%Y-%m-%d\')
+                )';
             }
         } else {
             if (!empty($this->search_query)) {
                 // Do a textual search.
-                $sql .=
-                '(event.title LIKE \'%'.self::escapeString($this->search_query).'%\' OR '.
-                '(eventtype.name LIKE \'%'.self::escapeString($this->search_query).'%\') OR '.
+                $sql .= 'AND (
+                    (event.title LIKE \'%'.self::escapeString($this->search_query).'%\') OR
+                    (eventtype.name LIKE \'%'.self::escapeString($this->search_query).'%\') OR
 
-                'event.description LIKE \'%'.self::escapeString($this->search_query).'%\' OR '.
-                '(location.name LIKE \'%'.self::escapeString($this->search_query).'%\')) AND ';
+                    (event.description LIKE \'%'.self::escapeString($this->search_query).'%\') OR
+                    (location.name LIKE \'%'.self::escapeString($this->search_query).'%\')
+                )';
             }
 
-            $sql .= 'IF (recurringdate.recurringdate IS NULL,
+            $sql .= 'AND (IF (recurringdate.recurringdate IS NULL,
                 e.starttime,
                 CONCAT(DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.starttime," %H:%i:%s"))
             ) >= NOW() OR
             IF (recurringdate.recurringdate IS NULL,
                 e.endtime,
                 CONCAT(DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.endtime," %H:%i:%s"))
-            ) >= NOW()';
+            ) >= NOW())';
         }
 
         // Adds filter for event type
         if (!empty($this->search_event_type)) {
-            $sql .= ') AND ( eventtype.name = \'' . self::escapeString($this->search_event_type) .'\'';
+            $sql .= 'AND ( eventtype.name = \'' . self::escapeString($this->search_event_type) .'\')';
         }
 
         // Adds filters for target audience
         if (!empty($this->search_event_audience)) {
-            $sql .= ') AND ( audience.name = \'' . self::escapeString($this->search_event_audience) . '\'';
+            $sql .= 'AND ( audience.name = \'' . self::escapeString($this->search_event_audience) . '\')';
         }
 
-        $sql .= ') ORDER BY (
+        $sql .= 'ORDER BY (
                         IF (recurringdate.recurringdate IS NULL,
                           e.starttime,
                           CONCAT(DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.starttime," %H:%i:%s"))

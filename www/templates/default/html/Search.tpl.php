@@ -5,6 +5,9 @@
         </nav>
         <?php echo $savvy->render($context, 'sidebar.tpl.php'); ?>
         <?php echo $savvy->render($context, 'filters.tpl.php'); ?>
+        <div class="dcf-txt-xs">
+            <?php echo $context->getSQL(); ?>
+        </div>
     </aside>
     <section id="updatecontent" class="day_cal dcf-col-100% dcf-col-67%-end@md">
         <?php echo $savvy->render($context, 'hcalendar/Search.tpl.php'); ?>
