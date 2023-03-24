@@ -24,7 +24,9 @@
                 <?php foreach ($all_audiences as $single_audience) : ?>
                     <?php
                         $target_audience_id = 'target-audience-' . $single_audience->id;
-                        $in_query = strpos($query, strtolower($single_audience->name));
+                        $splitQuery = explode(',', $query);
+                        $splitQuery = array_map('trim', $splitQuery);
+                        $in_query = in_array(strtolower($single_audience->name), $splitQuery);
                     ?>
                     <div class="dcf-input-checkbox">
                         <input

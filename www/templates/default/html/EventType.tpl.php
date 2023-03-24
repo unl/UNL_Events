@@ -24,7 +24,9 @@
                 <?php foreach ($all_eventtypes as $single_type) : ?>
                     <?php
                         $event_type_id = 'event-type-' . $single_type->id;
-                        $in_query = strpos($query, strtolower($single_type->name));
+                        $splitQuery = explode(',', $query);
+                        $splitQuery = array_map('trim', $splitQuery);
+                        $in_query = in_array(strtolower($single_type->name), $splitQuery);
                     ?>
                     <div class="dcf-input-checkbox">
                         <input
