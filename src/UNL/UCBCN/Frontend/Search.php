@@ -17,6 +17,7 @@ namespace UNL\UCBCN\Frontend;
 
 use UNL\UCBCN\Calendar\Audiences;
 use UNL\UCBCN\Calendar\EventTypes;
+use UNL\UCBCN\DateStringParser;
 use UNL\UCBCN\Event;
 
 /**
@@ -44,6 +45,13 @@ class Search extends EventListing implements RoutableInterface
         'xml' => 500,
         'default' => 100
     );
+
+    /**
+     * Calendar \UNL\UCBCN\Calendar Object
+     *
+     * @var \UNL\UCBCN\DateStringParser
+     */
+    private $date_parser;
 
     /**
      * Constructs this search output.
@@ -79,7 +87,21 @@ class Search extends EventListing implements RoutableInterface
         $this->limit = $options['limit'] ?? $this->limit;
         $this->offset = $options['offset'] ?? $this->offset;
 
+        $this->date_parser = new DateStringParser($this->search_query);
+
         parent::__construct($options);
+    }
+
+    protected function getParsedDates()
+    {
+        return json_encode(
+            array(
+                "start_date" => $this->date_parser->start_date,
+                "end_date" => $this->date_parser->end_date,
+                "parsed" => $this->date_parser->parsed,
+                "single" => $this->date_parser->single,
+            )
+        )
     }
 
     /**
@@ -104,14 +126,22 @@ class Search extends EventListing implements RoutableInterface
                     AND calendar_has_event.status IN ("posted", "archived")
                     AND  (';
 
-        if ($t = $this->getSearchTimestamp()) {
-            // This is a time...
+        if ($this->date_parser->parsed && false) {
             $sql .= '
                 IF (recurringdate.recurringdate IS NULL,
-                    e.starttime,
+                    DATE_FORMAT(e.starttime, "%Y-%m-%d"),
                     recurringdate.recurringdate
-                ) LIKE \''.date('Y-m-d', $t).'%\'
+                ) >= DATE_FORMAT(\'' . date('Y-m-d', $this->date_parser->start_date) . '\',"%Y-%m-%d")
             ';
+
+            if (!$this->date_parser->single) {
+                $sql .= ' OR
+                    IF (recurringdate.recurringdate IS NULL,
+                        DATE_FORMAT(e.starttime, "%Y-%m-%d"),
+                        recurringdate.recurringdate
+                    ) <= DATE_FORMAT(\'' . date('Y-m-d', $this->date_parser->end_date) . '\',"%Y-%m-%d")
+                ';
+            }
         } else {
             if (!empty($this->search_query)) {
                 // Do a textual search.
