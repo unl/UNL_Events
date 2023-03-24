@@ -140,7 +140,7 @@ class Search extends EventListing implements RoutableInterface
                 $sql .= 'AND (
                     (event.title LIKE \'%'.self::escapeString($this->search_query).'%\') OR
                     (eventtype.name LIKE \'%'.self::escapeString($this->search_query).'%\') OR
-
+                    (audience.name LIKE \'%'.self::escapeString($this->search_query).'%\') OR
                     (event.description LIKE \'%'.self::escapeString($this->search_query).'%\') OR
                     (location.name LIKE \'%'.self::escapeString($this->search_query).'%\')
                 )';
