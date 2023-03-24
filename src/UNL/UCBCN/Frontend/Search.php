@@ -92,7 +92,7 @@ class Search extends EventListing implements RoutableInterface
         parent::__construct($options);
     }
 
-    protected function getParsedDates()
+    public function getParsedDates()
     {
         return json_encode(
             array(
@@ -126,7 +126,7 @@ class Search extends EventListing implements RoutableInterface
                     AND calendar_has_event.status IN ("posted", "archived")
                     AND  (';
 
-        if ($this->date_parser->parsed && false) {
+        if ($this->date_parser->parsed) {
             $sql .= '
                 IF (recurringdate.recurringdate IS NULL,
                     DATE_FORMAT(e.starttime, "%Y-%m-%d"),
