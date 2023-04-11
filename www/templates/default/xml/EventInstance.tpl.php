@@ -98,7 +98,7 @@
             <?php endif; ?>
         </WebPages>
         <?php
-        $webcasts = $context->event->getWebcasts();
+        $webcasts = $context->event->getWebcast();
         if ($webcasts->count()): ?>
         <Webcasts>
         	<?php foreach ($webcasts as $webcast) : ?>
