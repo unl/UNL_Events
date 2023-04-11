@@ -47,6 +47,12 @@ abstract class RecordList extends \LimitIterator implements \Countable
             $this->options['limit'] = -1;
         }
 
+        // Check if the offset is greater than the list itself
+        // If so do not use it
+        if ($this->options['offset'] >= count($list)) {
+            $this->options['offset'] = 0;
+        }
+
         parent::__construct($list, $this->options['offset'], $this->options['limit']);
     }
 

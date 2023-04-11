@@ -5,6 +5,7 @@ use UNL\UCBCN\Manager\EventForm as EventForm;
 use UNL\UCBCN as BaseUCBCN;
 use UNL\UCBCN\Event;
 use UNL\UCBCN\Event\EventType;
+use UNL\UCBCN\Event\Audience;
 use UNL\UCBCN\Event\Occurrence;
 
 class CreateEvent extends EventForm
@@ -147,6 +148,19 @@ class CreateEvent extends EventForm
         $event_has_type->eventtype_id = $post_data['type'];
 
         $event_has_type->insert();
+
+        // Insert the audience if it is set
+        $all_audiences = $this->getAudiences();
+        foreach ($all_audiences as $current_audience) {
+            $target_audience_id = 'target-audience-' . $current_audience->id;
+            if (isset($post_data[$target_audience_id]) && $post_data[$target_audience_id] === $current_audience->id) {
+                $event_targets_audience = new Audience;
+                $event_targets_audience->event_id = $this->event->id;
+                $event_targets_audience->audience_id = $post_data[$target_audience_id];
+
+                $event_targets_audience->insert();
+            }
+        }
 
         # add the event date time record
         $event_datetime = new Occurrence;

@@ -29,7 +29,8 @@ use UNL\UCBCN\RuntimeException;
  */
 class Day extends EventListing implements RoutableInterface
 {
-    private $isHomepage = FALSE;
+
+    private $isHomepage = false;
 
     /**
      * Constructor for an individual day.
@@ -47,7 +48,7 @@ class Day extends EventListing implements RoutableInterface
         }
 
         if (isset($options[0]) && !preg_match("/^\d{4}\/\d{1,2}\/\d{1,2}\/?/", $options[0])) {
-            $this->isHomepage = TRUE;
+            $this->isHomepage = true;
         }
 
         parent::__construct($options);
@@ -139,6 +140,11 @@ class Day extends EventListing implements RoutableInterface
         return $filteredResults;
     }
 
+    public function isHomepage()
+    {
+        return $this->isHomepage;
+    }
+
     private function isAllDayEvent(\DateTime $startDateTime, \DateTime $endDateTime) {
 
         //It must start at midnight to be an all day event
@@ -153,10 +159,6 @@ class Day extends EventListing implements RoutableInterface
         }
 
         return true;
-    }
-
-    public function isHomepage() {
-        return $this->isHomepage;
     }
 
     public function getDateTimeString($endOfDay = FALSE){

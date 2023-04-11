@@ -376,13 +376,17 @@
         .date-wrapper,
         .time-wrapper,
         .location,
+        .target-audience,
+        .event-type,
         .contact {
-          display: block;
+          display: grid;
+          grid-template-columns: auto 1fr;
+          column-gap: 0.3em;
           font-size: 0.84em;
-        }
 
-        .location div {
-          padding-left: 1.78em;
+          svg {
+            margin-top: 0.2em;
+          }
         }
 
         .description {

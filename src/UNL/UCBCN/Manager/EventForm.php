@@ -3,6 +3,7 @@ namespace UNL\UCBCN\Manager;
 
 use UNL\UCBCN\Calendar as CalendarModel;
 use UNL\UCBCN\Calendar\EventTypes;
+use UNL\UCBCN\Calendar\Audiences;
 use UNL\UCBCN\Permission;
 
 class EventForm extends PostHandler
@@ -33,7 +34,12 @@ class EventForm extends PostHandler
 
 	public function getEventTypes()
 	{
-		return new EventTypes(array());
+		return new EventTypes(array('order_name' => true));
+	}
+
+	public function getAudiences()
+	{
+		return new Audiences(array('order_name' => true));
 	}
 
 	protected function setEventData($post_data)

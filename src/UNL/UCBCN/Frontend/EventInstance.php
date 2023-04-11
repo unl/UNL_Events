@@ -280,7 +280,8 @@ class EventInstance implements RoutableInterface
         $timezoneDateTime = new \UNL\UCBCN\TimezoneDateTime($this->eventdatetime->timezone);
         $location   = $this->eventdatetime->getLocation();
         $eventTypes = $this->event->getEventTypes();
-        $webcast    = $this->eventdatetime->getWebcast();
+        $eventAudiences = $this->event->getAudiences();
+        $webcast   = $this->eventdatetime->getWebcast();
         $documents  = $this->event->getDocuments();
         $contacts   = $this->event->getPublicContacts();
         $originCalendar = $this->event->getOriginCalendar();
@@ -353,6 +354,19 @@ class EventInstance implements RoutableInterface
                         'EventTypeID'          => $type->id,
                         'EventTypeName'        => $type->name,
                         'EventTypeDescription' => $type->description,
+                    );
+                }
+            }
+        }
+
+        if ($eventAudiences->count()) {
+            $data['EventAudiences'] = array();
+            foreach ($eventAudiences as $targetAudience) {
+                $audience = $targetAudience->getAudience();
+                if ($audience) {
+                    $data['EventAudiences'][] = array(
+                        'EventAudienceID'          => $audience->id,
+                        'EventAudienceName'        => $audience->name
                     );
                 }
             }

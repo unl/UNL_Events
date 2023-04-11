@@ -102,7 +102,11 @@ class CreateCalendar extends PostHandler
             'account',
             'calendar',
             'events',
-            'event'
+            'event',
+            'audience',
+            'eventtype',
+            'images',
+            'phpMyAdmin'
         );
 
         # name and shortname are required

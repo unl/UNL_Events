@@ -177,6 +177,9 @@ require(['jquery', 'wdn'], function ($, WDN) {
             if ($('#start-date').val() == '') {
                 notifier.mark_input_invalid($('#start-date'));
             }
+            if ($('#type').find(':selected').val() == '') {
+                notifier.mark_input_invalid($('#type'));
+            }
             errors.push('<a href=\"#title\">Title</a>, and <a href=\"#start-date\">start date</a> are required.');
         }
 
