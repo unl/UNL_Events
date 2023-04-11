@@ -227,22 +227,28 @@
                         }
                         ?>
                     </td>
-                    <td class="dcf-txt-middle location with-controls">
-                        <?php $location = $datetime->getLocation(); ?>
-                        <?php if (isset($location) && !empty($location)): ?>
+                    <?php $location = $datetime->getLocation(); ?>
+                    <?php if (isset($location) && !empty($location)): ?>
+                        <td class="dcf-txt-middle location with-controls" data-id="<?php echo $location->id; ?>" data-microdata="<?php echo json_encode($location->microdata_check()); ?>">
                             <?php echo $location->name; ?>
-                        <?php else: ?>
+                        </td>
+                    <?php else: ?>
+                        <td class="dcf-txt-middle location with-controls" data-id="" data-microdata="false">
                             <?php echo "None"; ?>
-                        <?php endif;?>
-                    </td>
-                    <td class="dcf-txt-middle v_location with-controls">
-                        <?php $getWebcast = $datetime->getWebcast(); ?>
-                        <?php if (isset($getWebcast) && !empty($getWebcast)): ?>
+                        </td>
+                    <?php endif;?>
+
+                    <?php $getWebcast = $datetime->getWebcast(); ?>
+                    <?php if (isset($getWebcast) && !empty($getWebcast)): ?>
+                        <td class="dcf-txt-middle v_location with-controls" data-id="<?php echo $getWebcast->id; ?>" data-microdata="true">
                             <?php echo $getWebcast->title; ?>
-                        <?php else: ?>
+                        </td>
+                    <?php else: ?>
+                        <td class="dcf-txt-middle v_location with-controls" data-id="" data-microdata="false">
                             <?php echo "None"; ?>
-                        <?php endif;?>
-                    </td>
+                        </td>
+                    <?php endif;?>
+
                     <td class="dcf-pr-0 dcf-txt-middle controls">
                         <div class="dcf-d-flex dcf-ai-center dcf-jc-flex-end">
                             <a
