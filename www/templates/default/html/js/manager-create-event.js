@@ -170,7 +170,7 @@ require(['jquery', 'wdn'], function ($, WDN) {
         var errors = [];
 
         // validate required fields
-        if ($('#title').val() == '' || $('#start-date').val() == '') {
+        if ($('#title').val() == '' || $('#type').find(':selected').val() == '' || $('#start-date').val() == '') {
             if ($('#title').val() == '') {
                 notifier.mark_input_invalid($('#title'));
             }
@@ -180,7 +180,7 @@ require(['jquery', 'wdn'], function ($, WDN) {
             if ($('#type').find(':selected').val() == '') {
                 notifier.mark_input_invalid($('#type'));
             }
-            errors.push('<a href=\"#title\">Title</a>, and <a href=\"#start-date\">start date</a> are required.');
+            errors.push('<a href=\"#title\">Title</a>, <a href=\"#type\">Type</a>, and <a href=\"#start-date\">start date</a> are required.');
         }
 
         var start = new Date($('#start-date').val());
