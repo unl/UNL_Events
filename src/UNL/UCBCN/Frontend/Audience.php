@@ -213,13 +213,18 @@ class Audience extends EventListing implements RoutableInterface
      */
     public function getURL()
     {
-        $url = '/audience/';
+        $url = self::generateURL($this->calendar);
 
         if (!empty($this->search_query)) {
             $url .= '?q=' . urlencode($this->search_query);
         }
 
         return $url;
+    }
+
+    public static function generateURL(Calendar $calendar)
+    {
+        return $calendar->getURL() . 'audience/';
     }
 
     /**

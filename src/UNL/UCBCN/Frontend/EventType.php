@@ -212,13 +212,18 @@ class EventType extends EventListing implements RoutableInterface
      */
     public function getURL()
     {
-        $url = '/eventtype/';
+        $url = self::generateURL($this->calendar);
 
         if (!empty($this->search_query)) {
             $url .= '?q=' . urlencode($this->search_query);
         }
 
         return $url;
+    }
+
+    public static function generateURL(Calendar $calendar)
+    {
+        return $calendar->getURL() . 'eventtype/';
     }
 
     /**
