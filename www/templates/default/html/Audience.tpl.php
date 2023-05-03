@@ -19,7 +19,7 @@
                 <input type="hidden" name="offset" value="<?php echo $context->options['offset'] ?? ""; ?>">
             <?php endif; ?>
 
-            <fieldset>
+            <fieldset id="filter_audience" class="dcf-collapsible-fieldset">
                 <legend>Target Audiences</legend>
                 <?php foreach ($all_audiences as $single_audience) : ?>
                     <?php
@@ -49,19 +49,27 @@
 
         <script>
             const form = document.getElementById('audience_form');
-            const checkboxes = form.querySelectorAll('input[type="checkbox"]');
-            const hidden_query = document.getElementById('hidden_query');
+            const filter_audience = document.getElementById('filter_audience');
 
-            // Submit if select changes
-            checkboxes.forEach((input) => {
-                input.addEventListener('input', () => {
-                    const checkedCheckboxes = form.querySelectorAll('input[type="checkbox"]:checked');
-                    hidden_query.value = Array.from(checkedCheckboxes).map((checkbox) => checkbox.value).join(", ");
-                    if (checkedCheckboxes.length > 0) {
-                        form.submit();
-                    }
+            window.addEventListener('inlineJSReady', function() {
+                WDN.initializePlugin('collapsible-fieldsets');
+            }, false);
+            
+            filter_audience.addEventListener('ready', () => {
+                const checkboxes = filter_audience.querySelectorAll('input[type="checkbox"]');
+                const hidden_query = document.getElementById('hidden_query');
+
+                // Submit if select changes
+                checkboxes.forEach((input) => {
+                    input.addEventListener('input', () => {
+                        const checkedCheckboxes = form.querySelectorAll('input[type="checkbox"]:checked');
+                        hidden_query.value = Array.from(checkedCheckboxes).map((checkbox) => checkbox.value).join(", ");
+                        if (checkedCheckboxes.length > 0) {
+                            form.submit();
+                        }
+                    });
                 });
-            });
+            })
         </script>
     </section>
     <section id="updatecontent" class="day_cal dcf-col-100% dcf-col-67%-end@md">

@@ -19,7 +19,7 @@
                 <input type="hidden" name="offset" value="<?php echo $context->options['offset'] ?? ""; ?>">
             <?php endif; ?>
 
-            <fieldset>
+            <fieldset id="filter_event_types" class="dcf-collapsible-fieldset">
                 <legend>Event Types</legend>
                 <?php foreach ($all_eventtypes as $single_type) : ?>
                     <?php
@@ -49,17 +49,24 @@
 
         <script>
             const form = document.getElementById('eventtype_form');
-            const checkboxes = form.querySelectorAll('input[type="checkbox"]');
-            const hidden_query = document.getElementById('hidden_query');
+            const filter_event_types = document.getElementById('filter_event_types');
+            window.addEventListener('inlineJSReady', function() {
+                WDN.initializePlugin('collapsible-fieldsets');
+            }, false);
 
-            // Submit if select changes
-            checkboxes.forEach((input) => {
-                input.addEventListener('input', () => {
-                    const checkedCheckboxes = form.querySelectorAll('input[type="checkbox"]:checked');
-                    hidden_query.value = Array.from(checkedCheckboxes).map((checkbox) => checkbox.value).join(", ");
-                    if (checkedCheckboxes.length > 0) {
-                        form.submit();
-                    }
+            filter_event_types.addEventListener('ready', () => {
+                const checkboxes = filter_event_types.querySelectorAll('input[type="checkbox"]');
+                const hidden_query = document.getElementById('hidden_query');
+
+                // Submit if select changes
+                checkboxes.forEach((input) => {
+                    input.addEventListener('input', () => {
+                        const checkedCheckboxes = form.querySelectorAll('input[type="checkbox"]:checked');
+                        hidden_query.value = Array.from(checkedCheckboxes).map((checkbox) => checkbox.value).join(", ");
+                        if (checkedCheckboxes.length > 0) {
+                            form.submit();
+                        }
+                    });
                 });
             });
         </script>
