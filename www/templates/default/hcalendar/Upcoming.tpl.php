@@ -30,7 +30,9 @@
     </h1>
     <p class="dcf-txt-xs unl-font-sans unl-dark-gray">
         <span>
-            <?php if ($context->count() != 1): ?>
+            <?php if ($context->count() == 0): ?>
+                No Events Coming Up
+            <?php elseif ($context->count() != 1): ?>
                 Next <?php echo $context->count(); ?> events
             <?php else: ?>
                 Next event
