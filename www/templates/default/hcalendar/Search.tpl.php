@@ -47,12 +47,14 @@
     <?php endif; ?>
 
     <p class="dcf-txt-xs unl-font-sans unl-dark-gray">
-        <?php echo $context->count(); ?>
-
-        <?php if ($context->count() != 1): ?>
-            results from the calendar "<?php echo htmlentities($context->calendar->name); ?>" matching search query
+        <?php if ($context->count() == 0): ?>
+            No results from the calendar "<?php echo $context->calendar->name; ?>" matching search query
+        <?php elseif ($context->count() != 1): ?>
+            <?php echo $context->count(); ?>
+            results from the calendar "<?php echo $context->calendar->name; ?>" matching search query
         <?php else: ?>
-            results from the calendar "<?php echo htmlentities($context->calendar->name); ?>" matching search query
+            <?php echo $context->count(); ?>
+            results from the calendar "<?php echo $context->calendar->name; ?>" matching search query
         <?php endif; ?>
     </p>
 </div>
