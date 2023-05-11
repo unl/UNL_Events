@@ -61,7 +61,7 @@
     <fieldset id="filter_results" class="dcf-collapsible-fieldset">
         <legend>Filter Results</legend>
         <div class="dcf-form-group">
-            <label for="type">Type</label>
+            <label for="type">Event Type</label>
             <select class="dcf-w-100%" id="type" name="type">
                 <option
                     <?php if (empty($selected_type)) { echo $selected_html; } ?>
