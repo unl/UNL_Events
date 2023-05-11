@@ -58,7 +58,7 @@
     <?php if (!empty($query)): ?>
         <input type="hidden" name="q" value="<?php echo htmlentities($query); ?>"/>
     <?php endif;?>
-    <fieldset>
+    <fieldset id="filter_results" class="dcf-collapsible-fieldset">
         <legend>Filter Results</legend>
         <div class="dcf-form-group">
             <label for="type">Type</label>
@@ -147,23 +147,31 @@
 <?php
     $page->addScriptDeclaration("
         const form = document.querySelector('form#filter_form');
-        const filter_reset = form.querySelector('#filter_reset');
+        const filter_results = document.getElementById('filter_results');
+        
+        window.addEventListener('inlineJSReady', function() {
+            WDN.initializePlugin('collapsible-fieldsets');
+        }, false);
 
-        // Submit if select changes
-        form.querySelectorAll('select').forEach((input) => {
-            input.addEventListener('input', () => {
+        filter_results.addEventListener('ready', () => {
+            const filter_reset = form.querySelector('#filter_reset');
+
+            // Submit if select changes
+            form.querySelectorAll('select').forEach((input) => {
+                input.addEventListener('input', () => {
+                    form.submit();
+                });
+            });
+
+            // Set inputs to empty and submit if reset button is clicked
+            filter_reset.addEventListener('click', (e) => {
+                const type_select = form.querySelector('#type');
+                const type_audience = form.querySelector('#audience');
+
+                type_select.value = '';
+                type_audience.value = '';
+
                 form.submit();
             });
-        });
-
-        // Set inputs to empty and submit if reset button is clicked
-        filter_reset.addEventListener('click', (e) => {
-            const type_select = form.querySelector('#type');
-            const type_audience = form.querySelector('#audience');
-
-            type_select.value = '';
-            type_audience.value = '';
-
-            form.submit();
         });
     ");
