@@ -1,36 +1,38 @@
 <div id="results">
     <p class="dcf-txt-xs unl-font-sans unl-dark-gray">
-            <?php if ($context->isDateRange()): ?>
+        <?php if ($context->isDateRange()): ?>
+            <span class="dcf-bold">
                 Displaying Search for Date Range:
-                    <span class="dcf-bold">
-                        <?php echo date('F jS, Y', $context->getStartDate()); ?>
-                        <?php echo "-"; ?>
-                        <?php echo date('F jS, Y', $context->getEndDate()); ?>
-                    </span>
-            <?php elseif ($context->isSingleDate()): ?>
+                <?php echo date('F jS, Y', $context->getStartDate()); ?>
+                <?php echo "-"; ?>
+                <?php echo date('F jS, Y', $context->getEndDate()); ?>
+            </span>
+        <?php elseif ($context->isSingleDate()): ?>
+            <span class="dcf-bold">
                 Displaying Search for Date:
-                    <span class="dcf-bold">
-                        <?php echo date('F jS, Y', $context->getStartDate()); ?>
-                    </span>
-            <?php elseif (empty($context->search_query)): ?>
+                <?php echo date('F jS, Y', $context->getStartDate()); ?>
+            </span>
+        <?php elseif (empty($context->search_query)): ?>
+            <span class="dcf-bold">
                 Displaying Search:
-                    <span class="dcf-bold">
-                        Any Event
-                    </span>
-            <?php else: ?>
+                Any Event
+            </span>
+        <?php else: ?>
+            <span class="dcf-bold">
                 Displaying Search:
-                    <span class="dcf-bold">
-                        <?php echo htmlentities($context->search_query); ?>
-                    </span>
-            <?php endif; ?>
-        <?php if (!empty($context->search_event_type)): ?>
-            <span class='dcf-d-block'>
-                Filter Type: <?php echo htmlentities($context->search_event_type); ?>
+                <?php echo $context->search_query; ?>
             </span>
         <?php endif; ?>
+
+        <?php if (!empty($context->search_event_type)): ?>
+            <span class='dcf-d-block dcf-ml-2'>
+                Event Type: <?php echo $context->search_event_type; ?>
+            </span>
+        <?php endif; ?>
+
         <?php if (!empty($context->search_event_audience)): ?>
-            <span class='dcf-d-block'>
-                Filter Audience: <?php echo htmlentities($context->search_event_audience); ?>
+            <span class='dcf-d-block dcf-ml-2'>
+                Target Audience: <?php echo $context->search_event_audience; ?>
             </span>
         <?php endif; ?>
     </p>
