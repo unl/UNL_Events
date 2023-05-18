@@ -50,7 +50,7 @@ UNL\UCBCN::setTimezoneOptions(
 
 // CAS Auth Configuration
 UNL\UCBCN\Manager\Auth::$eventsAuthSessionName = 'DEV_EVENTS_AUTH_SESSION_NAME';
-UNL\UCBCN\Manager\Auth::$certPath = '/etc/pki/tls/cert.pem';
+UNL\UCBCN\Manager\Auth::$certPath = '/etc/pki/tls/cert.pem'; // Set this to false for local development
 UNL\UCBCN\Manager\Auth::$directory_url = 'https://directory.unl.edu/';
 
 // Site Notice
