@@ -63,7 +63,19 @@
     <h3>Your Calendars</h3>
     <div class="tools">
         <ul class="dcf-list-bare dcf-txt-sm">
-            <?php foreach ($context->getCalendars() as $calendar): ?>
+            <?php
+                $calendar_list = array();
+                foreach ($context->getCalendars() as $calendar) {
+                    $calendar_list[] = $calendar;
+                }
+
+                // sort so they are in alphabetical order
+                usort($calendar_list, function ($a, $b) {
+                    return strcmp($a->name, $b->name);
+                });
+            ?>
+
+            <?php foreach ($calendar_list as $calendar): ?>
                 <li>
                     <a class="dcf-txt-decor-hover" href="<?php echo $calendar->getManageURL() ?>"><?php echo $calendar->name ?></a>
                 </li>
