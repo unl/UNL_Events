@@ -71,7 +71,7 @@
 
                 // sort so they are in alphabetical order
                 usort($calendar_list, function ($a, $b) {
-                    return strcmp($a->name, $b->name);
+                    return strcasecmp($a->name, $b->name);
                 });
             ?>
 
