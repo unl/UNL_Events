@@ -24,7 +24,7 @@
             </span>
         <?php endif; ?>
 
-        <?php if (!empty($context->search_event_type)): ?>
+        <?php if (!empty($context->event_type_filter)): ?>
             <span class='dcf-d-block dcf-ml-2'>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" class="dcf-h-4 dcf-w-4 dcf-fill-current">
                     <path d="M29.9,15.7c0,0,0-0.1-0.1-0.2c-0.1-0.2-0.2-0.4-0.4-0.6l-7.2-7.2c-0.7-0.7-1.7-0.7-2.4,0c-0.7,0.7-0.7,1.7,0,2.4l4.4,4.3
@@ -35,11 +35,11 @@
                         <path fill="none" d="M0,0h30v30H0V0z"/>
                     </g>
                 </svg>
-                Event Type: <?php echo $context->search_event_type; ?>
+                Event Type: <?php echo $context->event_type_filter; ?>
             </span>
         <?php endif; ?>
 
-        <?php if (!empty($context->search_event_audience)): ?>
+        <?php if (!empty($context->audience_filter)): ?>
             <span class='dcf-d-block dcf-ml-2'>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" class="dcf-h-4 dcf-w-4 dcf-fill-current">
                     <path d="M29.9,15.7c0,0,0-0.1-0.1-0.2c-0.1-0.2-0.2-0.4-0.4-0.6l-7.2-7.2c-0.7-0.7-1.7-0.7-2.4,0c-0.7,0.7-0.7,1.7,0,2.4l4.4,4.3
@@ -50,7 +50,7 @@
                         <path fill="none" d="M0,0h30v30H0V0z"/>
                     </g>
                 </svg>
-                Target Audience: <?php echo $context->search_event_audience; ?>
+                Target Audience: <?php echo $context->audience_filter; ?>
             </span>
         <?php endif; ?>
     </p>

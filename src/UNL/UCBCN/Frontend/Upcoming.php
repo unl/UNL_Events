@@ -38,9 +38,6 @@ class Upcoming extends EventListing implements RoutableInterface
     public $calendar;
     private $isHomepage = false;
 
-    public $upcoming_event_type = '';
-    public $upcoming_event_audience = '';
-
     public $options = array(
             'limit'  => 10,
             'offset' => 0,
@@ -61,9 +58,6 @@ class Upcoming extends EventListing implements RoutableInterface
         $options['i'] = date('i');
         $options['s'] = date('s');
         $options['includeEventImageData'] = TRUE;
-
-        $this->upcoming_event_type = $options['type'] ?? "";
-        $this->upcoming_event_audience = $options['audience'] ?? "";
 
         if (isset($options[0]) && !preg_match("/^\d{4}\/\d{1,2}\/\d{1,2}\/?/", $options[0])) {
             $this->isHomepage = true;
@@ -156,14 +150,16 @@ class Upcoming extends EventListing implements RoutableInterface
                     )
                 ';
 
-         // Adds filter for event type
-         if (!empty($this->upcoming_event_type)) {
-            $sql .= ' AND ( eventtype.name = \'' . self::escapeString($this->upcoming_event_type) .'\')';
+        // Adds filters for target audience
+        if (!empty($this->event_type_filter)) {
+            $sql .= 'AND ';
+            $sql .= $this->getEventTypeSQL('eventtype');
         }
 
         // Adds filters for target audience
-        if (!empty($this->upcoming_event_audience)) {
-            $sql .= ' AND ( audience.name = \'' . self::escapeString($this->upcoming_event_audience) . '\')';
+        if (!empty($this->audience_filter)) {
+            $sql .= 'AND ';
+            $sql .= $this->getAudienceSQL('audience');
         }
 
         $sql .= '
@@ -188,7 +184,29 @@ class Upcoming extends EventListing implements RoutableInterface
      */
     public function getURL()
     {
-        return $this->generateURL($this->calendar);
+        $url_params = "";
+
+        if (!empty($this->event_type_filter)) {
+            if (empty($url)) {
+                $url_params .= "?";
+            } else {
+                $url_params .= "&";
+            }
+            $url_params .= $this->getEventTypeURLParam();
+        }
+
+        if (!empty($this->audience_filter)) {
+            if (empty($url)) {
+                $url_params .= "?";
+            } else {
+                $url_params .= "&";
+            }
+            $url_params .= $this->getAudienceURLParam();
+        }
+
+        $url = $this->generateURL($this->calendar);
+
+        return $url . $url_params;
     }
 
     public function isHomepage()

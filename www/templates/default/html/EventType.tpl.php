@@ -1,6 +1,6 @@
 <?php
     const CHECKED_INPUT = 'checked="checked"';
-    $query = strtolower($context->search_query ?? "");
+    $query = strtolower($context->event_type_filter ?? "");
 ?>
 <div class="dcf-grid dcf-col-gap-vw dcf-row-gap-6">
     <section class="dcf-col-100% dcf-col-33%-start@md">
@@ -11,7 +11,7 @@
         <form id="eventtype_form" class="dcf-form dcf-mt-5">
             <?php $all_eventtypes = $context->getEventTypes(); ?>
 
-            <input type="hidden" id="hidden_query" name="q" value="<?php echo $context->search_query ?? ""; ?>">
+            <input type="hidden" id="hidden_query" name="type" value="<?php echo $context->event_type_filter ?? ""; ?>">
             <?php if (isset($context->options['limit'])): ?>
                 <input type="hidden" name="limit" value="<?php echo $context->options['limit'] ?? ""; ?>">
             <?php endif; ?>

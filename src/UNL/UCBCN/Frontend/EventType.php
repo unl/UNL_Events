@@ -30,8 +30,6 @@ use UNL\UCBCN\Calendar\EventTypes;
  */
 class EventType extends EventListing implements RoutableInterface
 {
-    public $search_query = '';
-    public $search_event_audience = '';
     public $search_event_calendar = '';
     public $limit = 100;
     public $offset = 0;
@@ -49,15 +47,13 @@ class EventType extends EventListing implements RoutableInterface
      */
     public function __construct($options=array())
     {
-        if (empty($options['q'])) {
-            throw new UnexpectedValueException('Enter an event type to search for events.', 400);
-        }
-
-        // List of event types (comma separated)
-        $this->search_query = $options['q'] ?? "";
-
-        $this->search_event_audience = $options['audience'] ?? "";
+        // If calendar id is provided we will add that to the query
         $this->search_event_calendar = $options['calendar_id'] ?? "";
+
+        // backwards compatibility
+        if (empty($options['type']) && !empty($options['q'])) {
+            $options['type'] = $options['q'];
+        }
 
         $format_max_limit = $this->max_limit['default'];
         if (array_key_exists($options['format'], $this->max_limit)) {
@@ -109,25 +105,18 @@ class EventType extends EventListing implements RoutableInterface
                         e.endtime,
                         CONCAT(DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.endtime," %H:%i:%s"))
                     ) >= NOW()
-                )';
+                ) AND ( eventtype.name IS NOT NULL ) ';
 
-        // splits the event types by comma and creates the SQL for those
-        if (!empty($this->search_query)) {
-            $eventtype_explode = $this->getSplitEventtypes();
-
-            $sql .= ' AND (';
-            foreach ($eventtype_explode as $index => $eventtype_single) {
-                if ($index > 0) {
-                    $sql .= ' OR ';
-                }
-                $sql .= 'eventtype.name = \'' . self::escapeString($eventtype_single) . '\'';
-            }
-            $sql .= ') ';
+        // Adds filters for target audience
+        if (!empty($this->event_type_filter)) {
+            $sql .= 'AND ';
+            $sql .= $this->getEventTypeSQL('eventtype');
         }
 
-        // Adds any filters for target audience
-        if (!empty($this->search_event_audience)) {
-            $sql .= ' AND ( audience.name = \'' . self::escapeString($this->search_event_audience) .'\')';
+        // Adds filters for target audience
+        if (!empty($this->audience_filter)) {
+            $sql .= 'AND ';
+            $sql .= $this->getAudienceSQL('audience');
         }
 
         // Adds any filters for calendar id
@@ -151,43 +140,25 @@ class EventType extends EventListing implements RoutableInterface
     }
 
     /**
-     * Splits the search query by commas and trims whitespace from all the items
-     *
-     * @return string[]
-     */
-    public function getSplitEventtypes(): array
-    {
-        if (empty($this->search_query)) {
-            return array();
-        }
-
-        // splits the eventtypes by comma
-        $types_explode = explode(',', $this->search_query);
-        $types_explode = array_map('trim', $types_explode);
-
-        return $types_explode;
-    }
-
-    /**
      * Returns the count of the items in the query
-     * This is only here becuase savvy will mess up the array
+     * This is only here because savvy will mess up the array
      *
      * @return int
      */
     public function countQuery():int
     {
-        return count($this->getSplitEventtypes());
+        return count($this->getSplitEventType());
     }
 
     /**
-     * returns nicely formatted string of the eventtypess from the search query
+     * returns nicely formatted string of the event types from the search query
      *
      * @return string
      */
     public function getFormattedEventTypes()
     {
         $output_string = '';
-        $eventtype_explode = $this->getSplitEventtypes();
+        $eventtype_explode = $this->getSplitEventType();
         $last_index = count($eventtype_explode) - 1;
 
         foreach ($eventtype_explode as $index => $eventtype_single) {
@@ -212,11 +183,27 @@ class EventType extends EventListing implements RoutableInterface
      */
     public function getURL()
     {
-        $url = self::generateURL($this->calendar);
+        $url_params = "";
 
-        if (!empty($this->search_query)) {
-            $url .= '?q=' . urlencode($this->search_query);
+        if (!empty($this->event_type_filter)) {
+            if (empty($url_params)) {
+                $url_params .= "?";
+            } else {
+                $url_params .= "&";
+            }
+            $url_params .= $this->getEventTypeURLParam();
         }
+
+        if (!empty($this->audience_filter)) {
+            if (empty($url_params)) {
+                $url_params .= "?";
+            } else {
+                $url_params .= "&";
+            }
+            $url_params .= $this->getAudienceURLParam();
+        }
+
+        $url = self::generateURL($this->calendar);
 
         return $url;
     }

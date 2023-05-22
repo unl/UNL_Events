@@ -1,5 +1,7 @@
 <div id="results">
-    <?php if ($context->countQuery() > 1): ?>
+    <?php if(empty($context->event_type_filter)): ?>
+        <p class="dcf-txt-xs unl-font-sans unl-dark-gray">Displaying All Event Types
+    <?php elseif ($context->countQuery() > 1): ?>
         <p class="dcf-txt-xs unl-font-sans unl-dark-gray">Displaying Event Types:
     <?php else: ?>
         <p class="dcf-txt-xs unl-font-sans unl-dark-gray">Displaying Event Type:
