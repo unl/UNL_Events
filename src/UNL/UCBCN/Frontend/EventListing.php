@@ -2,6 +2,8 @@
 namespace UNL\UCBCN\Frontend;
 
 use UNL\UCBCN\ActiveRecord\RecordList;
+use UNL\UCBCN\Calendar\Audiences;
+use UNL\UCBCN\Calendar\EventTypes;
 
 class EventListing extends RecordList
 {
@@ -56,7 +58,15 @@ class EventListing extends RecordList
         }
     }
 
-    
+    /**
+     * Gets list of all event types
+     *
+     * @return bool|EventTypes - false if no event type, otherwise return recordList of all event types
+     */
+    public function getEventTypes()
+    {
+        return new EventTypes(array('order_name' => true));
+    }
 
     public function getSplitEventType(): array
     {
@@ -98,6 +108,17 @@ class EventListing extends RecordList
         }
 
         return $url;
+    }
+
+
+    /**
+     * Gets list of all audiences
+     *
+     * @return bool|Audiences - false if no audiences, otherwise return recordList of all audiences
+     */
+    public function getAudiences()
+    {
+        return new Audiences(array('order_name' => true));
     }
 
     public function getSplitAudiences(): array

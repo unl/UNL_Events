@@ -15,9 +15,6 @@
  */
 namespace UNL\UCBCN\Frontend;
 
-use UNL\UCBCN\Calendar\Audiences;
-use UNL\UCBCN\Calendar\EventTypes;
-
 /**
  * A list of upcoming events for a calendar.
  *
@@ -83,26 +80,6 @@ class Upcoming extends EventListing implements RoutableInterface
                 $this->options['y']
             )
         );
-    }
-
-    /**
-     * Gets list of all event types
-     *
-     * @return bool|EventTypes - false if no event type, otherwise return recordList of all event types
-     */
-    public function getEventTypes()
-    {
-        return new EventTypes(array('order_name' => true));
-    }
-
-    /**
-     * Gets list of all audiences
-     *
-     * @return bool|Audiences - false if no audiences, otherwise return recordList of all audiences
-     */
-    public function getAudiences()
-    {
-        return new Audiences(array('order_name' => true));
     }
 
 	/**

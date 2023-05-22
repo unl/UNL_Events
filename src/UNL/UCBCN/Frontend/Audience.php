@@ -14,8 +14,6 @@
  */
 namespace UNL\UCBCN\Frontend;
 
-use UNL\UCBCN\Calendar\Audiences;
-
 /**
  * Container for audience search results for the frontend.
  *
@@ -139,7 +137,6 @@ class Audience extends EventListing implements RoutableInterface
         return $sql;
     }
 
-
     /**
      * Returns the count of the items in the query
      * This is only here because savvy will mess up the array
@@ -214,15 +211,4 @@ class Audience extends EventListing implements RoutableInterface
     {
         return $calendar->getURL() . 'audience/';
     }
-
-    /**
-     * Gets list of all audiences
-     *
-     * @return bool|Audiences - false if no audiences, otherwise return recordList of all audiences
-     */
-    public function getAudiences()
-    {
-        return new Audiences(array('order_name' => true));
-    }
-
 }

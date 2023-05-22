@@ -14,8 +14,6 @@
  */
 namespace UNL\UCBCN\Frontend;
 
-use UNL\UCBCN\Calendar\EventTypes;
-
 /**
  * Container for event type search results for the frontend.
  *
@@ -212,15 +210,4 @@ class EventType extends EventListing implements RoutableInterface
     {
         return $calendar->getURL() . 'eventtype/';
     }
-
-    /**
-     * Gets list of all event types
-     *
-     * @return bool|EventTypes - false if no event type, otherwise return recordList of all event types
-     */
-    public function getEventTypes()
-    {
-        return new EventTypes(array('order_name' => true));
-    }
-
 }
