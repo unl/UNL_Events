@@ -35,7 +35,7 @@
 
     <hr class="dcf-mt-3 dcf-mb-5">
 
-    <fieldset id="audience_filter" class="dcf-collapsible-fieldset dcf-d-none"
+    <fieldset id="audience_filter" class="events-h-max-filter dcf-collapsible-fieldset dcf-d-none dcf-overflow-y-auto"
         <?php if (empty($selected_audience)): ?>
             data-start-expanded="false"
         <?php endif;?>
@@ -67,7 +67,7 @@
         <?php endforeach; ?>
     </fieldset>
 
-    <fieldset id="type_filter" class="dcf-collapsible-fieldset dcf-d-none"
+    <fieldset id="type_filter" class="events-h-max-filter dcf-collapsible-fieldset dcf-d-none dcf-overflow-y-auto"
         <?php if (empty($selected_type)): ?>
             data-start-expanded="false"
         <?php endif;?>
