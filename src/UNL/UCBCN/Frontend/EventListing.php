@@ -281,7 +281,7 @@ class EventListing extends RecordList
                 $output_string .= ' ';
             }
             if ($index === $last_index && $index > 0) {
-                $output_string .= 'and ';
+                $output_string .= 'or ';
             }
             $output_string .= ucwords($single_filter);
         }
