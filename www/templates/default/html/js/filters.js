@@ -23,7 +23,7 @@ audience_filter.addEventListener('ready', () => {
                 .filter((checkbox) => checkbox.checked)
                 .map((checkbox) => checkbox.value)
                 .join(', ');
-            cleanInputsAndSubmit();
+            cleanInputsAndSubmit().catch((err) => console.error(err));
         });
     });
 });
@@ -42,7 +42,7 @@ type_filter.addEventListener('ready', () => {
                 .filter((checkbox) => checkbox.checked)
                 .map((checkbox) => checkbox.value)
                 .join(', ');
-            cleanInputsAndSubmit();
+            cleanInputsAndSubmit().catch((err) => console.error(err));
         });
     });
 });
@@ -53,7 +53,7 @@ filter_reset.addEventListener('click', (e) => {
         checkbox.checked = false;
     });
 
-    cleanInputsAndSubmit();
+    cleanInputsAndSubmit().catch((err) => console.error(err));
 });
 
 
