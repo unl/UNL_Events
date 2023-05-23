@@ -1,28 +1,22 @@
 <div id="results">
     <p class="dcf-txt-xs unl-font-sans unl-dark-gray">
-        <?php if ($context->isDateRange()): ?>
-            <span class="dcf-bold">
+        <span class="dcf-bold">
+            <?php if ($context->isDateRange()): ?>
                 Displaying Search for Date Range:
                 <?php echo date('F jS, Y', $context->getStartDate()); ?>
                 <?php echo "-"; ?>
                 <?php echo date('F jS, Y', $context->getEndDate()); ?>
-            </span>
-        <?php elseif ($context->isSingleDate()): ?>
-            <span class="dcf-bold">
-                Displaying Search for Date:
-                <?php echo date('F jS, Y', $context->getStartDate()); ?>
-            </span>
-        <?php elseif (empty($context->search_query)): ?>
-            <span class="dcf-bold">
-                Displaying Search:
-                Any Event
-            </span>
-        <?php else: ?>
-            <span class="dcf-bold">
-                Displaying Search:
-                <?php echo $context->search_query; ?>
-            </span>
-        <?php endif; ?>
+            <?php elseif ($context->isSingleDate()): ?>
+                    Displaying Search for Date:
+                    <?php echo date('F jS, Y', $context->getStartDate()); ?>
+            <?php elseif (empty($context->search_query)): ?>
+                    Displaying Search:
+                    Any Event
+            <?php else: ?>
+                    Displaying Search:
+                    <?php echo $context->search_query; ?>
+            <?php endif; ?>
+        </span>
 
         <?php if (!empty($context->event_type_filter)): ?>
             <span class='dcf-d-block dcf-ml-2'>

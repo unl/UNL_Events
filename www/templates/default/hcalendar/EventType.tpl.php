@@ -1,14 +1,16 @@
 <div id="results">
     <p class="dcf-txt-xs unl-dark-gray">
-        <?php if(empty($context->event_type_filter)): ?>
-            Displaying All Event Types
-        <?php elseif ($context->getEventTypeCount() > 1): ?>
-            Displaying Event Types:
-            <span><?php echo $context->getFormattedEventTypes(); ?></span>
-        <?php else: ?>
-            Displaying Event Type:
-            <span><?php echo $context->getFormattedEventTypes(); ?></span>
-        <?php endif; ?>
+        <span class="dcf-bold">
+            <?php if(empty($context->event_type_filter)): ?>
+                Displaying Any Event Types
+            <?php elseif ($context->getEventTypeCount() > 1): ?>
+                Displaying Event Types:
+                <?php echo $context->getFormattedEventTypes(); ?>
+            <?php else: ?>
+                Displaying Event Type:
+                <?php echo $context->getFormattedEventTypes(); ?>
+            <?php endif; ?>
+        </span>
         <?php if (!empty($context->audience_filter)): ?>
             <span class='dcf-d-block dcf-ml-2'>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" class="dcf-h-4 dcf-w-4 dcf-fill-current">

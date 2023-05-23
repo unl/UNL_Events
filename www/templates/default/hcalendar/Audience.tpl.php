@@ -1,14 +1,16 @@
 <div id="results">
     <p class="dcf-txt-xs unl-dark-gray">
-        <?php if(empty($context->audience_filter)): ?>
-            Displaying All Audiences
-        <?php elseif ($context->getAudienceCount() > 1): ?>
-            Displaying Audiences:
-            <span><?php echo $context->getFormattedAudiences(); ?></span>
-        <?php else: ?>
-            Displaying Audience:
-            <span><?php echo $context->getFormattedAudiences(); ?></span>
-        <?php endif; ?>
+        <span class="dcf-bold">
+            <?php if(empty($context->audience_filter)): ?>
+                Displaying Any Audiences
+            <?php elseif ($context->getAudienceCount() > 1): ?>
+                Displaying Audiences:
+                <?php echo $context->getFormattedAudiences(); ?>
+            <?php else: ?>
+                Displaying Audience:
+                <?php echo $context->getFormattedAudiences(); ?>
+            <?php endif; ?>
+        </span>
         <?php if (!empty($context->event_type_filter)): ?>
             <span class='dcf-d-block dcf-ml-2'>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" class="dcf-h-4 dcf-w-4 dcf-fill-current">
