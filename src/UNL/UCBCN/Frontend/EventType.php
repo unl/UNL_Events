@@ -138,43 +138,6 @@ class EventType extends EventListing implements RoutableInterface
     }
 
     /**
-     * Returns the count of the items in the query
-     * This is only here because savvy will mess up the array
-     *
-     * @return int
-     */
-    public function countQuery():int
-    {
-        return count($this->getSplitEventType());
-    }
-
-    /**
-     * returns nicely formatted string of the event types from the search query
-     *
-     * @return string
-     */
-    public function getFormattedEventTypes()
-    {
-        $output_string = '';
-        $eventtype_explode = $this->getSplitEventType();
-        $last_index = count($eventtype_explode) - 1;
-
-        foreach ($eventtype_explode as $index => $eventtype_single) {
-            if ($index > 0 && $last_index >= 2) {
-                $output_string .= ', ';
-            } elseif ($index > 0) {
-                $output_string .= ' ';
-            }
-            if ($index === $last_index && $index > 0) {
-                $output_string .= 'and ';
-            }
-            $output_string .= ucwords($eventtype_single);
-        }
-
-        return $output_string;
-    }
-
-    /**
      * returns the url to this eventtype page.
      *
      * @return string
@@ -184,21 +147,11 @@ class EventType extends EventListing implements RoutableInterface
         $url_params = "";
 
         if (!empty($this->event_type_filter)) {
-            if (empty($url_params)) {
-                $url_params .= "?";
-            } else {
-                $url_params .= "&";
-            }
-            $url_params .= $this->getEventTypeURLParam();
+            $url_params .= $this->getEventTypeURLParam($url_params);
         }
 
         if (!empty($this->audience_filter)) {
-            if (empty($url_params)) {
-                $url_params .= "?";
-            } else {
-                $url_params .= "&";
-            }
-            $url_params .= $this->getAudienceURLParam();
+            $url_params .= $this->getAudienceURLParam($url_params);
         }
 
         $url = self::generateURL($this->calendar);

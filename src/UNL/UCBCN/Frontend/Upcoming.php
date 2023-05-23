@@ -164,21 +164,11 @@ class Upcoming extends EventListing implements RoutableInterface
         $url_params = "";
 
         if (!empty($this->event_type_filter)) {
-            if (empty($url_params)) {
-                $url_params .= "?";
-            } else {
-                $url_params .= "&";
-            }
-            $url_params .= $this->getEventTypeURLParam();
+            $url_params .= $this->getEventTypeURLParam($url_params);
         }
 
         if (!empty($this->audience_filter)) {
-            if (empty($url_params)) {
-                $url_params .= "?";
-            } else {
-                $url_params .= "&";
-            }
-            $url_params .= $this->getAudienceURLParam();
+            $url_params .= $this->getAudienceURLParam($url_params);
         }
 
         $url = $this->generateURL($this->calendar);

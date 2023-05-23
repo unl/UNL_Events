@@ -14,7 +14,7 @@
                         <path fill="none" d="M0,0h30v30H0V0z"/>
                     </g>
                 </svg>
-                Event Type: <?php echo $context->event_type_filter; ?>
+                Event Type: <?php echo $context->getFormattedEventTypes(); ?>
             </span>
         <?php endif; ?>
         <?php if (!empty($context->audience_filter)): ?>
@@ -28,7 +28,7 @@
                         <path fill="none" d="M0,0h30v30H0V0z"/>
                     </g>
                 </svg>
-                Target Audience: <?php echo $context->audience_filter; ?>
+                Target Audience: <?php echo $context->getFormattedAudiences(); ?>
             </span>
         <?php endif; ?>
     </p>
