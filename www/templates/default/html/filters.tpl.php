@@ -8,9 +8,24 @@
 ?>
 
 <form id="filter_form" class="dcf-form dcf-mt-5">
-    <input type="hidden" id="filter_hidden_q" name="q" value="<?php echo htmlentities($query); ?>"/>
-    <input type="hidden" id="filter_hidden_audience" name="audience" value="<?php echo htmlentities($selected_audience); ?>"/>
-    <input type="hidden" id="filter_hidden_type" name="type" value="<?php echo htmlentities($selected_type); ?>"/>
+    <input
+        type="hidden"
+        id="filter_hidden_q"
+        name="q"
+        value="<?php echo htmlentities($query); ?>"
+    />
+    <input
+        type="hidden"
+        id="filter_hidden_audience"
+        name="audience"
+        value="<?php echo htmlentities($selected_audience); ?>"
+    />
+    <input
+        type="hidden"
+        id="filter_hidden_type"
+        name="type"
+        value="<?php echo htmlentities($selected_type); ?>"
+    />
     <div class="dcf-d-flex dcf-flex-nowrap dcf-flex-row dcf-jc-between dcf-ai-center">
         <p class="dcf-mb-0 dcf-txt-lg">Filter Results</p>
         <button id="filter_reset" class="dcf-btn dcf-btn-secondary" type="button">

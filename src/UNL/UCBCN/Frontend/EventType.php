@@ -156,7 +156,7 @@ class EventType extends EventListing implements RoutableInterface
 
         $url = self::generateURL($this->calendar);
 
-        return $url;
+        return $url . $url_params;
     }
 
     public static function generateURL(Calendar $calendar)

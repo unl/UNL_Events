@@ -222,7 +222,7 @@ class Search extends EventListing implements RoutableInterface
     {
         $url_params = "";
 
-        if ( isset($this->search_query)) {
+        if (isset($this->search_query)) {
             $url_params .= '?q=' . urlencode($this->search_query);
         }
 

@@ -18,26 +18,26 @@ if (empty($timezoneDisplay) || empty($timezoneDisplay->getTimezone())) {
     <span class="dcf-sr-only">Date:</span>
     <div>
         <?php if (!empty($starttime)): ?>
-            <time 
-                class="dtstart" 
+            <time
+                class="dtstart"
                 datetime="<?php echo $timezoneDisplay->format($starttime, $context->eventdatetime->timezone, 'c') ?>"
             >
-                <?php if ($timezoneDisplay->format($starttime, $context->eventdatetime->timezone,'M') === "May"): ?>
-                    <?php echo $timezoneDisplay->format($starttime, $context->eventdatetime->timezone,'M j, Y') ?>
+                <?php if ($timezoneDisplay->format($starttime, $context->eventdatetime->timezone, 'M') === "May"): ?>
+                    <?php echo $timezoneDisplay->format($starttime, $context->eventdatetime->timezone, 'M j, Y') ?>
                 <?php else: ?>
-                    <?php echo $timezoneDisplay->format($starttime, $context->eventdatetime->timezone,'M. j, Y') ?>
+                    <?php echo $timezoneDisplay->format($starttime, $context->eventdatetime->timezone, 'M. j, Y') ?>
                 <?php endif; ?>
             </time>
         <?php endif; ?>
         <?php if (!empty($endtime) && $context->isOngoing()): ?>
             &ndash; <time
-                class="dtend" 
-                datetime="<?php echo $timezoneDisplay->format($endtime, $context->eventdatetime->timezone,'c') ?>"
+                class="dtend"
+                datetime="<?php echo $timezoneDisplay->format($endtime, $context->eventdatetime->timezone, 'c') ?>"
             >
-                <?php if ($timezoneDisplay->format($endtime, $context->eventdatetime->timezone,'M') === "May"): ?>
-                    <?php echo $timezoneDisplay->format($endtime, $context->eventdatetime->timezone,'M j, Y') ?>
+                <?php if ($timezoneDisplay->format($endtime, $context->eventdatetime->timezone, 'M') === "May"): ?>
+                    <?php echo $timezoneDisplay->format($endtime, $context->eventdatetime->timezone, 'M j, Y') ?>
                 <?php else: ?>
-                    <?php echo $timezoneDisplay->format($endtime, $context->eventdatetime->timezone,'M. j, Y') ?>
+                    <?php echo $timezoneDisplay->format($endtime, $context->eventdatetime->timezone, 'M. j, Y') ?>
                 <?php endif; ?>
             </time>
         <?php endif; ?>
