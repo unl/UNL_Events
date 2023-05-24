@@ -1,4 +1,5 @@
 <?php
+$locationRoom = isset($location->room) ? $location->room : '';
 $room = !empty($context->eventdatetime->room) ? $context->eventdatetime->room : $locationRoom;
 ?>
 
