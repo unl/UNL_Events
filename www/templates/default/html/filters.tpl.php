@@ -28,7 +28,7 @@
     />
     <div class="dcf-d-flex dcf-flex-nowrap dcf-flex-row dcf-jc-between dcf-ai-center">
         <p class="dcf-mb-0 dcf-txt-lg">Filter Results</p>
-        <button id="filter_reset" class="dcf-btn dcf-btn-secondary" type="button">
+        <button id="filter_reset" class="dcf-btn dcf-btn-tertiary" type="button">
             Clear
         </button>
     </div>

@@ -9,6 +9,11 @@ const filter_hidden_q = document.getElementById('filter_hidden_q');
 const filter_hidden_audience = document.getElementById('filter_hidden_audience');
 const filter_hidden_type = document.getElementById('filter_hidden_type');
 
+// Amount of time to sleep before fetching new events
+// This helps user experience since they can ready and see the loading info
+// If we did not have this people might think they are missing something
+let filter_fetch_sleep_time = 500;
+
 // Once the collapsible fieldset loads set up event listeners
 audience_filter.addEventListener('ready', () => {
     // This is to prevent weird transition when page loads
@@ -72,6 +77,7 @@ async function cleanInputsAndSubmit() {
     // Might be worth doing some sort of fall back to regular form submit on error
     try {
         set_loading();
+        await sleep(filter_fetch_sleep_time);
         const new_state = get_new_state();
         const new_dom = await fetch_new_events(new_state);
         update_events(new_dom);
@@ -191,4 +197,15 @@ function set_error() {
         throw new Error('Missing Error Content Template');
     }
     document.getElementById('updatecontent').innerHTML = error_template.innerHTML;
+}
+
+/**
+ * Sleeps for any amount of time
+ * - Best to use as `await sleep(50);`
+ * 
+ * @param {number} ms Number of milliseconds to sleep 
+ * @returns {Promise<void>}
+ */
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
