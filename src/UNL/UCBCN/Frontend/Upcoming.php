@@ -15,9 +15,6 @@
  */
 namespace UNL\UCBCN\Frontend;
 
-use UNL\UCBCN\Calendar\Audiences;
-use UNL\UCBCN\Calendar\EventTypes;
-
 /**
  * A list of upcoming events for a calendar.
  *
@@ -37,9 +34,6 @@ class Upcoming extends EventListing implements RoutableInterface
      */
     public $calendar;
     private $isHomepage = false;
-
-    public $upcoming_event_type = '';
-    public $upcoming_event_audience = '';
 
     public $options = array(
             'limit'  => 10,
@@ -61,9 +55,6 @@ class Upcoming extends EventListing implements RoutableInterface
         $options['i'] = date('i');
         $options['s'] = date('s');
         $options['includeEventImageData'] = TRUE;
-
-        $this->upcoming_event_type = $options['type'] ?? "";
-        $this->upcoming_event_audience = $options['audience'] ?? "";
 
         if (isset($options[0]) && !preg_match("/^\d{4}\/\d{1,2}\/\d{1,2}\/?/", $options[0])) {
             $this->isHomepage = true;
@@ -89,26 +80,6 @@ class Upcoming extends EventListing implements RoutableInterface
                 $this->options['y']
             )
         );
-    }
-
-    /**
-     * Gets list of all event types
-     *
-     * @return bool|EventTypes - false if no event type, otherwise return recordList of all event types
-     */
-    public function getEventTypes()
-    {
-        return new EventTypes(array('order_name' => true));
-    }
-
-    /**
-     * Gets list of all audiences
-     *
-     * @return bool|Audiences - false if no audiences, otherwise return recordList of all audiences
-     */
-    public function getAudiences()
-    {
-        return new Audiences(array('order_name' => true));
     }
 
 	/**
@@ -156,14 +127,16 @@ class Upcoming extends EventListing implements RoutableInterface
                     )
                 ';
 
-         // Adds filter for event type
-         if (!empty($this->upcoming_event_type)) {
-            $sql .= ' AND ( eventtype.name = \'' . self::escapeString($this->upcoming_event_type) .'\')';
+        // Adds filters for target audience
+        if (!empty($this->event_type_filter)) {
+            $sql .= 'AND ';
+            $sql .= $this->getEventTypeSQL('eventtype');
         }
 
         // Adds filters for target audience
-        if (!empty($this->upcoming_event_audience)) {
-            $sql .= ' AND ( audience.name = \'' . self::escapeString($this->upcoming_event_audience) . '\')';
+        if (!empty($this->audience_filter)) {
+            $sql .= 'AND ';
+            $sql .= $this->getAudienceSQL('audience');
         }
 
         $sql .= '
@@ -188,7 +161,19 @@ class Upcoming extends EventListing implements RoutableInterface
      */
     public function getURL()
     {
-        return $this->generateURL($this->calendar);
+        $url_params = "";
+
+        if (!empty($this->event_type_filter)) {
+            $url_params .= $this->getEventTypeURLParam($url_params);
+        }
+
+        if (!empty($this->audience_filter)) {
+            $url_params .= $this->getAudienceURLParam($url_params);
+        }
+
+        $url = $this->generateURL($this->calendar);
+
+        return $url . $url_params;
     }
 
     public function isHomepage()

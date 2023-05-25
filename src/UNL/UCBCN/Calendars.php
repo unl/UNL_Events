@@ -7,10 +7,10 @@ use UNL\UCBCN\Calendar\Event as CalendarHasEvent;
 
 /**
  * Object related to a list of calendars.
- * 
+ *
  * PHP version 5
- * 
- * @category  Events 
+ *
+ * @category  Events
  * @package   UNL_UCBCN
  * @author    Tyler Lemburg <trlemburg@gmail.com>
  * @copyright 2015 Regents of the University of Nebraska
@@ -34,7 +34,9 @@ class Calendars extends RecordList
                 SELECT DISTINCT id FROM (SELECT calendar.id, calendar.name FROM calendar
                 INNER JOIN user_has_permission ON calendar.id = user_has_permission.calendar_id
                 INNER JOIN user ON user_has_permission.user_uid = user.uid
-                WHERE user.uid = "' . self::escapeString($this->options['user_id']) . '" ORDER BY calendar.name) as distinctfilter';
+                WHERE user.uid = "' .
+                self::escapeString($this->options['user_id']) .
+                '") as distinctfilter ORDER BY name';
             return $sql;
         } else if (array_key_exists('subscription_id', $this->options)) {
             # get all calendars that are subscribed with a certain subscription
@@ -46,7 +48,9 @@ class Calendars extends RecordList
             # get all calendars that allow recommendations within the given account
             $sql = '
                 SELECT id FROM calendar
-                WHERE account_id = ' . (int)$this->options['recommendable_within_account_id'] . ' AND recommendationswithinaccount = 1;';
+                WHERE account_id = ' .
+                (int)$this->options['recommendable_within_account_id'] .
+                ' AND recommendationswithinaccount = 1;';
             return $sql;
         } else if (array_key_exists('recommend_permissions_for_user_uid', $this->options)) {
             # get all calendars where the user has event post or event send to pending permissions
@@ -55,11 +59,15 @@ class Calendars extends RecordList
                 INNER JOIN user_has_permission ON calendar.id = user_has_permission.calendar_id
                 INNER JOIN permission ON user_has_permission.permission_id = permission.id
                 WHERE (permission.name = "Event Post" OR permission.name = "Event Send Event to Pending Queue")
-                AND user_has_permission.user_uid = "' . self::escapeString($this->options['recommend_permissions_for_user_uid']) . '";';
+                AND user_has_permission.user_uid = "' .
+                self::escapeString($this->options['recommend_permissions_for_user_uid']) .
+                '";';
             return $sql;
         } else if (array_key_exists('original_calendars_for_event_id', $this->options)) {
             $sql = 'SELECT DISTINCT calendar_id FROM calendar_has_event
-                    WHERE (source = "' . CalendarHasEvent::SOURCE_CREATE_EVENT_FORM . '" OR source = "' . CalendarHasEvent::SOURCE_CHECKED_CONSIDER_EVENT . '")
+                    WHERE (source = "' .
+                    CalendarHasEvent::SOURCE_CREATE_EVENT_FORM .
+                    '" OR source = "' . CalendarHasEvent::SOURCE_CHECKED_CONSIDER_EVENT . '")
                     AND event_id = ' . (int)$this->options['original_calendars_for_event_id'] . ';';
             return $sql;
         } else if (array_key_exists('has_event_activity_since', $this->options)) {

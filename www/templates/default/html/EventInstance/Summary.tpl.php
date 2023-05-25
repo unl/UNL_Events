@@ -9,7 +9,7 @@
         <small class="dcf-badge dcf-badge-roundrect dcf-mb-4">
             <a
                 class="dcf-txt-decor-hover"
-                href="<?php echo $frontend->getEventTypeURL() . '?q=' . $event_event_type->name; ?>"
+                href="<?php echo $frontend->getEventTypeURL() . '?type=' . $event_event_type->name; ?>"
                 style="color: inherit;"
             >
                 <?php echo $event_event_type->name; ?>
