@@ -210,6 +210,4 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-window.addEventListener('inlineJSReady', function() {
-    WDN.initializePlugin('collapsible-fieldsets');
-}, false);
+WDN.initializePlugin('collapsible-fieldsets');
