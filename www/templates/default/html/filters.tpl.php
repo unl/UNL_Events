@@ -35,68 +35,72 @@
 
     <hr class="dcf-mt-3 dcf-mb-5">
 
-    <fieldset id="audience_filter" class="events-h-max-filter dcf-collapsible-fieldset dcf-d-none dcf-overflow-y-auto"
+    <fieldset id="audience_filter" class="dcf-collapsible-fieldset dcf-d-none"
         <?php if (empty($selected_audience)): ?>
             data-start-expanded="false"
         <?php endif;?>
     >
         <legend>Target Audience</legend>
-        <?php foreach ($context->getAudiences() as $single_audience): ?>
-            <?php
-                $target_audience_id = 'audience_filter_' . $single_audience->id;
-                $splitQuery = explode(',', strtolower($selected_audience));
-                $splitQuery = array_map('trim', $splitQuery);
-                $in_query = in_array(strtolower($single_audience->name), $splitQuery);
-            ?>
-            <div class="dcf-input-checkbox">
-                <input
-                    id="<?php echo $target_audience_id; ?>"
-                    class="audience_filter_checkbox"
-                    type="checkbox"
-                    value="<?php echo $single_audience->name; ?>"
-                    <?php
-                        if ($in_query !== false) {
-                            echo CHECKED_INPUT;
-                        }
-                    ?>
-                >
-                <label for="<?php echo $target_audience_id; ?>">
-                    <?php echo $single_audience->name; ?>
-                </label>
-            </div>
-        <?php endforeach; ?>
+        <div class="events-h-max-filter dcf-overflow-y-auto">
+            <?php foreach ($context->getAudiences() as $single_audience): ?>
+                <?php
+                    $target_audience_id = 'audience_filter_' . $single_audience->id;
+                    $splitQuery = explode(',', strtolower($selected_audience));
+                    $splitQuery = array_map('trim', $splitQuery);
+                    $in_query = in_array(strtolower($single_audience->name), $splitQuery);
+                ?>
+                <div class="dcf-input-checkbox">
+                    <input
+                        id="<?php echo $target_audience_id; ?>"
+                        class="audience_filter_checkbox"
+                        type="checkbox"
+                        value="<?php echo $single_audience->name; ?>"
+                        <?php
+                            if ($in_query !== false) {
+                                echo CHECKED_INPUT;
+                            }
+                        ?>
+                    >
+                    <label for="<?php echo $target_audience_id; ?>">
+                        <?php echo $single_audience->name; ?>
+                    </label>
+                </div>
+            <?php endforeach; ?>
+        </div>
     </fieldset>
 
-    <fieldset id="type_filter" class="events-h-max-filter dcf-collapsible-fieldset dcf-d-none dcf-overflow-y-auto"
+    <fieldset id="type_filter" class="dcf-collapsible-fieldset dcf-d-none"
         <?php if (empty($selected_type)): ?>
             data-start-expanded="false"
         <?php endif;?>
     >
         <legend>Event Type</legend>
-        <?php foreach ($context->getEventTypes() as $single_event_type): ?>
-            <?php
-                $event_type_id = 'event_type_filter_' . $single_event_type->id;
-                $splitQuery = explode(',', strtolower($selected_type));
-                $splitQuery = array_map('trim', $splitQuery);
-                $in_query = in_array(strtolower($single_event_type->name), $splitQuery);
-            ?>
-            <div class="dcf-input-checkbox">
-                <input
-                    id="<?php echo $event_type_id; ?>"
-                    class="type_filter_checkbox"
-                    type="checkbox"
-                    value="<?php echo $single_event_type->name; ?>"
-                    <?php
-                        if ($in_query !== false) {
-                            echo CHECKED_INPUT;
-                        }
-                    ?>
-                >
-                <label for="<?php echo $event_type_id; ?>">
-                    <?php echo $single_event_type->name; ?>
-                </label>
-            </div>
-        <?php endforeach; ?>
+        <div class="events-h-max-filter dcf-overflow-y-auto">
+            <?php foreach ($context->getEventTypes() as $single_event_type): ?>
+                <?php
+                    $event_type_id = 'event_type_filter_' . $single_event_type->id;
+                    $splitQuery = explode(',', strtolower($selected_type));
+                    $splitQuery = array_map('trim', $splitQuery);
+                    $in_query = in_array(strtolower($single_event_type->name), $splitQuery);
+                ?>
+                <div class="dcf-input-checkbox">
+                    <input
+                        id="<?php echo $event_type_id; ?>"
+                        class="type_filter_checkbox"
+                        type="checkbox"
+                        value="<?php echo $single_event_type->name; ?>"
+                        <?php
+                            if ($in_query !== false) {
+                                echo CHECKED_INPUT;
+                            }
+                        ?>
+                    >
+                    <label for="<?php echo $event_type_id; ?>">
+                        <?php echo $single_event_type->name; ?>
+                    </label>
+                </div>
+            <?php endforeach; ?>
+        </div>
     </fieldset>
 </form>
 
