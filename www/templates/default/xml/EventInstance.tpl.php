@@ -112,34 +112,19 @@
             </WebPage>
             <?php endif; ?>
         </WebPages>
-        <?php
-        $webcasts = $context->event->getWebcast();
-        if ($webcasts->count()): ?>
         <Webcasts>
-        	<?php foreach ($webcasts as $webcast) : ?>
+        <?php
+            if (isset($context->eventdatetime->webcast_id) && !empty($context->eventdatetime->webcast_id)) :
+                $webcast = $context->eventdatetime->getWebcast();
+            ?>
             <Webcast>
-                <Title><?php echo htmlspecialchars($webcast->title); ?></Title>
-                <WebcastStatus><?php echo $webcast->status; ?></WebcastStatus>
-                <DateAvailable><?php echo date('Y-m-d',strtotime($webcast->dateavailable)); ?></DateAvailable>
-                <PlayerType><?php echo $webcast->playertype; ?></PlayerType>
-                <Bandwidth><?php echo $webcast->bandwidth; ?></Bandwidth>
-                <?php
-                $webcastLinks = $webcast->getLinks();
-                if ($webcastLinks->count()) : ?>
-                <WebcastURLs>
-                	<?php foreach ($webcastLinks as $webcastlink) : ?>
-                    <WebcastURL>
-                        <URL><?php echo $webcastLink->url; ?></URL>
-                        <SequenceNumber><?php echo $webcastLink->sequencenumber; ?></SequenceNumber>
-                    </WebcastURL>
-                    <?php endforeach; ?>
-                </WebcastURLs>
-                <?php endif; ?>
-                <WebcastAdditionalInfo><?php echo htmlspecialchars($webcast->additionalinfo); ?></WebcastAdditionalInfo>
+                <WebcastID><?php echo $webcast->id; ?></WebcastID>
+                <WebcastName><?php echo htmlspecialchars($webcast->title); ?></WebcastName>
+                <WebcastURL><?php echo htmlspecialchars($webcast->url); ?></WebcastURL>
+                <AdditionalPublicInfo><?php echo htmlspecialchars($webcast->additionalinfo); ?></AdditionalPublicInfo>
             </Webcast>
-            <?php endforeach; ?>
+            <?php endif; ?>
         </Webcasts>
-        <?php endif; ?>
         <?php if (!empty($context->event->imagedata)) : ?>
         <Images>
             <Image>

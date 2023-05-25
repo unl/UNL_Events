@@ -385,30 +385,15 @@ class EventInstance implements RoutableInterface
             );
         }
 
-        // if ($webcasts->count()) {
-        //     $data['Webcasts'] = array();
-        //     foreach ($webcasts as $webcast) {
-        //         $webcast_data = array();
-        //         $webcast_data['Title']         = $webcast->title;
-        //         $webcast_data['WebcastStatus'] = $webcast->status;
-        //         $webcast_data['DateAvailable'] = date('Y-m-d',strtotime($webcast->dateavailable));
-        //         $webcast_data['PlayerType']    = $webcast->playertype;
-        //         $webcast_data['Bandwidth']     = $webcast->bandwidth;
-
-        //         $webcastLinks = $webcast->getLinks();
-        //         if ($webcastLinks->count()) {
-        //             $webcast_data['WebcastURLs'] = array();
-        //             foreach ($webcastLinks as $webcastLink) {
-        //                 $linkURL = array(
-        //                     'URL'            => $webcastLink->url,
-        //                     'SequenceNumber' => $webcastLink->sequencenumber,
-        //                 );
-        //                 $webcast_data['WebcastURLs'][] = $linkURL;
-        //             }
-        //         }
-        //         $data['Webcasts'][] = $webcast_data;
-        //     }
-        // }
+        $data['Webcasts'] = array();
+        if (isset($webcast) && !empty($webcast)) {
+            $data['Webcasts'][0] = array(
+                'LocationID'    => $webcast->id,
+                'LocationName'  => $webcast->title,
+                'WebcastURL'  => $webcast->url,
+                'AdditionalPublicInfo'  => $webcast->additionalinfo,
+            );
+        }
 
         if (isset($this->event->imagedata)) {
             $data['Images'][0] = array(
