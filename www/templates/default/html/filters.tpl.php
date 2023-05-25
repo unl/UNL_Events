@@ -36,12 +36,13 @@
     <hr class="dcf-mt-3 dcf-mb-5">
 
     <fieldset id="audience_filter" class="dcf-collapsible-fieldset dcf-d-none"
+        style="padding-bottom: 0px;"
         <?php if (empty($selected_audience)): ?>
             data-start-expanded="false"
         <?php endif;?>
     >
         <legend>Target Audience</legend>
-        <div class="events-h-max-filter dcf-overflow-y-auto">
+        <div class="events-h-max-filter dcf-overflow-y-auto dcf-pb-4" style="margin-right: calc(-3.16vw + 1px);">
             <?php foreach ($context->getAudiences() as $single_audience): ?>
                 <?php
                     $target_audience_id = 'audience_filter_' . $single_audience->id;
@@ -70,12 +71,13 @@
     </fieldset>
 
     <fieldset id="type_filter" class="dcf-collapsible-fieldset dcf-d-none"
+        style="padding-bottom: 0px;"
         <?php if (empty($selected_type)): ?>
             data-start-expanded="false"
         <?php endif;?>
     >
         <legend>Event Type</legend>
-        <div class="events-h-max-filter dcf-overflow-y-auto">
+        <div class="events-h-max-filter dcf-overflow-y-auto dcf-pb-4" style="margin-right: calc(-3.16vw + 1px);">
             <?php foreach ($context->getEventTypes() as $single_event_type): ?>
                 <?php
                     $event_type_id = 'event_type_filter_' . $single_event_type->id;
