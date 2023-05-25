@@ -99,11 +99,6 @@
         <?php endforeach; ?>
     </fieldset>
 </form>
-<script defer>
-    window.addEventListener('inlineJSReady', function() {
-        WDN.initializePlugin('collapsible-fieldsets');
-    }, false);
-</script>
 
 <?php
     $page->addScript(
