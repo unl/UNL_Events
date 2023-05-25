@@ -93,8 +93,8 @@ if ($context->getCalendar()) {
                                                     (
                                                         (isset($context->options['q']
                                                     ) && (
-                                                        strpos($context->output->getURL(), '/audience') !== 0 &&
-                                                        strpos($context->output->getURL(), '/eventtype') !== 0)
+                                                        strpos($context->output->getURL(), '/audience') === false &&
+                                                        strpos($context->output->getURL(), '/eventtype') === false)
                                                     )?$context->options['q']:'') .
                                                 '"/>
 

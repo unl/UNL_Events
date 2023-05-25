@@ -15,7 +15,7 @@ class Auth
 
     public function __construct()
     {
-        if (!file_exists(self::$certPath)) {
+        if (self::$certPath !== false && !file_exists(self::$certPath)) {
             self::$certPath = GuzzleHttp\default_ca_bundle();
         }
 

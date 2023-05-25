@@ -15,8 +15,6 @@
  */
 namespace UNL\UCBCN\Frontend;
 
-use UNL\UCBCN\Calendar\Audiences;
-use UNL\UCBCN\Calendar\EventTypes;
 use UNL\UCBCN\Frontend\DateStringParser;
 use UNL\UCBCN\Event;
 
@@ -35,8 +33,6 @@ use UNL\UCBCN\Event;
 class Search extends EventListing implements RoutableInterface
 {
     public $search_query = '';
-    public $search_event_type = '';
-    public $search_event_audience = '';
 
     public $limit = 100;
     public $offset = 0;
@@ -64,8 +60,6 @@ class Search extends EventListing implements RoutableInterface
 
         // Removed error for when search query is empty because I think it would be useful
         $this->search_query = $options['q'] ?? "";
-        $this->search_event_type = $options['type'] ?? "";
-        $this->search_event_audience = $options['audience'] ?? "";
 
         $format_max_limit = $this->max_limit['default'];
         if (array_key_exists($options['format'], $this->max_limit)) {
@@ -156,14 +150,16 @@ class Search extends EventListing implements RoutableInterface
             ) >= NOW())';
         }
 
-        // Adds filter for event type
-        if (!empty($this->search_event_type)) {
-            $sql .= 'AND ( eventtype.name = \'' . self::escapeString($this->search_event_type) .'\')';
+        // Adds filters for target audience
+        if (!empty($this->event_type_filter)) {
+            $sql .= 'AND ';
+            $sql .= $this->getEventTypeSQL('eventtype');
         }
 
         // Adds filters for target audience
-        if (!empty($this->search_event_audience)) {
-            $sql .= 'AND ( audience.name = \'' . self::escapeString($this->search_event_audience) . '\')';
+        if (!empty($this->audience_filter)) {
+            $sql .= 'AND ';
+            $sql .= $this->getAudienceSQL('audience');
         }
 
         $sql .= 'ORDER BY (
@@ -175,26 +171,6 @@ class Search extends EventListing implements RoutableInterface
                     event.title ASC';
 
         return $sql;
-    }
-
-    /**
-     * Gets list of all event types
-     *
-     * @return bool|EventTypes - false if no event type, otherwise return recordList of all event types
-     */
-    public function getEventTypes()
-    {
-        return new EventTypes(array('order_name' => true));
-    }
-
-    /**
-     * Gets list of all audiences
-     *
-     * @return bool|Audiences - false if no audiences, otherwise return recordList of all audiences
-     */
-    public function getAudiences()
-    {
-        return new Audiences(array('order_name' => true));
     }
 
     /**
@@ -244,21 +220,23 @@ class Search extends EventListing implements RoutableInterface
      */
     public function getURL()
     {
-        $url = $this->options['calendar']->getURL() . 'search/';
+        $url_params = "";
 
         if (isset($this->search_query)) {
-            $url .= '?q=' . urlencode($this->search_query);
+            $url_params .= '?q=' . urlencode($this->search_query);
         }
 
-        if (!empty($this->search_event_type)) {
-            $url .= '&type=' . urlencode($this->search_event_type);
+        if (!empty($this->event_type_filter)) {
+            $url_params .= $this->getEventTypeURLParam($url_params);
         }
 
-        if (!empty($this->search_event_audience)) {
-            $url .= '&audience=' . urlencode($this->search_event_audience);
+        if (!empty($this->audience_filter)) {
+            $url_params .= $this->getAudienceURLParam($url_params);
         }
 
-        return $url;
+        $url = $this->options['calendar']->getURL() . 'search/';
+
+        return $url . $url_params;
     }
 
     /**

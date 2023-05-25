@@ -292,12 +292,12 @@ class Controller
 
     public function getAudienceURL()
     {
-        return $this->getURL() . 'audience/';
+        return Audience::generateURL($this->options['calendar']);
     }
 
     public function getEventTypeURL()
     {
-        return $this->getURL() . 'eventtype/';
+        return EventType::generateURL($this->options['calendar']);
     }
 
     /**

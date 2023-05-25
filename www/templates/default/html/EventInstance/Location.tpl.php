@@ -1,3 +1,8 @@
+<?php
+$locationRoom = isset($location->room) ? $location->room : '';
+$room = !empty($context->eventdatetime->room) ? $context->eventdatetime->room : $locationRoom;
+?>
+
 <?php if (isset($context->eventdatetime->location_id) && $context->eventdatetime->location_id): ?>
     <?php $l = $context->eventdatetime->getLocation(); ?>
     <?php if (isset($l->mapurl) || !empty($l->name)): ?>
@@ -14,6 +19,9 @@
                     <a class="webpageurl" href="<?php echo $l->webpageurl ?>"><?php echo $l->name; ?></a>
                 <?php else: ?>
                     <?php echo $l->name; ?>
+                <?php endif; ?>
+                <?php if (!empty($room)): ?>
+                    <span class="room">Room: <?php echo $room ?></span>
                 <?php endif; ?>
             </span>
         </span>

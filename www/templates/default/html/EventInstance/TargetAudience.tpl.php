@@ -28,7 +28,7 @@
                 $current_audience = $audience->getAudience();
                 $output .= '<a class="dcf-d-inline-block" href="' .
                     $frontend->getAudienceURL() .
-                    '?q=' .
+                    '?audience=' .
                     $current_audience->name .
                     '" >';
                 $output .= $current_audience->name;

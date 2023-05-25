@@ -12,6 +12,7 @@ $title = '';
 $site_title = 'UNL Events';
 if (!$context->getCalendar()) {
     $title .= 'UNL Events';
+    $cal_url = "/";
 } else {
     $title .= 'UNL';
     if ($context->getCalendar()->id != UNL\UCBCN\Frontend\Controller::$default_calendar_id) {
@@ -19,12 +20,13 @@ if (!$context->getCalendar()) {
     }
     $title .= ' | Manager | Events';
     $site_title = $context->getCalendar()->name . ' Events Manager';
+    $cal_url = $context->getCalendar()->getFrontendURL();
 }
 $view_class = str_replace('\\', '_', strtolower($context->options['model']));
 
 //Document titles
 $page->doctitle = '<title>' . $title . '</title>';
-$page->titlegraphic = '<a class="dcf-txt-h5" href="/">' . $site_title . '</a>';
+$page->titlegraphic = '<a class="dcf-txt-h5" href="' . $cal_url . '">' . $site_title . '</a>';
 $page->affiliation = '';
 
 //css

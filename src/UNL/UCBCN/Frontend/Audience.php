@@ -14,8 +14,6 @@
  */
 namespace UNL\UCBCN\Frontend;
 
-use UNL\UCBCN\Calendar\Audiences;
-
 /**
  * Container for audience search results for the frontend.
  *
@@ -30,8 +28,6 @@ use UNL\UCBCN\Calendar\Audiences;
  */
 class Audience extends EventListing implements RoutableInterface
 {
-    public $search_query = '';
-    public $search_event_type = '';
     public $search_event_calendar = '';
     public $limit = 100;
     public $offset = 0;
@@ -49,15 +45,13 @@ class Audience extends EventListing implements RoutableInterface
      */
     public function __construct($options=array())
     {
-        if (empty($options['q'])) {
-            throw new UnexpectedValueException('Enter an audience to search for events.', 400);
-        }
-
-        // List of audiences (Comma separated)
-        $this->search_query = $options['q'] ?? "";
-
-        $this->search_event_type = $options['type'] ?? "";
+        // If calendar id is provided we will add that to the query
         $this->search_event_calendar = $options['calendar_id'] ?? "";
+
+        // backwards compatibility
+        if (empty($options['audience']) && !empty($options['q'])) {
+            $options['audience'] = $options['q'];
+        }
 
         $format_max_limit = $this->max_limit['default'];
         if (array_key_exists($options['format'], $this->max_limit)) {
@@ -109,25 +103,18 @@ class Audience extends EventListing implements RoutableInterface
                         e.endtime,
                         CONCAT(DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.endtime," %H:%i:%s"))
                     ) >= NOW()
-                )';
+                ) AND ( audience.name IS NOT NULL ) ';
 
-        // splits the audiences by comma and creates the SQL for those
-        if (!empty($this->search_query)) {
-            $audiences_explode = $this->getSplitAudiences();
-
-            $sql .= ' AND (';
-            foreach ($audiences_explode as $index => $audience_single) {
-                if ($index > 0) {
-                    $sql .= ' OR ';
-                }
-                $sql .= 'audience.name = \'' . self::escapeString($audience_single) . '\'';
-            }
-            $sql .= ') ';
+        // Adds filters for target audience
+        if (!empty($this->event_type_filter)) {
+            $sql .= 'AND ';
+            $sql .= $this->getEventTypeSQL('eventtype');
         }
 
-        // Adds any filters for event type
-        if (!empty($this->search_event_type)) {
-            $sql .= ' AND ( eventtype.name = \'' . self::escapeString($this->search_event_type) .'\')';
+        // Adds filters for target audience
+        if (!empty($this->audience_filter)) {
+            $sql .= 'AND ';
+            $sql .= $this->getAudienceSQL('audience');
         }
 
         // Adds any filters for calendar id
@@ -151,85 +138,29 @@ class Audience extends EventListing implements RoutableInterface
     }
 
     /**
-     * Splits the search query by commas and trims whitespace from all the items
-     *
-     * @return string[]
-     */
-    public function getSplitAudiences(): array
-    {
-        if (empty($this->search_query)) {
-            return array();
-        }
-
-        // splits the audiences by comma
-        $audiences_explode = explode(',', $this->search_query);
-        $audiences_explode = array_map('trim', $audiences_explode);
-
-        return $audiences_explode;
-    }
-
-    /**
-     * Returns the count of the items in the query
-     * This is only here becuase savvy will mess up the array
-     *
-     * @return int
-     */
-    public function countQuery():int
-    {
-        return count($this->getSplitAudiences());
-    }
-
-
-    /**
-     * returns nicely formatted string of the audiences from the search query
-     *
-     * @return string
-     */
-    public function getFormattedAudiences()
-    {
-        $output_string = '';
-        $audiences_explode = $this->getSplitAudiences();
-        $last_index = count($audiences_explode) - 1;
-
-        foreach ($audiences_explode as $index => $audience_single) {
-            if ($index > 0 && $last_index >= 2) {
-                $output_string .= ', ';
-            } elseif ($index > 0) {
-                $output_string .= ' ';
-            }
-            if ($index === $last_index && $index > 0) {
-                $output_string .= 'and ';
-            }
-            $output_string .= ucwords($audience_single);
-        }
-
-        return $output_string;
-    }
-
-    /**
      * returns the url to this audience page.
      *
      * @return string
      */
     public function getURL()
     {
-        $url = '/audience/';
+        $url_params = "";
 
-        if (!empty($this->search_query)) {
-            $url .= '?q=' . urlencode($this->search_query);
+        if (!empty($this->event_type_filter)) {
+            $url_params .= $this->getEventTypeURLParam($url_params);
         }
 
-        return $url;
+        if (!empty($this->audience_filter)) {
+            $url_params .= $this->getAudienceURLParam($url_params);
+        }
+
+        $url = self::generateURL($this->calendar);
+
+        return $url . $url_params;
     }
 
-    /**
-     * Gets list of all audiences
-     *
-     * @return bool|Audiences - false if no audiences, otherwise return recordList of all audiences
-     */
-    public function getAudiences()
+    public static function generateURL(Calendar $calendar)
     {
-        return new Audiences(array('order_name' => true));
+        return $calendar->getURL() . 'audience/';
     }
-
 }
