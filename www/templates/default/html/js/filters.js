@@ -209,3 +209,5 @@ function set_error() {
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
+
+WDN.initializePlugin('collapsible-fieldsets');
