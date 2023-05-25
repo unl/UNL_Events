@@ -70,14 +70,13 @@
         </div>
     </fieldset>
 
-    <fieldset id="type_filter" class="dcf-collapsible-fieldset dcf-d-none"
-        style="padding-bottom: 0px;"
+    <fieldset id="type_filter" class="events-filter-fieldset dcf-collapsible-fieldset dcf-d-none"
         <?php if (empty($selected_type)): ?>
             data-start-expanded="false"
         <?php endif;?>
     >
         <legend>Event Type</legend>
-        <div class="events-h-max-filter dcf-overflow-y-auto dcf-pb-4" style="margin-right: calc(-3.16vw + 1px);">
+        <div class="events-filter-fieldset-contents events-h-max-filter dcf-overflow-y-auto dcf-pb-4">
             <?php foreach ($context->getEventTypes() as $single_event_type): ?>
                 <?php
                     $event_type_id = 'event_type_filter_' . $single_event_type->id;
