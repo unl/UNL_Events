@@ -15,6 +15,9 @@
             <EndDate><?php echo $timezoneDateTime->format($context->getEndTime(),'c'); ?></EndDate>
             <EndTime><?php echo $timezoneDateTime->formatUTC($context->getEndTime(),'H:i:s'); ?>Z</EndTime>
             <?php endif; ?>
+            <AdditionalPublicInfo>
+                <?php echo htmlspecialchars($context->eventdatetime->additionalpublicinfo); ?>
+            </AdditionalPublicInfo>
         </DateTime>
         <Locations>
         	<?php
@@ -28,14 +31,32 @@
                     <LocationType><?php echo $loc->type; ?></LocationType>
                 </LocationTypes>
                 <Address>
-                    <Room><?php echo htmlspecialchars($context->eventdatetime->room); ?></Room>
+                    <?php if(isset($context->eventdatetime->room) && !empty($context->eventdatetime->room)): ?>
+                        <Room><?php echo htmlspecialchars($context->eventdatetime->room); ?></Room>
+                    <?php else: ?>
+                        <Room><?php echo htmlspecialchars($loc->room); ?></Room>
+                    <?php endif; ?>
                     <BuildingName><?php echo htmlspecialchars($loc->name); ?></BuildingName>
                     <CityName><?php echo htmlspecialchars($loc->city); ?></CityName>
                     <PostalZone><?php echo $loc->zip; ?></PostalZone>
                     <CountrySubentityCode><?php echo $loc->state; ?></CountrySubentityCode>
                     <Country>
-                        <IdentificationCode xmlns="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-1.0" codeListID="ISO3166-1" codeListAgencyID="6" codeListAgencyName="United Nations Economic Commission for Europe" codeListName="Country" codeListVersionID="0.3" languageID="en" codeListURI="http://www.iso.org/iso/en/prods-services/iso3166ma/02iso-3166-code-lists/list-en1-semic.txt" codeListSchemeURI="urn:oasis:names:specification:ubl:schema:xsd:CountryIdentificationCode-1.0">US</IdentificationCode>
-                        <Name xmlns="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-1.0">United States</Name>
+                        <IdentificationCode
+                            xmlns="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-1.0"
+                            codeListID="ISO3166-1"
+                            codeListAgencyID="6"
+                            codeListAgencyName="United Nations Economic Commission for Europe"
+                            codeListName="Country"
+                            codeListVersionID="0.3"
+                            languageID="en"
+                            codeListURI="http://www.iso.org/iso/en/prods-services/iso3166ma/02iso-3166-code-lists/list-en1-semic.txt"
+                            codeListSchemeURI="urn:oasis:names:specification:ubl:schema:xsd:CountryIdentificationCode-1.0"
+                        >
+                            US
+                        </IdentificationCode>
+                        <Name xmlns="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-1.0">
+                            United States
+                        </Name>
                     </Country>
                 </Address>
                 <Phones>
@@ -55,8 +76,25 @@
                 </MapLinks>
 
                 <LocationHours><?php echo htmlspecialchars($loc->hours); ?></LocationHours>
-                <Directions><?php echo htmlspecialchars($loc->directions); ?></Directions>
-                <AdditionalPublicInfo><?php echo htmlspecialchars($loc->additionalpublicinfo); ?></AdditionalPublicInfo>
+
+                <?php if(isset($context->eventdatetime->directions) && !empty($context->eventdatetime->directions)): ?>
+                    <Directions><?php echo htmlspecialchars($context->eventdatetime->directions); ?></Directions>
+                <?php else: ?>
+                    <Directions><?php echo htmlspecialchars($loc->directions); ?></Directions>
+                <?php endif; ?>
+
+                <?php if(
+                    isset($context->eventdatetime->location_additionalpublicinfo) &&
+                    !empty($context->eventdatetime->location_additionalpublicinfo)):
+                ?>
+                    <AdditionalPublicInfo>
+                        <?php echo htmlspecialchars($context->eventdatetime->location_additionalpublicinfo); ?>
+                    </AdditionalPublicInfo>
+                <?php else: ?>
+                    <AdditionalPublicInfo>
+                        <?php echo htmlspecialchars($loc->additionalpublicinfo); ?>
+                    </AdditionalPublicInfo>
+                <?php endif; ?>
             </Location>
             <?php endif; ?>
         </Locations>
@@ -64,7 +102,7 @@
         $eventTypes = $context->event->getEventTypes();
         if ($eventTypes->count()) : ?>
         <EventTypes>
-        	<?php foreach ($eventTypes as $eventHasType) : 
+        	<?php foreach ($eventTypes as $eventHasType) :
         		$type = $eventHasType->getType();
 	        	if ($type) : ?>
 	            <EventType>
@@ -72,7 +110,7 @@
 	                <EventTypeName><?php echo htmlspecialchars($type->name); ?></EventTypeName>
 	                <EventTypeDescription><?php echo htmlspecialchars($type->description); ?></EventTypeDescription>
 	            </EventType>
-	            <?php 
+	            <?php
             	endif;
             endforeach; ?>
         </EventTypes>
@@ -121,7 +159,19 @@
                 <WebcastID><?php echo $webcast->id; ?></WebcastID>
                 <WebcastName><?php echo htmlspecialchars($webcast->title); ?></WebcastName>
                 <WebcastURL><?php echo htmlspecialchars($webcast->url); ?></WebcastURL>
-                <AdditionalPublicInfo><?php echo htmlspecialchars($webcast->additionalinfo); ?></AdditionalPublicInfo>
+
+                <?php if(
+                    isset($context->eventdatetime->webcast_additionalpublicinfo) &&
+                    !empty($context->eventdatetime->webcast_additionalpublicinfo)):
+                ?>
+                    <AdditionalPublicInfo>
+                        <?php echo htmlspecialchars($context->eventdatetime->webcast_additionalpublicinfo); ?>
+                    </AdditionalPublicInfo>
+                <?php else: ?>
+                    <AdditionalPublicInfo>
+                        <?php echo htmlspecialchars($webcast->additionalinfo); ?>
+                    </AdditionalPublicInfo>
+                <?php endif; ?>
             </Webcast>
             <?php endif; ?>
         </Webcasts>
@@ -130,7 +180,9 @@
             <Image>
                 <Title>Image</Title>
                 <Description>image for event <?php echo $context->event->id; ?></Description>
-                <URL><?php echo \UNL\UCBCN\Frontend\Controller::$url; ?>?image&amp;id=<?php echo $context->event->id; ?></URL>
+                <URL>
+                    <?php echo \UNL\UCBCN\Frontend\Controller::$url; ?>?image&amp;id=<?php echo $context->event->id; ?>
+                </URL>
             </Image>
         </Images>
         <?php endif; ?>
@@ -216,7 +268,9 @@
                 </ContactName>
                 <Phones>
                     <Phone>
-                        <PhoneNumber><?php echo htmlspecialchars($context->event->listingcontactphone); ?></PhoneNumber>
+                        <PhoneNumber>
+                            <?php echo htmlspecialchars($context->event->listingcontactphone); ?>
+                        </PhoneNumber>
                     </Phone>
                 </Phones>
                 <EmailAddresses>
@@ -241,7 +295,9 @@
                 <AccountID><?php echo $originCalendar->account_id; ?></AccountID>
                 <Name><?php echo htmlspecialchars($originCalendar->name); ?></Name>
                 <ShortName><?php echo htmlspecialchars($originCalendar->shortname); ?></ShortName>
-                <URL><?php echo $protocol . $_SERVER['SERVER_NAME'] . '/' . urlencode($originCalendar->shortname);?></URL>
+                <URL>
+                    <?php echo $protocol . $_SERVER['SERVER_NAME'] . '/' . urlencode($originCalendar->shortname);?>
+                </URL>
             </OriginCalendar>
         <?php endif; ?>
     </Event>

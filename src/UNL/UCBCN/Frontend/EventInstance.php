@@ -31,7 +31,7 @@ class EventInstance implements RoutableInterface
      * @var \UNL\UCBCN\Frontend\Calendar
      */
     public $calendar;
-    
+
     public $options;
 
     function __construct($options = array())
@@ -39,25 +39,25 @@ class EventInstance implements RoutableInterface
         if (!isset($options['id'])) {
             throw new InvalidArgumentException('No event specified', 404);
         }
-        
+
         if (!isset($options['calendar'])) {
             throw new InvalidArgumentException('A calendar must be set', 500);
         }
-        
+
         $this->calendar = $options['calendar'];
-        
+
         $this->eventdatetime = Occurrence::getById($options['id']);
 
         if (false === $this->eventdatetime) {
             throw new UnexpectedValueException('No event with that id exists', 404);
         }
-        
+
         //Find the requested date, and ensure format
         $requestedDate = date('Y-m-d', strtotime($this->eventdatetime->starttime));
         if (isset($options['y'], $options['m'], $options['d'])) {
             $requestedDate = date('Y-m-d', strtotime($options['y'] . '-' . $options['m'] . '-' . $options['d']));
         }
-        
+
         //Set the recurring date
         if (Occurrence::RECURRING_TYPE_NONE != $this->eventdatetime->recurringtype && isset($options['recurringdate_id'])) {
             //Set the recurring date by the id
@@ -105,7 +105,7 @@ class EventInstance implements RoutableInterface
     {
         return $this->calendar->getURL() . date('Y/m/d/', strtotime($this->getStartTime())) . $this->eventdatetime->id . '/';
     }
-    
+
     public function getImageURL()
     {
         if (isset($this->event->imageurl)) {
@@ -113,7 +113,7 @@ class EventInstance implements RoutableInterface
         } elseif (isset($this->event->imagedata)) {
             return Controller::$url . 'images/' . $this->event->id;
         }
-        
+
         return false;
     }
 
@@ -129,7 +129,7 @@ class EventInstance implements RoutableInterface
         if (empty($this->eventdatetime->endtime)) {
             return false;
         }
-        
+
         $start = date('m-d-Y', strtotime($this->eventdatetime->starttime));
         $end   = date('m-d-Y', strtotime($this->eventdatetime->endtime));
 
@@ -143,13 +143,13 @@ class EventInstance implements RoutableInterface
 
     /**
      * Determines if this event is currently in progress.
-     * 
+     *
      * @return bool
      */
     public function isInProgress()
     {
         $currentTime = time();
-        
+
         if (strtotime($this->eventdatetime->starttime) > $currentTime) {
             //It has not started yet.
             return false;
@@ -186,16 +186,16 @@ class EventInstance implements RoutableInterface
 
     /**
      * Get the start time for this event instance
-     * 
+     *
      * Takes into account current recurring date, if present.
      * This should always be used instead of directly accessing $this->eventdatetime->starttime
-     * 
+     *
      * @return string
      */
     public function getStartTime()
     {
         $time = $this->eventdatetime->starttime;
-        
+
         if ($this->eventdatetime->isRecurring() && isset($this->recurringdate) && $this->recurringdate instanceof \UNL\UCBCN\Event\RecurringDate) {
             $first_recurring_date = $this->recurringdate->getFirstRecordInOngoingSeries();
             if (isset($first_recurring_date->recurringdate)) {
@@ -205,50 +205,50 @@ class EventInstance implements RoutableInterface
 
         return $time;
     }
-    
+
     /**
      * Get the end time for this event instance
-     * 
+     *
      * Takes into account the current recurring date, if present.
      * This should always be used instead of directly accessing $this->eventdatetime->endtime
      */
     public function getEndTime()
     {
         $time = $this->eventdatetime->endtime;
-        
+
         if (empty($time)) {
             return $time;
         }
 
         if ($this->eventdatetime->isRecurring() && isset($this->recurringdate) && $this->recurringdate instanceof \UNL\UCBCN\Event\RecurringDate) {
             $diff = strtotime($this->eventdatetime->endtime) - strtotime($this->eventdatetime->starttime);
-            
+
             $time = date('Y-m-d H:i:s', strtotime($this->getStartTime()) + $diff);
         }
-        
+
         return $time;
     }
-    
+
     public function getShortDescription($maxChars = 250)
     {
         // normalize line endings
         $fullDescription = str_replace("\r\n", "\n", $this->event->description);
-        
+
         // break on paragraphs
         $fullDescription = explode("\n", $fullDescription, 2);
-        
+
         if (mb_strlen($fullDescription[0]) > $maxChars) {
             // find the maximum number of characters that do not break a word
             preg_match("/.{1,$maxChars}(?:\\b|$)/s", $fullDescription[0], $matches);
             return $matches[0] . ' …';
         }
-        
+
         return $fullDescription[0];
     }
 
     /**
      * Checks to see if the location has all information necessary for Google's microdata.
-     * 
+     *
      * @return bool
      */
     function microdata_check()
@@ -274,7 +274,7 @@ class EventInstance implements RoutableInterface
 
         return true;
     }
-    
+
     public function toJSONData()
     {
         $timezoneDateTime = new \UNL\UCBCN\TimezoneDateTime($this->eventdatetime->timezone);
@@ -314,7 +314,9 @@ class EventInstance implements RoutableInterface
                 'LocationName'  => $location->name,
                 'LocationTypes' => array('LocationType' => $location->type),
                 'Address' => array(
-                    'Room'                 => $location->room,
+                    'Room' =>
+                        !empty($this->eventdatetime->room) ?
+                        $this->eventdatetime->room : $location->room,
                     'BuildingName'         => $location->name,
                     'CityName'             => $location->city,
                     'PostalZone'           => $location->zip,
@@ -339,8 +341,12 @@ class EventInstance implements RoutableInterface
                     0 => $location->mapurl,
                 ),
                 'LocationHours'        => $location->hours,
-                'Directions'           => $location->directions,
-                'AdditionalPublicInfo' => $location->additionalpublicinfo,
+                'Directions' =>
+                    !empty($this->eventdatetime->directions) ?
+                    $this->eventdatetime->directions : $location->directions,
+                'AdditionalPublicInfo' =>
+                    !empty($this->eventdatetime->location_additionalpublicinfo) ?
+                    $this->eventdatetime->location_additionalpublicinfo : $location->additionalpublicinfo,
             );
         }
         $data['Room'] = !empty($this->eventdatetime->room) ? $this->eventdatetime->room : ($location ? $location->room : NULL);
@@ -388,10 +394,12 @@ class EventInstance implements RoutableInterface
         $data['Webcasts'] = array();
         if (isset($webcast) && !empty($webcast)) {
             $data['Webcasts'][0] = array(
-                'LocationID'    => $webcast->id,
-                'LocationName'  => $webcast->title,
+                'WebcastID'    => $webcast->id,
+                'WebcastTitle'  => $webcast->title,
                 'WebcastURL'  => $webcast->url,
-                'AdditionalPublicInfo'  => $webcast->additionalinfo,
+                'AdditionalPublicInfo' =>
+                    !empty($this->eventdatetime->webcast_additionalpublicinfo) ?
+                    $this->eventdatetime->webcast_additionalpublicinfo : $webcast->additionalinfo,
             );
         }
 
@@ -505,7 +513,7 @@ class EventInstance implements RoutableInterface
 
      /**
      * Formats event data in google microdata standard for events.
-     * 
+     *
      * @return Array
      */
     public function getFormattedMicrodata()
@@ -532,7 +540,7 @@ class EventInstance implements RoutableInterface
                 $this->event->imageurl,
             );
         }
-        
+
         if ($this->isAllDay()) {
             $data['startDate'] =  date('m-d-Y', strtotime( $this->getStartTime()));
         } else {
