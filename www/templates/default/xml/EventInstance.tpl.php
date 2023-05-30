@@ -15,9 +15,11 @@
             <EndDate><?php echo $timezoneDateTime->format($context->getEndTime(),'c'); ?></EndDate>
             <EndTime><?php echo $timezoneDateTime->formatUTC($context->getEndTime(),'H:i:s'); ?>Z</EndTime>
             <?php endif; ?>
-            <AdditionalPublicInfo>
-                <?php echo htmlspecialchars($context->eventdatetime->additionalpublicinfo); ?>
-            </AdditionalPublicInfo>
+            <?php
+                if ($context->eventdatetime->isRecurring()):
+            ?>
+            <RecurringID><?php echo $context->recurringdate->id; ?></RecurringID>
+            <?php endif; ?>
         </DateTime>
         <Locations>
             <?php

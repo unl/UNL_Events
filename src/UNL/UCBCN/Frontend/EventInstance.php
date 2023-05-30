@@ -297,7 +297,9 @@ class EventInstance implements RoutableInterface
             'End'   => $timezoneDateTime->format($this->getEndTime(),'c'),
             'AllDay' => $this->isAllDay(),
             'EventTimezone' => $this->eventdatetime->timezone,
-            'CalendarTimezone' => $this->calendar->defaulttimezone
+            'CalendarTimezone' => $this->calendar->defaulttimezone,
+            'IsRecurring'=> $this->eventdatetime->isRecurring(),
+            'RecurrenceID'=> $this->eventdatetime->isRecurring() ? $this->recurringdate->id : null,
         );
         $data['EventStatus']           = $this->event->isCanceled($this) ? 'Canceled' : 'Happening As Scheduled';
         $data['Classification']        = 'Public';
