@@ -17,18 +17,16 @@
         $location = '';
         if (isset($eventinstance->eventdatetime->location_id) && $eventinstance->eventdatetime->location_id) {
             $l = $eventinstance->eventdatetime->getLocation();
-            if (isset($l)) {
-                if (isset($l->mapurl) || !empty($l->name)) {
-                    $location = '<div class="unl-event-location dcf-txt-xs dcf-pt-1 unl-dark-gray">';
-                    if (isset($l->mapurl) && filter_var($l->mapurl, FILTER_VALIDATE_URL)) {
-                        $location .= '<a class="mapurl" href="' . $l->mapurl .'">' . $l->name . '</a>';
-                    } elseif (isset($l->webpageurl) && filter_var($l->webpageurl, FILTER_VALIDATE_URL)) {
-                        $location .= '<a class="webpageurl" href="' . $l->webpageurl .'">' . $l->name . '</a>';
-                    } else {
-                        $location .= $l->name;
-                    }
-                    $location .= '</div>';
+            if (isset($l) && isset($l->mapurl) || !empty($l->name)) {
+                $location = '<div class="unl-event-location dcf-txt-xs dcf-pt-1 unl-dark-gray">';
+                if (isset($l->mapurl) && filter_var($l->mapurl, FILTER_VALIDATE_URL)) {
+                    $location .= '<a class="mapurl" href="' . $l->mapurl .'">' . $l->name . '</a>';
+                } elseif (isset($l->webpageurl) && filter_var($l->webpageurl, FILTER_VALIDATE_URL)) {
+                    $location .= '<a class="webpageurl" href="' . $l->webpageurl .'">' . $l->name . '</a>';
+                } else {
+                    $location .= $l->name;
                 }
+                $location .= '</div>';
             }
         }
         $month = $timezoneDisplay->format($starttime, $eventinstance->eventdatetime->timezone,'M');

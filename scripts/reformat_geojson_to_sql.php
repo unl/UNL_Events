@@ -59,7 +59,7 @@ if (!isset($json_data['features']) || !is_array($json_data['features']) || empty
 }
 
 // Loop through features and extract data
-foreach ( $json_data['features'] as $index => $building) {
+foreach ($json_data['features'] as $index => $building) {
     if (!isset($building['properties']) || !is_array($building['properties']) || empty($building['properties'])) {
         echo "\033[31m Missing Properties On Feature \033[0m\n";
         continue;
@@ -68,10 +68,14 @@ foreach ( $json_data['features'] as $index => $building) {
     // Helps know that things are happening
     echo $index+1 . ":" . count($json_data['features']) . " - " . $building['properties']['NAME'] . "\n";
 
-    $zip = NULL;
+    $zip = null;
     if (!empty($api_key)) {
         // Use google geocoding to get zip code
-        $google_data = file_get_contents('https://maps.googleapis.com/maps/api/geocode/json?address=' . urlencode($building['properties']['Address']) . '%20lincoln%20Nebraska&key=' . $api_key);
+        $google_data = file_get_contents('https://maps.googleapis.com/maps/api/geocode/json?address=' . 
+            urlencode($building['properties']['Address']) . 
+            '%20lincoln%20Nebraska&key=' . 
+            $api_key
+        );
 
         // extract zip code if we got data back
         if ($google_data !== false) {
@@ -95,7 +99,7 @@ foreach ( $json_data['features'] as $index => $building) {
     $output_sql .= "'" . 'NE' . "', ";
     if (!empty($api_key)) {
         $output_sql .= "'" . $zip . "', ";
-    }else{
+    } else {
         $output_sql .= "null, ";
     }
     $output_sql .= "'" . 'https://maps.unl.edu/' . $building['properties']['ABBREV'] . "', ";

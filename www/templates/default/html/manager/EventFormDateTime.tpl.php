@@ -194,7 +194,7 @@
                     // If the location is in the standard or saved sections we want to select those
                     $standard_or_saved_check = true;
                     if (!empty($datetime_location)) {
-                        $standard_or_saved_check = $datetime_location->is_saved_or_standard();
+                        $standard_or_saved_check = $datetime_location->isSavedOrStandard();
                     }
                 ?>
 
@@ -233,7 +233,7 @@
                             <option 
                                 <?php if ($location == $loop_location->id) echo SELECTED_INPUT ?> 
                                 value="<?php echo $loop_location->id ?>" 
-                                data-microdata="<?php echo json_encode($loop_location->microdata_check()); ?>"
+                                data-microdata="<?php echo json_encode($loop_location->microdataCheck()); ?>"
                                 <?php //TODO: Add Stuff for editing location ?>
                                 ><?php echo $loop_location->name ?></option>
                         <?php endforeach; ?>
@@ -242,13 +242,13 @@
 
                 <optgroup label="UNL Campus locations">
                     <?php foreach ($campus_locations as $loop_location): ?>
-                        <option <?php if ($location == $loop_location->id) echo SELECTED_INPUT ?> value="<?php echo $loop_location->id ?>" data-microdata="<?php echo json_encode($loop_location->microdata_check()); ?>"><?php echo $loop_location->name ?></option>
+                        <option <?php if ($location == $loop_location->id) echo SELECTED_INPUT ?> value="<?php echo $loop_location->id ?>" data-microdata="<?php echo json_encode($loop_location->microdataCheck()); ?>"><?php echo $loop_location->name ?></option>
                     <?php endforeach; ?>
                 </optgroup>
 
                 <optgroup label="Extension locations">
                     <?php foreach ($extensions_locations as $loop_location): ?>
-                        <option <?php if ($location == $loop_location->id) echo SELECTED_INPUT ?> value="<?php echo $loop_location->id ?>" data-microdata="<?php echo json_encode($loop_location->microdata_check()); ?>"><?php echo $loop_location->name ?></option>
+                        <option <?php if ($location == $loop_location->id) echo SELECTED_INPUT ?> value="<?php echo $loop_location->id ?>" data-microdata="<?php echo json_encode($loop_location->microdataCheck()); ?>"><?php echo $loop_location->name ?></option>
                     <?php endforeach; ?>
                 </optgroup>
             </select>
@@ -436,7 +436,7 @@
                     // If the webcast is in the saved section we want to select that one
                     $standard_or_saved_check = true;
                     if (!empty($datetime_v_location)) {
-                        $standard_or_saved_check = $datetime_v_location->is_saved();
+                        $standard_or_saved_check = $datetime_v_location->isSaved();
                     }
                 ?>
 

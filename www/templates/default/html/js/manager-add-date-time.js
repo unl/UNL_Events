@@ -4,14 +4,14 @@ function isUrlValid(url) {
 
 require(['jquery'], function ($) {
     $('#add-datetime-form').submit(function (submit) {
-        errors = [];
+        let errors = [];
 
         // validate required fields
         if ($('#start-date').val() == '') {
             if ($('#start-date').val() == '') {
                 notifier.mark_input_invalid($('#start-date'));
             }
-            errors.push('<a href=\"#location\">Location</a> and <a href=\"#start-date\">start date</a> are required.');
+            errors.push('<a href="#location">Location</a> and <a href="#start-date">start date</a> are required.');
         }
 
         var start = new Date($('#start-date').val());
@@ -37,7 +37,7 @@ require(['jquery'], function ($) {
 
                 if (start > end) {
                     notifier.mark_input_invalid($('#end-date'));
-                    errors.push('Your <a href=\"#end-date\">end date/time</a> must be on or after the <a href=\"#start-date\">start date/time</a>.');
+                    errors.push('Your <a href="#end-date">end date/time</a> must be on or after the <a href="#start-date">start date/time</a>.');
                 }
             }
         }
@@ -53,7 +53,7 @@ require(['jquery'], function ($) {
                     if ($('#recurs-until-date').val() == '') {
                         notifier.mark_input_invalid($('#recurs-until-date'));
                     }
-                    errors.push('Recurring events require a <a href=\"#recurring-type\">recurring type</a> and <a href=\"#recurs-until-date\">date</a> that they recur until.');
+                    errors.push('Recurring events require a <a href="#recurring-type">recurring type</a> and <a href="#recurs-until-date">date</a> that they recur until.');
                 }
 
                 if ($('#end-date').val() != '') {
@@ -71,7 +71,7 @@ require(['jquery'], function ($) {
 
                 if (start > until) {
                     notifier.mark_input_invalid($('#recurs-until-date'));
-                    errors.push('The <a href=\"#recurs-until-date\">\"recurs until date\"</a> must be on or after the start date.');
+                    errors.push('The <a href="#recurs-until-date">"recurs until date"</a> must be on or after the start date.');
                 }
             }
         }
@@ -80,32 +80,32 @@ require(['jquery'], function ($) {
         if ($('#physical_location_check').val() == '1') {
             if ($('#location').val() == 'new' && $('#location-name').val() == '') {
                 notifier.mark_input_invalid($('#location-name'));
-                errors.push('You must give your new location a <a href=\"#location-name\">name</a>.');
+                errors.push('You must give your new location a <a href="#location-name">name</a>.');
             }
 
             if ($('#location').val() == 'new' && $('#location-address-1').val() == '') {
                 notifier.mark_input_invalid($('#location-address-1'));
-                errors.push('You must give your new location a <a href=\"#location-address-1\">address</a>.');
+                errors.push('You must give your new location a <a href="#location-address-1">address</a>.');
             }
 
             if ($('#location').val() == 'new' && $('#location-city').val() == '') {
                 notifier.mark_input_invalid($('#location-city'));
-                errors.push('You must give your new location a <a href=\"#location-city\">city</a>.');
+                errors.push('You must give your new location a <a href="#location-city">city</a>.');
             }
 
             if ($('#location').val() == 'new' && $('#location-state').val() == '') {
                 notifier.mark_input_invalid($('#location-state'));
-                errors.push('You must give your new location a <a href=\"#location-state\">state</a>.');
+                errors.push('You must give your new location a <a href="#location-state">state</a>.');
             }
 
             if ($('#location').val() == 'new' && $('#location-zip').val() == '') {
                 notifier.mark_input_invalid($('#location-zip'));
-                errors.push('You must give your new location a <a href=\"#location-zip\">zip</a>.');
+                errors.push('You must give your new location a <a href="#location-zip">zip</a>.');
             }
 
             if ($('#location').val() == 'new' && $('#location-webpage').val() !== '' && !isUrlValid($('#location-webpage').val())) {
                 notifier.mark_input_invalid($('#location-webpage'));
-                errors.push('<a href=\"#location-webpage\"> Location URL</a> is not a valid URL.');
+                errors.push('<a href="#location-webpage"> Location URL</a> is not a valid URL.');
             }
         }
 
@@ -113,15 +113,15 @@ require(['jquery'], function ($) {
         if ($('#virtual_location_check').val() == '1') {
             if ($('#v-location').val() == 'new' && $('#new-v-location-name').val() == '') {
                 notifier.mark_input_invalid($('#new-v-location-name'));
-                errors.push('You must give your new virtual location a <a href=\"#new-v-location-name\">name</a>.');
+                errors.push('You must give your new virtual location a <a href="#new-v-location-name">name</a>.');
             }
 
             if ($('#v-location').val() == 'new' && $('#new-v-location-url').val() == '') {
                 notifier.mark_input_invalid($('#new-v-location-url'));
-                errors.push('You must give your new virtual location a <a href=\"#new-v-location-url\">URL</a>.');
+                errors.push('You must give your new virtual location a <a href="#new-v-location-url">URL</a>.');
             } else if ($('#v-location').val() == 'new' && $('#new-v-location-url').val() !== '' && !isUrlValid($('#new-v-location-url').val())) {
                 notifier.mark_input_invalid($('#new-v-location-url'));
-                errors.push('<a href=\"#new-v-location-url\">Virtual Location URL</a> is not a valid URL.');
+                errors.push('<a href="#new-v-location-url">Virtual Location URL</a> is not a valid URL.');
             }
         }
 

@@ -8,7 +8,7 @@ class CalendarLookup extends PostHandler
     public $options = array();
     public $account;
 
-    public function __construct($options = array()) 
+    public function __construct($options = array())
     {
         $this->options = $options + $this->options;
 
@@ -18,7 +18,6 @@ class CalendarLookup extends PostHandler
 
     public function handlePost(array $get, array $post, array $files)
     {
-        $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Location Updated', 'Your Location has been updated.');
         //redirect
         return Controller::getUserLocationURL();
     }

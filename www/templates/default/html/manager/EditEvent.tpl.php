@@ -270,7 +270,7 @@
                     </td>
                     <?php $location = $datetime->getLocation(); ?>
                     <?php if (isset($location) && !empty($location)): ?>
-                        <td class="dcf-txt-middle location with-controls" data-id="<?php echo $location->id; ?>" data-microdata="<?php echo json_encode($location->microdata_check()); ?>">
+                        <td class="dcf-txt-middle location with-controls" data-id="<?php echo $location->id; ?>" data-microdata="<?php echo json_encode($location->microdataCheck()); ?>">
                             <div class="dcf-popup dcf-w-100%" data-hover="true" data-point="true">
                                 <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup dcf-w-100%"><?php echo $location->name; ?></button>
                                 <div class="dcf-popup-content unl-cream unl-bg-blue dcf-p-3 dcf-rounded" style="width: 100%; min-width: 25ch;">

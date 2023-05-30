@@ -47,7 +47,7 @@ class Webcasts extends RecordList
                 WHERE user_id = "' . $this->escapeString($this->options['user_id']) . '"
                 ORDER BY title ASC;
             ';
-        } else if (array_key_exists('calendar_id', $this->options)) {
+        } elseif (array_key_exists('calendar_id', $this->options)) {
             return '
                 SELECT id
                 FROM webcast

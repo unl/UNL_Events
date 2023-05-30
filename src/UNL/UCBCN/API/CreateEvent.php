@@ -19,12 +19,12 @@ class CreateEvent
 
     public $result;
 
-    public function __construct($options = array()) 
+    public function __construct($options = array())
     {
         $this->options = $options + $this->options;
         $this->calendar = CalendarModel::getByShortName($this->options['calendar_shortname']);
 
-        if ($this->calendar === FALSE) {
+        if ($this->calendar === false) {
             throw new \Exception("That calendar could not be found.", 404);
         }
 
@@ -36,7 +36,7 @@ class CreateEvent
         $this->event = new Event;
     }
 
-    public function handleGet($get) 
+    public function handleGet($get)
     {
         throw new NotFoundException('Not Found');
     }
@@ -47,7 +47,7 @@ class CreateEvent
         return $new_event;
     }
 
-    private function validateEventData($post_data) 
+    private function validateEventData($post_data)
     {
         # title, start date, location are required
         if (empty($post_data['title']) || empty($post_data['start_time']) || empty($post_data['end_time'])) {
@@ -94,7 +94,8 @@ class CreateEvent
                 throw new ValidationException('You must give your new location a zip.');
             }
 
-            if ($post_data['location'] == 'new' && !empty($post_data['new_location']['webpageurl']) && !filter_var($post_data['new_location']['webpageurl'], FILTER_VALIDATE_URL)) {
+            if ($post_data['location'] == 'new' && !empty($post_data['new_location']['webpageurl']) &&
+                !filter_var($post_data['new_location']['webpageurl'], FILTER_VALIDATE_URL)) {
                 throw new ValidationException('Location URL is not a valid URL.');
             }
         }
@@ -107,7 +108,8 @@ class CreateEvent
 
             if ($post_data['v_location'] == 'new' && empty($post_data['new_v_location']['url'])) {
                 throw new ValidationException('You must give your new virtual location a URL.');
-            } else if ($post_data['v_location'] == 'new' && !empty($post_data['new_v_location']['url']) && !filter_var($post_data['new_v_location']['url'], FILTER_VALIDATE_URL)) {
+            } elseif ($post_data['v_location'] == 'new' && !empty($post_data['new_v_location']['url']) &&
+                !filter_var($post_data['new_v_location']['url'], FILTER_VALIDATE_URL)) {
                 throw new ValidationException('Virtual Location URL is not a valid URL.');
             }
         }
@@ -118,10 +120,10 @@ class CreateEvent
         }
     }
 
-    private function createEvent($post_data) 
+    private function createEvent($post_data)
     {
         $user = Auth::getCurrentUser();
-        
+
         # setting event data from post
         $this->event->title = empty($post_data['title']) ? NULL : $post_data['title'];
         $this->event->subtitle = empty($post_data['subtitle']) ? NULL : $post_data['subtitle'];
@@ -132,7 +134,8 @@ class CreateEvent
         $this->event->listingcontactemail = empty($post_data['contact_email']) ? NULL : $post_data['contact_email'];
 
         $this->event->webpageurl = empty($post_data['website']) ? NULL : $post_data['website'];
-        $this->event->approvedforcirculation = array_key_exists('private_public', $post_data) && $post_data['private_public'] == 'private' ? 0 : 1;
+        $this->event->approvedforcirculation = array_key_exists('private_public', $post_data) &&
+            $post_data['private_public'] == 'private' ? 0 : 1;
 
         $this->validateEventData($post_data);
 
@@ -144,14 +147,16 @@ class CreateEvent
         $event_datetime->location_id = $post_data['location'];
 
         # set the start date and end date
-        $event_datetime->timezone = empty($post_data['timezone']) ? \UNL\UCBCN::$defaultTimezone : $post_data['timezone'];
+        $event_datetime->timezone = empty($post_data['timezone']) ?
+            \UNL\UCBCN::$defaultTimezone : $post_data['timezone'];
         $event_datetime->starttime = date('Y-m-d H:i:s', strtotime($post_data['start_time']));
         $event_datetime->endtime = date('Y-m-d H:i:s', strtotime($post_data['end_time']));
 
         $event_datetime->recurringtype = 'none';
         $event_datetime->room = empty($post_data['room']) ? NULL : $post_data['room'];
         $event_datetime->directions = empty($post_data['directions']) ? NULL : $post_data['directions'];
-        $event_datetime->additionalpublicinfo = empty($post_data['additional_public_info']) ? NULL : $post_data['additional_public_info'];
+        $event_datetime->additionalpublicinfo = empty($post_data['additional_public_info']) ?
+            NULL : $post_data['additional_public_info'];
 
         $event_datetime->insert();
 

@@ -116,13 +116,13 @@ class Occurrence extends Record
         if ($r) {
             if (isset($this->location_id)) {
                 $location = $this->getLocation();
-                if (isset($location) && !$location->is_saved_or_standard()) {
+                if (isset($location) && !$location->isSavedOrStandard()) {
                     $location->delete();
                 }
             }
             if (isset($this->webcast_id)) {
                 $webcast = $this->getWebcast();
-                if (isset($webcast) && !$webcast->is_saved()) {
+                if (isset($webcast) && !$webcast->isSaved()) {
                     $webcast->delete();
                 }
             }

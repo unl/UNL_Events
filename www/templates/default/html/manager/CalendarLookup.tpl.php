@@ -2,7 +2,7 @@
     $crumbs = new stdClass;
     $crumbs->crumbs = array(
         "Events Manager" => "/manager",
-        "Calendar Lookup" => NULL
+        "Calendar Lookup" => null
     );
     echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
 ?>

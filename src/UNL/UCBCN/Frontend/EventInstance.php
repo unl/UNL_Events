@@ -251,7 +251,7 @@ class EventInstance implements RoutableInterface
      *
      * @return bool
      */
-    public function microdata_check()
+    public function microdataCheck()
     {
         if (!isset($this->event->title) || empty($this->event->title)) {
             return false;
@@ -267,7 +267,7 @@ class EventInstance implements RoutableInterface
 
         if (isset($this->eventdatetime->location_id)) {
             $location = $this->eventdatetime->getLocation();
-            if (!$location->microdata_check()) {
+            if (!$location->microdataCheck()) {
                 return false;
             }
         }

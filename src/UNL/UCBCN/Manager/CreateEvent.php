@@ -25,7 +25,11 @@ class CreateEvent extends EventForm
             $this->flashNotice(parent::NOTICE_LEVEL_ALERT, 'Sorry! We couldn\'t create your event', $e->getMessage());
             throw $e;
         }
-        $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Event Created', 'Your event "' . $new_event->title . '" has been created.');
+        $this->flashNotice(
+            parent::NOTICE_LEVEL_SUCCESS,
+            'Event Created',
+            'Your event "' . $new_event->title . '" has been created.'
+        );
 
         # redirect
         return $this->calendar->getManageURL(TRUE);
@@ -35,7 +39,9 @@ class CreateEvent extends EventForm
     {
         # title, start date, location are required
         if (empty($post_data['title']) || empty($post_data['start_date'])) {
-            throw new ValidationException('<a href="#title">Title</a>, and <a href="#start-date">start date</a> are required.');
+            throw new ValidationException(
+                '<a href="#title">Title</a>, and <a href="#start-date">start date</a> are required.'
+            );
         }
 
         # if we are sending this to UNL Main Calendar, description and contact info must be given
@@ -73,7 +79,9 @@ class CreateEvent extends EventForm
             }
 
             if ($post_data['location'] == 'new' && empty($post_data['new_location']['streetaddress1'])) {
-                throw new ValidationException('You must give your new location an <a href=\"#location-address-1\">address</a>.');
+                throw new ValidationException(
+                    'You must give your new location an <a href=\"#location-address-1\">address</a>.'
+                );
             }
 
             if ($post_data['location'] == 'new' && empty($post_data['new_location']['city'])) {
@@ -81,14 +89,17 @@ class CreateEvent extends EventForm
             }
 
             if ($post_data['location'] == 'new' && empty($post_data['new_location']['state'])) {
-                throw new ValidationException('You must give your new location a <a href=\"#location-state\">state</a>.');
+                throw new ValidationException(
+                    'You must give your new location a <a href=\"#location-state\">state</a>.'
+                );
             }
 
             if ($post_data['location'] == 'new' && empty($post_data['new_location']['zip'])) {
                 throw new ValidationException('You must give your new location a <a href=\"#location-zip\">zip</a>.');
             }
 
-            if ($post_data['location'] == 'new' && !empty($post_data['new_location']['webpageurl']) && !filter_var($post_data['new_location']['webpageurl'], FILTER_VALIDATE_URL)) {
+            if ($post_data['location'] == 'new' && !empty($post_data['new_location']['webpageurl']) &&
+                !filter_var($post_data['new_location']['webpageurl'], FILTER_VALIDATE_URL)) {
                 throw new ValidationException('<a href=\"#location-webpage\">Location URL</a> is not a valid URL.');
             }
         }
@@ -96,13 +107,21 @@ class CreateEvent extends EventForm
         // If there is a virtual location make sure these are set
         if (isset($post_data['virtual_location_check']) && $post_data['virtual_location_check'] == '1') {
             if ($post_data['v_location'] == 'new' && empty($post_data['new_v_location']['title'])) {
-                throw new ValidationException('You must give your new virtual location a <a href=\"#new-v-location-name\">name</a>.');
+                throw new ValidationException(
+                    'You must give your new virtual location a <a href=\"#new-v-location-name\">name</a>.'
+                );
             }
 
             if ($post_data['v_location'] == 'new' && empty($post_data['new_v_location']['url'])) {
-                throw new ValidationException('You must give your new virtual location a <a href=\"#new-v-location-url\">URL</a>.');
-            } else if ($post_data['v_location'] == 'new' && !empty($post_data['new_v_location']['url']) && !filter_var($post_data['new_v_location']['url'], FILTER_VALIDATE_URL)) {
-                throw new ValidationException('<a href=\"#new-v-location-url\">Virtual Location URL</a> is not a valid URL.');
+                throw new ValidationException(
+                    'You must give your new virtual location a <a href=\"#new-v-location-url\">URL</a>.'
+                );
+            } elseif ($post_data['v_location'] == 'new' &&
+                !empty($post_data['new_v_location']['url']) &&
+                !filter_var($post_data['new_v_location']['url'], FILTER_VALIDATE_URL)) {
+                throw new ValidationException(
+                    '<a href=\"#new-v-location-url\">Virtual Location URL</a> is not a valid URL.'
+                );
             }
         }
 

@@ -2,6 +2,7 @@
 namespace UNL\UCBCN;
 
 use UNL\UCBCN\ActiveRecord\Record;
+
 /**
  * Table Definition for webcast
  *
@@ -39,7 +40,7 @@ class Webcast extends Record
         return 'webcast';
     }
 
-    
+
     public function table()
     {
         return array(
@@ -58,7 +59,7 @@ class Webcast extends Record
             'id',
         );
     }
-    
+
     public function sequenceKey()
     {
         return array('id',true);
@@ -66,11 +67,11 @@ class Webcast extends Record
 
     /**
      * Checks to see if the location is saved to anyone or any calendar.
-     * 
+     *
      * @return bool
      */
-    public function is_saved()
+    public function isSaved()
     {
-        return (isset($this->user_id) || isset($this->calendar_id));
+        return isset($this->user_id) || isset($this->calendar_id);
     }
 }

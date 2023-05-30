@@ -106,26 +106,26 @@ class Location extends Record
             }
         }
     }
-    
+
 
 
     /**
      * Checks to see if the location is saved to anyone or any calendar.
      * It also checks to see if it is a standard location
-     * 
+     *
      * @return bool
      */
-    public function is_saved_or_standard()
+    public function isSavedOrStandard()
     {
-        return (isset($this->user_id) || isset($this->calendar_id) || $this->standard == 1);
+        return isset($this->user_id) || isset($this->calendar_id) || $this->standard == 1;
     }
 
     /**
      * Checks to see if the location has all information necessary for Google's microdata.
-     * 
+     *
      * @return bool
      */
-    public function microdata_check()
+    public function microdataCheck()
     {
         if (!isset($this->name) || empty($this->name)) {
             return false;

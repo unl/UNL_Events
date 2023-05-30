@@ -1,10 +1,10 @@
 <?php $url = $context->getURL(); ?>
-<?php $microdata_check = $context->microdata_check(); ?>
+<?php $microdataCheck = $context->microdataCheck(); ?>
 <div class="event_cal">
     <div class='vcalendar'>
         <div class='vevent'>
 
-            <?php if($microdata_check): ?>
+            <?php if($microdataCheck): ?>
                 <script type="application/ld+json">
                     <?php $event_microdata = $context->getFormattedMicrodata(); ?>
                     <?php $raw_microdata = $savvy->getRawObject($event_microdata); ?>
