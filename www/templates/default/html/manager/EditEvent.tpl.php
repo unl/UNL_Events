@@ -271,7 +271,71 @@
                     <?php $location = $datetime->getLocation(); ?>
                     <?php if (isset($location) && !empty($location)): ?>
                         <td class="dcf-txt-middle location with-controls" data-id="<?php echo $location->id; ?>" data-microdata="<?php echo json_encode($location->microdata_check()); ?>">
-                            <?php echo $location->name; ?>
+                            <div class="dcf-popup dcf-w-100%" data-hover="true" data-point="true">
+                                <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup dcf-w-100%"><?php echo $location->name; ?></button>
+                                <div class="dcf-popup-content unl-cream unl-bg-blue dcf-p-3 dcf-rounded" style="width: 100%; min-width: 25ch;">
+                                    <dl>
+                                        <?php if(isset($location->name) && !empty($location->name)): ?>
+                                            <dt>Name</dt>
+                                            <dd><?php echo $location->name; ?></dd>
+                                        <?php endif; ?>
+
+                                        <?php if(isset($location->streetaddress1) && !empty($location->streetaddress1)): ?>
+                                            <dt>Street Address 1</dt>
+                                            <dd><?php echo $location->streetaddress1; ?></dd>
+                                        <?php endif; ?>
+
+                                        <?php if(isset($location->streetaddress2) && !empty($location->streetaddress2)): ?>
+                                            <dt>Street Address 2</dt>
+                                            <dd><?php echo $location->streetaddress2; ?></dd>
+                                        <?php endif; ?>
+
+                                        <?php if(isset($location->city) && !empty($location->city)): ?>
+                                            <dt>City</dt>
+                                            <dd><?php echo $location->city; ?></dd>
+                                        <?php endif; ?>
+
+                                        <?php if(isset($location->state) && !empty($location->state)): ?>
+                                            <dt>State</dt>
+                                            <dd><?php echo $location->state; ?></dd>
+                                        <?php endif; ?>
+                                    
+                                        <?php if(isset($location->zip) && !empty($location->zip)): ?>
+                                            <dt>Zip</dt>
+                                            <dd><?php echo $location->zip; ?></dd>
+                                        <?php endif; ?>
+
+                                        <?php if(isset($location->room) && !empty($location->room)): ?>
+                                            <dt>Room</dt>
+                                            <dd><?php echo $location->room; ?></dd>
+                                        <?php endif; ?>
+
+                                        <?php if(isset($datetime->room) && !empty($datetime->room)): ?>
+                                            <dt>Room</dt>
+                                            <dd><?php echo $datetime->room; ?></dd>
+                                        <?php elseif(isset($location->room) && !empty($location->room)): ?>
+                                            <dt>Room</dt>
+                                            <dd><?php echo $location->room; ?></dd>
+                                        <?php endif; ?>
+
+                                        <?php if(isset($datetime->directions) && !empty($datetime->directions)): ?>
+                                            <dt>Directions</dt>
+                                            <dd><?php echo $datetime->directions; ?></dd>
+                                        <?php elseif(isset($location->directions) && !empty($location->directions)): ?>
+                                            <dt>Directions</dt>
+                                            <dd><?php echo $location->directions; ?></dd>
+                                        <?php endif; ?>
+
+                                        <?php if(isset($datetime->location_additionalpublicinfo) && !empty($datetime->location_additionalpublicinfo)): ?>
+                                            <dt>Additional Public Info</dt>
+                                            <dd><?php echo $datetime->location_additionalpublicinfo; ?></dd>
+                                        <?php elseif(isset($location->additionalpublicinfo) && !empty($location->additionalpublicinfo)): ?>
+                                            <dt>Additional Public Info</dt>
+                                            <dd><?php echo $location->additionalpublicinfo; ?></dd>
+                                        <?php endif; ?>
+                                    </dl>
+                                </div>
+                            </div>
                         </td>
                     <?php else: ?>
                         <td class="dcf-txt-middle location with-controls" data-id="" data-microdata="false">
@@ -282,7 +346,30 @@
                     <?php $getWebcast = $datetime->getWebcast(); ?>
                     <?php if (isset($getWebcast) && !empty($getWebcast)): ?>
                         <td class="dcf-txt-middle v_location with-controls" data-id="<?php echo $getWebcast->id; ?>" data-microdata="true">
-                            <?php echo $getWebcast->title; ?>
+                            <div class="dcf-popup dcf-w-100%" data-hover="true" data-point="true">
+                                <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup dcf-w-100%"><?php echo $getWebcast->title; ?></button>
+                                <div class="dcf-popup-content unl-cream unl-bg-blue dcf-p-3 dcf-rounded" style="min-width: 25ch;">
+                                    <dl>
+                                        <?php if(isset($getWebcast->title) && !empty($getWebcast->title)): ?>
+                                            <dt>Name</dt>
+                                            <dd><?php echo $getWebcast->title; ?></dd>
+                                        <?php endif; ?>
+
+                                        <?php if(isset($getWebcast->url) && !empty($getWebcast->url)): ?>
+                                            <dt>URL</dt>
+                                            <dd><?php echo $getWebcast->url; ?></dd>
+                                        <?php endif; ?>
+
+                                        <?php if(isset($datetime->webcast_additionalpublicinfo) && !empty($datetime->webcast_additionalpublicinfo)): ?>
+                                            <dt>Additional Public Info</dt>
+                                            <dd><?php echo $datetime->webcast_additionalpublicinfo; ?></dd>
+                                        <?php elseif(isset($getWebcast->additionalinfo) && !empty($getWebcast->additionalinfo)): ?>
+                                            <dt>Additional Public Info</dt>
+                                            <dd><?php echo $getWebcast->additionalinfo; ?></dd>
+                                        <?php endif; ?>
+                                    </dl>
+                                </div>
+                            </div>
                         </td>
                     <?php else: ?>
                         <td class="dcf-txt-middle v_location with-controls" data-id="" data-microdata="false">
