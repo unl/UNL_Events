@@ -175,7 +175,7 @@ class EventListing extends RecordList
      */
     public function getAudienceURLParam(string $url_params): string
     {
-        return $this->getFilterURLParam($url_params, "audience", $this->event_type_filter);
+        return $this->getFilterURLParam($url_params, "audience", $this->audience_filter);
     }
 
     /**
@@ -252,9 +252,9 @@ class EventListing extends RecordList
 
         if (!empty($filter_value)) {
             if (empty($url_params)) {
-                $url_params .= "?";
+                $url .= "?";
             } else {
-                $url_params .= "&";
+                $url .= "&";
             }
             $url .= $param_name . '=' . urlencode($filter_value);
         }
