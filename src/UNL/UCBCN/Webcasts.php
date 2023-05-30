@@ -25,7 +25,7 @@ use UNL\UCBCN\ActiveRecord\RecordList;
  */
 class Webcasts extends RecordList
 {
-    function __construct($options = array())
+    public function __construct($options = array())
     {
         parent::__construct($options);
     }

@@ -132,16 +132,11 @@ const setRecurringOptions = function(start_elem, month_group_elem, rectypemonth)
 
     // get week in month
     var nth = {
-        "1": "First",
-        "2": "Second",
-        "3": "Third",
-        "4": "Fourth",
-        "5": "Last",
         1: "First",
         2: "Second",
         3: "Third",
         4: "Fourth",
-        5: "Last"
+        5: "Last",
     };
 
     // get number of days (28, 29, 30, 31) in month

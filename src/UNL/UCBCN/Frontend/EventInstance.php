@@ -251,7 +251,7 @@ class EventInstance implements RoutableInterface
      *
      * @return bool
      */
-    function microdata_check()
+    public function microdata_check()
     {
         if (!isset($this->event->title) || empty($this->event->title)) {
             return false;

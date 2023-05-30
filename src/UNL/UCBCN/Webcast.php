@@ -40,7 +40,7 @@ class Webcast extends Record
     }
 
     
-    function table()
+    public function table()
     {
         return array(
             'id'=>129,
@@ -52,14 +52,14 @@ class Webcast extends Record
         );
     }
 
-    function keys()
+    public function keys()
     {
         return array(
             'id',
         );
     }
     
-    function sequenceKey()
+    public function sequenceKey()
     {
         return array('id',true);
     }
