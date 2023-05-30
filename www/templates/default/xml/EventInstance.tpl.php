@@ -1,11 +1,11 @@
-	<Event>
+    <Event>
         <EventID><?php echo $context->event->id; ?></EventID>
         <EventTitle><?php echo htmlspecialchars($context->event->displayTitle($context)); ?></EventTitle>
         <EventSubtitle><?php echo htmlspecialchars($context->event->subtitle); ?></EventSubtitle>
         <Status><?php echo $context->event->icalStatus($context); ?></Status>
         <?php
         $timezoneDateTime = new \UNL\UCBCN\TimezoneDateTime($context->eventdatetime->timezone);
-		    ?>
+            ?>
         <DateTime>
             <StartDate><?php echo $timezoneDateTime->format($context->getStartTime(),'c'); ?></StartDate>
             <StartTime><?php echo $timezoneDateTime->formatUTC($context->getStartTime(),'H:i:s'); ?>Z</StartTime>
@@ -20,10 +20,10 @@
             </AdditionalPublicInfo>
         </DateTime>
         <Locations>
-        	<?php
-			if (isset($context->eventdatetime->location_id) && !empty($context->eventdatetime->location_id)) :
+            <?php
+            if (isset($context->eventdatetime->location_id) && !empty($context->eventdatetime->location_id)) :
                 $loc = $context->eventdatetime->getLocation();
-			?>
+            ?>
             <Location>
                 <LocationID><?php echo $loc->id; ?></LocationID>
                 <LocationName><?php echo htmlspecialchars($loc->name); ?></LocationName>
@@ -102,16 +102,16 @@
         $eventTypes = $context->event->getEventTypes();
         if ($eventTypes->count()) : ?>
         <EventTypes>
-        	<?php foreach ($eventTypes as $eventHasType) :
-        		$type = $eventHasType->getType();
-	        	if ($type) : ?>
-	            <EventType>
-	                <EventTypeID><?php echo $type->id; ?></EventTypeID>
-	                <EventTypeName><?php echo htmlspecialchars($type->name); ?></EventTypeName>
-	                <EventTypeDescription><?php echo htmlspecialchars($type->description); ?></EventTypeDescription>
-	            </EventType>
-	            <?php
-            	endif;
+            <?php foreach ($eventTypes as $eventHasType) :
+                $type = $eventHasType->getType();
+                if ($type) : ?>
+                <EventType>
+                    <EventTypeID><?php echo $type->id; ?></EventTypeID>
+                    <EventTypeName><?php echo htmlspecialchars($type->name); ?></EventTypeName>
+                    <EventTypeDescription><?php echo htmlspecialchars($type->description); ?></EventTypeDescription>
+                </EventType>
+                <?php
+                endif;
             endforeach; ?>
         </EventTypes>
         <?php endif; ?>
@@ -122,10 +122,10 @@
             <?php foreach ($audiences as $audience) : ?>
                 <?php $current_audience = $audience->getAudience(); ?>
                 <?php if($current_audience): ?>
-	            <Audience>
-	                <AudienceID><?php echo $current_audience->id; ?></AudienceID>
-	                <AudienceName><?php echo htmlspecialchars($current_audience->name); ?></AudienceName>
-	            </Audience>
+                <Audience>
+                    <AudienceID><?php echo $current_audience->id; ?></AudienceID>
+                    <AudienceName><?php echo htmlspecialchars($current_audience->name); ?></AudienceName>
+                </Audience>
                 <?php endif; ?>
             <?php endforeach; ?>
         </Audiences>
@@ -190,7 +190,7 @@
         $documents = $context->event->getDocuments();
         if ($documents->count()) : ?>
         <Documents>
-        	<?php foreach ($documents as $document) : ?>
+            <?php foreach ($documents as $document) : ?>
             <Document>
                 <Title><?php echo htmlspecialchars($document->name); ?></Title>
                 <URL><?php echo $document->url; ?></URL>
@@ -202,7 +202,7 @@
         $contacts = $context->event->getPublicContacts();
         if ($contacts->count()) : ?>
         <PublicEventContacts>
-        	<?php foreach ($contacts as $contact) : ?>
+            <?php foreach ($contacts as $contact) : ?>
             <PublicEventContact>
                 <PublicEventContactID><?php echo $contact->id; ?></PublicEventContactID>
 
