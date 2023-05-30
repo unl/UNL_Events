@@ -123,9 +123,9 @@ CREATE PROCEDURE updateOrInsertLocation(
     IN in_standard TINYINT
 )
 BEGIN
-    SELECT @A:=id FROM events.location WHERE name = in_name AND standard = 1 LIMIT 1;
-    IF EXISTS (SELECT id FROM events.location WHERE name = in_name AND standard = 1) THEN
-        UPDATE events.location
+    SELECT @A:=id FROM location WHERE name = in_name AND standard = 1 LIMIT 1;
+    IF EXISTS (SELECT id FROM location WHERE name = in_name AND standard = 1) THEN
+        UPDATE location
         SET streetaddress1 = in_streetaddress1,
             city = in_city,
             state = in_state,
@@ -134,7 +134,7 @@ BEGIN
             additionalpublicinfo = in_additionalpublicinfo
         WHERE id = @A;
     ELSE
-        INSERT INTO events.location (name, streetaddress1, city, state, zip, mapurl, additionalpublicinfo, standard)
+        INSERT INTO location (name, streetaddress1, city, state, zip, mapurl, additionalpublicinfo, standard)
         VALUES (in_name, in_streetaddress1, in_city, in_state, in_zip, in_mapurl, in_additionalpublicinfo, in_standard);
     END IF;
 
