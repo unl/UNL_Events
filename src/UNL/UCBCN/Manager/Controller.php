@@ -76,6 +76,11 @@ class Controller {
         return self::$url . 'account/';
     }
 
+    public static function getUserLocationURL() 
+    {
+        return self::$url . 'location/';
+    }
+
     public static function getWelcomeURL() {
         return self::$url . 'welcome/';
     }

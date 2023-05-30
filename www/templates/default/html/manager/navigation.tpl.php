@@ -28,6 +28,10 @@
                 <li><a class="dcf-txt-decor-hover" href="<?php echo $calendar->getUsersURL() ?>">Users &amp; Permissions</a></li>
             <?php endif; ?>
 
+            <?php if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_CREATE_ID, $calendar->id)): ?>
+                <li><a class="dcf-txt-decor-hover" href="<?php echo $calendar->getLocationURL(); ?>">Calendar Locations</a></li>
+            <?php endif; ?>
+
             <?php if ($user->hasPermission(\UNL\UCBCN\Permission::CALENDAR_EDIT_PERMISSIONS_ID, $calendar->id)): ?>
                 <li><a class="dcf-txt-decor-hover" href="<?php echo $base_manager_url ?>logout">Logout</a></li>
             <?php endif; ?>
@@ -50,7 +54,7 @@
                 <a class="dcf-txt-decor-hover" href="<?php echo $context->getEditMeURL() ?>">User Info</a>
             </li>
             <li>
-                <a class="dcf-txt-decor-hover" href="<?php echo $context->getEditAccountURL() ?>">Account Info</a>
+                <a class="dcf-txt-decor-hover" href="<?php echo $context->getUserLocationURL(); ?>">User Locations</a>
             </li>
             <li>
                 <a class="dcf-txt-decor-hover" href="https://www.github.com/unl/UNL_UCBCN_System/wiki">Get Help!</a>
