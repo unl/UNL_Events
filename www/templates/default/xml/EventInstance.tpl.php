@@ -15,6 +15,7 @@
             <EndDate><?php echo $timezoneDateTime->format($context->getEndTime(),'c'); ?></EndDate>
             <EndTime><?php echo $timezoneDateTime->formatUTC($context->getEndTime(),'H:i:s'); ?>Z</EndTime>
             <?php endif; ?>
+            <AdditionalPublicInfo><?php echo htmlspecialchars($context->eventdatetime->additionalpublicinfo); ?></AdditionalPublicInfo>
             <?php
                 if ($context->eventdatetime->isRecurring()):
             ?>
@@ -53,12 +54,8 @@
                             languageID="en"
                             codeListURI="http://www.iso.org/iso/en/prods-services/iso3166ma/02iso-3166-code-lists/list-en1-semic.txt"
                             codeListSchemeURI="urn:oasis:names:specification:ubl:schema:xsd:CountryIdentificationCode-1.0"
-                        >
-                            US
-                        </IdentificationCode>
-                        <Name xmlns="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-1.0">
-                            United States
-                        </Name>
+                        >US</IdentificationCode>
+                        <Name xmlns="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-1.0">United States</Name>
                     </Country>
                 </Address>
                 <Phones>
@@ -89,13 +86,9 @@
                     isset($context->eventdatetime->location_additionalpublicinfo) &&
                     !empty($context->eventdatetime->location_additionalpublicinfo)):
                 ?>
-                    <AdditionalPublicInfo>
-                        <?php echo htmlspecialchars($context->eventdatetime->location_additionalpublicinfo); ?>
-                    </AdditionalPublicInfo>
+                    <AdditionalPublicInfo><?php echo htmlspecialchars($context->eventdatetime->location_additionalpublicinfo); ?></AdditionalPublicInfo>
                 <?php else: ?>
-                    <AdditionalPublicInfo>
-                        <?php echo htmlspecialchars($loc->additionalpublicinfo); ?>
-                    </AdditionalPublicInfo>
+                    <AdditionalPublicInfo><?php echo htmlspecialchars($loc->additionalpublicinfo); ?></AdditionalPublicInfo>
                 <?php endif; ?>
             </Location>
             <?php endif; ?>
@@ -166,13 +159,9 @@
                     isset($context->eventdatetime->webcast_additionalpublicinfo) &&
                     !empty($context->eventdatetime->webcast_additionalpublicinfo)):
                 ?>
-                    <AdditionalPublicInfo>
-                        <?php echo htmlspecialchars($context->eventdatetime->webcast_additionalpublicinfo); ?>
-                    </AdditionalPublicInfo>
+                    <AdditionalPublicInfo><?php echo htmlspecialchars($context->eventdatetime->webcast_additionalpublicinfo); ?></AdditionalPublicInfo>
                 <?php else: ?>
-                    <AdditionalPublicInfo>
-                        <?php echo htmlspecialchars($webcast->additionalinfo); ?>
-                    </AdditionalPublicInfo>
+                    <AdditionalPublicInfo><?php echo htmlspecialchars($webcast->additionalinfo); ?></AdditionalPublicInfo>
                 <?php endif; ?>
             </Webcast>
             <?php endif; ?>
@@ -182,9 +171,7 @@
             <Image>
                 <Title>Image</Title>
                 <Description>image for event <?php echo $context->event->id; ?></Description>
-                <URL>
-                    <?php echo \UNL\UCBCN\Frontend\Controller::$url; ?>?image&amp;id=<?php echo $context->event->id; ?>
-                </URL>
+                <URL><?php echo \UNL\UCBCN\Frontend\Controller::$url; ?>?image&amp;id=<?php echo $context->event->id; ?></URL>
             </Image>
         </Images>
         <?php endif; ?>
@@ -270,9 +257,7 @@
                 </ContactName>
                 <Phones>
                     <Phone>
-                        <PhoneNumber>
-                            <?php echo htmlspecialchars($context->event->listingcontactphone); ?>
-                        </PhoneNumber>
+                        <PhoneNumber><?php echo htmlspecialchars($context->event->listingcontactphone); ?></PhoneNumber>
                     </Phone>
                 </Phones>
                 <EmailAddresses>
@@ -297,9 +282,7 @@
                 <AccountID><?php echo $originCalendar->account_id; ?></AccountID>
                 <Name><?php echo htmlspecialchars($originCalendar->name); ?></Name>
                 <ShortName><?php echo htmlspecialchars($originCalendar->shortname); ?></ShortName>
-                <URL>
-                    <?php echo $protocol . $_SERVER['SERVER_NAME'] . '/' . urlencode($originCalendar->shortname);?>
-                </URL>
+                <URL><?php echo $protocol . $_SERVER['SERVER_NAME'] . '/' . urlencode($originCalendar->shortname);?></URL>
             </OriginCalendar>
         <?php endif; ?>
     </Event>
