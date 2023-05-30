@@ -81,6 +81,11 @@ class Controller {
         return self::$url . 'location/';
     }
 
+    public static function getCalendarLookupURL() 
+    {
+        return self::$url . 'lookup/';
+    }
+
     public static function getWelcomeURL() {
         return self::$url . 'welcome/';
     }

@@ -57,6 +57,9 @@
                 <a class="dcf-txt-decor-hover" href="<?php echo $context->getUserLocationURL(); ?>">User Locations</a>
             </li>
             <li>
+                <a class="dcf-txt-decor-hover" href="<?php echo $context->getCalendarLookupURL(); ?>">Calendar Lookup</a>
+            </li>
+            <li>
                 <a class="dcf-txt-decor-hover" href="https://www.github.com/unl/UNL_UCBCN_System/wiki">Get Help!</a>
             </li>
         </ul>

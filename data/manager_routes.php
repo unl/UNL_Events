@@ -17,6 +17,7 @@ $calendar_slash_optional = '(' . $calendar . '(\/)?)?';
 $routes['/^(\/)?$/'] = 'UNL\UCBCN\Manager\CalendarList';
 $routes['/^me(\/)?$/'] = 'UNL\UCBCN\Manager\EditUserInfo';
 $routes['/^location(\/)?$/'] = 'UNL\UCBCN\Manager\UserLocation';
+$routes['/^lookup(\/)?$/'] = 'UNL\UCBCN\Manager\CalendarLookup';
 $routes['/^welcome(\/)?$/'] = 'UNL\UCBCN\Manager\Welcome';
 $routes['/^logout(\/)?$/'] = 'UNL\UCBCN\Manager\AuthAction';
 
