@@ -67,7 +67,16 @@ class EditEvent extends EventForm
 
         # website must be a valid url
         if (!empty($post_data['website']) && !filter_var($post_data['website'], FILTER_VALIDATE_URL)) {
-          throw new ValidationException('Event Website must be a valid URL.');
+            throw new ValidationException('Event Website must be a valid URL.');
+        }
+
+        if (!empty($post_data['contact_name']) || !empty($post_data['contact_phone']) || !empty($post_data['contact_email'])) {
+            if (empty($post_data['contact_type'])) {
+                throw new ValidationException('<a href="#contact-type">Contact Type</a> is required if a contact is added.');
+            }
+            if ($post_data['contact_type'] !== "person" && $post_data['contact_type'] !== "organization") {
+                throw new ValidationException('<a href="#contact-type">Contact Type</a> must be person or organization.');
+            }
         }
 
 	    // Validate Image

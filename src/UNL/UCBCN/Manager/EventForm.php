@@ -52,6 +52,7 @@ class EventForm extends PostHandler
 		$this->event->listingcontactname = empty($post_data['contact_name']) ? NULL : $post_data['contact_name'];
 		$this->event->listingcontactphone = empty($post_data['contact_phone']) ? NULL : $post_data['contact_phone'];
 		$this->event->listingcontactemail = empty($post_data['contact_email']) ? NULL : $post_data['contact_email'];
+		$this->event->listingcontacttype = empty($post_data['contact_type']) ? NULL : $post_data['contact_type'];
 
 		$this->event->webpageurl = empty($post_data['website']) ? NULL : $post_data['website'];
 		$this->event->approvedforcirculation = !empty($post_data['private_public']) && $post_data['private_public'] == 'private' ? 0 : 1;

@@ -135,6 +135,15 @@ class CreateEvent extends EventForm
             throw new ValidationException('<a href="send_to_main">Consider for main calendar</a> is required.');
         }
 
+        if (!empty($post_data['contact_name']) || !empty($post_data['contact_phone']) || !empty($post_data['contact_email'])) {
+            if (empty($post_data['contact_type'])) {
+                throw new ValidationException('<a href="#contact-type">Contact Type</a> is required if a contact is added.');
+            }
+            if ($post_data['contact_type'] !== "person" && $post_data['contact_type'] !== "organization") {
+                throw new ValidationException('<a href="#contact-type">Contact Type</a> must be person or organization.');
+            }
+        }
+
         # Validate Image
         $this->validateEventImage($post_data, $files);
     }

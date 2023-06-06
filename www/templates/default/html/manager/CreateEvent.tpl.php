@@ -144,6 +144,17 @@
                     <label for="contact-phone">Phone</label>
                     <input id="contact-phone" name="contact_phone" type="text" class="dcf-w-100%" value="<?php if (isset($post['contact_phone'])) { echo $post['contact_phone']; } ?>" />
                 </div>
+                <fieldset class="dcf-mb-0 dcf-p-0 dcf-b-0" id="contact-type">
+                    <legend class="dcf-pb-2">Organizer Type</legend>
+                    <div class="dcf-input-radio">
+                        <input id="contact-type-person" name="contact_type" type="radio" value="person" <?php if (!empty($post['contact_type']) && $post['contact_type'] == 'person') { echo CHECKED_INPUT; } ?>/>
+                        <label for="contact-type-person">Person</label>
+                    </div>
+                    <div class="dcf-input-radio">
+                        <input id="contact-type-organization" name="contact_type" type="radio" value="organization" <?php if (!empty($post['contact_type']) && $post['contact_type'] == 'organization') { echo CHECKED_INPUT; } ?>/>
+                        <label for="contact-type-organization">Organization</label>
+                    </div>
+                </fieldset>
             </div>
             <hr>
         </section>

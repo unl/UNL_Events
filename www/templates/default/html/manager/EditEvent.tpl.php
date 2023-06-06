@@ -627,6 +627,17 @@
                     value="<?php echo $event->listingcontactphone; ?>"
                 />
             </div>
+            <fieldset class="dcf-mb-0 dcf-p-0 dcf-b-0" id="contact-type">
+                <legend class="dcf-pb-2">Organizer Type</legend>
+                <div class="dcf-input-radio">
+                    <input id="contact-type-person" name="contact_type" type="radio" value="person" <?php if (isset($event->listingcontacttype) && $event->listingcontacttype === 'person') { echo CHECKED_INPUT; } ?>/>
+                    <label for="contact-type-person">Person</label>
+                </div>
+                <div class="dcf-input-radio">
+                    <input id="contact-type-organization" name="contact_type" type="radio" value="organization" <?php if (isset($event->listingcontacttype) && $event->listingcontacttype === 'organization') { echo CHECKED_INPUT; } ?>/>
+                    <label for="contact-type-organization">Organization</label>
+                </div>
+            </fieldset>
         </div>
         <hr>
     </section>

@@ -21,3 +21,6 @@ ALTER TABLE `eventdatetime` ADD `location_additionalpublicinfo` longtext DEFAULT
 
 -- Allows locations to be saved to a calendar
 ALTER TABLE `location` ADD `calendar_id` VARCHAR(100) DEFAULT NULL;
+
+-- Add organizer type to events
+ALTER TABLE `event` ADD `listingcontacttype` ENUM('person', 'organization') DEFAULT NULL AFTER `listingcontactemail`;

@@ -313,6 +313,25 @@ require(['jquery', 'wdn'], function ($, WDN) {
             }
         }
 
+        if ($('#contact-name').val().trim() !== "" ||
+            $('#contact-phone').val().trim() !== "" ||
+            $('#contact-email').val().trim() !== "")
+        {
+            console.log('inside if')
+            if ($('input[name="contact_type"]:checked').val() === undefined) {
+                notifier.mark_input_invalid($('#contact-type'));
+                errors.push('<a href="#contact-type">Contact Type</a> is required when a contact has been added.');
+            }
+
+            if ($('input[name="contact_type"]:checked').val() !== undefined &&
+                $('input[name="contact_type"]:checked').val() !== "person" &&
+                $('input[name="contact_type"]:checked').val() !== "organization") 
+            {
+                notifier.mark_input_invalid($('#contact-type'));
+                errors.push('<a href="#contact-type">Contact Type</a> must be person or organization.');
+            }
+        }
+
         var websiteURL = $('#website').val();
         if (websiteURL != '' && !isUrlValid(websiteURL)) {
             notifier.mark_input_invalid($('#website'));
