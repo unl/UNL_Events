@@ -70,7 +70,7 @@ $(JS_OBJ3): www/templates/default/html/js/event-image.js $(UGLIFYJS)
 $(JS_OBJ4): www/templates/default/html/js/filters.js $(UGLIFYJS)
 	$(UGLIFYJS) $< -c -m -o $@ --source-map
 
-$(JS_OB5): www/templates/default/html/js/manager-create-event.js $(UGLIFYJS)
+$(JS_OBJ5): www/templates/default/html/js/manager-create-event.js $(UGLIFYJS)
 	$(UGLIFYJS) $< -c -m -o $@ --source-map
 
 $(JS_OBJ6): www/templates/default/html/js/manager-event-form-date-time.js $(UGLIFYJS)
