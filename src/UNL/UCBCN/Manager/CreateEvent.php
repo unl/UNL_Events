@@ -135,7 +135,7 @@ class CreateEvent extends EventForm
             throw new ValidationException('<a href="send_to_main">Consider for main calendar</a> is required.');
         }
 
-        if ($post_data['contact_type'] !== "person" && $post_data['contact_type'] !== "organization") {
+        if (!empty($post_data['contact_type']) && $post_data['contact_type'] !== "person" && $post_data['contact_type'] !== "organization") {
             throw new ValidationException('<a href="#contact-type">Contact Type</a> must be person or organization.');
         }
 

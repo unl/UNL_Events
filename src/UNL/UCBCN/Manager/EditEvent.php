@@ -70,7 +70,7 @@ class EditEvent extends EventForm
             throw new ValidationException('Event Website must be a valid URL.');
         }
 
-        if ($post_data['contact_type'] !== "person" && $post_data['contact_type'] !== "organization") {
+        if (!empty($post_data['contact_type']) && $post_data['contact_type'] !== "person" && $post_data['contact_type'] !== "organization") {
             throw new ValidationException('<a href="#contact-type">Contact Type</a> must be person or organization.');
         }
 
