@@ -74,4 +74,14 @@ class Webcast extends Record
     {
         return isset($this->user_id) || isset($this->calendar_id);
     }
+
+    /**
+     * Checks to see if the location has all information necessary for Google's microdata.
+     *
+     * @return bool
+     */
+    public function microdataCheck()
+    {
+        return (isset($this->url) && !empty($this->url));
+    }
 }

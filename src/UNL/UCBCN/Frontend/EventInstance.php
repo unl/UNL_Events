@@ -272,6 +272,13 @@ class EventInstance implements RoutableInterface
             }
         }
 
+        if (isset($this->eventdatetime->webcast_id)) {
+            $webcast = $this->eventdatetime->getWebcast();
+            if (!$webcast->microdataCheck()) {
+                return false;
+            }
+        }
+
         return true;
     }
 
@@ -586,6 +593,22 @@ class EventInstance implements RoutableInterface
             $webcast_data["url"] = $webcast->url;
 
             $data["location"][] = $webcast_data;
+        }
+
+        if (isset($this->event->imagedata)) {
+            $data["image"] = array();
+            $data["image"][] = \UNL\UCBCN\Frontend\Controller::$url . '?image&amp;id=' . $this->event->id;
+        }
+        
+        if (isset($this->event->listingcontacttype)) {
+            $data["organizer"] = array();
+            if ($this->event->listingcontacttype === "person") {
+                $data["organizer"]['@type'] = 'Person';
+            } else {
+                $data["organizer"]['@type'] = 'organization';
+            }
+            $data["organizer"]['name'] = $this->event->listingcontactname;
+            $data["organizer"]['url'] = $this->event->listingcontacturl;
         }
 
         return $data;
