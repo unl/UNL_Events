@@ -139,6 +139,11 @@ class CreateEvent extends EventForm
             throw new ValidationException('<a href="#contact-type">Contact Type</a> must be person or organization.');
         }
 
+        # website must be a valid url
+        if (!empty($post_data['contact_website']) && !filter_var($post_data['contact_website'], FILTER_VALIDATE_URL)) {
+            throw new ValidationException('Contact Website must be a valid URL.');
+        }
+
         # Validate Image
         $this->validateEventImage($post_data, $files);
     }

@@ -343,6 +343,12 @@ require(['jquery', 'wdn'], function ($, WDN) {
             errors.push('<a href="#contact-type">Contact Type</a> must be person or organization.');
         }
 
+        var contactWebsiteURL = $('#contact_website').val();
+        if (contactWebsiteURL != '' && !isUrlValid(contactWebsiteURL)) {
+            notifier.mark_input_invalid($('#contact_website'));
+            errors.push('<a href="#contact_website">Contact Website</a> is not a valid URL.');
+        }
+
         var websiteURL = $('#website').val();
         if (websiteURL != '' && !isUrlValid(websiteURL)) {
             notifier.mark_input_invalid($('#website'));
