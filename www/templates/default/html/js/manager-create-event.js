@@ -34,6 +34,10 @@ function testMicrodata(modal_output=true) {
     const location_check_input = document.getElementById('physical_location_check');
     const virtual_location_check_input = document.getElementById('virtual_location_check');
 
+    const contact_name_input = document.getElementById('contact-name');
+    const contact_url_input = document.getElementById('contact-website');
+    const contact_type_input = document.querySelector('input[name="contact_type"]:checked');
+
     if (title_input.value == "") {
         if (modal_output) {
             modal_error_output_html += "<li>Missing title</li>";
@@ -135,16 +139,34 @@ function testMicrodata(modal_output=true) {
         }
     }
 
+    if (contact_name_input.value !== "" || contact_url_input.value !== "") {
+        if (contact_type_input === null) {
+            if (modal_output) {
+                modal_error_output_html += "<li>If organizer contact info is used the type must be specified</li>";
+            }
+            microdata_pass = false;
+        }
+        if (
+            (contact_name_input.value !== "" && contact_url_input.value === "") ||
+            (contact_name_input.value === "" && contact_url_input.value !== "")
+        ){
+            if (modal_output) {
+                modal_error_output_html += "<li>Both the organizer name and organizer website must be set if either are used</li>";
+            }
+            microdata_pass = false;
+        }
+    }
+
     if (!microdata_pass) {
         if (modal_output) {
             google_microdata_modal_output.innerHTML = "<span class='dcf-bold'>Your event is missing these requirements:</span> <ul>" + modal_error_output_html + "</ul>";
         }
-        google_microdata_button.innerHTML = "! Your event does not reach google microdata requirements !";
+        google_microdata_button.innerHTML = "! Your event does not reach Google microdata requirements !";
         google_microdata_button.style.backgroundColor = "var(--bg-brand-eta)";
         google_microdata_button.style.borderColor = "var(--bg-brand-eta)";
     }else{
         if (modal_output) {
-            google_microdata_modal_output.innerHTML = "<span class='dcf-bold'>Your event is fulfilling all google's requirements</span>";
+            google_microdata_modal_output.innerHTML = "<span class='dcf-bold'>Your event is fulfilling all Google's requirements</span>";
         }
         google_microdata_button.innerHTML = "Your event does reach google microdata requirements";
         google_microdata_button.style.backgroundColor = "var(--bg-brand-zeta)";
@@ -313,23 +335,12 @@ require(['jquery', 'wdn'], function ($, WDN) {
             }
         }
 
-        if ($('#contact-name').val().trim() !== "" ||
-            $('#contact-phone').val().trim() !== "" ||
-            $('#contact-email').val().trim() !== "")
+        if ($('input[name="contact_type"]:checked').val() !== undefined &&
+            $('input[name="contact_type"]:checked').val() !== "person" &&
+            $('input[name="contact_type"]:checked').val() !== "organization") 
         {
-            console.log('inside if')
-            if ($('input[name="contact_type"]:checked').val() === undefined) {
-                notifier.mark_input_invalid($('#contact-type'));
-                errors.push('<a href="#contact-type">Contact Type</a> is required when a contact has been added.');
-            }
-
-            if ($('input[name="contact_type"]:checked').val() !== undefined &&
-                $('input[name="contact_type"]:checked').val() !== "person" &&
-                $('input[name="contact_type"]:checked').val() !== "organization") 
-            {
-                notifier.mark_input_invalid($('#contact-type'));
-                errors.push('<a href="#contact-type">Contact Type</a> must be person or organization.');
-            }
+            notifier.mark_input_invalid($('#contact-type'));
+            errors.push('<a href="#contact-type">Contact Type</a> must be person or organization.');
         }
 
         var websiteURL = $('#website').val();

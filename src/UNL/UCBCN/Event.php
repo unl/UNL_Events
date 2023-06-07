@@ -64,6 +64,7 @@ class Event extends Record
     public $listingcontactname;              // string(100)
     public $listingcontactphone;             // string(255)
     public $listingcontactemail;             // string(255)
+    public $listingcontacturl;               // blob(4294967295)  blob
     public $listingcontacttype;              // enum('person', 'organization')
     public $icalendar;                       // blob(4294967295)  blob
     public $imagedata;                       // blob(4294967295)  blob binary
