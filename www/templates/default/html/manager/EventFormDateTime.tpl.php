@@ -312,9 +312,9 @@
             <textarea
                 id="additional-public-info"
                 name="additional_public_info"
-            >
-                <?php echo $additional_public_info; ?>
-            </textarea>
+            ><?php 
+                echo $additional_public_info; 
+            ?></textarea>
         </div>
     </div>
     <hr>
