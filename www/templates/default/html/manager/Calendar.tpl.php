@@ -175,51 +175,69 @@ use UNL\UCBCN\Permission;
                                         <ul>
                                         <?php $datetimes = $event->getDateTimes(); ?>
                                         <?php $count = 0; ?>
+                                        
                                         <?php foreach($datetimes as $datetime): ?>
                                             <li>
-                                                <?php if (++$count <= 3) : ?>
+                                                <?php if (++$count <= 3) :
+                                                    $date_format = 'n/d/y';
+                                                    $time_format = 'g:ia';
+                                                    $formatted_start_time = date(
+                                                        $time_format,
+                                                        strtotime($datetime->starttime)
+                                                    );
+                                                    $formatted_start_date = date(
+                                                        $time_format,
+                                                        strtotime($datetime->starttime)
+                                                    );
+                                                ?>
                                                     <div>
                                                         <?php
                                                         {
                                                             if ($datetime->recurringtype == 'none') {
                                                                 echo date(
-                                                                    'n/d/y @ g:ia',
+                                                                    $date_format . ' @ ' . $time_format,
                                                                     strtotime($datetime->starttime)
                                                                 );
-                                                            } else if ($datetime->recurringtype == 'daily' ||
+                                                            } elseif ($datetime->recurringtype == 'daily' ||
                                                                 $datetime->recurringtype == 'weekly' ||
                                                                 $datetime->recurringtype == 'biweekly' ||
                                                                 $datetime->recurringtype == 'annually'
                                                             ) {
                                                                 echo ucwords($datetime->recurringtype) .
                                                                     ' @ ' .
-                                                                    date('g:ia', strtotime($datetime->starttime)) .
+                                                                    date(
+                                                                        $time_format,
+                                                                        strtotime($datetime->starttime)
+                                                                    ) .
                                                                     ':<br>' .
-                                                                    date('n/d/y', strtotime($datetime->starttime)) .
+                                                                    $formatted_start_date .
                                                                     ' - ' .
-                                                                    date('n/d/y', strtotime($datetime->recurs_until));
-                                                            } else if ($datetime->recurringtype == 'monthly') {
+                                                                    date(
+                                                                        $date_format,
+                                                                        strtotime($datetime->recurs_until)
+                                                                    );
+                                                            } elseif ($datetime->recurringtype == 'monthly') {
                                                                 if ($datetime->rectypemonth == 'lastday') {
                                                                     echo 'Last day of every month @ ' .
-                                                                        date('g:ia', strtotime($datetime->starttime)) .
+                                                                        $formatted_start_time .
                                                                         ':<br>' .
-                                                                        date('n/d/y', strtotime($datetime->starttime)) .
+                                                                        $formatted_start_date .
                                                                         ' - ' .
                                                                         date(
-                                                                            'n/d/y',
+                                                                            $date_format,
                                                                             strtotime($datetime->recurs_until)
                                                                         );
-                                                                } else if ($datetime->rectypemonth == 'date') {
+                                                                } elseif ($datetime->rectypemonth == 'date') {
                                                                     echo ordinal(
                                                                             date('d', strtotime($datetime->starttime))
                                                                         ) .
                                                                         ' of every month @ ' .
-                                                                        date('g:ia', strtotime($datetime->starttime)) .
+                                                                        $formatted_start_time .
                                                                         ':<br>' .
-                                                                        date('n/d/y', strtotime($datetime->starttime)) .
+                                                                        $formatted_start_date .
                                                                         ' - ' .
                                                                         date(
-                                                                            'n/d/y',
+                                                                            $date_format,
                                                                             strtotime($datetime->recurs_until)
                                                                         );
                                                                 } else {
@@ -227,10 +245,10 @@ use UNL\UCBCN\Permission;
                                                                         date(' l', strtotime($datetime->starttime)) .
                                                                         ' of every month' .
                                                                         ':<br>' .
-                                                                        date('n/d/y', strtotime($datetime->starttime)) .
+                                                                        $formatted_start_date .
                                                                         ' - ' .
                                                                         date(
-                                                                            'n/d/y',
+                                                                            $date_format,
                                                                             strtotime($datetime->recurs_until)
                                                                         );
                                                                 }
