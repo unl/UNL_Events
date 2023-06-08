@@ -8,7 +8,7 @@ class UserLocation extends PostHandler
     public $options = array();
     public $account;
 
-    public function __construct($options = array()) 
+    public function __construct($options = array())
     {
         $this->options = $options + $this->options;
 

@@ -12,7 +12,7 @@ class EditEvent extends EventForm
     public $on_main_calendar;
     public $page;
 
-    public function __construct($options = array()) 
+    public function __construct($options = array())
     {
         parent::__construct($options);
 
@@ -45,7 +45,11 @@ class EditEvent extends EventForm
             throw $e;
         }
 
-        $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Event Updated', 'The event "' . $this->event->title . '" has been updated.');
+        $this->flashNotice(
+            parent::NOTICE_LEVEL_SUCCESS,
+            'Event Updated',
+            'The event "' . $this->event->title . '" has been updated.'
+        );
         return $this->event->getEditURL($this->calendar);
     }
 
@@ -60,7 +64,10 @@ class EditEvent extends EventForm
         if (!$this->on_main_calendar) {
             if (array_key_exists('send_to_main', $post_data) && $post_data['send_to_main'] == 'on') {
                 if (empty($post_data['description']) || empty($post_data['contact_name'])) {
-                    throw new ValidationException('<a href="#contact-name">Contact name</a>, <a href="#description">description</a> and <a href="#imagedata">image</a> are required to recommend to UNL Main Calendar.');
+                    throw new ValidationException(
+                        '<a href="#contact-name">Contact name</a>, <a href="#description">description</a>' .
+                        ' and <a href="#imagedata">image</a> are required to recommend to UNL Main Calendar.'
+                    );
                 }
             }
         }
@@ -70,7 +77,10 @@ class EditEvent extends EventForm
             throw new ValidationException('Event Website must be a valid URL.');
         }
 
-        if (!empty($post_data['contact_type']) && $post_data['contact_type'] !== "person" && $post_data['contact_type'] !== "organization") {
+        if (!empty($post_data['contact_type']) &&
+            $post_data['contact_type'] !== "person" &&
+            $post_data['contact_type'] !== "organization"
+        ) {
             throw new ValidationException('<a href="#contact-type">Contact Type</a> must be person or organization.');
         }
 
@@ -109,7 +119,7 @@ class EditEvent extends EventForm
 
         foreach ($all_audiences as $current_audience) {
             $target_audience_id = 'target-audience-' . $current_audience->id;
-            
+
             // get the audiences currently associated with the event
             // (these will change since we are adding and deleting)
             // we then check and store the audience that matches the one we are looking for

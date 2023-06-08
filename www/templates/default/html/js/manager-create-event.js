@@ -1,5 +1,13 @@
-function isUrlValid(url) {
-    return /^(https?|s?ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(url);
+function isUrlValid(string) {
+    let url;
+
+    try {
+        url = new URL(string);
+    } catch (_) {
+        return false;  
+    }
+
+    return url.protocol === "http:" || url.protocol === "https:";
 }
 
 const google_microdata_button = document.getElementById('google-microdata-button');
@@ -189,7 +197,7 @@ require(['jquery', 'wdn'], function ($, WDN) {
     });
 
     $('#create-event-form').submit(function (submit) {
-        var errors = [];
+        let errors = [];
 
         // validate required fields
         if ($('#title').val() == '' || $('#type').find(':selected').val() == '' || $('#start-date').val() == '') {
@@ -209,20 +217,20 @@ require(['jquery', 'wdn'], function ($, WDN) {
         if ($('#start-date').val() != '') {
             // validate end date is after start date and the time is afterward accordingly
             if ($('#end-date').val() != '') {
-                var end = new Date($('#end-date').val());
+                let end = new Date($('#end-date').val());
 
                 // translate times from inputs. Blank hour = 12, blank minute = 0, blank am/pm = am
-                var start_am_pm = $('#start-time-am-pm-pm').is(':checked') ? 'pm' : 'am';
-                var start_hour = $('#start-time-hour').val() != '' ? parseInt($('#start-time-hour').val()) % 12 : 0;
+                let start_am_pm = $('#start-time-am-pm-pm').is(':checked') ? 'pm' : 'am';
+                let start_hour = $('#start-time-hour').val() != '' ? parseInt($('#start-time-hour').val()) % 12 : 0;
                 start_hour = start_am_pm == 'pm' ? start_hour + 12 : start_hour;
-                var start_minute = $('#start-time-minute').val() != '' ? parseInt($('#start-time-minute').val()) : 0;
+                let start_minute = $('#start-time-minute').val() != '' ? parseInt($('#start-time-minute').val()) : 0;
                 start.setHours(start_hour);
                 start.setMinutes(start_minute);
 
-                var end_am_pm = $('#end-time-am-pm-pm').is(':checked') ? 'pm' : 'am';
-                var end_hour = $('#end-time-hour').val() != '' ? parseInt($('#end-time-hour').val()) % 12 : 0;
+                let end_am_pm = $('#end-time-am-pm-pm').is(':checked') ? 'pm' : 'am';
+                let end_hour = $('#end-time-hour').val() != '' ? parseInt($('#end-time-hour').val()) % 12 : 0;
                 end_hour = end_am_pm == 'pm' ? end_hour + 12 : end_hour;
-                var end_minute = $('#end-time-minute').val() != '' ? parseInt($('#end-time-minute').val()) : 0;
+                let end_minute = $('#end-time-minute').val() != '' ? parseInt($('#end-time-minute').val()) : 0;
                 end.setHours(end_hour);
                 end.setMinutes(end_minute);
 

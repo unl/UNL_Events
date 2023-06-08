@@ -31,7 +31,10 @@ if (isset($context->eventdatetime->location_id)) :
             <span>
                 <?php if (isset($location->mapurl) && filter_var($location->mapurl, FILTER_VALIDATE_URL)): ?>
                     <a class="mapurl" href="<?php echo $location->mapurl ?>"><?php echo $location->name; ?></a>
-                <?php elseif (isset($location->webpageurl) && filter_var($location->webpageurl, FILTER_VALIDATE_URL)): ?>
+                <?php elseif (
+                        isset($location->webpageurl) &&
+                        filter_var($location->webpageurl, FILTER_VALIDATE_URL)
+                ): ?>
                     <a class="webpageurl" href="<?php echo $location->webpageurl ?>"><?php echo $location->name; ?></a>
                 <?php else: ?>
                     <?php echo $location->name; ?>

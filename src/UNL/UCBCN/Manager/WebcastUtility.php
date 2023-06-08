@@ -28,7 +28,7 @@ class WebcastUtility
             $webcast->user_id = $user->uid;
         }
 
-        if (array_key_exists('v_location_save_calendar', $post_data) && 
+        if (array_key_exists('v_location_save_calendar', $post_data) &&
             $post_data['v_location_save_calendar'] == 'on') {
             $webcast->calendar_id = $calendar->id;
         }

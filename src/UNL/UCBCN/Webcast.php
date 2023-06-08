@@ -82,6 +82,6 @@ class Webcast extends Record
      */
     public function microdataCheck()
     {
-        return (isset($this->url) && !empty($this->url));
+        return isset($this->url) && !empty($this->url);
     }
 }

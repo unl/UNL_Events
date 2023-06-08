@@ -45,7 +45,6 @@ function setUpLocationListeners(location_id) {
     if (location_id == "physical_location") {
         let location_input = document.getElementById('location');
 
-        //TODO: Add Stuff for editing location
         location_input.addEventListener('change', () => {
             if (location_input.value == 'new') {
                 document.getElementById('new-location-fields').style.display = "block";
@@ -88,7 +87,7 @@ function setUpLocationListeners(location_id) {
 //                                            __/ |                       
 //                                           |___/                        
 const ordinal = function(number) {
-    var mod = number % 100;
+    const mod = number % 100;
     if (mod >= 11 && mod <= 13) {
         return number + 'th';
     } else if (mod % 10 == 1) {
@@ -113,7 +112,7 @@ const setRecurringOptions = function(start_elem, month_group_elem, rectypemonth)
     if (!start_elem.val()) { return; }
 
     // get startdate info
-    var weekdays = [
+    const weekdays = [
         "Sunday",
         "Monday",
         "Tuesday",
@@ -123,15 +122,15 @@ const setRecurringOptions = function(start_elem, month_group_elem, rectypemonth)
         "Saturday"
     ];
 
-    var start_date = new Date(start_elem.val());
+    let start_date = new Date(start_elem.val());
     if (!start_date.isValid()) { return; }
-    var start_year = start_date.getFullYear();
-    var start_month = start_date.getMonth() + 1;
-    var start_day = start_date.getDate();
-    var start_weekday = weekdays[start_date.getDay()];
+    let start_year = start_date.getFullYear();
+    let start_month = start_date.getMonth() + 1;
+    let start_day = start_date.getDate();
+    let start_weekday = weekdays[start_date.getDay()];
 
     // get week in month
-    var nth = {
+    const nth = {
         1: "First",
         2: "Second",
         3: "Third",
@@ -140,17 +139,17 @@ const setRecurringOptions = function(start_elem, month_group_elem, rectypemonth)
     };
 
     // get number of days (28, 29, 30, 31) in month
-    var days_in_month = 28;
-    d = new Date(start_year, start_month - 1, 28);
+    let days_in_month = 28;
+    let d = new Date(start_year, start_month - 1, 28);
     while (days_in_month == d.getDate()) {
         d = new Date(start_year, start_month - 1, ++days_in_month);
     }
     days_in_month--;
 
-    var week = 0; // the week of the start day
-    var total_weeks = 0; // total weeks in the month
-    for (var i = 1; i <= days_in_month; i++) {
-        var d = new Date(start_year, start_month - 1, i);
+    let week = 0; // the week of the start day
+    let total_weeks = 0; // total weeks in the month
+    for (let i = 1; i <= days_in_month; i++) {
+        let d = new Date(start_year, start_month - 1, i);
         if (weekdays[d.getDay()] == start_weekday && i <= start_day) {
             week++;
         }
@@ -163,27 +162,23 @@ const setRecurringOptions = function(start_elem, month_group_elem, rectypemonth)
     month_group_elem.children(".dynamicRecurring").remove();
     // populate rectypemonth with appropriate options
 
-    var dynamicRecurringSelected = '';
+    let dynamicRecurringSelected = '';
     if (nth[week] != undefined) {
-        dynamicRecurringSelected = '';
         if (rectypemonth == nth[week].toLowerCase()) { dynamicRecurringSelected = ' selected="selected" '}
         month_group_elem.prepend("<option class='dynamicRecurring' " + dynamicRecurringSelected + "value='" + nth[week].toLowerCase() + "'>" + nth[week] + " " + start_weekday + " of every month</option>")
     }
 
     if (week == 4 && total_weeks == 4) {
-        dynamicRecurringSelected = '';
         if (rectypemonth == 'last') { dynamicRecurringSelected = ' selected="selected" '}
         month_group_elem.prepend("<option class='dynamicRecurring' " + dynamicRecurringSelected + "value='last'>" + "Last " + start_weekday + " of every month</option>")
     }
 
     if (days_in_month == start_day) {
-      dynamicRecurringSelected = '';
-      if (rectypemonth == 'lastday') { dynamicRecurringSelected = ' selected="selected" '}
-      month_group_elem.prepend("<option class='dynamicRecurring' " + dynamicRecurringSelected + "value='lastday'>Last day of every month</option>");
+        if (rectypemonth == 'lastday') { dynamicRecurringSelected = ' selected="selected" '}
+        month_group_elem.prepend("<option class='dynamicRecurring' " + dynamicRecurringSelected + "value='lastday'>Last day of every month</option>");
     }
 
-    var text = ordinal(start_day) + ' of every month';
-    dynamicRecurringSelected = '';
+    let text = ordinal(start_day) + ' of every month';
     if (rectypemonth == 'date') { dynamicRecurringSelected = ' selected="selected" '}
     month_group_elem.prepend("<option class='dynamicRecurring' " + dynamicRecurringSelected + "value='date'>" + text + "</option>");
 };

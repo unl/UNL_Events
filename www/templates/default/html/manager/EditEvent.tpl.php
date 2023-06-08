@@ -126,7 +126,13 @@
         </div>
         <div class="dcf-form-group">
             <label for="subtitle">Subtitle</label>
-            <input id="subtitle" name="subtitle" type="text" class="dcf-w-100%" value="<?php echo $event->subtitle; ?>" />
+            <input
+                id="subtitle"
+                name="subtitle"
+                type="text"
+                class="dcf-w-100%"
+                value="<?php echo $event->subtitle; ?>"
+            >
         </div>
         <div class="dcf-form-group">
             <label for="description">Description</label>
@@ -270,22 +276,35 @@
                     </td>
                     <?php $location = $datetime->getLocation(); ?>
                     <?php if (isset($location) && !empty($location)): ?>
-                        <td class="dcf-txt-middle location with-controls" data-id="<?php echo $location->id; ?>" data-microdata="<?php echo json_encode($location->microdataCheck()); ?>">
+                        <td
+                            class="dcf-txt-middle location with-controls"
+                            data-id="<?php echo $location->id; ?>"
+                            data-microdata="<?php echo json_encode($location->microdataCheck()); ?>"
+                        >
                             <div class="dcf-popup dcf-w-100%" data-hover="true" data-point="true">
-                                <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup dcf-w-100%"><?php echo $location->name; ?></button>
-                                <div class="dcf-popup-content unl-cream unl-bg-blue dcf-p-3 dcf-rounded" style="width: 100%; min-width: 25ch;">
+                                <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup dcf-w-100%">
+                                    <?php echo $location->name; ?>
+                                </button>
+                                <div
+                                    class="dcf-popup-content unl-cream unl-bg-blue dcf-p-3 dcf-rounded"
+                                    style="width: 100%; min-width: 25ch;"
+                                >
                                     <dl>
                                         <?php if(isset($location->name) && !empty($location->name)): ?>
                                             <dt>Name</dt>
                                             <dd><?php echo $location->name; ?></dd>
                                         <?php endif; ?>
 
-                                        <?php if(isset($location->streetaddress1) && !empty($location->streetaddress1)): ?>
+                                        <?php
+                                            if(isset($location->streetaddress1) && !empty($location->streetaddress1)):
+                                        ?>
                                             <dt>Street Address 1</dt>
                                             <dd><?php echo $location->streetaddress1; ?></dd>
                                         <?php endif; ?>
 
-                                        <?php if(isset($location->streetaddress2) && !empty($location->streetaddress2)): ?>
+                                        <?php
+                                            if(isset($location->streetaddress2) && !empty($location->streetaddress2)):
+                                        ?>
                                             <dt>Street Address 2</dt>
                                             <dd><?php echo $location->streetaddress2; ?></dd>
                                         <?php endif; ?>
@@ -299,7 +318,7 @@
                                             <dt>State</dt>
                                             <dd><?php echo $location->state; ?></dd>
                                         <?php endif; ?>
-                                    
+
                                         <?php if(isset($location->zip) && !empty($location->zip)): ?>
                                             <dt>Zip</dt>
                                             <dd><?php echo $location->zip; ?></dd>
@@ -326,10 +345,18 @@
                                             <dd><?php echo $location->directions; ?></dd>
                                         <?php endif; ?>
 
-                                        <?php if(isset($datetime->location_additionalpublicinfo) && !empty($datetime->location_additionalpublicinfo)): ?>
+                                        <?php
+                                            if(isset($datetime->location_additionalpublicinfo) &&
+                                                !empty($datetime->location_additionalpublicinfo)
+                                            ):
+                                        ?>
                                             <dt>Additional Public Info</dt>
                                             <dd><?php echo $datetime->location_additionalpublicinfo; ?></dd>
-                                        <?php elseif(isset($location->additionalpublicinfo) && !empty($location->additionalpublicinfo)): ?>
+                                        <?php
+                                            elseif(isset($location->additionalpublicinfo) &&
+                                                !empty($location->additionalpublicinfo)
+                                            ):
+                                        ?>
                                             <dt>Additional Public Info</dt>
                                             <dd><?php echo $location->additionalpublicinfo; ?></dd>
                                         <?php endif; ?>
@@ -345,10 +372,19 @@
 
                     <?php $getWebcast = $datetime->getWebcast(); ?>
                     <?php if (isset($getWebcast) && !empty($getWebcast)): ?>
-                        <td class="dcf-txt-middle v_location with-controls" data-id="<?php echo $getWebcast->id; ?>" data-microdata="true">
+                        <td
+                            class="dcf-txt-middle v_location with-controls"
+                            data-id="<?php echo $getWebcast->id; ?>"
+                            data-microdata="<?php echo json_encode($getWebcast->microdataCheck()); ?>"
+                        >
                             <div class="dcf-popup dcf-w-100%" data-hover="true" data-point="true">
-                                <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup dcf-w-100%"><?php echo $getWebcast->title; ?></button>
-                                <div class="dcf-popup-content unl-cream unl-bg-blue dcf-p-3 dcf-rounded" style="min-width: 25ch;">
+                                <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup dcf-w-100%">
+                                    <?php echo $getWebcast->title; ?>
+                                </button>
+                                <div
+                                    class="dcf-popup-content unl-cream unl-bg-blue dcf-p-3 dcf-rounded"
+                                    style="min-width: 25ch;"
+                                >
                                     <dl>
                                         <?php if(isset($getWebcast->title) && !empty($getWebcast->title)): ?>
                                             <dt>Name</dt>
@@ -360,10 +396,18 @@
                                             <dd><?php echo $getWebcast->url; ?></dd>
                                         <?php endif; ?>
 
-                                        <?php if(isset($datetime->webcast_additionalpublicinfo) && !empty($datetime->webcast_additionalpublicinfo)): ?>
+                                        <?php
+                                            if(isset($datetime->webcast_additionalpublicinfo) &&
+                                                !empty($datetime->webcast_additionalpublicinfo)
+                                            ):
+                                        ?>
                                             <dt>Additional Public Info</dt>
                                             <dd><?php echo $datetime->webcast_additionalpublicinfo; ?></dd>
-                                        <?php elseif(isset($getWebcast->additionalinfo) && !empty($getWebcast->additionalinfo)): ?>
+                                        <?php
+                                            elseif(isset($getWebcast->additionalinfo) &&
+                                                !empty($getWebcast->additionalinfo)
+                                            ):
+                                        ?>
                                             <dt>Additional Public Info</dt>
                                             <dd><?php echo $getWebcast->additionalinfo; ?></dd>
                                         <?php endif; ?>
@@ -546,7 +590,11 @@
                         Privacy
                         <div class="dcf-popup dcf-d-inline" data-point="true">
                             <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup dcf-p-0">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="dcf-d-block dcf-h-5 dcf-w-5 dcf-fill-current" viewBox="0 0 24 24">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="dcf-d-block dcf-h-5 dcf-w-5 dcf-fill-current"
+                                    viewBox="0 0 24 24"
+                                >
                                     <path d="M11.5,1C5.159,1,0,6.159,0,12.5C0,18.841,5.159,24,11.5,24
                                         S23,18.841,23,12.5C23,6.159,17.841,1,11.5,1z M11.5,23 C5.71,23,1,18.29,1,12.5
                                         C1,6.71,5.71,2,11.5,2S22,6.71,22,12.5C22,18.29,17.29,23,11.5,23z"></path>
@@ -560,7 +608,9 @@
                                 </svg>
                             </button>
                             <div class="dcf-popup-content unl-bg-blue dcf-p-1 dcf-rounded" style="min-width: 25ch;">
-                                <p class="dcf-m-0 dcf-regular">If private this event will not show up in "All Calendar" results.</p>
+                                <p class="dcf-m-0 dcf-regular">
+                                    If private this event will not show up in "All Calendar" results.
+                                </p>
                             </div>
                         </div>
                     </legend>
@@ -663,7 +713,11 @@
                         Organizer Type
                         <div class="dcf-popup dcf-d-inline" data-point="true">
                             <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup dcf-p-0">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="dcf-d-block dcf-h-5 dcf-w-5 dcf-fill-current" viewBox="0 0 24 24">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="dcf-d-block dcf-h-5 dcf-w-5 dcf-fill-current"
+                                    viewBox="0 0 24 24"
+                                >
                                     <path d="M11.5,1C5.159,1,0,6.159,0,12.5C0,18.841,5.159,24,11.5,24
                                         S23,18.841,23,12.5C23,6.159,17.841,1,11.5,1z M11.5,23 C5.71,23,1,18.29,1,12.5
                                         C1,6.71,5.71,2,11.5,2S22,6.71,22,12.5C22,18.29,17.29,23,11.5,23z"></path>
@@ -677,16 +731,38 @@
                                 </svg>
                             </button>
                             <div class="dcf-popup-content unl-bg-blue dcf-p-1 dcf-rounded" style="min-width: 25ch;">
-                                <p class="dcf-m-0 dcf-regular">This is used to format organizer data for google microdata.</p>
+                                <p class="dcf-m-0 dcf-regular">
+                                    This is used to format organizer data for google microdata.
+                                </p>
                             </div>
                         </div>
                     </legend>
                 <div class="dcf-input-radio">
-                    <input id="contact-type-person" name="contact_type" type="radio" value="person" <?php if (isset($event->listingcontacttype) && $event->listingcontacttype === 'person') { echo CHECKED_INPUT; } ?>/>
+                    <input
+                        id="contact-type-person"
+                        name="contact_type"
+                        type="radio"
+                        value="person"
+                        <?php
+                            if (isset($event->listingcontacttype) &&
+                                $event->listingcontacttype === 'person'
+                            ) { echo CHECKED_INPUT; }
+                        ?>
+                    >
                     <label for="contact-type-person">Person</label>
                 </div>
                 <div class="dcf-input-radio">
-                    <input id="contact-type-organization" name="contact_type" type="radio" value="organization" <?php if (isset($event->listingcontacttype) && $event->listingcontacttype === 'organization') { echo CHECKED_INPUT; } ?>/>
+                    <input
+                        id="contact-type-organization"
+                        name="contact_type"
+                        type="radio"
+                        value="organization"
+                        <?php
+                            if (isset($event->listingcontacttype) &&
+                                $event->listingcontacttype === 'organization'
+                            ) { echo CHECKED_INPUT; }
+                        ?>
+                    >
                     <label for="contact-type-organization">Organization</label>
                 </div>
             </fieldset>

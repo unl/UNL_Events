@@ -47,7 +47,10 @@ class CreateEvent extends EventForm
         # if we are sending this to UNL Main Calendar, description and contact info must be given
         if (array_key_exists('send_to_main', $post_data) && $post_data['send_to_main'] == 'on') {
             if (empty($post_data['description']) || empty($post_data['contact_name'])) {
-                throw new ValidationException('<a href="#contact-name">Contact name</a> and <a href="#description">description</a> are required to recommend to UNL Main Calendar.');
+                throw new ValidationException(
+                    '<a href="#contact-name">Contact name</a> and <a href="#description">description</a>' .
+                    ' are required to recommend to UNL Main Calendar.'
+                );
             }
         }
 
@@ -66,7 +69,10 @@ class CreateEvent extends EventForm
             $post_data['end_time_am_pm']);
 
         if ($start_date > $end_date) {
-            throw new ValidationException('Your <a href="#end-date">end date/time</a> must be on or after the <a href="#start-date">start date/time</a>.');
+            throw new ValidationException(
+                'Your <a href="#end-date">end date/time</a>' .
+                ' must be on or after the <a href="#start-date">start date/time</a>.'
+            );
         }
 
         # Validate Recurring Event (if applicable)
@@ -135,7 +141,10 @@ class CreateEvent extends EventForm
             throw new ValidationException('<a href="send_to_main">Consider for main calendar</a> is required.');
         }
 
-        if (!empty($post_data['contact_type']) && $post_data['contact_type'] !== "person" && $post_data['contact_type'] !== "organization") {
+        if (!empty($post_data['contact_type']) &&
+            $post_data['contact_type'] !== "person" &&
+            $post_data['contact_type'] !== "organization"
+        ) {
             throw new ValidationException('<a href="#contact-type">Contact Type</a> must be person or organization.');
         }
 

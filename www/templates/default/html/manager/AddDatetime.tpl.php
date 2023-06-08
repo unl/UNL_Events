@@ -57,8 +57,16 @@
 <h1><?php echo $last_crumb ?></h1>
 
 <form class="dcf-form" id="add-datetime-form" action="" method="POST">
-    <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
-    <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
+    <input
+        type="hidden"
+        name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>"
+        value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>"
+    >
+    <input
+        type="hidden"
+        name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>"
+        value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>"
+    >
 
     <?php echo $savvy->render($context, 'EventFormDateTime.tpl.php'); ?>
 
@@ -67,4 +75,8 @@
 <br>
 
 <?php
-$page->addScript($base_frontend_url .'templates/default/html/js/manager-add-date-time.min.js?v='.UNL\UCBCN\Frontend\Controller::$version);
+$page->addScript(
+    $base_frontend_url .
+    'templates/default/html/js/manager-add-date-time.min.js?v='.
+    UNL\UCBCN\Frontend\Controller::$version
+);

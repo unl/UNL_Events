@@ -71,9 +71,9 @@ foreach ($json_data['features'] as $index => $building) {
     $zip = null;
     if (!empty($api_key)) {
         // Use google geocoding to get zip code
-        $google_data = file_get_contents('https://maps.googleapis.com/maps/api/geocode/json?address=' . 
-            urlencode($building['properties']['Address']) . 
-            '%20lincoln%20Nebraska&key=' . 
+        $google_data = file_get_contents('https://maps.googleapis.com/maps/api/geocode/json?address=' .
+            urlencode($building['properties']['Address']) .
+            '%20lincoln%20Nebraska&key=' .
             $api_key
         );
 

@@ -7,12 +7,12 @@ $room = !empty($context->eventdatetime->room) ? $context->eventdatetime->room : 
     <?php $l = $context->eventdatetime->getLocation(); ?>
     <?php if (isset($l->mapurl) || !empty($l->name)): ?>
         <span class="location">
-            <svg 
-                class="dcf-mr-1 dcf-h-4 dcf-w-4 dcf-fill-current" 
-                aria-hidden="true" 
-                focusable="false" 
-                height="24" 
-                width="24" 
+            <svg
+                class="dcf-mr-1 dcf-h-4 dcf-w-4 dcf-fill-current"
+                aria-hidden="true"
+                focusable="false"
+                height="24"
+                width="24"
                 viewBox="0 0 24 24"
             >
                 <path d="M12 0C7.589 0 4 3.589 4 8c0 4.245 7.273 15.307 7.583 15.775

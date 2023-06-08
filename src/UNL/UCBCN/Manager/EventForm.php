@@ -44,18 +44,18 @@ class EventForm extends PostHandler
 
 	protected function setEventData($post_data)
 	{
-		$this->event->title = empty($post_data['title']) ? NULL : $post_data['title'];
-		$this->event->subtitle = empty($post_data['subtitle']) ? NULL : $post_data['subtitle'];
-		$this->event->description = empty($post_data['description']) ? NULL : $post_data['description'];
+		$this->event->title = empty($post_data['title']) ? null : $post_data['title'];
+		$this->event->subtitle = empty($post_data['subtitle']) ? null : $post_data['subtitle'];
+		$this->event->description = empty($post_data['description']) ? null : $post_data['description'];
 		$this->event->canceled = !empty($post_data['canceled']) ? 1 : 0;
 
-		$this->event->listingcontactname = empty($post_data['contact_name']) ? NULL : $post_data['contact_name'];
-		$this->event->listingcontactphone = empty($post_data['contact_phone']) ? NULL : $post_data['contact_phone'];
-		$this->event->listingcontactemail = empty($post_data['contact_email']) ? NULL : $post_data['contact_email'];
-		$this->event->listingcontacturl = empty($post_data['contact_website']) ? NULL : $post_data['contact_website'];
-		$this->event->listingcontacttype = empty($post_data['contact_type']) ? NULL : $post_data['contact_type'];
+		$this->event->listingcontactname = empty($post_data['contact_name']) ? null : $post_data['contact_name'];
+		$this->event->listingcontactphone = empty($post_data['contact_phone']) ? null : $post_data['contact_phone'];
+		$this->event->listingcontactemail = empty($post_data['contact_email']) ? null : $post_data['contact_email'];
+		$this->event->listingcontacturl = empty($post_data['contact_website']) ? null : $post_data['contact_website'];
+		$this->event->listingcontacttype = empty($post_data['contact_type']) ? null : $post_data['contact_type'];
 
-		$this->event->webpageurl = empty($post_data['website']) ? NULL : $post_data['website'];
+		$this->event->webpageurl = empty($post_data['website']) ? null : $post_data['website'];
 		$this->event->approvedforcirculation = !empty($post_data['private_public']) && $post_data['private_public'] == 'private' ? 0 : 1;
 
 		# for extraneous data aside from the event (location, type, etc)
@@ -89,11 +89,11 @@ class EventForm extends PostHandler
 			ob_start();
 			$image = imagecreatefromstring($raw_image_base64);
 			if ($image_type == 'jpeg') {
-				imagejpeg($image, NULL, 90);
+				imagejpeg($image, null, 90);
 			} elseif ($image_type == 'gif') {
 				imagegif($image);
 			} elseif ($image_type == 'png') {
-				imagepng($image, NULL, 9, PNG_NO_FILTER);
+				imagepng($image, null, 9, PNG_NO_FILTER);
 			}
 
 			$image_base64 = ob_get_clean();
@@ -110,8 +110,8 @@ class EventForm extends PostHandler
 		if ($this->on_main_calendar || isset($post_data['send_to_main'])) {
 			throw new ValidationException('Image can not be removed. Image is required for events considered for main UNL Calendar.');
 		} else {
-			$this->event->imagemime = NULL;
-			$this->event->imagedata = NULL;
+			$this->event->imagemime = null;
+			$this->event->imagedata = null;
 		}
 	}
 

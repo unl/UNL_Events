@@ -118,6 +118,15 @@ class CreateEvent
         if (!empty($post_data['website']) && !filter_var($post_data['website'], FILTER_VALIDATE_URL)) {
             throw new ValidationException('Event Website must be a valid URL.');
         }
+
+        # website must be a valid url
+        if (!empty($post_data['contact_website']) && !filter_var($post_data['contact_website'], FILTER_VALIDATE_URL)) {
+            throw new ValidationException('Contact Website must be a valid URL.');
+        }
+
+        if (!empty($post_data['contact_type']) && $post_data['contact_type'] !== "person" && $post_data['contact_type'] !== "organization") {
+            throw new ValidationException('<a href="#contact-type">Contact Type</a> must be person or organization.');
+        }
     }
 
     private function createEvent($post_data)
@@ -125,15 +134,17 @@ class CreateEvent
         $user = Auth::getCurrentUser();
 
         # setting event data from post
-        $this->event->title = empty($post_data['title']) ? NULL : $post_data['title'];
-        $this->event->subtitle = empty($post_data['subtitle']) ? NULL : $post_data['subtitle'];
-        $this->event->description = empty($post_data['description']) ? NULL : $post_data['description'];
+        $this->event->title = empty($post_data['title']) ? null : $post_data['title'];
+        $this->event->subtitle = empty($post_data['subtitle']) ? null : $post_data['subtitle'];
+        $this->event->description = empty($post_data['description']) ? null : $post_data['description'];
 
-        $this->event->listingcontactname = empty($post_data['contact_name']) ? NULL : $post_data['contact_name'];
-        $this->event->listingcontactphone = empty($post_data['contact_phone']) ? NULL : $post_data['contact_phone'];
-        $this->event->listingcontactemail = empty($post_data['contact_email']) ? NULL : $post_data['contact_email'];
+        $this->event->listingcontactname = empty($post_data['contact_name']) ? null : $post_data['contact_name'];
+        $this->event->listingcontactphone = empty($post_data['contact_phone']) ? null : $post_data['contact_phone'];
+        $this->event->listingcontactemail = empty($post_data['contact_email']) ? null : $post_data['contact_email'];
+        $this->event->listingcontacturl = empty($post_data['contact_website']) ? null : $post_data['contact_website'];
+        $this->event->listingcontacttype = empty($post_data['contact_type']) ? null : $post_data['contact_type'];
 
-        $this->event->webpageurl = empty($post_data['website']) ? NULL : $post_data['website'];
+        $this->event->webpageurl = empty($post_data['website']) ? null : $post_data['website'];
         $this->event->approvedforcirculation = array_key_exists('private_public', $post_data) &&
             $post_data['private_public'] == 'private' ? 0 : 1;
 
@@ -153,10 +164,10 @@ class CreateEvent
         $event_datetime->endtime = date('Y-m-d H:i:s', strtotime($post_data['end_time']));
 
         $event_datetime->recurringtype = 'none';
-        $event_datetime->room = empty($post_data['room']) ? NULL : $post_data['room'];
-        $event_datetime->directions = empty($post_data['directions']) ? NULL : $post_data['directions'];
+        $event_datetime->room = empty($post_data['room']) ? null : $post_data['room'];
+        $event_datetime->directions = empty($post_data['directions']) ? null : $post_data['directions'];
         $event_datetime->additionalpublicinfo = empty($post_data['additional_public_info']) ?
-            NULL : $post_data['additional_public_info'];
+            null : $post_data['additional_public_info'];
 
         $event_datetime->insert();
 

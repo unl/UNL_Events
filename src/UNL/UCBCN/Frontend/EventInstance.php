@@ -59,7 +59,9 @@ class EventInstance implements RoutableInterface
         }
 
         //Set the recurring date
-        if (Occurrence::RECURRING_TYPE_NONE != $this->eventdatetime->recurringtype && isset($options['recurringdate_id'])) {
+        if (Occurrence::RECURRING_TYPE_NONE != $this->eventdatetime->recurringtype &&
+            isset($options['recurringdate_id'])
+        ) {
             //Set the recurring date by the id
             $this->recurringdate = RecurringDate::getByID($options['recurringdate_id']);
         } else if ($requestedDate != date('Y-m-d', strtotime($this->eventdatetime->starttime))) {
@@ -71,18 +73,24 @@ class EventInstance implements RoutableInterface
                 'event_id = ' . (int)$this->eventdatetime->event_id . ' AND unlinked = 0'
             );
             // Recurring Event must have a valid recurring date
-            if (Occurrence::RECURRING_TYPE_NONE != $this->eventdatetime->recurringtype && empty($this->recurringdate)) {
+            if (Occurrence::RECURRING_TYPE_NONE != $this->eventdatetime->recurringtype &&
+                empty($this->recurringdate)
+            ) {
               throw new UnexpectedValueException('No recurring event exists for day', 404);
             }
         }
 
         // Always include images with XML and JSON formats
-        if (isset($_GET['format']) && (strtolower($_GET['format']) == 'xml' || strtolower($_GET['format']) == 'json')) {
+        if (isset($_GET['format']) &&
+            (strtolower($_GET['format']) == 'xml' || strtolower($_GET['format']) == 'json')
+        ) {
             $options['includeEventImageData'] = TRUE;
         }
 
         // get event with image data if includeEventImageData is not set or is TRUE
-        $this->event = $this->eventdatetime->getEvent(!isset($options['includeEventImageData']) || $options['includeEventImageData'] === TRUE);
+        $this->event = $this->eventdatetime->getEvent(
+            !isset($options['includeEventImageData']) || $options['includeEventImageData'] === TRUE
+        );
         $this->options = $options;
     }
 
@@ -103,7 +111,9 @@ class EventInstance implements RoutableInterface
      */
     public function getURL()
     {
-        return $this->calendar->getURL() . date('Y/m/d/', strtotime($this->getStartTime())) . $this->eventdatetime->id . '/';
+        return $this->calendar->getURL() .
+            date('Y/m/d/', strtotime($this->getStartTime())) .
+            $this->eventdatetime->id . '/';
     }
 
     public function getImageURL()
@@ -196,7 +206,10 @@ class EventInstance implements RoutableInterface
     {
         $time = $this->eventdatetime->starttime;
 
-        if ($this->eventdatetime->isRecurring() && isset($this->recurringdate) && $this->recurringdate instanceof \UNL\UCBCN\Event\RecurringDate) {
+        if ($this->eventdatetime->isRecurring() &&
+            isset($this->recurringdate) &&
+            $this->recurringdate instanceof \UNL\UCBCN\Event\RecurringDate
+        ) {
             $first_recurring_date = $this->recurringdate->getFirstRecordInOngoingSeries();
             if (isset($first_recurring_date->recurringdate)) {
                 $time = $first_recurring_date->recurringdate . ' ' . substr($time, 11);
@@ -220,7 +233,10 @@ class EventInstance implements RoutableInterface
             return $time;
         }
 
-        if ($this->eventdatetime->isRecurring() && isset($this->recurringdate) && $this->recurringdate instanceof \UNL\UCBCN\Event\RecurringDate) {
+        if ($this->eventdatetime->isRecurring() &&
+            isset($this->recurringdate) &&
+            $this->recurringdate instanceof \UNL\UCBCN\Event\RecurringDate
+        ) {
             $diff = strtotime($this->eventdatetime->endtime) - strtotime($this->eventdatetime->starttime);
 
             $time = date('Y-m-d H:i:s', strtotime($this->getStartTime()) + $diff);
@@ -358,7 +374,8 @@ class EventInstance implements RoutableInterface
                     $this->eventdatetime->location_additionalpublicinfo : $location->additionalpublicinfo,
             );
         }
-        $data['Room'] = !empty($this->eventdatetime->room) ? $this->eventdatetime->room : ($location ? $location->room : NULL);
+        $data['Room'] = !empty($this->eventdatetime->room) ?
+            $this->eventdatetime->room : ($location ? $location->room : NULL);
 
         if ($eventTypes->count()) {
             $data['EventTypes'] = array();
@@ -529,15 +546,12 @@ class EventInstance implements RoutableInterface
     {
         $timezoneDateTime = new \UNL\UCBCN\TimezoneDateTime($this->eventdatetime->timezone);
         $location   = $this->eventdatetime->getLocation();
-        $eventTypes = $this->event->getEventTypes();
         $webcast    = $this->eventdatetime->getWebcast();
-        $documents  = $this->event->getDocuments();
-        $contacts   = $this->event->getPublicContacts();
-        $originCalendar = $this->event->getOriginCalendar();
         $data       = array();
+        $type_string = '@type';
 
-        $data['@context'] = "https://schema.org";
-        $data['@type'] = "Event";
+        $data['@context'] = 'https://schema.org';
+        $data[$type_string] = 'Event';
         $data['name'] = $this->event->title;
 
         if (isset($this->event->description)) {
@@ -561,54 +575,56 @@ class EventInstance implements RoutableInterface
             }
         }
 
-        $data['eventStatus'] = $this->event->isCanceled($this) ? 'https://schema.org/EventCancelled' : 'https://schema.org/EventScheduled';
+        $data['eventStatus'] = $this->event->isCanceled($this) ?
+            'https://schema.org/EventCancelled' : 'https://schema.org/EventScheduled';
 
         if (isset($this->eventdatetime->location_id) && isset($this->eventdatetime->webcast_id)) {
-            $data['eventAttendanceMode'] = "https://schema.org/MixedEventAttendanceMode";
+            $data['eventAttendanceMode'] = 'https://schema.org/MixedEventAttendanceMode';
         } elseif (isset($this->eventdatetime->location_id) && !isset($this->eventdatetime->webcast_id)) {
-            $data['eventAttendanceMode'] = "https://schema.org/OfflineEventAttendanceMode";
+            $data['eventAttendanceMode'] = 'https://schema.org/OfflineEventAttendanceMode';
         } else {
-            $data['eventAttendanceMode'] = "https://schema.org/OnlineEventAttendanceMode";
+            $data['eventAttendanceMode'] = 'https://schema.org/OnlineEventAttendanceMode';
         }
 
         $data['location'] = array();
         if (isset($this->eventdatetime->location_id)) {
             $location_data = array();
-            $location_data["@type"] = "Place";
-            $location_data["name"] = $location->name;
-            $location_data["address"] = array(
-                "@type" => "PostalAddress",
-                "streetAddress" => $location->streetaddress1 . ((isset($location->streetaddress2)) ? " " . $location->streetaddress2 : ""),
-                "postalCode" => $location->zip,
-                "addressRegion" => $location->state,
-                "addressCountry" => "US",
+            $location_data[$type_string] = 'Place';
+            $location_data['name'] = $location->name;
+            $location_data['address'] = array(
+                $type_string => 'PostalAddress',
+                'streetAddress' => $location->streetaddress1 . ((isset($location->streetaddress2)) ?
+                    ' ' . $location->streetaddress2 : ''),
+                'postalCode' => $location->zip,
+                'addressRegion' => $location->state,
+                'addressCountry' => 'US',
             );
 
-            $data["location"][] = $location_data;
+            $data['location'][] = $location_data;
         }
 
         if (isset($this->eventdatetime->webcast_id)) {
             $webcast_data = array();
-            $webcast_data["@type"] = "VirtualLocation";
-            $webcast_data["url"] = $webcast->url;
+            $webcast_data[$type_string] = 'VirtualLocation';
+            $webcast_data['url'] = $webcast->url;
 
-            $data["location"][] = $webcast_data;
+            $data['location'][] = $webcast_data;
         }
 
         if (isset($this->event->imagedata)) {
-            $data["image"] = array();
-            $data["image"][] = \UNL\UCBCN\Frontend\Controller::$url . '?image&amp;id=' . $this->event->id;
+            $data['image'] = array();
+            $data['image'][] = \UNL\UCBCN\Frontend\Controller::$url . '?image&amp;id=' . $this->event->id;
         }
-        
+
         if (isset($this->event->listingcontacttype)) {
-            $data["organizer"] = array();
-            if ($this->event->listingcontacttype === "person") {
-                $data["organizer"]['@type'] = 'Person';
+            $data['organizer'] = array();
+            if ($this->event->listingcontacttype === 'person') {
+                $data['organizer'][$type_string] = 'Person';
             } else {
-                $data["organizer"]['@type'] = 'organization';
+                $data['organizer'][$type_string] = 'organization';
             }
-            $data["organizer"]['name'] = $this->event->listingcontactname;
-            $data["organizer"]['url'] = $this->event->listingcontacturl;
+            $data['organizer']['name'] = $this->event->listingcontactname;
+            $data['organizer']['url'] = $this->event->listingcontacturl;
         }
 
         return $data;
