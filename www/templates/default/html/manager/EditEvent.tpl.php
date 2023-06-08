@@ -783,7 +783,10 @@ require(['jquery'], function($) {
     });
 
     $('.delete-datetime-recurrence').submit(function (submit) {
-        if (!window.confirm('Are you sure you want to delete this occurrence of your recurring instance? The rest of the recurrences will remain.')) {
+        if (!window.confirm(
+            'Are you sure you want to delete this occurrence of your recurring instance?' +
+            ' The rest of the recurrences will remain.'
+        )) {
             submit.preventDefault();
         }
     });
