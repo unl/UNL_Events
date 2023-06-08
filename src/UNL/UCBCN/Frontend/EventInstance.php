@@ -84,12 +84,12 @@ class EventInstance implements RoutableInterface
         if (isset($_GET['format']) &&
             (strtolower($_GET['format']) == 'xml' || strtolower($_GET['format']) == 'json')
         ) {
-            $options['includeEventImageData'] = TRUE;
+            $options['includeEventImageData'] = true;
         }
 
-        // get event with image data if includeEventImageData is not set or is TRUE
+        // get event with image data if includeEventImageData is not set or is true
         $this->event = $this->eventdatetime->getEvent(
-            !isset($options['includeEventImageData']) || $options['includeEventImageData'] === TRUE
+            !isset($options['includeEventImageData']) || $options['includeEventImageData'] === true
         );
         $this->options = $options;
     }
@@ -375,7 +375,7 @@ class EventInstance implements RoutableInterface
             );
         }
         $data['Room'] = !empty($this->eventdatetime->room) ?
-            $this->eventdatetime->room : ($location ? $location->room : NULL);
+            $this->eventdatetime->room : ($location ? $location->room : null);
 
         if ($eventTypes->count()) {
             $data['EventTypes'] = array();

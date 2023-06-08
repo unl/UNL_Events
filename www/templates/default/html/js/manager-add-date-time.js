@@ -65,8 +65,8 @@ require(['jquery'], function ($) {
                 }
 
                 if ($('#end-date').val() != '') {
-                    var instanceStart = new Date($('#start-date').val());
-                    var instanceEnd = new Date($('#end-date').val());
+                    let instanceStart = new Date($('#start-date').val());
+                    let instanceEnd = new Date($('#end-date').val());
                     if (instanceStart && instanceEnd && instanceStart.getDate() != instanceEnd.getDate()) {
                         errors.push('A recurring event instance start and end date must be the same day. If you need multiple multi-day (ongoing) occurrences, you must define them as separate datetime instances.');
                     }
@@ -75,7 +75,7 @@ require(['jquery'], function ($) {
                 // check that the recurs until date is on or after the start date
                 start.setHours(0);
                 start.setMinutes(0);
-                var until = new Date($('#recurs-until-date').val());
+                let until = new Date($('#recurs-until-date').val());
 
                 if (start > until) {
                     notifier.mark_input_invalid($('#recurs-until-date'));

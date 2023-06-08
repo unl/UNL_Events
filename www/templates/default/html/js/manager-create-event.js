@@ -213,7 +213,7 @@ require(['jquery', 'wdn'], function ($, WDN) {
             errors.push('<a href="#title">Title</a>, <a href="#type">Type</a>, and <a href="#start-date">start date</a> are required.');
         }
 
-        var start = new Date($('#start-date').val());
+        let start = new Date($('#start-date').val());
         if ($('#start-date').val() != '') {
             // validate end date is after start date and the time is afterward accordingly
             if ($('#end-date').val() != '') {
@@ -256,8 +256,8 @@ require(['jquery', 'wdn'], function ($, WDN) {
                 }
 
                 if ($('#end-date').val() != '') {
-                    var instanceStart = new Date($('#start-date').val());
-                    var instanceEnd = new Date($('#end-date').val());
+                    let instanceStart = new Date($('#start-date').val());
+                    let instanceEnd = new Date($('#end-date').val());
                     if (instanceStart && instanceEnd && instanceStart.getDate() != instanceEnd.getDate()) {
                         errors.push('A recurring event instance start and end date must be the same day. If you need multiple multi-day (ongoing) occurrences, you must define them as separate datetime instances.');
                     }
@@ -266,7 +266,7 @@ require(['jquery', 'wdn'], function ($, WDN) {
                 // check that the recurs until date is on or after the start date
                 start.setHours(0);
                 start.setMinutes(0);
-                var until = new Date($('#recurs-until-date').val());
+                let until = new Date($('#recurs-until-date').val());
 
                 if (start > until) {
                     notifier.mark_input_invalid($('#recurs-until-date'));
@@ -351,13 +351,13 @@ require(['jquery', 'wdn'], function ($, WDN) {
             errors.push('<a href="#contact-type">Contact Type</a> must be person or organization.');
         }
 
-        var contactWebsiteURL = $('#contact-website').val();
+        let contactWebsiteURL = $('#contact-website').val();
         if (contactWebsiteURL != '' && !isUrlValid(contactWebsiteURL)) {
             notifier.mark_input_invalid($('#contact-website'));
             errors.push('<a href="#contact_website">Contact Website</a> is not a valid URL.');
         }
 
-        var websiteURL = $('#website').val();
+        let websiteURL = $('#website').val();
         if (websiteURL != '' && !isUrlValid(websiteURL)) {
             notifier.mark_input_invalid($('#website'));
             errors.push('<a href="#website">Event Website</a> is not a valid URL.');
