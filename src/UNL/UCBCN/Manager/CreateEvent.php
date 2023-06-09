@@ -80,54 +80,21 @@ class CreateEvent extends EventForm
 
         // If there is a physical location make sure these are set
         if (isset($post_data['physical_location_check']) && $post_data['physical_location_check'] == '1') {
-            if ($post_data['location'] == 'new' && empty($post_data['new_location']['name'])) {
-                throw new ValidationException('You must give your new location a <a href="#location-name">name</a>.');
-            }
-
-            if ($post_data['location'] == 'new' && empty($post_data['new_location']['streetaddress1'])) {
-                throw new ValidationException(
-                    'You must give your new location an <a href=\"#location-address-1\">address</a>.'
-                );
-            }
-
-            if ($post_data['location'] == 'new' && empty($post_data['new_location']['city'])) {
-                throw new ValidationException('You must give your new location a <a href=\"#location-city\">city</a>.');
-            }
-
-            if ($post_data['location'] == 'new' && empty($post_data['new_location']['state'])) {
-                throw new ValidationException(
-                    'You must give your new location a <a href=\"#location-state\">state</a>.'
-                );
-            }
-
-            if ($post_data['location'] == 'new' && empty($post_data['new_location']['zip'])) {
-                throw new ValidationException('You must give your new location a <a href=\"#location-zip\">zip</a>.');
-            }
-
-            if ($post_data['location'] == 'new' && !empty($post_data['new_location']['webpageurl']) &&
-                !filter_var($post_data['new_location']['webpageurl'], FILTER_VALIDATE_URL)) {
-                throw new ValidationException('<a href=\"#location-webpage\">Location URL</a> is not a valid URL.');
+            if($post_data['location'] == "new") {
+                $validate_data = LocationUtility::validateLocation($post_data);
+                if (!$validate_data['valid']) {
+                    throw new ValidationException($validate_data['message']);
+                }
             }
         }
 
         // If there is a virtual location make sure these are set
         if (isset($post_data['virtual_location_check']) && $post_data['virtual_location_check'] == '1') {
-            if ($post_data['v_location'] == 'new' && empty($post_data['new_v_location']['title'])) {
-                throw new ValidationException(
-                    'You must give your new virtual location a <a href=\"#new-v-location-name\">name</a>.'
-                );
-            }
-
-            if ($post_data['v_location'] == 'new' && empty($post_data['new_v_location']['url'])) {
-                throw new ValidationException(
-                    'You must give your new virtual location a <a href=\"#new-v-location-url\">URL</a>.'
-                );
-            } elseif ($post_data['v_location'] == 'new' &&
-                !empty($post_data['new_v_location']['url']) &&
-                !filter_var($post_data['new_v_location']['url'], FILTER_VALIDATE_URL)) {
-                throw new ValidationException(
-                    '<a href=\"#new-v-location-url\">Virtual Location URL</a> is not a valid URL.'
-                );
+            if($post_data['v_location'] == "new") {
+                $validate_data = WebcastUtility::validateWebcast($post_data);
+                if (!$validate_data['valid']) {
+                    throw new ValidationException($validate_data['message']);
+                }
             }
         }
 

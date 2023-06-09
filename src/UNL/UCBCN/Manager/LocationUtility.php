@@ -6,6 +6,51 @@ use UNL\UCBCN\Locations;
 
 class LocationUtility
 {
+    public static function validateLocation(array $post_data): array {
+        $outputMessage = "";
+        $isValid = true;
+        if (empty($post_data['new_location']['name'])) {
+            $outputMessage = 'You must give your new location a <a href="#location-name">name</a>.';
+            $isValid = false;
+        }
+
+        if ($isValid && empty($post_data['new_location']['streetaddress1'])) {
+            $outputMessage = 'You must give your new location an <a href="#location-address-1">address</a>.';
+            $isValid = false;
+        }
+
+        if ($isValid && empty($post_data['new_location']['city'])) {
+            $outputMessage = 'You must give your new location a <a href="#location-city">city</a>.';
+            $isValid = false;
+        }
+
+        if ($isValid && empty($post_data['new_location']['state'])) {
+            $outputMessage = 'You must give your new location a <a href="#location-state">state</a>.';
+            $isValid = false;
+        }
+
+        if ($isValid && empty($post_data['new_location']['zip'])) {
+            $outputMessage = 'You must give your new location a <a href="#location-zip">zip</a>.';
+            $isValid = false;
+        }
+
+        if ($isValid && !empty($post_data['new_location']['webpageurl']) &&
+            !filter_var($post_data['webpageurl'], FILTER_VALIDATE_URL)
+        ) {
+            $outputMessage = '<a href="#location-webpage">Location URL</a> is not a valid URL.';
+            $isValid = false;
+        }
+
+        if ($isValid && !empty($post_data['new_location']['mapurl']) &&
+            !filter_var($post_data['mapurl'], FILTER_VALIDATE_URL)
+        ) {
+            $outputMessage = '<a href="#location-mapurl">Location Map URL</a> is not a valid URL.';
+            $isValid = false;
+        }
+
+        return array("valid" => $isValid, "message" => $outputMessage);
+    }
+
     public static function addLocation(array $post_data, $user, $calendar)
     {
         $allowed_fields = array(

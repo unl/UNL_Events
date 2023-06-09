@@ -6,6 +6,30 @@ use UNL\UCBCN\Webcasts;
 
 class WebcastUtility
 {
+    public static function validateWebcast(array $post_data): array {
+        $outputMessage = "";
+        $isValid = true;
+
+        if (empty($post_data['new_v_location']['title'])) {
+            $outputMessage = 'You must give your new virtual location a <a href="#new-v-location-name">name</a>.';
+            $isValid = false;
+        }
+
+        if ($isValid && empty($post_data['new_v_location']['url'])) {
+            $outputMessage = 'You must give your new virtual location a <a href="#new-v-location-url">URL</a>.';
+            $isValid = false;
+        }
+        
+        if ($isValid && !empty($post_data['new_v_location']['url']) &&
+            !filter_var($post_data['url'], FILTER_VALIDATE_URL)
+        ) {
+            $outputMessage = '<a href="#new-v-location-url">Virtual Location URL</a> is not a valid URL.';
+            $isValid = false;
+        }
+
+        return array("valid" => $isValid, "message" => $outputMessage);
+    }
+
     public static function addWebcast(array $post_data, $user, $calendar)
     {
         // These need to match webcast table
