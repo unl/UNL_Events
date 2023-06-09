@@ -19,12 +19,6 @@
         'value="' . $controller->getCSRFHelper()->getTokenValue() . '" ' .
     '> ';
 ?>
-<h1>User Locations</h1>
-
-<div class="dcf-mb-5">
-    <button id="new_location" class="dcf-btn dcf-btn-primary" type="button">Create A New Location</button>
-</div>
-
 <script>
     const LOCATIONS = [];
     LOCATIONS[0] = {
@@ -47,11 +41,23 @@
     };
 </script>
 
-<table class="dcf-table dcf-table-responsive dcf-table-striped dcf-w-100%">
+<div class="dcf-mb-5 dcf-d-flex dcf-flex-row dcf-flex-wrap dcf-jc-between dcf-ai-center">
+    <h1 id="table_desc">User Locations</h1>
+    <button id="new_location" class="dcf-btn dcf-btn-primary" type="button">Create A New Location</button>
+</div>
+
+<table class="dcf-table dcf-table-responsive dcf-table-striped dcf-w-100%" aria-describedby="table_desc">
+    <thead>
+        <tr>
+            <th>Location Name</th>
+            <th>Attached Calendar</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
     <tbody>
         <?php foreach($context->getUserLocations() as $location): ?>
             <tr>
-                <td class="dcf-bold">
+                <td>
                     <?php echo $location->name; ?>
                     <script>
                         <?php $location_json = $location->toJSON(); ?>
