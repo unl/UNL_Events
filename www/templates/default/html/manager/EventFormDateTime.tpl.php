@@ -433,7 +433,6 @@
         <fieldset class="dcf-mt-6" id="new-location-fields" style="display: none;">
             <legend>New Location</legend>
 
-            <pre><?php var_dump($post); ?></pre>
             <?php echo $savvy->render($post, 'PhysicalLocationForm.tpl.php'); ?>
 
             <div class="dcf-d-grid dcf-grid-full dcf-grid-halves@md dcf-col-gap-5">
