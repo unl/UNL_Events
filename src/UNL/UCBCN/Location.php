@@ -2,6 +2,8 @@
 namespace UNL\UCBCN;
 
 use UNL\UCBCN\ActiveRecord\Record;
+use UNL\UCBCN\Calendar;
+
 /**
  * Details for locations within the database.
  *
@@ -107,7 +109,38 @@ class Location extends Record
         }
     }
 
+    public function getCalendar()
+    {
+        if (!isset($this->calendar_id) || empty($this->calendar_id)) {
+            return null;
+        }
 
+        return Calendar::getByID($this->calendar_id);
+    }
+
+
+    public function toJSON()
+    {
+        $data = array(
+            'location'                        => $this->id,
+            'location-name'                   => $this->name,
+            'location-address-1'              => $this->streetaddress1,
+            'location-address-2'              => $this->streetaddress2,
+            'location-city'                   => $this->city,
+            'location-state'                           => $this->state,
+            'location-zip'                    => $this->zip,
+            'location-map-url'                => $this->mapurl,
+            'location-webpage'                => $this->webpageurl,
+            'location-hours'                  => $this->hours,
+            'location-phone'                  => $this->phone,
+            'location-room'                   => $this->room,
+            'location-directions'             => $this->directions,
+            'location-additional-public-info' => $this->additionalpublicinfo,
+            'user_id'                         => $this->user_id,
+            'calendar_id'                     => $this->calendar_id,
+        );
+        return $data;
+    }
 
     /**
      * Checks to see if the location is saved to anyone or any calendar.
