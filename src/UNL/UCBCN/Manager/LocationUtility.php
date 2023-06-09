@@ -35,14 +35,14 @@ class LocationUtility
         }
 
         if ($isValid && !empty($post_data['new_location']['webpageurl']) &&
-            !filter_var($post_data['webpageurl'], FILTER_VALIDATE_URL)
+            !filter_var($post_data['new_location']['webpageurl'], FILTER_VALIDATE_URL)
         ) {
             $outputMessage = '<a href="#location-webpage">Location URL</a> is not a valid URL.';
             $isValid = false;
         }
 
         if ($isValid && !empty($post_data['new_location']['mapurl']) &&
-            !filter_var($post_data['mapurl'], FILTER_VALIDATE_URL)
+            !filter_var($post_data['new_location']['mapurl'], FILTER_VALIDATE_URL)
         ) {
             $outputMessage = '<a href="#location-mapurl">Location Map URL</a> is not a valid URL.';
             $isValid = false;

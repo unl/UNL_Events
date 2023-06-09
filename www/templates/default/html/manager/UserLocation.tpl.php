@@ -119,6 +119,7 @@
 >
     <?php echo $token_inputs; ?>
     <input type="hidden" id="location" name="location" value="new">
+    <input type="hidden" id="createOrModify-method" name="method" value="post">
 
     <fieldset class="dcf-mt-6" id="new-location-fields">
         <legend id="createOrModify-legend">Create New Location</legend>
@@ -164,6 +165,7 @@
     const createOrModifyForm = document.getElementById('createOrModify');
     const createOrModifyLegend = document.getElementById('createOrModify-legend');
     const createOrModifySubmit = document.getElementById('createOrModify-submit');
+    const createOrModifyMethod = document.getElementById('createOrModify-method');
 
     createButton.addEventListener('click', () => {
         if (!createOrModifyForm.classList.contains('dcf-d-none')) {
@@ -173,6 +175,7 @@
         }
         createOrModifyLegend.innerText = "Create New Location";
         createOrModifySubmit.value = "Create New Location";
+        createOrModifyMethod.value = "post";
         fillInputs(0);
         showForm();
     });
@@ -186,6 +189,7 @@
             }
             createOrModifyLegend.innerText = "Modify Location";
             createOrModifySubmit.value = "Modify Location";
+            createOrModifyMethod.value = "put";
             fillInputs(modifyButton.dataset.locationId);
             showForm();
         });

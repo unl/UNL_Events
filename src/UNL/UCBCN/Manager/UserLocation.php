@@ -1,6 +1,9 @@
 <?php
 namespace UNL\UCBCN\Manager;
 
+use UNL\UCBCN\Calendar;
+use UNL\UCBCN\Permission;
+
 class UserLocation extends PostHandler
 {
     public $options = array();
@@ -27,25 +30,83 @@ class UserLocation extends PostHandler
     {
         $user = Auth::getCurrentUser();
 
-        // $pending_permission = Permission::getByName('Event Send Event to Pending Queue');
-        // $posted_permission = Permission::getByName('Event Post');
+        $edit_permission = Permission::getByName('Event Edit');
+        $create_permission = Permission::getByName('Event Create');
 
-        return $user->hasPermission(5, $calendar_id) && $user->hasPermission(25, $calendar_id);
+        return $user->hasPermission($edit_permission->id, $calendar_id) && $user->hasPermission($create_permission->id, $calendar_id);
     }
 
     public function handlePost(array $get, array $post, array $files)
     {
-        
+        $method = $post['method'] ?? "";
         try {
-            throw new ValidationException('<pre>' . print_r($post, true) . '</pre>');
+            switch ($method) {
+                case "post":
+                    $this->create_location($post);
+                    break;
+                case "put":
+                    $this->update_location($post);
+                    break;
+                case "delete":
+                    $this->detach_location($post);
+                    break;
+                default: 
+                    throw new ValidationException('Invalid Method');
+            }
+
         } catch (ValidationException $e) {
             $this->post = $post;
             $this->flashNotice(parent::NOTICE_LEVEL_ALERT, 'Sorry! We couldn\'t create your event', $e->getMessage());
             throw $e;
         }
-        $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Location Updated', 'Your Location has been updated.');
+
+        switch ($method) {
+            case "post":
+                $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Location Created', 'Your Location has been created.');
+                break;
+            case "put":
+                $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Location Updated', 'Your Location has been updated.');
+                break;
+            case "delete":
+                $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Location Detached', 'Your Location has been detached from you.');
+                break;
+        }
 
         //redirect
         return Controller::getUserLocationURL();
+    }
+
+    private function create_location(array $post_data)
+    {
+        $user = Auth::getCurrentUser();
+        $post_data['location_save'] = 'on';
+
+        $calendar = null;
+        if (isset($post_data['calendar_id']) && is_numeric($post_data['calendar_id'])) {
+            $post_data['location_save_calendar'] = 'on';
+            $calendar = Calendar::getByID($post_data['calendar_id']);
+        }
+
+        $this->validateLocation($post_data);
+
+        LocationUtility::addLocation($post_data, $user, $calendar);
+    }
+
+    private function update_location(array $post_data)
+    {
+        throw new ValidationException('<div>Update</div><pre>' . print_r($post_data, true) . '</pre>');
+    }
+
+    private function detach_location(array $post_data)
+    {
+        throw new ValidationException('<div>Detach</div><pre>' . print_r($post_data, true) . '</pre>');
+    }
+
+    private function validateLocation(array $post_data)
+    {
+        $validate_data = LocationUtility::validateLocation($post_data);
+        if (!$validate_data['valid']) {
+            throw new ValidationException($validate_data['message']);
+        }
     }
 }
