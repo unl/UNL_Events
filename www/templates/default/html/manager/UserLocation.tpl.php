@@ -64,7 +64,7 @@
                         <?php $raw_location_json = $savvy->getRawObject($location_json); ?>
                         LOCATIONS[<?php echo $location->id; ?>] = <?php
                             echo json_encode($raw_location_json, JSON_UNESCAPED_SLASHES);
-                        ?>
+                        ?>;
                     </script>
                 </td>
                 <td>
@@ -118,8 +118,26 @@
     method="post"
 >
     <?php echo $token_inputs; ?>
-    <input type="hidden" id="location" name="location" value="new">
-    <input type="hidden" id="createOrModify-method" name="method" value="post">
+    <input
+        type="hidden"
+        id="location"
+        name="location"
+        <?php if (isset($post['location'])): ?>
+            value="<?php echo $post['location'];?>"
+        <?php else: ?>
+            value="new"
+        <?php endif; ?>
+    >
+    <input
+        type="hidden"
+        id="createOrModify-method"
+        name="method"
+        <?php if (isset($post['method'])): ?>
+            value="<?php echo $post['method'];?>"
+        <?php else: ?>
+            value="post"
+        <?php endif; ?>
+    >
 
     <fieldset class="dcf-mt-6" id="new-location-fields">
         <legend id="createOrModify-legend">Create New Location</legend>
@@ -153,6 +171,7 @@
 
         <div class="dcf-form-group">
             <input id="createOrModify-submit" class="dcf-btn dcf-btn-primary" type="submit" value="Create New Location">
+            <button id="createOrModify-cancel" class="dcf-btn dcf-btn-secondary" type="button">Cancel</button>
         </div>
     </fieldset>
 </form>
@@ -165,11 +184,19 @@
     const createOrModifyForm = document.getElementById('createOrModify');
     const createOrModifyLegend = document.getElementById('createOrModify-legend');
     const createOrModifySubmit = document.getElementById('createOrModify-submit');
+    const createOrModifyCancel = document.getElementById('createOrModify-cancel');
     const createOrModifyMethod = document.getElementById('createOrModify-method');
+
+    createOrModifyCancel.addEventListener('click', () => {
+        if (!confirm('Are you sure you want to clear out the form?')) {
+            return;
+        }
+        hideForm();
+    });
 
     createButton.addEventListener('click', () => {
         if (!createOrModifyForm.classList.contains('dcf-d-none')) {
-            if (!confirm('Are you sure you want to clear out the form')) {
+            if (!confirm('Are you sure you want to clear out the form?')) {
                 return;
             }
         }
@@ -183,7 +210,7 @@
     modifyButtons.forEach((modifyButton) => {
         modifyButton.addEventListener('click', () => {
             if (!createOrModifyForm.classList.contains('dcf-d-none')) {
-                if (!confirm('Are you sure you want to clear out the form')) {
+                if (!confirm('Are you sure you want to clear out the form?')) {
                     return;
                 }
             }
@@ -208,6 +235,10 @@
             const defaultValue = locationProp === 'location-state' ? "NE" : "";
             elementToModify.value = locationToModify[locationProp] ?? defaultValue;
         }
+    }
+
+    function hideForm() {
+        createOrModifyForm.classList.add('dcf-d-none');
     }
 
     function showForm() {

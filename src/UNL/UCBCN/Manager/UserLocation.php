@@ -1,8 +1,10 @@
 <?php
 namespace UNL\UCBCN\Manager;
 
+use Exception;
 use UNL\UCBCN\Calendar;
 use UNL\UCBCN\Permission;
+use UNL\UCBCN\Location as Location;
 
 class UserLocation extends PostHandler
 {
@@ -94,12 +96,41 @@ class UserLocation extends PostHandler
 
     private function update_location(array $post_data)
     {
-        throw new ValidationException('<div>Update</div><pre>' . print_r($post_data, true) . '</pre>');
+        $user = Auth::getCurrentUser();
+        $post_data['location_save'] = 'on';
+
+        $calendar = null;
+        if (isset($post_data['calendar_id']) && is_numeric($post_data['calendar_id'])) {
+            $post_data['location_save_calendar'] = 'on';
+            $calendar = Calendar::getByID($post_data['calendar_id']);
+        }
+
+        if (!empty($post_data['location']) && $post_data['location'] === "New") {
+            throw new ValidationException('Missing Location To Update');
+        }
+
+        $this->validateLocation($post_data);
+
+        try {
+            LocationUtility::updateLocation($post_data, $user, $calendar);
+        } catch(Exception $e) {
+            throw new ValidationException('Error Updating Location');
+        }
     }
 
     private function detach_location(array $post_data)
     {
-        throw new ValidationException('<div>Detach</div><pre>' . print_r($post_data, true) . '</pre>');
+        if (!empty($post_data['location']) && $post_data['location'] === "New") {
+            throw new ValidationException('Missing Location To Detach');
+        }
+
+        $location = Location::getByID($post_data['location']);
+        if ($location === null) {
+            throw new ValidationException('Invalid Location ID');
+        }
+
+        $location->user_id = null;
+        $location->update();
     }
 
     private function validateLocation(array $post_data)
