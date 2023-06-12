@@ -1,6 +1,7 @@
 <?php
 namespace UNL\UCBCN\Manager;
 
+use Exception;
 use UNL\UCBCN\Location as Location;
 use UNL\UCBCN\Locations;
 
@@ -73,9 +74,8 @@ class LocationUtility
         $location = new Location;
 
         foreach ($allowed_fields as $field) {
-            $value = $post_data['new_location'][$field];
-            if (!empty($value)) {
-                $location->$field = $value;
+            if (!empty($post_data['new_location'][$field])) {
+                $location->$field = $post_data['new_location'][$field];
             }
         }
 
@@ -90,6 +90,49 @@ class LocationUtility
         $location->standard = 0;
 
         $location->insert();
+
+        return $location;
+    }
+
+    public static function updateLocation(array $post_data, $user, $calendar)
+    {
+        $allowed_fields = array(
+            'name',
+            'streetaddress1',
+            'streetaddress2',
+            'room',
+            'city',
+            'state',
+            'zip',
+            'mapurl',
+            'webpageurl',
+            'hours',
+            'directions',
+            'additionalpublicinfo',
+            'type',
+            'phone',
+        );
+
+        $location = Location::getByID($post_data['location']);
+        if ($location === null) {
+            throw new Exception('Invalid Location ID');
+        }
+
+        foreach ($allowed_fields as $field) {
+            if (!empty($post_data['new_location'][$field])) {
+                $location->$field = $post_data['new_location'][$field];
+            }
+        }
+
+        if (array_key_exists('location_save', $post_data) && $post_data['location_save'] == 'on') {
+            $location->user_id = $user->uid;
+        }
+
+        if (array_key_exists('location_save_calendar', $post_data) && $post_data['location_save_calendar'] == 'on') {
+            $location->calendar_id = $calendar->id;
+        }
+
+        $location->update();
 
         return $location;
     }
