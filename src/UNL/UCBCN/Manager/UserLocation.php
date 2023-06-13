@@ -87,6 +87,9 @@ class UserLocation extends PostHandler
         if (isset($post_data['calendar_id']) && is_numeric($post_data['calendar_id'])) {
             $post_data['location_save_calendar'] = 'on';
             $calendar = Calendar::getByID($post_data['calendar_id']);
+            if (!$this->userHasAccessToCalendar($post_data['calendar_id'])) {
+                throw new ValidationException('You do not have access to that calendar.');
+            }
         }
 
         $this->validateLocation($post_data);
@@ -103,10 +106,13 @@ class UserLocation extends PostHandler
         if (isset($post_data['calendar_id']) && is_numeric($post_data['calendar_id'])) {
             $post_data['location_save_calendar'] = 'on';
             $calendar = Calendar::getByID($post_data['calendar_id']);
+            if (!$this->userHasAccessToCalendar($post_data['calendar_id'])) {
+                throw new ValidationException('You do not have access to that calendar.');
+            }
         }
 
         if (!empty($post_data['location']) && $post_data['location'] === "New") {
-            throw new ValidationException('Missing Location To Update');
+            throw new ValidationException('Missing Location To Update.');
         }
 
         $this->validateLocation($post_data);

@@ -124,8 +124,10 @@ class LocationUtility
             }
         }
 
-        if (array_key_exists('location_save', $post_data) && $post_data['location_save'] == 'on') {
-            $location->user_id = $user->uid;
+        if (!isset($location->user_id) || $location->user_id === $user->uid) {
+            if (array_key_exists('location_save', $post_data) && $post_data['location_save'] == 'on') {
+                $location->user_id = $user->uid;
+            }
         }
 
         if (array_key_exists('location_save_calendar', $post_data) && $post_data['location_save_calendar'] == 'on') {

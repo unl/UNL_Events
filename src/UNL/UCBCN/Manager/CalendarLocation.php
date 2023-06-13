@@ -23,6 +23,13 @@ class CalendarLocation extends PostHandler
         return LocationUtility::getCalendarLocations($this->calendar->id);
     }
 
+    public function getCurrentUser()
+    {
+        $user = Auth::getCurrentUser();
+
+        return $user->uid;
+    }
+
     public function getUserCalendars() 
     {
         $user = Auth::getCurrentUser();

@@ -21,6 +21,7 @@
     '> ';
 ?>
 <script>
+    const CURRENTUSER = '<?php echo $context->getCurrentUser(); ?>';
     const LOCATIONS = [];
     LOCATIONS[0] = {
         'location'                        : 'new',
@@ -51,6 +52,7 @@
     <thead>
         <tr>
             <th>Location Name</th>
+            <th>Attached Person</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -66,6 +68,9 @@
                             echo json_encode($raw_location_json, JSON_UNESCAPED_SLASHES);
                         ?>;
                     </script>
+                </td>
+                <td>
+                    <?php echo $location->user_id; ?>
                 </td>
                 <td>
                     <form id="location_delete_<?php echo $location->id; ?>" method="post">
@@ -133,7 +138,21 @@
         <?php echo $savvy->render($post, 'PhysicalLocationForm.tpl.php'); ?>
 
         <div class="dcf-form-group">
-            <div class="dcf-input-checkbox">
+            <input
+                type="hidden"
+                id="user_id"
+                name="user_id"
+                value="<?php echo isset($post['user_id']) ? $post['user_id']: ''; ?>"
+            >
+            <div 
+                id="createOrModify-userCheck" 
+                class="
+                    dcf-input-checkbox
+                    <?php if (isset($post['user_id']) && $post['user_id'] !== $context->getCurrentUser()): ?>
+                        dcf-d-none
+                    <?php endif; ?>
+                "
+            >
                 <input
                     id="location-save"
                     name="location_save"
@@ -146,6 +165,16 @@
                 >
                 <label for="location-save">Save this location for your future events</label>
             </div>
+            <p 
+                id="createOrModify-taken"
+                class="
+                    <?php if (!isset($post['user_id']) || $post['user_id'] === $context->getCurrentUser()): ?>
+                        dcf-d-none
+                    <?php endif; ?>
+                " 
+            >
+                This location is already saved to <?php echo $post['user_id']; ?>
+            </p>
         </div>
 
         <div class="dcf-form-group">
@@ -165,6 +194,10 @@
     const createOrModifySubmit = document.getElementById('createOrModify-submit');
     const createOrModifyCancel = document.getElementById('createOrModify-cancel');
     const createOrModifyMethod = document.getElementById('createOrModify-method');
+
+    const locationSave = document.getElementById('location-save');
+    const createOrModifyUserCheck = document.getElementById('createOrModify-userCheck');
+    const createOrModifyTaken = document.getElementById('createOrModify-taken');
 
     createOrModifyCancel.addEventListener('click', () => {
         if (!confirm('Are you sure you want to clear out the form?')) {
@@ -203,7 +236,7 @@
 
     function fillInputs(location_id) {
         const locationToModify = LOCATIONS[location_id];
-        const specialProps = ['user_id', 'calendar_id'];
+        const specialProps = ['calendar_id'];
 
         for (const locationProp in locationToModify) {
             if (specialProps.includes(locationProp)) { continue; }
@@ -213,6 +246,23 @@
 
             const defaultValue = locationProp === 'location-state' ? "NE" : "";
             elementToModify.value = locationToModify[locationProp] ?? defaultValue;
+        }
+
+        if (locationToModify['user_id'] === null || locationToModify['user_id'] === '' || locationToModify['user_id'] === CURRENTUSER) {
+            createOrModifyUserCheck.classList.remove('dcf-d-none');
+            createOrModifyTaken.classList.add('dcf-d-none');
+
+            if (locationToModify['user_id'] === CURRENTUSER) {
+                locationSave.checked = true;
+            } else {
+                locationSave.checked = false;
+            }
+        } else {
+            createOrModifyUserCheck.classList.add('dcf-d-none');
+            createOrModifyTaken.classList.remove('dcf-d-none');
+
+            createOrModifyTaken.innerText = `This location is already saved to ${locationToModify['user_id']}`;
+            locationSave.checked = false;
         }
     }
 
