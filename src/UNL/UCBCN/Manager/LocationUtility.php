@@ -132,6 +132,8 @@ class LocationUtility
 
         if (array_key_exists('location_save_calendar', $post_data) && $post_data['location_save_calendar'] == 'on') {
             $location->calendar_id = $calendar->id;
+        } else {
+            $location->calendar_id = null;
         }
 
         $location->update();
