@@ -9,7 +9,7 @@
             type="text"
             class="dcf-w-100%"
             value="<?php
-                echo isset($post['new_v_location']['title']) ? $post['new_v_location']['title']: '';
+                echo isset($context['new_v_location']['title']) ? $context['new_v_location']['title']: '';
             ?>"
         >
     </div>
@@ -21,7 +21,7 @@
             type="text"
             class="dcf-w-100%"
             value="<?php
-                echo isset($post['new_v_location']['url']) ? $post['new_v_location']['url']: '';
+                echo isset($context['new_v_location']['url']) ? $context['new_v_location']['url']: '';
             ?>"
         >
     </div>
@@ -31,8 +31,8 @@
             id="new-v-location-additional-public-info"
             name="new_v_location[additionalinfo]"
         ><?php
-            if (isset($post['new_v_location']['additionalinfo'])) {
-                echo $post['new_v_location']['additionalinfo'];
+            if (isset($context['new_v_location']['additionalinfo'])) {
+                echo $context['new_v_location']['additionalinfo'];
             }
         ?></textarea>
     </div>

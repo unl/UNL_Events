@@ -1,6 +1,7 @@
 <?php
 namespace UNL\UCBCN\Manager;
 
+use Exception;
 use UNL\UCBCN\Webcast as Webcast;
 use UNL\UCBCN\Webcasts;
 
@@ -21,7 +22,7 @@ class WebcastUtility
         }
         
         if ($isValid && !empty($post_data['new_v_location']['url']) &&
-            !filter_var($post_data['url'], FILTER_VALIDATE_URL)
+            !filter_var($post_data['new_v_location']['url'], FILTER_VALIDATE_URL)
         ) {
             $outputMessage = '<a href="#new-v-location-url">Virtual Location URL</a> is not a valid URL.';
             $isValid = false;
@@ -58,6 +59,46 @@ class WebcastUtility
         }
 
         $webcast->insert();
+
+        return $webcast;
+    }
+
+    public static function updateWebcast(array $post_data, $user, $calendar)
+    {
+        // These need to match webcast table
+        $allowed_fields = array(
+            'title',
+            'url',
+            'additionalinfo',
+        );
+
+        $webcast = Webcast::getByID($post_data['v_location']);
+        if ($webcast === null) {
+            throw new Exception('Invalid Location ID');
+        }
+
+
+        foreach ($allowed_fields as $field) {
+            $value = $post_data['new_v_location'][$field];
+            if (!empty($value)) {
+                $webcast->$field = $value;
+            }
+        }
+
+        if (array_key_exists('v_location_save', $post_data) && $post_data['v_location_save'] == 'on') {
+            $webcast->user_id = $user->uid;
+        } else {
+            $webcast->user_id = null;
+        }
+
+        if (array_key_exists('v_location_save_calendar', $post_data) &&
+            $post_data['v_location_save_calendar'] == 'on') {
+            $webcast->calendar_id = $calendar->id;
+        } else {
+            $webcast->calendar_id = null;
+        }
+
+        $webcast->update();
 
         return $webcast;
     }

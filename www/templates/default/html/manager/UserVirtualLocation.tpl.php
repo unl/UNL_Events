@@ -73,7 +73,7 @@
                     <form id="location_delete_<?php echo $webcast->id; ?>" method="post">
                         <?php echo $token_inputs; ?>
 
-                        <input type="hidden" name="location" value="<?php echo $webcast->id; ?>">
+                        <input type="hidden" name="v_location" value="<?php echo $webcast->id; ?>">
                         <input type="hidden" name="method" value="delete">
                     </form>
                     <div class="dcf-btn-group">

@@ -4,7 +4,7 @@ namespace UNL\UCBCN\Manager;
 use Exception;
 use UNL\UCBCN\Calendar;
 use UNL\UCBCN\Permission;
-use UNL\UCBCN\Location as Location;
+use UNL\UCBCN\Webcast as Webcast;
 
 class UserVirtualLocation extends PostHandler
 {
@@ -44,13 +44,13 @@ class UserVirtualLocation extends PostHandler
         try {
             switch ($method) {
                 case "post":
-                    $this->create_location($post);
+                    $this->create_webcast($post);
                     break;
                 case "put":
-                    $this->update_location($post);
+                    $this->update_webcast($post);
                     break;
                 case "delete":
-                    $this->detach_location($post);
+                    $this->detach_webcast($post);
                     break;
                 default: 
                     throw new ValidationException('Invalid Method');
@@ -64,84 +64,84 @@ class UserVirtualLocation extends PostHandler
 
         switch ($method) {
             case "post":
-                $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Location Created', 'Your Location has been created.');
+                $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Virtual Location Created', 'Your Virtual Location has been created.');
                 break;
             case "put":
-                $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Location Updated', 'Your Location has been updated.');
+                $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Virtual Location Updated', 'Your Virtual Location has been updated.');
                 break;
             case "delete":
-                $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Location Detached', 'Your Location has been detached from you.');
+                $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Virtual Location Detached', 'Your Virtual Location has been detached from you.');
                 break;
         }
 
         //redirect
-        return Controller::getUserLocationURL();
+        return Controller::getUserVirtualLocationURL();
     }
 
-    private function create_location(array $post_data)
+    private function create_webcast(array $post_data)
     {
         $user = Auth::getCurrentUser();
-        $post_data['location_save'] = 'on';
+        $post_data['v_location_save'] = 'on';
 
         $calendar = null;
         if (isset($post_data['calendar_id']) && is_numeric($post_data['calendar_id'])) {
-            $post_data['location_save_calendar'] = 'on';
+            $post_data['v_location_save_calendar'] = 'on';
             $calendar = Calendar::getByID($post_data['calendar_id']);
             if (!$this->userHasAccessToCalendar($post_data['calendar_id'])) {
                 throw new ValidationException('You do not have access to that calendar.');
             }
         }
 
-        $this->validateLocation($post_data);
+        $this->validateWebcast($post_data);
 
-        LocationUtility::addLocation($post_data, $user, $calendar);
+        WebcastUtility::addWebcast($post_data, $user, $calendar);
     }
 
-    private function update_location(array $post_data)
+    private function update_webcast(array $post_data)
     {
         $user = Auth::getCurrentUser();
-        $post_data['location_save'] = 'on';
+        $post_data['v_location_save'] = 'on';
 
         $calendar = null;
         if (isset($post_data['calendar_id']) && is_numeric($post_data['calendar_id'])) {
-            $post_data['location_save_calendar'] = 'on';
+            $post_data['v_location_save_calendar'] = 'on';
             $calendar = Calendar::getByID($post_data['calendar_id']);
             if (!$this->userHasAccessToCalendar($post_data['calendar_id'])) {
                 throw new ValidationException('You do not have access to that calendar.');
             }
         }
 
-        if (!empty($post_data['location']) && $post_data['location'] === "New") {
-            throw new ValidationException('Missing Location To Update.');
+        if (!empty($post_data['v_location']) && $post_data['v_location'] === "New") {
+            throw new ValidationException('Missing Virtual Location To Update.');
         }
 
-        $this->validateLocation($post_data);
+        $this->validateWebcast($post_data);
 
         try {
-            LocationUtility::updateLocation($post_data, $user, $calendar);
+            WebcastUtility::updateWebcast($post_data, $user, $calendar);
         } catch(Exception $e) {
-            throw new ValidationException('Error Updating Location');
+            throw new ValidationException('Error Updating Virtual Location');
         }
     }
 
-    private function detach_location(array $post_data)
+    private function detach_webcast(array $post_data)
     {
-        if (!empty($post_data['location']) && $post_data['location'] === "New") {
+        if (!empty($post_data['v_location']) && $post_data['v_location'] === "New") {
             throw new ValidationException('Missing Location To Detach');
         }
 
-        $location = Location::getByID($post_data['location']);
-        if ($location === null) {
-            throw new ValidationException('Invalid Location ID');
+        $webcast = Webcast::getByID($post_data['v_location']);
+        if ($webcast === null) {
+            throw new ValidationException('Invalid Virtual Location ID');
         }
 
-        $location->user_id = null;
-        $location->update();
+        $webcast->user_id = null;
+        $webcast->update();
     }
 
-    private function validateLocation(array $post_data)
+    private function validateWebcast(array $post_data)
     {
-        $validate_data = LocationUtility::validateLocation($post_data);
+        $validate_data = WebcastUtility::validateWebcast($post_data);
         if (!$validate_data['valid']) {
             throw new ValidationException($validate_data['message']);
         }
