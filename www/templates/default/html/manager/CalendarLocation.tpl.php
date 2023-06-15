@@ -70,7 +70,9 @@
                     </script>
                 </td>
                 <td>
-                    <?php echo $location->user_id; ?>
+                    <?php if (isset($location->user_id)): ?>
+                        Location attached to <?php echo $location->user_id; ?>
+                    <?php endif; ?>
                 </td>
                 <td>
                     <form id="location_delete_<?php echo $location->id; ?>" method="post">

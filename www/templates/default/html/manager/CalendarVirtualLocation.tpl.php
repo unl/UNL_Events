@@ -50,7 +50,9 @@
         <?php foreach($context->getCalendarWebcasts() as $webcast): ?>
             <tr>
                 <td>
-                    <?php echo $webcast->title; ?>
+                    <a href="<?php echo $webcast->url; ?>">
+                        <?php echo $webcast->title; ?>
+                    </a>
                     <script>
                         <?php $virtual_location_json = $webcast->toJSON(); ?>
                         <?php $raw_virtual_location_json = $savvy->getRawObject($virtual_location_json); ?>
@@ -60,7 +62,9 @@
                     </script>
                 </td>
                 <td>
-                    <?php echo $webcast->user_id; ?>
+                    <?php if (isset($webcast->user_id)): ?>
+                        Virtual location attached to <?php echo $webcast->user_id; ?>
+                    <?php endif; ?>
                 </td>
                 <td>
                     <form id="location_delete_<?php echo $webcast->id; ?>" method="post">
@@ -250,7 +254,7 @@
             createOrModifyUserCheck.classList.add('dcf-d-none');
             createOrModifyTaken.classList.remove('dcf-d-none');
 
-            createOrModifyTaken.innerText = `This location is already saved to ${locationToModify['user_id']}`;
+            createOrModifyTaken.innerText = `This virtual location is already saved to ${locationToModify['user_id']}`;
             locationSave.checked = false;
         }
     }

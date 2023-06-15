@@ -48,7 +48,9 @@
         <?php foreach($context->getUserWebcasts() as $webcast): ?>
             <tr>
                 <td>
-                    <?php echo $webcast->title; ?>
+                    <a href="<?php echo $webcast->url; ?>">
+                        <?php echo $webcast->title; ?>
+                    </a>
                     <script>
                         <?php $webcast_json = $webcast->toJSON(); ?>
                         <?php $raw_webcast_json = $savvy->getRawObject($webcast_json); ?>
@@ -130,7 +132,7 @@
     >
 
     <fieldset class="dcf-mt-6" id="new-location-fields">
-        <legend id="createOrModify-legend">Create New Location</legend>
+        <legend id="createOrModify-legend">Create New Virtual Location</legend>
 
         <?php echo $savvy->render($post, 'VirtualLocationForm.tpl.php'); ?>
 
@@ -160,7 +162,7 @@
         </div>
 
         <div class="dcf-form-group">
-            <input id="createOrModify-submit" class="dcf-btn dcf-btn-primary" type="submit" value="Create New Location">
+            <input id="createOrModify-submit" class="dcf-btn dcf-btn-primary" type="submit" value="Create New Virtual Location">
             <button id="createOrModify-cancel" class="dcf-btn dcf-btn-secondary" type="button">Cancel</button>
         </div>
     </fieldset>
