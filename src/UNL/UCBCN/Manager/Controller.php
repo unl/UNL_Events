@@ -80,6 +80,10 @@ class Controller {
     {
         return self::$url . 'location/';
     }
+    public static function getUserVirtualLocationURL()
+    {
+        return self::$url . 'virtual-location/';
+    }
 
     public static function getCalendarLookupURL()
     {

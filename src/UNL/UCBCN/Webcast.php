@@ -65,6 +65,28 @@ class Webcast extends Record
         return array('id',true);
     }
 
+    public function getCalendar()
+    {
+        if (!isset($this->calendar_id) || empty($this->calendar_id)) {
+            return null;
+        }
+
+        return Calendar::getByID($this->calendar_id);
+    }
+
+    public function toJSON()
+    {
+        $data = array(
+            'v-location'                            => $this->id,
+            'new-v-location-name'                   => $this->title,
+            'new-v-location-url'                    => $this->url,
+            'new-v-location-additional-public-info' => $this->additionalinfo,
+            'user_id'                               => $this->user_id,
+            'calendar_id'                           => $this->calendar_id,
+        );
+        return $data;
+    }
+
     /**
      * Checks to see if the location is saved to anyone or any calendar.
      *
