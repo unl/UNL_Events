@@ -85,10 +85,12 @@ class WebcastUtility
             }
         }
 
-        if (array_key_exists('v_location_save', $post_data) && $post_data['v_location_save'] == 'on') {
-            $webcast->user_id = $user->uid;
-        } else {
-            $webcast->user_id = null;
+        if (!isset($webcast->user_id) || $webcast->user_id === $user->uid) {
+            if (array_key_exists('v_location_save', $post_data) && $post_data['v_location_save'] == 'on') {
+                $webcast->user_id = $user->uid;
+            } else {
+                $webcast->user_id = null;
+            }
         }
 
         if (array_key_exists('v_location_save_calendar', $post_data) &&

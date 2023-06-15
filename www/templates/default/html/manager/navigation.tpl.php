@@ -56,7 +56,7 @@
                 <li>
                     <a
                         class="dcf-txt-decor-hover"
-                        href="<?php echo $calendar->getLocationURL(); ?>"
+                        href="<?php echo $calendar->getVirtualLocationURL(); ?>"
                     >Calendar Virtual Locations</a>
                 </li>
             <?php endif; ?>

@@ -130,6 +130,11 @@ class Calendar extends Record
         return ManagerController::$url . $this->shortname . '/location/';
     }
 
+    public function getVirtualLocationURL()
+    {
+        return ManagerController::$url . $this->shortname . '/virtual-location/';
+    }
+
     public function getPromoURL()
     {
         return ManagerController::$url . $this->shortname . '/promo/';
