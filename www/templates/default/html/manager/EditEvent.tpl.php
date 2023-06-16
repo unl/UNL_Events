@@ -282,7 +282,7 @@
                             data-microdata="<?php echo json_encode($location->microdataCheck()); ?>"
                         >
                             <div class="dcf-popup dcf-w-100%" data-hover="true" data-point="true">
-                                <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup dcf-w-100%">
+                                <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup dcf-w-100%" type="button">
                                     <?php echo $location->name; ?>
                                 </button>
                                 <div
@@ -378,7 +378,7 @@
                             data-microdata="<?php echo json_encode($getWebcast->microdataCheck()); ?>"
                         >
                             <div class="dcf-popup dcf-w-100%" data-hover="true" data-point="true">
-                                <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup dcf-w-100%">
+                                <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup dcf-w-100%" type="button">
                                     <?php echo $getWebcast->title; ?>
                                 </button>
                                 <div
@@ -589,7 +589,7 @@
                 <legend class="dcf-pb-2">
                         Privacy
                         <div class="dcf-popup dcf-d-inline" data-point="true">
-                            <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup dcf-p-0">
+                            <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup dcf-p-0" type="button">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     class="dcf-d-block dcf-h-5 dcf-w-5 dcf-fill-current"
@@ -712,7 +712,7 @@
                 <legend class="dcf-pb-2">
                         Organizer Type
                         <div class="dcf-popup dcf-d-inline" data-point="true">
-                            <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup dcf-p-0">
+                            <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup dcf-p-0" type="button">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     class="dcf-d-block dcf-h-5 dcf-w-5 dcf-fill-current"

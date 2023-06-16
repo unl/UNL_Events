@@ -136,7 +136,7 @@
                     <legend class="dcf-pb-2">
                         Privacy
                         <div class="dcf-popup dcf-d-inline" data-point="true">
-                            <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup dcf-p-0">
+                            <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup dcf-p-0" type="button">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     class="dcf-d-block dcf-h-5 dcf-w-5 dcf-fill-current"
@@ -279,7 +279,7 @@
                     <legend class="dcf-pb-2">
                         Organizer Type
                         <div class="dcf-popup dcf-d-inline" data-point="true">
-                            <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup dcf-p-0">
+                            <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup dcf-p-0" type="button">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     class="dcf-d-block dcf-h-5 dcf-w-5 dcf-fill-current"

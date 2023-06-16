@@ -261,7 +261,7 @@ use UNL\UCBCN\Permission;
                                                         if (isset($location) && !empty($location)):
                                                     ?>
                                                     <div class="dcf-popup" data-point="true">
-                                                        <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup">
+                                                        <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup" type="button">
                                                             <?php echo $location->name; ?>
                                                         </button>
                                                         <div
@@ -392,7 +392,7 @@ use UNL\UCBCN\Permission;
                                                         if (isset($getWebcast) && !empty($getWebcast)):
                                                     ?>
                                                         <div class="dcf-popup" data-point="true">
-                                                            <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup">
+                                                            <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup" type="button">
                                                                 <?php echo $getWebcast->title; ?>
                                                             </button>
                                                             <div

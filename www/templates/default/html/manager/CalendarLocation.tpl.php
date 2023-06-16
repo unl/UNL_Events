@@ -49,14 +49,22 @@
     <button id="new_location" class="dcf-btn dcf-btn-primary" type="button">Create A New Location</button>
 </div>
 
+<p>
+    These saved locations will let you or anyone on your calendar recall them easily 
+    when creating or editing new events. Location are physical places your event will 
+    take place. Any location saved to you or the calendar you are making the event 
+    in will show up in the drop down of available locations. You can always make a 
+    new location during the event creation or edit process.
+</p>
+
 <?php if (count($locations) === 0) :?>
     <p>Your calendar has not saved any locations yet<p>
 <?php else: ?>
-    <table class="dcf-table dcf-table-responsive dcf-table-striped dcf-w-100%" aria-describedby="table_desc">
+    <table class="dcf-table dcf-table-responsive dcf-table-striped dcf-w-100% dcf-mt-8" aria-describedby="table_desc">
         <thead>
             <tr>
                 <th>Location Name</th>
-                <th>Attached Person</th>
+                <th>Saved Person</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -75,7 +83,7 @@
                     </td>
                     <td>
                         <?php if (isset($location->user_id)): ?>
-                            Location attached to <?php echo $location->user_id; ?>
+                            Location saved to <?php echo $location->user_id; ?>
                         <?php endif; ?>
                     </td>
                     <td>
@@ -96,7 +104,7 @@
                             <input
                                 class="dcf-btn dcf-btn-secondary"
                                 type="submit"
-                                value="Detach"
+                                value="Un-Save"
                                 form="location_delete_<?php echo $location->id; ?>"
                             >
                         </div>

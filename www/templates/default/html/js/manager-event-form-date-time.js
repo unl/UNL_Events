@@ -43,37 +43,65 @@ location_buttons.forEach((location_button) => {
 // When new form bits come up we need to set up the event listeners
 function setUpLocationListeners(location_id) {
     if (location_id == "physical_location") {
-        let location_input = document.getElementById('location');
+        const location_input = document.getElementById('location');
+        const location_fieldset = document.getElementById('new-location-fields');
 
         location_input.addEventListener('change', () => {
             if (location_input.value == 'new') {
-                document.getElementById('new-location-fields').style.display = "block";
+                location_fieldset.style.display = "block";
             } else {
-                document.getElementById('new-location-fields').style.display = "none";
+                location_fieldset.style.display = "none";
             }
         });
 
         if (location_input.value == 'new') {
-            document.getElementById('new-location-fields').style.display = "block";
+            location_fieldset.style.display = "block";
         } else {
-            document.getElementById('new-location-fields').style.display = "none";
+            location_fieldset.style.display = "none";
         }
+
+        require(['dcf-popup'], (DCFPopup) => {
+            // Get all the popups on the dom
+            const popups = location_fieldset.querySelectorAll('.dcf-popup');
+            
+            // Initialize the popup theme
+            const popupTheme = new DCFPopup.DCFPopupTheme();
+            
+            // Initialize the popup with the modified theme
+            const popupObj = new DCFPopup.DCFPopup(popups, popupTheme);
+            popupObj.initialize();
+        });
     } else if (location_id == "virtual_location") {
-        let location_input = document.getElementById('v-location');
+        const location_input = document.getElementById('v-location');
+        const location_fieldset = document.getElementById('new-v-location-fields');
 
         location_input.addEventListener('change', () => {
             if (location_input.value == 'new') {
-                document.getElementById('new-v-location-fields').style.display = "block";
+                location_fieldset.style.display = "block";
             } else {
-                document.getElementById('new-v-location-fields').style.display = "none";
+                location_fieldset.style.display = "none";
             }
         });
 
         if (location_input.value == 'new') {
-            document.getElementById('new-v-location-fields').style.display = "block";
+            location_fieldset.style.display = "block";
         } else {
-            document.getElementById('new-v-location-fields').style.display = "none";
+            location_fieldset.style.display = "none";
         }
+
+        require(['dcf-popup'], (DCFPopup) => {
+            // Get all the popups on the dom
+            const popups = location_fieldset.querySelectorAll('.dcf-popup');
+            
+            // Initialize the popup theme
+            const popupTheme = new DCFPopup.DCFPopupTheme();
+            
+            // Any changes to the theme would go here
+            
+            // Initialize the popup with the modified theme
+            const popupObj = new DCFPopup.DCFPopup(popups, popupTheme);
+            popupObj.initialize();
+        });
     }
 }
 
