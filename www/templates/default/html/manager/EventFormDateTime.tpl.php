@@ -386,6 +386,7 @@
                             <option
                                 <?php if ($location == $loop_location->id) { echo SELECTED_INPUT; } ?>
                                 value="<?php echo $loop_location->id; ?>"
+                                data-microdata="<?php echo json_encode($loop_location->microdataCheck()); ?>"
                                 ><?php echo $loop_location->name; ?></option>
                         <?php endforeach; ?>
                     </optgroup>
