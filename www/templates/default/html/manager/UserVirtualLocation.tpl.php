@@ -18,6 +18,7 @@
         'name="' . $controller->getCSRFHelper()->getTokenValueKey() . '" ' .
         'value="' . $controller->getCSRFHelper()->getTokenValue() . '" ' .
     '> ';
+    $webcasts = $context->getUserWebcasts();
 ?>
 <script>
     const LOCATIONS = [];
@@ -36,68 +37,72 @@
     <button id="new_location" class="dcf-btn dcf-btn-primary" type="button">Create A New Virtual Location</button>
 </div>
 
-<table class="dcf-table dcf-table-responsive dcf-table-striped dcf-w-100%" aria-describedby="table_desc">
-    <thead>
-        <tr>
-            <th>Virtual Location Name</th>
-            <th>Attached Calendar</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php foreach($context->getUserWebcasts() as $webcast): ?>
+<?php if (count($webcasts) === 0) :?>
+    <p>You have not saved any virtual locations yet<p>
+<?php else: ?>
+    <table class="dcf-table dcf-table-responsive dcf-table-striped dcf-w-100%" aria-describedby="table_desc">
+        <thead>
             <tr>
-                <td>
-                    <a href="<?php echo $webcast->url; ?>">
-                        <?php echo $webcast->title; ?>
-                    </a>
-                    <script>
-                        <?php $webcast_json = $webcast->toJSON(); ?>
-                        <?php $raw_webcast_json = $savvy->getRawObject($webcast_json); ?>
-                        LOCATIONS[<?php echo $webcast->id; ?>] = <?php
-                            echo json_encode($raw_webcast_json, JSON_UNESCAPED_SLASHES);
-                        ?>;
-                    </script>
-                </td>
-                <td>
-                    <?php if (isset($webcast->calendar_id)): ?>
-                        <?php $webcastCalendar = $webcast->getCalendar();?>
-                        Saved to
-                        <a href='<?php echo $webcastCalendar->getManageURL(); ?>'>
-                            <?php echo $webcastCalendar->name; ?>
-                        </a>
-                        calendar
-                    <?php else: ?>
-                        Not attached to any calendar
-                    <?php endif;?>
-                </td>
-                <td>
-                    <form id="location_delete_<?php echo $webcast->id; ?>" method="post">
-                        <?php echo $token_inputs; ?>
-
-                        <input type="hidden" name="v_location" value="<?php echo $webcast->id; ?>">
-                        <input type="hidden" name="method" value="delete">
-                    </form>
-                    <div class="dcf-btn-group">
-                        <button
-                            class="dcf-btn dcf-btn-primary events-modify-location"
-                            type="button"
-                            data-location-id="<?php echo $webcast->id; ?>"
-                        >
-                            Modify
-                        </button>
-                        <input
-                            class="dcf-btn dcf-btn-secondary"
-                            type="submit"
-                            value="Detach"
-                            form="location_delete_<?php echo $webcast->id; ?>"
-                        >
-                    </div>
-                </td>
+                <th>Virtual Location Name</th>
+                <th>Attached Calendar</th>
+                <th>Actions</th>
             </tr>
-        <?php endforeach; ?>
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            <?php foreach($webcasts as $webcast): ?>
+                <tr>
+                    <td>
+                        <a href="<?php echo $webcast->url; ?>">
+                            <?php echo $webcast->title; ?>
+                        </a>
+                        <script>
+                            <?php $webcast_json = $webcast->toJSON(); ?>
+                            <?php $raw_webcast_json = $savvy->getRawObject($webcast_json); ?>
+                            LOCATIONS[<?php echo $webcast->id; ?>] = <?php
+                                echo json_encode($raw_webcast_json, JSON_UNESCAPED_SLASHES);
+                            ?>;
+                        </script>
+                    </td>
+                    <td>
+                        <?php if (isset($webcast->calendar_id)): ?>
+                            <?php $webcastCalendar = $webcast->getCalendar();?>
+                            Saved to
+                            <a href='<?php echo $webcastCalendar->getManageURL(); ?>'>
+                                <?php echo $webcastCalendar->name; ?>
+                            </a>
+                            calendar
+                        <?php else: ?>
+                            Not attached to any calendar
+                        <?php endif;?>
+                    </td>
+                    <td>
+                        <form id="location_delete_<?php echo $webcast->id; ?>" method="post">
+                            <?php echo $token_inputs; ?>
+
+                            <input type="hidden" name="v_location" value="<?php echo $webcast->id; ?>">
+                            <input type="hidden" name="method" value="delete">
+                        </form>
+                        <div class="dcf-btn-group">
+                            <button
+                                class="dcf-btn dcf-btn-primary events-modify-location"
+                                type="button"
+                                data-location-id="<?php echo $webcast->id; ?>"
+                            >
+                                Modify
+                            </button>
+                            <input
+                                class="dcf-btn dcf-btn-secondary"
+                                type="submit"
+                                value="Detach"
+                                form="location_delete_<?php echo $webcast->id; ?>"
+                            >
+                        </div>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+<?php endif; ?>
 
 <form
     id="createOrModify"
