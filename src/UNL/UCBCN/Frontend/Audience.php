@@ -103,7 +103,11 @@ class Audience extends EventListing implements RoutableInterface
                         e.endtime,
                         CONCAT(DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.endtime," %H:%i:%s"))
                     ) >= NOW()
-                ) AND ( audience.name IS NOT NULL ) ';
+                ) AND ( audience.name IS NOT NULL ) 
+                AND (
+                    calendar_has_event.calendar_id = ' . (int)$this->calendar->id . '
+                    OR event.approvedforcirculation = 1
+                ) ';
 
         // Adds filters for target audience
         if (!empty($this->event_type_filter)) {
