@@ -266,7 +266,17 @@ class EventInstance implements RoutableInterface
     {
         $metaTagOutput = "";
 
-        $metaTagOutput .= '<meta property="og:title" content="' . $this->event->displayTitle($this) . '" />' . PHP_EOL;
+        $datetimeString = date('n/d/y @ g:ia', strtotime($this->eventdatetime->starttime));
+        if ($this->isAllDay()) {
+            $datetimeString = date('n/d/y', strtotime($this->eventdatetime->starttime));
+        }
+
+        $metaTagOutput .= '<meta property="og:title" content="' .
+            $this->event->displayTitle($this) .
+            ' - ' .
+            $datetimeString .
+            '" />' .
+            PHP_EOL;
         $metaTagOutput .= '<meta property="og:url" content="' . $this->getURL() . '" />' . PHP_EOL;
         $metaTagOutput .= '<meta property="og:type" content="website" />' . PHP_EOL;
 
