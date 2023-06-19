@@ -51,6 +51,10 @@ if ($context->getRaw('output') instanceof UNL\UCBCN\Frontend\RoutableInterface) 
 
 $page->head .= '<link rel="home" href="' . $context->getCalendarURL() . '" />' . PHP_EOL;
 
+if ($context->getRaw('output') instanceof UNL\UCBCN\Frontend\EventInstance) {
+    $page->head .= $context->getRaw('output')->getMetaTags() . PHP_EOL;
+}
+
 //Render output
 $savvy->addGlobal('page', $page);
 $view_class = str_replace('\\', '_', strtolower($context->options['model']));

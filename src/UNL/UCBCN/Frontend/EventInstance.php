@@ -262,6 +262,29 @@ class EventInstance implements RoutableInterface
         return $fullDescription[0];
     }
 
+    public function getMetaTags()
+    {
+        $metaTagOutput = "";
+
+        $metaTagOutput .= '<meta property="og:title" content="' . $this->event->displayTitle($this) . '" />' . PHP_EOL;
+        $metaTagOutput .= '<meta property="og:url" content="' . $this->getURL() . '" />' . PHP_EOL;
+        $metaTagOutput .= '<meta property="og:type" content="website" />' . PHP_EOL;
+
+        if (isset($this->event->description) && !empty($this->event->description)) {
+            $metaTagOutput .= '<meta property="og:description" content="' . $this->event->description .'" />' . PHP_EOL;
+        }
+        if (isset($this->event->imagedata) && !empty($this->event->imagedata)) {
+            $metaTagOutput .= '<meta property="og:image" content="' .
+                \UNL\UCBCN\Frontend\Controller::$url .
+                '?image&amp;id=' .
+                $this->event->id .
+                '" />' .
+                PHP_EOL;
+        }
+
+        return $metaTagOutput;
+    }
+
     /**
      * Checks to see if the location has all information necessary for Google's microdata.
      *
