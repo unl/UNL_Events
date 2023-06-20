@@ -30,7 +30,7 @@ use UNL\UCBCN\Event;
  * @license   http://www1.unl.edu/wdn/wiki/Software_License BSD License
  * @link      http://code.google.com/p/unl-event-publisher/
  */
-class Search extends EventListing implements RoutableInterface
+class Search extends EventListing implements RoutableInterface, MetaTagInterface
 {
     public $search_query = '';
 
@@ -211,6 +211,17 @@ class Search extends EventListing implements RoutableInterface
     public function getEndDate()
     {
         return $this->date_parser->end_date;
+    }
+
+    public function getMetaTags()
+    {
+        $metaTagOutput = "";
+
+        $metaTagOutput .= '<meta property="og:title" content="' . $this->calendar->name . ' Calendar - Search" />' . PHP_EOL;
+        $metaTagOutput .= '<meta property="og:url" content="' . $this->getURL() . '" />' . PHP_EOL;
+        $metaTagOutput .= '<meta property="og:type" content="website" />' . PHP_EOL;
+
+        return $metaTagOutput;
     }
 
     /**

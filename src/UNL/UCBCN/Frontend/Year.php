@@ -27,7 +27,7 @@ namespace UNL\UCBCN\Frontend;
  * @license   http://www1.unl.edu/wdn/wiki/Software_License BSD License 
  * @link      http://code.google.com/p/unl-event-publisher/ 
  */
-class Year implements RoutableInterface
+class Year implements RoutableInterface, MetaTagInterface
 {
     /**
      * Year to show events for.
@@ -98,6 +98,17 @@ class Year implements RoutableInterface
     public static function generateURL(Calendar $calendar, \DateTime $datetime)
     {
         return $calendar->getURL() . $datetime->format('Y') . '/';
+    }
+
+    public function getMetaTags()
+    {
+        $metaTagOutput = "";
+
+        $metaTagOutput .= '<meta property="og:title" content="' . $this->calendar->name . ' Calendar - ' . $this->getDateTime()->format('Y') . '" />' . PHP_EOL;
+        $metaTagOutput .= '<meta property="og:url" content="' . $this->getURL() . '" />' . PHP_EOL;
+        $metaTagOutput .= '<meta property="og:type" content="website" />' . PHP_EOL;
+
+        return $metaTagOutput;
     }
 
 

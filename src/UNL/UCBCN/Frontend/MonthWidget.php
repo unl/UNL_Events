@@ -14,6 +14,8 @@
  */
 namespace UNL\UCBCN\Frontend;
 
+use Traversable;
+
 /**
  * Class defines a month widget, basically a table with 30 boxes representing the
  * days in the month. Days which have events will be selected.
@@ -42,7 +44,7 @@ class MonthWidget extends Month
         $this->data = $this->getEventTotals($this->getDatePeriod());
     }
 
-    public function getIterator()
+    public function getIterator(): Traversable
     {
         return new \IteratorIterator($this->getDatePeriod());
     }

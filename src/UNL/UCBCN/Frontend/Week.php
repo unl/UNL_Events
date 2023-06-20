@@ -14,6 +14,8 @@
  */
 namespace UNL\UCBCN\Frontend;
 
+use Traversable;
+
 /**
  * Constructs a week view for the calendar.
  * 
@@ -24,7 +26,7 @@ namespace UNL\UCBCN\Frontend;
  * @license   http://www1.unl.edu/wdn/wiki/Software_License BSD License
  * @link      http://code.google.com/p/unl-event-publisher/
  */
-class Week implements \IteratorAggregate, RoutableInterface
+class Week implements \IteratorAggregate, RoutableInterface, MetaTagInterface
 {
     /**
      * @var \UNL\UCBCN\Calendar
@@ -75,7 +77,8 @@ class Week implements \IteratorAggregate, RoutableInterface
         return new \DatePeriod($start_date, $interval, $end_date);
     }
     
-    public function getIterator() {
+    public function getIterator(): Traversable
+    {
         return new DayIterator($this->getDatePeriod(), $this->calendar);
     }
     
@@ -104,6 +107,17 @@ class Week implements \IteratorAggregate, RoutableInterface
     public static function generateURL(Calendar $calendar, \DateTime $datetime)
     {
         return $calendar->getURL() . $datetime->format('Y/\WW/');
+    }
+
+    public function getMetaTags()
+    {
+        $metaTagOutput = "";
+
+        $metaTagOutput .= '<meta property="og:title" content="' . $this->calendar->name . ' Calendar - Week ' . $this->getDateTime()->format('W') . '" />' . PHP_EOL;
+        $metaTagOutput .= '<meta property="og:url" content="' . $this->getURL() . '" />' . PHP_EOL;
+        $metaTagOutput .= '<meta property="og:type" content="website" />' . PHP_EOL;
+
+        return $metaTagOutput;
     }
 
     /**

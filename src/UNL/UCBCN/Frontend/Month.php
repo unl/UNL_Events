@@ -14,6 +14,8 @@
  */
 namespace UNL\UCBCN\Frontend;
 
+use Traversable;
+
 /**
  * Object for a month view of the calendar.
  * 
@@ -26,7 +28,7 @@ namespace UNL\UCBCN\Frontend;
  * @license   http://www1.unl.edu/wdn/wiki/Software_License BSD License 
  * @link      http://code.google.com/p/unl-event-publisher/
  */
-class Month implements \IteratorAggregate, RoutableInterface
+class Month implements \IteratorAggregate, RoutableInterface, MetaTagInterface
 {
     /**
      * Calendar to show events for UNL_UCBCN_Month object
@@ -82,7 +84,7 @@ class Month implements \IteratorAggregate, RoutableInterface
         return new \DatePeriod($start_date, $interval, $end_date);
     }
     
-    public function getIterator()
+    public function getIterator(): Traversable
     {
         return new DayIterator($this->getDatePeriod(), $this->calendar);
     }
@@ -192,6 +194,17 @@ class Month implements \IteratorAggregate, RoutableInterface
     {
         return self::generateURL($this->calendar, $this->getDateTime());
         
+    }
+
+    public function getMetaTags()
+    {
+        $metaTagOutput = "";
+
+        $metaTagOutput .= '<meta property="og:title" content="' . $this->calendar->name . ' Calendar - ' . $this->getDateTime()->format('F') . '" />' . PHP_EOL;
+        $metaTagOutput .= '<meta property="og:url" content="' . $this->getURL() . '" />' . PHP_EOL;
+        $metaTagOutput .= '<meta property="og:type" content="website" />' . PHP_EOL;
+
+        return $metaTagOutput;
     }
 
     /**
