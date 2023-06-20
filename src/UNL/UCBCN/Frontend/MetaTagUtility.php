@@ -33,7 +33,6 @@ class MetaTagUtility {
             $metaTagOutput .= '<meta property="og:image" content="' . $this->image . '" />' . PHP_EOL;
         }
 
-        $metaTagOutput .= '<meta name="twitter:card" content="summary">' . PHP_EOL;
         $metaTagOutput .= '<meta property="twitter:domain" content="' . $this->getSiteURL() . '">' . PHP_EOL;
         $metaTagOutput .= '<meta property="twitter:url" content="' . $this->url . '">' . PHP_EOL;
         $metaTagOutput .= '<meta name="twitter:title" content="' . $this->title . '">' . PHP_EOL;
