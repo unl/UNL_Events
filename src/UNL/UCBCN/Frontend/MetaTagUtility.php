@@ -42,7 +42,10 @@ class MetaTagUtility {
             $metaTagOutput .= '<meta name="twitter:description" content="' . $this->description . '">' . PHP_EOL;
         }
         if (isset($this->image) && !empty($this->image)) {
+            $metaTagOutput .= '<meta name="twitter:card" content="summary_large_image">' . PHP_EOL;
             $metaTagOutput .= '<meta property="twitter:image" content="' . $this->image . '" />' . PHP_EOL;
+        } else {
+            $metaTagOutput .= '<meta name="twitter:card" content="summary">' . PHP_EOL;
         }
         
 
