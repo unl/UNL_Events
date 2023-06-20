@@ -51,7 +51,7 @@ if ($context->getRaw('output') instanceof UNL\UCBCN\Frontend\RoutableInterface) 
 
 $page->head .= '<link rel="home" href="' . $context->getCalendarURL() . '" />' . PHP_EOL;
 
-if ($context->getRaw('output') instanceof UNL\UCBCN\Frontend\EventInstance) {
+if ($context->getRaw('output') instanceof UNL\UCBCN\Frontend\MetaTagInterface) {
     $page->head .= $context->getRaw('output')->getMetaTags() . PHP_EOL;
 }
 
