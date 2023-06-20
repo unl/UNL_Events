@@ -7,6 +7,7 @@ class MetaTagUtility {
     public $title;
     public $description;
     public $image;
+    public $imageDefault;
     public $label1;
     public $data1;
     public $label2;
@@ -14,10 +15,12 @@ class MetaTagUtility {
 
     public function __construct($url, $title, $description, $options=array())
     {
+        $this->imageDefault =  $this->getSiteURL(). "wdn/templates_5.3/includes/global/favicon/512.png";
+
         $this->url = $url;
         $this->title = $title;
         $this->description = $description;
-        $this->image = $options['image'] ?? $this->getSiteURL(). "wdn/templates_5.3/includes/global/favicon/512.png";
+        $this->image = $options['image'] ?? "";
         $this->label1 = $options['label1'] ?? "";
         $this->data1 = $options['data1'] ?? "";
         $this->label2 = $options['label2'] ?? "";
@@ -38,6 +41,9 @@ class MetaTagUtility {
 
         if (!empty($this->image)) {
             $metaTagOutput .= '<meta property="og:image" content="' . $this->image . '" />' . PHP_EOL;
+        } else {
+            $metaTagOutput .= '<meta property="og:image" content="' . $this->imageDefault . '" />' . PHP_EOL;
+
         }
 
         if (!empty($this->image)) {
@@ -54,6 +60,8 @@ class MetaTagUtility {
 
         if (!empty($this->image)) {
             $metaTagOutput .= '<meta property="twitter:image" content="' . $this->image . '" />' . PHP_EOL;
+        } else {
+            $metaTagOutput .= '<meta property="twitter:image" content="' . $this->imageDefault . '" />' . PHP_EOL;
         }
 
         if (!empty($this->label1) && !empty($this->data1)) {
