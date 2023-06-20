@@ -178,17 +178,15 @@ class Upcoming extends EventListing implements RoutableInterface, MetaTagInterfa
 
     public function getMetaTags()
     {
-        $metaTagOutput = "";
-
-        $title = '<meta property="og:title" content="' . $this->calendar->name . ' Calendar - Upcoming" />' . PHP_EOL;
-        if ($this->isHomepage) {
-            $title = '<meta property="og:title" content="' . $this->calendar->name . ' Calendar" />' . PHP_EOL;
+        $title = $this->calendar->name . ' Calendar';
+        if (!$this->isHomepage) {
+            $title .= ' - Upcoming';
         }
-        $metaTagOutput .= $title;
-        $metaTagOutput .= '<meta property="og:url" content="' . $this->getURL() . '" />' . PHP_EOL;
-        $metaTagOutput .= '<meta property="og:type" content="website" />' . PHP_EOL;
+        $description = 'The UNL events calendar for ' . $this->calendar->name;
 
-        return $metaTagOutput;
+        $metaTagUtility = new MetaTagUtility($this->getURL(), $title, $description);
+
+        return $metaTagUtility->getMetaTags();
     }
 
     public function isHomepage()

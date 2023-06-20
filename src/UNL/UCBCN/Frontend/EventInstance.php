@@ -264,35 +264,24 @@ class EventInstance implements RoutableInterface, MetaTagInterface
 
     public function getMetaTags()
     {
-        $metaTagOutput = "";
-
         $datetimeString = date('n/d/y @ g:ia', strtotime($this->eventdatetime->starttime));
         if ($this->isAllDay()) {
             $datetimeString = date('n/d/y', strtotime($this->eventdatetime->starttime));
         }
 
-        $metaTagOutput .= '<meta property="og:title" content="' .
-            $this->event->displayTitle($this) .
-            ' - ' .
-            $datetimeString .
-            '" />' .
-            PHP_EOL;
-        $metaTagOutput .= '<meta property="og:url" content="' . $this->getURL() . '" />' . PHP_EOL;
-        $metaTagOutput .= '<meta property="og:type" content="website" />' . PHP_EOL;
+        $title = $this->event->displayTitle($this) . ' - ' . $datetimeString;
 
         if (isset($this->event->description) && !empty($this->event->description)) {
-            $metaTagOutput .= '<meta property="og:description" content="' . $this->event->description .'" />' . PHP_EOL;
-        }
-        if (isset($this->event->imagedata) && !empty($this->event->imagedata)) {
-            $metaTagOutput .= '<meta property="og:image" content="' .
-                \UNL\UCBCN\Frontend\Controller::$url .
-                '?image&amp;id=' .
-                $this->event->id .
-                '" />' .
-                PHP_EOL;
+            $description = $this->event->description;
         }
 
-        return $metaTagOutput;
+        if (isset($this->event->imagedata) && !empty($this->event->imagedata)) {
+            $image = MetaTagUtility::getSiteURL() . '?image&amp;id=' . $this->event->id;
+        }
+
+        $metaTagUtility = new MetaTagUtility($this->getURL(), $title, $description, $image);
+
+        return $metaTagUtility->getMetaTags();
     }
 
     /**

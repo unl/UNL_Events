@@ -143,14 +143,15 @@ class Audience extends EventListing implements RoutableInterface, MetaTagInterfa
 
     public function getMetaTags()
     {
-        $metaTagOutput = "";
+        $title = $this->calendar->name . ' Calendar - Audience';
+        $description = 'The UNL events calendar for ' . $this->calendar->name;
 
-        $metaTagOutput .= '<meta property="og:title" content="' . $this->calendar->name . ' Calendar - Audience" />' . PHP_EOL;
-        $metaTagOutput .= '<meta property="og:url" content="' . $this->getURL() . '" />' . PHP_EOL;
-        $metaTagOutput .= '<meta property="og:type" content="website" />' . PHP_EOL;
+        $metaTagUtility = new MetaTagUtility($this->getURL(), $title, $description);
 
-        return $metaTagOutput;
+        return $metaTagUtility->getMetaTags();
     }
+
+
 
     /**
      * returns the url to this audience page.

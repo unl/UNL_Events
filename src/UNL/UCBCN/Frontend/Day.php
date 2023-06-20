@@ -195,17 +195,15 @@ class Day extends EventListing implements RoutableInterface, MetaTagInterface
 
     public function getMetaTags()
     {
-        $metaTagOutput = "";
-
-        $title = '<meta property="og:title" content="' . $this->calendar->name . ' Calendar - ' . $this->getDateTime()->format('F d, Y') . '" />' . PHP_EOL;
-        if ($this->isHomepage) {
-            $title = '<meta property="og:title" content="' . $this->calendar->name . ' Calendar" />' . PHP_EOL;
+        $title = $this->calendar->name . ' Calendar';
+        if (!$this->isHomepage) {
+            $title .= ' - ' . $this->getDateTime()->format('F d, Y');
         }
-        $metaTagOutput .= $title;
-        $metaTagOutput .= '<meta property="og:url" content="' . $this->getURL() . '" />' . PHP_EOL;
-        $metaTagOutput .= '<meta property="og:type" content="website" />' . PHP_EOL;
+        $description = 'The UNL events calendar for ' . $this->calendar->name;
 
-        return $metaTagOutput;
+        $metaTagUtility = new MetaTagUtility($this->getURL(), $title, $description);
+
+        return $metaTagUtility->getMetaTags();
     }
 
     /**
