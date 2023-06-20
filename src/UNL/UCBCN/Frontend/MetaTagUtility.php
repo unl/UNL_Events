@@ -25,6 +25,9 @@ class MetaTagUtility {
         $this->data1 = $options['data1'] ?? "";
         $this->label2 = $options['label2'] ?? "";
         $this->data2 = $options['data2'] ?? "";
+
+        $this->description = (strlen($description) > 100) ? substr($description,0,100).'...' : $description;
+
     }
 
     public function getMetaTags(): string
