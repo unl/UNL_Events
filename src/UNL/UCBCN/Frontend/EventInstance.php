@@ -271,18 +271,20 @@ class EventInstance implements RoutableInterface, MetaTagInterface
 
         $title = $this->event->displayTitle($this) . ' - ' . $datetimeString;
 
-        $description = "Event on " . $datetimeString;
+        $description = 'Event on ' . $datetimeString;
         if (isset($this->event->description) && !empty($this->event->description)) {
             $description = $this->event->description;
         }
 
-        $image = "";
+        $image = '';
         if (isset($this->event->imagedata) && !empty($this->event->imagedata)) {
             $image = MetaTagUtility::getSiteURL() . '?image&amp;id=' . $this->event->id;
         }
 
         $options = array(
             'image' => $image,
+            'label1' => 'Calendar',
+            'data1' => $this->calendar->name,
         );
 
         $metaTagUtility = new MetaTagUtility($this->getURL(), $title, $description, $options);
