@@ -12,7 +12,7 @@ class APILocation implements ModelInterface, ModelAuthInterface
 {
     public $options = array();
 
-    public function __construct($options = array()) 
+    public function __construct($options = array())
     {
         $this->options = $options + $this->options;
     }
@@ -35,7 +35,7 @@ class APILocation implements ModelInterface, ModelAuthInterface
 
     public function run(string $method, array $data, $user): array
     {
-        
+
         if ($method === 'GET') {
             return $this->handleGet();
         }
@@ -47,25 +47,24 @@ class APILocation implements ModelInterface, ModelAuthInterface
         }
 
         throw new InvalidMethodException('Location only allows get.');
-
-        return array();
     }
 
     private function handleGet(): array
     {
-        if (!isset($this->options['location_id']) || (!is_numeric($this->options['location_id']) && $this->options['location_id'] !== 'standard')) {
+        if (
+            !isset($this->options['location_id']) ||
+            (!is_numeric($this->options['location_id']) && $this->options['location_id'] !== 'standard')
+        ) {
             throw new ValidationException('Invalid location ID.');
         }
 
         if (is_numeric($this->options['location_id'])) {
             return $this->getLocationById($this->options['location_id']);
-        } else if ($this->options['location_id'] === 'standard') {
+        } elseif ($this->options['location_id'] === 'standard') {
             return $this->getLocationByStandard();
-        } else {
-            throw new ValidationException('Invalid location ID.');
         }
 
-        return array();
+        throw new ValidationException('Invalid location ID.');
     }
 
     private function handlePost(array $data, User $user): array
@@ -105,7 +104,7 @@ class APILocation implements ModelInterface, ModelAuthInterface
         $new_location = LocationUtility::addLocation($data, $user, $calendar);
 
         if ($new_location === false) {
-            throw new Exception('Failed to create location.');
+            throw new ServerErrorException('Failed to create location.');
         }
 
         $location_json = $new_location->toJSON();
@@ -128,8 +127,8 @@ class APILocation implements ModelInterface, ModelAuthInterface
         }
 
         if (
-            !(isset($location->user_id) && $location->user_id === $user->uid) && 
-            !(isset($location->calendar_id) && $this->userHasAccessToCalendar($user, $location->calendar_id)) 
+            !(isset($location->user_id) && $location->user_id === $user->uid) &&
+            !(isset($location->calendar_id) && $this->userHasAccessToCalendar($user, $location->calendar_id))
         ) {
             throw new ForbiddenException('You do not have access to modify that location.');
         }
@@ -163,7 +162,7 @@ class APILocation implements ModelInterface, ModelAuthInterface
         $new_location = LocationUtility::updateLocation($data, $user, $calendar);
 
         if ($new_location === false) {
-            throw new Exception('Failed to Update location.');
+            throw new ServerErrorException('Failed to Update location.');
         }
 
         $location_json = $new_location->toJSON();
@@ -177,7 +176,8 @@ class APILocation implements ModelInterface, ModelAuthInterface
         $edit_permission = Permission::getByName('Event Edit');
         $create_permission = Permission::getByName('Event Create');
 
-        return $user->hasPermission($edit_permission->id, $calendar_id) && $user->hasPermission($create_permission->id, $calendar_id);
+        return $user->hasPermission($edit_permission->id, $calendar_id) &&
+            $user->hasPermission($create_permission->id, $calendar_id);
     }
 
     private function getLocationByStandard(): array
@@ -205,7 +205,7 @@ class APILocation implements ModelInterface, ModelAuthInterface
 
     private function getLocationById(string $id): array
     {
-        $location = Location::getByID($this->options['location_id']);
+        $location = Location::getByID($id);
 
         if ($location === false) {
             throw new ValidationException('Invalid location ID.');

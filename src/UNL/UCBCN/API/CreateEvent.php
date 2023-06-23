@@ -70,7 +70,7 @@ class CreateEvent
         // If there is a physical location make sure these are set
         if (isset($post_data['physical_location_check']) && $post_data['physical_location_check'] == '1') {
             # check that this location ID is legit
-            if ($post_data['location'] !== 'new' && Location::getByID($post_data['location']) === FALSE) {
+            if ($post_data['location'] !== 'new' && Location::getByID($post_data['location']) === false) {
                 throw new ValidationException('That location ID is invalid.');
             }
 
@@ -124,7 +124,10 @@ class CreateEvent
             throw new ValidationException('Contact Website must be a valid URL.');
         }
 
-        if (!empty($post_data['contact_type']) && $post_data['contact_type'] !== "person" && $post_data['contact_type'] !== "organization") {
+        if (!empty($post_data['contact_type']) &&
+            $post_data['contact_type'] !== "person" &&
+            $post_data['contact_type'] !== "organization")
+        {
             throw new ValidationException('<a href="#contact-type">Contact Type</a> must be person or organization.');
         }
     }

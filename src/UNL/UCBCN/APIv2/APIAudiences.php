@@ -7,7 +7,7 @@ class APIAudiences implements ModelInterface
 {
     public $options = array();
 
-    public function __construct($options = array()) 
+    public function __construct($options = array())
     {
         $this->options = $options + $this->options;
     }

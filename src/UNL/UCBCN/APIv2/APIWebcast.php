@@ -13,7 +13,7 @@ class APIWebcast implements ModelInterface, ModelAuthInterface
 {
     public $options = array();
 
-    public function __construct($options = array()) 
+    public function __construct($options = array())
     {
         $this->options = $options + $this->options;
     }
@@ -43,12 +43,10 @@ class APIWebcast implements ModelInterface, ModelAuthInterface
             return $this->handlePost($data, $user);
         }
         if ($method === 'PUT') {
-            return $this->handlePost($data, $user);
+            return $this->handlePut($data, $user);
         }
 
         throw new InvalidMethodException('Virtual location only allows get.');
-        
-        return array();
     }
 
     private function handleGet()
@@ -83,7 +81,7 @@ class APIWebcast implements ModelInterface, ModelAuthInterface
         $new_webcast = WebcastUtility::addWebcast($data, $user, $calendar);
 
         if ($new_webcast === false) {
-            throw new Exception('Failed to create virtual location.');
+            throw new ServerErrorException('Failed to create virtual location.');
         }
 
         $webcast_json = $new_webcast->toJSON();
@@ -100,14 +98,14 @@ class APIWebcast implements ModelInterface, ModelAuthInterface
             throw new ValidationException('Invalid Location ID.');
         }
 
-        $location = Location::getByID($data['v_location']);
-        if ($location === null) {
+        $webcast = Webcast::getByID($data['v_location']);
+        if ($webcast === null) {
             throw new ValidationException('Invalid Location ID');
         }
 
         if (
-            !(isset($location->user_id) && $location->user_id === $user->uid) && 
-            !(isset($location->calendar_id) && $this->userHasAccessToCalendar($user, $location->calendar_id)) 
+            !(isset($webcast->user_id) && $webcast->user_id === $user->uid) &&
+            !(isset($webcast->calendar_id) && $this->userHasAccessToCalendar($user, $webcast->calendar_id))
         ) {
             throw new ForbiddenException('You do not have access to modify that virtual location.');
         }
@@ -118,7 +116,7 @@ class APIWebcast implements ModelInterface, ModelAuthInterface
         $new_webcast = WebcastUtility::updateWebcast($data, $user, $calendar);
 
         if ($new_webcast === false) {
-            throw new Exception('Failed to create virtual location.');
+            throw new ServerErrorException('Failed to create virtual location.');
         }
 
         $webcast_json = $new_webcast->toJSON();
@@ -160,7 +158,8 @@ class APIWebcast implements ModelInterface, ModelAuthInterface
         $edit_permission = Permission::getByName('Event Edit');
         $create_permission = Permission::getByName('Event Create');
 
-        return $user->hasPermission($edit_permission->id, $calendar_id) && $user->hasPermission($create_permission->id, $calendar_id);
+        return $user->hasPermission($edit_permission->id, $calendar_id) && 
+            $user->hasPermission($create_permission->id, $calendar_id);
     }
 
     private function translateIncomingJSON(array &$webcast_data)

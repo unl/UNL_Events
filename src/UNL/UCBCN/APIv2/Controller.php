@@ -12,7 +12,7 @@ class Controller {
     public static $url = '/api/v2/';
     public $auth = null;
     public $user = false;
-    
+
     public function __construct($options = array()) {
         $this->options = $options + $this->options;
         $this->auth = new Auth();
@@ -35,7 +35,10 @@ class Controller {
         } catch (InvalidMethodException $e) {
             $this->output['status'] = 405;
             $this->output['message'] = $e->getMessage() !== "" ? $e->getMessage() : 'Method Not Allowed';
-        } catch (\Exception $e) {
+        } catch (ServerErrorException $e) {
+            $this->output['status'] = 500;
+            $this->output['message'] = $e->getMessage() !== "" ? $e->getMessage() : 'Internal Server Error';
+        }catch (\Exception $e) {
             $this->output['status'] = 500;
             $this->output['message'] = $e->getMessage() !== "" ? $e->getMessage() : 'Internal Server Error';
         }
@@ -95,12 +98,12 @@ class Controller {
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $this->request_data = $_POST;
-        } else if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+        } elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
             $this->request_data = $_GET;
-        } else if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
+        } elseif ($_SERVER['REQUEST_METHOD'] == 'PUT') {
             parse_str(file_get_contents('php://input'), $_PUT);
             $this->request_data = $_PUT;
-        } else if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
+        } elseif ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
             parse_str(file_get_contents('php://input'), $_DELETE);
             $this->request_data = $_DELETE;
         } else {
