@@ -14,7 +14,7 @@ require_once __DIR__ . '/../../vendor/composer/autoload.php';
 
 use RegExpRouter as RegExpRouter;
 
-$routes = include __DIR__ . '/../../data/api_v2_routes.php';
+$routes = include_once __DIR__ . '/../../data/api_v2_routes.php';
 $router = new RegExpRouter\Router(array('baseURL' => Controller::$url));
 $router->setRoutes($routes);
 
@@ -22,5 +22,5 @@ $controller_options = $router->route($_SERVER['REQUEST_URI'], $_GET);
 $controller = new Controller($controller_options);
 
 http_response_code($controller->output['status']);
-echo json_encode($controller->output);
+echo json_encode($controller->output, JSON_UNESCAPED_SLASHES);
 exit;

@@ -15,8 +15,6 @@ $recurrence_id = '(?P<recurrence_id>([0-9]+))';
 $calendar_slash_required = '(' . $calendar . '\/)?';
 $calendar_slash_optional = '(' . $calendar . '(\/)?)?';
 
-$routes['/^(\/)?$/'] = 'UNL\UCBCN\APIv2\Home';
-$routes['/^test(\/)?$/'] = 'UNL\UCBCN\APIv2\Home';
-$routes['/^location(\/)?$/'] = 'UNL\UCBCN\APIv2\Home';
+$routes['/^(\/)?$/'] = 'UNL\UCBCN\APIv2\APIHome';
 
 return $routes;

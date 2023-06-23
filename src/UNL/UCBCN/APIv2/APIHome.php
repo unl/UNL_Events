@@ -1,7 +1,7 @@
 <?php
 namespace UNL\UCBCN\APIv2;
 
-class Home implements ModelInterface
+class APIHome implements ModelInterface
 {
     public $options = array();
 
@@ -10,8 +10,8 @@ class Home implements ModelInterface
         $this->options = $options + $this->options;
     }
 
-    public function run(string $method, array $data): array
+    public function run(string $method, array $data, $user): array
     {
-        return array('data' => 'Hello World');
+        return array('Hello World');
     }
 }
