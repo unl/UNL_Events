@@ -115,6 +115,18 @@ class UserLocation extends PostHandler
             throw new ValidationException('Missing Location To Update.');
         }
 
+        $location = Location::getByID($post_data['location']);
+        if ($location === null) {
+            throw new ValidationException('Invalid Location ID');
+        }
+
+        if (
+            !(isset($location->user_id) && $location->user_id === $user->uid) &&
+            !(isset($location->calendar_id) && $this->userHasAccessToCalendar($location->calendar_id))
+        ) {
+            throw new ValidationException('You do not have access to modify that location.');
+        }
+
         $this->validateLocation($post_data);
 
         try {

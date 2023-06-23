@@ -111,6 +111,18 @@ class UserVirtualLocation extends PostHandler
             }
         }
 
+        $webcast = Webcast::getByID($post_data['v_location']);
+        if ($webcast === null) {
+            throw new ValidationException('Invalid Virtual Location');
+        }
+
+        if (
+            !(isset($webcast->user_id) && $webcast->user_id === $user->uid) &&
+            !(isset($webcast->calendar_id) && $this->userHasAccessToCalendar($webcast->calendar_id))
+        ) {
+            throw new ValidationException('You do not have access to modify that virtual location.');
+        }
+
         if (!empty($post_data['v_location']) && $post_data['v_location'] === "New") {
             throw new ValidationException('Missing Virtual Location To Update.');
         }

@@ -16,6 +16,10 @@ class CalendarVirtualLocation extends PostHandler
     {
         $this->options = $options + $this->options;
         $this->calendar = Calendar::getByShortName($this->options['calendar_shortname']);
+
+        if (!$this->userHasAccessToCalendar()) {
+            throw new \Exception("You do not have permission to add/edit virtual locations.", 403);
+        }
     }
 
     public function getCalendarWebcasts()
@@ -35,6 +39,16 @@ class CalendarVirtualLocation extends PostHandler
         $user = Auth::getCurrentUser();
 
         return $user->getCalendars();
+    }
+
+    public function userHasAccessToCalendar()
+    {
+        $user = Auth::getCurrentUser();
+
+        $edit_permission = Permission::getByName('Event Edit');
+        $create_permission = Permission::getByName('Event Create');
+
+        return $user->hasPermission($edit_permission->id, $this->calendar->id) && $user->hasPermission($create_permission->id, $this->calendar->id);
     }
 
     public function handlePost(array $get, array $post, array $files)
@@ -98,6 +112,18 @@ class CalendarVirtualLocation extends PostHandler
 
         if (!empty($post_data['v_location']) && $post_data['v_location'] === "New") {
             throw new ValidationException('Missing Virtual Location To Update');
+        }
+
+        $webcast = Webcast::getByID($post_data['v_location']);
+        if ($webcast === null) {
+            throw new ValidationException('Invalid Virtual Location');
+        }
+
+        if (
+            !(isset($webcast->user_id) && $webcast->user_id === $user->uid) &&
+            !(isset($webcast->calendar_id) && $this->userHasAccessToCalendar())
+        ) {
+            throw new ValidationException('You do not have access to modify that virtual location');
         }
 
         $this->validateLocation($post_data);

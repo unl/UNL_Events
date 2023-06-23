@@ -16,6 +16,10 @@ class CalendarLocation extends PostHandler
     {
         $this->options = $options + $this->options;
         $this->calendar = Calendar::getByShortName($this->options['calendar_shortname']);
+
+        if (!$this->userHasAccessToCalendar()) {
+            throw new \Exception("You do not have permission to add/edit locations.", 403);
+        }
     }
 
     public function getCalendarLocations() 
@@ -35,6 +39,16 @@ class CalendarLocation extends PostHandler
         $user = Auth::getCurrentUser();
 
         return $user->getCalendars();
+    }
+
+    public function userHasAccessToCalendar()
+    {
+        $user = Auth::getCurrentUser();
+
+        $edit_permission = Permission::getByName('Event Edit');
+        $create_permission = Permission::getByName('Event Create');
+
+        return $user->hasPermission($edit_permission->id, $this->calendar->id) && $user->hasPermission($create_permission->id, $this->calendar->id);
     }
 
     public function handlePost(array $get, array $post, array $files)
@@ -98,6 +112,18 @@ class CalendarLocation extends PostHandler
 
         if (!empty($post_data['location']) && $post_data['location'] === "New") {
             throw new ValidationException('Missing Location To Update');
+        }
+
+        $location = Location::getByID($post_data['location']);
+        if ($location === null) {
+            throw new ValidationException('Invalid Location ID');
+        }
+
+        if (
+            !(isset($location->user_id) && $location->user_id === $user->uid) &&
+            !(isset($location->calendar_id) && $this->userHasAccessToCalendar())
+        ) {
+            throw new ValidationException('You do not have access to modify that location');
         }
 
         $this->validateLocation($post_data);

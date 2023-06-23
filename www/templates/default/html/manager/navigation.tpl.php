@@ -43,7 +43,11 @@
                 </li>
             <?php endif; ?>
 
-            <?php if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_CREATE_ID, $calendar->id)): ?>
+            <?php 
+                if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_CREATE_ID, $calendar->id) && 
+                    $user->hasPermission(\UNL\UCBCN\Permission::EVENT_EDIT_ID, $calendar->id)
+                ):
+            ?>
                 <li>
                     <a
                         class="dcf-txt-decor-hover"
@@ -52,7 +56,11 @@
                 </li>
             <?php endif; ?>
 
-            <?php if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_CREATE_ID, $calendar->id)): ?>
+            <?php 
+                if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_CREATE_ID, $calendar->id) && 
+                    $user->hasPermission(\UNL\UCBCN\Permission::EVENT_EDIT_ID, $calendar->id)
+                ):
+            ?>
                 <li>
                     <a
                         class="dcf-txt-decor-hover"
