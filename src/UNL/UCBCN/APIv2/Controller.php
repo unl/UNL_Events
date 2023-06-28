@@ -7,7 +7,7 @@ class Controller {
     public $output = array(
         'status' => 200,
         'message' => 'success',
-        'data' => 'null',
+        'data' => null,
     );
     public static $url = '/api/v2/';
     public $auth = null;
@@ -47,7 +47,7 @@ class Controller {
     public function run()
     {
         if (!isset($this->options['model'])) {
-            throw new NotFoundException('Not Found');
+            throw new NotFoundException();
         }
 
         $model = new $this->options['model']($this->options);
@@ -62,7 +62,7 @@ class Controller {
             }
 
             if (!$authCheck) {
-                throw new MissingAuthException('Not Authenticated');
+                throw new MissingAuthException();
             }
         }
 

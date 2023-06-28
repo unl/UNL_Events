@@ -9,10 +9,15 @@ class CreateCalendar extends PostHandler
 {
     public $options = array();
     public $calendar;
+    public $user;
 
     public function __construct($options = array()) 
     {
         $this->options = $options + $this->options;
+
+        if (array_key_exists('user', $this->options)) {
+            $this->user = $this->options['user'];
+        }
 
         # check if we are looking to edit a calendar
         if (array_key_exists('calendar_shortname', $this->options)) {
@@ -23,7 +28,7 @@ class CreateCalendar extends PostHandler
             }
 
             # check permissions to edit this calendar's details
-            $user = Auth::getCurrentUser();
+            $user = $this->options['user'] ?? Auth::getCurrentUser();
             if (!$user->hasPermission(Permission::CALENDAR_EDIT_ID, $this->calendar->id)) {
                 throw new \Exception("You do not have permission to edit the details of this calendar.", 403);
             }
@@ -69,7 +74,7 @@ class CreateCalendar extends PostHandler
         $this->calendar->name = $post_data['name'];
         $this->calendar->shortname = $post_data['shortname'];
         $this->calendar->defaulttimezone = empty($post_data['defaulttimezone']) ? BaseUCBCN::$defaultTimezone : $post_data['defaulttimezone'];
-        $this->calendar->website = $post_data['website'];
+        $this->calendar->website = $post_data['website'] ?? "";
         switch ($post_data['event_release_preference']) {
             case '':
                 $this->calendar->eventreleasepreference = Calendar::EVENT_RELEASE_PREFERENCE_DEFAULT;
@@ -84,7 +89,7 @@ class CreateCalendar extends PostHandler
                 $this->calendar->eventreleasepreference = Calendar::EVENT_RELEASE_PREFERENCE_DEFAULT;
         }
 
-        $this->calendar->emaillists = $post_data['email_lists'];
+        $this->calendar->emaillists = $post_data['email_lists'] ?? "";
         $this->calendar->recommendationswithinaccount = array_key_exists('recommend_within_account', $post_data) && 
             $post_data['recommend_within_account'] == 'on' ? 1 : 0;
     }
@@ -133,15 +138,30 @@ class CreateCalendar extends PostHandler
         if (in_array($post_data['shortname'], $invalid_shortnames)) {
             throw new ValidationException('Sorry, that shortname is invalid. Please try another one.');
         }
+
+        if (!empty($post_data['event_release_preference']) && 
+            !in_array(
+                $post_data['event_release_preference'],
+                array( 'immediate', 'pending', '' )
+            )
+        ) {
+            throw new ValidationException('Invalid event release preference.');
+        }
+
+        if (!empty($post_data['website']) &&
+            !filter_var($post_data['website'], FILTER_VALIDATE_URL)
+        ) {
+            throw new ValidationException('That website is invalid.');
+        }
     }
 
-    private function createCalendar($post_data) 
+    public function createCalendar($post_data) 
     {
-        $user = Auth::getCurrentUser();
+        $user = $this->options['user'] ?? Auth::getCurrentUser();
         $account = $user->getAccount();
 
-        $this->setCalendarData($post_data);
         $this->validateCalendarData($post_data);
+        $this->setCalendarData($post_data);
         $this->calendar->account_id = $account->id;
 
         $this->calendar->datecreated = date('Y-m-d H:i:s');
@@ -153,12 +173,12 @@ class CreateCalendar extends PostHandler
         $this->calendar->addUser($user);
     }
 
-    private function updateCalendar($post_data)
+    public function updateCalendar($post_data)
     {
-        $user = Auth::getCurrentUser();
+        $user = $this->options['user'] ?? Auth::getCurrentUser();
 
-        $this->setCalendarData($post_data);
         $this->validateCalendarData($post_data);
+        $this->setCalendarData($post_data);
         $this->calendar->datelastupdated = date('Y-m-d H:i:s');
         $this->calendar->uidlastupdated = $user->uid;
 

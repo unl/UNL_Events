@@ -5,7 +5,7 @@
 $routes = array();
 
 // Optional calendar short name, which prefixes all routes
-$calendar = '(?P<calendar_shortname>([a-zA-Z-_0-9]+)+)';
+$calendar = '(?P<calendar_id>([0-9]+|[a-zA-Z-_0-9]+))';
 $user = '(?P<user_uid>([a-zA-Z0-9-_]+))';
 $subscription = '(?P<subscription_id>([0-9]+))';
 $location = '(?P<location_id>([0-9]+|standard))';
@@ -23,5 +23,7 @@ $routes['/^location(\/)?$/'] = 'UNL\UCBCN\APIv2\APILocation';
 $routes['/^location\/' . $location . '(\/)?$/'] = 'UNL\UCBCN\APIv2\APILocation';
 $routes['/^virtual-location(\/)?$/'] = 'UNL\UCBCN\APIv2\APIWebcast';
 $routes['/^virtual-location\/' . $webcast . '(\/)?$/'] = 'UNL\UCBCN\APIv2\APIWebcast';
+$routes['/^calendar(\/)?$/'] = 'UNL\UCBCN\APIv2\APICalendar';
+$routes['/^calendar\/' . $calendar . '(\/)?$/'] = 'UNL\UCBCN\APIv2\APICalendar';
 
 return $routes;
