@@ -346,6 +346,7 @@ class EventInstance implements RoutableInterface, MetaTagInterface
         $data['EventTitle']    = $this->event->displayTitle($this);
         $data['EventSubtitle'] = $this->event->subtitle;
         $data['DateTime'] = array(
+            'DateTimeID' => $this->eventdatetime->id,
             'Start' => $timezoneDateTime->format($this->getStartTime(),'c'),
             'End'   => $timezoneDateTime->format($this->getEndTime(),'c'),
             'AllDay' => $this->isAllDay(),
