@@ -121,7 +121,7 @@ class EventInstance implements RoutableInterface, MetaTagInterface
         if (isset($this->event->imageurl)) {
             return $this->event->imageurl;
         } elseif (isset($this->event->imagedata)) {
-            return Controller::$url . 'images/' . $this->event->id;
+            return \UNL\UCBCN\Frontend\Controller::$url . 'images/' . $this->event->id;
         }
 
         return false;

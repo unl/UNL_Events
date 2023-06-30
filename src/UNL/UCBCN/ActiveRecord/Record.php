@@ -11,8 +11,6 @@
  */
 namespace UNL\UCBCN\ActiveRecord;
 
-use UNL\UCBCN\Controller as Controller;
-
 abstract class Record
 {
     public function __construct()
@@ -422,7 +420,7 @@ abstract class Record
             return false;
         }
 
-        return Controller::getURL()
+        return \UNL\UCBCN\Frontend\Controller::$url
                . call_user_func(array(get_called_class(), 'getTable'))
                . '/' . $this->{$keys[0]};
     }

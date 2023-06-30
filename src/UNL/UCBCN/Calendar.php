@@ -520,6 +520,15 @@ class Calendar extends Record
     }
 
     /**
+     * @param Event $event
+     * @return false|CalendarHasEvent
+     */
+    public function hasEventById(string $event_id)
+    {
+        return CalendarHasEvent::getByIds($this->id, $event_id);
+    }
+
+    /**
      * Finds the subscriptions this calendar has, and processes them.
      *
      * @return void
