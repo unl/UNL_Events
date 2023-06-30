@@ -59,7 +59,7 @@ class APICalendar implements ModelInterface, ModelAuthInterface
     public function run(string $method, array $data, $user): array
     {
         if ($method === 'GET') {
-            return $this->calendarToJSON($this->calendar);
+            return $this->calendarToJSON($this->calendar->id);
         }
 
         if ($method === 'POST') {
@@ -96,7 +96,7 @@ class APICalendar implements ModelInterface, ModelAuthInterface
             throw new ValidationException($e->getMessage());
         }
 
-        return $this->calendarToJSON($createCalendar->calendar);
+        return $this->calendarToJSON($createCalendar->calendar->id);
     }
 
     private function handlePut(array $data, User $user): array
@@ -123,11 +123,17 @@ class APICalendar implements ModelInterface, ModelAuthInterface
             throw new ValidationException($e->getMessage());
         }
 
-        return $this->calendarToJSON($createCalendar->calendar);
+        return $this->calendarToJSON($createCalendar->calendar->id);
     }
 
-    private function calendarToJSON(calendar $calendar): array
+    public static function calendarToJSON(string $calendar_id): array
     {
+        $calendar = Calendar::getById($calendar_id);
+
+        if ($calendar === false) {
+            throw new ValidationException('Invalid Calendar Id');
+        }
+
         $event_release_preference = null;
         switch ($calendar->eventreleasepreference) {
             case Calendar::EVENT_RELEASE_PREFERENCE_DEFAULT:
@@ -147,7 +153,7 @@ class APICalendar implements ModelInterface, ModelAuthInterface
             'id' => $calendar->id,
             'name' => $calendar->name,
             'short-name' => $calendar->shortname,
-            'default-timezone' => $this->translateTimezone($calendar->defaulttimezone),
+            'default-timezone' => APICalendar::translateTimezone($calendar->defaulttimezone),
             'website' => $calendar->website,
             'email-list' => $calendar->emaillists,
             'event-release-preference' => $event_release_preference,
@@ -173,7 +179,7 @@ class APICalendar implements ModelInterface, ModelAuthInterface
         $calendar_data['defaulttimezone'] = $timezones[$calendar_data['default-timezone']];
     }
 
-    private function translateTimezone($phpTimeZone)
+    private static function translateTimezone($phpTimeZone)
     {
         $timezones = BaseUCBCN::getTimezoneOptions();
 

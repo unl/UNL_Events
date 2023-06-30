@@ -107,10 +107,7 @@ class APILocation implements ModelInterface, ModelAuthInterface
             throw new ServerErrorException('Failed to create location.');
         }
 
-        $location_json = $new_location->toJSON();
-        $this->translateOutgoingJSON($location_json);
-
-        return $location_json;
+        return $this->translateOutgoingJSON($new_location->id);
     }
 
     private function handlePut(array $data, User $user): array
@@ -165,10 +162,7 @@ class APILocation implements ModelInterface, ModelAuthInterface
             throw new ServerErrorException('Failed to Update location.');
         }
 
-        $location_json = $new_location->toJSON();
-        $this->translateOutgoingJSON($location_json);
-
-        return $location_json;
+        return $this->translateOutgoingJSON($new_location->id);;
     }
 
     public function userHasAccessToCalendar(User $user, string $calendar_id)
@@ -189,15 +183,11 @@ class APILocation implements ModelInterface, ModelAuthInterface
         $extension_locations_json = array();
 
         foreach ($main_locations as $location) {
-            $location_json = $location->toJSON();
-            $this->translateOutgoingJSON($location_json);
-            $main_locations_json[] = $location_json;
+            $main_locations_json[] = $this->translateOutgoingJSON($location->id);;
         }
 
         foreach ($extension_locations as $location) {
-            $location_json = $location->toJSON();
-            $this->translateOutgoingJSON($location_json);
-            $extension_locations_json[] = $location_json;
+            $extension_locations_json[] = $this->translateOutgoingJSON($location->id);;
         }
 
         return array('main' => $main_locations_json, 'extension' => $extension_locations_json);
@@ -205,16 +195,7 @@ class APILocation implements ModelInterface, ModelAuthInterface
 
     private function getLocationById(string $id): array
     {
-        $location = Location::getByID($id);
-
-        if ($location === false) {
-            throw new ValidationException('Invalid location ID.');
-        }
-
-        $location_json = $location->toJSON();
-        $this->translateOutgoingJSON($location_json);
-
-        return $location_json;
+        return $this->translateOutgoingJSON($id);
     }
 
     private function translateIncomingJSON(array &$location_data)
@@ -247,25 +228,35 @@ class APILocation implements ModelInterface, ModelAuthInterface
         $location_data['new_location'] = $new_location;
     }
 
-    private function translateOutgoingJSON(array &$location_data)
+    public static function translateOutgoingJSON(string $location_id): array
     {
-        $this->replaceJSONKey($location_data, 'location',                        'id'                            );
-        $this->replaceJSONKey($location_data, 'location-name',                   'name'                          );
-        $this->replaceJSONKey($location_data, 'location-address-1',              'address-1'                     );
-        $this->replaceJSONKey($location_data, 'location-address-2',              'address-2'                     );
-        $this->replaceJSONKey($location_data, 'location-city',                   'city'                          );
-        $this->replaceJSONKey($location_data, 'location-state',                  'state'                         );
-        $this->replaceJSONKey($location_data, 'location-zip',                    'zip'                           );
-        $this->replaceJSONKey($location_data, 'location-map-url',                'map-url'                       );
-        $this->replaceJSONKey($location_data, 'location-webpage',                'webpage'                       );
-        $this->replaceJSONKey($location_data, 'location-hours',                  'hours'                         );
-        $this->replaceJSONKey($location_data, 'location-phone',                  'phone'                         );
-        $this->replaceJSONKey($location_data, 'location-room',                   'default-room'                  );
-        $this->replaceJSONKey($location_data, 'location-directions',             'default-directions'            );
-        $this->replaceJSONKey($location_data, 'location-additional-public-info', 'default-additional-public-info');
+        $location = Location::getByID($location_id);
+
+        if ($location === false) {
+            throw new ValidationException('Invalid location ID.');
+        }
+
+        $location_json = $location->toJSON();
+
+        APILocation::replaceJSONKey($location_json, 'location',                        'id'                            );
+        APILocation::replaceJSONKey($location_json, 'location-name',                   'name'                          );
+        APILocation::replaceJSONKey($location_json, 'location-address-1',              'address-1'                     );
+        APILocation::replaceJSONKey($location_json, 'location-address-2',              'address-2'                     );
+        APILocation::replaceJSONKey($location_json, 'location-city',                   'city'                          );
+        APILocation::replaceJSONKey($location_json, 'location-state',                  'state'                         );
+        APILocation::replaceJSONKey($location_json, 'location-zip',                    'zip'                           );
+        APILocation::replaceJSONKey($location_json, 'location-map-url',                'map-url'                       );
+        APILocation::replaceJSONKey($location_json, 'location-webpage',                'webpage'                       );
+        APILocation::replaceJSONKey($location_json, 'location-hours',                  'hours'                         );
+        APILocation::replaceJSONKey($location_json, 'location-phone',                  'phone'                         );
+        APILocation::replaceJSONKey($location_json, 'location-room',                   'default-room'                  );
+        APILocation::replaceJSONKey($location_json, 'location-directions',             'default-directions'            );
+        APILocation::replaceJSONKey($location_json, 'location-additional-public-info', 'default-additional-public-info');
+
+        return $location_json;
     }
 
-    private function replaceJSONKey(array &$json_data, string $oldKey, string $newKey): void
+    private static function replaceJSONKey(array &$json_data, string $oldKey, string $newKey): void
     {
         if (!key_exists($oldKey, $json_data)) {
             return;

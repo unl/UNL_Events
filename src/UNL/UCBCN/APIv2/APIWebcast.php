@@ -55,16 +55,7 @@ class APIWebcast implements ModelInterface, ModelAuthInterface
             throw new ValidationException('Invalid virtual location ID.');
         }
 
-        $webcast = Webcast::getByID($this->options['webcast_id']);
-
-        if ($webcast === false) {
-            throw new ValidationException('Invalid virtual location ID.');
-        }
-
-        $webcast_json = $webcast->toJSON();
-        $this->translateOutgoingJSON($webcast_json);
-
-        return $webcast_json;
+        return $this->translateOutgoingJSON($this->options['webcast_id']);
     }
 
     private function handlePost(array $data, User $user): array
@@ -84,10 +75,7 @@ class APIWebcast implements ModelInterface, ModelAuthInterface
             throw new ServerErrorException('Failed to create virtual location.');
         }
 
-        $webcast_json = $new_webcast->toJSON();
-        $this->translateOutgoingJSON($webcast_json);
-
-        return $webcast_json;
+        return $this->translateOutgoingJSON($new_webcast->id);
     }
 
     private function handlePut(array $data, User $user): array
@@ -119,10 +107,7 @@ class APIWebcast implements ModelInterface, ModelAuthInterface
             throw new ServerErrorException('Failed to create virtual location.');
         }
 
-        $webcast_json = $new_webcast->toJSON();
-        $this->translateOutgoingJSON($webcast_json);
-
-        return $webcast_json;
+        return $this->translateOutgoingJSON($new_webcast->id);;
     }
 
     private function validateIncomingWebcast($data, $user, &$calendar)
@@ -182,15 +167,25 @@ class APIWebcast implements ModelInterface, ModelAuthInterface
         $webcast_data['new_v_location'] = $new_v_location;
     }
 
-    private function translateOutgoingJSON(array &$webcast_data)
+    public static function translateOutgoingJSON(string $webcast_id): array
     {
-        $this->replaceJSONKey($webcast_data, 'v-location',                            'id');
-        $this->replaceJSONKey($webcast_data, 'new-v-location-name',                   'name');
-        $this->replaceJSONKey($webcast_data, 'new-v-location-url',                    'url');
-        $this->replaceJSONKey($webcast_data, 'new-v-location-additional-public-info', 'default-additional-public-info');
+        $webcast = Webcast::getByID($webcast_id);
+
+        if ($webcast === false) {
+            throw new ValidationException('Invalid virtual location ID.');
+        }
+
+        $webcast_json = $webcast->toJSON();
+
+        APIWebcast::replaceJSONKey($webcast_json, 'v-location',                            'id');
+        APIWebcast::replaceJSONKey($webcast_json, 'new-v-location-name',                   'name');
+        APIWebcast::replaceJSONKey($webcast_json, 'new-v-location-url',                    'url');
+        APIWebcast::replaceJSONKey($webcast_json, 'new-v-location-additional-public-info', 'default-additional-public-info');
+
+        return $webcast_json;
     }
 
-    private function replaceJSONKey(&$json_data, $oldKey, $newKey)
+    private static function replaceJSONKey(&$json_data, $oldKey, $newKey)
     {
         if (!key_exists($oldKey, $json_data)) {
             return;
