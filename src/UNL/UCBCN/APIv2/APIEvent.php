@@ -1,16 +1,10 @@
 <?php
 namespace UNL\UCBCN\APIv2;
 
-use UNL\UCBCN\Calendar as Calendar;
-use UNL\UCBCN\Manager\CreateCalendar as CreateCalendar;
-use UNL\UCBCN\User;
-use UNL\UCBCN as BaseUCBCN;
 use UNL\UCBCN\Event;
 use UNL\UCBCN\Event\Occurrence as Occurrence;
 use UNL\UCBCN\Event\Occurrences as Occurrences;
 use UNL\UCBCN\Event\RecurringDate;
-use UNL\UCBCN\Frontend\EventInstance;
-use UNL\UCBCN\Permission;
 
 class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
 {

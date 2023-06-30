@@ -62,7 +62,7 @@ class Search extends EventListing implements RoutableInterface, MetaTagInterface
         $this->search_query = $options['q'] ?? "";
 
         $format_max_limit = $this->max_limit['default'];
-        if (array_key_exists($options['format'], $this->max_limit)) {
+        if (key_exists('format', $options) && array_key_exists($options['format'], $this->max_limit)) {
             $format_max_limit = $this->max_limit[$options['format']];
         }
 

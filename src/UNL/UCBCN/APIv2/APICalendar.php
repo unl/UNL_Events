@@ -17,7 +17,8 @@ class APICalendar implements ModelInterface, ModelAuthInterface
     {
         $this->options = $options + $this->options;
 
-        $this->calendar_create = $this->endsWith($_SERVER['REQUEST_URI'], '/calendar') || $this->endsWith($_SERVER['REQUEST_URI'], '/calendar/');
+        $url_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $this->calendar_create = $this->endsWith($url_path, '/calendar') || $this->endsWith($url_path, '/calendar/');
 
         if ($this->calendar_create) {
             return;
@@ -186,7 +187,7 @@ class APICalendar implements ModelInterface, ModelAuthInterface
         return array_search($phpTimeZone, $timezones);
     }
 
-    private function endsWith( $haystack, $needle ) {
+    public function endsWith( $haystack, $needle ) {
         $length = strlen( $needle );
         if( !$length ) {
             return true;
