@@ -211,19 +211,19 @@ class APILocation implements ModelInterface, ModelAuthInterface
             $location_data['location_save_calendar'] = 'on';
         }
 
-        $new_location['name'] = $location_data['name'];
-        $new_location['streetaddress1'] = $location_data['address-1'];
-        $new_location['streetaddress2'] = $location_data['address-2'];
-        $new_location['city'] = $location_data['city'];
-        $new_location['state'] = $location_data['state'];
-        $new_location['zip'] = $location_data['zip'];
-        $new_location['mapurl'] = $location_data['map-url'];
-        $new_location['webpageurl'] = $location_data['webpage'];
-        $new_location['hours'] = $location_data['hours'];
-        $new_location['phone'] = $location_data['phone'];
-        $new_location['room'] = $location_data['default-room'];
-        $new_location['directions'] = $location_data['default-directions'];
-        $new_location['additionalpublicinfo'] = $location_data['default-additional-public-info'];
+        $new_location['name'] = $location_data['name'] ?? "";
+        $new_location['streetaddress1'] = $location_data['address-1'] ?? "";
+        $new_location['streetaddress2'] = $location_data['address-2'] ?? "";
+        $new_location['city'] = $location_data['city'] ?? "";
+        $new_location['state'] = $location_data['state'] ?? "";
+        $new_location['zip'] = $location_data['zip'] ?? "";
+        $new_location['mapurl'] = $location_data['map-url'] ?? "";
+        $new_location['webpageurl'] = $location_data['webpage'] ?? "";
+        $new_location['hours'] = $location_data['hours'] ?? "";
+        $new_location['phone'] = $location_data['phone'] ?? "";
+        $new_location['room'] = $location_data['default-room'] ?? "";
+        $new_location['directions'] = $location_data['default-directions'] ?? "";
+        $new_location['additionalpublicinfo'] = $location_data['default-additional-public-info'] ?? "";
 
         $location_data['new_location'] = $new_location;
     }

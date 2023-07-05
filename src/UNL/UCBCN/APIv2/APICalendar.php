@@ -168,16 +168,16 @@ class APICalendar implements ModelInterface, ModelAuthInterface
         $this->replaceJSONKey($calendar_data, 'email-lists', 'email_lists');
         $this->replaceJSONKey($calendar_data, 'recommend-within-account', 'recommend_within_account');
 
-        $calendar_data['event_release_preference'] = strtolower($calendar_data['event-release-preference']);
+        $calendar_data['event_release_preference'] = strtolower($calendar_data['event-release-preference'] ?? "");
 
         $timezones = BaseUCBCN::getTimezoneOptions();
-        $calendar_data['default-timezone'] = ucfirst(strtolower($calendar_data['default-timezone']));
+        $calendar_data['default-timezone'] = ucfirst(strtolower($calendar_data['default-timezone'] ?? ""));
 
         if (!array_key_exists($calendar_data['default-timezone'], $timezones)) {
             throw new ValidationException('Invalid timezone');
         }
 
-        $calendar_data['defaulttimezone'] = $timezones[$calendar_data['default-timezone']];
+        $calendar_data['defaulttimezone'] = $timezones[$calendar_data['default-timezone'] ?? ""];
     }
 
     private static function translateTimezone($phpTimeZone)

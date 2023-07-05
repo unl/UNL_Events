@@ -160,9 +160,9 @@ class APIWebcast implements ModelInterface, ModelAuthInterface
             $webcast_data['v_location_save_calendar'] = 'on';
         }
 
-        $new_v_location['title'] = $webcast_data['name'];
-        $new_v_location['url'] = $webcast_data['url'];
-        $new_v_location['additionalinfo'] = $webcast_data['default-additional-public-info'];
+        $new_v_location['title'] = $webcast_data['name'] ?? "";
+        $new_v_location['url'] = $webcast_data['url'] ?? "";
+        $new_v_location['additionalinfo'] = $webcast_data['default-additional-public-info'] ?? "";
 
         $webcast_data['new_v_location'] = $new_v_location;
     }
