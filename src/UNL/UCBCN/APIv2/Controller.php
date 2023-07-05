@@ -73,11 +73,16 @@ class Controller {
 
     public function checkAuthToken(): bool
     {
-        if (!array_key_exists('api_token', $this->request_data)) {
+        $headers = getallheaders();
+        if ($headers === false) {
+            throw new ServerErrorException('Could not read request headers.');
+        }
+
+        if (!array_key_exists('Authorization', $headers)) {
             return false;
         }
 
-        $this->user = $this->auth->authenticateViaToken($this->request_data['api_token']);
+        $this->user = $this->auth->authenticateViaToken($headers['Authorization']);
 
         return $this->user !== false;
     }
