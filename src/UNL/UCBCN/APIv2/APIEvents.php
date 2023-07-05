@@ -16,6 +16,10 @@ class APIEvents extends APICalendar implements ModelInterface, ModelAuthInterfac
     public $url_match_search = false;
     public $url_match_pending = false;
 
+    public $limit = 100;
+    public $offset = 0;
+    public $max_limit = 500;
+
     public function __construct($options = array())
     {
         //TODO Get Limits and Offset working on these
@@ -26,10 +30,25 @@ class APIEvents extends APICalendar implements ModelInterface, ModelAuthInterfac
         $this->event_type_filter = $options['type'] ?? "";
         $this->audience_filter = $options['audience'] ?? "";
 
+        if (!isset($options['limit']) ||
+            empty($options['limit']) ||
+            intval($options['limit']) > $this->max_limit ||
+            intval($options['limit']) <= 0
+        ) {
+            $options['limit'] = $this->max_limit;
+        }
+
+        if (!isset($options['offset']) || empty($options['offset']) || intval($options['offset']) <= 0) {
+            $options['offset'] = 0;
+        }
+
+        $this->limit = $options['limit'] ?? $this->limit;
+        $this->offset = $options['offset'] ?? $this->offset;
+
         $url_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         $this->url_match_upcoming = $this->endsWith($url_path, '/upcoming') || $this->endsWith($url_path, '/upcoming/');
-        $this->url_match_search  = $this->endsWith($url_path, '/search') || $this->endsWith($url_path, '/search/');
-        $this->url_match_pending   = $this->endsWith($url_path, '/pending') || $this->endsWith($url_path, '/pending/');
+        $this->url_match_search   = $this->endsWith($url_path, '/search') || $this->endsWith($url_path, '/search/');
+        $this->url_match_pending  = $this->endsWith($url_path, '/pending') || $this->endsWith($url_path, '/pending/');
 
         parent::__construct($options);
     }
@@ -104,6 +123,9 @@ class APIEvents extends APICalendar implements ModelInterface, ModelAuthInterfac
             'q' => $this->search_query,
             'type' => $this->event_type_filter,
             'audience' => $this->audience_filter,
+            'limit' => $this->limit,
+            'offset' => $this->offset,
+            'format' => 'json',
         ));
 
         foreach ($search_events as $event_occurrence) {
@@ -116,7 +138,7 @@ class APIEvents extends APICalendar implements ModelInterface, ModelAuthInterfac
     private function handlePendingGet() {
         $output_array = array();
 
-        $pending_events = $this->calendar->getEvents(Calendar::STATUS_PENDING);
+        $pending_events = $this->calendar->getEvents(Calendar::STATUS_PENDING, $this->limit, $this->offset);
 
         foreach ($pending_events as $event) {
             $output_array[] = APIEvent::translateOutgoingEventJSON($event->id);
