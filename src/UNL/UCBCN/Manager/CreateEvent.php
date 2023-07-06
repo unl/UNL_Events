@@ -80,21 +80,31 @@ class CreateEvent extends EventForm
 
         // If there is a physical location make sure these are set
         if (isset($post_data['physical_location_check']) && $post_data['physical_location_check'] == '1') {
+            if (!isset($post_data['location']) || empty($post_data['location'])) {
+                throw new ValidationException('Missing location.');
+            }
             if($post_data['location'] == "new") {
                 $validate_data = LocationUtility::validateLocation($post_data);
                 if (!$validate_data['valid']) {
                     throw new ValidationException($validate_data['message']);
                 }
+            } else if (!is_numeric($post_data['location'])) {
+                throw new ValidationException('Invalid virtual location.');
             }
         }
 
         // If there is a virtual location make sure these are set
         if (isset($post_data['virtual_location_check']) && $post_data['virtual_location_check'] == '1') {
+            if (!isset($post_data['v_location']) || empty($post_data['v_location'])) {
+                throw new ValidationException('Missing virtual location.');
+            }
             if($post_data['v_location'] == "new") {
                 $validate_data = WebcastUtility::validateWebcast($post_data);
                 if (!$validate_data['valid']) {
                     throw new ValidationException($validate_data['message']);
                 }
+            } else if (!is_numeric($post_data['v_location'])) {
+                throw new ValidationException('Invalid virtual location.');
             }
         }
 
@@ -131,12 +141,12 @@ class CreateEvent extends EventForm
         # tricky: if end date is empty, we want that to be the same as the start date
         # if the end time is also empty, then be sure to set the am/pm appropriately
         if (empty($post_data['end_date'])) {
-            $post_data['end_date'] = $post_data['start_date'];
+            $post_data['end_date'] = $post_data['start_date'] ?? "";
         }
         if (empty($post_data['end_time_hour']) && empty($post_data['end_time_minute'])) {
-            $post_data['end_time_hour'] = $post_data['start_time_hour'];
-            $post_data['end_time_minute'] = $post_data['start_time_minute'];
-            $post_data['end_time_am_pm'] = $post_data['start_time_am_pm'];
+            $post_data['end_time_hour'] = $post_data['start_time_hour'] ?? "";
+            $post_data['end_time_minute'] = $post_data['start_time_minute'] ?? "";
+            $post_data['end_time_am_pm'] = $post_data['start_time_am_pm'] ?? "";
         }
 
         # by setting and then validating, we allow the event on the form to have the entered data
@@ -172,7 +182,7 @@ class CreateEvent extends EventForm
         $event_datetime->canceled = 0;
 
         // check if physical location has been added
-        if ($post_data['physical_location_check'] == "1") {
+        if (isset($post_data['physical_location_check']) && $post_data['physical_location_check'] == "1") {
 
             // if a physical location is there then create a new one or set it to the selected one
             if ($post_data['location'] == 'new') {
@@ -184,13 +194,13 @@ class CreateEvent extends EventForm
             }
 
             // Set other location related fields
-            $event_datetime->room = $post_data['room'];
-            $event_datetime->directions = $post_data['directions'];
-            $event_datetime->location_additionalpublicinfo = $post_data['l_additional_public_info'];
+            $event_datetime->room = $post_data['room'] ?? null;
+            $event_datetime->directions = $post_data['directions'] ?? null;
+            $event_datetime->location_additionalpublicinfo = $post_data['l_additional_public_info'] ?? null;
         }
 
         // check if physical location has been added
-        if ($post_data['virtual_location_check'] == "1") {
+        if (isset($post_data['virtual_location_check']) && $post_data['virtual_location_check'] == "1") {
 
             // if a virtual location is there then create a new one or set it to the selected one
             if ($post_data['v_location'] == 'new') {
@@ -202,7 +212,7 @@ class CreateEvent extends EventForm
             }
 
             // Set other webcast related fields
-            $event_datetime->webcast_additionalpublicinfo = $post_data['v_additional_public_info'];
+            $event_datetime->webcast_additionalpublicinfo = $post_data['v_additional_public_info'] ?? null;
         }
 
         # set the start date and end date
