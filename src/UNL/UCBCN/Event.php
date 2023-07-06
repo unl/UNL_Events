@@ -613,6 +613,11 @@ class Event extends Record
             $calendar_has_event = CalendarHasEvent::getByEventIDSource($this->id, 'create event api');
             if ($calendar_has_event) {
                 return Calendar::getByID($calendar_has_event->calendar_id);
+            } else {
+                $calendar_has_event = CalendarHasEvent::getByEventIDSource($this->id, 'create event api v2');
+                if ($calendar_has_event) {
+                    return Calendar::getByID($calendar_has_event->calendar_id);
+                }
             }
         }
         return NULL;

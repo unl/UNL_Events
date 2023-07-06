@@ -25,3 +25,5 @@ ALTER TABLE `location` ADD `calendar_id` VARCHAR(100) DEFAULT NULL;
 -- Add organizer type to events
 ALTER TABLE `event` ADD `listingcontacturl` longtext DEFAULT NULL AFTER `listingcontactemail`;
 ALTER TABLE `event` ADD `listingcontacttype` ENUM('person', 'organization') DEFAULT NULL AFTER `listingcontacturl`;
+
+ALTER TABLE `calendar_has_event` MODIFY `source` ENUM('checked consider event', 'create event form', 'recommended', 'search', 'subscription', 'create event api', 'create event api v2') DEFAULT null;

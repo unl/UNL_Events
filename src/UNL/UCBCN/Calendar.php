@@ -340,7 +340,7 @@ class Calendar extends Record
         $calendar_has_event = CalendarHasEvent::getByIdsStatus($this->id, $event->id, $status);
 
         # check if this is where the event was originally created
-        if ($calendar_has_event->source == 'create event form' || $calendar_has_event->source == 'create event api') {
+        if ($calendar_has_event->source == 'create event form' || $calendar_has_event->source == 'create event api' || $calendar_has_event->source == 'create event api v2') {
             # delete the event from the entire system
             $event->delete();
         } else {

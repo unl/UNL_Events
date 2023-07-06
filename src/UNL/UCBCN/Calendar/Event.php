@@ -43,6 +43,7 @@ class Event extends Record
     
     const SOURCE_CREATE_EVENT_FORM      = 'create event form';
     const SOURCE_CREATE_EVENT_API       = 'create event api';
+    const SOURCE_CREATE_EVENT_API_V2    = 'create event api v2';
     const SOURCE_CHECKED_CONSIDER_EVENT = 'checked consider event';
     
     const STATUS_PENDING  = 'pending';
