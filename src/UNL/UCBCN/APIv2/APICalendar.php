@@ -180,7 +180,7 @@ class APICalendar implements ModelInterface, ModelAuthInterface
         $calendar_data['defaulttimezone'] = $timezones[$calendar_data['default-timezone'] ?? ""];
     }
 
-    private static function translateTimezone($phpTimeZone)
+    public static function translateTimezone($phpTimeZone)
     {
         $timezones = BaseUCBCN::getTimezoneOptions();
 

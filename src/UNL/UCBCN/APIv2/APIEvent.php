@@ -2,9 +2,13 @@
 namespace UNL\UCBCN\APIv2;
 
 use UNL\UCBCN\Event;
+use UNL\UCBCN\Calendar\Event as CalendarEvent;
 use UNL\UCBCN\Event\Occurrence as Occurrence;
 use UNL\UCBCN\Event\Occurrences as Occurrences;
 use UNL\UCBCN\Event\RecurringDate;
+use UNL\UCBCN\Manager\CreateEvent;
+use UNL\UCBCN\User as User;
+use UNL\UCBCN as BaseUCBCN;
 
 class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
 {
@@ -44,17 +48,24 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
                 return $this->handleEventGet();
             }
         }
+
+        if ($method === 'POST') {
+            return $this->handlePost($data, $user);
+        }
+
         throw new InvalidMethodException('Events only allows get.');
     }
 
-    private function handleEventGet() {
+    private function handleEventGet(): array
+    {
         if ($this->calendar->hasEventById($this->options['event_id']) === false) {
             throw new ValidationException('That calendar does not have that event with that id.');
         }
 
         return $this->translateOutgoingEventJSON($this->options['event_id']);
     }
-    private function handleDatetimeGet() {
+    private function handleDatetimeGet(): array
+    {
         $event_occurrence = Occurrence::getById($this->options['event_datetime_id']);
 
         if ($this->calendar->hasEventById($event_occurrence->event_id) === false) {
@@ -63,7 +74,8 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
 
         return $this->translateOutgoingEventJSON($event_occurrence->event_id);
     }
-    private function handleRecurrenceGet() {
+    private function handleRecurrenceGet(): array
+    {
         $recurring_date = RecurringDate::getById($this->options['recurrence_id']);
 
         if ($this->calendar->hasEventById($recurring_date->event_id) === false) {
@@ -72,6 +84,96 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
 
         return $this->translateOutgoingEventJSON($recurring_date->event_id);
     }
+
+    private function handlePost(array $data, User $user): array
+    {
+        var_dump($data);
+        $this->translateIncomingJSON($data);
+
+        var_dump($data);
+
+        $CreateEvent = new CreateEvent(array(
+            'calendar_shortname' => $this->calendar->shortname,
+            'user' => $user,
+            'event_source' => CalendarEvent::SOURCE_CREATE_EVENT_API_V2,
+        ));
+
+        try {
+            $CreateEvent->handlePost(array(), $data, array());
+        } catch (\UNL\UCBCN\Manager\ValidationException $e) {
+            throw new ValidationException($e->getMessage());
+        }
+
+        return array();
+    }
+
+    private function translateIncomingJSON(array &$event_data)
+    {
+        $this->replaceJSONKey($event_data, 'start-date', 'start_date');
+        $this->replaceJSONKey($event_data, 'start-time-hour', 'start_time_hour');
+        $this->replaceJSONKey($event_data, 'start-time-minute', 'start_time_minute');
+        $this->replaceJSONKey($event_data, 'start-time-am-pm', 'start_time_am_pm');
+
+        $this->replaceJSONKey($event_data, 'end-date', 'end_date');
+        $this->replaceJSONKey($event_data, 'end-time-hour', 'end_time_hour');
+        $this->replaceJSONKey($event_data, 'end-time-minute', 'end_time_minute');
+        $this->replaceJSONKey($event_data, 'end-time-am-pm', 'end_time_am_pm');
+
+        $this->replaceJSONKey($event_data, 'recurring-type', 'recurring_type');
+        $this->replaceJSONKey($event_data, 'recurs-until-date', 'recurs_until_date');
+        $this->replaceJSONKey($event_data, 'additional-public-info', 'additional_public_info');
+
+        $this->replaceJSONKey($event_data, 'contact-website', 'contact_website');
+        $this->replaceJSONKey($event_data, 'location-additional-public-info', 'l_additional_public_info');
+        $this->replaceJSONKey($event_data, 'virtual-location', 'v_location');
+        $this->replaceJSONKey($event_data, 'virtual-location-additional-public-info', 'v_additional_public_info');
+
+        $this->replaceJSONKey($event_data, 'private-public', 'private_public');
+
+        $this->replaceJSONKey($event_data, 'contact-type', 'contact_type');
+        $this->replaceJSONKey($event_data, 'contact-name', 'contact_name');
+        $this->replaceJSONKey($event_data, 'contact-phone', 'contact_phone');
+        $this->replaceJSONKey($event_data, 'contact-email', 'contact_email');
+        $this->replaceJSONKey($event_data, 'contact-website', 'contact_website');
+
+        if (isset($event_data['location'])) {
+            if ($event_data['location'] === 'new' || !is_numeric($event_data['location'])) {
+                throw new ValidationException('Only existing locations are allowed.');
+            }
+            $event_data['physical_location_check'] = '1';
+        }
+
+        if (isset($event_data['v_location'])) {
+            if ($event_data['v_location'] === 'new' || !is_numeric($event_data['v_location'])) {
+                throw new ValidationException('Only existing virtual locations are allowed.');
+            }
+            $event_data['virtual_location_check'] = '1';
+        }
+
+        if (isset($post_data['recurring_type'])) {
+            $event_data['recurring'] = 'on';
+        }
+
+        if (isset($event_data['timezone'])) {
+            $timezones = BaseUCBCN::getTimezoneOptions();
+
+            $event_data['timezone'] = ucfirst(strtolower($event_data['timezone']));
+
+            if (!array_key_exists($event_data['timezone'], $timezones)) {
+                throw new ValidationException('Invalid timezone.');
+            }
+
+            $event_data['timezone'] = $timezones[$event_data['timezone']];
+
+        }
+
+        unset($event_data['cropped_image_data']);
+        unset($event_data['imagedata']);
+        unset($event_data['remove_image']);
+
+        $event_data['send_to_main'] = 'off';
+    }
+
 
     public static function translateOutgoingEventJSON(string $event_id):array
     {
@@ -150,7 +252,7 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
         $occurrence_json['start-time'] = $timezoneDateTime->format($occurrence->starttime,'c');
         $occurrence_json['end-time'] = $timezoneDateTime->format($occurrence->endtime,'c');
         $occurrence_json['is-all-day'] = APIEvent::isAllDay($occurrence);
-        $occurrence_json['event-timezone'] = $occurrence->timezone;
+        $occurrence_json['event-timezone'] = APICalendar::translateTimezone($occurrence->timezone);
         // $occurrence_json['calendar-timezone'] = $this->calendar->defaulttimezone;
         $occurrence_json['is-recurring'] = $occurrence->isRecurring();
         $occurrence_json['canceled'] = $occurrence->canceled === '1';
@@ -210,5 +312,14 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
         }
 
         return true;
+    }
+
+    private function replaceJSONKey(array &$json_data, string $oldKey, string $newKey): void
+    {
+        if (!key_exists($oldKey, $json_data)) {
+            return;
+        }
+        $json_data[$newKey] = $json_data[$oldKey];
+        unset($json_data[$oldKey]);
     }
 }
