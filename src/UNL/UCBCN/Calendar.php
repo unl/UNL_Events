@@ -300,7 +300,7 @@ class Calendar extends Record
             $calendar_has_event->event_id = $event->id;
             $calendar_has_event->status = $status;
             $calendar_has_event->source = $source;
-            $calendar_has_event->insert();
+            $calendar_has_event->insert($user);
         }
 
         if ($event->approvedforcirculation) {

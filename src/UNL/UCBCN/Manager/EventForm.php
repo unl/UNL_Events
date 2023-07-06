@@ -26,7 +26,7 @@ class EventForm extends PostHandler
 			throw new EventFormException("That calendar could not be found.", 404);
 		}
 
-		$user = Auth::getCurrentUser();
+		$user = $this->options['user'] ?? Auth::getCurrentUser();
 		if (!$user->hasPermission(Permission::EVENT_CREATE_ID, $this->calendar->id)) {
 			throw new EventFormException("You do not have permission to create an event on this calendar.", 403);
 		}

@@ -4,17 +4,27 @@ namespace UNL\UCBCN\Manager;
 use UNL\UCBCN\Manager\EventForm as EventForm;
 use UNL\UCBCN as BaseUCBCN;
 use UNL\UCBCN\Event;
+use UNL\UCBCN\Calendar\Event as CalendarEvent;
 use UNL\UCBCN\Event\EventType;
 use UNL\UCBCN\Event\Audience;
 use UNL\UCBCN\Event\Occurrence;
 
 class CreateEvent extends EventForm
 {
+    private $user;
+    private $event_source = CalendarEvent::SOURCE_CREATE_EVENT_FORM;
+
     public function __construct($options = array())
     {
         parent::__construct($options);
         $this->mode = self::MODE_CREATE;
         $this->event = new Event;
+
+        $this->user = $this->options['user'] ?? null;
+
+        if (isset($this->options['event_source']) && $this->options['event_source'] === CalendarEvent::SOURCE_CREATE_EVENT_API_V2) {
+            $this->event_source = CalendarEvent::SOURCE_CREATE_EVENT_API_V2;
+        }
     }
 
     public function handlePost(array $get, array $post, array $files)
@@ -136,7 +146,7 @@ class CreateEvent extends EventForm
 
     private function createEvent($post_data, $files)
     {
-        $user = Auth::getCurrentUser();
+        $user = $this->user ?? Auth::getCurrentUser();
 
         # tricky: if end date is empty, we want that to be the same as the start date
         # if the end time is also empty, then be sure to set the am/pm appropriately
@@ -154,7 +164,7 @@ class CreateEvent extends EventForm
         $this->setEventData($post_data, $files);
         $this->validateEventData($post_data, $files);
 
-        $result = $this->event->insert($this->calendar, 'create event form');
+        $result = $this->event->insert($this->calendar, $this->event_source, $user);
 
         # add the event type record
         $event_has_type = new EventType;

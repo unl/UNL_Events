@@ -373,13 +373,13 @@ class Event extends Record
      *
      * @return bool
      */
-    public function insert($calendar = null, $source = null)
+    public function insert($calendar = null, $source = null, $user = null)
     {
         $this->datecreated = date('Y-m-d H:i:s');
         $this->datelastupdated = date('Y-m-d H:i:s');
 
-        $this->uidcreated = Auth::getCurrentUser()->uid;
-        $this->uidlastupdated = Auth::getCurrentUser()->uid;
+        $this->uidcreated = isset($user) ? $user->uid : Auth::getCurrentUser()->uid;
+        $this->uidlastupdated = isset($user) ? $user->uid : Auth::getCurrentUser()->uid;
         $result = parent::insert();
 
         $status_for_new_event = 'pending';
@@ -388,7 +388,7 @@ class Event extends Record
         }
 
         if (!empty($calendar)) {
-            $calendar->addEvent($this, $status_for_new_event, Auth::getCurrentUser(), $source);
+            $calendar->addEvent($this, $status_for_new_event, $user, $source);
         }
 
         return $result;
@@ -406,10 +406,10 @@ class Event extends Record
      *
      * @return bool
      */
-    public function update()
+    public function update($user = null)
     {
-        $this->uidcreated = Auth::getCurrentUser();
-        $this->uidlastupdated = Auth::getCurrentUser();
+        $this->uidcreated = isset($user) ? $user->uid : Auth::getCurrentUser()->uid;
+        $this->uidlastupdated = isset($user) ? $user->uid : Auth::getCurrentUser()->uid;
         $result = parent::update();
 
         return $result;
