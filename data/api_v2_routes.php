@@ -29,8 +29,10 @@ $routes['/^calendar\/' . $calendar . '\/event(\/)?$/'] = 'UNL\UCBCN\APIv2\APIEve
 $routes['/^calendar\/' . $calendar . '\/event\/' . $event . '(\/)?$/'] = 'UNL\UCBCN\APIv2\APIEvent';
 $routes['/^calendar\/' . $calendar . '\/event\/datetime\/' . $event_datetime . '(\/)?$/'] = 'UNL\UCBCN\APIv2\APIEvent';
 $routes['/^calendar\/' . $calendar . '\/event\/datetime\/recurrence\/' . $recurrence_id . '(\/)?$/'] = 'UNL\UCBCN\APIv2\APIEvent';
-$routes['/^calendar\/' . $calendar . '\/events\/upcoming(\/)?$/'] = 'UNL\UCBCN\APIv2\APIEvents';
+$routes['/^calendar\/' . $calendar . '\/events(\/)?$/'] = 'UNL\UCBCN\APIv2\APIEvents';
 $routes['/^calendar\/' . $calendar . '\/events\/search(\/)?$/'] = 'UNL\UCBCN\APIv2\APIEvents';
 $routes['/^calendar\/' . $calendar . '\/events\/pending(\/)?$/'] = 'UNL\UCBCN\APIv2\APIEvents';
+$routes['/^calendar\/' . $calendar . '\/events\/location\/' . $location . '(\/)?$/'] = 'UNL\UCBCN\APIv2\APIEvents';
+$routes['/^calendar\/' . $calendar . '\/events\/virtual-location\/' . $webcast . '(\/)?$/'] = 'UNL\UCBCN\APIv2\APIEvents';
 
 return $routes;

@@ -2,6 +2,10 @@
 namespace UNL\UCBCN\APIv2;
 
 use UNL\UCBCN\Calendar;
+use UNL\UCBCN\Event\Occurrences;
+use UNL\UCBCN\Events;
+use UNL\UCBCN\Location;
+use UNL\UCBCN\Webcast;
 use UNL\UCBCN\Frontend\EventInstance;
 use UNL\UCBCN\Frontend\Search;
 use UNL\UCBCN\Frontend\Upcoming;
@@ -12,7 +16,6 @@ class APIEvents extends APICalendar implements ModelInterface, ModelAuthInterfac
     public $audience_filter;
     public $search_query;
 
-    public $url_match_upcoming = false;
     public $url_match_search = false;
     public $url_match_pending = false;
 
@@ -46,7 +49,6 @@ class APIEvents extends APICalendar implements ModelInterface, ModelAuthInterfac
         $this->offset = $options['offset'] ?? $this->offset;
 
         $url_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-        $this->url_match_upcoming = $this->endsWith($url_path, '/upcoming') || $this->endsWith($url_path, '/upcoming/');
         $this->url_match_search   = $this->endsWith($url_path, '/search') || $this->endsWith($url_path, '/search/');
         $this->url_match_pending  = $this->endsWith($url_path, '/pending') || $this->endsWith($url_path, '/pending/');
 
@@ -75,13 +77,6 @@ class APIEvents extends APICalendar implements ModelInterface, ModelAuthInterfac
 
     public function run(string $method, array $data, $user): array
     {
-        if ($this->url_match_upcoming) {
-            if ($method === 'GET') {
-                return $this->handleUpcomingGet();
-            }
-            throw new InvalidMethodException('Upcoming Events only allows get.');
-        }
-
         if ($this->url_match_search) {
             if ($method === 'GET') {
                 return $this->handleSearchGet();
@@ -96,26 +91,35 @@ class APIEvents extends APICalendar implements ModelInterface, ModelAuthInterfac
             throw new InvalidMethodException('Pending Events only allows get.');
         }
 
-        throw new NotFoundException();
+        if ($method === 'GET' && key_exists('location_id', $this->options) && is_numeric($this->options['location_id'])) {
+            return $this->handleLocationGet();
+        }
+
+        if ($method === 'GET' && key_exists('webcast_id', $this->options) && is_numeric($this->options['webcast_id'])) {
+            return $this->handleWebcastGet();
+        }
+
+        if ($method === 'GET') {
+            return $this->handleGet();
+        }
+
+        throw new InvalidMethodException('Events only allows get.');
     }
 
-    private function handleUpcomingGet() {
+    private function handleGet() {
         $output_array = array();
 
-        $upcoming_events = new Upcoming(array(
-            'calendar' => $this->calendar,
-            'type' => $this->event_type_filter,
-            'audience' => $this->audience_filter,
-        ));
+        $pending_events = $this->calendar->getEvents(Calendar::STATUS_POSTED, $this->limit, $this->offset);
 
-        foreach ($upcoming_events as $event_occurrence) {
-            $output_array[] = APIEvent::translateOutgoingEventJSON($event_occurrence->event->id);
+        foreach ($pending_events as $event) {
+            $output_array[] = APIEvent::translateOutgoingEventJSON($event->id);
         }
 
         return $output_array;
     }
 
-    private function handleSearchGet() {
+    private function handleSearchGet()
+    {
         $output_array = array();
 
         $search_events = new Search(array(
@@ -128,20 +132,75 @@ class APIEvents extends APICalendar implements ModelInterface, ModelAuthInterfac
             'format' => 'json',
         ));
 
+        $event_ids = array();
         foreach ($search_events as $event_occurrence) {
-            $output_array[] = APIEvent::translateOutgoingEventJSON($event_occurrence->event->id);
+            if (!isset($event_ids[$event_occurrence->event->id])) {
+                $event_ids[$event_occurrence->event->id] = true;
+                $output_array[] = APIEvent::translateOutgoingEventJSON($event_occurrence->event->id);
+            }
         }
 
         return $output_array;
     }
 
-    private function handlePendingGet() {
+    private function handlePendingGet()
+    {
         $output_array = array();
 
         $pending_events = $this->calendar->getEvents(Calendar::STATUS_PENDING, $this->limit, $this->offset);
 
         foreach ($pending_events as $event) {
             $output_array[] = APIEvent::translateOutgoingEventJSON($event->id);
+        }
+
+        return $output_array;
+    }
+
+    private function handleLocationGet()
+    {
+        $output_array = array();
+
+        $location = Location::getById($this->options['location_id']);
+        if ($location === false) {
+            throw new ValidationException('Invalid location id');
+        }
+
+        $location_occurrences = new Occurrences(array(
+            'location_id' => $location->id,
+            'calendar_id' => $this->calendar->id,
+        ));
+
+        $event_ids = array();
+        foreach ($location_occurrences as $event_occurrence) {
+            if (!isset($event_ids[$event_occurrence->event_id])) {
+                $event_ids[$event_occurrence->event_id] = true;
+                $output_array[] = APIEvent::translateOutgoingEventJSON($event_occurrence->event_id);
+            }
+        }
+
+        return $output_array;
+    }
+
+    private function handleWebcastGet()
+    {
+        $output_array = array();
+
+        $webcast = Webcast::getById($this->options['webcast_id']);
+        if ($webcast === false) {
+            throw new ValidationException('Invalid virtual location id');
+        }
+
+        $webcast_occurrences = new Occurrences(array(
+            'webcast_id' => $webcast->id,
+            'calendar_id' => $this->calendar->id,
+        ));
+
+        $event_ids = array();
+        foreach ($webcast_occurrences as $event_occurrence) {
+            if (!isset($event_ids[$event_occurrence->event_id])) {
+                $event_ids[$event_occurrence->event_id] = true;
+                $output_array[] = APIEvent::translateOutgoingEventJSON($event_occurrence->event_id);
+            }
         }
 
         return $output_array;
