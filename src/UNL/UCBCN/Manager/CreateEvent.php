@@ -109,7 +109,7 @@ class CreateEvent extends EventForm
             } else if (!is_numeric($post_data['location'])) {
                 throw new ValidationException('Invalid location.');
             } else {
-                $location = Location::getById($this->options['location']);
+                $location = Location::getById($post_data['location']);
                 if ($location === false) {
                     throw new ValidationException('Invalid location.');
                 }
@@ -129,7 +129,7 @@ class CreateEvent extends EventForm
             } else if (!is_numeric($post_data['v_location'])) {
                 throw new ValidationException('Invalid virtual location.');
             } else {
-                $webcast = Webcast::getById($this->options['v_location']);
+                $webcast = Webcast::getById($post_data['v_location']);
                 if ($webcast === false) {
                     throw new ValidationException('Invalid virtual location.');
                 }
