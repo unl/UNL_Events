@@ -150,7 +150,7 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
             $event_data['virtual_location_check'] = '1';
         }
 
-        if (isset($post_data['recurring_type'])) {
+        if (isset($event_data['recurring_type'])) {
             $event_data['recurring'] = 'on';
         }
 
