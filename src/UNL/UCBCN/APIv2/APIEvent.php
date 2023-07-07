@@ -87,10 +87,7 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
 
     private function handlePost(array $data, User $user): array
     {
-        var_dump($data);
         $this->translateIncomingJSON($data);
-
-        var_dump($data);
 
         $CreateEvent = new CreateEvent(array(
             'calendar_shortname' => $this->calendar->shortname,
@@ -164,7 +161,6 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
             }
 
             $event_data['timezone'] = $timezones[$event_data['timezone']];
-
         }
 
         unset($event_data['cropped_image_data']);
@@ -263,13 +259,21 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
         $occurrence_json['event-virtual-location-additionalpublicinfo'] = $occurrence->webcast_additionalpublicinfo;
 
         if (isset($occurrence->location_id) && !empty($occurrence->location_id)) {
-            $occurrence_json['location'] = APILocation::translateOutgoingJSON($occurrence->location_id);
+            try {
+                $occurrence_json['location'] = APILocation::translateOutgoingJSON($occurrence->location_id);
+            } catch (ValidationException $e) {
+                $occurrence_json['location'] = null;
+            }
         } else {
             $occurrence_json['location'] = null;
         }
 
         if (isset($occurrence->webcast_id) && !empty($occurrence->webcast_id)) {
-            $occurrence_json['virtual-location'] = APIWebcast::translateOutgoingJSON($occurrence->webcast_id);
+            try {
+                $occurrence_json['virtual-location'] = APIWebcast::translateOutgoingJSON($occurrence->webcast_id);
+            } catch (ValidationException $e) {
+                $occurrence_json['virtual-location'] = null;
+            }
         } else {
             $occurrence_json['virtual-location'] = null;
         }
