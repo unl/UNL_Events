@@ -117,13 +117,25 @@ class Occurrence extends Record
             if (isset($this->location_id)) {
                 $location = $this->getLocation();
                 if ($location !== false && !$location->isSavedOrStandard()) {
-                    $location->delete();
+                    $location_occurrences = new Occurrences(array(
+                        'location_id' => $location->id,
+                    ));
+
+                    if (count($location_occurrences) === 0) {
+                        $location->delete();
+                    }
                 }
             }
             if (isset($this->webcast_id)) {
                 $webcast = $this->getWebcast();
                 if ($webcast !== false && !$webcast->isSaved()) {
-                    $webcast->delete();
+                    $webcast_occurrences = new Occurrences(array(
+                        'webcast_id' => $webcast->id,
+                    ));
+
+                    if (count($webcast_occurrences) === 0) {
+                        $webcast->delete();
+                    }
                 }
             }
             $this->deleteRecurrences();
