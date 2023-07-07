@@ -8,6 +8,8 @@ use UNL\UCBCN\Calendar\Event as CalendarEvent;
 use UNL\UCBCN\Event\EventType;
 use UNL\UCBCN\Event\Audience;
 use UNL\UCBCN\Event\Occurrence;
+use UNL\UCBCN\Location;
+use UNL\UCBCN\Webcast;
 
 class CreateEvent extends EventForm
 {
@@ -70,13 +72,19 @@ class CreateEvent extends EventForm
         }
 
         # end date must be after start date
-        $start_date = $this->calculateDate($post_data['start_date'],
-            $post_data['start_time_hour'], $post_data['start_time_minute'],
-            $post_data['start_time_am_pm']);
+        $start_date = $this->calculateDate(
+            $post_data['start_date'],
+            $post_data['start_time_hour'] ?? null,
+            $post_data['start_time_minute'] ?? null,
+            $post_data['start_time_am_pm'] ?? null
+        );
 
-        $end_date = $this->calculateDate($post_data['end_date'],
-            $post_data['end_time_hour'], $post_data['end_time_minute'],
-            $post_data['end_time_am_pm']);
+        $end_date = $this->calculateDate(
+            $post_data['end_date'] ?? $post_data['start_date'],
+            $post_data['end_time_hour'] ?? null,
+            $post_data['end_time_minute'] ?? null,
+            $post_data['end_time_am_pm'] ?? null
+        );
 
         if ($start_date > $end_date) {
             throw new ValidationException(
@@ -99,7 +107,12 @@ class CreateEvent extends EventForm
                     throw new ValidationException($validate_data['message']);
                 }
             } else if (!is_numeric($post_data['location'])) {
-                throw new ValidationException('Invalid virtual location.');
+                throw new ValidationException('Invalid location.');
+            } else {
+                $location = Location::getById($this->options['location']);
+                if ($location === false) {
+                    throw new ValidationException('Invalid location.');
+                }
             }
         }
 
@@ -115,6 +128,11 @@ class CreateEvent extends EventForm
                 }
             } else if (!is_numeric($post_data['v_location'])) {
                 throw new ValidationException('Invalid virtual location.');
+            } else {
+                $webcast = Webcast::getById($this->options['v_location']);
+                if ($webcast === false) {
+                    throw new ValidationException('Invalid virtual location.');
+                }
             }
         }
 
@@ -226,13 +244,20 @@ class CreateEvent extends EventForm
         }
 
         # set the start date and end date
-        $event_datetime->starttime = $this->calculateDate($post_data['start_date'],
-            $post_data['start_time_hour'], $post_data['start_time_minute'],
-            $post_data['start_time_am_pm']);
+        $event_datetime->starttime = $this->calculateDate(
+            $post_data['start_date'],
+            $post_data['start_time_hour'] ?? null,
+            $post_data['start_time_minute'] ?? null,
+            $post_data['start_time_am_pm'] ?? null
+        );
 
-        $event_datetime->endtime = $this->calculateDate($post_data['end_date'],
-            $post_data['end_time_hour'], $post_data['end_time_minute'],
-            $post_data['end_time_am_pm']);
+
+        $event_datetime->endtime = $this->calculateDate(
+            $post_data['end_date'] ?? $post_data['start_date'],
+            $post_data['end_time_hour'] ?? null,
+            $post_data['end_time_minute'] ?? null,
+            $post_data['end_time_am_pm'] ?? null
+        );
 
         if (array_key_exists('recurring', $post_data) && $post_data['recurring'] == 'on') {
             $event_datetime->recurringtype = $post_data['recurring_type'];
@@ -253,7 +278,7 @@ class CreateEvent extends EventForm
         }
         $event_datetime->timezone = $post_data['timezone'];
 
-        $event_datetime->additionalpublicinfo = $post_data['additional_public_info'];
+        $event_datetime->additionalpublicinfo = $post_data['additional_public_info'] ?? "";
 
         $event_datetime->insert();
 
