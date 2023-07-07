@@ -42,13 +42,13 @@
     $datetime_virtual_location_check  = $post['virtual_location_check']  ?? ( (isset($datetime) && isset($datetime->webcast_id)) ? '1' : '0'  );
 
     $datetime_location = (isset($datetime) && isset($datetime->location_id)) ? $datetime->getLocation() : '';
-    $location          = $post['location'] ?? ( (!empty($datetime_location)) ? $datetime_location->id : '' );
+    $location          = $post['location'] ?? ( ($datetime_location !== false && !empty($datetime_location)) ? $datetime_location->id : '' );
     $location_room                   = $post['room'] ?? $datetime->room ?? '';
     $location_directions             = $post['directions'] ?? $datetime->directions ?? '';
     $location_additional_public_info = $post['l_additional_public_info'] ?? $datetime->location_additionalpublicinfo ?? '';
 
     $datetime_v_location = (isset($datetime) && isset($datetime->webcast_id)) ? $datetime->getWebcast() : '';
-    $v_location          = $post['v_location'] ?? ( (!empty($datetime_v_location)) ? $datetime_v_location->id : '' );
+    $v_location          = $post['v_location'] ?? ( ($datetime_v_location !== false && !empty($datetime_v_location)) ? $datetime_v_location->id : '' );
     $v_location_additional_public_info = $post['v_additional_public_info'] ?? $datetime->webcast_additionalpublicinfo ?? '';
 
 ?>

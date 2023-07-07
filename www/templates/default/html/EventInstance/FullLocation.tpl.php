@@ -1,6 +1,6 @@
 <?php
-if (isset($context->eventdatetime->location_id)) :
-    $location = $context->eventdatetime->getLocation();
+$location = $context->eventdatetime->getLocation();
+if (isset($context->eventdatetime->location_id) && $location !== false):
     $locationName = isset($location->name) ? $location->name : '';
     $locationRoom = isset($location->room) ? $location->room : '';
     $locationDirections = isset($location->directions) ? $location->directions : '';
@@ -71,14 +71,15 @@ if (isset($context->eventdatetime->location_id)) :
     <?php endif; ?>
 <?php endif; ?>
 
-<?php if (isset($context->eventdatetime->webcast_id) && $context->eventdatetime->webcast_id): ?>
+<?php
+    $webcast = $context->eventdatetime->getWebcast();
+?>
+<?php if (isset($context->eventdatetime->webcast_id) && $webcast !== false): ?>
     <?php
-        $webcast = $context->eventdatetime->getWebcast();
         $webcastAdditional = isset($webcast->additionalinfo) ? $webcast->additionalinfo : '';
         $webcast_additional_info = !empty($context->eventdatetime->webcast_additionalpublicinfo) ?
             $context->eventdatetime->webcast_additionalpublicinfo : $webcastAdditional;
     ?>
-    <?php $webcast = $context->eventdatetime->getWebcast(); ?>
     <div class="location">
         <svg
             xmlns="http://www.w3.org/2000/svg"

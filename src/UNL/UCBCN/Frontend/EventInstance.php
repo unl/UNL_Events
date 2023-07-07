@@ -313,14 +313,14 @@ class EventInstance implements RoutableInterface, MetaTagInterface
 
         if (isset($this->eventdatetime->location_id)) {
             $location = $this->eventdatetime->getLocation();
-            if (!$location->microdataCheck()) {
+            if ($location !== false && !$location->microdataCheck()) {
                 return false;
             }
         }
 
         if (isset($this->eventdatetime->webcast_id)) {
             $webcast = $this->eventdatetime->getWebcast();
-            if (!$webcast->microdataCheck()) {
+            if ($webcast !== false && !$webcast->microdataCheck()) {
                 return false;
             }
         }
@@ -364,7 +364,7 @@ class EventInstance implements RoutableInterface, MetaTagInterface
         $data['Refreshments']          = $this->event->refreshments;
 
         $data['Locations'] = array();
-        if (isset($location) && !empty($location)) {
+        if ($location !== false) {
             $data['Locations'][0] = array(
                 'LocationID'    => $location->id,
                 'LocationName'  => $location->name,
@@ -449,7 +449,7 @@ class EventInstance implements RoutableInterface, MetaTagInterface
         }
 
         $data['Webcasts'] = array();
-        if (isset($webcast) && !empty($webcast)) {
+        if ($webcast !== false) {
             $data['Webcasts'][0] = array(
                 'WebcastID'    => $webcast->id,
                 'WebcastTitle'  => $webcast->title,
@@ -618,7 +618,7 @@ class EventInstance implements RoutableInterface, MetaTagInterface
         }
 
         $data['location'] = array();
-        if (isset($this->eventdatetime->location_id)) {
+        if (isset($this->eventdatetime->location_id) && $location !== false) {
             $location_data = array();
             $location_data[$type_string] = 'Place';
             $location_data['name'] = $location->name;
@@ -634,7 +634,7 @@ class EventInstance implements RoutableInterface, MetaTagInterface
             $data['location'][] = $location_data;
         }
 
-        if (isset($this->eventdatetime->webcast_id)) {
+        if (isset($this->eventdatetime->webcast_id) && $webcast !== false) {
             $webcast_data = array();
             $webcast_data[$type_string] = 'VirtualLocation';
             $webcast_data['url'] = $webcast->url;

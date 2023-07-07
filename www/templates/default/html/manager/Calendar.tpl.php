@@ -258,7 +258,7 @@ use UNL\UCBCN\Permission;
                                                     </div>
                                                     <?php
                                                         $location = $datetime->getLocation();
-                                                        if (isset($location) && !empty($location)):
+                                                        if (isset($datetime->location_id) && $location !== false):
                                                     ?>
                                                     <div class="dcf-popup" data-point="true">
                                                         <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup" type="button">
@@ -389,7 +389,7 @@ use UNL\UCBCN\Permission;
                                                     <?php
                                                         endif;
                                                         $getWebcast = $datetime->getWebcast();
-                                                        if (isset($getWebcast) && !empty($getWebcast)):
+                                                        if (isset($datetime->webcast_id) && $getWebcast !== false):
                                                     ?>
                                                         <div class="dcf-popup" data-point="true">
                                                             <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup" type="button">

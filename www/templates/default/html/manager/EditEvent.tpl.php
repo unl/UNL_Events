@@ -275,7 +275,7 @@
                         ?>
                     </td>
                     <?php $location = $datetime->getLocation(); ?>
-                    <?php if (isset($location) && !empty($location)): ?>
+                    <?php if (isset($datetime->location_id) && $location !== false): ?>
                         <td
                             class="dcf-txt-middle location with-controls"
                             data-id="<?php echo $location->id; ?>"
@@ -371,7 +371,7 @@
                     <?php endif;?>
 
                     <?php $getWebcast = $datetime->getWebcast(); ?>
-                    <?php if (isset($getWebcast) && !empty($getWebcast)): ?>
+                    <?php if (isset($datetime->webcast_id) && $getWebcast !== false): ?>
                         <td
                             class="dcf-txt-middle v_location with-controls"
                             data-id="<?php echo $getWebcast->id; ?>"

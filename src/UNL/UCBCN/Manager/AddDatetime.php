@@ -294,7 +294,7 @@ class AddDatetime extends PostHandler
             if (isset($this->event_datetime->location_id) && !empty($this->event_datetime->location_id)) {
                 $location_to_be_deleted = $this->event_datetime->getLocation();
                 $this->event_datetime->location_id = null;
-                if (isset($location_to_be_deleted) && !$location_to_be_deleted->isSavedOrStandard()) {
+                if ($location_to_be_deleted !== false && !$location_to_be_deleted->isSavedOrStandard()) {
                     $location_to_be_deleted->delete();
                 }
             }
@@ -321,7 +321,7 @@ class AddDatetime extends PostHandler
             if (isset($this->event_datetime->webcast_id) && !empty($this->event_datetime->webcast_id)) {
                 $webcast_to_be_deleted = $this->event_datetime->getWebcast();
                 $this->event_datetime->webcast_id = null;
-                if (isset($webcast_to_be_deleted) && !$webcast_to_be_deleted->isSaved()) {
+                if ($webcast_to_be_deleted !== false && !$webcast_to_be_deleted->isSaved()) {
                     $webcast_to_be_deleted->delete();
                 }
             }

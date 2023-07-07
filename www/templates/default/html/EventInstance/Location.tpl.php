@@ -3,8 +3,8 @@ $locationRoom = isset($location->room) ? $location->room : '';
 $room = !empty($context->eventdatetime->room) ? $context->eventdatetime->room : $locationRoom;
 ?>
 
-<?php if (isset($context->eventdatetime->location_id) && $context->eventdatetime->location_id): ?>
-    <?php $l = $context->eventdatetime->getLocation(); ?>
+<?php $l = $context->eventdatetime->getLocation(); ?>
+<?php if (isset($context->eventdatetime->location_id) && $l !== false): ?>
     <?php if (isset($l->mapurl) || !empty($l->name)): ?>
         <span class="location">
             <svg
@@ -38,8 +38,8 @@ $room = !empty($context->eventdatetime->room) ? $context->eventdatetime->room : 
     <?php endif; ?>
 <?php endif; ?>
 
-<?php if (isset($context->eventdatetime->webcast_id) && $context->eventdatetime->webcast_id): ?>
-    <?php $webcast = $context->eventdatetime->getWebcast(); ?>
+<?php $webcast = $context->eventdatetime->getWebcast(); ?>
+<?php if (isset($context->eventdatetime->webcast_id) && $webcast !== false): ?>
     <div class="location">
         <svg
             xmlns="http://www.w3.org/2000/svg"

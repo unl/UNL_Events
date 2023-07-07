@@ -25,8 +25,8 @@
         </DateTime>
         <Locations>
             <?php
-            if (isset($context->eventdatetime->location_id) && !empty($context->eventdatetime->location_id)) :
-                $loc = $context->eventdatetime->getLocation();
+            $loc = $context->eventdatetime->getLocation();
+            if (isset($context->eventdatetime->location_id) && $loc !== false) :
             ?>
             <Location>
                 <LocationID><?php echo $loc->id; ?></LocationID>
@@ -148,9 +148,9 @@
         </WebPages>
         <Webcasts>
         <?php
-            if (isset($context->eventdatetime->webcast_id) && !empty($context->eventdatetime->webcast_id)) :
-                $webcast = $context->eventdatetime->getWebcast();
-            ?>
+            $webcast = $context->eventdatetime->getWebcast();
+            if (isset($context->eventdatetime->webcast_id) && $webcast !== false):
+        ?>
             <Webcast>
                 <WebcastID><?php echo $webcast->id; ?></WebcastID>
                 <WebcastName><?php echo htmlspecialchars($webcast->title); ?></WebcastName>

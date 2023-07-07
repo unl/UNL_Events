@@ -116,13 +116,13 @@ class Occurrence extends Record
         if ($r) {
             if (isset($this->location_id)) {
                 $location = $this->getLocation();
-                if (isset($location) && !$location->isSavedOrStandard()) {
+                if ($location !== false && !$location->isSavedOrStandard()) {
                     $location->delete();
                 }
             }
             if (isset($this->webcast_id)) {
                 $webcast = $this->getWebcast();
-                if (isset($webcast) && !$webcast->isSaved()) {
+                if ($webcast !== false && !$webcast->isSaved()) {
                     $webcast->delete();
                 }
             }
@@ -252,7 +252,7 @@ class Occurrence extends Record
     /**
      * Gets an object for the location of this event date and time if set.
      *
-     * @return UNL\UCBCN\Location|null
+     * @return UNL\UCBCN\Location|false
      */
     public function getLocation()
     {
@@ -260,13 +260,13 @@ class Occurrence extends Record
             return Location::getById($this->location_id);
         }
 
-        return null;
+        return false;
     }
 
     /**
      * Gets an object for the webcast of this event date and time if set.
      *
-     * @return UNL\UCBCN\Webcast|null
+     * @return UNL\UCBCN\Webcast|false
      */
     public function getWebcast()
     {
@@ -274,7 +274,7 @@ class Occurrence extends Record
             return Webcast::getById($this->webcast_id);
         }
 
-        return null;
+        return false;
     }
 
     /**

@@ -28,8 +28,8 @@ $out[] = 'ORGANIZER;' . $organizer;
 $out[] = 'SUMMARY:' . icalFormatString($context->event->displayTitle($context));
 $out[] = 'STATUS:' . icalFormatString($context->event->icalStatus($context));
 $out[] = 'DESCRIPTION:' . icalFormatString($context->event->description);
-if (isset($context->eventdatetime->location_id) && $context->eventdatetime->location_id) {
-    $l = $context->eventdatetime->getLocation();
+$l = $context->eventdatetime->getLocation();
+if (isset($context->eventdatetime->location_id) && $l !== false) {
     $loc =  'LOCATION:'.$l->name;
     if (isset($context->eventdatetime->room)) {
         $loc .=  ' Room '.$context->eventdatetime->room;

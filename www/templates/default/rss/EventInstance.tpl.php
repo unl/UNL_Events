@@ -25,8 +25,8 @@ $timezoneDateTime = new \UNL\UCBCN\TimezoneDateTime($context->eventdatetime->tim
             ($context->eventdatetime->endtime > $context->eventdatetime->starttime)) {
         echo '-&lt;small&gt;&lt;abbr class="dtend" title="' . $timezoneDateTime->format($context->getEndTime(),'c') . '"&gt;' . $timezoneDateTime->format($context->getEndTime(),'g:i: a') . '&lt;/abbr&gt;&lt;/small&gt;';
         }
-        if (isset($context->eventdatetime->location_id) && !empty($context->eventdatetime->location_id)) {
-            $loc = $context->eventdatetime->getLocation();
+        $loc = $context->eventdatetime->getLocation();
+        if (isset($context->eventdatetime->location_id) && $loc !== false) {
             echo ' | &lt;small&gt;'.$loc->name;
             if (isset($context->eventdatetime->room)) {
                 echo ' Room:'.$context->eventdatetime->room;
