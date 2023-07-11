@@ -76,7 +76,7 @@ class Webcast extends Record
 
     public function toJSON()
     {
-        $data = array(
+        return array(
             'v-location'                            => $this->id,
             'new-v-location-name'                   => $this->title,
             'new-v-location-url'                    => $this->url,
@@ -84,7 +84,6 @@ class Webcast extends Record
             'user_id'                               => $this->user_id,
             'calendar_id'                           => $this->calendar_id,
         );
-        return $data;
     }
 
     /**

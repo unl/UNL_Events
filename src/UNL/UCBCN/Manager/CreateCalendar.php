@@ -11,7 +11,7 @@ class CreateCalendar extends PostHandler
     public $calendar;
     public $user;
 
-    public function __construct($options = array()) 
+    public function __construct($options = array())
     {
         $this->options = $options + $this->options;
 
@@ -54,12 +54,12 @@ class CreateCalendar extends PostHandler
         } else {
             # we are creating a new calendar
             try {
-                $this->createCalendar($post);    
+                $this->createCalendar($post);
             } catch (ValidationException $e) {
                 $this->flashNotice(parent::NOTICE_LEVEL_ALERT, 'Sorry! We couldn\'t create your calendar', $e->getMessage());
                 throw $e;
             }
-            
+
             $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Calendar Created', 'Your calendar "' . $this->calendar->name . '" has been created.');
         }
 
@@ -90,7 +90,7 @@ class CreateCalendar extends PostHandler
         }
 
         $this->calendar->emaillists = $post_data['email_lists'] ?? "";
-        $this->calendar->recommendationswithinaccount = array_key_exists('recommend_within_account', $post_data) && 
+        $this->calendar->recommendationswithinaccount = array_key_exists('recommend_within_account', $post_data) &&
             $post_data['recommend_within_account'] == 'on' ? 1 : 0;
     }
 
@@ -139,7 +139,7 @@ class CreateCalendar extends PostHandler
             throw new ValidationException('Sorry, that shortname is invalid. Please try another one.');
         }
 
-        if (!empty($post_data['event_release_preference']) && 
+        if (!empty($post_data['event_release_preference']) &&
             !in_array(
                 $post_data['event_release_preference'],
                 array( 'immediate', 'pending', '' )
@@ -155,7 +155,7 @@ class CreateCalendar extends PostHandler
         }
     }
 
-    public function createCalendar($post_data) 
+    public function createCalendar($post_data)
     {
         $user = $this->options['user'] ?? Auth::getCurrentUser();
         $account = $user->getAccount();

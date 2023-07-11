@@ -43,8 +43,8 @@
                 </li>
             <?php endif; ?>
 
-            <?php 
-                if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_CREATE_ID, $calendar->id) && 
+            <?php
+                if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_CREATE_ID, $calendar->id) &&
                     $user->hasPermission(\UNL\UCBCN\Permission::EVENT_EDIT_ID, $calendar->id)
                 ):
             ?>
@@ -56,8 +56,8 @@
                 </li>
             <?php endif; ?>
 
-            <?php 
-                if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_CREATE_ID, $calendar->id) && 
+            <?php
+                if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_CREATE_ID, $calendar->id) &&
                     $user->hasPermission(\UNL\UCBCN\Permission::EVENT_EDIT_ID, $calendar->id)
                 ):
             ?>
@@ -94,7 +94,10 @@
                 <a class="dcf-txt-decor-hover" href="<?php echo $context->getUserLocationURL(); ?>">User Locations</a>
             </li>
             <li>
-                <a class="dcf-txt-decor-hover" href="<?php echo $context->getUserVirtualLocationURL(); ?>">User Virtual Locations</a>
+                <a
+                    class="dcf-txt-decor-hover"
+                    href="<?php echo $context->getUserVirtualLocationURL(); ?>"
+                >User Virtual Locations</a>
             </li>
             <li>
                 <a

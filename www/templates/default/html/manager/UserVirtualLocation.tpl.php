@@ -39,9 +39,9 @@
 
 <p>
     These saved virtual locations will let you recall them easily when creating or editing new events.
-    Virtual location are like live streams, camera feeds, or event chat forums that is where your 
-    event will take place. Any location saved to you or the calendar you are making the event 
-    in will show up in the drop down of available locations. You can always make a new 
+    Virtual location are like live streams, camera feeds, or event chat forums that is where your
+    event will take place. Any location saved to you or the calendar you are making the event
+    in will show up in the drop down of available locations. You can always make a new
     location during the event creation or edit process.
 </p>
 
@@ -173,7 +173,11 @@
         </div>
 
         <div class="dcf-form-group">
-            <input id="createOrModify-submit" class="dcf-btn dcf-btn-primary" type="submit" value="Create New Virtual Location">
+            <input
+                id="createOrModify-submit"
+                class="dcf-btn dcf-btn-primary"
+                type="submit" value="Create New Virtual Location"
+            >
             <button id="createOrModify-cancel" class="dcf-btn dcf-btn-secondary" type="button">Cancel</button>
         </div>
     </fieldset>

@@ -24,7 +24,13 @@
         <?php echo $token_inputs; ?>
         <label for="lookupTerm">Calendar Shortname</label>
         <div class="dcf-input-group">
-            <input id="lookupTerm" name="lookupTerm" type="text" value="<?php echo $context->post['lookupTerm'] ?? ""; ?>" required="">
+            <input
+                id="lookupTerm"
+                name="lookupTerm"
+                type="text"
+                value="<?php echo $context->post['lookupTerm'] ?? ""; ?>"
+                required=""
+            >
             <button class="dcf-btn dcf-btn-primary" id="lookup-submit" name="submit" type="submit">Search</button>
         </div>
         <span class="dcf-form-help">
@@ -32,7 +38,8 @@
                 This shortname can be found by navigating to the calendar's page and copying the value from the URL.
             </span>
             <span class="dcf-d-inline-block">
-                To look <?php echo UNL\UCBCN\Frontend\Controller::$url; ?>wdn/, search for wdn. This search is case sensitive.
+                To look <?php echo UNL\UCBCN\Frontend\Controller::$url; ?>wdn/,
+                search for wdn. This search is case sensitive.
             </span>
         </span>
     </form>

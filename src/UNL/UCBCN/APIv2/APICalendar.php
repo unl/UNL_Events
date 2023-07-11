@@ -146,6 +146,8 @@ class APICalendar implements ModelInterface, ModelAuthInterface
             case Calendar::EVENT_RELEASE_PREFERENCE_PENDING:
                 $event_release_preference = 'pending';
                 break;
+            default:
+                $event_release_preference = null;
         }
 
         $recommendations_within_account = $calendar->recommendationswithinaccount === '1';

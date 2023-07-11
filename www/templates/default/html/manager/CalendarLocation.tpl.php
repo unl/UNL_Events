@@ -50,10 +50,10 @@
 </div>
 
 <p>
-    These saved locations will let you or anyone on your calendar recall them easily 
-    when creating or editing new events. Location are physical places your event will 
-    take place. Any location saved to you or the calendar you are making the event 
-    in will show up in the drop down of available locations. You can always make a 
+    These saved locations will let you or anyone on your calendar recall them easily
+    when creating or editing new events. Location are physical places your event will
+    take place. Any location saved to you or the calendar you are making the event
+    in will show up in the drop down of available locations. You can always make a
     new location during the event creation or edit process.
 </p>
 
@@ -159,8 +159,8 @@
                 name="user_id"
                 value="<?php echo isset($post['user_id']) ? $post['user_id']: ''; ?>"
             >
-            <div 
-                id="createOrModify-userCheck" 
+            <div
+                id="createOrModify-userCheck"
                 class="
                     dcf-input-checkbox
                     <?php if (isset($post['user_id']) && $post['user_id'] !== $context->getCurrentUser()): ?>
@@ -173,20 +173,20 @@
                     name="location_save"
                     type="checkbox"
                     <?php
-                        if (isset($post['location_save']) && $post['location_save'] == 'on') { 
-                            echo CHECKED_INPUT; 
+                        if (isset($post['location_save']) && $post['location_save'] == 'on') {
+                            echo CHECKED_INPUT;
                         }
                     ?>
                 >
                 <label for="location-save">Save this location for your future events</label>
             </div>
-            <p 
+            <p
                 id="createOrModify-taken"
                 class="
                     <?php if (!isset($post['user_id']) || $post['user_id'] === $context->getCurrentUser()): ?>
                         dcf-d-none
                     <?php endif; ?>
-                " 
+                "
             >
                 This location is already saved to <?php echo $post['user_id']; ?>
             </p>
@@ -263,7 +263,11 @@
             elementToModify.value = locationToModify[locationProp] ?? defaultValue;
         }
 
-        if (locationToModify['user_id'] === null || locationToModify['user_id'] === '' || locationToModify['user_id'] === CURRENTUSER) {
+        if (
+            locationToModify['user_id'] === null
+            || locationToModify['user_id'] === ''
+            || locationToModify['user_id'] === CURRENTUSER
+        ) {
             createOrModifyUserCheck.classList.remove('dcf-d-none');
             createOrModifyTaken.classList.add('dcf-d-none');
 

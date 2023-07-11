@@ -86,7 +86,7 @@ class LocationUtility
         if (array_key_exists('location_save_calendar', $post_data) && $post_data['location_save_calendar'] == 'on') {
             $location->calendar_id = $calendar->id;
         }
-        
+
         $location->standard = 0;
 
         $location->insert();
@@ -115,7 +115,7 @@ class LocationUtility
 
         $location = Location::getByID($post_data['location']);
         if ($location === null) {
-            throw new Exception('Invalid Location ID');
+            throw new ValidationException('Invalid Location ID');
         }
 
         foreach ($allowed_fields as $field) {

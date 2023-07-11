@@ -121,13 +121,13 @@ class Location extends Record
 
     public function toJSON()
     {
-        $data = array(
+        return array(
             'location'                        => $this->id,
             'location-name'                   => $this->name,
             'location-address-1'              => $this->streetaddress1,
             'location-address-2'              => $this->streetaddress2,
             'location-city'                   => $this->city,
-            'location-state'                           => $this->state,
+            'location-state'                  => $this->state,
             'location-zip'                    => $this->zip,
             'location-map-url'                => $this->mapurl,
             'location-webpage'                => $this->webpageurl,
@@ -139,7 +139,6 @@ class Location extends Record
             'user_id'                         => $this->user_id,
             'calendar_id'                     => $this->calendar_id,
         );
-        return $data;
     }
 
     /**

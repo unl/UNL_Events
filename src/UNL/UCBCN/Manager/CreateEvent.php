@@ -24,7 +24,10 @@ class CreateEvent extends EventForm
 
         $this->user = $this->options['user'] ?? null;
 
-        if (isset($this->options['event_source']) && $this->options['event_source'] === CalendarEvent::SOURCE_CREATE_EVENT_API_V2) {
+        if (
+            isset($this->options['event_source']) 
+            && $this->options['event_source'] === CalendarEvent::SOURCE_CREATE_EVENT_API_V2
+        ) {
             $this->event_source = CalendarEvent::SOURCE_CREATE_EVENT_API_V2;
         }
     }
@@ -106,7 +109,7 @@ class CreateEvent extends EventForm
                 if (!$validate_data['valid']) {
                     throw new ValidationException($validate_data['message']);
                 }
-            } else if (!is_numeric($post_data['location'])) {
+            } elseif (!is_numeric($post_data['location'])) {
                 throw new ValidationException('Invalid location.');
             } else {
                 $location = Location::getById($post_data['location']);
@@ -126,7 +129,7 @@ class CreateEvent extends EventForm
                 if (!$validate_data['valid']) {
                     throw new ValidationException($validate_data['message']);
                 }
-            } else if (!is_numeric($post_data['v_location'])) {
+            } elseif (!is_numeric($post_data['v_location'])) {
                 throw new ValidationException('Invalid virtual location.');
             } else {
                 $webcast = Webcast::getById($post_data['v_location']);
@@ -182,7 +185,7 @@ class CreateEvent extends EventForm
         $this->setEventData($post_data, $files);
         $this->validateEventData($post_data, $files);
 
-        $result = $this->event->insert($this->calendar, $this->event_source, $user);
+        $this->event->insert($this->calendar, $this->event_source, $user);
 
         # add the event type record
         $event_has_type = new EventType;

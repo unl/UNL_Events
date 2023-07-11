@@ -25,7 +25,6 @@ class APIEvents extends APICalendar implements ModelInterface, ModelAuthInterfac
 
     public function __construct($options = array())
     {
-        //TODO Get Limits and Offset working on these
         $this->options = $options + $this->options;
 
         $this->search_query = $options['query'] ?? "";
@@ -91,7 +90,10 @@ class APIEvents extends APICalendar implements ModelInterface, ModelAuthInterfac
             throw new InvalidMethodException('Pending Events only allows get.');
         }
 
-        if ($method === 'GET' && key_exists('location_id', $this->options) && is_numeric($this->options['location_id'])) {
+        if ($method === 'GET' 
+            && key_exists('location_id', $this->options) 
+            && is_numeric($this->options['location_id'])
+        ) {
             return $this->handleLocationGet();
         }
 

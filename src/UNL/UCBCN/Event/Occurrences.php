@@ -23,30 +23,30 @@ class Occurrences extends RecordList
         if (array_key_exists('recurring_only', $this->options)) {
             return 'SELECT id FROM eventdatetime WHERE ' .
                 'event_id = ' . (int)($this->options['event_id']) . ' AND recurringtype != "none";';
-        } else if (array_key_exists('event_id', $this->options)) {
+        } elseif (array_key_exists('event_id', $this->options)) {
             return 'SELECT id FROM eventdatetime WHERE ' .
                 'event_id = ' . (int)($this->options['event_id']) . ';';
-        } else if (array_key_exists('all_recurring', $this->options)) {
+        } elseif (array_key_exists('all_recurring', $this->options)) {
             return 'SELECT id FROM eventdatetime WHERE recurringtype != "none";';
-        } else if (array_key_exists('location_id', $this->options) && array_key_exists('calendar_id', $this->options)) {
+        } elseif (array_key_exists('location_id', $this->options) && array_key_exists('calendar_id', $this->options)) {
             return 'SELECT distinct eventdatetime.id FROM eventdatetime
                 inner join event on eventdatetime.event_id = event.id
                 inner join calendar_has_event on calendar_has_event.event_id = event.id
                 inner join location on eventdatetime.location_id = location.id
                 where location.id = ' . (int)($this->options['location_id']) . '
                 and calendar_has_event.calendar_id = ' . (int)($this->options['calendar_id']) . ';';
-        } else if (array_key_exists('location_id', $this->options)) {
+        } elseif (array_key_exists('location_id', $this->options)) {
             return 'SELECT eventdatetime.id FROM eventdatetime
                 inner join location on eventdatetime.location_id = location.id
                 where location.id = ' . (int)($this->options['location_id']) . ';';
-        }  else if (array_key_exists('webcast_id', $this->options) && array_key_exists('calendar_id', $this->options)) {
+        } elseif (array_key_exists('webcast_id', $this->options) && array_key_exists('calendar_id', $this->options)) {
             return 'SELECT distinct eventdatetime.id FROM eventdatetime
                 inner join event on eventdatetime.event_id = event.id
                 inner join calendar_has_event on calendar_has_event.event_id = event.id
                 inner join webcast on eventdatetime.webcast_id = webcast.id
                 where webcast.id = ' . (int)($this->options['webcast_id']) . '
                 and calendar_has_event.calendar_id = ' . (int)($this->options['calendar_id']) . ';';
-        } else if (array_key_exists('webcast_id', $this->options)) {
+        } elseif (array_key_exists('webcast_id', $this->options)) {
             return 'SELECT eventdatetime.id FROM eventdatetime
                 inner join webcast on eventdatetime.webcast_id = webcast.id
                 where webcast.id = ' . (int)($this->options['webcast_id']) . ';';

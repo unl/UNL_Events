@@ -242,22 +242,26 @@ class AddDatetime extends PostHandler
         }
 
         // If there is a physical location make sure these are set
-        if (isset($post_data['physical_location_check']) && $post_data['physical_location_check'] == '1') {
-            if($post_data['location'] == "new") {
-                $validate_data = LocationUtility::validateLocation($post_data);
-                if (!$validate_data['valid']) {
-                    throw new ValidationException($validate_data['message']);
-                }
+        if (
+            isset($post_data['physical_location_check'])
+            && $post_data['physical_location_check'] == '1'
+            && $post_data['location'] == "new"
+        ) {
+            $validate_data = LocationUtility::validateLocation($post_data);
+            if (!$validate_data['valid']) {
+                throw new ValidationException($validate_data['message']);
             }
         }
 
         // If there is a virtual location make sure these are set
-        if (isset($post_data['virtual_location_check']) && $post_data['virtual_location_check'] == '1') {
-            if($post_data['v_location'] == "new") {
-                $validate_data = WebcastUtility::validateWebcast($post_data);
-                if (!$validate_data['valid']) {
-                    throw new ValidationException($validate_data['message']);
-                }
+        if (
+            isset($post_data['virtual_location_check'])
+            && $post_data['virtual_location_check'] == '1'
+            && $post_data['v_location'] == "new"
+        ) {
+            $validate_data = WebcastUtility::validateWebcast($post_data);
+            if (!$validate_data['valid']) {
+                throw new ValidationException($validate_data['message']);
             }
         }
 

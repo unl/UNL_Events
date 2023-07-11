@@ -46,7 +46,11 @@ class CalendarLookup extends PostHandler
         $this->calendar = Calendar::getByShortName($this->post['lookupTerm']);
 
         if ($this->calendar === false) {
-            $this->flashNotice(parent::NOTICE_LEVEL_ALERT, 'Calendar Not Found', 'We could not find a calendar matching your search.');
+            $this->flashNotice(
+                parent::NOTICE_LEVEL_ALERT,
+                'Calendar Not Found',
+                'We could not find a calendar matching your search.'
+            );
         }
     
         //redirect

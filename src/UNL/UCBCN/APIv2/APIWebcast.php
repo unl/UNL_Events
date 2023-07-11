@@ -107,7 +107,7 @@ class APIWebcast implements ModelInterface, ModelAuthInterface
             throw new ServerErrorException('Failed to create virtual location.');
         }
 
-        return $this->translateOutgoingJSON($new_webcast->id);;
+        return $this->translateOutgoingJSON($new_webcast->id);
     }
 
     private function validateIncomingWebcast($data, $user, &$calendar)
@@ -143,7 +143,7 @@ class APIWebcast implements ModelInterface, ModelAuthInterface
         $edit_permission = Permission::getByName('Event Edit');
         $create_permission = Permission::getByName('Event Create');
 
-        return $user->hasPermission($edit_permission->id, $calendar_id) && 
+        return $user->hasPermission($edit_permission->id, $calendar_id) &&
             $user->hasPermission($create_permission->id, $calendar_id);
     }
 
@@ -180,7 +180,11 @@ class APIWebcast implements ModelInterface, ModelAuthInterface
         APIWebcast::replaceJSONKey($webcast_json, 'v-location',                            'id');
         APIWebcast::replaceJSONKey($webcast_json, 'new-v-location-name',                   'name');
         APIWebcast::replaceJSONKey($webcast_json, 'new-v-location-url',                    'url');
-        APIWebcast::replaceJSONKey($webcast_json, 'new-v-location-additional-public-info', 'default-additional-public-info');
+        APIWebcast::replaceJSONKey(
+            $webcast_json,
+            'new-v-location-additional-public-info',
+            'default-additional-public-info'
+        );
 
         return $webcast_json;
     }

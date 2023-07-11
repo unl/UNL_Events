@@ -109,12 +109,12 @@
                     <?php
                     if (isset($context['new_location']['state']) &&
                             $context['new_location']['state'] == $abbr
-                        ):
+                        ){
                     ?>
                         selected="selected"
-                    <?php elseif (!isset($context['new_location']['state']) && $abbr == 'NE'): ?>
+                    <?php } elseif (!isset($context['new_location']['state']) && $abbr == 'NE') { ?>
                         selected="selected"
-                    <?php endif; ?>
+                    <?php } ?>
                 >
                     <?php echo $state; ?>
                 </option>

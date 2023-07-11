@@ -34,7 +34,7 @@ class CalendarVirtualLocation extends PostHandler
         return $user->uid;
     }
 
-    public function getUserCalendars() 
+    public function getUserCalendars()
     {
         $user = Auth::getCurrentUser();
 
@@ -48,7 +48,8 @@ class CalendarVirtualLocation extends PostHandler
         $edit_permission = Permission::getByName('Event Edit');
         $create_permission = Permission::getByName('Event Create');
 
-        return $user->hasPermission($edit_permission->id, $this->calendar->id) && $user->hasPermission($create_permission->id, $this->calendar->id);
+        return $user->hasPermission($edit_permission->id, $this->calendar->id)
+            && $user->hasPermission($create_permission->id, $this->calendar->id);
     }
 
     public function handlePost(array $get, array $post, array $files)
@@ -57,15 +58,15 @@ class CalendarVirtualLocation extends PostHandler
         try {
             switch ($method) {
                 case "post":
-                    $this->create_webcast($post);
+                    $this->createWebcast($post);
                     break;
                 case "put":
-                    $this->update_webcast($post);
+                    $this->updateWebcast($post);
                     break;
                 case "delete":
-                    $this->detach_webcast($post);
+                    $this->detachWebcast($post);
                     break;
-                default: 
+                default:
                     throw new ValidationException('Invalid Method');
             }
 
@@ -77,13 +78,25 @@ class CalendarVirtualLocation extends PostHandler
 
         switch ($method) {
             case "post":
-                $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Virtual Location Created', 'Your calendar\'s virtual location has been created.');
+                $this->flashNotice(
+                    parent::NOTICE_LEVEL_SUCCESS,
+                    'Virtual Location Created',
+                    'Your calendar\'s virtual location has been created.'
+                );
                 break;
             case "put":
-                $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Virtual Location Updated', 'Your calendar\'s virtual location has been updated.');
+                $this->flashNotice(
+                    parent::NOTICE_LEVEL_SUCCESS,
+                    'Virtual Location Updated',
+                    'Your calendar\'s virtual location has been updated.'
+                );
                 break;
             case "delete":
-                $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Virtual Location Detached', 'The virtual location has been detached from your calendar.');
+                $this->flashNotice(
+                    parent::NOTICE_LEVEL_SUCCESS,
+                    'Virtual Location Detached',
+                    'The virtual location has been detached from your calendar.'
+                );
                 break;
         }
 
@@ -91,7 +104,7 @@ class CalendarVirtualLocation extends PostHandler
         return $this->calendar->getVirtualLocationURL();
     }
 
-    private function create_webcast(array $post_data)
+    private function createWebcast(array $post_data)
     {
         $user = Auth::getCurrentUser();
 
@@ -103,7 +116,7 @@ class CalendarVirtualLocation extends PostHandler
         WebcastUtility::addWebcast($post_data, $user, $calendar);
     }
 
-    private function update_webcast(array $post_data)
+    private function updateWebcast(array $post_data)
     {
         $user = Auth::getCurrentUser();
 
@@ -130,12 +143,12 @@ class CalendarVirtualLocation extends PostHandler
 
         try {
             WebcastUtility::updateWebcast($post_data, $user, $calendar);
-        } catch(Exception $e) {
+        } catch(ValidationException $e) {
             throw new ValidationException('Error Updating Virtual Location');
         }
     }
 
-    private function detach_webcast(array $post_data)
+    private function detachWebcast(array $post_data)
     {
         if (!empty($post_data['v_location']) && $post_data['v_location'] === "New") {
             throw new ValidationException('Missing Virtual Location To Detach');

@@ -22,7 +22,7 @@ class CalendarLocation extends PostHandler
         }
     }
 
-    public function getCalendarLocations() 
+    public function getCalendarLocations()
     {
         return LocationUtility::getCalendarLocations($this->calendar->id);
     }
@@ -34,7 +34,7 @@ class CalendarLocation extends PostHandler
         return $user->uid;
     }
 
-    public function getUserCalendars() 
+    public function getUserCalendars()
     {
         $user = Auth::getCurrentUser();
 
@@ -48,7 +48,8 @@ class CalendarLocation extends PostHandler
         $edit_permission = Permission::getByName('Event Edit');
         $create_permission = Permission::getByName('Event Create');
 
-        return $user->hasPermission($edit_permission->id, $this->calendar->id) && $user->hasPermission($create_permission->id, $this->calendar->id);
+        return $user->hasPermission($edit_permission->id, $this->calendar->id)
+            && $user->hasPermission($create_permission->id, $this->calendar->id);
     }
 
     public function handlePost(array $get, array $post, array $files)
@@ -57,15 +58,15 @@ class CalendarLocation extends PostHandler
         try {
             switch ($method) {
                 case "post":
-                    $this->create_location($post);
+                    $this->createLocation($post);
                     break;
                 case "put":
-                    $this->update_location($post);
+                    $this->updateLocation($post);
                     break;
                 case "delete":
-                    $this->detach_location($post);
+                    $this->detachLocation($post);
                     break;
-                default: 
+                default:
                     throw new ValidationException('Invalid Method');
             }
 
@@ -77,13 +78,25 @@ class CalendarLocation extends PostHandler
 
         switch ($method) {
             case "post":
-                $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Location Created', 'Your calendar\'s location has been created.');
+                $this->flashNotice(
+                    parent::NOTICE_LEVEL_SUCCESS,
+                    'Location Created',
+                    'Your calendar\'s location has been created.'
+                );
                 break;
             case "put":
-                $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Location Updated', 'Your calendar\'s location has been updated.');
+                $this->flashNotice(
+                    parent::NOTICE_LEVEL_SUCCESS,
+                    'Location Updated',
+                    'Your calendar\'s location has been updated.'
+                );
                 break;
             case "delete":
-                $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Location Detached', 'The location has been detached from your calendar.');
+                $this->flashNotice(
+                    parent::NOTICE_LEVEL_SUCCESS,
+                    'Location Detached',
+                    'The location has been detached from your calendar.'
+                );
                 break;
         }
 
@@ -91,7 +104,7 @@ class CalendarLocation extends PostHandler
         return $this->calendar->getLocationURL();
     }
 
-    private function create_location(array $post_data)
+    private function createLocation(array $post_data)
     {
         $user = Auth::getCurrentUser();
 
@@ -103,7 +116,7 @@ class CalendarLocation extends PostHandler
         LocationUtility::addLocation($post_data, $user, $calendar);
     }
 
-    private function update_location(array $post_data)
+    private function updateLocation(array $post_data)
     {
         $user = Auth::getCurrentUser();
 
@@ -135,7 +148,7 @@ class CalendarLocation extends PostHandler
         }
     }
 
-    private function detach_location(array $post_data)
+    private function detachLocation(array $post_data)
     {
         if (!empty($post_data['location']) && $post_data['location'] === "New") {
             throw new ValidationException('Missing Location To Detach');

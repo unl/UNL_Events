@@ -74,9 +74,8 @@ class WebcastUtility
 
         $webcast = Webcast::getByID($post_data['v_location']);
         if ($webcast === null) {
-            throw new Exception('Invalid Location ID');
+            throw new ValidationException('Invalid Location ID');
         }
-
 
         foreach ($allowed_fields as $field) {
             $value = $post_data['new_v_location'][$field];

@@ -405,8 +405,14 @@ class EventInstance implements RoutableInterface, MetaTagInterface
                     $this->eventdatetime->location_additionalpublicinfo : $location->additionalpublicinfo,
             );
         }
-        $data['Room'] = !empty($this->eventdatetime->room) ?
-            $this->eventdatetime->room : ($location ? $location->room : null);
+
+        if (!empty($this->eventdatetime->room)) {
+            $data['Room'] = $this->eventdatetime->room;
+        } elseif ($location !== false) {
+            $data['Room'] = $location->room;
+        } else {
+            $data['Room'] = null;
+        }
 
         if ($eventTypes->count()) {
             $data['EventTypes'] = array();

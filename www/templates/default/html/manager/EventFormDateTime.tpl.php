@@ -516,7 +516,7 @@
                                 </button>
                                 <div class="dcf-popup-content unl-bg-blue dcf-p-1 dcf-rounded" style="min-width: 25ch;">
                                     <p class="dcf-m-0 dcf-regular">
-                                        This allows for you or anyone else on the calendar to recall and edit 
+                                        This allows for you or anyone else on the calendar to recall and edit
                                         this location easily and it will be included in the dropdown above.
                                     </p>
                                 </div>
@@ -676,7 +676,7 @@
                                 </button>
                                 <div class="dcf-popup-content unl-bg-blue dcf-p-1 dcf-rounded" style="min-width: 25ch;">
                                     <p class="dcf-m-0 dcf-regular">
-                                        This allows for you to recall and edit this virtual 
+                                        This allows for you to recall and edit this virtual
                                         location easily and it will be included in the dropdown above.
                                     </p>
                                 </div>
@@ -719,7 +719,7 @@
                                 </button>
                                 <div class="dcf-popup-content unl-bg-blue dcf-p-1 dcf-rounded" style="min-width: 25ch;">
                                     <p class="dcf-m-0 dcf-regular">
-                                        This allows for you or anyone else on the calendar to recall and edit 
+                                        This allows for you or anyone else on the calendar to recall and edit
                                         this virtual location easily and it will be included in the dropdown above.
                                     </p>
                                 </div>

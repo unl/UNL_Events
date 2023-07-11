@@ -40,10 +40,10 @@
 </div>
 
 <p>
-    These saved virtual locations will let you or anyone on your calendar recall them easily 
-    when creating or editing new events. Virtual location are like live streams, camera feeds, 
-    or event chat forums that is where your event will take place. Any location saved to you or the 
-    calendar you are making the event in will show up in the drop down of available locations. 
+    These saved virtual locations will let you or anyone on your calendar recall them easily
+    when creating or editing new events. Virtual location are like live streams, camera feeds,
+    or event chat forums that is where your event will take place. Any location saved to you or the
+    calendar you are making the event in will show up in the drop down of available locations.
     You can always make a new location during the event creation or edit process.
 </p>
 
@@ -151,8 +151,8 @@
                 name="user_id"
                 value="<?php echo isset($post['user_id']) ? $post['user_id']: ''; ?>"
             >
-            <div 
-                id="createOrModify-userCheck" 
+            <div
+                id="createOrModify-userCheck"
                 class="
                     dcf-input-checkbox
                     <?php if (isset($post['user_id']) && $post['user_id'] !== $context->getCurrentUser()): ?>
@@ -165,27 +165,32 @@
                     name="v_location_save"
                     type="checkbox"
                     <?php
-                        if (isset($post['v_location_save']) && $post['v_location_save'] == 'on') { 
-                            echo CHECKED_INPUT; 
+                        if (isset($post['v_location_save']) && $post['v_location_save'] == 'on') {
+                            echo CHECKED_INPUT;
                         }
                     ?>
                 >
                 <label for="v-location-save">Save this virtual location for your future events</label>
             </div>
-            <p 
+            <p
                 id="createOrModify-taken"
                 class="
                     <?php if (!isset($post['user_id']) || $post['user_id'] === $context->getCurrentUser()): ?>
                         dcf-d-none
                     <?php endif; ?>
-                " 
+                "
             >
                 This virtual location is already saved to <?php echo $post['user_id']; ?>
             </p>
         </div>
 
         <div class="dcf-form-group">
-            <input id="createOrModify-submit" class="dcf-btn dcf-btn-primary" type="submit" value="Create New Virtual Location">
+            <input
+                id="createOrModify-submit"
+                class="dcf-btn dcf-btn-primary"
+                type="submit"
+                value="Create New Virtual Location"
+            >
             <button id="createOrModify-cancel" class="dcf-btn dcf-btn-secondary" type="button">Cancel</button>
         </div>
     </fieldset>
@@ -254,7 +259,11 @@
             elementToModify.value = locationToModify[locationProp] ?? "";
         }
 
-        if (locationToModify['user_id'] === null || locationToModify['user_id'] === '' || locationToModify['user_id'] === CURRENTUSER) {
+        if (
+            locationToModify['user_id'] === null
+            || locationToModify['user_id'] === ''
+            || locationToModify['user_id'] === CURRENTUSER
+        ) {
             createOrModifyUserCheck.classList.remove('dcf-d-none');
             createOrModifyTaken.classList.add('dcf-d-none');
 
