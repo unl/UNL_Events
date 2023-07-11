@@ -7,8 +7,10 @@ use UNL\UCBCN\Event\Occurrence as Occurrence;
 use UNL\UCBCN\Event\Occurrences as Occurrences;
 use UNL\UCBCN\Event\RecurringDate;
 use UNL\UCBCN\Manager\CreateEvent;
+use UNL\UCBCN\Manager\EditEvent;
 use UNL\UCBCN\User as User;
 use UNL\UCBCN as BaseUCBCN;
+use UNL\UCBCN\Manager\DeleteEvent;
 
 class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
 {
@@ -52,6 +54,12 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
         if ($method === 'POST') {
             return $this->handlePost($data, $user);
         }
+        if ($method === 'PUT') {
+            return $this->handlePut($data, $user);
+        }
+        if ($method === 'DELETE') {
+            return $this->handleDelete($user);
+        }
 
         throw new InvalidMethodException('Events only allows get.');
     }
@@ -89,19 +97,100 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
     {
         $this->translateIncomingJSON($data);
 
-        $CreateEvent = new CreateEvent(array(
+        $createEvent = new CreateEvent(array(
             'calendar_shortname' => $this->calendar->shortname,
             'user' => $user,
             'event_source' => CalendarEvent::SOURCE_CREATE_EVENT_API_V2,
         ));
 
         try {
-            $CreateEvent->handlePost(array(), $data, array());
+            $createEvent->handlePost(array(), $data, array());
         } catch (\UNL\UCBCN\Manager\ValidationException $e) {
             throw new ValidationException($e->getMessage());
         }
 
-        return array();
+        return $this->translateOutgoingEventJSON($createEvent->event->id);
+    }
+
+    private function handlePut(array $data, User $user): array
+    {
+        $this->translateIncomingJSON($data);
+
+        if (!isset($this->options['event_id']) || !is_numeric($this->options['event_id'])) {
+            throw new ValidationException('Missing event id.');
+        }
+        if ($this->calendar->hasEventById($this->options['event_id']) === false) {
+            throw new ValidationException('That calendar does not have that event with that id.');
+        }
+
+        $event = Event::getById($this->options['event_id']);
+        if ($event === false) {
+            throw new ValidationException('Invalid ID.');
+        }
+
+        // This needs to be unset since the update form is a checkbox instead of radio button
+        unset($data['send_to_main']);
+
+        try {
+            $editEvent = new EditEvent(array(
+                'calendar_shortname' => $this->calendar->shortname,
+                'user' => $user,
+                'event_id' => $this->options['event_id'],
+            ));
+        } catch (\Exception $e) {
+            throw new ForbiddenException($e->getMessage());
+        }
+        
+
+        try {
+            $editEvent->handlePost(array(), $data, array());
+        } catch (\UNL\UCBCN\Manager\ValidationException $e) {
+            throw new ValidationException($e->getMessage());
+        }
+
+        return $this->translateOutgoingEventJSON($editEvent->event->id);
+    }
+
+    private function handleDelete(User $user):array
+    {
+        if (!isset($this->options['event_id']) || !is_numeric($this->options['event_id'])) {
+            throw new ValidationException('Missing event id.');
+        }
+        if ($this->calendar->hasEventById($this->options['event_id']) === false) {
+            throw new ValidationException('That calendar does not have that event with that id.');
+        }
+
+        $event = Event::getById($this->options['event_id']);
+        if ($event === false) {
+            throw new ValidationException('Invalid ID.');
+        }
+
+        try {
+            $deleteEvent = new DeleteEvent(array(
+                'calendar_shortname' => $this->calendar->shortname,
+                'user' => $user,
+                'event_id' => $this->options['event_id'],
+            ));
+        } catch (\Exception $e) {
+            throw new ForbiddenException($e->getMessage());
+        }
+
+        $calendarHasEvents = CalendarEvent::getByIds($this->calendar->id, $this->options['event_id']);
+        if ($calendarHasEvents === false) {
+            throw new ValidationException('Calendar does not have that event.');
+        }
+
+        $data = array(
+            'status' => $calendarHasEvents->status === CalendarEvent::STATUS_POSTED ? 'upcoming' : $calendarHasEvents->status,
+        );
+
+        try {
+            $deleteEvent->handlePost(array(), $data, array());
+        } catch (\UNL\UCBCN\Manager\ValidationException $e) {
+            throw new ValidationException($e->getMessage());
+        }
+
+        return array('Event has been deleted from calendar.');
     }
 
     private function translateIncomingJSON(array &$event_data)

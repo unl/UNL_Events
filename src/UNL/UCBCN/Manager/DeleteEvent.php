@@ -20,7 +20,7 @@ class DeleteEvent extends PostHandler
             throw new \Exception("That calendar could not be found.", 404);
         }
 
-        $user = Auth::getCurrentUser();
+        $user = $this->options['user'] ?? Auth::getCurrentUser();
         if (!$user->hasPermission(Permission::EVENT_DELETE_ID, $this->calendar->id)) {
             throw new \Exception("You do not have permission to delete events on this calendar.", 403);
         }

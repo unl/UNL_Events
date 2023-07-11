@@ -11,6 +11,7 @@ class EditEvent extends EventForm
 {
     public $on_main_calendar;
     public $page;
+    private $user;
 
     public function __construct($options = array())
     {
@@ -22,7 +23,8 @@ class EditEvent extends EventForm
             throw new \Exception("That event could not be found.", 404);
         }
 
-        if (!$this->event->userCanEdit()) {
+        $this->user = $this->options['user'] ?? Auth::getCurrentUser();
+        if (!$this->event->userCanEdit($this->user)) {
             throw new \Exception("You do not have permission to edit this event.", 403);
         }
 
@@ -97,7 +99,7 @@ class EditEvent extends EventForm
     {
         $this->setEventData($post_data, $files);
         $this->validateEventData($post_data, $files);
-        $result = $this->event->update();
+        $result = $this->event->update($this->user);
 
         # update the event type record
         $event_has_type = EventType::getByEvent_ID($this->event->id);
