@@ -107,12 +107,14 @@
             <?php foreach($states as $abbr => $state): ?>
                 <option value="<?php echo $abbr; ?>"
                     <?php
-                    if (isset($context['new_location']['state']) &&
+                    if ((
+                            isset($context['new_location']['state']) &&
                             $context['new_location']['state'] == $abbr
-                        ){
+                        ) || (
+                        !isset($context['new_location']['state']) && $abbr == 'NE'
+                        )
+                    ){
                     ?>
-                        selected="selected"
-                    <?php } elseif (!isset($context['new_location']['state']) && $abbr == 'NE') { ?>
                         selected="selected"
                     <?php } ?>
                 >

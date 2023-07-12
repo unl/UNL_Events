@@ -175,7 +175,7 @@ use UNL\UCBCN\Permission;
                                         <ul>
                                         <?php $datetimes = $event->getDateTimes(); ?>
                                         <?php $count = 0; ?>
-                                        
+
                                         <?php foreach($datetimes as $datetime): ?>
                                             <li>
                                                 <?php if (++$count <= 3) :
@@ -261,7 +261,10 @@ use UNL\UCBCN\Permission;
                                                         if (isset($datetime->location_id) && $location !== false):
                                                     ?>
                                                     <div class="dcf-popup" data-point="true">
-                                                        <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup" type="button">
+                                                        <button
+                                                            class="dcf-btn dcf-btn-tertiary dcf-btn-popup"
+                                                            type="button"
+                                                        >
                                                             <?php echo $location->name; ?>
                                                         </button>
                                                         <div
@@ -392,7 +395,10 @@ use UNL\UCBCN\Permission;
                                                         if (isset($datetime->webcast_id) && $getWebcast !== false):
                                                     ?>
                                                         <div class="dcf-popup" data-point="true">
-                                                            <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup" type="button">
+                                                            <button
+                                                                class="dcf-btn dcf-btn-tertiary dcf-btn-popup"
+                                                                type="button"
+                                                            >
                                                                 <?php echo $getWebcast->title; ?>
                                                             </button>
                                                             <div

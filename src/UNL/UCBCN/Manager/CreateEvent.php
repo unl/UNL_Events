@@ -25,7 +25,7 @@ class CreateEvent extends EventForm
         $this->user = $this->options['user'] ?? null;
 
         if (
-            isset($this->options['event_source']) 
+            isset($this->options['event_source'])
             && $this->options['event_source'] === CalendarEvent::SOURCE_CREATE_EVENT_API_V2
         ) {
             $this->event_source = CalendarEvent::SOURCE_CREATE_EVENT_API_V2;

@@ -65,13 +65,25 @@ class UserVirtualLocation extends PostHandler
 
         switch ($method) {
             case "post":
-                $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Virtual Location Created', 'Your Virtual Location has been created.');
+                $this->flashNotice(
+                    parent::NOTICE_LEVEL_SUCCESS,
+                    'Virtual Location Created',
+                    'Your Virtual Location has been created.'
+                );
                 break;
             case "put":
-                $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Virtual Location Updated', 'Your Virtual Location has been updated.');
+                $this->flashNotice(
+                    parent::NOTICE_LEVEL_SUCCESS,
+                    'Virtual Location Updated',
+                    'Your Virtual Location has been updated.'
+                );
                 break;
             case "delete":
-                $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Virtual Location Detached', 'Your Virtual Location has been detached from you.');
+                $this->flashNotice(
+                    parent::NOTICE_LEVEL_SUCCESS,
+                    'Virtual Location Detached',
+                    'Your Virtual Location has been detached from you.'
+                );
                 break;
         }
 

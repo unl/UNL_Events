@@ -59,7 +59,7 @@ class APIEvents extends APICalendar implements ModelInterface, ModelAuthInterfac
         if ($this->url_match_pending && $method === 'GET') {
             return true;
         }
-        
+
         if ($method === 'GET') {
             return false;
         }
@@ -90,8 +90,8 @@ class APIEvents extends APICalendar implements ModelInterface, ModelAuthInterfac
             throw new InvalidMethodException('Pending Events only allows get.');
         }
 
-        if ($method === 'GET' 
-            && key_exists('location_id', $this->options) 
+        if ($method === 'GET'
+            && key_exists('location_id', $this->options)
             && is_numeric($this->options['location_id'])
         ) {
             return $this->handleLocationGet();

@@ -107,7 +107,18 @@ class Calendar extends Record
                 $append['page'] = $_SESSION['current_page'];
             }
             if (!empty($append)) {
-                $append = '?' . join('&', array_map(function ($key, $val) {return $key . '=' . $val;}, array_keys($append), $append));
+                $append = '?' .
+                    join(
+                        '&',
+                        array_map(
+                            function ($key, $val)
+                            {
+                                return $key . '=' . $val;
+                            },
+                            array_keys($append),
+                            $append
+                        )
+                    );
             } else {
                 $append = '';
             }
@@ -310,7 +321,12 @@ class Calendar extends Record
                 # it's confusing, but for each subscription which has this calendar as a
                 # subscribed calendar, take that subscription, find what calendar it is
                 # attached to, and add a calendar_has_event record
-                if (!($subscription instanceof \UNL\UCBCN\Calendar\Subscription) || CalendarHasEvent::getByIDs($subscription->calendar_id, $event->id)) {
+                if (
+                    !(
+                        $subscription instanceof \UNL\UCBCN\Calendar\Subscription)
+                        || CalendarHasEvent::getByIDs($subscription->calendar_id, $event->id
+                    )
+                ) {
                     # do not add this
                     continue;
                 }
@@ -340,7 +356,11 @@ class Calendar extends Record
         $calendar_has_event = CalendarHasEvent::getByIdsStatus($this->id, $event->id, $status);
 
         # check if this is where the event was originally created
-        if ($calendar_has_event->source == 'create event form' || $calendar_has_event->source == 'create event api' || $calendar_has_event->source == 'create event api v2') {
+        if (
+            $calendar_has_event->source == 'create event form'
+            || $calendar_has_event->source == 'create event api'
+            || $calendar_has_event->source == 'create event api v2'
+        ) {
             # delete the event from the entire system
             $event->delete();
         } else {
@@ -384,7 +404,13 @@ class Calendar extends Record
     }
 
     public function getFeaturedEvents($pinned_limit = 1, $limit = 10) {
-        $featureEvents = new FeaturedEvents(array('calendar' => $this, 'pinned_limit' => $pinned_limit, 'limit' => $limit));
+        $featureEvents = new FeaturedEvents(
+            array(
+                'calendar' => $this,
+                'pinned_limit' => $pinned_limit,
+                'limit' => $limit
+            )
+        );
         return !empty($featureEvents->options['array']) ? $featureEvents : NULL;
     }
 
@@ -442,12 +468,22 @@ class Calendar extends Record
 
         # archive events by id
         if (count($eventIDsToArchive) > 0) {
-            CalendarHasEvent::bulkUpdateStatus($this->id, $eventIDsToArchive, static::STATUS_POSTED, static::STATUS_ARCHIVED);
+            CalendarHasEvent::bulkUpdateStatus(
+                $this->id,
+                $eventIDsToArchive,
+                static::STATUS_POSTED,
+                static::STATUS_ARCHIVED
+            );
         }
 
         # unarchive events by id
         if (count($eventIDsToUnarchive) > 0) {
-            CalendarHasEvent::bulkUpdateStatus($this->id, $eventIDsToUnarchive, static::STATUS_ARCHIVED, static::STATUS_POSTED);
+            CalendarHasEvent::bulkUpdateStatus(
+                $this->id,
+                $eventIDsToUnarchive,
+                static::STATUS_ARCHIVED,
+                static::STATUS_POSTED
+            );
         }
     }
 
