@@ -37,14 +37,6 @@
     <button id="new_location" class="dcf-btn dcf-btn-primary" type="button">Create A New Virtual Location</button>
 </div>
 
-<p>
-    These saved virtual locations will let you recall them easily when creating or editing new events.
-    Virtual location are like live streams, camera feeds, or event chat forums that is where your
-    event will take place. Any location saved to you or the calendar you are making the event
-    in will show up in the drop down of available locations. You can always make a new
-    location during the event creation or edit process.
-</p>
-
 <?php if (count($webcasts) === 0) :?>
     <p class="dcf-bold">You have not saved any virtual locations yet<p>
 <?php else: ?>
