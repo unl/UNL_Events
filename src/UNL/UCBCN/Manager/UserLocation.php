@@ -15,6 +15,11 @@ class UserLocation extends PostHandler
         $this->options = $options + $this->options;
     }
 
+    public function getLocation($location_id)
+    {
+        return Location::getById($location_id);
+    }
+
     public function getUserLocations()
     {
         return LocationUtility::getUserLocations();
@@ -29,6 +34,10 @@ class UserLocation extends PostHandler
 
     public function userHasAccessToCalendar(string $calendar_id)
     {
+        if (!isset($calendar_id) || empty($calendar_id)) {
+            return true;
+        }
+
         $user = Auth::getCurrentUser();
 
         $edit_permission = Permission::getByName('Event Edit');
@@ -129,6 +138,10 @@ class UserLocation extends PostHandler
             !(isset($location->calendar_id) && $this->userHasAccessToCalendar($location->calendar_id))
         ) {
             throw new ValidationException('You do not have access to modify that location.');
+        } elseif (isset($location->calendar_id) && !$this->userHasAccessToCalendar($location->calendar_id)) {
+            $post_data['location_save_calendar'] = 'on';
+            $calendar = Calendar::getByID($location->calendar_id);
+            $post_data['calendar_id'] = $location->calendar_id;
         }
 
         $this->validateLocation($post_data);

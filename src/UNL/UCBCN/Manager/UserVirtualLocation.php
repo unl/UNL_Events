@@ -16,6 +16,11 @@ class UserVirtualLocation extends PostHandler
         $this->options = $options + $this->options;
     }
 
+    public function getWebcast($webcast_id)
+    {
+        return Webcast::getById($webcast_id);
+    }
+
     public function getUserWebcasts()
     {
         return WebcastUtility::getUserWebcasts();
@@ -30,6 +35,10 @@ class UserVirtualLocation extends PostHandler
 
     public function userHasAccessToCalendar(string $calendar_id)
     {
+        if (!isset($calendar_id) || empty($calendar_id)) {
+            return true;
+        }
+
         $user = Auth::getCurrentUser();
 
         $edit_permission = Permission::getByName('Event Edit');
@@ -134,6 +143,10 @@ class UserVirtualLocation extends PostHandler
             !(isset($webcast->calendar_id) && $this->userHasAccessToCalendar($webcast->calendar_id))
         ) {
             throw new ValidationException('You do not have access to modify that virtual location.');
+        } elseif (isset($webcast->calendar_id) && !$this->userHasAccessToCalendar($webcast->calendar_id)) {
+            $post_data['v_location_save_calendar'] = 'on';
+            $calendar = Calendar::getByID($webcast->calendar_id);
+            $post_data['calendar_id'] = $webcast->calendar_id;
         }
 
         if (!empty($post_data['v_location']) && $post_data['v_location'] === "New") {

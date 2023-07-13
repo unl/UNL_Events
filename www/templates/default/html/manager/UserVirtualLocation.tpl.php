@@ -29,6 +29,8 @@
         'new-v-location-additional-public-info' : '',
         'user_id'                               : '',
         'calendar_id'                           : '',
+        'calendar-name'                         : '',
+        'can-access-calendar'                   : true,
     };
 </script>
 
@@ -61,16 +63,30 @@
                             LOCATIONS[<?php echo $webcast->id; ?>] = <?php
                                 echo json_encode($raw_webcast_json, JSON_UNESCAPED_SLASHES);
                             ?>;
+                            LOCATIONS[<?php echo $webcast->id; ?>]['can-access-calendar'] = <?php
+                                echo json_encode($context->userHasAccessToCalendar($webcast->calendar_id ?? ""), JSON_UNESCAPED_SLASHES);
+                            ?>;
                         </script>
                     </td>
                     <td>
                         <?php if (isset($webcast->calendar_id)): ?>
                             <?php $webcastCalendar = $webcast->getCalendar();?>
                             Saved to
-                            <a href='<?php echo $webcastCalendar->getManageURL(); ?>'>
-                                <?php echo $webcastCalendar->name; ?>
-                            </a>
+                            <?php if ($context->userHasAccessToCalendar($webcast->calendar_id ?? "")): ?>
+                                <a href='<?php echo $webcastCalendar->getManageURL(); ?>'>
+                                    <?php echo $webcastCalendar->name; ?>
+                                </a>
+                            <?php else: ?>
+                                <a href='<?php echo $webcastCalendar->getFrontendURL(); ?>'>
+                                    <?php echo $webcastCalendar->name; ?>
+                                </a>
+                            <?php endif;?>
                             calendar
+                            <script>
+                                LOCATIONS[<?php echo $webcast->id; ?>]['calendar-name'] = <?php
+                                    echo json_encode($webcastCalendar->name, JSON_UNESCAPED_SLASHES);
+                                ?>;
+                            </script>
                         <?php endif;?>
                     </td>
                     <td>
@@ -140,28 +156,59 @@
         <?php echo $savvy->render($post, 'VirtualLocationForm.tpl.php'); ?>
 
         <div class="dcf-form-group">
-            <label> Save To Calendar </label>
-            <select name="calendar_id" id="calendar_id">
-                <option
-                    value=""
-                    <?php if (!isset($post['calendar_id'])): ?>
-                        selected="selected"
-                    <?php endif;?>
-                >
-                    -- Not saved to any calendar --
-                </option>
-                <?php foreach($context->getUserCalendars() as $calendar): ?>
-                    <?php if (!$context->userHasAccessToCalendar($calendar->id)) { continue; }?>
+            <?php $vLocation = isset($post['v_location']) ? $context->getWebcast($post['v_location']) : false; ?>
+            <?php $vLocationCalendar = $vLocation !== false ? $vLocation->getCalendar() : false; ?>
+            <div
+                id="createOrModify-calendar"
+                class="
+                    <?php if (
+                        (isset($post['method']) && $post['method'] === 'put')
+                        && ($vLocation !== false && !$context->userHasAccessToCalendar($vLocation->calendar_id ?? ""))
+                    ): ?>
+                        dcf-d-none
+                    <?php endif; ?>
+                "
+            >
+                <label> Save To Calendar </label>
+                <select name="calendar_id" id="calendar_id">
                     <option
-                        value="<?php echo $calendar->id; ?>"
-                        <?php if (isset($post['calendar_id']) && $post['calendar_id'] === $calendar->id): ?>
+                        value=""
+                        <?php if (!isset($post['calendar_id'])): ?>
                             selected="selected"
                         <?php endif;?>
                     >
-                        <?php echo $calendar->name; ?>
+                        -- Not saved to any calendar --
                     </option>
-                <?php endforeach; ?>
-            </select>
+                    <?php foreach($context->getUserCalendars() as $calendar): ?>
+                        <?php if (!$context->userHasAccessToCalendar($calendar->id ?? "")) { continue; }?>
+                        <option
+                            value="<?php echo $calendar->id; ?>"
+                            <?php if (isset($post['calendar_id']) && $post['calendar_id'] === $calendar->id): ?>
+                                selected="selected"
+                            <?php endif;?>
+                        >
+                            <?php echo $calendar->name; ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <p
+                id="createOrModify-taken"
+                class="
+                    <?php if (
+                        (isset($post['method']) && $post['method'] !== 'put')
+                        || (
+                            (isset($post['method']) && $post['method'] === 'put')
+                            && ($vLocation !== false && $context->userHasAccessToCalendar($vLocation->calendar_id ?? ""))
+                        )
+                    ): ?>
+                        dcf-d-none
+                    <?php endif; ?>
+                "
+            >
+                This virtual location is already saved to
+                <?php echo $vLocationCalendar !== false ? $vLocationCalendar->name : ''; ?>
+            </p>
         </div>
 
         <div class="dcf-form-group">
@@ -175,7 +222,6 @@
     </fieldset>
 </form>
 
-
 <script>
     const createButton = document.getElementById('new_location');
     const modifyButtons = document.querySelectorAll('.events-modify-location');
@@ -185,6 +231,9 @@
     const createOrModifySubmit = document.getElementById('createOrModify-submit');
     const createOrModifyCancel = document.getElementById('createOrModify-cancel');
     const createOrModifyMethod = document.getElementById('createOrModify-method');
+
+    const createOrModifyCalendar = document.getElementById('createOrModify-calendar');
+    const createOrModifyTaken = document.getElementById('createOrModify-taken');
 
     createOrModifyCancel.addEventListener('click', () => {
         if (!confirm('Are you sure you want to clear out the form?')) {
@@ -223,7 +272,7 @@
 
     function fillInputs(location_id) {
         const locationToModify = LOCATIONS[location_id];
-        const specialProps = ['user_id'];
+        const specialProps = ['user_id', 'can-access-calendar', 'calendar-name'];
 
         for (const locationProp in locationToModify) {
             if (specialProps.includes(locationProp)) { continue; }
@@ -232,6 +281,20 @@
             if (elementToModify === null) { throw new Error(`Missing Element ${locationProp}`); }
 
             elementToModify.value = locationToModify[locationProp] ?? "";
+        }
+
+        if (locationToModify['can-access-calendar']) {
+            createOrModifyCalendar.classList.remove('dcf-d-none');
+            createOrModifyTaken.classList.add('dcf-d-none');
+        } else {
+            createOrModifyCalendar.classList.add('dcf-d-none');
+            createOrModifyTaken.classList.remove('dcf-d-none');
+            createOrModifyTaken.innerText = `This virtual location is already saved to ${locationToModify['calendar-name']}`;
+
+            const elementToModify = document.getElementById('calendar_id');
+            if (elementToModify === null) { throw new Error(`Missing Element calendar_id`); }
+
+            elementToModify.value = '';
         }
     }
 
