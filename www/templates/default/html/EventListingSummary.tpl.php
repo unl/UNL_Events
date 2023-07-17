@@ -1,5 +1,5 @@
 <div class="vcalendar">
-    <ol class="dcf-mt-4 dcf-list-bare dcf-grid-full dcf-grid-halves@sm dcf-grid-thirds@lg dcf-grid-fourths@xl dcf-col-gap-vw dcf-row-gap-4">
+    <ol class="dcf-mt-4 dcf-mb-0 dcf-list-bare dcf-grid-full dcf-grid-halves@sm dcf-grid-thirds@lg dcf-grid-fourths@xl dcf-col-gap-vw dcf-row-gap-4">
     <?php
     foreach ($context as $eventinstance) {
         if (empty($eventinstance)) {
@@ -36,7 +36,7 @@
             $time = $timezoneDisplay->format($starttime, $eventinstance->eventdatetime->timezone, 'g:i a');
         }
         ?>
-            <li class="unl-event-teaser">
+            <li class="unl-event-teaser dcf-mb-0">
                 <header class="unl-event-title"><h3 class="dcf-mb-0 dcf-lh-3 dcf-bold dcf-txt-h6 unl-lh-crop"><a class="dcf-txt-decor-hover unl-darker-gray" href="<?php echo $url; ?>"><?php echo $event->displayTitle($eventinstance); ?></a></h3><?php echo $subTitle; ?><?php echo $location; ?></header>
                 <div class="unl-event-datetime dcf-flex-shrink-0 dcf-w-8 dcf-mr-5 dcf-txt-center">
                     <span class="dcf-d-block dcf-txt-3xs dcf-pt-2 dcf-pb-1 dcf-uppercase dcf-bold unl-ls-2 unl-cream unl-bg-scarlet"><?php echo $month; ?></span>
