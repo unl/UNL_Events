@@ -1,5 +1,5 @@
 <div class="vcalendar">
-    <ol class="dcf-mt-4 dcf-mb-0 dcf-list-bare dcf-grid-full dcf-grid-halves@sm dcf-grid-thirds@lg dcf-grid-fourths@xl dcf-col-gap-vw dcf-row-gap-4">
+    <ol class="dcf-mt-4 dcf-list-bare dcf-d-grid dcf-col-gap-vw dcf-row-gap-5 unl-event-teaser-ol">
     <?php
     foreach ($context as $eventinstance) {
         if (empty($eventinstance)) {
