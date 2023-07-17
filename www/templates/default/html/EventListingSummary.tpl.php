@@ -57,6 +57,7 @@
 <script>
   // TODO: Replace this with event css
   window.addEventListener('inlineJSReady', function() {
+    WDN.initializePlugin('card-as-link');
     WDN.initializePlugin('events', {limit:0});
   });
 </script>
