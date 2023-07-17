@@ -1,5 +1,5 @@
 <div class="vcalendar">
-    <ul class="dcf-mt-4 dcf-list-bare dcf-grid-full dcf-grid-halves@sm dcf-grid-thirds@lg dcf-grid-fourths@xl dcf-col-gap-vw dcf-row-gap-4">
+    <ol class="dcf-mt-4 dcf-list-bare dcf-grid-full dcf-grid-halves@sm dcf-grid-thirds@lg dcf-grid-fourths@xl dcf-col-gap-vw dcf-row-gap-4">
     <?php
     foreach ($context as $eventinstance) {
         if (empty($eventinstance)) {
@@ -47,7 +47,7 @@
         <?php
     }
     ?>
-    </ul>
+    </ol>
 
     <div class="dcf-txt-right">
         <a class="dcf-btn dcf-btn-tertiary" href="<?php echo $context->calendar->getFeaturedURL(); ?>">View All<span class="dcf-sr-only"> Featured Events</span></a>
