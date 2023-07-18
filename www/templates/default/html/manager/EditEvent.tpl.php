@@ -226,7 +226,7 @@
         >
             Add New Instance
         </a>
-        <table class="dcf-mt-6 dcf-table dcf-table-striped dcf-table-fixed dcf-w-100% dcf-txt-sm">
+        <table class="dcf-mt-6 dcf-table dcf-table-striped dcf-table-fixed dcf-table-responsive dcf-w-100% dcf-txt-sm">
             <caption class="dcf-sr-only">Current Event Instances</caption>
             <thead class="edt-header">
                 <tr>
@@ -237,7 +237,10 @@
                 </tr>
             </thead>
             <?php foreach($event->getDatetimes(5, ($context->page - 1)*5) as $datetime) : ?>
-                <tr class="edt-record <?php if ($datetime->recurringtype != 'none') { echo 'has-recurring'; } ?>">
+                <tr
+                    class="edt-record <?php if ($datetime->recurringtype != 'none') { echo 'has-recurring'; } ?> occurrence"
+                    data-microdata="<?php echo json_encode($datetime->microdataCheck()); ?>"
+                >
                     <td class="dcf-txt-middle dates">
                         <?php
                         {
@@ -279,10 +282,23 @@
                         <td
                             class="dcf-txt-middle location with-controls"
                             data-id="<?php echo $location->id; ?>"
-                            data-microdata="<?php echo json_encode($location->microdataCheck()); ?>"
                         >
                             <div class="dcf-popup dcf-w-100%" data-hover="true" data-point="true">
                                 <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup dcf-w-100%" type="button">
+                                    <svg
+                                        class="dcf-mr-1 dcf-h-4 dcf-w-4 dcf-fill-current"
+                                        aria-hidden="true"
+                                        focusable="false"
+                                        height="24"
+                                        width="24"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path d="M12 0C7.589 0 4 3.589 4 8c0 4.245 7.273 15.307 7.583 15.775
+                                            a.497.497 0 00.834 0C12.727 23.307 20 12.245 20 8c0-4.411-3.589-8-8-8zm0 22.58
+                                            C10.434 20.132 5 11.396 5 8c0-3.86 3.14-7 7-7s7 3.14 7 7c0 3.395-5.434 12.132-7 14.58z"></path>
+                                        <path d="M12 4.5c-1.93 0-3.5 1.57-3.5 3.5s1.57 3.5 3.5 3.5 3.5-1.57 3.5-3.5-1.57-3.5-3.5-3.5zm0 6
+                                            c-1.378 0-2.5-1.122-2.5-2.5s1.122-2.5 2.5-2.5 2.5 1.122 2.5 2.5-1.122 2.5-2.5 2.5z"></path>
+                                    </svg>
                                     <?php echo $location->name; ?>
                                 </button>
                                 <div
@@ -365,8 +381,24 @@
                             </div>
                         </td>
                     <?php else: ?>
-                        <td class="dcf-txt-middle location with-controls" data-id="" data-microdata="false">
-                            <?php echo "None"; ?>
+                        <td class="dcf-txt-middle location with-controls no-location" data-id="">
+                            <div class="dcf-d-flex dcf-jc-center dcf-ai-center">
+                                <svg
+                                    class="dcf-mr-1 dcf-h-4 dcf-w-4 dcf-fill-current"
+                                    aria-hidden="true"
+                                    focusable="false"
+                                    height="24"
+                                    width="24"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path d="M12 0C7.589 0 4 3.589 4 8c0 4.245 7.273 15.307 7.583 15.775
+                                        a.497.497 0 00.834 0C12.727 23.307 20 12.245 20 8c0-4.411-3.589-8-8-8zm0 22.58
+                                        C10.434 20.132 5 11.396 5 8c0-3.86 3.14-7 7-7s7 3.14 7 7c0 3.395-5.434 12.132-7 14.58z"></path>
+                                    <path d="M12 4.5c-1.93 0-3.5 1.57-3.5 3.5s1.57 3.5 3.5 3.5 3.5-1.57 3.5-3.5-1.57-3.5-3.5-3.5zm0 6
+                                        c-1.378 0-2.5-1.122-2.5-2.5s1.122-2.5 2.5-2.5 2.5 1.122 2.5 2.5-1.122 2.5-2.5 2.5z"></path>
+                                </svg>
+                                <?php echo "None"; ?>
+                            </div>
                         </td>
                     <?php endif;?>
 
@@ -375,10 +407,28 @@
                         <td
                             class="dcf-txt-middle v_location with-controls"
                             data-id="<?php echo $getWebcast->id; ?>"
-                            data-microdata="<?php echo json_encode($getWebcast->microdataCheck()); ?>"
                         >
                             <div class="dcf-popup dcf-w-100%" data-hover="true" data-point="true">
                                 <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup dcf-w-100%" type="button">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        class="dcf-mr-1 dcf-h-4 dcf-w-4 dcf-fill-current"
+                                        aria-hidden="true"
+                                        focusable="false"
+                                        height="24"
+                                        width="24"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path d="M22,1H2C0.897,1,0,1.937,0,3.088v14.824C0,19.063,0.897,20,2,20
+                                            h9.5v1H5c-0.276,0-0.5,0.224-0.5,0.5S4.724,22,5,22h14 c0.276,0,0.5-0.224,0.5-0.5
+                                            S19.276,21,19,21h-6.5v-1H22c1.103,0,2-0.937,2-2.088V3.088
+                                            C24,1.937,23.103,1,22,1z M2,2h20 c0.551,0,1,0.488,1,1.088
+                                            V15H1V3.088C1,2.488,1.449,2,2,2z M22,19H2c-0.551,0-1-0.488-1-1.088
+                                            V16h22v1.912 C23,18.512,22.551,19,22,19z"></path>
+                                        <path d="M12,16.5c-0.551,0-1,0.448-1,1
+                                            s0.449,1,1,1s1-0.448,1-1S12.551,16.5,12,16.5z M12,17.5L12,17.5h0.5H12z"></path>
+                                        <g><path fill="none" d="M0 0H24V24H0z"></path></g>
+                                    </svg>
                                     <?php echo $getWebcast->title; ?>
                                 </button>
                                 <div
@@ -416,13 +466,71 @@
                             </div>
                         </td>
                     <?php else: ?>
-                        <td class="dcf-txt-middle v_location with-controls" data-id="" data-microdata="false">
-                            <?php echo "None"; ?>
+                        <td class="dcf-txt-middle v_location with-controls no-webcast" data-id="">
+                            <div class="dcf-d-flex dcf-jc-center dcf-ai-center">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="dcf-mr-1 dcf-h-4 dcf-w-4 dcf-fill-current"
+                                    aria-hidden="true"
+                                    focusable="false"
+                                    height="24"
+                                    width="24"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path d="M22,1H2C0.897,1,0,1.937,0,3.088v14.824C0,19.063,0.897,20,2,20
+                                        h9.5v1H5c-0.276,0-0.5,0.224-0.5,0.5S4.724,22,5,22h14 c0.276,0,0.5-0.224,0.5-0.5
+                                        S19.276,21,19,21h-6.5v-1H22c1.103,0,2-0.937,2-2.088V3.088
+                                        C24,1.937,23.103,1,22,1z M2,2h20 c0.551,0,1,0.488,1,1.088
+                                        V15H1V3.088C1,2.488,1.449,2,2,2z M22,19H2c-0.551,0-1-0.488-1-1.088
+                                        V16h22v1.912 C23,18.512,22.551,19,22,19z"></path>
+                                    <path d="M12,16.5c-0.551,0-1,0.448-1,1
+                                        s0.449,1,1,1s1-0.448,1-1S12.551,16.5,12,16.5z M12,17.5L12,17.5h0.5H12z"></path>
+                                    <g><path fill="none" d="M0 0H24V24H0z"></path></g>
+                                </svg>
+                                <?php echo "None"; ?>
+                            </div>
                         </td>
                     <?php endif;?>
 
                     <td class="dcf-pr-0 dcf-txt-middle controls">
                         <div class="dcf-d-flex dcf-ai-center dcf-jc-flex-end">
+                            <?php if (!$datetime->microdataCheck()): ?>
+                                <div class="dcf-popup dcf-mr-1" data-point="true">
+                                    <button
+                                        class="dcf-btn dcf-btn-popup unl-bg-blue events-b-blue"
+                                        title="Missing Google Microdata Requirements"
+                                    >!</button>
+                                    <div class="dcf-popup-content unl-cream unl-bg-blue dcf-p-3 dcf-rounded" style="min-width: 50ch;">
+                                        <p class="dcf-bold">Missing Google Microdata Requirements</p>
+                                        <ul>
+                                            <?php if (!isset($datetime->location_id) && !isset($datetime->webcast_id)): ?>
+                                                <li>Missing a location (Could be virtual, physical, or both)</li>
+                                            <?php endif; ?>
+
+                                            <?php if (isset($datetime->location_id) && !$location->microdataCheck()): ?>
+                                                <?php if (empty($location->streetaddress1)): ?>
+                                                    <li>This location is missing an address</li>
+                                                <?php endif; ?>
+                                                <?php if (empty($location->city)): ?>
+                                                    <li>This location is missing a city</li>
+                                                <?php endif; ?>
+                                                <?php if (empty($location->state)): ?>
+                                                    <li>This location is missing a state</li>
+                                                <?php endif; ?>
+                                                <?php if (empty($location->zip)): ?>
+                                                    <li>This location is missing a zip</li>
+                                                <?php endif; ?>
+                                            <?php endif; ?>
+
+                                            <?php if (isset($datetime->webcast_id) && !$getWebcast->microdataCheck()): ?>
+                                                <?php if (empty($getWebcast->url)): ?>
+                                                    <li>This virtual location is missing a URL</li>
+                                                <?php endif; ?>
+                                            <?php endif; ?>
+                                        </ul>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
                             <a
                                 class="dcf-btn dcf-btn-primary"
                                 href="<?php echo $datetime->getEditURL($context->calendar); ?>"
@@ -771,9 +879,39 @@
     </section>
 
     <button class="dcf-btn dcf-btn-primary" type="submit">Save Event</button>
+    <button
+            id="google-microdata-button"
+            class="dcf-btn-toggle-modal dcf-btn unl-bg-blue events-b-blue unl-cream unl-cream@dark dcf-mt-3"
+            title="Learn More"
+            type="button"
+            data-toggles-modal="google-microdata-modal"
+            disabled
+        >
+            ! Your event does not reach google microdata requirements !
+        </button>
+
+        <div class="dcf-modal" id="google-microdata-modal" hidden>
+            <div class="dcf-modal-wrapper">
+                <div class="dcf-modal-header">
+                    <h2>Info About Google Microdata</h2>
+                    <button class="dcf-btn-close-modal">Close</button>
+                </div>
+                <div class="dcf-modal-content">
+                    Info about google microdata
+                    <div class="dcf-mt-5" id="google-microdata-modal-output">
+                    </div>
+                </div>
+            </div>
+        </div>
 </form>
 
 <?php
+$page->addScript(
+    $base_frontend_url .
+    'templates/default/html/js/manager-edit-event.min.js?v='.
+    UNL\UCBCN\Frontend\Controller::$version
+);
+
 $page->addScriptDeclaration("
 require(['jquery'], function($) {
     $('.delete-datetime').submit(function (submit) {

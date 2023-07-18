@@ -306,4 +306,31 @@ class Occurrence extends Record
     public function isCanceled() {
         return !empty($this->canceled);
     }
+
+    public function microdataCheck()
+    {
+        if (!isset($this->starttime) || empty($this->starttime)) {
+            return false;
+        }
+
+        if (!isset($this->location_id) && !isset($this->webcast_id)) {
+            return false;
+        }
+
+        if (isset($this->location_id)) {
+            $location = $this->getLocation();
+            if ($location !== false && !$location->microdataCheck()) {
+                return false;
+            }
+        }
+
+        if (isset($this->webcast_id)) {
+            $webcast = $this->getWebcast();
+            if ($webcast !== false && !$webcast->microdataCheck()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

@@ -339,8 +339,8 @@
         <button class="dcf-btn dcf-btn-primary" type="submit">Submit Event</button>
         <button
             id="google-microdata-button"
-            class="dcf-btn-toggle-modal dcf-btn unl-cream unl-cream@dark dcf-mt-3"
-            title="Learn More" style="background-color:var(--bg-brand-eta); border-color: var(--bg-brand-eta);"
+            class="dcf-btn-toggle-modal dcf-btn unl-bg-blue events-b-blue unl-cream unl-cream@dark dcf-mt-3"
+            title="Learn More"
             type="button"
             data-toggles-modal="google-microdata-modal"
             disabled
