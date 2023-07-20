@@ -72,7 +72,7 @@ class LocationUtility
             'phone',
         );
 
-        // creates a new Location and fills the values 
+        // creates a new Location and fills the values
         $location = new Location;
         foreach ($allowed_fields as $field) {
             if (!empty($post_data['new_location'][$field])) {

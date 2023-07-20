@@ -72,7 +72,10 @@
                                 echo json_encode($raw_location_json, JSON_UNESCAPED_SLASHES);
                             ?>;
                             LOCATIONS[<?php echo $location->id; ?>]['can-access-calendar'] = <?php
-                                echo json_encode($context->userHasAccessToCalendar($location->calendar_id ?? ""), JSON_UNESCAPED_SLASHES);
+                                echo json_encode(
+                                    $context->userHasAccessToCalendar($location->calendar_id ?? ""), 
+                                    JSON_UNESCAPED_SLASHES
+                                );
                             ?>;
                         </script>
                     </td>
@@ -311,5 +314,3 @@
         createOrModifyForm.classList.remove('dcf-d-none');
     }
 </script>
-
-<pre><? var_dump($post); ?></pre>

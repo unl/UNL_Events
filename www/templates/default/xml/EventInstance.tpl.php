@@ -26,7 +26,7 @@
         <Locations>
             <?php
             $loc = $context->eventdatetime->getLocation();
-            if (isset($context->eventdatetime->location_id) && $loc !== false) :
+            if (isset($context->eventdatetime->location_id) && $loc !== false) {
             ?>
             <Location>
                 <LocationID><?php echo $loc->id; ?></LocationID>
@@ -92,7 +92,7 @@
                     <AdditionalPublicInfo><?php echo htmlspecialchars($loc->additionalpublicinfo); ?></AdditionalPublicInfo>
                 <?php endif; ?>
             </Location>
-            <?php endif; ?>
+            <?php } ?>
         </Locations>
         <?php
         $eventTypes = $context->event->getEventTypes();

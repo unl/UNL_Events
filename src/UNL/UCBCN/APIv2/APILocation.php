@@ -219,7 +219,7 @@ class APILocation implements ModelInterface, ModelAuthInterface
             $location_data['location_save_calendar'] = 'on';
         }
 
-        // Replace any non-existing values with empty string for validator 
+        // Replace any non-existing values with empty string for validator
         $new_location['name'] = $location_data['name'] ?? "";
         $new_location['streetaddress1'] = $location_data['address-1'] ?? "";
         $new_location['streetaddress2'] = $location_data['address-2'] ?? "";

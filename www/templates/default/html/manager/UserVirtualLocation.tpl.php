@@ -64,7 +64,10 @@
                                 echo json_encode($raw_webcast_json, JSON_UNESCAPED_SLASHES);
                             ?>;
                             LOCATIONS[<?php echo $webcast->id; ?>]['can-access-calendar'] = <?php
-                                echo json_encode($context->userHasAccessToCalendar($webcast->calendar_id ?? ""), JSON_UNESCAPED_SLASHES);
+                                echo json_encode(
+                                    $context->userHasAccessToCalendar($webcast->calendar_id ?? ""), 
+                                    JSON_UNESCAPED_SLASHES
+                                );
                             ?>;
                         </script>
                     </td>
@@ -199,7 +202,10 @@
                         (isset($post['method']) && $post['method'] !== 'put')
                         || (
                             (isset($post['method']) && $post['method'] === 'put')
-                            && ($vLocation !== false && $context->userHasAccessToCalendar($vLocation->calendar_id ?? ""))
+                            && (
+                                $vLocation !== false
+                                && $context->userHasAccessToCalendar($vLocation->calendar_id ?? "")
+                            )
                         )
                     ): ?>
                         dcf-d-none

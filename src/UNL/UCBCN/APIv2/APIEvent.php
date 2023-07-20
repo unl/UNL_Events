@@ -183,7 +183,8 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
 
         // Build the data for the DeleteEvent class
         $data = array(
-            'status' => $calendarHasEvents->status === CalendarEvent::STATUS_POSTED ? 'upcoming' : $calendarHasEvents->status,
+            'status' => $calendarHasEvents->status === CalendarEvent::STATUS_POSTED ?
+                'upcoming' : $calendarHasEvents->status,
         );
 
         // tries to delete the event, catches validation errors

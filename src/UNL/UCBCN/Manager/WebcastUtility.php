@@ -20,7 +20,7 @@ class WebcastUtility
             $outputMessage = 'You must give your new virtual location a <a href="#new-v-location-url">URL</a>.';
             $isValid = false;
         }
-        
+
         if ($isValid && !empty($post_data['new_v_location']['url']) &&
             !filter_var($post_data['new_v_location']['url'], FILTER_VALIDATE_URL)
         ) {
@@ -41,7 +41,7 @@ class WebcastUtility
             'additionalinfo',
         );
 
-        // creates a new webcast and fills the values 
+        // creates a new webcast and fills the values
         $webcast = new Webcast;
         foreach ($allowed_fields as $field) {
             $value = $post_data['new_v_location'][$field];
