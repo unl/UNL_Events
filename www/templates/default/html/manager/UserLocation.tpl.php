@@ -73,7 +73,7 @@
                             ?>;
                             LOCATIONS[<?php echo $location->id; ?>]['can-access-calendar'] = <?php
                                 echo json_encode(
-                                    $context->userHasAccessToCalendar($location->calendar_id ?? ""), 
+                                    $context->userHasAccessToCalendar($location->calendar_id ?? ""),
                                     JSON_UNESCAPED_SLASHES
                                 );
                             ?>;

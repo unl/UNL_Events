@@ -65,7 +65,7 @@
                             ?>;
                             LOCATIONS[<?php echo $webcast->id; ?>]['can-access-calendar'] = <?php
                                 echo json_encode(
-                                    $context->userHasAccessToCalendar($webcast->calendar_id ?? ""), 
+                                    $context->userHasAccessToCalendar($webcast->calendar_id ?? ""),
                                     JSON_UNESCAPED_SLASHES
                                 );
                             ?>;
@@ -295,7 +295,8 @@
         } else {
             createOrModifyCalendar.classList.add('dcf-d-none');
             createOrModifyTaken.classList.remove('dcf-d-none');
-            createOrModifyTaken.innerText = `This virtual location is already saved to ${locationToModify['calendar-name']}`;
+            createOrModifyTaken.innerText =
+                `This virtual location is already saved to ${locationToModify['calendar-name']}`;
 
             const elementToModify = document.getElementById('calendar_id');
             if (elementToModify === null) { throw new Error(`Missing Element calendar_id`); }
