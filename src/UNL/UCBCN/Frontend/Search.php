@@ -213,6 +213,7 @@ class Search extends EventListing implements RoutableInterface, MetaTagInterface
         return $this->date_parser->end_date;
     }
 
+    // Sets the meta tags for the page
     public function getMetaTags()
     {
         $title = $this->calendar->name . ' Calendar - Search';

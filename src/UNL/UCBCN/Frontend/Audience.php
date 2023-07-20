@@ -141,6 +141,7 @@ class Audience extends EventListing implements RoutableInterface, MetaTagInterfa
         return $sql;
     }
 
+    // Sets the meta tags for the page
     public function getMetaTags()
     {
         $title = $this->calendar->name . ' Calendar - Audience';
@@ -150,8 +151,6 @@ class Audience extends EventListing implements RoutableInterface, MetaTagInterfa
 
         return $metaTagUtility->getMetaTags();
     }
-
-
 
     /**
      * returns the url to this audience page.

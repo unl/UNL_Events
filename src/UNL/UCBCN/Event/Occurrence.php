@@ -307,16 +307,20 @@ class Occurrence extends Record
         return !empty($this->canceled);
     }
 
+    // This will use google microdata's requirements and check if the occurrence is valid
     public function microdataCheck()
     {
+        // We need a start time
         if (!isset($this->starttime) || empty($this->starttime)) {
             return false;
         }
 
+        // We need at least a location or a virtual location or both
         if (!isset($this->location_id) && !isset($this->webcast_id)) {
             return false;
         }
 
+        // Check if the location valid
         if (isset($this->location_id)) {
             $location = $this->getLocation();
             if ($location !== false && !$location->microdataCheck()) {
@@ -324,6 +328,7 @@ class Occurrence extends Record
             }
         }
 
+        // Check if the virtual location is valid
         if (isset($this->webcast_id)) {
             $webcast = $this->getWebcast();
             if ($webcast !== false && !$webcast->microdataCheck()) {

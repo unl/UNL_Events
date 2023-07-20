@@ -109,17 +109,26 @@ class Location extends Record
         }
     }
 
+    /**
+     * Gets the calendar that is saved
+     *
+     * @return Calendar|false
+     */
     public function getCalendar()
     {
         if (!isset($this->calendar_id) || empty($this->calendar_id)) {
-            return null;
+            return false;
         }
 
         return Calendar::getByID($this->calendar_id);
     }
 
-
-    public function toJSON()
+    /**
+     * Creates a nicely formatted json data
+     *
+     * @return array
+     */
+    public function toJSON(): array
     {
         return array(
             'location'                        => $this->id,

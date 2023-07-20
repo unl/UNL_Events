@@ -176,8 +176,10 @@ class Upcoming extends EventListing implements RoutableInterface, MetaTagInterfa
         return $url . $url_params;
     }
 
+    // Sets the meta tags for the page
     public function getMetaTags()
     {
+        // Checks if it is the homepage
         $url = $this->getURL();
         if (!$this->isHomepage) {
             $url = $this->calendar->getURL();

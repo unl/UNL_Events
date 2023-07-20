@@ -1,12 +1,12 @@
 <?php
 namespace UNL\UCBCN\Manager;
 
-use Exception;
 use UNL\UCBCN\Webcast as Webcast;
 use UNL\UCBCN\Webcasts;
 
 class WebcastUtility
 {
+    // Function for validating a virtual location's data
     public static function validateWebcast(array $post_data): array {
         $outputMessage = "";
         $isValid = true;
@@ -31,6 +31,7 @@ class WebcastUtility
         return array("valid" => $isValid, "message" => $outputMessage);
     }
 
+    // Function for creating a new virtual location
     public static function addWebcast(array $post_data, $user, $calendar)
     {
         // These need to match webcast table
@@ -40,8 +41,8 @@ class WebcastUtility
             'additionalinfo',
         );
 
+        // creates a new webcast and fills the values 
         $webcast = new Webcast;
-
         foreach ($allowed_fields as $field) {
             $value = $post_data['new_v_location'][$field];
             if (!empty($value)) {
@@ -49,10 +50,12 @@ class WebcastUtility
             }
         }
 
+        // If webcast is saved to user set the user uid
         if (array_key_exists('v_location_save', $post_data) && $post_data['v_location_save'] == 'on') {
             $webcast->user_id = $user->uid;
         }
 
+        // If webcast is saved to calendar then set the calendar id
         if (array_key_exists('v_location_save_calendar', $post_data) &&
             $post_data['v_location_save_calendar'] == 'on') {
             $webcast->calendar_id = $calendar->id;
@@ -63,6 +66,7 @@ class WebcastUtility
         return $webcast;
     }
 
+    // Function for updating an existing virtual location
     public static function updateWebcast(array $post_data, $user, $calendar)
     {
         // These need to match webcast table
@@ -72,11 +76,13 @@ class WebcastUtility
             'additionalinfo',
         );
 
+        // Get the virtual location and validate it
         $webcast = Webcast::getByID($post_data['v_location']);
         if ($webcast === null) {
             throw new ValidationException('Invalid Location ID');
         }
 
+        // Set the values
         foreach ($allowed_fields as $field) {
             $value = $post_data['new_v_location'][$field];
             if (!empty($value)) {
@@ -84,7 +90,9 @@ class WebcastUtility
             }
         }
 
+        // If the user was not set or was set to the current user then allow for updates to user
         if (!isset($webcast->user_id) || $webcast->user_id === $user->uid) {
+            // Update the user or un-save it if the user was removed
             if (array_key_exists('v_location_save', $post_data) && $post_data['v_location_save'] == 'on') {
                 $webcast->user_id = $user->uid;
             } else {
@@ -92,6 +100,7 @@ class WebcastUtility
             }
         }
 
+        // If virtual location is saved to calendar then set the calendar id
         if (array_key_exists('v_location_save_calendar', $post_data) &&
             $post_data['v_location_save_calendar'] == 'on') {
             $webcast->calendar_id = $calendar->id;
@@ -104,12 +113,14 @@ class WebcastUtility
         return $webcast;
     }
 
+     // Get the users virtual locations
     public static function getUserWebcasts()
     {
         $user = Auth::getCurrentUser();
         return new Webcasts(array('user_id' => $user->uid));
     }
 
+    // Get the virtual locations from the calendar id
     public static function getCalendarWebcasts($calendar_id)
     {
         return new Webcasts(array('calendar_id' => $calendar_id));

@@ -12,6 +12,7 @@ class APIEventTypes implements ModelInterface
         $this->options = $options + $this->options;
     }
 
+    // This is only for getting list of all the audiences
     public function run(string $method, array $data, $user): array
     {
         if ($method !== 'GET') {
@@ -21,9 +22,16 @@ class APIEventTypes implements ModelInterface
         $output_data = array();
         $all_event_types = new EventTypes();
 
-        foreach($all_event_types as $audience) {
-            $output_data[] = $audience->name;
+        // Clean up data
+        foreach ($all_event_types as $event_type) {
+            $output_data[] = array(
+                'id' => $event_type->id,
+                'name' => $event_type->name,
+            );
         }
+
+        // Order by id asc
+        usort($output_data, function($a, $b) {return intval($a['id']) > intval($b['id']);});
 
         return array('eventtypes' => $output_data);
     }

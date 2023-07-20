@@ -262,6 +262,7 @@ class EventInstance implements RoutableInterface, MetaTagInterface
         return $fullDescription[0];
     }
 
+    // Sets the meta tags for the page
     public function getMetaTags()
     {
         $datetimeString = date('n/d/y @ g:ia', strtotime($this->eventdatetime->starttime));
@@ -271,16 +272,19 @@ class EventInstance implements RoutableInterface, MetaTagInterface
 
         $title = $this->event->displayTitle($this) . ' - ' . $datetimeString;
 
+        // Add a description if it is set
         $description = 'Event on ' . $datetimeString;
         if (isset($this->event->description) && !empty($this->event->description)) {
             $description = $this->event->description;
         }
 
+        // Add a image if it is set
         $image = '';
         if (isset($this->event->imagedata) && !empty($this->event->imagedata)) {
             $image = MetaTagUtility::getSiteURL() . '?image&amp;id=' . $this->event->id;
         }
 
+        // Build the options
         $options = array(
             'image' => $image,
             'label1' => 'Calendar',
@@ -299,18 +303,22 @@ class EventInstance implements RoutableInterface, MetaTagInterface
      */
     public function microdataCheck()
     {
+        // We need a title
         if (!isset($this->event->title) || empty($this->event->title)) {
             return false;
         }
 
+        // We need a start time
         if (!isset($this->eventdatetime->starttime) || empty($this->eventdatetime->starttime)) {
             return false;
         }
 
+        // We need at least a location or a virtual location or both
         if (!isset($this->eventdatetime->location_id) && !isset($this->eventdatetime->webcast_id)) {
             return false;
         }
 
+        // Check if the location valid
         if (isset($this->eventdatetime->location_id)) {
             $location = $this->eventdatetime->getLocation();
             if ($location !== false && !$location->microdataCheck()) {
@@ -318,6 +326,7 @@ class EventInstance implements RoutableInterface, MetaTagInterface
             }
         }
 
+        // Check if the virtual location is valid
         if (isset($this->eventdatetime->webcast_id)) {
             $webcast = $this->eventdatetime->getWebcast();
             if ($webcast !== false && !$webcast->microdataCheck()) {

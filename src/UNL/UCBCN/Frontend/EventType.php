@@ -141,6 +141,7 @@ class EventType extends EventListing implements RoutableInterface, MetaTagInterf
         return $sql;
     }
 
+    // Sets the meta tags for the page
     public function getMetaTags()
     {
         $title = $this->calendar->name . ' Calendar - Event Type';

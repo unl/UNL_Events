@@ -41,13 +41,16 @@ class APICalendar implements ModelInterface, ModelAuthInterface
         }
     }
 
-    public function needsAuth(string $method): bool
+    // We need auth if we are not using get
+    public function needsAuth (string $method): bool
     {
         if ($method === 'GET') {
             return false;
         }
         return true;
     }
+
+    // We can only use the API token
     public function canUseTokenAuth(string $method): bool
     {
         return true;
@@ -57,6 +60,7 @@ class APICalendar implements ModelInterface, ModelAuthInterface
         return false;
     }
 
+    // Basic CRUD options
     public function run(string $method, array $data, $user): array
     {
         if ($method === 'GET') {
@@ -72,43 +76,56 @@ class APICalendar implements ModelInterface, ModelAuthInterface
         }
 
         if ($method === 'DELETE') {
+            // Check if we can delete the calendar
             $delete_permission = Permission::getByName('Calendar Delete');
             if (!$user->hasPermission($delete_permission->id, $this->calendar->id)) {
                 throw new ForbiddenException('You do not have access to delete this calendar.');
             }
+
+            // If we do have access we will delete the calendar and output the data
             $this->calendar->delete();
             return array($this->calendar->name . ' has been deleted.');
         }
 
-        throw new InvalidMethodException('Calendar only allows get.');
+        throw new InvalidMethodException('Calendar route invalid method.');
     }
 
+    // Handle when a new calendar is being created
     private function handlePost(array $data, User $user): array
     {
+        // Clean up data
         $this->translateIncomingJSON($data);
 
+        // Make a new CreateCalendar object from manager
         $createCalendar = new CreateCalendar(array(
             'user' => $user,
         ));
 
+        // Try creating calendar and check for validation errors
         try {
             $createCalendar->createCalendar($data);
         } catch (\UNL\UCBCN\Manager\ValidationException $e) {
             throw new ValidationException($e->getMessage());
         }
 
+        // If successful then return the newly created calendar
         return $this->calendarToJSON($createCalendar->calendar->id);
     }
 
+    // Handle updating calendar data
     private function handlePut(array $data, User $user): array
     {
+        // Clean up data
         $this->translateIncomingJSON($data);
 
+        // Try using the CreateCalendar from manager
         try {
             $createCalendar = new CreateCalendar(array(
                 'calendar_shortname' => $this->calendar->shortname,
                 'user' => $user,
             ));
+
+        // Catch errors with validation or access
         } catch(\Exception $e) {
             if ($e->getCode() === 403) {
                 throw new ForbiddenException('You can not edit that calendar.');
@@ -116,25 +133,28 @@ class APICalendar implements ModelInterface, ModelAuthInterface
                 throw new ValidationException($e->getMessage());
             }
         }
-        
 
+        // Try updating and catch any validation errors
         try {
             $createCalendar->updateCalendar($data);
         } catch (\UNL\UCBCN\Manager\ValidationException $e) {
             throw new ValidationException($e->getMessage());
         }
 
+        // Return the newly updated calendar
         return $this->calendarToJSON($createCalendar->calendar->id);
     }
 
+    // Convert calendar id to json of the calendar
     public static function calendarToJSON(string $calendar_id): array
     {
+        // Get calendar and check if it exists
         $calendar = Calendar::getById($calendar_id);
-
         if ($calendar === false) {
             throw new ValidationException('Invalid Calendar Id');
         }
 
+        // Clean up event release preference
         $event_release_preference = null;
         switch ($calendar->eventreleasepreference) {
             case Calendar::EVENT_RELEASE_PREFERENCE_DEFAULT:
@@ -150,8 +170,10 @@ class APICalendar implements ModelInterface, ModelAuthInterface
                 $event_release_preference = null;
         }
 
+        // Convert to bool
         $recommendations_within_account = $calendar->recommendationswithinaccount === '1';
 
+        // The rest of the info can be made into an associative array
         return array(
             'id' => $calendar->id,
             'name' => $calendar->name,
@@ -164,6 +186,7 @@ class APICalendar implements ModelInterface, ModelAuthInterface
         );
     }
 
+    // Translate json from API to the data that the manager code will use
     private function translateIncomingJSON(array &$calendar_data)
     {
         $this->replaceJSONKey($calendar_data, 'short-name', 'shortname');
@@ -182,6 +205,7 @@ class APICalendar implements ModelInterface, ModelAuthInterface
         $calendar_data['defaulttimezone'] = $timezones[$calendar_data['default-timezone'] ?? ""];
     }
 
+    // Convert php time zone to short name from UCBCN
     public static function translateTimezone($phpTimeZone)
     {
         $timezones = BaseUCBCN::getTimezoneOptions();
@@ -189,14 +213,17 @@ class APICalendar implements ModelInterface, ModelAuthInterface
         return array_search($phpTimeZone, $timezones);
     }
 
-    public function endsWith( $haystack, $needle ) {
-        $length = strlen( $needle );
-        if( !$length ) {
+    // Function for checking if a string ends with a value
+    public function endsWith($haystack, $needle): bool
+    {
+        $length = strlen($needle);
+        if (!$length) {
             return true;
         }
-        return substr( $haystack, -$length ) === $needle;
+        return substr($haystack, -$length) === $needle;
     }
 
+    // Replace keys in array
     private function replaceJSONKey(array &$json_data, string $oldKey, string $newKey): void
     {
         if (!key_exists($oldKey, $json_data)) {

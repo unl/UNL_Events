@@ -193,8 +193,10 @@ class Day extends EventListing implements RoutableInterface, MetaTagInterface
         return self::generateURL($this->calendar, $this->getDateTime());
     }
 
+    // Sets the meta tags for the page
     public function getMetaTags()
     {
+        // Checks if it is the homepage
         $url = $this->getURL();
         if (!$this->isHomepage) {
             $url = $this->calendar->getURL();

@@ -100,6 +100,7 @@ class Year implements RoutableInterface, MetaTagInterface
         return $calendar->getURL() . $datetime->format('Y') . '/';
     }
 
+    // Sets the meta tags for the page
     public function getMetaTags()
     {
         $title = $this->calendar->name . ' Calendar - ' . $this->getDateTime()->format('Y');

@@ -109,6 +109,7 @@ class Week implements \IteratorAggregate, RoutableInterface, MetaTagInterface
         return $calendar->getURL() . $datetime->format('Y/\WW/');
     }
 
+    // Sets the meta tags for the page
     public function getMetaTags()
     {
         $title = $this->calendar->name . ' Calendar - Week ' . $this->getDateTime()->format('W');

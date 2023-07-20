@@ -22,11 +22,13 @@ class CalendarLocation extends PostHandler
         }
     }
 
+    // Gets the locations saved to the calendar
     public function getCalendarLocations()
     {
         return LocationUtility::getCalendarLocations($this->calendar->id);
     }
 
+    // Gets the current user
     public function getCurrentUser()
     {
         $user = Auth::getCurrentUser();
@@ -34,6 +36,7 @@ class CalendarLocation extends PostHandler
         return $user->uid;
     }
 
+    // Gets all the calendars a user has access to
     public function getUserCalendars()
     {
         $user = Auth::getCurrentUser();
@@ -41,7 +44,8 @@ class CalendarLocation extends PostHandler
         return $user->getCalendars();
     }
 
-    public function userHasAccessToCalendar()
+    // Validates a user can edit and create locations on the calendar
+    public function userHasAccessToCalendar(): bool
     {
         $user = Auth::getCurrentUser();
 
@@ -52,8 +56,10 @@ class CalendarLocation extends PostHandler
             && $user->hasPermission($create_permission->id, $this->calendar->id);
     }
 
+    // Handles all the forms submissions
     public function handlePost(array $get, array $post, array $files)
     {
+        // Determine what to do based on the method inputted
         $method = $post['method'] ?? "";
         try {
             switch ($method) {
@@ -76,6 +82,7 @@ class CalendarLocation extends PostHandler
             throw $e;
         }
 
+        // If everything goes well we will output a success notice based on the method
         switch ($method) {
             case "post":
                 $this->flashNotice(
@@ -100,38 +107,45 @@ class CalendarLocation extends PostHandler
                 break;
         }
 
-        //redirect
+        // Redirect
         return $this->calendar->getLocationURL();
     }
 
+    // Create a new location
     private function createLocation(array $post_data)
     {
         $user = Auth::getCurrentUser();
 
+        // Makes sure it is saved to the calendar you made it on
         $post_data['location_save_calendar'] = 'on';
         $calendar = $this->calendar;
 
+        // Validates the location data
         $this->validateLocation($post_data);
 
+        // Makes the new location
         LocationUtility::addLocation($post_data, $user, $calendar);
     }
 
+    // Updates an existing location
     private function updateLocation(array $post_data)
     {
         $user = Auth::getCurrentUser();
 
+         // Makes sure it is saved to the calendar you made it on
         $post_data['location_save_calendar'] = 'on';
         $calendar = $this->calendar;
 
+        // Makes sure we have a location set and it is valid
         if (!empty($post_data['location']) && $post_data['location'] === "New") {
             throw new ValidationException('Missing Location To Update');
         }
-
         $location = Location::getByID($post_data['location']);
         if ($location === null) {
             throw new ValidationException('Invalid Location ID');
         }
 
+        // Double check we have access to modify that location
         if (
             !(isset($location->user_id) && $location->user_id === $user->uid) &&
             !(isset($location->calendar_id) && $this->userHasAccessToCalendar())
@@ -139,8 +153,10 @@ class CalendarLocation extends PostHandler
             throw new ValidationException('You do not have access to modify that location');
         }
 
+        // Validates the location data
         $this->validateLocation($post_data);
 
+        // Tries to update and if not we will throw an error
         try {
             LocationUtility::updateLocation($post_data, $user, $calendar);
         } catch(Exception $e) {
@@ -148,21 +164,24 @@ class CalendarLocation extends PostHandler
         }
     }
 
+    // Detaches a location from the calendar, does not delete it
     private function detachLocation(array $post_data)
     {
+        // Checks to see if the location is set and valid
         if (!empty($post_data['location']) && $post_data['location'] === "New") {
             throw new ValidationException('Missing Location To Detach');
         }
-
         $location = Location::getByID($post_data['location']);
         if ($location === null) {
             throw new ValidationException('Invalid Location ID');
         }
 
+        // Removed the calendar from it
         $location->calendar_id = null;
         $location->update();
     }
 
+    // Uses the location utility to validate the location data
     private function validateLocation(array $post_data)
     {
         $validate_data = LocationUtility::validateLocation($post_data);

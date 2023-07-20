@@ -65,16 +65,26 @@ class Webcast extends Record
         return array('id',true);
     }
 
+    /**
+     * Gets the calendar that is saved
+     *
+     * @return Calendar|false
+     */
     public function getCalendar()
     {
         if (!isset($this->calendar_id) || empty($this->calendar_id)) {
-            return null;
+            return false;
         }
 
         return Calendar::getByID($this->calendar_id);
     }
 
-    public function toJSON()
+    /**
+     * Creates a nicely formatted json data
+     *
+     * @return array
+     */
+    public function toJSON(): array
     {
         return array(
             'v-location'                            => $this->id,
@@ -91,7 +101,7 @@ class Webcast extends Record
      *
      * @return bool
      */
-    public function isSaved()
+    public function isSaved(): bool
     {
         return isset($this->user_id) || isset($this->calendar_id);
     }
@@ -101,7 +111,7 @@ class Webcast extends Record
      *
      * @return bool
      */
-    public function microdataCheck()
+    public function microdataCheck(): bool
     {
         return isset($this->url) && !empty($this->url);
     }

@@ -22,6 +22,7 @@ class CalendarVirtualLocation extends PostHandler
         }
     }
 
+    // Gets the webcasts that are saved to the calendar
     public function getCalendarWebcasts()
     {
         return WebcastUtility::getCalendarWebcasts($this->calendar->id);
@@ -34,6 +35,7 @@ class CalendarVirtualLocation extends PostHandler
         return $user->uid;
     }
 
+    // Gets all the calendars saved to the user
     public function getUserCalendars()
     {
         $user = Auth::getCurrentUser();
@@ -41,7 +43,8 @@ class CalendarVirtualLocation extends PostHandler
         return $user->getCalendars();
     }
 
-    public function userHasAccessToCalendar()
+    // Validates a user can edit and create locations on the calendar
+    public function userHasAccessToCalendar(): bool
     {
         $user = Auth::getCurrentUser();
 
@@ -52,8 +55,10 @@ class CalendarVirtualLocation extends PostHandler
             && $user->hasPermission($create_permission->id, $this->calendar->id);
     }
 
+    // Handles all the forms submissions
     public function handlePost(array $get, array $post, array $files)
     {
+        // Determine what to do based on the method inputted
         $method = $post['method'] ?? "";
         try {
             switch ($method) {
@@ -76,6 +81,7 @@ class CalendarVirtualLocation extends PostHandler
             throw $e;
         }
 
+        // If everything goes well we will output a success notice based on the method
         switch ($method) {
             case "post":
                 $this->flashNotice(
@@ -100,38 +106,45 @@ class CalendarVirtualLocation extends PostHandler
                 break;
         }
 
-        //redirect
+        // Redirect
         return $this->calendar->getVirtualLocationURL();
     }
 
+    // Create a new virtual location
     private function createWebcast(array $post_data)
     {
         $user = Auth::getCurrentUser();
 
+        // Makes sure it is saved to the calendar you made it on
         $post_data['v_location_save_calendar'] = 'on';
         $calendar = $this->calendar;
 
+        // Validates the virtual location data
         $this->validateLocation($post_data);
 
+        // Makes the new virtual location
         WebcastUtility::addWebcast($post_data, $user, $calendar);
     }
 
+    // Updates an existing virtual location
     private function updateWebcast(array $post_data)
     {
         $user = Auth::getCurrentUser();
 
+        // Makes sure it is saved to the calendar you made it on
         $post_data['v_location_save_calendar'] = 'on';
         $calendar = $this->calendar;
 
+        // Makes sure we have a virtual location set and it is valid
         if (!empty($post_data['v_location']) && $post_data['v_location'] === "New") {
             throw new ValidationException('Missing Virtual Location To Update');
         }
-
         $webcast = Webcast::getByID($post_data['v_location']);
         if ($webcast === null) {
             throw new ValidationException('Invalid Virtual Location');
         }
 
+        // Double check we have access to modify that virtual location
         if (
             !(isset($webcast->user_id) && $webcast->user_id === $user->uid) &&
             !(isset($webcast->calendar_id) && $this->userHasAccessToCalendar())
@@ -139,8 +152,10 @@ class CalendarVirtualLocation extends PostHandler
             throw new ValidationException('You do not have access to modify that virtual location');
         }
 
+        // Validates the virtual location data
         $this->validateLocation($post_data);
 
+        // Tries to update and if not we will throw an error
         try {
             WebcastUtility::updateWebcast($post_data, $user, $calendar);
         } catch(ValidationException $e) {
@@ -148,21 +163,24 @@ class CalendarVirtualLocation extends PostHandler
         }
     }
 
+    // Detaches a location from the calendar, does not delete it
     private function detachWebcast(array $post_data)
     {
+        // Checks to see if the virtual location is set and valid
         if (!empty($post_data['v_location']) && $post_data['v_location'] === "New") {
             throw new ValidationException('Missing Virtual Location To Detach');
         }
-
         $webcast = Webcast::getByID($post_data['v_location']);
         if ($webcast === null) {
             throw new ValidationException('Invalid Virtual Location ID');
         }
 
+        // Removed the calendar from it
         $webcast->calendar_id = null;
         $webcast->update();
     }
 
+    // Uses the webcast utility to validate the virtual location data
     private function validateLocation(array $post_data)
     {
         $validate_data = WebcastUtility::validateWebcast($post_data);

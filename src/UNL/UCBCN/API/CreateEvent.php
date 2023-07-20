@@ -38,13 +38,21 @@ class CreateEvent
 
     public function handleGet($get)
     {
-        throw new NotFoundException('Not Found');
+        // throw new NotFoundException('Not Found');
+
+        http_response_code('503');
+        echo 'This API endpoint has been shutdown, please use the new API.';
+        exit;
     }
 
     public function handlePost($post)
     {
-        $new_event = $this->createEvent($post);
-        return $new_event;
+        // $new_event = $this->createEvent($post);
+        // return $new_event;
+
+        http_response_code('503');
+        echo 'This API endpoint has been shutdown, please use the new API.';
+        exit;
     }
 
     private function validateEventData($post_data)

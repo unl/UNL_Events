@@ -21,13 +21,16 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
         parent::__construct($options);
     }
 
-    public function needsAuth(string $method): bool
+    // We only need auth if the method is not get
+    public function needsAuth (string $method): bool
     {
         if ($method === 'GET') {
             return false;
         }
         return true;
     }
+
+    // We only want to use the API token auth
     public function canUseTokenAuth(string $method): bool
     {
         return true;
@@ -37,8 +40,10 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
         return false;
     }
 
+    // Basic CRUD options
     public function run(string $method, array $data, $user): array
     {
+        // Multiple ways to query events
         if ($method === 'GET') {
             if (key_exists('recurrence_id', $this->options)) {
                 return $this->handleRecurrenceGet();
@@ -51,6 +56,7 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
             }
         }
 
+        // Other crud options
         if ($method === 'POST') {
             return $this->handlePost($data, $user);
         }
@@ -61,15 +67,18 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
             return $this->handleDelete($user);
         }
 
-        throw new InvalidMethodException('Events only allows get.');
+        throw new InvalidMethodException('Events Route Invalid Method.');
     }
 
+    // This is for an event id being passed in
     private function handleEventGet(): array
     {
         $this->validateEvent($this->options['event_id']);
 
         return $this->translateOutgoingEventJSON($this->options['event_id']);
     }
+
+    // This is for an event datetime being passed in
     private function handleDatetimeGet(): array
     {
         $event_occurrence = Occurrence::getById($this->options['event_datetime_id']);
@@ -78,6 +87,8 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
 
         return $this->translateOutgoingEventJSON($event_occurrence->event_id);
     }
+
+    // This is for an event datetime recurrence id being passed in
     private function handleRecurrenceGet(): array
     {
         $recurring_date = RecurringDate::getById($this->options['recurrence_id']);
@@ -87,58 +98,73 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
         return $this->translateOutgoingEventJSON($recurring_date->event_id);
     }
 
+    // This is for creating an event
     private function handlePost(array $data, User $user): array
     {
+        // Clean up the data
         $this->translateIncomingJSON($data);
 
+        // Make a CreateEvent from the manager
         $createEvent = new CreateEvent(array(
             'calendar_shortname' => $this->calendar->shortname,
             'user' => $user,
             'event_source' => CalendarEvent::SOURCE_CREATE_EVENT_API_V2,
         ));
 
+        // Try to create the event and catch any validation errors
         try {
             $createEvent->handlePost(array(), $data, array());
         } catch (\UNL\UCBCN\Manager\ValidationException $e) {
             throw new ValidationException($e->getMessage());
         }
 
+        // Output the newly created event
         return $this->translateOutgoingEventJSON($createEvent->event->id);
     }
 
+    // Handles updating the event, this uses only the event id
     private function handlePut(array $data, User $user): array
     {
+        // Clean up the data
         $this->translateIncomingJSON($data);
 
+        // Validates the event
         $this->validateEvent($this->options['event_id']);
 
         // This needs to be unset since the update form is a checkbox instead of radio button
         unset($data['send_to_main']);
 
+        // Try creating an EditEvent object from manager
         try {
             $editEvent = new EditEvent(array(
                 'calendar_shortname' => $this->calendar->shortname,
                 'user' => $user,
                 'event_id' => $this->options['event_id'],
             ));
+
+        // Catch if we do not have access to edit that event
         } catch (\Exception $e) {
             throw new ForbiddenException($e->getMessage());
         }
-        
 
+        // Try to update the event and catch if there are any validation errors
         try {
             $editEvent->handlePost(array(), $data, array());
         } catch (\UNL\UCBCN\Manager\ValidationException $e) {
             throw new ValidationException($e->getMessage());
         }
 
+        // Output the newly updated event
         return $this->translateOutgoingEventJSON($editEvent->event->id);
     }
 
-    private function handleDelete(User $user):array
+    // Handles event deletions, this uses only event id
+    private function handleDelete(User $user): array
     {
+        // Validates event exists
         $this->validateEvent($this->options['event_id']);
 
+        // Tries to use the deleteEvent, catch errors related permissions and deleting events
         try {
             $deleteEvent = new DeleteEvent(array(
                 'calendar_shortname' => $this->calendar->shortname,
@@ -149,24 +175,29 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
             throw new ForbiddenException($e->getMessage());
         }
 
+        // We need for the status
         $calendarHasEvents = CalendarEvent::getByIds($this->calendar->id, $this->options['event_id']);
         if ($calendarHasEvents === false) {
             throw new ValidationException('Calendar does not have that event.');
         }
 
+        // Build the data for the DeleteEvent class
         $data = array(
             'status' => $calendarHasEvents->status === CalendarEvent::STATUS_POSTED ? 'upcoming' : $calendarHasEvents->status,
         );
 
+        // tries to delete the event, catches validation errors
         try {
             $deleteEvent->handlePost(array(), $data, array());
         } catch (\UNL\UCBCN\Manager\ValidationException $e) {
             throw new ValidationException($e->getMessage());
         }
 
+        // Returns success message
         return array('Event has been deleted from calendar.');
     }
 
+    // Validates the event id and checks if the calendar has that event in it
     private function validateEvent($event_id)
     {
         if (!isset($event_id) || !is_numeric($event_id)) {
@@ -182,6 +213,7 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
         }
     }
 
+    // Translates the incoming API json to match the event forms
     private function translateIncomingJSON(array &$event_data)
     {
         $this->replaceJSONKey($event_data, 'start-date', 'start_date');
@@ -241,18 +273,20 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
             $event_data['timezone'] = $timezones[$event_data['timezone']];
         }
 
+        // We do not allow images
         unset($event_data['cropped_image_data']);
         unset($event_data['imagedata']);
         unset($event_data['remove_image']);
 
+        // We do not allow people to send events to main with this
         $event_data['send_to_main'] = 'off';
     }
 
-
-    public static function translateOutgoingEventJSON(string $event_id):array
+    // Uses the event id and will output nicely formatted json
+    public static function translateOutgoingEventJSON(string $event_id): array
     {
+        // Validates the event
         $event = Event::getById($event_id);
-
         if ($event === false) {
             throw new ValidationException('Invalid ID.');
         }
@@ -273,6 +307,7 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
         $event_json['listing-contact-type'] = $event->listingcontacttype;
         $event_json['canceled'] = $event->canceled === '1';
 
+        // Gets the calendar data
         $original_calendar = $event->getOriginCalendar();
         if (isset($original_calendar)) {
             $event_json['original-calendar'] = APICalendar::calendarToJSON($original_calendar->id);
@@ -280,8 +315,9 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
             $event_json['original-calendar'] = null;
         }
 
+        // Gets event type data
         $event_json['event-types'] = array();
-        foreach($event->getEventTypes() as $event_type_connection) {
+        foreach ($event->getEventTypes() as $event_type_connection) {
             $event_type = $event_type_connection->getType();
             $event_json['event-types'][] = array(
                 'id' => $event_type->id,
@@ -289,8 +325,9 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
             );
         }
 
+        // Gets audiences data
         $event_json['audiences'] = array();
-        foreach($event->getAudiences() as $audience_connection) {
+        foreach ($event->getAudiences() as $audience_connection) {
             $audience = $audience_connection->getAudience();
             $event_json['audiences'][] = array(
                 'id' => $audience->id,
@@ -298,26 +335,30 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
             );
         }
 
+        // Gets image data
         if (isset($event->imagedata)) {
             $event_json['image-url'] = \UNL\UCBCN\Frontend\Controller::$url . '?image&id=' . $event->id;
         } else {
             $event_json['image-url'] = null;
         }
 
+        // Gets occurrences and then gets their data
         $event_json['occurrences'] = array();
         $occurrences = new Occurrences(array(
             'event_id' => $event->id,
         ));
-
         foreach ($occurrences as $occurrence) {
             $event_json['occurrences'][] = APIEvent::translateOutgoingOccurrenceJSON($occurrence);
         }
 
+        // returns the data
         return $event_json;
     }
 
+    // Takes that occurrence and outputs json
     public static function translateOutgoingOccurrenceJSON(Occurrence $occurrence): array
     {
+        // Gets timezone converter
         $timezoneDateTime = new \UNL\UCBCN\TimezoneDateTime($occurrence->timezone);
 
         $occurrence_json = array();
@@ -335,6 +376,7 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
         $occurrence_json['event-location-additionalpublicinfo'] = $occurrence->location_additionalpublicinfo;
         $occurrence_json['event-virtual-location-additionalpublicinfo'] = $occurrence->webcast_additionalpublicinfo;
 
+        // Gets the location data
         if (isset($occurrence->location_id) && !empty($occurrence->location_id)) {
             try {
                 $occurrence_json['location'] = APILocation::translateOutgoingJSON($occurrence->location_id);
@@ -345,6 +387,7 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
             $occurrence_json['location'] = null;
         }
 
+        // Get the webcast data
         if (isset($occurrence->webcast_id) && !empty($occurrence->webcast_id)) {
             try {
                 $occurrence_json['virtual-location'] = APIWebcast::translateOutgoingJSON($occurrence->webcast_id);
@@ -355,6 +398,7 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
             $occurrence_json['virtual-location'] = null;
         }
 
+        // Gets the recurring dates and their data
         $occurrence_json['recurring-dates'] = array();
         if ($occurrence->isRecurring()) {
             $recurring_dates = $occurrence->getRecurrences();
@@ -363,9 +407,11 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
             }
         }
 
+        // Returns the occurrence data
         return $occurrence_json;
     }
 
+    // Takes in the recurring date and outputs json
     public static function translateOutgoingRecurringDateJSON(RecurringDate $recurring_date): array
     {
         $recurring_date_json = array();
@@ -379,14 +425,16 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
         return $recurring_date_json;
     }
 
+
+    // Returns a bool on whether the datetime is all day
     private static function isAllDay($occurrence)
     {
-        //It must start at midnight to be an all day event
+        // It must start at midnight to be an all day event
         if (strpos($occurrence->starttime, '00:00:00') === false) {
             return false;
         }
 
-        //It must end at midnight, or not have an end date.
+        // It must end at midnight, or not have an end date.
         if (!empty($occurrence->endtime) &&
             strpos($occurrence->endtime, '00:00:00') === false) {
             return false;
@@ -395,6 +443,7 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
         return true;
     }
 
+    // Replaces array key
     private function replaceJSONKey(array &$json_data, string $oldKey, string $newKey): void
     {
         if (!key_exists($oldKey, $json_data)) {

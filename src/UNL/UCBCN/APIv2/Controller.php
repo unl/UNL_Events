@@ -17,6 +17,7 @@ class Controller {
         $this->options = $options + $this->options;
         $this->auth = new Auth();
 
+        // Handles all the errors and has default error messages
         try {
             $this->getRequestData();
             $this->run();
@@ -44,6 +45,7 @@ class Controller {
         }
     }
 
+    // This uses the model and auth to try running the API request
     public function run()
     {
         if (!isset($this->options['model'])) {
@@ -52,53 +54,69 @@ class Controller {
 
         $model = new $this->options['model']($this->options);
 
+        // Checks if that model requires Auth
         if ($model instanceof ModelAuthInterface && $model->needsAuth($_SERVER['REQUEST_METHOD'])) {
             $authCheck = false;
+
+            // We check if we can use the cookie auth and they are validated
             if ($model->canUseCookieAuth($_SERVER['REQUEST_METHOD'])) {
                 $authCheck = $this->checkAuthCookie();
             }
+
+            // If they have not been validated yet then we check if we can use the token auth
             if (!$authCheck && $model->canUseTokenAuth($_SERVER['REQUEST_METHOD'])) {
                 $authCheck = $this->checkAuthToken();
             }
 
+            // If we are here then we know that they are not going to be authenticated
             if (!$authCheck) {
                 throw new MissingAuthException();
             }
         }
 
+        // We will try running the API query
+        // User might be false if they are not authenticated
         $result = $model->run($_SERVER['REQUEST_METHOD'], $this->request_data, $this->user);
 
         $this->output['data'] = $result;
     }
 
+    // Checks the headers of request for API token
     public function checkAuthToken(): bool
     {
+        // Gets the headers
         $headers = getallheaders();
         if ($headers === false) {
             throw new ServerErrorException('Could not read request headers.');
         }
 
+        // Checks for auth token
         if (!array_key_exists('Authorization', $headers)) {
             return false;
         }
 
+        // Tries to authenticate with it
         $this->user = $this->auth->authenticateViaToken($headers['Authorization']);
 
+        // returns bool
         return $this->user !== false;
     }
 
+    // Checks the users cookies, this is like the normal auth through the website
     public function checkAuthCookie(): bool
     {
+        // Checks auth
         $this->auth->checkAuthentication();
-
         if (!$this->auth->isAuthenticated()) {
             return false;
         }
 
+        //sets the user and return true
         $this->user = $this->auth->getCurrentUser();
         return true;
     }
 
+    // Cleans up the request data and validates the method
     public function getRequestData(): void
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {

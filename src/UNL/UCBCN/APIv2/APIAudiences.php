@@ -12,6 +12,7 @@ class APIAudiences implements ModelInterface
         $this->options = $options + $this->options;
     }
 
+    // This is only for getting list of all the audiences
     public function run(string $method, array $data, $user): array
     {
         if ($method !== 'GET') {
@@ -21,9 +22,16 @@ class APIAudiences implements ModelInterface
         $output_data = array();
         $all_audiences = new Audiences();
 
-        foreach($all_audiences as $audience) {
-            $output_data[] = $audience->name;
+        // Clean up data
+        foreach ($all_audiences as $audience) {
+            $output_data[] = array(
+                'id' => $audience->id,
+                'name' => $audience->name,
+            );
         }
+
+        // Order by id asc
+        usort($output_data, function($a, $b) {return intval($a['id']) > intval($b['id']);});
 
         return array('audiences' => $output_data);
     }

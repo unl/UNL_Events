@@ -17,8 +17,8 @@ $calendar_slash_required = '(' . $calendar . '\/)?';
 $calendar_slash_optional = '(' . $calendar . '(\/)?)?';
 
 $routes['/^(\/)?$/'] = 'UNL\UCBCN\APIv2\APIHome';
-$routes['/^audience(\/)?$/'] = 'UNL\UCBCN\APIv2\APIAudiences';
-$routes['/^eventtype(\/)?$/'] = 'UNL\UCBCN\APIv2\APIEventTypes';
+$routes['/^audiences(\/)?$/'] = 'UNL\UCBCN\APIv2\APIAudiences';
+$routes['/^eventtypes(\/)?$/'] = 'UNL\UCBCN\APIv2\APIEventTypes';
 $routes['/^location(\/)?$/'] = 'UNL\UCBCN\APIv2\APILocation';
 $routes['/^location\/' . $location . '(\/)?$/'] = 'UNL\UCBCN\APIv2\APILocation';
 $routes['/^virtual-location(\/)?$/'] = 'UNL\UCBCN\APIv2\APIWebcast';

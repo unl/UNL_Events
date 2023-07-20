@@ -15,13 +15,21 @@ class CreateLocation {
 
     public function handleGet($get)
     {
-        throw new NotFoundException('Not Found');
+        // throw new NotFoundException('Not Found');
+
+        http_response_code('503');
+        echo 'This API endpoint has been shutdown, please use the new API.';
+        exit;
     }
 
     public function handlePost($post)
     {
-        $location = $this->createLocation($post);
-        return $location;
+        // $location = $this->createLocation($post);
+        // return $location;
+
+        http_response_code('503');
+        echo 'This API endpoint has been shutdown, please use the new API.';
+        exit;
     }
 
     private function validateLocationData($post_data)

@@ -196,6 +196,7 @@ class Month implements \IteratorAggregate, RoutableInterface, MetaTagInterface
         
     }
 
+    // Sets the meta tags for the page
     public function getMetaTags()
     {
         $title = $this->calendar->name . ' Calendar - ' . $this->getDateTime()->format('F');

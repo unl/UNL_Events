@@ -13,6 +13,7 @@ class MetaTagUtility {
     public $label2;
     public $data2;
 
+    // Gets all the different parts of the meta tags that each website uses
     public function __construct($url, $title, $description, $options=array())
     {
         $this->imageDefault =  $this->getSiteURL(). "wdn/templates_5.3/includes/global/favicon/512.png";
@@ -27,9 +28,9 @@ class MetaTagUtility {
         $this->data2 = $options['data2'] ?? "";
 
         $this->description = (strlen($description) > 100) ? substr($description,0,100).'...' : $description;
-
     }
 
+    // Build the HTML for the meta tags and returns it
     public function getMetaTags(): string
     {
         $metaTagOutput = "";
@@ -49,6 +50,7 @@ class MetaTagUtility {
 
         }
 
+        // Twitter tags
         if (!empty($this->image)) {
             $metaTagOutput .= '<meta name="twitter:card" content="summary_large_image">' . PHP_EOL;
         } else {

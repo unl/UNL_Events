@@ -54,7 +54,8 @@ class APIEvents extends APICalendar implements ModelInterface, ModelAuthInterfac
         parent::__construct($options);
     }
 
-    public function needsAuth(string $method): bool
+    // We only need auth for getting a list of the pending events
+    public function needsAuth (string $method): bool
     {
         if ($this->url_match_pending && $method === 'GET') {
             return true;
@@ -65,6 +66,8 @@ class APIEvents extends APICalendar implements ModelInterface, ModelAuthInterfac
         }
         return true;
     }
+
+    // We only want to use the token auth
     public function canUseTokenAuth(string $method): bool
     {
         return true;
@@ -74,8 +77,10 @@ class APIEvents extends APICalendar implements ModelInterface, ModelAuthInterfac
         return false;
     }
 
+    // We only handle get requests
     public function run(string $method, array $data, $user): array
     {
+        // When the url matches a search and the method is get
         if ($this->url_match_search) {
             if ($method === 'GET') {
                 return $this->handleSearchGet();
@@ -83,13 +88,15 @@ class APIEvents extends APICalendar implements ModelInterface, ModelAuthInterfac
             throw new InvalidMethodException('Search Events only allows get.');
         }
 
+        // When the url matches a pending and the method is get
         if ($this->url_match_pending) {
             if ($method === 'GET') {
-                return $this->handlePendingGet();
+                return $this->handlePendingGet($user);
             }
             throw new InvalidMethodException('Pending Events only allows get.');
         }
 
+        // When the url has a location id and the method is get
         if ($method === 'GET'
             && key_exists('location_id', $this->options)
             && is_numeric($this->options['location_id'])
@@ -97,10 +104,15 @@ class APIEvents extends APICalendar implements ModelInterface, ModelAuthInterfac
             return $this->handleLocationGet();
         }
 
-        if ($method === 'GET' && key_exists('webcast_id', $this->options) && is_numeric($this->options['webcast_id'])) {
+        // When the url has a webcast id and the method is get
+        if ($method === 'GET'
+            && key_exists('webcast_id', $this->options)
+            && is_numeric($this->options['webcast_id'])
+        ) {
             return $this->handleWebcastGet();
         }
 
+        // Handles the regular gets
         if ($method === 'GET') {
             return $this->handleGet();
         }
@@ -108,22 +120,25 @@ class APIEvents extends APICalendar implements ModelInterface, ModelAuthInterfac
         throw new InvalidMethodException('Events only allows get.');
     }
 
-    private function handleGet() {
+    // This is just getting a list of the calendar's events
+    private function handleGet(): array
+    {
         $output_array = array();
 
-        $pending_events = $this->calendar->getEvents(Calendar::STATUS_POSTED, $this->limit, $this->offset);
-
-        foreach ($pending_events as $event) {
+        $calendar_events = $this->calendar->getEvents(Calendar::STATUS_POSTED, $this->limit, $this->offset);
+        foreach ($calendar_events as $event) {
             $output_array[] = APIEvent::translateOutgoingEventJSON($event->id);
         }
 
         return $output_array;
     }
 
+    // This will preform a search similar to the normal site search
     private function handleSearchGet()
     {
         $output_array = array();
 
+        // Creates a new search object with all the things
         $search_events = new Search(array(
             'calendar' => $this->calendar,
             'q' => $this->search_query,
@@ -134,6 +149,7 @@ class APIEvents extends APICalendar implements ModelInterface, ModelAuthInterfac
             'format' => 'json',
         ));
 
+        // We only want each event once
         $event_ids = array();
         foreach ($search_events as $event_occurrence) {
             if (!isset($event_ids[$event_occurrence->event->id])) {
@@ -145,12 +161,18 @@ class APIEvents extends APICalendar implements ModelInterface, ModelAuthInterfac
         return $output_array;
     }
 
-    private function handlePendingGet()
+    // This will get a list of the pending events
+    private function handlePendingGet($user)
     {
         $output_array = array();
 
-        $pending_events = $this->calendar->getEvents(Calendar::STATUS_PENDING, $this->limit, $this->offset);
+        // Check if the user has access to that calendar
+        if (!$this->calendar->hasUser($user)) {
+            throw new ForbiddenException('You do not have access to delete this calendar.');
+        }
 
+        // Get the pending events
+        $pending_events = $this->calendar->getEvents(Calendar::STATUS_PENDING, $this->limit, $this->offset);
         foreach ($pending_events as $event) {
             $output_array[] = APIEvent::translateOutgoingEventJSON($event->id);
         }
@@ -158,20 +180,24 @@ class APIEvents extends APICalendar implements ModelInterface, ModelAuthInterfac
         return $output_array;
     }
 
+    // This will find the events on a calendar that are at a particular location
     private function handleLocationGet()
     {
         $output_array = array();
 
+        // Get the location
         $location = Location::getById($this->options['location_id']);
         if ($location === false) {
             throw new ValidationException('Invalid location id');
         }
 
+        // find all occurrences by location
         $location_occurrences = new Occurrences(array(
             'location_id' => $location->id,
             'calendar_id' => $this->calendar->id,
         ));
 
+        // We only want each event once
         $event_ids = array();
         foreach ($location_occurrences as $event_occurrence) {
             if (!isset($event_ids[$event_occurrence->event_id])) {
@@ -183,20 +209,24 @@ class APIEvents extends APICalendar implements ModelInterface, ModelAuthInterfac
         return $output_array;
     }
 
+    // This will find the events on a calendar that are at a particular virtual location
     private function handleWebcastGet()
     {
         $output_array = array();
 
+        // Get the virtual location
         $webcast = Webcast::getById($this->options['webcast_id']);
         if ($webcast === false) {
             throw new ValidationException('Invalid virtual location id');
         }
 
+        // find all occurrences at that virtual location
         $webcast_occurrences = new Occurrences(array(
             'webcast_id' => $webcast->id,
             'calendar_id' => $this->calendar->id,
         ));
 
+        // We only want each event once
         $event_ids = array();
         foreach ($webcast_occurrences as $event_occurrence) {
             if (!isset($event_ids[$event_occurrence->event_id])) {
