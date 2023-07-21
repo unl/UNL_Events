@@ -71,8 +71,8 @@
                         <?php endif; ?>
                     </td>
                     <td>
-                        <form 
-                            id="location_delete_<?php echo $webcast->id; ?>" 
+                        <form
+                            id="location_delete_<?php echo $webcast->id; ?>"
                             method="post"
                             onsubmit="return confirm('Are you sure you want to un-save this virtual location?');"
                         >

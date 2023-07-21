@@ -154,7 +154,16 @@
                                     </g>
                                 </svg>
                             </button>
-                            <div class="dcf-popup-content unl-cream unl-bg-blue dcf-p-1 dcf-rounded" style="min-width: 25ch;">
+                            <div
+                                class="
+                                    dcf-popup-content
+                                    unl-cream
+                                    unl-bg-blue
+                                    dcf-p-1
+                                    dcf-rounded
+                                "
+                                style="min-width: 25ch;"
+                            >
                                 <p class="dcf-m-0 dcf-regular">
                                     If private this event will not show up in "All Calendar" results.
                                 </p>
