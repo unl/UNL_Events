@@ -111,7 +111,7 @@ function testMicrodata(modal_output=true) {
             const location_microdata_check = location_input.options[location_input.selectedIndex].dataset.microdata == "true";
             if (!location_microdata_check) {
                 if (modal_output) {
-                    modal_error_output_html += "<li>The Location you selected does not meet the requirements for google microdata</li>";
+                    modal_error_output_html += "<li>The Location you selected does not meet the requirements for microdata</li>";
                 }
                 microdata_pass = false;
             }
@@ -169,7 +169,7 @@ function testMicrodata(modal_output=true) {
         if (modal_output) {
             google_microdata_modal_output.innerHTML = "<span class='dcf-bold'>Your event is missing these requirements:</span> <ul>" + modal_error_output_html + "</ul>";
         }
-        google_microdata_button.innerHTML = "! Your event does not reach Google microdata requirements !";
+        google_microdata_button.innerHTML = "! Your event does not reach microdata requirements !";
 
         google_microdata_button.classList.add('unl-bg-blue');
         google_microdata_button.classList.remove('unl-bg-green');
@@ -178,9 +178,9 @@ function testMicrodata(modal_output=true) {
         google_microdata_button.classList.remove('events-b-green');
     }else{
         if (modal_output) {
-            google_microdata_modal_output.innerHTML = "<span class='dcf-bold'>Your event is fulfilling all Google's requirements</span>";
+            google_microdata_modal_output.innerHTML = "<span class='dcf-bold'>Your event is fulfilling all microdata requirements</span>";
         }
-        google_microdata_button.innerHTML = "Your event does reach google microdata requirements";
+        google_microdata_button.innerHTML = "Your event does reach microdata requirements";
 
         google_microdata_button.classList.remove('unl-bg-blue');
         google_microdata_button.classList.add('unl-bg-green');
