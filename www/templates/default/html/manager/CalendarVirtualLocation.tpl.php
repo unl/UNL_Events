@@ -3,7 +3,7 @@
     $crumbs->crumbs = array(
         "Events Manager" => "/manager",
         $context->calendar->name => $context->calendar->getManageURL(),
-        "Calendar Virtual Locations" => null
+        "Calendar Saved Virtual Locations" => null
     );
     echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
 
@@ -35,7 +35,7 @@
 </script>
 
 <div class="dcf-mb-5 dcf-d-flex dcf-flex-row dcf-flex-wrap dcf-jc-between dcf-ai-center">
-    <h1 id="table_desc">Calendar Virtual Locations</h1>
+    <h1 id="table_desc">Calendar Saved Virtual Locations</h1>
     <button id="new_location" class="dcf-btn dcf-btn-primary" type="button">Create A New Virtual Location</button>
 </div>
 
@@ -71,27 +71,29 @@
                         <?php endif; ?>
                     </td>
                     <td>
-                        <form id="location_delete_<?php echo $webcast->id; ?>" method="post">
+                        <form 
+                            id="location_delete_<?php echo $webcast->id; ?>" 
+                            method="post"
+                            onsubmit="return confirm('Are you sure you want to un-save this virtual location?');"
+                        >
                             <?php echo $token_inputs; ?>
 
                             <input type="hidden" name="v_location" value="<?php echo $webcast->id; ?>">
                             <input type="hidden" name="method" value="delete">
                         </form>
-                        <div class="dcf-btn-group">
-                            <button
-                                class="dcf-btn dcf-btn-primary events-modify-location"
-                                type="button"
-                                data-location-id="<?php echo $webcast->id; ?>"
-                            >
-                                Modify
-                            </button>
-                            <input
-                                class="dcf-btn dcf-btn-secondary"
-                                type="submit"
-                                value="Un-Save"
-                                form="location_delete_<?php echo $webcast->id; ?>"
-                            >
-                        </div>
+                        <button
+                            class="dcf-btn dcf-btn-primary events-modify-location"
+                            type="button"
+                            data-location-id="<?php echo $webcast->id; ?>"
+                        >
+                            Edit
+                        </button>
+                        <input
+                            class="dcf-btn dcf-btn-secondary"
+                            type="submit"
+                            value="Un-Save"
+                            form="location_delete_<?php echo $webcast->id; ?>"
+                        >
                     </td>
                 </tr>
             <?php endforeach; ?>
@@ -230,8 +232,8 @@
                     return;
                 }
             }
-            createOrModifyLegend.innerText = "Modify Virtual Location";
-            createOrModifySubmit.value = "Modify Virtual Location";
+            createOrModifyLegend.innerText = "Edit Virtual Location";
+            createOrModifySubmit.value = "Save Edits";
             createOrModifyMethod.value = "put";
             fillInputs(modifyButton.dataset.locationId);
             showForm();

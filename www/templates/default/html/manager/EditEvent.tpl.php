@@ -507,7 +507,7 @@
                             <?php if (!$datetime->microdataCheck()): ?>
                                 <div class="dcf-popup dcf-mr-1" data-point="true">
                                     <button
-                                        class="dcf-btn dcf-btn-popup unl-bg-blue events-b-blue"
+                                        class="dcf-btn dcf-btn-popup unl-cream unl-bg-blue events-b-blue"
                                         title="Missing Microdata Requirements"
                                     >!</button>
                                     <div
@@ -731,7 +731,7 @@
                                     </g>
                                 </svg>
                             </button>
-                            <div class="dcf-popup-content unl-bg-blue dcf-p-1 dcf-rounded" style="min-width: 25ch;">
+                            <div class="dcf-popup-content unl-cream unl-bg-blue dcf-p-1 dcf-rounded" style="min-width: 25ch;">
                                 <p class="dcf-m-0 dcf-regular">
                                     If private this event will not show up in "All Calendar" results.
                                 </p>
@@ -870,7 +870,7 @@
     <button class="dcf-btn dcf-btn-primary" type="submit">Save Event</button>
     <button
             id="google-microdata-button"
-            class="dcf-btn-toggle-modal dcf-btn unl-bg-blue events-b-blue unl-cream unl-cream@dark dcf-mt-3"
+            class="dcf-btn-toggle-modal dcf-btn unl-bg-blue events-b-blue unl-cream dcf-mt-3"
             title="Learn More"
             type="button"
             data-toggles-modal="google-microdata-modal"

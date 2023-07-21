@@ -52,7 +52,7 @@
                     <a
                         class="dcf-txt-decor-hover"
                         href="<?php echo $calendar->getLocationURL(); ?>"
-                    >Calendar Locations</a>
+                    >Calendar Saved Locations</a>
                 </li>
             <?php endif; ?>
 
@@ -65,7 +65,7 @@
                     <a
                         class="dcf-txt-decor-hover"
                         href="<?php echo $calendar->getVirtualLocationURL(); ?>"
-                    >Calendar Virtual Locations</a>
+                    >Calendar Saved Virtual Locations</a>
                 </li>
             <?php endif; ?>
 
@@ -91,13 +91,13 @@
                 <a class="dcf-txt-decor-hover" href="<?php echo $context->getEditMeURL() ?>">User Info</a>
             </li>
             <li>
-                <a class="dcf-txt-decor-hover" href="<?php echo $context->getUserLocationURL(); ?>">User Locations</a>
+                <a class="dcf-txt-decor-hover" href="<?php echo $context->getUserLocationURL(); ?>">Your Locations</a>
             </li>
             <li>
                 <a
                     class="dcf-txt-decor-hover"
                     href="<?php echo $context->getUserVirtualLocationURL(); ?>"
-                >User Virtual Locations</a>
+                >Your Virtual Locations</a>
             </li>
             <li>
                 <a

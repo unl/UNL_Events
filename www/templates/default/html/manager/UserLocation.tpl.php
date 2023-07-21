@@ -2,7 +2,7 @@
     $crumbs = new stdClass;
     $crumbs->crumbs = array(
         "Events Manager" => "/manager",
-        "User Locations" => null
+        "Your Saved Locations" => null
     );
     echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
 
@@ -45,7 +45,7 @@
 </script>
 
 <div class="dcf-mb-5 dcf-d-flex dcf-flex-row dcf-flex-wrap dcf-jc-between dcf-ai-center">
-    <h1 id="table_desc">User Locations</h1>
+    <h1 id="table_desc">Your Saved Locations</h1>
     <button id="new_location" class="dcf-btn dcf-btn-primary" type="button">Create A New Location</button>
 </div>
 
@@ -101,27 +101,29 @@
                         <?php endif;?>
                     </td>
                     <td>
-                        <form id="location_delete_<?php echo $location->id; ?>" method="post">
+                        <form 
+                            id="location_delete_<?php echo $location->id; ?>"
+                            method="post"
+                            onsubmit="return confirm('Are you sure you want to un-save this location?');"
+                        >
                             <?php echo $token_inputs; ?>
 
                             <input type="hidden" name="location" value="<?php echo $location->id; ?>">
                             <input type="hidden" name="method" value="delete">
                         </form>
-                        <div class="dcf-btn-group">
-                            <button
-                                class="dcf-btn dcf-btn-primary events-modify-location"
-                                type="button"
-                                data-location-id="<?php echo $location->id; ?>"
-                            >
-                                Modify
-                            </button>
-                            <input
-                                class="dcf-btn dcf-btn-secondary"
-                                type="submit"
-                                value="Un-Save"
-                                form="location_delete_<?php echo $location->id; ?>"
-                            >
-                        </div>
+                        <button
+                            class="dcf-btn dcf-btn-primary events-modify-location"
+                            type="button"
+                            data-location-id="<?php echo $location->id; ?>"
+                        >
+                            Edit
+                        </button>
+                        <input
+                            class="dcf-btn dcf-btn-secondary"
+                            type="submit"
+                            value="Un-Save"
+                            form="location_delete_<?php echo $location->id; ?>"
+                        >
                     </td>
                 </tr>
             <?php endforeach; ?>
@@ -269,8 +271,8 @@
                     return;
                 }
             }
-            createOrModifyLegend.innerText = "Modify Location";
-            createOrModifySubmit.value = "Modify Location";
+            createOrModifyLegend.innerText = "Edit Location";
+            createOrModifySubmit.value = "Save Edits";
             createOrModifyMethod.value = "put";
             fillInputs(modifyButton.dataset.locationId);
             showForm();

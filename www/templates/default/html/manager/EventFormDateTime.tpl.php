@@ -473,7 +473,7 @@
                                     </svg>
                                 </button>
                                 <div
-                                    class="dcf-popup-content unl-bg-blue dcf-p-1 dcf-rounded"
+                                    class="dcf-popup-content unl-cream unl-bg-blue dcf-p-1 dcf-rounded"
                                     style="min-width: 25ch;"
                                 >
                                     <p class="dcf-m-0 dcf-regular">
@@ -522,7 +522,7 @@
                                     </svg>
                                 </button>
                                 <div
-                                    class="dcf-popup-content unl-bg-blue dcf-p-1 dcf-rounded"
+                                    class="dcf-popup-content unl-cream unl-bg-blue dcf-p-1 dcf-rounded"
                                     style="min-width: 25ch;"
                                 >
                                     <p class="dcf-m-0 dcf-regular">
@@ -687,7 +687,7 @@
                                     </svg>
                                 </button>
                                 <div
-                                    class="dcf-popup-content unl-bg-blue dcf-p-1 dcf-rounded"
+                                    class="dcf-popup-content unl-cream unl-bg-blue dcf-p-1 dcf-rounded"
                                     style="min-width: 25ch;"
                                 >
                                     <p class="dcf-m-0 dcf-regular">
@@ -735,12 +735,13 @@
                                     </svg>
                                 </button>
                                 <div
-                                    class="dcf-popup-content unl-bg-blue dcf-p-1 dcf-rounded"
+                                    class="dcf-popup-content unl-cream unl-bg-blue dcf-p-1 dcf-rounded"
                                     style="min-width: 25ch;"
                                 >
                                     <p class="dcf-m-0 dcf-regular">
                                         This allows for you or anyone else on the calendar to recall and edit
-                                        this virtual location easily. Saved virtual locations will be included in the dropdown above.
+                                        this virtual location easily. Saved virtual locations will be included
+                                        in the dropdown above.
                                     </p>
                                 </div>
                             </div>
