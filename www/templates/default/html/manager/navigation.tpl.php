@@ -91,13 +91,13 @@
                 <a class="dcf-txt-decor-hover" href="<?php echo $context->getEditMeURL() ?>">User Info</a>
             </li>
             <li>
-                <a class="dcf-txt-decor-hover" href="<?php echo $context->getUserLocationURL(); ?>">Your Locations</a>
+                <a class="dcf-txt-decor-hover" href="<?php echo $context->getUserLocationURL(); ?>">Your Saved Locations</a>
             </li>
             <li>
                 <a
                     class="dcf-txt-decor-hover"
                     href="<?php echo $context->getUserVirtualLocationURL(); ?>"
-                >Your Virtual Locations</a>
+                >Your Saved Virtual Locations</a>
             </li>
             <li>
                 <a
