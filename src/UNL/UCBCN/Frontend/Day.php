@@ -206,7 +206,7 @@ class Day extends EventListing implements RoutableInterface, MetaTagInterface
         if (!$this->isHomepage) {
             $title .= ' - ' . $this->getDateTime()->format('F d, Y');
         }
-        $description = 'The UNL events calendar for ' . $this->calendar->name;
+        $description = 'The events calendar for ' . $this->calendar->name;
 
         $metaTagUtility = new MetaTagUtility($url, $title, $description);
 

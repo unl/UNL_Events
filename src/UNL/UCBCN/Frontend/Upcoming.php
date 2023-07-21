@@ -188,7 +188,7 @@ class Upcoming extends EventListing implements RoutableInterface, MetaTagInterfa
         if (!$this->isHomepage) {
             $title .= ' - Upcoming';
         }
-        $description = 'The UNL events calendar for ' . $this->calendar->name;
+        $description = 'The events calendar for ' . $this->calendar->name;
 
         $metaTagUtility = new MetaTagUtility($url, $title, $description);
 
