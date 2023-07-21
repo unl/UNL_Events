@@ -291,6 +291,17 @@ class EventInstance implements RoutableInterface, MetaTagInterface
             'data1' => $this->calendar->name,
         );
 
+        $location = $this->eventdatetime->getLocation();
+        $webcast = $this->eventdatetime->getWebcast();
+
+        if ($location !== false) {
+            $options['label2'] = 'Location';
+            $options['data2'] = $location->name;
+        } elseif ($webcast !== false) {
+            $options['label2'] = 'Virtual Location';
+            $options['data2'] = $webcast->title;
+        }
+
         $metaTagUtility = new MetaTagUtility($this->getURL(), $title, $description, $options);
 
         return $metaTagUtility->getMetaTags();
