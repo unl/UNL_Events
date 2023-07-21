@@ -294,7 +294,10 @@ class EventInstance implements RoutableInterface, MetaTagInterface
         $location = $this->eventdatetime->getLocation();
         $webcast = $this->eventdatetime->getWebcast();
 
-        if ($location !== false) {
+        if ($location !== false && $webcast !== false) {
+            $options['label2'] = 'In-Person and Online';
+            $options['data2'] = $location->name . ' & ' . $webcast->title;
+        } elseif ($location !== false) {
             $options['label2'] = 'Location';
             $options['data2'] = $location->name;
         } elseif ($webcast !== false) {
