@@ -19,14 +19,14 @@
     </div>
     <div>
         <form class="dcf-form" action="" method="POST">
-            <input 
-                type="hidden" 
-                name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" 
-                value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" 
+            <input
+                type="hidden"
+                name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>"
+                value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>"
             />
-            <input 
-                type="hidden" 
-                name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" 
+            <input
+                type="hidden"
+                name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>"
                 value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>"
             >
             <fieldset>
@@ -35,29 +35,29 @@
                 <div class="dcf-form-group">
                     <label for="token">Current API Token</label>
                     <div>
-                        <input 
-                            readonly="readonly" 
-                            type="text" 
-                            id="token" 
-                            name="token" 
-                            value="<?php echo $context->user->token; ?>" 
+                        <input
+                            readonly="readonly"
+                            type="text"
+                            id="token"
+                            name="token"
+                            value="<?php echo $context->user->token; ?>"
                         />
                         <button class="dcf-btn dcf-btn-secondary dcf-d-none" id="copyToken" type="button">
-                            <svg 
-                                xmlns="http://www.w3.org/2000/svg" 
-                                class="dcf-h-5 dcf-w-5 dcf-fill-current" 
-                                focusable="false" 
-                                width="24" 
-                                height="24" 
-                                viewBox="0 0 24 24" 
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="dcf-h-5 dcf-w-5 dcf-fill-current"
+                                focusable="false"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
                                 aria-labelledby="filled-copy-1-basic-title"
                             >
                                 <title id="filled-copy-1-basic-title">Copy Token</title>
-                                <path 
+                                <path
                                     d="M5.5,22C5.224,22,5,21.776,5,21.5V3H3.5C3.224,3,3,3.224,3,3.5v20C3,23.776,
                                     3.224,24,3.5,24h14c0.276,0,0.5-0.224,0.5-0.5 V22H5.5z"
                                 ></path>
-                                <path 
+                                <path
                                     d="M21,6.5c0-0.133-0.053-0.26-0.146-0.353l-6-6C14.76,0.053,14.632,0,14.5,
                                     0h-8C6.224,0,6,0.224,6,0.5v20 C6,20.776,6.224,21,6.5,21h14c0.276,0,
                                     0.5-0.224,0.5-0.5V6.5z M14,7V1l6,6H14z"
