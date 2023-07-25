@@ -25,6 +25,7 @@ $controller_options = $router->route($_SERVER['REQUEST_URI'], $_GET);
 $controller = new Controller($controller_options);
 
 // Output the status and the data
+header('Access-Control-Allow-Origin: *');
 http_response_code($controller->output['status']);
 echo json_encode($controller->output, JSON_UNESCAPED_SLASHES);
 exit;
