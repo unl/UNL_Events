@@ -42,7 +42,7 @@
                             name="token"
                             value="<?php echo $context->user->token; ?>"
                         />
-                        <button class="dcf-btn dcf-btn-secondary dcf-d-none" id="copyToken" type="button">
+                        <button class="dcf-btn dcf-btn-secondary dcf-d-flex dcf-ai-center dcf-d-none" id="copyToken" type="button">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 class="dcf-h-5 dcf-w-5 dcf-fill-current"
