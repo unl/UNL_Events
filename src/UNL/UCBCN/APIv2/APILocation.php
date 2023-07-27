@@ -233,6 +233,9 @@ class APILocation implements ModelInterface, ModelAuthInterface
         $new_location['room'] = $location_data['default-room'] ?? "";
         $new_location['directions'] = $location_data['default-directions'] ?? "";
         $new_location['additionalpublicinfo'] = $location_data['default-additional-public-info'] ?? "";
+        $new_location['additionalpublicinfo'] = $location_data['default-additional-public-info'] ?? "";
+        $new_location['user_id'] = $location_data['user-id'] ?? "";
+        $new_location['calendar_id'] = $location_data['calendar-id'] ?? "";
 
         // This is to match form inputs
         $location_data['new_location'] = $new_location;
@@ -269,6 +272,8 @@ class APILocation implements ModelInterface, ModelAuthInterface
             'location-additional-public-info',
             'default-additional-public-info'
         );
+        APILocation::replaceJSONKey($location_json, 'user_id', 'user-id');
+        APILocation::replaceJSONKey($location_json, 'calendar_id', 'calendar-id');
 
         return $location_json;
     }

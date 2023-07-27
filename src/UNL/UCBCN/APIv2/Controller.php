@@ -91,12 +91,12 @@ class Controller {
         }
 
         // Checks for auth token
-        if (!array_key_exists('Authorization', $headers)) {
+        if (!array_key_exists('Authentication', $headers)) {
             return false;
         }
 
         // Tries to authenticate with it
-        $this->user = $this->auth->authenticateViaToken($headers['Authorization']);
+        $this->user = $this->auth->authenticateViaToken($headers['Authentication']);
 
         // returns bool
         return $this->user !== false;
