@@ -112,6 +112,8 @@ class APILocation implements ModelInterface, ModelAuthInterface
     // This is for updating a location
     private function handlePut(array $data, User $user): array
     {
+        $data['location'] = $this->options['location_id'] ?? 'new';
+
         // Clean up the data
         $this->translateIncomingJSON($data);
 
@@ -209,13 +211,16 @@ class APILocation implements ModelInterface, ModelAuthInterface
     private function translateIncomingJSON(array &$location_data)
     {
         $new_location = array();
-        $this->replaceJSONKey($location_data, 'id', 'location');
 
         // Clean up data
-        if (isset($location_data['save-user']) && $location_data['save-user'] === 'true') {
+        if (isset($location_data['save-user'])
+            && ($location_data['save-user'] === 'true' || $location_data['save-user'] === true)
+        ) {
             $location_data['location_save'] = 'on';
         }
-        if (isset($location_data['save-calendar']) && $location_data['save-calendar'] === 'true') {
+        if (isset($location_data['save-calendar'])
+            && ($location_data['save-calendar'] === 'true' || $location_data['save-calendar'] === true)
+        ) {
             $location_data['location_save_calendar'] = 'on';
         }
 
@@ -232,7 +237,6 @@ class APILocation implements ModelInterface, ModelAuthInterface
         $new_location['phone'] = $location_data['phone'] ?? "";
         $new_location['room'] = $location_data['default-room'] ?? "";
         $new_location['directions'] = $location_data['default-directions'] ?? "";
-        $new_location['additionalpublicinfo'] = $location_data['default-additional-public-info'] ?? "";
         $new_location['additionalpublicinfo'] = $location_data['default-additional-public-info'] ?? "";
         $new_location['user_id'] = $location_data['user-id'] ?? "";
         $new_location['calendar_id'] = $location_data['calendar-id'] ?? "";

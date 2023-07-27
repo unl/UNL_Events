@@ -91,6 +91,8 @@ class APIWebcast implements ModelInterface, ModelAuthInterface
     // Update existing virtual location
     private function handlePut(array $data, User $user): array
     {
+        $data['v_location'] = $this->options['webcast_id'] ?? 'new';
+
         // Cleans up incoming data
         $this->translateIncomingJSON($data);
 
@@ -170,19 +172,24 @@ class APIWebcast implements ModelInterface, ModelAuthInterface
     private function translateIncomingJSON(array &$webcast_data)
     {
         $new_v_location = array();
-        $this->replaceJSONKey($webcast_data, 'id', 'v_location');
 
-        if (isset($webcast_data['save-user']) && $webcast_data['save-user'] === 'true') {
+        if (isset($webcast_data['save-user'])
+            && ($webcast_data['save-user'] === 'true' || $webcast_data['save-user'] === true)
+        ) {
             $webcast_data['v_location_save'] = 'on';
         }
 
-        if (isset($webcast_data['save-calendar']) && $webcast_data['save-calendar'] === 'true') {
+        if (isset($webcast_data['save-calendar'])
+            && ($webcast_data['save-calendar'] === 'true' || $webcast_data['save-calendar'] === true)
+        ) {
             $webcast_data['v_location_save_calendar'] = 'on';
         }
 
         $new_v_location['title'] = $webcast_data['name'] ?? "";
         $new_v_location['url'] = $webcast_data['url'] ?? "";
         $new_v_location['additionalinfo'] = $webcast_data['default-additional-public-info'] ?? "";
+        $new_v_location['user_id'] = $webcast_data['user-id'] ?? "";
+        $new_v_location['calendar_id'] = $webcast_data['calendar-id'] ?? "";
 
         $webcast_data['new_v_location'] = $new_v_location;
     }
