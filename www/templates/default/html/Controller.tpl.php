@@ -51,6 +51,11 @@ if ($context->getRaw('output') instanceof UNL\UCBCN\Frontend\RoutableInterface) 
 
 $page->head .= '<link rel="home" href="' . $context->getCalendarURL() . '" />' . PHP_EOL;
 
+// If the page implements the meta tag interface we will set them in the head
+if ($context->getRaw('output') instanceof UNL\UCBCN\Frontend\MetaTagInterface) {
+    $page->head .= $context->getRaw('output')->getMetaTags() . PHP_EOL;
+}
+
 //Render output
 $savvy->addGlobal('page', $page);
 $view_class = str_replace('\\', '_', strtolower($context->options['model']));

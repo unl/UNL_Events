@@ -24,16 +24,20 @@ JS_OBJ = www/templates/default/html/js/events.min.js
 JS_OBJ2 = www/templates/default/html/js/manager.min.js
 JS_OBJ3 = www/templates/default/html/js/event-image.min.js
 JS_OBJ4 = www/templates/default/html/js/filters.min.js
+JS_OBJ5 = www/templates/default/html/js/manager-create-event.min.js
+JS_OBJ6 = www/templates/default/html/js/manager-event-form-date-time.min.js
+JS_OBJ7 = www/templates/default/html/js/manager-add-date-time.min.js
+JS_OBJ8 = www/templates/default/html/js/manager-edit-event.min.js
 
 all: less js
 
 less: $(CSS_OBJ) $(CSS_OBJ2)
 
-js: $(JS_OBJ) $(JS_OBJ2) $(JS_OBJ3) $(JS_OBJ4)
+js: $(JS_OBJ) $(JS_OBJ2) $(JS_OBJ3) $(JS_OBJ4) $(JS_OBJ5) $(JS_OBJ6) $(JS_OBJ7) $(JS_OBJ8)
 
 clean:
 	rm -r $(NODE_DIR)
-	rm $(JS_OBJ) $(JS_OBJ2) $(JS_OBJ3) $(JS_OBJ4)
+	rm $(JS_OBJ) $(JS_OBJ2) $(JS_OBJ3) $(JS_OBJ4) $(JS_OBJ5) $(JS_OBJ6) $(JS_OBJ7) $(JS_OBJ8)
 	rm $(CSS_OBJ)
 	
 $(CSS_OBJ): www/templates/default/html/less/events.less www/templates/default/html/less/eventicon-embedded.less $(LESSC) $(LESSHAT) $(WDN_MIXINS)
@@ -65,6 +69,18 @@ $(JS_OBJ3): www/templates/default/html/js/event-image.js $(UGLIFYJS)
 	$(UGLIFYJS) $< -c -m -o $@ --source-map
 
 $(JS_OBJ4): www/templates/default/html/js/filters.js $(UGLIFYJS)
+	$(UGLIFYJS) $< -c -m -o $@ --source-map
+
+$(JS_OBJ5): www/templates/default/html/js/manager-create-event.js $(UGLIFYJS)
+	$(UGLIFYJS) $< -c -m -o $@ --source-map
+
+$(JS_OBJ6): www/templates/default/html/js/manager-event-form-date-time.js $(UGLIFYJS)
+	$(UGLIFYJS) $< -c -m -o $@ --source-map
+
+$(JS_OBJ7): www/templates/default/html/js/manager-add-date-time.js $(UGLIFYJS)
+	$(UGLIFYJS) $< -c -m -o $@ --source-map
+
+$(JS_OBJ8): www/templates/default/html/js/manager-edit-event.js $(UGLIFYJS)
 	$(UGLIFYJS) $< -c -m -o $@ --source-map
 
 .PHONY: all less js clean

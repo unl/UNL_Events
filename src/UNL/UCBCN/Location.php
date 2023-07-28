@@ -2,6 +2,8 @@
 namespace UNL\UCBCN;
 
 use UNL\UCBCN\ActiveRecord\Record;
+use UNL\UCBCN\Calendar;
+
 /**
  * Details for locations within the database.
  *
@@ -45,8 +47,9 @@ class Location extends Record
     public $phone;                           // string(50)
     public $standard;                        // int(1)
     public $user_id;                         // string(255)
+    public $calendar_id;                     // string(255)
     public $display_order;                   // int(1)
-    
+
     const DISPLAY_ORDER_MAIN      = NULL;
     const DISPLAY_ORDER_EXTENSION = 1;
 
@@ -83,7 +86,7 @@ class Location extends Record
             'id',
         );
     }
-    
+
     function sequenceKey()
     {
         return array('id',true);
@@ -105,5 +108,82 @@ class Location extends Record
             }
         }
     }
-    
+
+    /**
+     * Gets the calendar that is saved
+     *
+     * @return Calendar|false
+     */
+    public function getCalendar()
+    {
+        if (!isset($this->calendar_id) || empty($this->calendar_id)) {
+            return false;
+        }
+
+        return Calendar::getByID($this->calendar_id);
+    }
+
+    /**
+     * Creates a nicely formatted json data
+     *
+     * @return array
+     */
+    public function toJSON(): array
+    {
+        return array(
+            'location'                        => $this->id,
+            'location-name'                   => $this->name,
+            'location-address-1'              => $this->streetaddress1,
+            'location-address-2'              => $this->streetaddress2,
+            'location-city'                   => $this->city,
+            'location-state'                  => $this->state,
+            'location-zip'                    => $this->zip,
+            'location-map-url'                => $this->mapurl,
+            'location-webpage'                => $this->webpageurl,
+            'location-hours'                  => $this->hours,
+            'location-phone'                  => $this->phone,
+            'location-room'                   => $this->room,
+            'location-directions'             => $this->directions,
+            'location-additional-public-info' => $this->additionalpublicinfo,
+            'user_id'                         => $this->user_id,
+            'calendar_id'                     => $this->calendar_id,
+        );
+    }
+
+    /**
+     * Checks to see if the location is saved to anyone or any calendar.
+     * It also checks to see if it is a standard location
+     *
+     * @return bool
+     */
+    public function isSavedOrStandard()
+    {
+        return isset($this->user_id) || isset($this->calendar_id) || $this->standard == 1;
+    }
+
+    /**
+     * Checks to see if the location has all information necessary for Google's microdata.
+     *
+     * @return bool
+     */
+    public function microdataCheck()
+    {
+        if (!isset($this->streetaddress1) || empty($this->streetaddress1)) {
+            return false;
+        }
+
+        if (!isset($this->city) || empty($this->city)) {
+            return false;
+        }
+
+        if (!isset($this->state) || empty($this->state)) {
+            return false;
+        }
+
+        if (!isset($this->zip) || empty($this->zip)) {
+            return false;
+        }
+
+        return true;
+    }
 }

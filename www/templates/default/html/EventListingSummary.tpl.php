@@ -13,7 +13,8 @@
         }
 
         $url = $frontend->getEventURL($eventinstance->getRawObject());
-        $subTitle = !empty($event->subtitle) ? '<p class="dcf-subhead dcf-mt-2 dcf-txt-3xs unl-dark-gray">' . $event->subtitle . '</p>' : '';
+        $subTitle = !empty($event->subtitle) ?
+            '<p class="dcf-subhead dcf-mt-2 dcf-txt-3xs unl-dark-gray">' . $event->subtitle . '</p>' : '';
         $location = '';
         if (isset($eventinstance->eventdatetime->location_id) && $eventinstance->eventdatetime->location_id) {
             $l = $eventinstance->eventdatetime->getLocation();
@@ -60,7 +61,10 @@
     </ol>
 
     <div class="dcf-txt-right">
-        <a class="dcf-btn dcf-btn-tertiary" href="<?php echo $context->calendar->getFeaturedURL(); ?>">View All<span class="dcf-sr-only"> Featured Events</span></a>
+        <a
+            class="dcf-btn dcf-btn-tertiary"
+            href="<?php echo $context->calendar->getFeaturedURL(); ?>"
+        >View All<span class="dcf-sr-only"> Featured Events</span></a>
     </div>
 </div>
 

@@ -25,7 +25,7 @@ namespace UNL\UCBCN\Frontend;
  * @license   http://www1.unl.edu/wdn/wiki/Software_License BSD License
  * @link      http://code.google.com/p/unl-event-publisher/
  */
-class Upcoming extends EventListing implements RoutableInterface
+class Upcoming extends EventListing implements RoutableInterface, MetaTagInterface
 {
     /**
      * Calendar \UNL\UCBCN\Calendar Object
@@ -174,6 +174,25 @@ class Upcoming extends EventListing implements RoutableInterface
         $url = $this->generateURL($this->calendar);
 
         return $url . $url_params;
+    }
+
+    // Sets the meta tags for the page
+    public function getMetaTags()
+    {
+        // Checks if it is the homepage
+        $url = $this->getURL();
+        if (!$this->isHomepage) {
+            $url = $this->calendar->getURL();
+        }
+        $title = $this->calendar->name . ' Calendar';
+        if (!$this->isHomepage) {
+            $title .= ' - Upcoming';
+        }
+        $description = 'The events calendar for ' . $this->calendar->name;
+
+        $metaTagUtility = new MetaTagUtility($url, $title, $description);
+
+        return $metaTagUtility->getMetaTags();
     }
 
     public function isHomepage()

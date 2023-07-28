@@ -30,7 +30,7 @@
         <input type="text" id="shortname" name="shortname" value="<?php echo $context->calendar->shortname ?>" />
     </div>
     <div class="dcf-form-group">
-        <label for="timezone">Default Time Zone <small class="dcf-required">Required</small></label>
+        <label for="defaulttimezone">Default Time Zone <small class="dcf-required">Required</small></label>
         <select id="defaulttimezone"" name="defaulttimezone" aria-label="Default Timezone">
           <?php
           $timezone = UNL\UCBCN::$defaultTimezone;

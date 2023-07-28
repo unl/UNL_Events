@@ -16,12 +16,16 @@ $calendar_slash_optional = '(' . $calendar . '(\/)?)?';
 
 $routes['/^(\/)?$/'] = 'UNL\UCBCN\Manager\CalendarList';
 $routes['/^me(\/)?$/'] = 'UNL\UCBCN\Manager\EditUserInfo';
-$routes['/^account(\/)?$/'] = 'UNL\UCBCN\Manager\EditAccount';
+$routes['/^location(\/)?$/'] = 'UNL\UCBCN\Manager\UserLocation';
+$routes['/^virtual-location(\/)?$/'] = 'UNL\UCBCN\Manager\UserVirtualLocation';
+$routes['/^lookup(\/)?$/'] = 'UNL\UCBCN\Manager\CalendarLookup';
 $routes['/^welcome(\/)?$/'] = 'UNL\UCBCN\Manager\Welcome';
 $routes['/^logout(\/)?$/'] = 'UNL\UCBCN\Manager\AuthAction';
 
 $routes['/^'.$calendar_slash_optional.'$/'] = 'UNL\UCBCN\Manager\Calendar';
 $routes['/^'.$calendar_slash_required.'create(\/)?$/'] = 'UNL\UCBCN\Manager\CreateEvent';
+$routes['/^'.$calendar_slash_required.'location(\/)?$/'] = 'UNL\UCBCN\Manager\CalendarLocation';
+$routes['/^'.$calendar_slash_required.'virtual-location(\/)?$/'] = 'UNL\UCBCN\Manager\CalendarVirtualLocation';
 $routes['/^'.$calendar_slash_required.'bulk-add(\/)?$/'] = 'UNL\UCBCN\Manager\BulkAddAction';
 $routes['/^'.$calendar_slash_required.'bulk-move(\/)?$/'] = 'UNL\UCBCN\Manager\BulkMoveAction';
 $routes['/^'.$calendar_slash_required.'event\/' . $event . '(\/)?$/'] = 'UNL\UCBCN\Manager\ViewEvent';

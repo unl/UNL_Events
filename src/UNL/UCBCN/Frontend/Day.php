@@ -27,7 +27,7 @@ use UNL\UCBCN\RuntimeException;
  * @license   http://www1.unl.edu/wdn/wiki/Software_License BSD License
  * @link      http://code.google.com/p/unl-event-publisher/
  */
-class Day extends EventListing implements RoutableInterface
+class Day extends EventListing implements RoutableInterface, MetaTagInterface
 {
 
     private $isHomepage = false;
@@ -191,6 +191,26 @@ class Day extends EventListing implements RoutableInterface
     public function getURL()
     {
         return self::generateURL($this->calendar, $this->getDateTime());
+    }
+
+    // Sets the meta tags for the page
+    public function getMetaTags()
+    {
+        // Checks if it is the homepage
+        $url = $this->getURL();
+        if (!$this->isHomepage) {
+            $url = $this->calendar->getURL();
+        }
+
+        $title = $this->calendar->name . ' Calendar';
+        if (!$this->isHomepage) {
+            $title .= ' - ' . $this->getDateTime()->format('F d, Y');
+        }
+        $description = 'The events calendar for ' . $this->calendar->name;
+
+        $metaTagUtility = new MetaTagUtility($url, $title, $description);
+
+        return $metaTagUtility->getMetaTags();
     }
 
     /**

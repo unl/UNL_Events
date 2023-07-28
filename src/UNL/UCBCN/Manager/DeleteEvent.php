@@ -20,7 +20,7 @@ class DeleteEvent extends PostHandler
             throw new \Exception("That calendar could not be found.", 404);
         }
 
-        $user = Auth::getCurrentUser();
+        $user = $this->options['user'] ?? Auth::getCurrentUser();
         if (!$user->hasPermission(Permission::EVENT_DELETE_ID, $this->calendar->id)) {
             throw new \Exception("You do not have permission to delete events on this calendar.", 403);
         }
@@ -52,14 +52,26 @@ class DeleteEvent extends PostHandler
         $calendar_has_event = CalendarHasEvent::getByIdsStatus($this->calendar->id, $this->event->id, $backend_tab_name);
 
         # check if this is where the event was originally created
-        if ($calendar_has_event->source == 'create event form' || $calendar_has_event->source == 'create event api') {
+        if (
+            $calendar_has_event->source == 'create event form'
+            || $calendar_has_event->source == 'create event api'
+            || $calendar_has_event->source == 'create event api v2'
+        ) {
             # delete the event from the entire system
             $this->event->delete();
-            $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Event Deleted', 'The event ' . $this->event->title . ' has been removed from the system.');
+            $this->flashNotice(
+                parent::NOTICE_LEVEL_SUCCESS,
+                'Event Deleted',
+                'The event ' . $this->event->title . ' has been removed from the system.'
+            );
         } else {
             # delete the calendar has event record
             $calendar_has_event->delete();
-            $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Event Deleted', 'The event ' . $this->event->title . ' has been removed from your calendar.');
+            $this->flashNotice(
+                parent::NOTICE_LEVEL_SUCCESS,
+                'Event Deleted',
+                'The event ' . $this->event->title . ' has been removed from your calendar.'
+            );
         }
 
         //redirect

@@ -653,7 +653,11 @@ class UCBCN
         // Find the originating calendar:
         $che           = UNL_UCBCN::factory('calendar_has_event');
         $che->event_id = $event->id;
-        $che->whereAdd('source=\'create event form\' OR source=\'checked consider event\'');
+        $che->whereAdd('source=\'create event form\'
+            OR source=\'create event api\'
+            OR source=\'create event api v2\'
+            OR source=\'checked consider event\'
+        ');
         if ($che->find()) {
             while ($che->fetch()) {
                 $c = UNL_UCBCN::factory('calendar');

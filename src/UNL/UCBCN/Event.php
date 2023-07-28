@@ -64,6 +64,8 @@ class Event extends Record
     public $listingcontactname;              // string(100)
     public $listingcontactphone;             // string(255)
     public $listingcontactemail;             // string(255)
+    public $listingcontacturl;               // blob(4294967295)  blob
+    public $listingcontacttype;              // enum('person', 'organization')
     public $icalendar;                       // blob(4294967295)  blob
     public $imagedata;                       // blob(4294967295)  blob binary
     public $imagemime;                       // string(255)
@@ -371,13 +373,13 @@ class Event extends Record
      *
      * @return bool
      */
-    public function insert($calendar = null, $source = null)
+    public function insert($calendar = null, $source = null, $user = null)
     {
         $this->datecreated = date('Y-m-d H:i:s');
         $this->datelastupdated = date('Y-m-d H:i:s');
 
-        $this->uidcreated = Auth::getCurrentUser()->uid;
-        $this->uidlastupdated = Auth::getCurrentUser()->uid;
+        $this->uidcreated = isset($user) ? $user->uid : Auth::getCurrentUser()->uid;
+        $this->uidlastupdated = isset($user) ? $user->uid : Auth::getCurrentUser()->uid;
         $result = parent::insert();
 
         $status_for_new_event = 'pending';
@@ -386,7 +388,7 @@ class Event extends Record
         }
 
         if (!empty($calendar)) {
-            $calendar->addEvent($this, $status_for_new_event, Auth::getCurrentUser(), $source);
+            $calendar->addEvent($this, $status_for_new_event, $user, $source);
         }
 
         return $result;
@@ -404,10 +406,10 @@ class Event extends Record
      *
      * @return bool
      */
-    public function update()
+    public function update($user = null)
     {
-        $this->uidcreated = Auth::getCurrentUser();
-        $this->uidlastupdated = Auth::getCurrentUser();
+        $this->uidcreated = isset($user) ? $user->uid : Auth::getCurrentUser()->uid;
+        $this->uidlastupdated = isset($user) ? $user->uid : Auth::getCurrentUser()->uid;
         $result = parent::update();
 
         return $result;
@@ -593,16 +595,6 @@ class Event extends Record
     }
 
     /**
-     * Get all webcasts for this event
-     *
-     * @return Event\Webcasts
-     */
-    public function getWebcasts()
-    {
-        return new Event\Webcasts(array('event_id' => $this->id));
-    }
-
-    /**
      * Get documents for this event
      *
      * @return Event\Documents
@@ -621,6 +613,11 @@ class Event extends Record
             $calendar_has_event = CalendarHasEvent::getByEventIDSource($this->id, 'create event api');
             if ($calendar_has_event) {
                 return Calendar::getByID($calendar_has_event->calendar_id);
+            } else {
+                $calendar_has_event = CalendarHasEvent::getByEventIDSource($this->id, 'create event api v2');
+                if ($calendar_has_event) {
+                    return Calendar::getByID($calendar_has_event->calendar_id);
+                }
             }
         }
         return NULL;

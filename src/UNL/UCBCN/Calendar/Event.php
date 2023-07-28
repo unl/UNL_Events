@@ -43,6 +43,7 @@ class Event extends Record
     
     const SOURCE_CREATE_EVENT_FORM      = 'create event form';
     const SOURCE_CREATE_EVENT_API       = 'create event api';
+    const SOURCE_CREATE_EVENT_API_V2    = 'create event api v2';
     const SOURCE_CHECKED_CONSIDER_EVENT = 'checked consider event';
     
     const STATUS_PENDING  = 'pending';
@@ -84,12 +85,12 @@ class Event extends Record
      *
      * @return int ID of the inserted record.
      */
-    public function insert()
+    public function insert($user = null)
     {
         $this->datecreated = date('Y-m-d H:i:s');
         $this->datelastupdated = date('Y-m-d H:i:s');
-        $this->uidcreated = Auth::getCurrentUser()->uid;
-        $this->uidlastupdated = Auth::getCurrentUser()->uid;
+        $this->uidcreated = isset($user) ? $user->uid : Auth::getCurrentUser()->uid;
+        $this->uidlastupdated = isset($user) ? $user->uid : Auth::getCurrentUser()->uid;
         $this->featured = 0;
         $this->pinned = 0;
         $result = parent::insert();
@@ -102,10 +103,10 @@ class Event extends Record
      *
      * @return bool True on sucess
      */
-    public function update()
+    public function update($user = null)
     {
         $this->datelastupdated = date('Y-m-d H:i:s');
-        $this->uidlastupdated = Auth::getCurrentUser()->uid;
+        $this->uidlastupdated = isset($user) ? $user->uid : Auth::getCurrentUser()->uid;
 
         $result = parent::update();
 

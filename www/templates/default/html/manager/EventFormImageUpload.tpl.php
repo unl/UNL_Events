@@ -1,5 +1,5 @@
-<fieldset>
-    <legend class="dcf-legend">Image</legend>
+<h2>Image</h2>
+<section class="dcf-mb-8 dcf-ml-5">
     <div class="details">
         <?php if ($context->event->imagemime != NULL): ?>
             <div class="dcf-form-group">
@@ -38,7 +38,8 @@
             </fieldset>
         </div>
     </div>
-</fieldset>
+    <hr>
+</section>
 <div class="dcf-modal" id="image-modal" hidden>
     <div class="dcf-modal-wrapper">
         <div class="dcf-modal-header">

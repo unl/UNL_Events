@@ -75,7 +75,7 @@ class Calendar extends Record
     const EVENT_RELEASE_PREFERENCE_DEFAULT   = null;
     const EVENT_RELEASE_PREFERENCE_IMMEDIATE = 1;
     const EVENT_RELEASE_PREFERENCE_PENDING   = 0;
-    
+
     public static function getTable()
     {
         return 'calendar';
@@ -87,7 +87,7 @@ class Calendar extends Record
             'id',
         );
     }
-    
+
     public function getFrontendURL() {
         return FrontendController::$url . $this->shortname . "/";
     }
@@ -107,7 +107,18 @@ class Calendar extends Record
                 $append['page'] = $_SESSION['current_page'];
             }
             if (!empty($append)) {
-                $append = '?' . join('&', array_map(function ($key, $val) {return $key . '=' . $val;}, array_keys($append), $append));
+                $append = '?' .
+                    join(
+                        '&',
+                        array_map(
+                            function ($key, $val)
+                            {
+                                return $key . '=' . $val;
+                            },
+                            array_keys($append),
+                            $append
+                        )
+                    );
             } else {
                 $append = '';
             }
@@ -115,51 +126,73 @@ class Calendar extends Record
         return ManagerController::$url . $this->shortname . "/" . $append;
     }
 
-    public function getNewURL() {
+    public function getNewURL()
+    {
         return ManagerController::$url . 'calendar/new/';
     }
 
-    public function getEditURL() {
+    public function getEditURL()
+    {
         return ManagerController::$url . $this->shortname . '/edit/';
     }
 
-    public function getPromoURL() {
+    public function getLocationURL()
+    {
+        return ManagerController::$url . $this->shortname . '/location/';
+    }
+
+    public function getVirtualLocationURL()
+    {
+        return ManagerController::$url . $this->shortname . '/virtual-location/';
+    }
+
+    public function getPromoURL()
+    {
         return ManagerController::$url . $this->shortname . '/promo/';
     }
 
-    public function getDeleteURL() {
+    public function getDeleteURL()
+    {
         return ManagerController::$url . $this->shortname . '/delete/';
     }
 
-    public function getDeleteFinalURL() {
+    public function getDeleteFinalURL()
+    {
         return ManagerController::$url . $this->shortname . '/delete_final/';
     }
 
-    public function getSubscriptionsURL() {
+    public function getSubscriptionsURL()
+    {
         return ManagerController::$url . $this->shortname . '/subscriptions/';
     }
 
-    public function getUsersURL() {
+    public function getUsersURL()
+    {
         return ManagerController::$url . $this->shortname . '/users/';
     }
 
-    public function getCleanupURL() {
+    public function getCleanupURL()
+    {
         return ManagerController::$url . $this->shortname . '/cleanup/';
     }
 
-    public function getArchiveURL() {
+    public function getArchiveURL()
+    {
         return ManagerController::$url . $this->shortname . '/archive/';
     }
 
-    public function getSearchURL() {
+    public function getSearchURL()
+    {
         return ManagerController::$url . $this->shortname . '/search/';
     }
 
-    public function getBulkAddActionURL() {
+    public function getBulkAddActionURL()
+    {
         return $this->getManageURL() . 'bulk-add/';
     }
 
-    public function getBulkMoveActionURL() {
+    public function getBulkMoveActionURL()
+    {
         return $this->getManageURL() . 'bulk-move/';
     }
 
@@ -212,7 +245,7 @@ class Calendar extends Record
         return false;
 
     }
-    
+
     public function removeUser(User $user)
     {
         if (isset($this->id) && isset($user->uid)) {
@@ -256,7 +289,7 @@ class Calendar extends Record
 
         return parent::delete();
     }
-    
+
     /**
      * Adds the event to the current calendar, and updates subscribed calendars with the same event.
      *
@@ -278,19 +311,24 @@ class Calendar extends Record
             $calendar_has_event->event_id = $event->id;
             $calendar_has_event->status = $status;
             $calendar_has_event->source = $source;
-            $calendar_has_event->insert();
+            $calendar_has_event->insert($user);
         }
 
         if ($event->approvedforcirculation) {
             # get the subscribed calendars and similarly add the event to them.
             # we use the insert method instead of reusing addEvent because we do not want an infinite loop
             foreach ($this->getSubscriptionsToThis() as $subscription) {
-                # it's confusing, but for each subscription which has this calendar as a 
+                # it's confusing, but for each subscription which has this calendar as a
                 # subscribed calendar, take that subscription, find what calendar it is
                 # attached to, and add a calendar_has_event record
-                if (!($subscription instanceof \UNL\UCBCN\Calendar\Subscription) || CalendarHasEvent::getByIDs($subscription->calendar_id, $event->id)) {
+                if (
+                    !(
+                        $subscription instanceof \UNL\UCBCN\Calendar\Subscription)
+                        || CalendarHasEvent::getByIDs($subscription->calendar_id, $event->id
+                    )
+                ) {
                     # do not add this
-                    continue; 
+                    continue;
                 }
 
                 $calendar_has_event = new CalendarHasEvent;
@@ -304,7 +342,7 @@ class Calendar extends Record
             }
         }
     }
-    
+
     /**
      * Removes the given event from the calendar_has_event table.
      *
@@ -318,7 +356,11 @@ class Calendar extends Record
         $calendar_has_event = CalendarHasEvent::getByIdsStatus($this->id, $event->id, $status);
 
         # check if this is where the event was originally created
-        if ($calendar_has_event->source == 'create event form' || $calendar_has_event->source == 'create event api') {
+        if (
+            $calendar_has_event->source == 'create event form'
+            || $calendar_has_event->source == 'create event api'
+            || $calendar_has_event->source == 'create event api v2'
+        ) {
             # delete the event from the entire system
             $event->delete();
         } else {
@@ -362,7 +404,13 @@ class Calendar extends Record
     }
 
     public function getFeaturedEvents($pinned_limit = 1, $limit = 10) {
-        $featureEvents = new FeaturedEvents(array('calendar' => $this, 'pinned_limit' => $pinned_limit, 'limit' => $limit));
+        $featureEvents = new FeaturedEvents(
+            array(
+                'calendar' => $this,
+                'pinned_limit' => $pinned_limit,
+                'limit' => $limit
+            )
+        );
         return !empty($featureEvents->options['array']) ? $featureEvents : NULL;
     }
 
@@ -420,19 +468,29 @@ class Calendar extends Record
 
         # archive events by id
         if (count($eventIDsToArchive) > 0) {
-            CalendarHasEvent::bulkUpdateStatus($this->id, $eventIDsToArchive, static::STATUS_POSTED, static::STATUS_ARCHIVED);
+            CalendarHasEvent::bulkUpdateStatus(
+                $this->id,
+                $eventIDsToArchive,
+                static::STATUS_POSTED,
+                static::STATUS_ARCHIVED
+            );
         }
 
         # unarchive events by id
         if (count($eventIDsToUnarchive) > 0) {
-            CalendarHasEvent::bulkUpdateStatus($this->id, $eventIDsToUnarchive, static::STATUS_ARCHIVED, static::STATUS_POSTED);
+            CalendarHasEvent::bulkUpdateStatus(
+                $this->id,
+                $eventIDsToUnarchive,
+                static::STATUS_ARCHIVED,
+                static::STATUS_POSTED
+            );
         }
     }
 
     /**
      * Gets events related to this calendar
      */
-    public function getEvents($status = 'all', $limit = -1, $offset = 0) 
+    public function getEvents($status = 'all', $limit = -1, $offset = 0)
     {
         # create options for event listing class
         $options = array(
@@ -463,12 +521,12 @@ class Calendar extends Record
         return $events;
     }
 
-    public function getSubscriptions() 
+    public function getSubscriptions()
     {
         return new Calendar\Subscriptions(array('calendar_id' => $this->id));
     }
 
-    public function getSubscriptionsToThis() 
+    public function getSubscriptionsToThis()
     {
         return new Calendar\Subscriptions(array('subbed_calendar_id' => $this->id));
     }
@@ -495,6 +553,15 @@ class Calendar extends Record
     public function hasEvent(Event $event)
     {
         return CalendarHasEvent::getByIds($this->id, $event->id);
+    }
+
+    /**
+     * @param Event $event
+     * @return false|CalendarHasEvent
+     */
+    public function hasEventById(string $event_id)
+    {
+        return CalendarHasEvent::getByIds($this->id, $event_id);
     }
 
     /**

@@ -38,7 +38,7 @@ class Controller {
     public static $default_calendar_id = 1;
 
     public static $url = '/manager/';
-    
+
     public function __construct($options = array()) {
         $this->options = $options + $this->options;
 
@@ -66,14 +66,28 @@ class Controller {
         return self::$url;
     }
 
-    public static function getEditMeURL() 
+    public static function getEditMeURL()
     {
         return self::$url . 'me/';
     }
 
-    public static function getEditAccountURL() 
+    public static function getEditAccountURL()
     {
         return self::$url . 'account/';
+    }
+
+    public static function getUserLocationURL()
+    {
+        return self::$url . 'location/';
+    }
+    public static function getUserVirtualLocationURL()
+    {
+        return self::$url . 'virtual-location/';
+    }
+
+    public static function getCalendarLookupURL()
+    {
+        return self::$url . 'lookup/';
     }
 
     public static function getWelcomeURL() {
@@ -115,17 +129,17 @@ class Controller {
             return NULL;
         }
     }
-    
+
     protected function handlePost($object)
     {
         if (!$object instanceof PostHandler) {
             throw new \Exception("The object is not an instance of the PostHandler", 500);
         }
-        
+
         if (!$this->validateCSRF()) {
             throw new \Exception('Invalid security token provided. If you think this was an error, please retry the request.', 403);
         }
-        
+
         $result = $object->handlePost($_GET, $_POST, $_FILES);
 
         if (is_string($result)) {
@@ -194,7 +208,7 @@ class Controller {
     /**
      * Get the querystring parameters for a URL
      *
-     * @param string $url 
+     * @param string $url
      *
      * @return array key=>value pairs
      */

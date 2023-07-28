@@ -175,38 +175,335 @@ use UNL\UCBCN\Permission;
                                         <ul>
                                         <?php $datetimes = $event->getDateTimes(); ?>
                                         <?php $count = 0; ?>
+
                                         <?php foreach($datetimes as $datetime): ?>
                                             <li>
-                                                <?php if (++$count <= 3) : ?>
-                                                    <?php
-                                                    {
-                                                        if ($datetime->recurringtype == 'none') {
-                                                            echo date('n/d/y @ g:ia', strtotime($datetime->starttime));
-                                                        } else if ($datetime->recurringtype == 'daily' || $datetime->recurringtype == 'weekly' || $datetime->recurringtype == 'biweekly' ||
-                                                                $datetime->recurringtype == 'annually') {
-                                                            echo ucwords($datetime->recurringtype) . ' @ ' . date('g:ia', strtotime($datetime->starttime)) .
-                                                                ':<br>' . date('n/d/y', strtotime($datetime->starttime)) .
-                                                                ' - ' . date('n/d/y', strtotime($datetime->recurs_until));
-                                                        } else if ($datetime->recurringtype == 'monthly') {
-                                                            if ($datetime->rectypemonth == 'lastday') {
-                                                                echo 'Last day of every month @ ' . date('g:ia', strtotime($datetime->starttime)) .
-                                                                    ':<br>' . date('n/d/y', strtotime($datetime->starttime)) .
-                                                                    ' - ' . date('n/d/y', strtotime($datetime->recurs_until));
-                                                            } else if ($datetime->rectypemonth == 'date') {
-                                                                echo ordinal(date('d', strtotime($datetime->starttime))) .
-                                                                    ' of every month @ ' . date('g:ia', strtotime($datetime->starttime)) .
-                                                                    ':<br>' . date('n/d/y', strtotime($datetime->starttime)) .
-                                                                    ' - ' . date('n/d/y', strtotime($datetime->recurs_until));
-                                                            } else {
-                                                                echo ucwords($datetime->rectypemonth) . date(' l', strtotime($datetime->starttime)) . ' of every month' .
-                                                                    ':<br>' . date('n/d/y', strtotime($datetime->starttime)) .
-                                                                    ' - ' . date('n/d/y', strtotime($datetime->recurs_until));
+                                                <?php if (++$count <= 3) :
+                                                    $date_format = 'n/d/y';
+                                                    $time_format = 'g:ia';
+                                                    $formatted_start_time = date(
+                                                        $time_format,
+                                                        strtotime($datetime->starttime)
+                                                    );
+                                                    $formatted_start_date = date(
+                                                        $time_format,
+                                                        strtotime($datetime->starttime)
+                                                    );
+                                                ?>
+                                                    <div>
+                                                        <?php
+                                                        {
+                                                            if ($datetime->recurringtype == 'none') {
+                                                                echo date(
+                                                                    $date_format . ' @ ' . $time_format,
+                                                                    strtotime($datetime->starttime)
+                                                                );
+                                                            } elseif ($datetime->recurringtype == 'daily' ||
+                                                                $datetime->recurringtype == 'weekly' ||
+                                                                $datetime->recurringtype == 'biweekly' ||
+                                                                $datetime->recurringtype == 'annually'
+                                                            ) {
+                                                                echo ucwords($datetime->recurringtype) .
+                                                                    ' @ ' .
+                                                                    date(
+                                                                        $time_format,
+                                                                        strtotime($datetime->starttime)
+                                                                    ) .
+                                                                    ':<br>' .
+                                                                    $formatted_start_date .
+                                                                    ' - ' .
+                                                                    date(
+                                                                        $date_format,
+                                                                        strtotime($datetime->recurs_until)
+                                                                    );
+                                                            } elseif ($datetime->recurringtype == 'monthly') {
+                                                                if ($datetime->rectypemonth == 'lastday') {
+                                                                    echo 'Last day of every month @ ' .
+                                                                        $formatted_start_time .
+                                                                        ':<br>' .
+                                                                        $formatted_start_date .
+                                                                        ' - ' .
+                                                                        date(
+                                                                            $date_format,
+                                                                            strtotime($datetime->recurs_until)
+                                                                        );
+                                                                } elseif ($datetime->rectypemonth == 'date') {
+                                                                    echo ordinal(
+                                                                            date('d', strtotime($datetime->starttime))
+                                                                        ) .
+                                                                        ' of every month @ ' .
+                                                                        $formatted_start_time .
+                                                                        ':<br>' .
+                                                                        $formatted_start_date .
+                                                                        ' - ' .
+                                                                        date(
+                                                                            $date_format,
+                                                                            strtotime($datetime->recurs_until)
+                                                                        );
+                                                                } else {
+                                                                    echo ucwords($datetime->rectypemonth) .
+                                                                        date(' l', strtotime($datetime->starttime)) .
+                                                                        ' of every month' .
+                                                                        ':<br>' .
+                                                                        $formatted_start_date .
+                                                                        ' - ' .
+                                                                        date(
+                                                                            $date_format,
+                                                                            strtotime($datetime->recurs_until)
+                                                                        );
+                                                                }
                                                             }
                                                         }
-                                                    }
-                                                    ?><br>
-                                                    <?php $location = $datetime->getLocation(); ?>
-                                                    <?php if (!empty($location)) echo $location->name; ?>
+                                                        ?>
+                                                    </div>
+                                                    <?php
+                                                        $location = $datetime->getLocation();
+                                                        if (isset($datetime->location_id) && $location !== false):
+                                                    ?>
+                                                    <div class="dcf-d-flex dcf-ai-center">
+                                                    <svg
+                                                        class="dcf-mr-1 dcf-h-4 dcf-w-4 dcf-fill-current"
+                                                        aria-hidden="true"
+                                                        focusable="false"
+                                                        height="24"
+                                                        width="24"
+                                                        viewBox="0 0 24 24"
+                                                    >
+                                                        <path d="M12 0C7.589 0 4 3.589 4 8c0 4.245 7.273 15.307
+                                                            7.583 15.775 a.497.497 0 00.834 0C12.727 23.307 20
+                                                            12.245 20 8c0-4.411-3.589-8-8-8zm0 22.58 C10.434
+                                                            20.132 5 11.396 5 8c0-3.86 3.14-7 7-7s7 3.14 7 7c0
+                                                            3.395-5.434 12.132-7 14.58z"></path>
+                                                        <path d="M12 4.5c-1.93 0-3.5 1.57-3.5 3.5s1.57 3.5 3.5
+                                                            3.5 3.5-1.57 3.5-3.5-1.57-3.5-3.5-3.5zm0 6 c-1.378
+                                                            0-2.5-1.122-2.5-2.5s1.122-2.5 2.5-2.5 2.5 1.122
+                                                            2.5 2.5-1.122 2.5-2.5 2.5z"></path>
+                                                    </svg>
+                                                    <span class="dcf-sr-only">Physical Location:</span>
+                                                    <div class="dcf-popup" data-point="true">
+                                                        <button
+                                                            class="dcf-btn dcf-btn-tertiary dcf-btn-popup"
+                                                            type="button"
+                                                        >
+                                                            <?php echo $location->name; ?>
+                                                        </button>
+                                                        <div
+                                                            class="dcf-popup-content
+                                                                unl-cream
+                                                                unl-bg-blue
+                                                                dcf-p-3 dcf-rounded"
+                                                            style="width: 100%; min-width: 25ch;"
+                                                        >
+                                                            <dl>
+                                                                <?php
+                                                                    if(isset($location->name) &&
+                                                                    !empty($location->name)):
+                                                                ?>
+                                                                    <dt>Name</dt>
+                                                                    <dd><?php echo $location->name; ?></dd>
+                                                                <?php endif; ?>
+
+                                                                <?php
+                                                                    if(isset($location->streetaddress1) &&
+                                                                    !empty($location->streetaddress1)):
+                                                                ?>
+                                                                    <dt>Street Address 1</dt>
+                                                                    <dd><?php echo $location->streetaddress1; ?></dd>
+                                                                <?php endif; ?>
+
+                                                                <?php
+                                                                    if(isset($location->streetaddress2) &&
+                                                                    !empty($location->streetaddress2)):
+                                                                ?>
+                                                                    <dt>Street Address 2</dt>
+                                                                    <dd><?php echo $location->streetaddress2; ?></dd>
+                                                                <?php endif; ?>
+
+                                                                <?php
+                                                                    if(isset($location->city) &&
+                                                                    !empty($location->city)):
+                                                                ?>
+                                                                    <dt>City</dt>
+                                                                    <dd><?php echo $location->city; ?></dd>
+                                                                <?php endif; ?>
+
+                                                                <?php
+                                                                    if(isset($location->state) &&
+                                                                    !empty($location->state)):
+                                                                ?>
+                                                                    <dt>State</dt>
+                                                                    <dd><?php echo $location->state; ?></dd>
+                                                                <?php endif; ?>
+
+                                                                <?php
+                                                                    if(isset($location->zip) &&
+                                                                    !empty($location->zip)):
+                                                                ?>
+                                                                    <dt>Zip</dt>
+                                                                    <dd><?php echo $location->zip; ?></dd>
+                                                                <?php endif; ?>
+
+                                                                <?php
+                                                                    if(isset($location->room) &&
+                                                                    !empty($location->room)):
+                                                                ?>
+                                                                    <dt>Room</dt>
+                                                                    <dd><?php echo $location->room; ?></dd>
+                                                                <?php endif; ?>
+
+                                                                <?php
+                                                                    if(isset($datetime->room) &&
+                                                                    !empty($datetime->room)):
+                                                                ?>
+                                                                    <dt>Room</dt>
+                                                                    <dd><?php echo $datetime->room; ?></dd>
+                                                                <?php
+                                                                    elseif(isset($location->room) &&
+                                                                        !empty($location->room)):
+                                                                ?>
+                                                                    <dt>Room</dt>
+                                                                    <dd><?php echo $location->room; ?></dd>
+                                                                <?php endif; ?>
+
+                                                                <?php
+                                                                    if(isset($datetime->directions) &&
+                                                                        !empty($datetime->directions)):
+                                                                ?>
+                                                                    <dt>Directions</dt>
+                                                                    <dd><?php echo $datetime->directions; ?></dd>
+                                                                <?php
+                                                                    elseif(isset($location->directions) &&
+                                                                        !empty($location->directions)):
+                                                                ?>
+                                                                    <dt>Directions</dt>
+                                                                    <dd><?php echo $location->directions; ?></dd>
+                                                                <?php endif; ?>
+
+                                                                <?php
+                                                                    if(
+                                                                        isset(
+                                                                            $datetime->location_additionalpublicinfo
+                                                                        ) &&
+                                                                        !empty($datetime->location_additionalpublicinfo)
+                                                                    ):
+                                                                ?>
+                                                                    <dt>Additional Public Info</dt>
+                                                                    <dd>
+                                                                        <?php
+                                                                            echo $datetime
+                                                                                ->location_additionalpublicinfo;
+                                                                        ?>
+                                                                    </dd>
+                                                                <?php
+                                                                    elseif(isset($location->additionalpublicinfo) &&
+                                                                        !empty($location->additionalpublicinfo)
+                                                                    ):
+                                                                ?>
+                                                                    <dt>Additional Public Info</dt>
+                                                                    <dd>
+                                                                        <?php
+                                                                            echo $location->additionalpublicinfo;
+                                                                        ?>
+                                                                    </dd>
+                                                                <?php endif; ?>
+                                                            </dl>
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                                    <?php
+                                                        endif;
+                                                        $getWebcast = $datetime->getWebcast();
+                                                        if (isset($datetime->webcast_id) && $getWebcast !== false):
+                                                    ?>
+                                                    <div class="dcf-d-flex dcf-ai-center">
+                                                        <svg
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            class="dcf-mr-1 dcf-h-4 dcf-w-4 dcf-fill-current"
+                                                            aria-hidden="true"
+                                                            focusable="false"
+                                                            height="24"
+                                                            width="24"
+                                                            viewBox="0 0 24 24"
+                                                        >
+                                                            <path d="M22,1H2C0.897,1,0,1.937,0,3.088v14.824C0,19.063,
+                                                                0.897,20,2,20 h9.5v1H5c-0.276,0-0.5,0.224-0.5,
+                                                                0.5S4.724,22,5,22h14 c0.276,0,0.5-0.224,0.5-0.5
+                                                                S19.276,21,19,21h-6.5v-1H22c1.103,0,2-0.937,
+                                                                2-2.088V3.088 C24,1.937,23.103,1,22,1z M2,2h20
+                                                                c0.551,0,1,0.488,1,1.088 V15H1V3.088C1,2.488,
+                                                                1.449,2,2,2z M22,19H2c-0.551,0-1-0.488-1-1.088
+                                                                V16h22v1.912 C23,18.512,22.551,19,22,19z"></path>
+                                                            <path d="M12,16.5c-0.551,0-1,0.448-1,1
+                                                                s0.449,1,1,1s1-0.448,1-1S12.551,
+                                                                16.5,12,16.5z M12,17.5L12,17.5h0.5H12z"></path>
+                                                            <g><path fill="none" d="M0 0H24V24H0z"></path></g>
+                                                        </svg>
+                                                        <span class="dcf-sr-only">Virtual Location:</span>
+                                                        <div class="dcf-popup" data-point="true">
+                                                            <button
+                                                                class="dcf-btn dcf-btn-tertiary dcf-btn-popup"
+                                                                type="button"
+                                                            >
+                                                                <?php echo $getWebcast->title; ?>
+                                                            </button>
+                                                            <div
+                                                                class="dcf-popup-content
+                                                                    unl-cream
+                                                                    unl-bg-blue
+                                                                    dcf-p-3 dcf-rounded"
+                                                                style="min-width: 25ch;"
+                                                            >
+                                                                <dl>
+                                                                    <?php
+                                                                        if(isset($getWebcast->title) &&
+                                                                            !empty($getWebcast->title)):
+                                                                    ?>
+                                                                        <dt>Name</dt>
+                                                                        <dd><?php echo $getWebcast->title; ?></dd>
+                                                                    <?php endif; ?>
+
+                                                                    <?php
+                                                                        if(isset($getWebcast->url) &&
+                                                                            !empty($getWebcast->url)):
+                                                                    ?>
+                                                                        <dt>URL</dt>
+                                                                        <dd><?php echo $getWebcast->url; ?></dd>
+                                                                    <?php endif; ?>
+
+                                                                    <?php
+                                                                        if(
+                                                                            isset(
+                                                                                $datetime->webcast_additionalpublicinfo
+                                                                            ) &&
+                                                                            !empty(
+                                                                                $datetime->webcast_additionalpublicinfo
+                                                                            )
+                                                                        ):
+                                                                    ?>
+                                                                        <dt>Additional Public Info</dt>
+                                                                        <dd>
+                                                                            <?php
+                                                                                echo $datetime
+                                                                                    ->webcast_additionalpublicinfo;
+                                                                            ?>
+                                                                        </dd>
+                                                                    <?php
+                                                                        elseif(isset($getWebcast->additionalinfo) &&
+                                                                            !empty($getWebcast->additionalinfo)
+                                                                        ):
+                                                                    ?>
+                                                                        <dt>Additional Public Info</dt>
+                                                                        <dd>
+                                                                            <?php
+                                                                                echo $getWebcast->additionalinfo;
+                                                                            ?>
+                                                                        </dd>
+                                                                    <?php endif; ?>
+                                                                </dl>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <?php endif; ?>
                                                 <?php else: ?>
                                                     ...and <?php echo (count($datetimes) - 3); ?> more
                                                 <?php break; ?>

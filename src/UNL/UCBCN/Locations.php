@@ -5,10 +5,10 @@ use UNL\UCBCN\ActiveRecord\RecordList;
 use UNL\UCBCN\ActiveRecord\Record;
 /**
  * Object related to a list of calendars.
- * 
+ *
  * PHP version 5
- * 
- * @category  Events 
+ *
+ * @category  Events
  * @package   UNL_UCBCN
  * @author    Tyler Lemburg <trlemburg@gmail.com>
  * @copyright 2015 Regents of the University of Nebraska
@@ -34,31 +34,38 @@ class Locations extends RecordList
         if (array_key_exists('user_id', $this->options)) {
             return '
               SELECT id
-              FROM location 
-              WHERE user_id = "' . $this->escapeString($this->options['user_id']) . '" 
+              FROM location
+              WHERE user_id = "' . $this->escapeString($this->options['user_id']) . '"
               ORDER BY display_order ASC, name ASC;
             ';
-        } else if (array_key_exists('standard', $this->options)) {
+        } elseif (array_key_exists('calendar_id', $this->options)) {
+            return '
+              SELECT id
+              FROM location
+              WHERE calendar_id = "' . $this->escapeString($this->options['calendar_id']) . '"
+              ORDER BY display_order ASC, name ASC;
+            ';
+        } elseif (array_key_exists('standard', $this->options)) {
             if (!array_key_exists('display_order', $this->options)) {
                 throw new \Exception('You must also provide a display_order filter', 500);
             }
-            
+
             if (NULL == $this->options['display_order']) {
                 return '
                   SELECT id
-                  FROM location 
+                  FROM location
                   WHERE standard = 1 AND display_order IS NULL
                   ORDER BY user_id DESC, name ASC;
                 ';
             } else {
                 return '
                   SELECT id
-                  FROM location 
+                  FROM location
                   WHERE standard = 1 AND display_order = ' . (int)$this->options['display_order'] . '
                   ORDER BY user_id DESC, name ASC;
                 ';
             }
-            
+
         } else {
             return parent::getSQL();
         }

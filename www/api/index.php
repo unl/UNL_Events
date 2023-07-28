@@ -32,7 +32,7 @@ if (!$user || empty($token)) {
 	$_API_USER = $user;
 }
 
-$routes = include __DIR__ . '/../../data/api_routes.php';
+$routes = include_once __DIR__ . '/../../data/api_routes.php';
 $router = new RegExpRouter\Router(array('baseURL' => Controller::$url));
 $router->setRoutes($routes);
 

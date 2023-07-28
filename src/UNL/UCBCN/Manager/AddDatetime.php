@@ -18,6 +18,7 @@ class AddDatetime extends PostHandler
     public $event_datetime;
     public $recurrence_id;
     public $original_event_datetime_id;
+    public $post;
 
     public function __construct($options = array())
     {
@@ -54,7 +55,10 @@ class AddDatetime extends PostHandler
             # now we check for if we are editing a specific recurrence
             if (array_key_exists('recurrence_id', $this->options)) {
 
-                $recurrence = RecurringDate::getByEventDatetimeIDRecurrenceID($this->event_datetime->id, $this->options['recurrence_id']);
+                $recurrence = RecurringDate::getByEventDatetimeIDRecurrenceID(
+                    $this->event_datetime->id,
+                    $this->options['recurrence_id']
+                );
 
                 if ($recurrence === FALSE) {
                     throw new \Exception("That recurrence could not be found", 404);
@@ -67,8 +71,13 @@ class AddDatetime extends PostHandler
 
                 # set the start and end time based on the recurring date record
                 $event_length = strtotime($temp_event_datetime->endtime) - strtotime($temp_event_datetime->starttime);
-                $temp_event_datetime->starttime = $recurrence->recurringdate . ' ' . date('H:i:s', strtotime($temp_event_datetime->starttime));
-                $temp_event_datetime->endtime = date('Y-m-d H:i:s', strtotime($temp_event_datetime->starttime) + $event_length);
+                $temp_event_datetime->starttime = $recurrence->recurringdate .
+                    ' ' .
+                    date('H:i:s', strtotime($temp_event_datetime->starttime));
+                $temp_event_datetime->endtime = date(
+                    'Y-m-d H:i:s',
+                    strtotime($temp_event_datetime->starttime) + $event_length
+                );
 
                 $temp_event_datetime->recurringtype = 'none';
                 $temp_event_datetime->rectypemonth = NULL;
@@ -85,6 +94,8 @@ class AddDatetime extends PostHandler
 
     public function handlePost(array $get, array $post, array $files)
     {
+        $this->post = $post;
+
         if (isset($post['toggle-cancel'])) {
             $this->processCancelToggle($post);
             die();
@@ -133,7 +144,13 @@ class AddDatetime extends PostHandler
 	    try {
 		    $this->editDatetime($post);
 	    } catch (ValidationException $e) {
-		    $this->flashNotice(parent::NOTICE_LEVEL_ALERT, 'Sorry! We couldn\'t ' . ($new ? 'create' : 'update') . ' this location/date/time', $e->getMessage());
+		    $this->flashNotice(
+                parent::NOTICE_LEVEL_ALERT,
+                'Sorry! We couldn\'t ' .
+                    ($new ? 'create' : 'update') .
+                    ' this location/date/time',
+                $e->getMessage()
+            );
 		    throw $e;
 	    }
 
@@ -151,16 +168,25 @@ class AddDatetime extends PostHandler
 		    }
 	    }
         if ($new) {
-            $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Location/Date/Time Added', 'Another location, date and time has been added.');
+            $this->flashNotice(
+                parent::NOTICE_LEVEL_SUCCESS,
+                'Location/Date/Time Added',
+                'Another location, date and time has been added.'
+            );
         } else {
-            $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Location/Date/Time Updated', 'Your location, date and time has been updated.');
+            $this->flashNotice(
+                parent::NOTICE_LEVEL_SUCCESS,
+                'Location/Date/Time Updated', '
+                Your location, date and time has been updated.'
+            );
         }
     }
 
     private function setDatetimeData($post_data)
     {
         # set the start date and end date
-        $this->event_datetime->timezone = empty($post_data['timezone']) ? BaseUCBCN::$defaultTimezone : $post_data['timezone'];
+        $this->event_datetime->timezone = empty($post_data['timezone']) ?
+            BaseUCBCN::$defaultTimezone : $post_data['timezone'];
         $this->event_datetime->starttime = $this->calculateDate($post_data['start_date'],
             $post_data['start_time_hour'], $post_data['start_time_minute'],
             $post_data['start_time_am_pm']);
@@ -186,8 +212,7 @@ class AddDatetime extends PostHandler
         } else {
             $this->event_datetime->recurringtype = 'none';
         }
-        $this->event_datetime->room = $post_data['room'];
-        $this->event_datetime->directions = $post_data['directions'];
+
         $this->event_datetime->additionalpublicinfo = $post_data['additional_public_info'];
     }
 
@@ -199,8 +224,8 @@ class AddDatetime extends PostHandler
         }
 
         # start date, location are required
-        if (empty($post_data['location']) || empty($post_data['start_date'])) {
-            throw new ValidationException('<a href="#location">Location</a> and <a href="#start-date">start date</a> are required.');
+        if (empty($post_data['start_date'])) {
+            throw new ValidationException('<a href="#start-date">start date</a> are required.');
         }
 
         # end date must be after start date
@@ -216,9 +241,28 @@ class AddDatetime extends PostHandler
             throw new ValidationException('Your <a href="#end-date">end date/time</a> must be on or after the <a href="#start-date">start date/time</a>.');
         }
 
-        # check that a new location has a name
-        if ($post_data['location'] == 'new' && empty($post_data['new_location']['name'])) {
-            throw new ValidationException('You must give your new location a <a href="#location-name">name</a>.');
+        // If there is a physical location make sure these are set
+        if (
+            isset($post_data['physical_location_check'])
+            && $post_data['physical_location_check'] == '1'
+            && $post_data['location'] == "new"
+        ) {
+            $validate_data = LocationUtility::validateLocation($post_data);
+            if (!$validate_data['valid']) {
+                throw new ValidationException($validate_data['message']);
+            }
+        }
+
+        // If there is a virtual location make sure these are set
+        if (
+            isset($post_data['virtual_location_check'])
+            && $post_data['virtual_location_check'] == '1'
+            && $post_data['v_location'] == "new"
+        ) {
+            $validate_data = WebcastUtility::validateWebcast($post_data);
+            if (!$validate_data['valid']) {
+                throw new ValidationException($validate_data['message']);
+            }
         }
 
         # Validate Recurring Event (if applicable)
@@ -247,13 +291,56 @@ class AddDatetime extends PostHandler
             $post_data['end_time_am_pm'] = $post_data['start_time_am_pm'];
         }
 
-        # check if this is to use a new location
-        if ($post_data['location'] == 'new') {
-            # create a new location
-	        $location = LocationUtility::addLocation($post_data, $user);
-            $this->event_datetime->location_id = $location->id;
+        // Checks if we have a physical location
+        if ($post_data['physical_location_check'] == '0') {
+
+            // if not we check if we need to set the location to null and delete the old location
+            if (isset($this->event_datetime->location_id) && !empty($this->event_datetime->location_id)) {
+                $location_to_be_deleted = $this->event_datetime->getLocation();
+                $this->event_datetime->location_id = null;
+                if ($location_to_be_deleted !== false && !$location_to_be_deleted->isSavedOrStandard()) {
+                    $location_to_be_deleted->delete();
+                }
+            }
         } else {
-            $this->event_datetime->location_id = $post_data['location'];
+            // check if this is to use a new location
+            if ($post_data['location'] == 'new') {
+                // create a new location
+                $location = LocationUtility::addLocation($post_data, $user, $this->calendar);
+                $this->event_datetime->location_id = $location->id;
+            } else {
+                $this->event_datetime->location_id = $post_data['location'];
+            }
+
+            // set other location related fields
+            $this->event_datetime->room = $post_data['room'];
+            $this->event_datetime->directions = $post_data['directions'];
+            $this->event_datetime->location_additionalpublicinfo = $post_data['l_additional_public_info'];
+        }
+
+         // Checks if we have a virtual location
+        if ($post_data['virtual_location_check'] == '0') {
+
+            // if not we check if we need to set the webcast to null and delete the old webcast
+            if (isset($this->event_datetime->webcast_id) && !empty($this->event_datetime->webcast_id)) {
+                $webcast_to_be_deleted = $this->event_datetime->getWebcast();
+                $this->event_datetime->webcast_id = null;
+                if ($webcast_to_be_deleted !== false && !$webcast_to_be_deleted->isSaved()) {
+                    $webcast_to_be_deleted->delete();
+                }
+            }
+        } else {
+            // if a virtual location is there then create a new one or set it to the selected one
+            if ($post_data['v_location'] == 'new') {
+                // create a new location
+                $webcast = WebcastUtility::addWebcast($post_data, $user, $this->calendar);
+                $this->event_datetime->webcast_id = $webcast->id;
+            } else {
+                $this->event_datetime->webcast_id = $post_data['v_location'];
+            }
+
+            // set other webcast related fields
+            $this->event_datetime->webcast_additionalpublicinfo = $post_data['v_additional_public_info'];
         }
 
         $this->setDatetimeData($post_data);
@@ -271,10 +358,10 @@ class AddDatetime extends PostHandler
             if (!$datetime_copy->isRecurring() && $this->event_datetime->isRecurring()) {
                 $this->event_datetime->insertRecurrences();
             # if we are removing recurring completely
-            } else if ($datetime_copy->isRecurring() && !$this->event_datetime->isRecurring()) {
+            } elseif ($datetime_copy->isRecurring() && !$this->event_datetime->isRecurring()) {
                 $this->event_datetime->deleteRecurrences();
             # if we are recurring before and after the change
-            } else if ($datetime_copy->isRecurring() && $this->event_datetime->isRecurring()) {
+            } elseif ($datetime_copy->isRecurring() && $this->event_datetime->isRecurring()) {
                 # start time, end time, frequency and recurs until must all remain the same
                 # or we wipe it and start over
 
@@ -290,5 +377,41 @@ class AddDatetime extends PostHandler
         }
 
         return $this->event_datetime;
+    }
+
+
+    /**
+     * Get the original datetime unmodified.
+     *
+     * @return UNL\UCBCN\Event\Occurrence
+     */
+    public function getOriginalDatetime()
+    {
+        $temp_event_datetime = Occurrence::getByID($this->original_event_datetime_id);
+
+        # now we check for if we are editing a specific recurrence
+        if (isset($this->recurrence_id)) {
+            $recurrence = RecurringDate::getByEventDatetimeIDRecurrenceID(
+                $this->original_event_datetime_id,
+                $this->recurrence_id
+            );
+
+            $temp_event_datetime->id = null;
+
+            # set the start and end time based on the recurring date record
+            $event_length = strtotime($temp_event_datetime->endtime) - strtotime($temp_event_datetime->starttime);
+            $temp_event_datetime->starttime = $recurrence->recurringdate .
+                ' ' . date('H:i:s', strtotime($temp_event_datetime->starttime));
+            $temp_event_datetime->endtime = date(
+                'Y-m-d H:i:s',
+                strtotime($temp_event_datetime->starttime) + $event_length
+            );
+
+            $temp_event_datetime->recurringtype = 'none';
+            $temp_event_datetime->rectypemonth = null;
+            $temp_event_datetime->recurs_until = null;
+        }
+
+        return $temp_event_datetime;
     }
 }

@@ -26,7 +26,7 @@ namespace UNL\UCBCN\Frontend;
  * @license   http://www1.unl.edu/wdn/wiki/Software_License BSD License
  * @link      http://code.google.com/p/unl-event-publisher/
  */
-class Audience extends EventListing implements RoutableInterface
+class Audience extends EventListing implements RoutableInterface, MetaTagInterface
 {
     public $search_event_calendar = '';
     public $limit = 100;
@@ -103,7 +103,11 @@ class Audience extends EventListing implements RoutableInterface
                         e.endtime,
                         CONCAT(DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.endtime," %H:%i:%s"))
                     ) >= NOW()
-                ) AND ( audience.name IS NOT NULL ) ';
+                ) AND ( audience.name IS NOT NULL )
+                AND (
+                    calendar_has_event.calendar_id = ' . (int)$this->calendar->id . '
+                    OR event.approvedforcirculation = 1
+                ) ';
 
         // Adds filters for target audience
         if (!empty($this->event_type_filter)) {
@@ -135,6 +139,17 @@ class Audience extends EventListing implements RoutableInterface
                     event.title ASC';
 
         return $sql;
+    }
+
+    // Sets the meta tags for the page
+    public function getMetaTags()
+    {
+        $title = $this->calendar->name . ' Calendar - Audience';
+        $description = 'The UNL events calendar for ' . $this->calendar->name;
+
+        $metaTagUtility = new MetaTagUtility($this->getURL(), $title, $description);
+
+        return $metaTagUtility->getMetaTags();
     }
 
     /**

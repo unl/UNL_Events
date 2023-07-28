@@ -7,7 +7,7 @@ use UNL\UCBCN\Location;
 use UNL\UCBCN\Event\RecurringDate;
 use UNL\UCBCN\Event\RecurringDates;
 use UNL\UCBCN\Manager\Controller;
-
+use UNL\UCBCN\Webcast;
 
 /**
  * Table Definition for eventdatetime
@@ -36,7 +36,8 @@ class Occurrence extends Record
 
     public $id;                              // int(10)  not_null primary_key unsigned auto_increment
     public $event_id;                        // int(10)  not_null multiple_key unsigned
-    public $location_id;                     // int(10)  not_null multiple_key unsigned
+    public $location_id;                     // int(10)  multiple_key unsigned
+    public $webcast_id;                      // int(10)  multiple_key unsigned
     public $timezone;                        // string(30)
     public $starttime;                       // datetime(19)  multiple_key binary
     public $endtime;                         // datetime(19)  multiple_key binary
@@ -47,6 +48,8 @@ class Occurrence extends Record
     public $hours;                           // string(255)
     public $directions;                      // blob(4294967295)  blob
     public $additionalpublicinfo;            // blob(4294967295)  blob
+    public $location_additionalpublicinfo;   // blob(4294967295)  blob
+    public $webcast_additionalpublicinfo;    // blob(4294967295)  blob
     public $canceled;
 
     const ONE_DAY = 86400;
@@ -111,6 +114,30 @@ class Occurrence extends Record
         //delete the actual event.
         $r = parent::delete();
         if ($r) {
+            if (isset($this->location_id)) {
+                $location = $this->getLocation();
+                if ($location !== false && !$location->isSavedOrStandard()) {
+                    $location_occurrences = new Occurrences(array(
+                        'location_id' => $location->id,
+                    ));
+
+                    if (count($location_occurrences) === 0) {
+                        $location->delete();
+                    }
+                }
+            }
+            if (isset($this->webcast_id)) {
+                $webcast = $this->getWebcast();
+                if ($webcast !== false && !$webcast->isSaved()) {
+                    $webcast_occurrences = new Occurrences(array(
+                        'webcast_id' => $webcast->id,
+                    ));
+
+                    if (count($webcast_occurrences) === 0) {
+                        $webcast->delete();
+                    }
+                }
+            }
             $this->deleteRecurrences();
         }
         return $r;
@@ -235,13 +262,31 @@ class Occurrence extends Record
     }
     
     /**
-     * Gets an object for the location of this event date and time.
+     * Gets an object for the location of this event date and time if set.
      *
-     * @return UNL\UCBCN\Location
+     * @return UNL\UCBCN\Location|false
      */
     public function getLocation()
     {
-        return Location::getById($this->location_id);
+        if (isset($this->location_id)) {
+            return Location::getById($this->location_id);
+        }
+
+        return false;
+    }
+
+    /**
+     * Gets an object for the webcast of this event date and time if set.
+     *
+     * @return UNL\UCBCN\Webcast|false
+     */
+    public function getWebcast()
+    {
+        if (isset($this->webcast_id)) {
+            return Webcast::getById($this->webcast_id);
+        }
+
+        return false;
     }
 
     /**
@@ -260,5 +305,37 @@ class Occurrence extends Record
 
     public function isCanceled() {
         return !empty($this->canceled);
+    }
+
+    // This will use google microdata's requirements and check if the occurrence is valid
+    public function microdataCheck()
+    {
+        // We need a start time
+        if (!isset($this->starttime) || empty($this->starttime)) {
+            return false;
+        }
+
+        // We need at least a location or a virtual location or both
+        if (!isset($this->location_id) && !isset($this->webcast_id)) {
+            return false;
+        }
+
+        // Check if the location valid
+        if (isset($this->location_id)) {
+            $location = $this->getLocation();
+            if ($location !== false && !$location->microdataCheck()) {
+                return false;
+            }
+        }
+
+        // Check if the virtual location is valid
+        if (isset($this->webcast_id)) {
+            $webcast = $this->getWebcast();
+            if ($webcast !== false && !$webcast->microdataCheck()) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

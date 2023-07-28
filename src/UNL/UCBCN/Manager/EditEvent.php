@@ -6,13 +6,15 @@ use UNL\UCBCN\Event;
 use UNL\UCBCN\Event\EventType;
 use UNL\UCBCN\Event\Audience;
 use UNL\UCBCN\Calendar as CalendarModel;
+use UNL\UCBCN\Calendar\EventType as ValidateEventType;
 
 class EditEvent extends EventForm
 {
     public $on_main_calendar;
     public $page;
+    private $user;
 
-    public function __construct($options = array()) 
+    public function __construct($options = array())
     {
         parent::__construct($options);
 
@@ -22,7 +24,8 @@ class EditEvent extends EventForm
             throw new \Exception("That event could not be found.", 404);
         }
 
-        if (!$this->event->userCanEdit()) {
+        $this->user = $this->options['user'] ?? Auth::getCurrentUser();
+        if (!$this->event->userCanEdit($this->user)) {
             throw new \Exception("You do not have permission to edit this event.", 403);
         }
 
@@ -45,7 +48,11 @@ class EditEvent extends EventForm
             throw $e;
         }
 
-        $this->flashNotice(parent::NOTICE_LEVEL_SUCCESS, 'Event Updated', 'The event "' . $this->event->title . '" has been updated.');
+        $this->flashNotice(
+            parent::NOTICE_LEVEL_SUCCESS,
+            'Event Updated',
+            'The event "' . $this->event->title . '" has been updated.'
+        );
         return $this->event->getEditURL($this->calendar);
     }
 
@@ -60,14 +67,42 @@ class EditEvent extends EventForm
         if (!$this->on_main_calendar) {
             if (array_key_exists('send_to_main', $post_data) && $post_data['send_to_main'] == 'on') {
                 if (empty($post_data['description']) || empty($post_data['contact_name'])) {
-                    throw new ValidationException('<a href="#contact-name">Contact name</a>, <a href="#description">description</a> and <a href="#imagedata">image</a> are required to recommend to UNL Main Calendar.');
+                    throw new ValidationException(
+                        '<a href="#contact-name">Contact name</a>, <a href="#description">description</a>' .
+                        ' and <a href="#imagedata">image</a> are required to recommend to UNL Main Calendar.'
+                    );
                 }
             }
         }
 
+        if (!isset($post_data['type']) || !is_numeric($post_data['type'])) {
+            throw new ValidationException(
+                'Your <a href="#type">event type</a> must be set'
+            );
+        }
+
+        $validateType = ValidateEventType::getById($post_data['type']);
+        if ($validateType === false) {
+            throw new ValidationException(
+                'Your <a href="#type">event type</a> is invalid'
+            );
+        }
+
         # website must be a valid url
         if (!empty($post_data['website']) && !filter_var($post_data['website'], FILTER_VALIDATE_URL)) {
-          throw new ValidationException('Event Website must be a valid URL.');
+            throw new ValidationException('Event Website must be a valid URL.');
+        }
+
+        if (!empty($post_data['contact_type']) &&
+            $post_data['contact_type'] !== "person" &&
+            $post_data['contact_type'] !== "organization"
+        ) {
+            throw new ValidationException('<a href="#contact-type">Contact Type</a> must be person or organization.');
+        }
+
+        # website must be a valid url
+        if (!empty($post_data['contact_website']) && !filter_var($post_data['contact_website'], FILTER_VALIDATE_URL)) {
+            throw new ValidationException('Contact Website must be a valid URL.');
         }
 
 	    // Validate Image
@@ -78,7 +113,7 @@ class EditEvent extends EventForm
     {
         $this->setEventData($post_data, $files);
         $this->validateEventData($post_data, $files);
-        $result = $this->event->update();
+        $result = $this->event->update($this->user);
 
         # update the event type record
         $event_has_type = EventType::getByEvent_ID($this->event->id);
@@ -100,7 +135,7 @@ class EditEvent extends EventForm
 
         foreach ($all_audiences as $current_audience) {
             $target_audience_id = 'target-audience-' . $current_audience->id;
-            
+
             // get the audiences currently associated with the event
             // (these will change since we are adding and deleting)
             // we then check and store the audience that matches the one we are looking for
