@@ -80,6 +80,8 @@ class APIEvents extends APICalendar implements ModelInterface, ModelAuthInterfac
     // We only handle get requests
     public function run(string $method, array $data, $user): array
     {
+        throw new NotImplementedException();
+
         // When the url matches a search and the method is get
         if ($this->url_match_search) {
             if ($method === 'GET') {

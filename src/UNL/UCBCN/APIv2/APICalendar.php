@@ -63,6 +63,8 @@ class APICalendar implements ModelInterface, ModelAuthInterface
     // Basic CRUD options
     public function run(string $method, array $data, $user): array
     {
+        throw new NotImplementedException();
+
         if ($method === 'GET') {
             return $this->calendarToJSON($this->calendar->id);
         }

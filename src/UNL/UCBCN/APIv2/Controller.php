@@ -37,9 +37,15 @@ class Controller {
         } catch (InvalidMethodException $e) {
             $this->output['status'] = 405;
             $this->output['message'] = $e->getMessage() !== "" ? $e->getMessage() : 'Method Not Allowed';
+        } catch (UnsupportedMediaTypeException $e) {
+            $this->output['status'] = 415;
+            $this->output['message'] = $e->getMessage() !== "" ? $e->getMessage() : 'Unsupported Media Type';
         } catch (ServerErrorException $e) {
             $this->output['status'] = 500;
             $this->output['message'] = $e->getMessage() !== "" ? $e->getMessage() : 'Internal Server Error';
+        } catch (NotImplementedException $e) {
+            $this->output['status'] = 501;
+            $this->output['message'] = $e->getMessage() !== "" ? $e->getMessage() : 'Not Implemented';
         }catch (\Exception $e) {
             $this->output['status'] = 500;
             $this->output['message'] = $e->getMessage() !== "" ? $e->getMessage() : 'Internal Server Error';
@@ -79,6 +85,10 @@ class Controller {
         // User might be false if they are not authenticated
         $result = $model->run($_SERVER['REQUEST_METHOD'], $this->request_data, $this->user);
 
+        if (empty($result)) {
+            $result = null;
+        }
+        
         $this->output['data'] = $result;
     }
 
