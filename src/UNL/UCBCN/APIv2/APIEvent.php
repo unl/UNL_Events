@@ -11,6 +11,7 @@ use UNL\UCBCN\Manager\EditEvent;
 use UNL\UCBCN\User as User;
 use UNL\UCBCN as BaseUCBCN;
 use UNL\UCBCN\Manager\DeleteEvent;
+use UNL\UCBCN\calendar\Audience;
 
 class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
 {
@@ -277,6 +278,22 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
             }
 
             $event_data['timezone'] = $timezones[$event_data['timezone']];
+        }
+
+        foreach ($event_data as $key => $value) {
+            if (substr($key, 0, 9) === "audience-" && $value === true) {
+                $audience_id = substr($key, 9);
+                if (!empty($audience_id) && is_numeric($audience_id)) {
+                    $validateAudience = Audience::getById($audience_id);
+
+                    if ($validateAudience === false) {
+                        throw new ValidationException('Invalid Audience.');
+                    }
+
+                    $event_data['target-audience-' . $audience_id] = $audience_id;
+                }
+                
+            }
         }
 
         // We do not allow images
