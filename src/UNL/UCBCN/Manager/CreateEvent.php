@@ -6,6 +6,7 @@ use UNL\UCBCN as BaseUCBCN;
 use UNL\UCBCN\Event;
 use UNL\UCBCN\Calendar\Event as CalendarEvent;
 use UNL\UCBCN\Event\EventType;
+use UNL\UCBCN\Calendar\EventType as ValidateEventType;
 use UNL\UCBCN\Event\Audience;
 use UNL\UCBCN\Event\Occurrence;
 use UNL\UCBCN\Location;
@@ -93,6 +94,19 @@ class CreateEvent extends EventForm
             throw new ValidationException(
                 'Your <a href="#end-date">end date/time</a>' .
                 ' must be on or after the <a href="#start-date">start date/time</a>.'
+            );
+        }
+
+        if (!isset($post_data['type']) || !is_numeric($post_data['type'])) {
+            throw new ValidationException(
+                'Your <a href="#type">event type</a> must be set'
+            );
+        }
+
+        $validateType = ValidateEventType::getById($post_data['type']);
+        if ($validateType === false) {
+            throw new ValidationException(
+                'Your <a href="#type">event type</a> is invalid'
             );
         }
 
