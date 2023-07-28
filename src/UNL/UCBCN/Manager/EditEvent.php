@@ -6,6 +6,7 @@ use UNL\UCBCN\Event;
 use UNL\UCBCN\Event\EventType;
 use UNL\UCBCN\Event\Audience;
 use UNL\UCBCN\Calendar as CalendarModel;
+use UNL\UCBCN\Calendar\EventType as ValidateEventType;
 
 class EditEvent extends EventForm
 {
@@ -72,6 +73,19 @@ class EditEvent extends EventForm
                     );
                 }
             }
+        }
+
+        if (!isset($post_data['type']) || !is_numeric($post_data['type'])) {
+            throw new ValidationException(
+                'Your <a href="#type">event type</a> must be set'
+            );
+        }
+
+        $validateType = ValidateEventType::getById($post_data['type']);
+        if ($validateType === false) {
+            throw new ValidationException(
+                'Your <a href="#type">event type</a> is invalid'
+            );
         }
 
         # website must be a valid url
