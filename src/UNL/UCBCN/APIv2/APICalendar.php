@@ -179,8 +179,8 @@ class APICalendar implements ModelInterface, ModelAuthInterface
             'name' => $calendar->name,
             'short-name' => $calendar->shortname,
             'default-timezone' => APICalendar::translateTimezone($calendar->defaulttimezone),
-            'website' => $calendar->website,
-            'email-list' => $calendar->emaillists,
+            'webpage' => empty($calendar->website) ? null : $calendar->website,
+            'email-list' =>  empty($calendar->emaillists) ? null : $calendar->emaillists,
             'event-release-preference' => $event_release_preference,
             'recommendations-within-account' => $recommendations_within_account,
         );
@@ -189,6 +189,7 @@ class APICalendar implements ModelInterface, ModelAuthInterface
     // Translate json from API to the data that the manager code will use
     private function translateIncomingJSON(array &$calendar_data)
     {
+        $this->replaceJSONKey($calendar_data, 'webpage', 'website');
         $this->replaceJSONKey($calendar_data, 'short-name', 'shortname');
         $this->replaceJSONKey($calendar_data, 'email-lists', 'email_lists');
         $this->replaceJSONKey($calendar_data, 'recommend-within-account', 'recommend_within_account');

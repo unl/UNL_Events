@@ -217,6 +217,9 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
     // Translates the incoming API json to match the event forms
     private function translateIncomingJSON(array &$event_data)
     {
+        $this->replaceJSONKey($event_data, 'webpage', 'webpageurl');
+        $this->replaceJSONKey($event_data, 'eventtype', 'type');
+
         $this->replaceJSONKey($event_data, 'start-date', 'start_date');
         $this->replaceJSONKey($event_data, 'start-time-hour', 'start_time_hour');
         $this->replaceJSONKey($event_data, 'start-time-minute', 'start_time_minute');
@@ -229,20 +232,22 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
 
         $this->replaceJSONKey($event_data, 'recurring-type', 'recurring_type');
         $this->replaceJSONKey($event_data, 'recurs-until-date', 'recurs_until_date');
-        $this->replaceJSONKey($event_data, 'additional-public-info', 'additional_public_info');
+        $this->replaceJSONKey($event_data, 'event-room', 'room');
+        $this->replaceJSONKey($event_data, 'event-directions', 'directions');
+        $this->replaceJSONKey($event_data, 'event-additional-public-info', 'additional_public_info');
 
         $this->replaceJSONKey($event_data, 'contact-website', 'contact_website');
-        $this->replaceJSONKey($event_data, 'location-additional-public-info', 'l_additional_public_info');
+        $this->replaceJSONKey($event_data, 'event-location-additional-public-info', 'l_additional_public_info');
         $this->replaceJSONKey($event_data, 'virtual-location', 'v_location');
-        $this->replaceJSONKey($event_data, 'virtual-location-additional-public-info', 'v_additional_public_info');
+        $this->replaceJSONKey($event_data, 'event-virtual-location-additional-public-info', 'v_additional_public_info');
 
         $this->replaceJSONKey($event_data, 'private-public', 'private_public');
 
-        $this->replaceJSONKey($event_data, 'contact-type', 'contact_type');
-        $this->replaceJSONKey($event_data, 'contact-name', 'contact_name');
-        $this->replaceJSONKey($event_data, 'contact-phone', 'contact_phone');
-        $this->replaceJSONKey($event_data, 'contact-email', 'contact_email');
-        $this->replaceJSONKey($event_data, 'contact-website', 'contact_website');
+        $this->replaceJSONKey($event_data, 'listing-contact-type', 'contact_type');
+        $this->replaceJSONKey($event_data, 'listing-contact-name', 'contact_name');
+        $this->replaceJSONKey($event_data, 'listing-contact-phone', 'contact_phone');
+        $this->replaceJSONKey($event_data, 'listing-contact-email', 'contact_email');
+        $this->replaceJSONKey($event_data, 'listing-contact-website', 'contact_website');
 
         if (isset($event_data['location'])) {
             if ($event_data['location'] === 'new' || !is_numeric($event_data['location'])) {
@@ -298,9 +303,8 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
         $event_json['title'] = $event->title;
         $event_json['subtitle'] = $event->subtitle;
         $event_json['description'] = $event->description;
-        $event_json['webpageurl'] = $event->webpageurl;
-        $event_json['approved-for-circulation'] = $event->approvedforcirculation === '1';
-        $event_json['listing-contact-uid'] = $event->listingcontactuid;
+        $event_json['webpage'] = $event->webpageurl;
+        $event_json['private-public'] = $event->approvedforcirculation === '1' ? 'public' : 'private';
         $event_json['listing-contact-name'] = $event->listingcontactname;
         $event_json['listing-contact-phone'] = $event->listingcontactphone;
         $event_json['listing-contact-email'] = $event->listingcontactemail;
@@ -317,10 +321,10 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
         }
 
         // Gets event type data
-        $event_json['event-types'] = array();
+        $event_json['eventtypes'] = array();
         foreach ($event->getEventTypes() as $event_type_connection) {
             $event_type = $event_type_connection->getType();
-            $event_json['event-types'][] = array(
+            $event_json['eventtypes'][] = array(
                 'id' => $event_type->id,
                 'name' => $event_type->name,
             );
@@ -373,9 +377,9 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
         $occurrence_json['canceled'] = $occurrence->canceled === '1';
         $occurrence_json['event-room'] = $occurrence->room;
         $occurrence_json['event-directions'] = $occurrence->directions;
-        $occurrence_json['event-additionalpublicinfo'] = $occurrence->additionalpublicinfo;
-        $occurrence_json['event-location-additionalpublicinfo'] = $occurrence->location_additionalpublicinfo;
-        $occurrence_json['event-virtual-location-additionalpublicinfo'] = $occurrence->webcast_additionalpublicinfo;
+        $occurrence_json['event-additional-public-info'] = $occurrence->additionalpublicinfo;
+        $occurrence_json['event-location-additional-public-info'] = $occurrence->location_additionalpublicinfo;
+        $occurrence_json['event-virtual-location-additional-public-info'] = $occurrence->webcast_additionalpublicinfo;
 
         // Gets the location data
         if (isset($occurrence->location_id) && !empty($occurrence->location_id)) {
