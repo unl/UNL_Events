@@ -123,24 +123,26 @@ class Controller {
         // Get the Content-Type header from the request
         $contentType = isset($_SERVER['CONTENT_TYPE']) ? $_SERVER['CONTENT_TYPE'] : '';
 
-        // Check if the Content-Type is application/x-www-form-urlencoded (URL-encoded form data)
-        if (stripos($contentType, 'application/x-www-form-urlencoded') !== false) {
-            // Data is URL-encoded, use parse_str
-            parse_str(file_get_contents('php://input'), $this->request_data);
-        } elseif (stripos($contentType, 'application/json') !== false) {
-            // Data is in JSON format, use json_decode
-            $jsonData = file_get_contents('php://input');
-            $this->request_data = json_decode($jsonData, true);
+        if (!empty($contentType)) {
+            // Check if the Content-Type is application/x-www-form-urlencoded (URL-encoded form data)
+            if (stripos($contentType, 'application/x-www-form-urlencoded') !== false) {
+                // Data is URL-encoded, use parse_str
+                parse_str(file_get_contents('php://input'), $this->request_data);
+            } elseif (stripos($contentType, 'application/json') !== false) {
+                // Data is in JSON format, use json_decode
+                $jsonData = file_get_contents('php://input');
+                $this->request_data = json_decode($jsonData, true);
 
-            // Check if JSON decoding was successful
-            if ($this->request_data === null) {
-                throw new ValidationException('Invalid JSON.');
+                // Check if JSON decoding was successful
+                if ($this->request_data === null) {
+                    throw new ValidationException('Invalid JSON.');
+                }
+            } elseif (stripos($contentType, 'multipart/form-data') !== false) {
+                parse_str(file_get_contents('php://input'), $this->request_data);
+            }else {
+                // Unsupported Content-Type
+                throw new UnsupportedMediaTypeException('Unsupported content type.');
             }
-        } elseif (stripos($contentType, 'multipart/form-data') !== false) {
-            parse_str(file_get_contents('php://input'), $this->request_data);
-        }else {
-            // Unsupported Content-Type
-            throw new UnsupportedMediaTypeException('Unsupported content type.');
         }
 
         $this->request_data = array_merge($_POST, $this->request_data);
