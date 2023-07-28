@@ -22,24 +22,24 @@ class APIHome implements ModelInterface
                     $url_base . '/location/standard',
                     $url_base . '/location/{location_id}',
                     $url_base . '/virtual-location/{virtual_location_id}',
-                    $url_base . '/calendar/{calendar_id}',
+                    // $url_base . '/calendar/{calendar_id}',
                     $url_base . '/calendar/{calendar_id}/event/{event_id}',
                     $url_base . '/calendar/{calendar_id}/event/datetime/{datetime_id}',
                     $url_base . '/calendar/{calendar_id}/event/datetime/recurrence/{recurrence_id}',
-                    $url_base . '/calendar/{calendar_id}/events',
-                    $url_base . '/calendar/{calendar_id}/events/search',
-                    $url_base . '/calendar/{calendar_id}/events/location/{location_id}',
-                    $url_base . '/calendar/{calendar_id}/events/virtual-location/{virtual_location_id}',
+                //     $url_base . '/calendar/{calendar_id}/events',
+                //     $url_base . '/calendar/{calendar_id}/events/search',
+                //     $url_base . '/calendar/{calendar_id}/events/location/{location_id}',
+                //     $url_base . '/calendar/{calendar_id}/events/virtual-location/{virtual_location_id}',
                 ),
-                'auth_required_routes' => array(
-                    $url_base . '/calendar/{calendar_id}/events/pending',
-                )
+                // 'auth_required_routes' => array(
+                //     $url_base . '/calendar/{calendar_id}/events/pending',
+                // )
             ),
             'POST' => array(
                 'auth_required_routes' => array(
                     $url_base . '/location',
                     $url_base . '/virtual-location',
-                    $url_base . '/calendar',
+                    // $url_base . '/calendar',
                     $url_base . '/calendar/{calendar_id}/event',
                 ),
             ),
@@ -47,13 +47,13 @@ class APIHome implements ModelInterface
                 'auth_required_routes' => array(
                     $url_base . '/location/{location_id}',
                     $url_base . '/virtual-location/{virtual_location_id}',
-                    $url_base . '/calendar/{calendar_id}',
+                    // $url_base . '/calendar/{calendar_id}',
                     $url_base . '/calendar/{calendar_id}/event/{event_id}',
                 ),
             ),
             'DELETE' => array(
                 'auth_required_routes' => array(
-                    $url_base . '/calendar/{calendar_id}',
+                    // $url_base . '/calendar/{calendar_id}',
                     $url_base . '/calendar/{calendar_id}/event/{event_id}',
                 ),
             ),
