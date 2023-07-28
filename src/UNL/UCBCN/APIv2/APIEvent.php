@@ -195,8 +195,7 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
             throw new ValidationException($e->getMessage());
         }
 
-        // Returns success message
-        return array('Event has been deleted from calendar.');
+        return array();
     }
 
     // Validates the event id and checks if the calendar has that event in it
@@ -220,6 +219,7 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
     {
         $this->replaceJSONKey($event_data, 'webpage', 'webpageurl');
         $this->replaceJSONKey($event_data, 'eventtype', 'type');
+        $this->replaceJSONKey($event_data, 'event-timezone', 'timezone');
 
         $this->replaceJSONKey($event_data, 'start-date', 'start_date');
         $this->replaceJSONKey($event_data, 'start-time-hour', 'start_time_hour');
@@ -249,6 +249,8 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
         $this->replaceJSONKey($event_data, 'listing-contact-phone', 'contact_phone');
         $this->replaceJSONKey($event_data, 'listing-contact-email', 'contact_email');
         $this->replaceJSONKey($event_data, 'listing-contact-website', 'contact_website');
+
+        $event_data['canceled'] = isset($event_data['canceled']) && $event_data['canceled'] === true ? '1' : '0';
 
         if (isset($event_data['location'])) {
             if ($event_data['location'] === 'new' || !is_numeric($event_data['location'])) {
