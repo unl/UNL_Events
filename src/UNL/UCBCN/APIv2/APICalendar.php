@@ -63,8 +63,6 @@ class APICalendar implements ModelInterface, ModelAuthInterface
     // Basic CRUD options
     public function run(string $method, array $data, $user): array
     {
-        throw new NotImplementedException();
-
         if ($method === 'GET') {
             return $this->calendarToJSON($this->calendar->id);
         }
@@ -86,7 +84,7 @@ class APICalendar implements ModelInterface, ModelAuthInterface
 
             // If we do have access we will delete the calendar and output the data
             $this->calendar->delete();
-            return array($this->calendar->name . ' has been deleted.');
+            return array();
         }
 
         throw new InvalidMethodException('Calendar route invalid method.');
@@ -182,7 +180,7 @@ class APICalendar implements ModelInterface, ModelAuthInterface
             'short-name' => $calendar->shortname,
             'default-timezone' => APICalendar::translateTimezone($calendar->defaulttimezone),
             'webpage' => empty($calendar->website) ? null : $calendar->website,
-            'email-list' =>  empty($calendar->emaillists) ? null : $calendar->emaillists,
+            'email-list' => empty($calendar->emaillists) ? null : $calendar->emaillists,
             'event-release-preference' => $event_release_preference,
             'recommendations-within-account' => $recommendations_within_account,
         );
@@ -193,7 +191,7 @@ class APICalendar implements ModelInterface, ModelAuthInterface
     {
         $this->replaceJSONKey($calendar_data, 'webpage', 'website');
         $this->replaceJSONKey($calendar_data, 'short-name', 'shortname');
-        $this->replaceJSONKey($calendar_data, 'email-lists', 'email_lists');
+        $this->replaceJSONKey($calendar_data, 'email-list', 'email_lists');
         $this->replaceJSONKey($calendar_data, 'recommend-within-account', 'recommend_within_account');
 
         $calendar_data['event_release_preference'] = strtolower($calendar_data['event-release-preference'] ?? "");
