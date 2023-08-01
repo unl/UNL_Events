@@ -32,6 +32,7 @@ $routes['/^calendar\/' . $calendar . '\/event\/datetime\/recurrence\/' . $recurr
 $routes['/^calendar\/' . $calendar . '\/events(\/)?$/'] = 'UNL\UCBCN\APIv2\APIEvents';
 $routes['/^calendar\/' . $calendar . '\/events\/search(\/)?$/'] = 'UNL\UCBCN\APIv2\APIEvents';
 $routes['/^calendar\/' . $calendar . '\/events\/pending(\/)?$/'] = 'UNL\UCBCN\APIv2\APIEvents';
+$routes['/^calendar\/' . $calendar . '\/events\/archived(\/)?$/'] = 'UNL\UCBCN\APIv2\APIEvents';
 $routes['/^calendar\/' . $calendar . '\/events\/location\/' . $location . '(\/)?$/'] = 'UNL\UCBCN\APIv2\APIEvents';
 $routes['/^calendar\/' . $calendar . '\/events\/virtual-location\/' . $webcast . '(\/)?$/'] = 'UNL\UCBCN\APIv2\APIEvents';
 

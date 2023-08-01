@@ -18,6 +18,7 @@ class APIEvents extends APICalendar implements ModelInterface, ModelAuthInterfac
 
     public $url_match_search = false;
     public $url_match_pending = false;
+    public $url_match_archived = false;
 
     public $limit = 100;
     public $offset = 0;
@@ -50,6 +51,7 @@ class APIEvents extends APICalendar implements ModelInterface, ModelAuthInterfac
         $url_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         $this->url_match_search   = $this->endsWith($url_path, '/search') || $this->endsWith($url_path, '/search/');
         $this->url_match_pending  = $this->endsWith($url_path, '/pending') || $this->endsWith($url_path, '/pending/');
+        $this->url_match_archived = $this->endsWith($url_path, '/archived') || $this->endsWith($url_path, '/archived/');
 
         parent::__construct($options);
     }
@@ -57,7 +59,9 @@ class APIEvents extends APICalendar implements ModelInterface, ModelAuthInterfac
     // We only need auth for getting a list of the pending events
     public function needsAuth (string $method): bool
     {
-        if ($this->url_match_pending && $method === 'GET') {
+        if (
+            ($this->url_match_pending || $this->url_match_archived)
+            && $method === 'GET') {
             return true;
         }
 
@@ -94,6 +98,14 @@ class APIEvents extends APICalendar implements ModelInterface, ModelAuthInterfac
                 return $this->handlePendingGet($user);
             }
             throw new InvalidMethodException('Pending Events only allows get.');
+        }
+
+        // When the url matches a pending and the method is get
+        if ($this->url_match_archived) {
+            if ($method === 'GET') {
+                return $this->handleArchivedGet($user);
+            }
+            throw new InvalidMethodException('Archived Events only allows get.');
         }
 
         // When the url has a location id and the method is get
@@ -168,12 +180,31 @@ class APIEvents extends APICalendar implements ModelInterface, ModelAuthInterfac
 
         // Check if the user has access to that calendar
         if (!APIEvents::$calendar->hasUser($user)) {
-            throw new ForbiddenException('You do not have access to delete this calendar.');
+            throw new ForbiddenException('You do not have access to this calendar.');
         }
 
         // Get the pending events
         $pending_events = APIEvents::$calendar->getEvents(Calendar::STATUS_PENDING, $this->limit, $this->offset);
         foreach ($pending_events as $event) {
+            $output_array[] = APIEvent::translateOutgoingEventJSON($event->id);
+        }
+
+        return $output_array;
+    }
+
+    // This will get a list of the pending events
+    private function handleArchivedGet($user)
+    {
+        $output_array = array();
+
+        // Check if the user has access to that calendar
+        if (!APIEvents::$calendar->hasUser($user)) {
+            throw new ForbiddenException('You do not have access to this calendar.');
+        }
+
+        // Get the pending events
+        $archived_events = APIEvents::$calendar->getEvents(Calendar::STATUS_ARCHIVED, $this->limit, $this->offset);
+        foreach ($archived_events as $event) {
             $output_array[] = APIEvent::translateOutgoingEventJSON($event->id);
         }
 
