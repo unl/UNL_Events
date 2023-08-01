@@ -114,9 +114,9 @@ class WebcastUtility
     }
 
      // Get the users virtual locations
-    public static function getUserWebcasts()
+    public static function getUserWebcasts($user=null)
     {
-        $user = Auth::getCurrentUser();
+        $user = $user ?? Auth::getCurrentUser();
         return new Webcasts(array('user_id' => $user->uid));
     }
 
