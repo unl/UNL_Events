@@ -17,9 +17,12 @@ class APIMe implements ModelInterface, ModelAuthInterface
         $this->options = $options + $this->options;
 
         $url_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-        $this->url_match_calendars = $this->endsWith($url_path, '/calendars') || $this->endsWith($url_path, '/calendars/');
-        $this->url_match_locations = $this->endsWith($url_path, '/locations') || $this->endsWith($url_path, '/locations/');
-        $this->url_match_webcasts = $this->endsWith($url_path, '/virtual-locations') || $this->endsWith($url_path, '/virtual-locations/');
+        $this->url_match_calendars = $this->endsWith($url_path, '/calendars')
+            || $this->endsWith($url_path, '/calendars/');
+        $this->url_match_locations = $this->endsWith($url_path, '/locations')
+            || $this->endsWith($url_path, '/locations/');
+        $this->url_match_webcasts = $this->endsWith($url_path, '/virtual-locations')
+            || $this->endsWith($url_path, '/virtual-locations/');
     }
 
     // We need auth if we are not using get
@@ -115,15 +118,5 @@ class APIMe implements ModelInterface, ModelAuthInterface
             return true;
         }
         return substr($haystack, -$length) === $needle;
-    }
-
-    // Replace keys in array
-    private function replaceJSONKey(array &$json_data, string $oldKey, string $newKey): void
-    {
-        if (!key_exists($oldKey, $json_data)) {
-            return;
-        }
-        $json_data[$newKey] = $json_data[$oldKey];
-        unset($json_data[$oldKey]);
     }
 }
