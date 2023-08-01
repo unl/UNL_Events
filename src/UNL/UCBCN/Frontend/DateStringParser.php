@@ -254,11 +254,17 @@ class DateStringParser
             )
         ) {
             if (isset($matches[2])) {
+                if (intval($matches[1]) < 2000 || intval($matches[1]) > 2050) {
+                    return false;
+                }
                 // Year or Year to Year
                 $this->start_date = strtotime('january 1st, ' . $matches[1]);
                 $this->end_date = strtotime('december 31st, ' . $matches[2]);
             } else {
                 // Year or Year to Year
+                if (intval($matches[1]) < 2000 || intval($matches[1]) > 2050) {
+                    return false;
+                }
                 $this->start_date = strtotime('january 1st, ' . $matches[1]);
                 $this->end_date = strtotime('december 31st, ' . $matches[1]);
             }
@@ -384,9 +390,15 @@ class DateStringParser
 
     private function convertToSingleDate($input):bool
     {
+        // Q will make it do some kinda funky quarters format which we do not want
+        // if the input is just numeric then it is not a date it is a number
+        if (strpos($input, 'q ') !== false || is_numeric($input)) {
+            return false;
+        }
         $this->start_date = strtotime($input);
         // Check if the end date was calculated successfully
-        if ($this->start_date !== false) {
+        // 946684800 is the start of the year 2000 and any event should be before that date
+        if ($this->start_date !== false && $this->start_date > '946684800') {
             // Convert the end date to a string and return it
             return true;
         }
@@ -411,7 +423,7 @@ class DateStringParser
         $words = explode(' ', $dateString);
 
         // Check if the string starts with a number
-        if (is_numeric($words[0])) {
+        if (is_numeric($words[0]) && isset($words[1])) {
             // Get the number and time interval
             $num = $words[0];
             $interval = $words[1];
