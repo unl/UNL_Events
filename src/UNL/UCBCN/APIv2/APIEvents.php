@@ -125,7 +125,7 @@ class APIEvents extends APICalendar implements ModelInterface, ModelAuthInterfac
     {
         $output_array = array();
 
-        $calendar_events = $this->calendar->getEvents(Calendar::STATUS_POSTED, $this->limit, $this->offset);
+        $calendar_events = APIEvents::$calendar->getEvents(Calendar::STATUS_POSTED, $this->limit, $this->offset);
         foreach ($calendar_events as $event) {
             $output_array[] = APIEvent::translateOutgoingEventJSON($event->id);
         }
@@ -140,7 +140,7 @@ class APIEvents extends APICalendar implements ModelInterface, ModelAuthInterfac
 
         // Creates a new search object with all the things
         $search_events = new Search(array(
-            'calendar' => $this->calendar,
+            'calendar' => APIEvents::$calendar,
             'q' => $this->search_query,
             'type' => $this->event_type_filter,
             'audience' => $this->audience_filter,
@@ -167,12 +167,12 @@ class APIEvents extends APICalendar implements ModelInterface, ModelAuthInterfac
         $output_array = array();
 
         // Check if the user has access to that calendar
-        if (!$this->calendar->hasUser($user)) {
+        if (!APIEvents::$calendar->hasUser($user)) {
             throw new ForbiddenException('You do not have access to delete this calendar.');
         }
 
         // Get the pending events
-        $pending_events = $this->calendar->getEvents(Calendar::STATUS_PENDING, $this->limit, $this->offset);
+        $pending_events = APIEvents::$calendar->getEvents(Calendar::STATUS_PENDING, $this->limit, $this->offset);
         foreach ($pending_events as $event) {
             $output_array[] = APIEvent::translateOutgoingEventJSON($event->id);
         }
@@ -194,7 +194,7 @@ class APIEvents extends APICalendar implements ModelInterface, ModelAuthInterfac
         // find all occurrences by location
         $location_occurrences = new Occurrences(array(
             'location_id' => $location->id,
-            'calendar_id' => $this->calendar->id,
+            'calendar_id' => APIEvents::$calendar->id,
         ));
 
         // We only want each event once
@@ -223,7 +223,7 @@ class APIEvents extends APICalendar implements ModelInterface, ModelAuthInterfac
         // find all occurrences at that virtual location
         $webcast_occurrences = new Occurrences(array(
             'webcast_id' => $webcast->id,
-            'calendar_id' => $this->calendar->id,
+            'calendar_id' => APIEvents::$calendar->id,
         ));
 
         // We only want each event once

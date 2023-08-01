@@ -107,7 +107,7 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
 
         // Make a CreateEvent from the manager
         $createEvent = new CreateEvent(array(
-            'calendar_shortname' => $this->calendar->shortname,
+            'calendar_shortname' => APIEvent::$calendar->shortname,
             'user' => $user,
             'event_source' => CalendarEvent::SOURCE_CREATE_EVENT_API_V2,
         ));
@@ -138,7 +138,7 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
         // Try creating an EditEvent object from manager
         try {
             $editEvent = new EditEvent(array(
-                'calendar_shortname' => $this->calendar->shortname,
+                'calendar_shortname' => APIEvent::$calendar->shortname,
                 'user' => $user,
                 'event_id' => $this->options['event_id'],
             ));
@@ -168,7 +168,7 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
         // Tries to use the deleteEvent, catch errors related permissions and deleting events
         try {
             $deleteEvent = new DeleteEvent(array(
-                'calendar_shortname' => $this->calendar->shortname,
+                'calendar_shortname' => APIEvent::$calendar->shortname,
                 'user' => $user,
                 'event_id' => $this->options['event_id'],
             ));
@@ -177,7 +177,7 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
         }
 
         // We need for the status
-        $calendarHasEvents = CalendarEvent::getByIds($this->calendar->id, $this->options['event_id']);
+        $calendarHasEvents = CalendarEvent::getByIds(APIEvent::$calendar->id, $this->options['event_id']);
         if ($calendarHasEvents === false) {
             throw new ValidationException('Calendar does not have that event.');
         }
@@ -204,7 +204,7 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
         if (!isset($event_id) || !is_numeric($event_id)) {
             throw new ValidationException('Missing event id.');
         }
-        if ($this->calendar->hasEventById($event_id) === false) {
+        if (APIEvent::$calendar->hasEventById($event_id) === false) {
             throw new ValidationException('That calendar does not have that event with that id.');
         }
 
@@ -316,6 +316,11 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
             throw new ValidationException('Invalid ID.');
         }
 
+        $calendarHasEvents = CalendarEvent::getByIds(APIEvent::$calendar->id, $event_id);
+        if ($calendarHasEvents === false) {
+            throw new ValidationException('Calendar does not have that event.');
+        }
+
         $event_json = array();
 
         $event_json['id'] = $event->id;
@@ -330,6 +335,8 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
         $event_json['listing-contact-url'] = $event->listingcontacturl;
         $event_json['listing-contact-type'] = $event->listingcontacttype;
         $event_json['canceled'] = $event->canceled === '1';
+
+        $event_json['calendar-event-status'] = $calendarHasEvents->status;
 
         // Gets the calendar data
         $original_calendar = $event->getOriginCalendar();
