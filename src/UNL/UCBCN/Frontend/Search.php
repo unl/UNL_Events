@@ -103,6 +103,7 @@ class Search extends EventListing implements RoutableInterface, MetaTagInterface
                 LEFT JOIN event_targets_audience ON (event_targets_audience.event_id = event.id)
                 LEFT JOIN audience ON (audience.id = event_targets_audience.audience_id)
                 LEFT JOIN location ON (location.id = e.location_id)
+                LEFT JOIN webcast ON (webcast.id = e.webcast_id)
                 WHERE
                     calendar_has_event.calendar_id = ' . (int)$this->calendar->id . '
                     AND calendar_has_event.status IN ("posted", "archived")';
@@ -136,7 +137,8 @@ class Search extends EventListing implements RoutableInterface, MetaTagInterface
                     (eventtype.name LIKE \'%'.self::escapeString($this->search_query).'%\') OR
                     (audience.name LIKE \'%'.self::escapeString($this->search_query).'%\') OR
                     (event.description LIKE \'%'.self::escapeString($this->search_query).'%\') OR
-                    (location.name LIKE \'%'.self::escapeString($this->search_query).'%\')
+                    (location.name LIKE \'%'.self::escapeString($this->search_query).'%\') OR
+                    (webcast.title LIKE \'%'.self::escapeString($this->search_query).'%\')
                 )';
             }
 
