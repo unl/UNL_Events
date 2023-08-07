@@ -63,7 +63,7 @@ class EventType extends EventListing implements RoutableInterface, MetaTagInterf
             intval($options['limit']) > $format_max_limit ||
             intval($options['limit']) <= 0
         ) {
-            $options['limit'] = $format_max_limit;
+            $options['limit'] = $this->max_limit['default'];;
         }
 
         if (!isset($options['offset']) || empty($options['offset']) ||  intval($options['offset']) <= 0) {

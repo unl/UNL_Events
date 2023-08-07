@@ -38,7 +38,7 @@ class APIEvents extends APICalendar implements ModelInterface, ModelAuthInterfac
             intval($options['limit']) > $this->max_limit ||
             intval($options['limit']) <= 0
         ) {
-            $options['limit'] = $this->max_limit;
+            $options['limit'] = $this->limit;
         }
 
         if (!isset($options['offset']) || empty($options['offset']) || intval($options['offset']) <= 0) {
