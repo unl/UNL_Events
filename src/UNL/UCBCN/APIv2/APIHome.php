@@ -31,8 +31,16 @@ class APIHome implements ModelInterface
                     $url_base . '/calendar/{calendar_id}/events/location/{location_id}',
                     $url_base . '/calendar/{calendar_id}/events/virtual-location/{virtual_location_id}',
                 ),
+                'cookie_auth_routes' => array(
+                    $url_base . '/me',
+                    $url_base . '/me/locations',
+                    $url_base . '/me/virtual-locations',
+                ),
                 'auth_required_routes' => array(
                     $url_base . '/calendar/{calendar_id}/events/pending',
+                    $url_base . '/me',
+                    $url_base . '/me/locations',
+                    $url_base . '/me/virtual-locations',
                 )
             ),
             'POST' => array(
