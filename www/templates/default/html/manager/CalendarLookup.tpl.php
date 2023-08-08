@@ -52,7 +52,9 @@
             <?php foreach($context->getUsers() as $user): ?>
                 <div>
                     <p class="dcf-bold dcf-mb-0">
-                        <a href="https://directory.unl.edu/people/<?php echo $user->uid; ?>" target="_blank"><?php echo $user->uid; ?></a>
+                        <a href="https://directory.unl.edu/people/<?php echo $user->uid; ?>" target="_blank">
+                            <?php echo $user->uid; ?>
+                        </a>
                     </p>
                     <ul>
                         <?php foreach($context->getUserPermissions($user->uid) as $permission): ?>
