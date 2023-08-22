@@ -34,5 +34,6 @@ $routes['/^calendar\/' . $calendar . '\/events\/search(\/)?$/'] = 'UNL\UCBCN\API
 $routes['/^calendar\/' . $calendar . '\/events\/pending(\/)?$/'] = 'UNL\UCBCN\APIv2\APIEvents';
 $routes['/^calendar\/' . $calendar . '\/events\/location\/' . $location . '(\/)?$/'] = 'UNL\UCBCN\APIv2\APIEvents';
 $routes['/^calendar\/' . $calendar . '\/events\/virtual-location\/' . $webcast . '(\/)?$/'] = 'UNL\UCBCN\APIv2\APIEvents';
+$routes['/^calendars\/search(\/)?$/'] = 'UNL\UCBCN\APIv2\APICalendars';
 
 return $routes;
