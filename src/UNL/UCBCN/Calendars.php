@@ -82,6 +82,16 @@ class Calendars extends RecordList
                 WHERE calendar_has_event.datelastupdated >= '" . $filter_date . "'
                 ORDER BY calendar.name";
             return trim($sql);
+        } else if (array_key_exists('search_query', $this->options)) {
+            $sql = '
+                SELECT id
+                FROM calendar
+                WHERE shortname LIKE "%' . self::escapeString($this->options['search_query']) . '%"
+                OR name LIKE "%' . self::escapeString($this->options['search_query']) . '%"
+                ORDER BY id;
+            ';
+
+            return $sql;
         } else {
             return parent::getSQL();
         }
