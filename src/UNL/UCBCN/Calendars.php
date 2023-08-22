@@ -30,31 +30,28 @@ class Calendars extends RecordList
     public function getSQL() {
         if (array_key_exists('user_id', $this->options)) {
             # get all calendars related through a join on user_has_permission
-            $sql = '
+            return '
                 SELECT DISTINCT id FROM (SELECT calendar.id, calendar.name FROM calendar
                 INNER JOIN user_has_permission ON calendar.id = user_has_permission.calendar_id
                 INNER JOIN user ON user_has_permission.user_uid = user.uid
                 WHERE user.uid = "' .
                 self::escapeString($this->options['user_id']) .
                 '") as distinctfilter ORDER BY name';
-            return $sql;
-        } else if (array_key_exists('subscription_id', $this->options)) {
+        } elseif (array_key_exists('subscription_id', $this->options)) {
             # get all calendars that are subscribed with a certain subscription
-            $sql = '
+            return '
                 SELECT calendar_id FROM subscription_has_calendar
                 WHERE subscription_id = ' . (int)$this->options['subscription_id'] . ';';
-            return $sql;
-        } else if (array_key_exists('recommendable_within_account_id', $this->options)) {
+        } elseif (array_key_exists('recommendable_within_account_id', $this->options)) {
             # get all calendars that allow recommendations within the given account
-            $sql = '
+            return '
                 SELECT id FROM calendar
                 WHERE account_id = ' .
                 (int)$this->options['recommendable_within_account_id'] .
                 ' AND recommendationswithinaccount = 1;';
-            return $sql;
-        } else if (array_key_exists('recommend_permissions_for_user_uid', $this->options)) {
+        } elseif (array_key_exists('recommend_permissions_for_user_uid', $this->options)) {
             # get all calendars where the user has event post or event send to pending permissions
-            $sql = '
+            return '
                 SELECT DISTINCT calendar.id FROM calendar
                 INNER JOIN user_has_permission ON calendar.id = user_has_permission.calendar_id
                 INNER JOIN permission ON user_has_permission.permission_id = permission.id
@@ -62,15 +59,13 @@ class Calendars extends RecordList
                 AND user_has_permission.user_uid = "' .
                 self::escapeString($this->options['recommend_permissions_for_user_uid']) .
                 '";';
-            return $sql;
-        } else if (array_key_exists('original_calendars_for_event_id', $this->options)) {
-            $sql = 'SELECT DISTINCT calendar_id FROM calendar_has_event
+        } elseif (array_key_exists('original_calendars_for_event_id', $this->options)) {
+            return 'SELECT DISTINCT calendar_id FROM calendar_has_event
                     WHERE (source = "' .
                     CalendarHasEvent::SOURCE_CREATE_EVENT_FORM .
                     '" OR source = "' . CalendarHasEvent::SOURCE_CHECKED_CONSIDER_EVENT . '")
                     AND event_id = ' . (int)$this->options['original_calendars_for_event_id'] . ';';
-            return $sql;
-        } else if (array_key_exists('has_event_activity_since', $this->options)) {
+        } elseif (array_key_exists('has_event_activity_since', $this->options)) {
             $format = 'Y-m-d';
             $date = $this->options['has_event_activity_since'];
             $d = \DateTime::createFromFormat($format, $date);
@@ -82,16 +77,14 @@ class Calendars extends RecordList
                 WHERE calendar_has_event.datelastupdated >= '" . $filter_date . "'
                 ORDER BY calendar.name";
             return trim($sql);
-        } else if (array_key_exists('search_query', $this->options)) {
-            $sql = '
+        } elseif (array_key_exists('search_query', $this->options)) {
+            return '
                 SELECT id
                 FROM calendar
                 WHERE shortname LIKE "%' . self::escapeString($this->options['search_query']) . '%"
                 OR name LIKE "%' . self::escapeString($this->options['search_query']) . '%"
                 ORDER BY id;
             ';
-
-            return $sql;
         } else {
             return parent::getSQL();
         }
