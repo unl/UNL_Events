@@ -16,6 +16,7 @@ class APIMe implements ModelInterface, ModelAuthInterface
     {
         $this->options = $options + $this->options;
 
+        // Figure out which endpoint we are talking to
         $url_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         $this->url_match_calendars = $this->endsWith($url_path, '/calendars')
             || $this->endsWith($url_path, '/calendars/');
@@ -41,7 +42,7 @@ class APIMe implements ModelInterface, ModelAuthInterface
         return true;
     }
 
-    // Basic CRUD options
+    // Matches each endpoint and their preferred method
     public function run(string $method, array $data, $user): array
     {
         if ($this->url_match_calendars) {
@@ -72,11 +73,13 @@ class APIMe implements ModelInterface, ModelAuthInterface
         return $this->getCurrentUser($user);
     }
 
+    // Returns the data about the user (Just the UID)
     public function getCurrentUser(User $user): array
     {
         return array('uid' => $user->uid);
     }
 
+    // Gets the users calendar and formats them
     public function getUserCalendars(User $user): array
     {
         $calendars = $user->getCalendars();
@@ -88,6 +91,7 @@ class APIMe implements ModelInterface, ModelAuthInterface
         return $output_data;
     }
 
+    // Gets the users locations and formats them
     public function getUserLocations(User $user): array
     {
         $locations = LocationUtility::getUserLocations($user);
@@ -99,6 +103,7 @@ class APIMe implements ModelInterface, ModelAuthInterface
         return $output_data;
     }
 
+    // Gets the users virtual locations and formats them
     public function getUserWebcasts(User $user): array
     {
         $webcasts = WebcastUtility::getUserWebcasts($user);
