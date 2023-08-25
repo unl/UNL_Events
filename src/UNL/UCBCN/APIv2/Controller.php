@@ -122,8 +122,11 @@ class Controller {
             return false;
         }
 
-        //sets the user and return true
+        //sets the user and return true if the user is not false
         $this->user = $this->auth->getCurrentUser();
+        if ($this->user === false) {
+            return false;
+        }
         return true;
     }
 

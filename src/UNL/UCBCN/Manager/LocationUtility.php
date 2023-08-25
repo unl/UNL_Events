@@ -154,9 +154,9 @@ class LocationUtility
     }
 
     // Get the users locations
-    public static function getUserLocations()
+    public static function getUserLocations($user=null)
     {
-        $user = Auth::getCurrentUser();
+        $user = $user ?? Auth::getCurrentUser();
         return new Locations(array('user_id' => $user->uid));
     }
 
