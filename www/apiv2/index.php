@@ -24,8 +24,40 @@ header('Content-type:application/json');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Origin, Content-Type, Authentication, X-Requested-With');
 header('Access-Control-Allow-Credentials: true');
-header('Access-Control-Allow-Origin: *');
+header('Vary: Origin');
 header('Access-Control-Max-Age: 1728000');
+
+// Get the origin of the request
+if (array_key_exists('HTTP_ORIGIN', $_SERVER)) {
+    $origin = $_SERVER['HTTP_ORIGIN'];
+}
+else if (array_key_exists('HTTP_REFERER', $_SERVER)) {
+    $origin = $_SERVER['HTTP_REFERER'];
+} else {
+    $origin = $_SERVER['REMOTE_ADDR'];
+}
+
+// If we do not have this array set then create it
+if (!isset($api_v2_cors_allowed_domains_regex)) {
+    $api_v2_cors_allowed_domains_regex = array('/127\.0\.0\.1/');
+}
+
+// Loop through the allowed domains and double check they are valid
+$valid_origin = false;
+foreach ($api_v2_cors_allowed_domains_regex as $origin_regex) {
+    $match = preg_match($origin_regex, $origin, $result);
+
+    // If we find one that is then leave the loop
+    if($match == 1) {
+        $valid_origin = true;
+        break;
+    }
+}
+
+// Add that origin to the allowed origin so that we can send any cookies
+if ($valid_origin) {
+    header('Access-Control-Allow-Origin:' . $origin);
+}
 
 // We typically do not allow options method but for the JS fetch preflight we need it
 if ($_SERVER['REQUEST_METHOD'] === "OPTIONS") {
