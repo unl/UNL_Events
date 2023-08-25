@@ -24,6 +24,7 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
     {
         $this->options = $options + $this->options;
 
+        // Check if we are doing a status change
         $url_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         $this->url_match_status = $this->endsWith($url_path, '/status') || $this->endsWith($url_path, '/status/');
 
@@ -52,6 +53,8 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
     // Basic CRUD options
     public function run(string $method, array $data, $user): array
     {
+
+        // If we are doing a status change we only want PUT
         if ($this->url_match_status) {
             if ($method === 'PUT') {
                 return $this->handleStatusPost($data, $user);
@@ -138,21 +141,22 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
         return $this->translateOutgoingEventJSON($createEvent->event->id);
     }
 
-    // This is for creating an event
+    // This is for updating a posts status on a calendar
     private function handleStatusPost(array $data, User $user): array
     {
+        // Validate status
         $available_statuses = array('pending', 'posted', 'archived');
         $status = strtolower($data['status'] ?? "");
-
         if (empty($status) || !in_array($status, $available_statuses)) {
             throw new ValidationException('Missing or Invalid Status');
         }
 
+        // Validate the event on this calendar
         $this->validateEvent($this->options['event_id']);
 
+        // Validate the user has access to preform status changes on this calendar
         $move_pending_permission = Permission::getByName('Event Send Event to Pending Queue');
         $move_upcoming_permission = Permission::getByName('Event Post');
-
         if (
             !$user->hasPermission($move_pending_permission->id, APIEvent::$calendar->id)
             || !$user->hasPermission($move_upcoming_permission->id, APIEvent::$calendar->id)
@@ -160,13 +164,16 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
             throw new ForbiddenException('You do not have the permissions to do that');
         }
 
+        // Get the event
         $event = Event::getById($this->options['event_id']);
         if ($event === false) {
             throw new ValidationException('Invalid ID.');
         }
 
+        // Update the events status using the calendar
         $event->updateStatusWithCalendar(APIEvent::$calendar, $status, $user);
 
+        // Return the event
         return $this->translateOutgoingEventJSON($this->options['event_id']);
     }
 
