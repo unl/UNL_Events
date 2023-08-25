@@ -54,7 +54,7 @@ UNL\UCBCN\Manager\Auth::$certPath = '/etc/pki/tls/cert.pem'; // Set this to fals
 UNL\UCBCN\Manager\Auth::$directory_url = 'https://directory.unl.edu/';
 
 // API v2 allowed cors domains regex
-$api_v2_cors_allowed_domains_regex = array('/127\.0\.0\.1/', '/https:\/\/[a-zA-Z\-_\.]+\.unl\.edu.*/');
+$api_v2_cors_allowed_domains_regex = array('/127\.0\.0\.1/', '/https:\/\/[a-zA-Z0-9\-_\.]+\.unl\.edu.*/');
 
 // Site Notice
 $siteNotice = new stdClass();
