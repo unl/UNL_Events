@@ -33,6 +33,7 @@ class APIHome implements ModelInterface
                 ),
                 'auth_required_routes' => array(
                     $url_base . '/calendar/{calendar_id}/events/pending',
+                    $url_base . '/calendar/{calendar_id}/events/archived',
                 )
             ),
             'POST' => array(
