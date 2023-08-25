@@ -51,6 +51,7 @@ class APIHome implements ModelInterface
                     $url_base . '/virtual-location/{virtual_location_id}',
                     $url_base . '/calendar/{calendar_id}',
                     $url_base . '/calendar/{calendar_id}/event/{event_id}',
+                    $url_base . '/calendar/{calendar_id}/event/{event_id}/status',
                 ),
             ),
             'DELETE' => array(
