@@ -10,7 +10,7 @@ use UNL\UCBCN\Permission;
 class APICalendar implements ModelInterface, ModelAuthInterface
 {
     public $options = array();
-    public $calendar = false;
+    public static $calendar = false;
     private $calendar_create = false;
 
     public function __construct($options = array())
@@ -29,14 +29,14 @@ class APICalendar implements ModelInterface, ModelAuthInterface
         }
 
         if (is_numeric($this->options['calendar_id'])) {
-            $this->calendar = Calendar::getById($this->options['calendar_id']);
+            APICalendar::$calendar = Calendar::getById($this->options['calendar_id']);
         }
 
-        if ($this->calendar === false) {
-            $this->calendar = Calendar::getByShortname($this->options['calendar_id']);
+        if (APICalendar::$calendar === false) {
+            APICalendar::$calendar = Calendar::getByShortname($this->options['calendar_id']);
         }
 
-        if ($this->calendar === false) {
+        if (APICalendar::$calendar === false) {
             throw new ValidationException('Invalid Calendar Id');
         }
     }
@@ -64,7 +64,7 @@ class APICalendar implements ModelInterface, ModelAuthInterface
     public function run(string $method, array $data, $user): array
     {
         if ($method === 'GET') {
-            return $this->calendarToJSON($this->calendar->id);
+            return $this->calendarToJSON(APICalendar::$calendar->id);
         }
 
         if ($method === 'POST') {
@@ -78,12 +78,12 @@ class APICalendar implements ModelInterface, ModelAuthInterface
         if ($method === 'DELETE') {
             // Check if we can delete the calendar
             $delete_permission = Permission::getByName('Calendar Delete');
-            if (!$user->hasPermission($delete_permission->id, $this->calendar->id)) {
+            if (!$user->hasPermission($delete_permission->id, APICalendar::$calendar->id)) {
                 throw new ForbiddenException('You do not have access to delete this calendar.');
             }
 
             // If we do have access we will delete the calendar and output the data
-            $this->calendar->delete();
+            APICalendar::$calendar->delete();
             return array();
         }
 
@@ -121,7 +121,7 @@ class APICalendar implements ModelInterface, ModelAuthInterface
         // Try using the CreateCalendar from manager
         try {
             $createCalendar = new CreateCalendar(array(
-                'calendar_shortname' => $this->calendar->shortname,
+                'calendar_shortname' => APICalendar::$calendar->shortname,
                 'user' => $user,
             ));
 

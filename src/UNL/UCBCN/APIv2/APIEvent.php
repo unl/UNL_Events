@@ -1,6 +1,7 @@
 <?php
 namespace UNL\UCBCN\APIv2;
 
+use Exception;
 use UNL\UCBCN\Event;
 use UNL\UCBCN\Calendar\Event as CalendarEvent;
 use UNL\UCBCN\Event\Occurrence as Occurrence;
@@ -12,12 +13,20 @@ use UNL\UCBCN\User as User;
 use UNL\UCBCN as BaseUCBCN;
 use UNL\UCBCN\Manager\DeleteEvent;
 use UNL\UCBCN\calendar\Audience;
+use UNL\UCBCN\Permission;
 
 class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
 {
+
+    public $url_match_status= false;
+
     public function __construct($options = array())
     {
         $this->options = $options + $this->options;
+
+        // Check if we are doing a status change
+        $url_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $this->url_match_status = $this->endsWith($url_path, '/status') || $this->endsWith($url_path, '/status/');
 
         parent::__construct($options);
     }
@@ -44,6 +53,15 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
     // Basic CRUD options
     public function run(string $method, array $data, $user): array
     {
+
+        // If we are doing a status change we only want PUT
+        if ($this->url_match_status) {
+            if ($method === 'PUT') {
+                return $this->handleStatusPost($data, $user);
+            }
+            throw new InvalidMethodException('Events Status Invalid Method.');
+        }
+
         // Multiple ways to query events
         if ($method === 'GET') {
             if (key_exists('recurrence_id', $this->options)) {
@@ -107,7 +125,7 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
 
         // Make a CreateEvent from the manager
         $createEvent = new CreateEvent(array(
-            'calendar_shortname' => $this->calendar->shortname,
+            'calendar_shortname' => APIEvent::$calendar->shortname,
             'user' => $user,
             'event_source' => CalendarEvent::SOURCE_CREATE_EVENT_API_V2,
         ));
@@ -121,6 +139,42 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
 
         // Output the newly created event
         return $this->translateOutgoingEventJSON($createEvent->event->id);
+    }
+
+    // This is for updating a posts status on a calendar
+    private function handleStatusPost(array $data, User $user): array
+    {
+        // Validate status
+        $available_statuses = array('pending', 'posted', 'archived');
+        $status = strtolower($data['status'] ?? "");
+        if (empty($status) || !in_array($status, $available_statuses)) {
+            throw new ValidationException('Missing or Invalid Status');
+        }
+
+        // Validate the event on this calendar
+        $this->validateEvent($this->options['event_id']);
+
+        // Validate the user has access to preform status changes on this calendar
+        $move_pending_permission = Permission::getByName('Event Send Event to Pending Queue');
+        $move_upcoming_permission = Permission::getByName('Event Post');
+        if (
+            !$user->hasPermission($move_pending_permission->id, APIEvent::$calendar->id)
+            || !$user->hasPermission($move_upcoming_permission->id, APIEvent::$calendar->id)
+        ) {
+            throw new ForbiddenException('You do not have the permissions to do that');
+        }
+
+        // Get the event
+        $event = Event::getById($this->options['event_id']);
+        if ($event === false) {
+            throw new ValidationException('Invalid ID.');
+        }
+
+        // Update the events status using the calendar
+        $event->updateStatusWithCalendar(APIEvent::$calendar, $status, $user);
+
+        // Return the event
+        return $this->translateOutgoingEventJSON($this->options['event_id']);
     }
 
     // Handles updating the event, this uses only the event id
@@ -138,7 +192,7 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
         // Try creating an EditEvent object from manager
         try {
             $editEvent = new EditEvent(array(
-                'calendar_shortname' => $this->calendar->shortname,
+                'calendar_shortname' => APIEvent::$calendar->shortname,
                 'user' => $user,
                 'event_id' => $this->options['event_id'],
             ));
@@ -168,7 +222,7 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
         // Tries to use the deleteEvent, catch errors related permissions and deleting events
         try {
             $deleteEvent = new DeleteEvent(array(
-                'calendar_shortname' => $this->calendar->shortname,
+                'calendar_shortname' => APIEvent::$calendar->shortname,
                 'user' => $user,
                 'event_id' => $this->options['event_id'],
             ));
@@ -177,7 +231,7 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
         }
 
         // We need for the status
-        $calendarHasEvents = CalendarEvent::getByIds($this->calendar->id, $this->options['event_id']);
+        $calendarHasEvents = CalendarEvent::getByIds(APIEvent::$calendar->id, $this->options['event_id']);
         if ($calendarHasEvents === false) {
             throw new ValidationException('Calendar does not have that event.');
         }
@@ -204,7 +258,7 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
         if (!isset($event_id) || !is_numeric($event_id)) {
             throw new ValidationException('Missing event id.');
         }
-        if ($this->calendar->hasEventById($event_id) === false) {
+        if (APIEvent::$calendar->hasEventById($event_id) === false) {
             throw new ValidationException('That calendar does not have that event with that id.');
         }
 
@@ -316,6 +370,11 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
             throw new ValidationException('Invalid ID.');
         }
 
+        $calendarHasEvents = CalendarEvent::getByIds(APIEvent::$calendar->id, $event_id);
+        if ($calendarHasEvents === false) {
+            throw new ValidationException('Calendar does not have that event.');
+        }
+
         $event_json = array();
 
         $event_json['id'] = $event->id;
@@ -330,6 +389,8 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
         $event_json['listing-contact-url'] = $event->listingcontacturl;
         $event_json['listing-contact-type'] = $event->listingcontacttype;
         $event_json['canceled'] = $event->canceled === '1';
+
+        $event_json['calendar-event-status'] = $calendarHasEvents->status;
 
         // Gets the calendar data
         $original_calendar = $event->getOriginCalendar();

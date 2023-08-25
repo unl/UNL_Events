@@ -30,6 +30,7 @@ class APIHome implements ModelInterface
                     $url_base . '/calendar/{calendar_id}/events/search',
                     $url_base . '/calendar/{calendar_id}/events/location/{location_id}',
                     $url_base . '/calendar/{calendar_id}/events/virtual-location/{virtual_location_id}',
+                    $url_base . '/calendars/search',
                 ),
                 'cookie_auth_routes' => array(
                     $url_base . '/me',
@@ -38,6 +39,7 @@ class APIHome implements ModelInterface
                 ),
                 'auth_required_routes' => array(
                     $url_base . '/calendar/{calendar_id}/events/pending',
+                    $url_base . '/calendar/{calendar_id}/events/archived',
                     $url_base . '/me',
                     $url_base . '/me/locations',
                     $url_base . '/me/virtual-locations',
@@ -57,6 +59,7 @@ class APIHome implements ModelInterface
                     $url_base . '/virtual-location/{virtual_location_id}',
                     $url_base . '/calendar/{calendar_id}',
                     $url_base . '/calendar/{calendar_id}/event/{event_id}',
+                    $url_base . '/calendar/{calendar_id}/event/{event_id}/status',
                 ),
             ),
             'DELETE' => array(

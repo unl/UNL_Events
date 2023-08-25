@@ -38,7 +38,7 @@
                 This shortname can be found by navigating to the calendar's page and copying the value from the URL.
             </span>
             <span class="dcf-d-inline-block">
-                To look <?php echo UNL\UCBCN\Frontend\Controller::$url; ?>wdn/,
+                To look up https://events.unl.edu/wdn/,
                 search for wdn. This search is case sensitive.
             </span>
         </span>
@@ -51,7 +51,11 @@
         <div class="dcf-grid-thirds@lg dcf-grid-halves@sm dcf-row-gap-4 dcf-col-gap-vw">
             <?php foreach($context->getUsers() as $user): ?>
                 <div>
-                    <p class="dcf-bold dcf-mb-0"><?php echo $user->uid; ?></p>
+                    <p class="dcf-bold dcf-mb-0">
+                        <a href="https://directory.unl.edu/people/<?php echo $user->uid; ?>" target="_blank">
+                            <?php echo $user->uid; ?>
+                        </a>
+                    </p>
                     <ul>
                         <?php foreach($context->getUserPermissions($user->uid) as $permission): ?>
                             <li class="dcf-txt-sm dcf-mb-0"><?php echo $permission->name; ?></li>
