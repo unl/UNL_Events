@@ -1,6 +1,7 @@
 <?php
 namespace UNL\UCBCN\APIv2;
 
+use Exception;
 use UNL\UCBCN\Event;
 use UNL\UCBCN\Calendar\Event as CalendarEvent;
 use UNL\UCBCN\Event\Occurrence as Occurrence;
@@ -12,12 +13,19 @@ use UNL\UCBCN\User as User;
 use UNL\UCBCN as BaseUCBCN;
 use UNL\UCBCN\Manager\DeleteEvent;
 use UNL\UCBCN\calendar\Audience;
+use UNL\UCBCN\Permission;
 
 class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
 {
+
+    public $url_match_status= false;
+
     public function __construct($options = array())
     {
         $this->options = $options + $this->options;
+
+        $url_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $this->url_match_status = $this->endsWith($url_path, '/status') || $this->endsWith($url_path, '/status/');
 
         parent::__construct($options);
     }
@@ -44,6 +52,13 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
     // Basic CRUD options
     public function run(string $method, array $data, $user): array
     {
+        if ($this->url_match_status) {
+            if ($method === 'PUT') {
+                return $this->handleStatusPost($data, $user);
+            }
+            throw new InvalidMethodException('Events Status Invalid Method.');
+        }
+
         // Multiple ways to query events
         if ($method === 'GET') {
             if (key_exists('recurrence_id', $this->options)) {
@@ -121,6 +136,38 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
 
         // Output the newly created event
         return $this->translateOutgoingEventJSON($createEvent->event->id);
+    }
+
+    // This is for creating an event
+    private function handleStatusPost(array $data, User $user): array
+    {
+        $available_statuses = array('pending', 'posted', 'archived');
+        $status = strtolower($data['status'] ?? "");
+
+        if (empty($status) || !in_array($status, $available_statuses)) {
+            throw new ValidationException('Missing or Invalid Status');
+        }
+
+        $this->validateEvent($this->options['event_id']);
+
+        $move_pending_permission = Permission::getByName('Event Send Event to Pending Queue');
+        $move_upcoming_permission = Permission::getByName('Event Post');
+
+        if (
+            !$user->hasPermission($move_pending_permission->id, APIEvent::$calendar->id)
+            || !$user->hasPermission($move_upcoming_permission->id, APIEvent::$calendar->id)
+        ) {
+            throw new ForbiddenException('You do not have the permissions to do that');
+        }
+
+        $event = Event::getById($this->options['event_id']);
+        if ($event === false) {
+            throw new ValidationException('Invalid ID.');
+        }
+
+        $event->updateStatusWithCalendar(APIEvent::$calendar, $status, $user);
+
+        return $this->translateOutgoingEventJSON($this->options['event_id']);
     }
 
     // Handles updating the event, this uses only the event id

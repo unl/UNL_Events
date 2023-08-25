@@ -27,6 +27,7 @@ $routes['/^calendar(\/)?$/'] = 'UNL\UCBCN\APIv2\APICalendar';
 $routes['/^calendar\/' . $calendar . '(\/)?$/'] = 'UNL\UCBCN\APIv2\APICalendar';
 $routes['/^calendar\/' . $calendar . '\/event(\/)?$/'] = 'UNL\UCBCN\APIv2\APIEvent';
 $routes['/^calendar\/' . $calendar . '\/event\/' . $event . '(\/)?$/'] = 'UNL\UCBCN\APIv2\APIEvent';
+$routes['/^calendar\/' . $calendar . '\/event\/' . $event . '\/status(\/)?$/'] = 'UNL\UCBCN\APIv2\APIEvent';
 $routes['/^calendar\/' . $calendar . '\/event\/datetime\/' . $event_datetime . '(\/)?$/'] = 'UNL\UCBCN\APIv2\APIEvent';
 $routes['/^calendar\/' . $calendar . '\/event\/datetime\/recurrence\/' . $recurrence_id . '(\/)?$/'] = 'UNL\UCBCN\APIv2\APIEvent';
 $routes['/^calendar\/' . $calendar . '\/events(\/)?$/'] = 'UNL\UCBCN\APIv2\APIEvents';
