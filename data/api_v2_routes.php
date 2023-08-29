@@ -42,4 +42,6 @@ $routes['/^me\/calendars(\/)?$/'] = 'UNL\UCBCN\APIv2\APIMe';
 $routes['/^me\/locations(\/)?$/'] = 'UNL\UCBCN\APIv2\APIMe';
 $routes['/^me\/virtual-locations(\/)?$/'] = 'UNL\UCBCN\APIv2\APIMe';
 
+$routes['/^calendars\/search\/events(\/)?$/'] = 'UNL\UCBCN\APIv2\APICalendars';
+
 return $routes;
