@@ -59,7 +59,8 @@ class Search extends EventListing implements RoutableInterface, MetaTagInterface
     {
 
         // Removed error for when search query is empty because I think it would be useful
-        $this->search_query = $options['q'] ?? "";
+        // There might be a better way to remove % from searches
+        $this->search_query = str_replace('%', '', $options['q'] ?? "");
 
         $format_max_limit = $this->max_limit['default'];
         if (key_exists('format', $options) && array_key_exists($options['format'], $this->max_limit)) {
