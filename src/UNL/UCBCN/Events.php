@@ -91,7 +91,7 @@ class Events extends RecordList
         } else if (array_key_exists('search_term', $this->options)) {
             $term = $this->options['search_term'];
             $eventTypes = (
-                array_key_exists('event_types', $this->options) 
+                array_key_exists('event_types', $this->options)
                 && is_array($this->options['event_types'])
             ) ? $this->options['event_types'] : false;
             $audiences = (
