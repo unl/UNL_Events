@@ -13,9 +13,9 @@ class APIAllCalendars implements ModelInterface
     public $url_match_search = false;
     public $url_match_events = false;
 
-    public $limit = 10;
+    public $limit = 100;
     public $offset = 0;
-    public $max_limit = 10;
+    public $max_limit = 500;
 
     public $audiences = "";
     public $eventtypes = "";
