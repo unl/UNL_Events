@@ -36,12 +36,12 @@ $routes['/^calendar\/' . $calendar . '\/events\/pending(\/)?$/'] = 'UNL\UCBCN\AP
 $routes['/^calendar\/' . $calendar . '\/events\/archived(\/)?$/'] = 'UNL\UCBCN\APIv2\APIEvents';
 $routes['/^calendar\/' . $calendar . '\/events\/location\/' . $location . '(\/)?$/'] = 'UNL\UCBCN\APIv2\APIEvents';
 $routes['/^calendar\/' . $calendar . '\/events\/virtual-location\/' . $webcast . '(\/)?$/'] = 'UNL\UCBCN\APIv2\APIEvents';
-$routes['/^calendars\/search(\/)?$/'] = 'UNL\UCBCN\APIv2\APICalendars';
+$routes['/^calendars\/search(\/)?$/'] = 'UNL\UCBCN\APIv2\APIAllCalendars'; // This is here for legacy purposes
+$routes['/^all-calendars\/search(\/)?$/'] = 'UNL\UCBCN\APIv2\APIAllCalendars';
+$routes['/^all-calendars\/events(\/)?$/'] = 'UNL\UCBCN\APIv2\APIAllCalendars';
 $routes['/^me(\/)?$/'] = 'UNL\UCBCN\APIv2\APIMe';
 $routes['/^me\/calendars(\/)?$/'] = 'UNL\UCBCN\APIv2\APIMe';
 $routes['/^me\/locations(\/)?$/'] = 'UNL\UCBCN\APIv2\APIMe';
 $routes['/^me\/virtual-locations(\/)?$/'] = 'UNL\UCBCN\APIv2\APIMe';
-
-$routes['/^calendars\/search\/events(\/)?$/'] = 'UNL\UCBCN\APIv2\APICalendars';
 
 return $routes;
