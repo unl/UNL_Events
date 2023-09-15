@@ -3,8 +3,10 @@ namespace UNL\UCBCN\APIv2;
 
 use UNL\UCBCN\Calendars;
 use UNL\UCBCN\Events;
+use UNL\UCBCN\Calendar\Audiences;
+use UNL\UCBCN\Calendar\EventTypes;
 
-class APICalendars implements ModelInterface
+class APIAllCalendars implements ModelInterface
 {
     public $search_query;
 
@@ -14,6 +16,9 @@ class APICalendars implements ModelInterface
     public $limit = 10;
     public $offset = 0;
     public $max_limit = 10;
+
+    public $audiences = "";
+    public $eventtypes = "";
 
     public function __construct($options = array())
     {
@@ -37,6 +42,9 @@ class APICalendars implements ModelInterface
 
         $this->limit = $options['limit'] ?? $this->limit;
         $this->offset = $options['offset'] ?? $this->offset;
+
+        $this->audiences = $options['audience'] ?? $this->audiences;
+        $this->eventtypes = $options['eventtypes'] ?? $this->eventtypes;
     }
 
     // We only handle get requests
@@ -58,7 +66,7 @@ class APICalendars implements ModelInterface
             throw new InvalidMethodException('Search Calendars only allows get.');
         }
 
-        throw new ValidationException('Calendar Search needs a search query');
+        throw new ValidationException('All Calendars route needs a search query');
     }
 
     // This will preform a search similar to the normal site search
@@ -86,12 +94,48 @@ class APICalendars implements ModelInterface
     private function handleAllCalendarEventSearchGet()
     {
         $output_array = array();
-
-        $events = new Events(array(
+        $options = array(
             'search_term' => $this->search_query,
+            'current' => true,
             'limit' => $this->limit,
             'offset' => $this->offset,
-        ));
+        );
+
+        if (!empty($this->audiences)) {
+            $all_audiences = new Audiences();
+            $filter_explode = explode(',', $this->audiences);
+            $filter_explode = array_map('strtolower', array_map('trim', $filter_explode));
+            
+            $audience_option = array();
+            foreach ($all_audiences as $single_audience) {
+                if (in_array(strtolower($single_audience->name), $filter_explode)) {
+                    $audience_option[] = $single_audience->id;
+                }
+            }
+
+            if (!empty($audience_option)) {
+                $options['audiences'] = $audience_option;
+            }
+        }
+
+        if (!empty($this->eventtypes)) {
+            $all_event_types = new EventTypes();
+            $filter_explode = explode(',', $this->eventtypes);
+            $filter_explode = array_map('strtolower', array_map('trim', $filter_explode));
+            
+            $event_type_option = array();
+            foreach ($all_event_types as $single_event_type) {
+                if (in_array(strtolower($single_event_type->name), $filter_explode)) {
+                    $event_type_option[] = $single_event_type->id;
+                }
+            }
+
+            if (!empty($event_type_option)) {
+                $options['event_types'] = $event_type_option;
+            }
+        }
+
+        $events = new Events($options);
 
         // We only want each event once
         $event_ids = array();
