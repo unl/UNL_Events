@@ -25,9 +25,10 @@ class APIAllCalendars implements ModelInterface
         $this->search_query = str_replace('%', '', $options['q'] ?? "");
 
         $url_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-        $this->url_match_search = $this->endsWith($url_path, '/search') || $this->endsWith($url_path, '/search/');
-        $this->url_match_events = $this->endsWith($url_path, '/events/search')
-            || $this->endsWith($url_path, '/events/search/');
+        $this->url_match_search = $this->endsWith($url_path, '/all-calendars/search')
+            || $this->endsWith($url_path, '/all-calendars/search/');
+        $this->url_match_events = $this->endsWith($url_path, '/all-calendars/events/search')
+            || $this->endsWith($url_path, '/all-calendars/events/search/');
 
         if (!isset($options['limit']) ||
             empty($options['limit']) ||
