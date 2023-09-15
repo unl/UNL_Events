@@ -90,12 +90,20 @@ class Events extends RecordList
             return $sql;
         } else if (array_key_exists('search_term', $this->options)) {
             $term = $this->options['search_term'];
-            $eventTypes = (array_key_exists('event_types', $this->options) && is_array($this->options['event_types'])) ? $this->options['event_types'] : false;
-            $audiences = (array_key_exists('audiences', $this->options) && is_array($this->options['audiences'])) ? $this->options['audiences'] : false;
+            $eventTypes = (
+                array_key_exists('event_types', $this->options) 
+                && is_array($this->options['event_types'])
+            ) ? $this->options['event_types'] : false;
+            $audiences = (
+                array_key_exists('audiences', $this->options)
+                && is_array($this->options['audiences'])
+            ) ? $this->options['audiences'] : false;
             $current = (array_key_exists('current', $this->options)) ? $this->options['current'] : false;
             
             // Keep this in for legacy purposes
-            $eventTypeID = (array_key_exists('event_type_id', $this->options)) ? trim($this->options['event_type_id']) : 0;
+            $eventTypeID = (
+                array_key_exists('event_type_id', $this->options)
+            ) ? trim($this->options['event_type_id']) : 0;
 
             $sql = '
                 SELECT event.id
@@ -103,7 +111,8 @@ class Events extends RecordList
                 INNER JOIN event ON eventdatetime.event_id = event.id
                 INNER JOIN calendar_has_event ON calendar_has_event.event_id = event.id
                 LEFT JOIN event_has_eventtype ON (event_has_eventtype.event_id = event.id)
-                LEFT JOIN recurringdate ON (recurringdate.event_datetime_id = eventdatetime.id AND recurringdate.unlinked = 0)
+                LEFT JOIN recurringdate
+                    ON (recurringdate.event_datetime_id = eventdatetime.id AND recurringdate.unlinked = 0)
                 LEFT JOIN eventtype ON (eventtype.id = event_has_eventtype.eventtype_id)
                 LEFT JOIN location ON (location.id = eventdatetime.location_id)
                 LEFT JOIN webcast ON (webcast.id = eventdatetime.webcast_id)
@@ -158,11 +167,17 @@ class Events extends RecordList
             if ($current) {
                 $sql .= 'AND (IF (recurringdate.recurringdate IS NULL,
                         eventdatetime.starttime,
-                        CONCAT(DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),DATE_FORMAT(eventdatetime.starttime," %H:%i:%s"))
+                        CONCAT(
+                            DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),
+                            DATE_FORMAT(eventdatetime.starttime," %H:%i:%s")
+                        )
                     ) >= NOW() OR
                     IF (recurringdate.recurringdate IS NULL,
                         eventdatetime.endtime,
-                        CONCAT(DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),DATE_FORMAT(eventdatetime.endtime," %H:%i:%s"))
+                        CONCAT(
+                            DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),
+                            DATE_FORMAT(eventdatetime.endtime," %H:%i:%s")
+                        )
                     ) >= NOW())';
             }
 
