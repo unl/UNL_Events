@@ -1,10 +1,9 @@
-UNL Events
-==================
+# UNL Events
 
-Join us at https://unlevents.slack.com
+Join us at [https://unlwdn.slack.com](https://unlwdn.slack.com)
 
-manual INSTALL
--------
+## Manual Install
+
 1. run `git submodule init`
 2. run `git submodule update`
 3. run `cp config.sample.php config.inc.php`
@@ -14,7 +13,5 @@ manual INSTALL
 7. This misses an empty file that the code looks for. Run `touch www/wdn/templates_4.0/includes/wdnResources.html`
 8. You need to compile the stuff. First, `npm install less-plugin-clean-css` This dependency is missing for some reason.
 9. Now `make`. Your assets should now be compiled.
-10. Set up a database.  For now we are copying down the live data into a development database.
+10. Set up a database by running `data/20230819-events-schema.sql`. This will create the db tables and insert any standard data.
 11. customize config.inc.php and www/.htaccess to your environment.
-
-
