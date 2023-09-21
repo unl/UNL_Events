@@ -370,10 +370,13 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
             throw new ValidationException('Invalid ID.');
         }
 
-        $calendarHasEvents = CalendarEvent::getByIds(APIEvent::$calendar->id, $event_id);
-        if ($calendarHasEvents === false) {
-            throw new ValidationException('Calendar does not have that event.');
+        if (isset(APIEvent::$calendar) && !empty(APIEvent::$calendar)) {
+            $calendarHasEvents = CalendarEvent::getByIds(APIEvent::$calendar->id, $event_id);
+            if ($calendarHasEvents === false) {
+                throw new ValidationException('Calendar does not have that event.');
+            }
         }
+        
 
         $event_json = array();
 
@@ -390,7 +393,9 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
         $event_json['listing-contact-type'] = $event->listingcontacttype;
         $event_json['canceled'] = $event->canceled === '1';
 
-        $event_json['calendar-event-status'] = $calendarHasEvents->status;
+        if (isset(APIEvent::$calendar) && !empty(APIEvent::$calendar)) {
+            $event_json['calendar-event-status'] = $calendarHasEvents->status;
+        }
 
         // Gets the calendar data
         $original_calendar = $event->getOriginCalendar();

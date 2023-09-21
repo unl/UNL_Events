@@ -30,7 +30,8 @@ class APIHome implements ModelInterface
                     $url_base . '/calendar/{calendar_id}/events/search',
                     $url_base . '/calendar/{calendar_id}/events/location/{location_id}',
                     $url_base . '/calendar/{calendar_id}/events/virtual-location/{virtual_location_id}',
-                    $url_base . '/calendars/search',
+                    $url_base . '/all-calendars/search',
+                    $url_base . '/all-calendars/events/search',
                 ),
                 'cookie_auth_routes' => array(
                     $url_base . '/me',

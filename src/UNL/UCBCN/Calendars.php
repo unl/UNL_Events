@@ -79,10 +79,12 @@ class Calendars extends RecordList
             return trim($sql);
         } elseif (array_key_exists('search_query', $this->options)) {
             return '
-                SELECT id
+                SELECT calendar.id
                 FROM calendar
-                WHERE shortname LIKE "%' . self::escapeString($this->options['search_query']) . '%"
-                OR name LIKE "%' . self::escapeString($this->options['search_query']) . '%"
+                LEFT OUTER JOIN user on user.uid = calendar.shortname
+                WHERE (calendar.shortname LIKE "%' . self::escapeString($this->options['search_query']) . '%"
+                OR calendar.name LIKE "%' . self::escapeString($this->options['search_query']) . '%")
+                AND (user.uid is null OR user.uid = "' . self::escapeString($this->options['search_query']) . '")
                 ORDER BY id;
             ';
         } else {
