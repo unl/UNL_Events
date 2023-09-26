@@ -11,7 +11,7 @@ if (isset($context->eventdatetime->starttime)) {
     if (strpos($context->eventdatetime->starttime,'00:00:00')) {
         $out[] = 'DTSTART;VALUE=DATE:' . $timezoneDateTime->format($context->getStartTime(),'Ymd');
     } else {
-           $out[] = 'DTSTART:'. $timezoneDateTime->formatUTC($context->getStartTime(),'Ymd\THis\Z');
+        $out[] = 'DTSTART:'. $timezoneDateTime->formatUTC($context->getStartTime(),'Ymd\THis\Z');
     }
 }
 if ($context->eventdatetime->recurringtype == 'none') {
@@ -36,21 +36,20 @@ if ($has_location && $has_webcast) {
     $loc = 'LOCATION:' . $location->name;
     if (isset($context->eventdatetime->room)) {
         $loc .= ' Room ' . $context->eventdatetime->room;
-    } else if (isset($location->room)) {
+    } elseif (isset($location->room)) {
         $loc .= ' Room ' . $location->room;
     }
-    $loc = ', and online at ';
-    $loc = $webcast->title . ' (' . $webcast->url . ')';
+    $loc .= ', and online at ' . $webcast->title . ' (' . $webcast->url . ')';
     $out[] = $loc;
-} else if ($has_location) {
+} elseif ($has_location) {
     $loc = 'LOCATION:' . $location->name;
     if (isset($context->eventdatetime->room)) {
         $loc .= ' Room ' . $context->eventdatetime->room;
-    } else if (isset($location->room)) {
+    } elseif (isset($location->room)) {
         $loc .= ' Room ' . $location->room;
     }
     $out[] = $loc;
-} else if ($has_webcast) {
+} elseif ($has_webcast) {
     $loc = 'LOCATION:' . $webcast->title . '( ' . $webcast->url . ' )';
     $out[] = $loc;
 }
@@ -60,7 +59,7 @@ if (isset($context->eventdatetime->endtime)
     if (strpos($context->eventdatetime->endtime,'00:00:00')) {
         $out[] = 'DTEND;VALUE=DATE:'. $timezoneDateTime->format($context->getEndTime(),'Ymd');
     } else {
-           $out[] = 'DTEND:' . $timezoneDateTime->formatUTC($context->getEndTime(),'Ymd\THis\Z');
+        $out[] = 'DTEND:' . $timezoneDateTime->formatUTC($context->getEndTime(),'Ymd\THis\Z');
     }
 } elseif (isset($context->eventdatetime->starttime)) {
     if (strpos($context->eventdatetime->starttime,'00:00:00')) {
