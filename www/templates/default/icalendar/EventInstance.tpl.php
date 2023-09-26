@@ -28,12 +28,30 @@ $out[] = 'ORGANIZER;' . $organizer;
 $out[] = 'SUMMARY:' . icalFormatString($context->event->displayTitle($context));
 $out[] = 'STATUS:' . icalFormatString($context->event->icalStatus($context));
 $out[] = 'DESCRIPTION:' . icalFormatString($context->event->description);
-$l = $context->eventdatetime->getLocation();
-if (isset($context->eventdatetime->location_id) && $l !== false) {
-    $loc =  'LOCATION:'.$l->name;
+$location = $context->eventdatetime->getLocation();
+$webcast = $context->eventdatetime->getWebcast();
+$has_location = isset($context->eventdatetime->location_id) && $location !== false;
+$has_webcast = isset($context->eventdatetime->webcast_id) && $webcast !== false;
+if ($has_location && $has_webcast) {
+    $loc = 'LOCATION:' . $location->name;
     if (isset($context->eventdatetime->room)) {
-        $loc .=  ' Room '.$context->eventdatetime->room;
+        $loc .= ' Room ' . $context->eventdatetime->room;
+    } else if (isset($location->room)) {
+        $loc .= ' Room ' . $location->room;
     }
+    $loc = ', and online at ';
+    $loc = $webcast->title . ' (' . $webcast->url . ')';
+    $out[] = $loc;
+} else if ($has_location) {
+    $loc = 'LOCATION:' . $location->name;
+    if (isset($context->eventdatetime->room)) {
+        $loc .= ' Room ' . $context->eventdatetime->room;
+    } else if (isset($location->room)) {
+        $loc .= ' Room ' . $location->room;
+    }
+    $out[] = $loc;
+} else if ($has_webcast) {
+    $loc = 'LOCATION:' . $webcast->title . '( ' . $webcast->url . ' )';
     $out[] = $loc;
 }
 $out[] = 'URL:'.$context->getURL();
