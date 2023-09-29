@@ -50,7 +50,7 @@ if ($has_location && $has_webcast) {
     }
     $out[] = $loc;
 } elseif ($has_webcast) {
-    $loc = 'LOCATION:' . $webcast->title . '( ' . $webcast->url . ' )';
+    $loc = 'LOCATION:' . $webcast->title . ' (' . $webcast->url . ')';
     $out[] = $loc;
 }
 $out[] = 'URL:'.$context->getURL();
