@@ -18,6 +18,7 @@
             }
         ?>
         <?php echo $savvy->render($context, 'hcalendar/Upcoming.tpl.php'); ?>
+        <?php echo $savvy->render($context, 'prev_next_buttons.tpl.php'); ?>
     </section>
     <template id="loadingContent">
         <div id="results">
