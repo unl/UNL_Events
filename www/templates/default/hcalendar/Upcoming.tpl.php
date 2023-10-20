@@ -56,7 +56,7 @@
             <?php if ($context->count() == 0): ?>
                 No events coming up
             <?php elseif ($context->count() != 1): ?>
-                There are <?php echo $context->count(); ?> events coming up - Heres The Next <?php echo $context->options['limit']; ?>
+                The next <?php echo $context->options['limit']; ?> events out of <?php echo $context->count(); ?> 
             <?php else: ?>
                 There is 1 event coming up
             <?php endif; ?>
