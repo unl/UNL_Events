@@ -54,11 +54,11 @@
     <p class="dcf-txt-xs unl-font-sans unl-dark-gray">
         <span>
             <?php if ($context->count() == 0): ?>
-                No Events Coming Up
+                No events coming up
             <?php elseif ($context->count() != 1): ?>
-                Next <?php echo $context->count(); ?> events
+                There are <?php echo $context->count(); ?> events coming up - Heres The Next <?php echo $context->options['limit']; ?>
             <?php else: ?>
-                Next event
+                There is 1 event coming up
             <?php endif; ?>
         </span>
     </p>
