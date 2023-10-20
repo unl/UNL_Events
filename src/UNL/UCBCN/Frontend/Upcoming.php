@@ -35,9 +35,15 @@ class Upcoming extends EventListing implements RoutableInterface, MetaTagInterfa
     public $calendar;
     private $isHomepage = false;
 
+    public $max_limit = array(
+        'json' => 50,
+        'xml' => 50,
+        'default' => 10
+    );
+
     public $options = array(
-            'limit'  => 10,
-            'offset' => 0,
+        'limit' => 10,
+        'offset' => 0,
     );
 
     /**
@@ -58,6 +64,23 @@ class Upcoming extends EventListing implements RoutableInterface, MetaTagInterfa
 
         if (isset($options[0]) && !preg_match("/^\d{4}\/\d{1,2}\/\d{1,2}\/?/", $options[0])) {
             $this->isHomepage = true;
+        }
+
+        $format_max_limit = $this->max_limit['default'];
+        if (key_exists('format', $options) && array_key_exists($options['format'], $this->max_limit)) {
+            $format_max_limit = $this->max_limit[$options['format']];
+        }
+
+        if (!isset($options['limit']) ||
+            empty($options['limit']) ||
+            intval($options['limit']) > $format_max_limit ||
+            intval($options['limit']) <= 0
+        ) {
+            $options['limit'] = $this->max_limit['default'];
+        }
+
+        if (!isset($options['offset']) || empty($options['offset']) ||  intval($options['offset']) <= 0) {
+            $options['offset'] = 0;
         }
 
         parent::__construct($options);
@@ -150,7 +173,6 @@ class Upcoming extends EventListing implements RoutableInterface, MetaTagInterfa
                         )
                     ) ASC,
                     event.title ASC';
-        $sql .= $this->setLimitClause($this->options['limit']);
         return $sql;
     }
 
