@@ -39,8 +39,18 @@
     $previous_link_parts['query'] = http_build_query($previous_link_params);
     $next_link_parts['query'] = http_build_query($next_link_params);
 
-    $previous_link = $previous_link_parts['scheme'] . '://' . $previous_link_parts['host'] . $previous_link_parts['path'] . '?' . $previous_link_parts['query'];
-    $next_link = $next_link_parts['scheme'] . '://' . $next_link_parts['host'] . $next_link_parts['path'] . '?' . $next_link_parts['query'];
+    $previous_link = $previous_link_parts['scheme']
+        . '://'
+        . $previous_link_parts['host']
+        . $previous_link_parts['path']
+        . '?'
+        . $previous_link_parts['query'];
+    $next_link = $next_link_parts['scheme']
+        . '://'
+        . $next_link_parts['host']
+        . $next_link_parts['path']
+        . '?'
+        . $next_link_parts['query'];
 ?>
 
 <?php if($context->count() > 0 && !($previous_offset < 0 && $next_offset > $context->count())): ?>
