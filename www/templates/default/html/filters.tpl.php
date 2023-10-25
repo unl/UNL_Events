@@ -35,7 +35,7 @@
 
     <hr class="dcf-mt-3 dcf-mb-5">
 
-    <fieldset id="audience_filter" class="dcf-collapsible-fieldset dcf-d-none"
+    <fieldset id="audience_filter" class="dcf-collapsible-fieldset" hidden
         style="padding-bottom: 0px;"
         <?php if (empty($selected_audience)): ?>
             data-start-expanded="false"
@@ -70,7 +70,7 @@
         </div>
     </fieldset>
 
-    <fieldset id="type_filter" class="events-filter-fieldset dcf-collapsible-fieldset dcf-d-none"
+    <fieldset id="type_filter" class="events-filter-fieldset dcf-collapsible-fieldset" hidden
         <?php if (empty($selected_type)): ?>
             data-start-expanded="false"
         <?php endif;?>
