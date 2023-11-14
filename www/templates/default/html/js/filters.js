@@ -16,9 +16,6 @@ let filter_fetch_sleep_time = 500;
 
 // Once the collapsible fieldset loads set up event listeners
 audience_filter.addEventListener('ready', () => {
-    // This is to prevent weird transition when page loads
-    audience_filter.classList.remove('dcf-d-none');
-
     // Get checkboxes and if they change/input try to submit the change
     const audience_checkboxes = document.querySelectorAll('.audience_filter_checkbox');
     audience_checkboxes.forEach((single_checkbox) => {
@@ -35,9 +32,6 @@ audience_filter.addEventListener('ready', () => {
 
 // Once the collapsible fieldset loads set up event listeners
 type_filter.addEventListener('ready', () => {
-    // This is to prevent weird transition when page loads
-    type_filter.classList.remove('dcf-d-none');
-
     // Get checkboxes and if they change/input try to submit the change
     const type_checkboxes = document.querySelectorAll('.type_filter_checkbox');
     type_checkboxes.forEach((single_checkbox) => {
