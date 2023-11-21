@@ -9,6 +9,12 @@
                         <input id="remove-image" name="remove_image" type="checkbox">
                         <label class="dcf-txt-sm" for="remove-image">Remove Image</label>
                     </div>
+                <?php else: ?>
+                    <p class="dcf-txt-xs">
+                        You may not remove this image at this time
+                        due to your event being sent the main calendar for approval.
+                        Images are required for main calendar events.
+                    </p>
                 <?php endif; ?>
             </div>
         <?php endif; ?>
