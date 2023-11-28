@@ -30,6 +30,9 @@
     $end_minute = $post['end_time_minute'] ?? ( !empty($datetime_end_time) ? date('i'    , $datetime_end_time) : '30' );
     $end_am_pm  = $post['end_time_am_pm']  ?? ( !empty($datetime_end_time) ? date('a'    , $datetime_end_time) : 'am' );
 
+    $time_mode = (isset($datetime) && !empty($datetime) && $datetime->isAllDay()) ? 'all-day' : 'regular';
+    $time_mode = (isset($datetime) && !empty($datetime) && $time_mode === 'regular' && $datetime->timeTBD === 'YES') ? 'TBD' : 'regular';
+
     $datetime_recurring_check = (isset($context->recurrence_id));
     $is_recurring         = $post['recurring'] ?? (isset($datetime) && isset($datetime->recurringtype) && strtolower($datetime->recurringtype) !== 'none');
     $recurring_type       = $post['recurring_type']    ?? ( ($is_recurring) ? $datetime->recurringtype : '' );
@@ -92,21 +95,21 @@
             <legend>Event Time</legend>
             <div class="dcf-grid dcf-grid-full dcf-grid-thirds@md dcf-col-gap-vw">
                 <div class="dcf-input-radio">
-                    <input id="time-mode-regular" name="time_mode" type="radio" value="0" checked>
+                    <input id="time-mode-regular" name="time_mode" type="radio" value="regular" <?php if ($time_mode === 'regular') { echo 'checked'; }?>>
                     <label for="time-mode-regular">Regular</label>
                 </div>
                 <div class="dcf-input-radio">
-                    <input id="time-mode-all-day" name="time_mode" type="radio" value="1">
+                    <input id="time-mode-all-day" name="time_mode" type="radio" value="all-day" <?php if ($time_mode === 'all-day') { echo 'checked'; }?>>
                     <label for="time-mode-all-day">All Day</label>
                 </div>
                 <div class="dcf-input-radio">
-                    <input id="time-mode-tbd" name="time_mode" type="radio" value="2">
+                    <input id="time-mode-tbd" name="time_mode" type="radio" value="TBD" <?php if ($time_mode === 'TBD') { echo 'checked'; }?>>
                     <label for="time-mode-tbd"><abbr title="To Be Determined">TBD</abbr></label>
                 </div>
             </div>
         </fieldset>
 
-        <div id="time-container">
+        <div id="time-container" <?php if ($time_mode !== 'regular') { echo 'class="dcf-d-none"'; }?>>
             <div class="dcf-d-grid dcf-grid-full dcf-grid-halves@md dcf-col-gap-vw">
                 <fieldset>
                     <legend>
