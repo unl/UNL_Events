@@ -14,6 +14,19 @@ function isUrlValid(string) {
     return url.protocol === "http:" || url.protocol === "https:";
 }
 
+const time_mode_radios = Array.from(document.querySelectorAll('input[type="radio"][name="time_mode"]'));
+const time_container = document.getElementById('time-container');
+time_mode_radios.forEach((radio) => {
+    radio.addEventListener('input', () => {
+        const checked_radio = time_mode_radios.filter((radio) => radio.checked)[0];
+        if (checked_radio.id === 'time-mode-regular') {
+            time_container.classList.remove('dcf-d-none');
+        } else {
+            time_container.classList.add('dcf-d-none');
+        }
+    })
+});
+
 require(['jquery'], function ($) {
     $('#add-datetime-form').submit(function (submit) {
         let errors = [];
