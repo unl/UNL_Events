@@ -41,6 +41,7 @@ class Occurrence extends Record
     public $timezone;                        // string(30)
     public $starttime;                       // datetime(19)  multiple_key binary
     public $endtime;                         // datetime(19)  multiple_key binary
+    public $timeTBD;                         // enum 'YES', 'NO'
     public $recurringtype;                   // string(255)
     public $recurs_until;                    // datetime
     public $rectypemonth;                    // string(255)
@@ -334,6 +335,22 @@ class Occurrence extends Record
             if ($webcast !== false && !$webcast->microdataCheck()) {
                 return false;
             }
+        }
+
+        return true;
+    }
+
+    public function isAllDay()
+    {
+        //It must start at midnight to be an all day event
+        if (strpos($this->starttime, '00:00:00') === false) {
+            return false;
+        }
+
+        //It must end at midnight, or not have an end date.
+        if (!empty($this->endtime) &&
+            strpos($this->endtime, '00:00:00') === false) {
+            return false;
         }
 
         return true;
