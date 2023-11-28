@@ -19,20 +19,20 @@
     $timezone = $post['timezone'] ?? $datetime->timezone ?? $calendar->defaulttimezone;
 
     $datetime_start_time = (isset($datetime) && isset($datetime->starttime)) ? strtotime($datetime->starttime) : '';
-    $start_date   = $post['start_date']        ?? ( !empty($datetime_start_time) ? date($standard_date_format, $datetime_start_time) : ''   );
+    $start_date   = $post['start_date']        ?? ( !empty($datetime_start_time) ? date($standard_date_format, $datetime_start_time) : '' );
     $start_hour   = $post['start_time_hour']   ?? ( !empty($datetime_start_time) ? date('h'    , $datetime_start_time) : '9'  );
     $start_minute = $post['start_time_minute'] ?? ( !empty($datetime_start_time) ? date('i'    , $datetime_start_time) : '00' );
     $start_am_pm  = $post['start_time_am_pm']  ?? ( !empty($datetime_start_time) ? date('a'    , $datetime_start_time) : 'am' );
 
     $datetime_end_time = (isset($datetime) && isset($datetime->endtime)) ? strtotime($datetime->endtime) : '';
-    $end_date   = $post['end_date']        ?? ( !empty($datetime_end_time) ? date($standard_date_format, $datetime_end_time) : ''   );
+    $end_date   = $post['end_date']        ?? ( !empty($datetime_end_time) ? date($standard_date_format, $datetime_end_time) : '' );
     $end_hour   = $post['end_time_hour']   ?? ( !empty($datetime_end_time) ? date('h'    , $datetime_end_time) : '9'  );
     $end_minute = $post['end_time_minute'] ?? ( !empty($datetime_end_time) ? date('i'    , $datetime_end_time) : '30' );
     $end_am_pm  = $post['end_time_am_pm']  ?? ( !empty($datetime_end_time) ? date('a'    , $datetime_end_time) : 'am' );
 
     $datetime_recurring_check = (isset($context->recurrence_id));
-    $is_recurring             = $post['recurring'] ?? (isset($datetime) && isset($datetime->recurringtype) && strtolower($datetime->recurringtype) !== 'none');
-    $recurring_type       = $post['recurring_type']    ?? ( ($is_recurring) ? $datetime->recurringtype : ''                          );
+    $is_recurring         = $post['recurring'] ?? (isset($datetime) && isset($datetime->recurringtype) && strtolower($datetime->recurringtype) !== 'none');
+    $recurring_type       = $post['recurring_type']    ?? ( ($is_recurring) ? $datetime->recurringtype : '' );
     $recurs_until_date    = $post['recurs_until_date'] ?? ( ($is_recurring) ? date($standard_date_format, strtotime($datetime->recurs_until)) : '' );
     $recurring_month_type = ($is_recurring && $recurring_type == 'monthly') ? $datetime->rectypemonth : '';
 
