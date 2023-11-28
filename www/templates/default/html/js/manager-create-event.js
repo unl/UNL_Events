@@ -1,3 +1,7 @@
+//TODO: Validate start-time and end-time are set if time-mode is regular and end-time are after start-time
+//TODO: Remove instances of end-date
+//TODO: If time-mode radio buttons are checked we need to update visibility of times
+
 function isUrlValid(string) {
     let url;
 
