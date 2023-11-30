@@ -8,6 +8,12 @@
         $datetime = $context->getOriginalDatetime();
     }
 
+    $time_mode_regular = \UNL\UCBCN\Calendar\Event\Occurrence::TIME_MODE_REGULAR;
+    $time_mode_kickoff = \UNL\UCBCN\Calendar\Event\Occurrence::TIME_MODE_KICKOFF;
+    $time_mode_deadline = \UNL\UCBCN\Calendar\Event\Occurrence::TIME_MODE_DEADLINE;
+    $time_mode_all_day = \UNL\UCBCN\Calendar\Event\Occurrence::TIME_MODE_ALLDAY;
+    $time_mode_tbd = \UNL\UCBCN\Calendar\Event\Occurrence::TIME_MODE_TBD;
+
     // Sorry that this is messy it is better than a billion if statements
 
     // We are going to use the post data
@@ -30,8 +36,7 @@
     $end_minute = $post['end_time_minute'] ?? ( !empty($datetime_end_time) ? date('i'    , $datetime_end_time) : '30' );
     $end_am_pm  = $post['end_time_am_pm']  ?? ( !empty($datetime_end_time) ? date('a'    , $datetime_end_time) : 'am' );
 
-    $time_mode = (isset($datetime) && !empty($datetime) && $datetime->isAllDay()) ? 'all-day' : 'regular';
-    $time_mode = (isset($datetime) && !empty($datetime) && $time_mode === 'regular' && $datetime->timeTBD === 'YES') ? 'TBD' : 'regular';
+    $time_mode = (isset($datetime) && isset($datetime->timemode)) ? $datetime->timemode : $time_mode_regular;
 
     $datetime_recurring_check = (isset($context->recurrence_id));
     $is_recurring         = $post['recurring'] ?? (isset($datetime) && isset($datetime->recurringtype) && strtolower($datetime->recurringtype) !== 'none');
@@ -92,28 +97,39 @@
         </div>
 
         <fieldset>
-            <legend>Event Time</legend>
-            <div class="dcf-grid dcf-grid-full dcf-grid-thirds@md dcf-col-gap-vw">
+            <legend>
+                Event Time
+                <small class="dcf-required">Required</small>
+            </legend>
+            <div class="dcf-grid dcf-grid-full dcf-grid-halves@sm dcf-grid-thirds@md dcf-grid-fifths@lg dcf-col-gap-vw">
                 <div class="dcf-input-radio">
-                    <input id="time-mode-regular" name="time_mode" type="radio" value="regular" <?php if ($time_mode === 'regular') { echo 'checked'; }?>>
-                    <label for="time-mode-regular">Regular</label>
+                    <input id="<?php echo $time_mode_regular; ?>" name="time_mode" type="radio" value="<?php echo $time_mode_regular; ?>" <?php if ($time_mode === $time_mode_regular) { echo 'checked'; }?>>
+                    <label for="<?php echo $time_mode_regular; ?>">Start & End</label>
                 </div>
                 <div class="dcf-input-radio">
-                    <input id="time-mode-all-day" name="time_mode" type="radio" value="all-day" <?php if ($time_mode === 'all-day') { echo 'checked'; }?>>
-                    <label for="time-mode-all-day">All Day</label>
+                    <input id="<?php echo $time_mode_kickoff; ?>" name="time_mode" type="radio" value="<?php echo $time_mode_kickoff; ?>" <?php if ($time_mode === $time_mode_kickoff) { echo 'checked'; }?>>
+                    <label for="<?php echo $time_mode_kickoff; ?>">Kick Off <br><span class="dcf-txt-xs">(Start Time Only)</span></label>
                 </div>
                 <div class="dcf-input-radio">
-                    <input id="time-mode-tbd" name="time_mode" type="radio" value="TBD" <?php if ($time_mode === 'TBD') { echo 'checked'; }?>>
-                    <label for="time-mode-tbd"><abbr title="To Be Determined">TBD</abbr></label>
+                    <input id="<?php echo $time_mode_deadline; ?>" name="time_mode" type="radio" value="<?php echo $time_mode_deadline; ?>" <?php if ($time_mode === $time_mode_deadline) { echo 'checked'; }?>>
+                    <label for="<?php echo $time_mode_deadline; ?>">Deadline <br><span class="dcf-txt-xs">(End Time Only)</span></label>
+                </div>
+                <div class="dcf-input-radio">
+                    <input id="<?php echo $time_mode_all_day; ?>" name="time_mode" type="radio" value="<?php echo $time_mode_all_day; ?>" <?php if ($time_mode === $time_mode_all_day) { echo 'checked'; }?>>
+                    <label for="<?php echo $time_mode_all_day; ?>">All Day</label>
+                </div>
+                <div class="dcf-input-radio">
+                    <input id="<?php echo $time_mode_tbd; ?>" name="time_mode" type="radio" value="<?php echo $time_mode_tbd; ?>" <?php if ($time_mode === $time_mode_tbd) { echo 'checked'; }?>>
+                    <label for="<?php echo $time_mode_tbd; ?>"><abbr title="To Be Determined">TBD</abbr></label>
                 </div>
             </div>
         </fieldset>
 
-        <div id="time-container" <?php if ($time_mode !== 'regular') { echo 'class="dcf-d-none"'; }?>>
+        <div id="time-container" <?php if ($time_mode !== $time_mode_regular) { echo 'class="dcf-d-none"'; }?>>
             <div class="dcf-d-grid dcf-grid-full dcf-grid-halves@md dcf-col-gap-vw">
-                <fieldset>
+                <fieldset id="start-time-container">
                     <legend>
-                        Start Time
+                        <span id="start-time-label">Start Time</span>
                         <small class="dcf-required">Required</small>
                     </legend>
                     <div class="dcf-d-flex dcf-flex-wrap dcf-ai-center dcf-col-gap-4">
@@ -194,9 +210,9 @@
                     </div>
                 </fieldset>
 
-                <fieldset>
+                <fieldset id="end-time-container">
                     <legend>
-                        End Time
+                        <span id="end-time-label">End Time</span>
                         <small class="dcf-required">Required</small>
                     </legend>
                     <div class="dcf-d-flex dcf-flex-wrap dcf-ai-center dcf-col-gap-4">
@@ -797,6 +813,12 @@ $js_recurring_month = $recurring_month_type ?? '';
 
 $page->addScriptDeclaration("const recurringType = '" . $js_recurring_type . "';");
 $page->addScriptDeclaration("const recurringMonth = '" . $js_recurring_month . "';");
+
+$page->addScriptDeclaration("const time_mode_regular = '" . $time_mode_regular . "';");
+$page->addScriptDeclaration("const time_mode_kickoff = '" . $time_mode_kickoff . "';");
+$page->addScriptDeclaration("const time_mode_deadline = '" . $time_mode_deadline . "';");
+$page->addScriptDeclaration("const time_mode_all_day = '" . $time_mode_all_day . "';");
+$page->addScriptDeclaration("const time_mode_tbd = '" . $time_mode_tbd . "';");
 
 $page->addScript(
     $base_frontend_url .
