@@ -98,7 +98,7 @@
 
         <fieldset>
             <legend>
-                Event Time
+                Event Time Type
                 <small class="dcf-required">Required</small>
             </legend>
             <div class="dcf-grid dcf-grid-full dcf-grid-halves@sm dcf-grid-thirds@md dcf-grid-fifths@lg dcf-col-gap-vw">
