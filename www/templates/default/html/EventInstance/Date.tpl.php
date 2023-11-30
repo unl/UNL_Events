@@ -4,6 +4,8 @@ if ($context->isAllDay()) {
     $classes[] = 'all-day';
 }
 
+//TODO: Update this to include better info for time modes
+
 $starttime = $context->getStartTime();
 $endtime = $context->getEndTime();
 if (empty($timezoneDisplay) || empty($timezoneDisplay->getTimezone())) {

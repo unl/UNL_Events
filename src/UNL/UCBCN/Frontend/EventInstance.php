@@ -369,6 +369,7 @@ class EventInstance implements RoutableInterface, MetaTagInterface
         $data['Status']        = $this->event->icalStatus($this);
         $data['EventTitle']    = $this->event->displayTitle($this);
         $data['EventSubtitle'] = $this->event->subtitle;
+        //TODO: Add time mode output
         $data['DateTime'] = array(
             'DateTimeID' => $this->eventdatetime->id,
             'Start' => $timezoneDateTime->format($this->getStartTime(),'c'),
