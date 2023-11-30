@@ -1,14 +1,10 @@
-//TODO: Validate start-time and end-time are set if time-mode is regular and end-time are after start-time
-//TODO: Remove instances of end-date
-//TODO: If time-mode radio buttons are checked we need to update visibility of times
-
 function isUrlValid(string) {
     let url;
 
     try {
         url = new URL(string);
     } catch (_) {
-        return false;  
+        return false;
     }
 
     return url.protocol === "http:" || url.protocol === "https:";
@@ -60,7 +56,7 @@ require(['jquery'], function ($) {
             errors.push('<a href="#location">Location</a> and <a href="#start-date">start date</a> are required.');
         }
 
-        // translate times from inputs. Blank hour = 12, blank minute = 0, blank am/pm = am
+        // Translate times from inputs
         let start_date = new Date($('#start-date').val());
         let start_am_pm = $('#start-time-am-pm-pm').is(':checked') ? 'pm' : 'am';
         let start_hour = $('#start-time-hour').val() != '' ? parseInt($('#start-time-hour').val()) % 12 : 0;
@@ -68,7 +64,8 @@ require(['jquery'], function ($) {
         let start_minute = $('#start-time-minute').val() != '' ? parseInt($('#start-time-minute').val()) : 0;
         start_date.setHours(start_hour);
         start_date.setMinutes(start_minute);
-        
+
+        // This is setting up the end date
         let end_date = new Date($('#start-date').val());
         let end_am_pm = $('#end-time-am-pm-pm').is(':checked') ? 'pm' : 'am';
         let end_hour = $('#end-time-hour').val() != '' ? parseInt($('#end-time-hour').val()) % 12 : 0;

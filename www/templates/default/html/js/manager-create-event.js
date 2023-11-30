@@ -1,7 +1,3 @@
-//TODO: Validate start-time and end-time are set if time-mode is regular and end-time are after start-time
-//TODO: Remove instances of end-date
-//TODO: If time-mode radio buttons are checked we need to update visibility of times
-
 function isUrlValid(string) {
     let url;
 
@@ -259,7 +255,7 @@ require(['jquery', 'wdn'], function ($, WDN) {
             errors.push('<a href="#title">Title</a>, <a href="#type">Type</a>, and <a href="#start-date">start date</a> are required.');
         }
 
-        // translate times from inputs. Blank hour = 12, blank minute = 0, blank am/pm = am
+        // translate times from inputs
         let start_date = new Date($('#start-date').val());
         let start_am_pm = $('#start-time-am-pm-pm').is(':checked') ? 'pm' : 'am';
         let start_hour = $('#start-time-hour').val() != '' ? parseInt($('#start-time-hour').val()) % 12 : 0;
@@ -267,7 +263,8 @@ require(['jquery', 'wdn'], function ($, WDN) {
         let start_minute = $('#start-time-minute').val() != '' ? parseInt($('#start-time-minute').val()) : 0;
         start_date.setHours(start_hour);
         start_date.setMinutes(start_minute);
-        
+
+        // This is setting up the end date
         let end_date = new Date($('#start-date').val());
         let end_am_pm = $('#end-time-am-pm-pm').is(':checked') ? 'pm' : 'am';
         let end_hour = $('#end-time-hour').val() != '' ? parseInt($('#end-time-hour').val()) % 12 : 0;
@@ -379,7 +376,7 @@ require(['jquery', 'wdn'], function ($, WDN) {
 
         if ($('input[name="contact_type"]:checked').val() !== undefined &&
             $('input[name="contact_type"]:checked').val() !== "person" &&
-            $('input[name="contact_type"]:checked').val() !== "organization") 
+            $('input[name="contact_type"]:checked').val() !== "organization")
         {
             notifier.mark_input_invalid($('#contact-type'));
             errors.push('<a href="#contact-type">Contact Type</a> must be person or organization.');
