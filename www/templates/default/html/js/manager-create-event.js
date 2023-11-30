@@ -16,15 +16,36 @@ function isUrlValid(string) {
 
 const time_mode_radios = Array.from(document.querySelectorAll('input[type="radio"][name="time_mode"]'));
 const time_container = document.getElementById('time-container');
+const start_time_container = document.getElementById('start-time-container');
+const start_time_label = document.getElementById('start-time-label');
+const end_time_container = document.getElementById('end-time-container');
+const end_time_label = document.getElementById('end-time-label');
 time_mode_radios.forEach((radio) => {
     radio.addEventListener('input', () => {
         const checked_radio = time_mode_radios.filter((radio) => radio.checked)[0];
-        if (checked_radio.id === 'time-mode-regular') {
+        if (checked_radio.id === time_mode_regular) {
             time_container.classList.remove('dcf-d-none');
+            start_time_container.classList.remove('dcf-d-none');
+            start_time_label.innerText = 'Start Time';
+            end_time_container.classList.remove('dcf-d-none');
+            end_time_label.innerText = 'End Time';
+
+        } else if (checked_radio.id === time_mode_deadline) {
+            time_container.classList.remove('dcf-d-none');
+            start_time_container.classList.add('dcf-d-none');
+            end_time_container.classList.remove('dcf-d-none');
+            end_time_label.innerText = 'Time Of The Deadline';
+
+        } else if (checked_radio.id === time_mode_kickoff) {
+            time_container.classList.remove('dcf-d-none');
+            start_time_container.classList.remove('dcf-d-none');
+            start_time_label.innerText = 'Kick Off Time';
+            end_time_container.classList.add('dcf-d-none');
+
         } else {
             time_container.classList.add('dcf-d-none');
         }
-    })
+    });
 });
 
 const google_microdata_button = document.getElementById('google-microdata-button');
@@ -238,32 +259,28 @@ require(['jquery', 'wdn'], function ($, WDN) {
             errors.push('<a href="#title">Title</a>, <a href="#type">Type</a>, and <a href="#start-date">start date</a> are required.');
         }
 
-        let start = new Date($('#start-date').val());
-        if ($('#start-date').val() != '') {
-            // validate end date is after start date and the time is afterward accordingly
-            if ($('#end-date').val() != '') {
-                let end = new Date($('#end-date').val());
+        // translate times from inputs. Blank hour = 12, blank minute = 0, blank am/pm = am
+        let start_date = new Date($('#start-date').val());
+        let start_am_pm = $('#start-time-am-pm-pm').is(':checked') ? 'pm' : 'am';
+        let start_hour = $('#start-time-hour').val() != '' ? parseInt($('#start-time-hour').val()) % 12 : 0;
+        start_hour = start_am_pm == 'pm' ? start_hour + 12 : start_hour;
+        let start_minute = $('#start-time-minute').val() != '' ? parseInt($('#start-time-minute').val()) : 0;
+        start_date.setHours(start_hour);
+        start_date.setMinutes(start_minute);
+        
+        let end_date = new Date($('#start-date').val());
+        let end_am_pm = $('#end-time-am-pm-pm').is(':checked') ? 'pm' : 'am';
+        let end_hour = $('#end-time-hour').val() != '' ? parseInt($('#end-time-hour').val()) % 12 : 0;
+        end_hour = end_am_pm == 'pm' ? end_hour + 12 : end_hour;
+        let end_minute = $('#end-time-minute').val() != '' ? parseInt($('#end-time-minute').val()) : 0;
+        end_date.setHours(end_hour);
+        end_date.setMinutes(end_minute);
 
-                // translate times from inputs. Blank hour = 12, blank minute = 0, blank am/pm = am
-                let start_am_pm = $('#start-time-am-pm-pm').is(':checked') ? 'pm' : 'am';
-                let start_hour = $('#start-time-hour').val() != '' ? parseInt($('#start-time-hour').val()) % 12 : 0;
-                start_hour = start_am_pm == 'pm' ? start_hour + 12 : start_hour;
-                let start_minute = $('#start-time-minute').val() != '' ? parseInt($('#start-time-minute').val()) : 0;
-                start.setHours(start_hour);
-                start.setMinutes(start_minute);
-
-                let end_am_pm = $('#end-time-am-pm-pm').is(':checked') ? 'pm' : 'am';
-                let end_hour = $('#end-time-hour').val() != '' ? parseInt($('#end-time-hour').val()) % 12 : 0;
-                end_hour = end_am_pm == 'pm' ? end_hour + 12 : end_hour;
-                let end_minute = $('#end-time-minute').val() != '' ? parseInt($('#end-time-minute').val()) : 0;
-                end.setHours(end_hour);
-                end.setMinutes(end_minute);
-
-                if (start > end) {
-                    notifier.mark_input_invalid($('#end-date'));
-                    errors.push('Your <a href="#end-date">end date/time</a> must be on or after the <a href="#start-date">start date/time</a>.');
-                }
-            }
+        // Check that the start time is before the end time
+        // We only care if the time mode is regular
+        if ($('#start-date').val() != '' && $('#' + time_mode_regular).is(':checked') && start_date > end_date) {
+            notifier.mark_input_invalid($('#end-time-container'));
+            errors.push('Your <a href="#end-time-container">end time</a> must be on or after the <a href="#start-time-container">start time</a>.');
         }
 
         // if recurring is checked, there must be a recurring type and the recurs_until date must be on
@@ -280,20 +297,12 @@ require(['jquery', 'wdn'], function ($, WDN) {
                     errors.push('Recurring events require a <a href="#recurring-type">recurring type</a> and <a href="#recurs-until-date">date</a> that they recur until.');
                 }
 
-                if ($('#end-date').val() != '') {
-                    let instanceStart = new Date($('#start-date').val());
-                    let instanceEnd = new Date($('#end-date').val());
-                    if (instanceStart && instanceEnd && instanceStart.getDate() != instanceEnd.getDate()) {
-                        errors.push('A recurring event instance start and end date must be the same day. If you need multiple multi-day (ongoing) occurrences, you must define them as separate datetime instances.');
-                    }
-                }
-
                 // check that the recurs until date is on or after the start date
-                start.setHours(0);
-                start.setMinutes(0);
+                start_date.setHours(0);
+                start_date.setMinutes(0);
                 let until = new Date($('#recurs-until-date').val());
 
-                if (start > until) {
+                if (start_date > until) {
                     notifier.mark_input_invalid($('#recurs-until-date'));
                     errors.push('The <a href="#recurs-until-date">"recurs until date"</a> must be on or after the start date.');
                 }
