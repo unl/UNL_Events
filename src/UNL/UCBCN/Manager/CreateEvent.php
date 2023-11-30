@@ -75,6 +75,18 @@ class CreateEvent extends EventForm
             throw new ValidationException('The timezone is invalid.');
         }
 
+        // Validate time mode
+        $time_modes_array = array(
+            Occurrence::TIME_MODE_REGULAR ,
+            Occurrence::TIME_MODE_KICKOFF ,
+            Occurrence::TIME_MODE_DEADLINE,
+            Occurrence::TIME_MODE_ALLDAY  ,
+            Occurrence::TIME_MODE_TBD     ,
+        );
+        if (!in_array($post_data['time_mode'], $time_modes_array)) {
+            throw new ValidationException('Your <a href="#time-mode-container">Time Setting</a> is invalid');
+        }
+
         # end date must be after start date
         $start_date = $this->calculateDate(
             $post_data['start_date'],
@@ -83,17 +95,19 @@ class CreateEvent extends EventForm
             $post_data['start_time_am_pm'] ?? null
         );
 
+        // There is no end date anymore so it is just the start date
         $end_date = $this->calculateDate(
-            $post_data['end_date'] ?? $post_data['start_date'],
+            $post_data['start_date'],
             $post_data['end_time_hour'] ?? null,
             $post_data['end_time_minute'] ?? null,
             $post_data['end_time_am_pm'] ?? null
         );
 
-        if ($start_date > $end_date) {
+        // We only have both start and end times if the time mode is regular
+        if ($post_data['time_mode'] === Occurrence::TIME_MODE_REGULAR && $start_date > $end_date) {
             throw new ValidationException(
-                'Your <a href="#end-date">end date/time</a>' .
-                ' must be on or after the <a href="#start-date">start date/time</a>.'
+                'Your <a href="#end-time-container">end time</a>' .
+                ' must be on or after the <a href="#start-time-container">start time</a>.'
             );
         }
 
@@ -183,17 +197,6 @@ class CreateEvent extends EventForm
     {
         $user = $this->user ?? Auth::getCurrentUser();
 
-        # tricky: if end date is empty, we want that to be the same as the start date
-        # if the end time is also empty, then be sure to set the am/pm appropriately
-        if (empty($post_data['end_date'])) {
-            $post_data['end_date'] = $post_data['start_date'] ?? "";
-        }
-        if (empty($post_data['end_time_hour']) && empty($post_data['end_time_minute'])) {
-            $post_data['end_time_hour'] = $post_data['start_time_hour'] ?? "";
-            $post_data['end_time_minute'] = $post_data['start_time_minute'] ?? "";
-            $post_data['end_time_am_pm'] = $post_data['start_time_am_pm'] ?? "";
-        }
-
         # by setting and then validating, we allow the event on the form to have the entered data
         # so if the validation fails, the form shows with the entered data
         $this->setEventData($post_data, $files);
@@ -260,6 +263,30 @@ class CreateEvent extends EventForm
             $event_datetime->webcast_additionalpublicinfo = $post_data['v_additional_public_info'] ?? null;
         }
 
+        // Set the start and end times to match the ideal input
+        $event_datetime->timemode = $post_data['time_mode'];
+        switch ($post_data['time_mode']) {
+            case Occurrence::TIME_MODE_KICKOFF:
+                $post_data['end_time_hour'] = $post_data['start_time_hour'];
+                $post_data['end_time_minute'] = $post_data['start_time_minute'];
+                $post_data['end_time_am_pm'] = $post_data['start_time_am_pm'];
+                break;
+            case Occurrence::TIME_MODE_DEADLINE:
+                $post_data['start_time_hour'] = $post_data['end_time_hour'];
+                $post_data['start_time_minute'] = $post_data['end_time_minute'];
+                $post_data['start_time_am_pm'] = $post_data['end_time_am_pm'];
+                break;
+            case Occurrence::TIME_MODE_ALLDAY:
+            case Occurrence::TIME_MODE_TBD:
+                unset($post_data['start_time_hour']);
+                unset($post_data['start_time_minute']);
+                unset($post_data['start_time_am_pm']);
+                unset($post_data['end_time_hour']);
+                unset($post_data['end_time_minute']);
+                unset($post_data['end_time_am_pm']);
+                break;
+        }
+
         # set the start date and end date
         $event_datetime->starttime = $this->calculateDate(
             $post_data['start_date'],
@@ -268,9 +295,8 @@ class CreateEvent extends EventForm
             $post_data['start_time_am_pm'] ?? null
         );
 
-
         $event_datetime->endtime = $this->calculateDate(
-            $post_data['end_date'] ?? $post_data['start_date'],
+            $post_data['start_date'],
             $post_data['end_time_hour'] ?? null,
             $post_data['end_time_minute'] ?? null,
             $post_data['end_time_am_pm'] ?? null

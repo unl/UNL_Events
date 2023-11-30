@@ -184,16 +184,46 @@ class AddDatetime extends PostHandler
 
     private function setDatetimeData($post_data)
     {
+        // Set the start and end times to match the ideal input
+        $this->event_datetime->timemode = $post_data['time_mode'];
+        switch ($post_data['time_mode']) {
+            case Occurrence::TIME_MODE_KICKOFF:
+                $post_data['end_time_hour'] = $post_data['start_time_hour'];
+                $post_data['end_time_minute'] = $post_data['start_time_minute'];
+                $post_data['end_time_am_pm'] = $post_data['start_time_am_pm'];
+                break;
+            case Occurrence::TIME_MODE_DEADLINE:
+                $post_data['start_time_hour'] = $post_data['end_time_hour'];
+                $post_data['start_time_minute'] = $post_data['end_time_minute'];
+                $post_data['start_time_am_pm'] = $post_data['end_time_am_pm'];
+                break;
+            case Occurrence::TIME_MODE_ALLDAY:
+            case Occurrence::TIME_MODE_TBD:
+                unset($post_data['start_time_hour']);
+                unset($post_data['start_time_minute']);
+                unset($post_data['start_time_am_pm']);
+                unset($post_data['end_time_hour']);
+                unset($post_data['end_time_minute']);
+                unset($post_data['end_time_am_pm']);
+                break;
+        }
+
         # set the start date and end date
         $this->event_datetime->timezone = empty($post_data['timezone']) ?
             BaseUCBCN::$defaultTimezone : $post_data['timezone'];
-        $this->event_datetime->starttime = $this->calculateDate($post_data['start_date'],
-            $post_data['start_time_hour'], $post_data['start_time_minute'],
-            $post_data['start_time_am_pm']);
+        $this->event_datetime->starttime = $this->calculateDate(
+            $post_data['start_date'],
+            $post_data['start_time_hour'],
+            $post_data['start_time_minute'],
+            $post_data['start_time_am_pm']
+        );
 
-        $this->event_datetime->endtime = $this->calculateDate($post_data['end_date'],
-            $post_data['end_time_hour'], $post_data['end_time_minute'],
-            $post_data['end_time_am_pm']);
+        $this->event_datetime->endtime = $this->calculateDate(
+            $post_data['start_date'],
+            $post_data['end_time_hour'],
+            $post_data['end_time_minute'],
+            $post_data['end_time_am_pm']
+        );
 
         if (array_key_exists('recurring', $post_data) && $post_data['recurring'] == 'on') {
             $this->event_datetime->recurringtype = $post_data['recurring_type'];
@@ -228,17 +258,39 @@ class AddDatetime extends PostHandler
             throw new ValidationException('<a href="#start-date">start date</a> are required.');
         }
 
+        // Validate time mode
+        $time_modes_array = array(
+            Occurrence::TIME_MODE_REGULAR ,
+            Occurrence::TIME_MODE_KICKOFF ,
+            Occurrence::TIME_MODE_DEADLINE,
+            Occurrence::TIME_MODE_ALLDAY  ,
+            Occurrence::TIME_MODE_TBD     ,
+        );
+        if (!in_array($post_data['time_mode'], $time_modes_array)) {
+            throw new ValidationException('Your <a href="#time-mode-container">Time Setting</a> is invalid');
+        }
+
         # end date must be after start date
-        $start_date = $this->calculateDate($post_data['start_date'],
-            $post_data['start_time_hour'], $post_data['start_time_minute'],
-            $post_data['start_time_am_pm']);
+        $start_date = $this->calculateDate(
+            $post_data['start_date'],
+            $post_data['start_time_hour'],
+            $post_data['start_time_minute'],
+            $post_data['start_time_am_pm']
+        );
 
-        $end_date = $this->calculateDate($post_data['end_date'],
-            $post_data['end_time_hour'], $post_data['end_time_minute'],
-            $post_data['end_time_am_pm']);
+        $end_date = $this->calculateDate(
+            $post_data['start_date'],
+            $post_data['end_time_hour'],
+            $post_data['end_time_minute'],
+            $post_data['end_time_am_pm']
+        );
 
-        if ($start_date > $end_date) {
-            throw new ValidationException('Your <a href="#end-date">end date/time</a> must be on or after the <a href="#start-date">start date/time</a>.');
+        // We only have both start and end times if the time mode is regular
+        if ($post_data['time_mode'] === Occurrence::TIME_MODE_REGULAR && $start_date > $end_date) {
+            throw new ValidationException(
+                'Your <a href="#end-time-container">end time</a>' .
+                ' must be on or after the <a href="#start-time-container">start time</a>.'
+            );
         }
 
         // If there is a physical location make sure these are set
@@ -279,17 +331,6 @@ class AddDatetime extends PostHandler
         $datetime_copy = clone $this->event_datetime;
 
         $this->event_datetime->event_id = $this->event->id;
-
-        # tricky: if end date is empty, we want that to be the same as the start date
-        # if the end time is also empty, then be sure to set the am/pm appropriately
-        if (empty($post_data['end_date'])) {
-            $post_data['end_date'] = $post_data['start_date'];
-        }
-        if (empty($post_data['end_time_hour']) && empty($post_data['end_time_minute'])) {
-            $post_data['end_time_hour'] = $post_data['start_time_hour'];
-            $post_data['end_time_minute'] = $post_data['start_time_minute'];
-            $post_data['end_time_am_pm'] = $post_data['start_time_am_pm'];
-        }
 
         // Checks if we have a physical location
         if ($post_data['physical_location_check'] == '0') {
