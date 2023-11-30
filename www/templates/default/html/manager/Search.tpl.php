@@ -112,6 +112,7 @@
                                         <?php if (++$count <= 3) : ?>
                                             <?php
                                             {
+                                                //TODO: Update this to take into account the time modes
                                                 if ($datetime->recurringtype == 'none') {
                                                     echo date('n/d/y @ g:ia', strtotime($datetime->starttime));
                                                 } else if ($datetime->recurringtype == 'daily' || $datetime->recurringtype == 'weekly' || $datetime->recurringtype == 'biweekly' ||

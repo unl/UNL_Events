@@ -179,6 +179,7 @@ use UNL\UCBCN\Permission;
                                         <?php foreach($datetimes as $datetime): ?>
                                             <li>
                                                 <?php if (++$count <= 3) :
+                                                    //TODO: Update this to take into account the time modes
                                                     $date_format = 'n/d/y';
                                                     $time_format = 'g:ia';
                                                     $formatted_start_time = date(

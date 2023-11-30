@@ -265,6 +265,7 @@ class EventInstance implements RoutableInterface, MetaTagInterface
     // Sets the meta tags for the page
     public function getMetaTags()
     {
+        //TODO: Update this to take into account the time modes
         $datetimeString = date('n/d/y @ g:ia', strtotime($this->eventdatetime->starttime));
         if ($this->isAllDay()) {
             $datetimeString = date('n/d/y', strtotime($this->eventdatetime->starttime));

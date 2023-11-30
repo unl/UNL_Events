@@ -248,6 +248,7 @@
                     <td class="dcf-txt-middle dates">
                         <?php
                         {
+                            //TODO: Update this to take into account the time modes
                             if ($datetime->recurringtype == 'none') {
                                 echo date('n/d/y @ g:ia', strtotime($datetime->starttime));
                             } elseif ($datetime->recurringtype == 'daily' ||
