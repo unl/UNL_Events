@@ -10,12 +10,15 @@ function isUrlValid(string) {
     return url.protocol === "http:" || url.protocol === "https:";
 }
 
+// Sets up time input variables
 const time_mode_radios = Array.from(document.querySelectorAll('input[type="radio"][name="time_mode"]'));
 const time_container = document.getElementById('time-container');
 const start_time_container = document.getElementById('start-time-container');
 const start_time_label = document.getElementById('start-time-label');
 const end_time_container = document.getElementById('end-time-container');
 const end_time_label = document.getElementById('end-time-label');
+
+// This will update which of the time field sets are shown when a radio button is clicked
 time_mode_radios.forEach((radio) => {
     radio.addEventListener('input', () => {
         const checked_radio = time_mode_radios.filter((radio) => radio.checked)[0];
