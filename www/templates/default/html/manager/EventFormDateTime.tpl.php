@@ -36,7 +36,7 @@
     $end_minute = $post['end_time_minute'] ?? ( !empty($datetime_end_time) ? date('i'    , $datetime_end_time) : '30' );
     $end_am_pm  = $post['end_time_am_pm']  ?? ( !empty($datetime_end_time) ? date('a'    , $datetime_end_time) : 'am' );
 
-    $time_mode = (isset($datetime) && isset($datetime->timemode)) ? $datetime->timemode : $time_mode_regular;
+    $time_mode = $post['time_mode'] ?? (isset($datetime) && isset($datetime->timemode)) ? $datetime->timemode : $time_mode_regular;
 
     $datetime_recurring_check = (isset($context->recurrence_id));
     $is_recurring         = $post['recurring'] ?? (isset($datetime) && isset($datetime->recurringtype) && strtolower($datetime->recurringtype) !== 'none');
@@ -96,7 +96,7 @@
             </div>
         </div>
 
-        <fieldset>
+        <fieldset id="time-mode-container">
             <legend>
                 Event Time Type
                 <small class="dcf-required">Required</small>
@@ -125,9 +125,27 @@
             </div>
         </fieldset>
 
-        <div id="time-container" <?php if ($time_mode !== $time_mode_regular) { echo 'class="dcf-d-none"'; }?>>
+        <div
+            id="time-container"
+            <?php
+                if (
+                    $time_mode !== $time_mode_regular
+                    && $time_mode !== $time_mode_kickoff
+                    && $time_mode !== $time_mode_deadline
+                ) {
+                    echo 'class="dcf-d-none"';
+                }
+            ?>
+        >
             <div class="dcf-d-grid dcf-grid-full dcf-grid-halves@md dcf-col-gap-vw">
-                <fieldset id="start-time-container">
+                <fieldset
+                    id="start-time-container"
+                    <?php
+                        if ($time_mode === $time_mode_deadline) {
+                            echo 'class="dcf-d-none"';
+                        }
+                    ?>
+                >
                     <legend>
                         <span id="start-time-label">Start Time</span>
                         <small class="dcf-required">Required</small>
@@ -210,7 +228,14 @@
                     </div>
                 </fieldset>
 
-                <fieldset id="end-time-container">
+                <fieldset
+                    id="end-time-container"
+                    <?php
+                        if ($time_mode === $time_mode_kickoff) {
+                            echo 'class="dcf-d-none"';
+                        }
+                    ?>
+                >
                     <legend>
                         <span id="end-time-label">End Time</span>
                         <small class="dcf-required">Required</small>
