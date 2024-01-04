@@ -384,6 +384,7 @@ class EventInstance implements RoutableInterface, MetaTagInterface
             'Start' => $timezoneDateTime->format($this->getStartTime(),'c'),
             'End'   => $timezoneDateTime->format($this->getEndTime(),'c'),
             'AllDay' => $this->isAllDay(),
+            'TimeMode' => $this->eventdatetime->timemode,
             'EventTimezone' => $this->eventdatetime->timezone,
             'CalendarTimezone' => $this->calendar->defaulttimezone,
             'IsRecurring'=> $this->eventdatetime->isRecurring(),
