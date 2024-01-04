@@ -118,7 +118,7 @@ class Day extends EventListing implements RoutableInterface, MetaTagInterface
                 $endDateTime = $timezoneDisplay->getDateTime($result['endtime'], $result['timezone']);
             }
 
-            if ($this->isAllDayEvent($startDateTime,  $endDateTime)) {
+            if ($this->isAllDayEvent($startDateTime, $endDateTime)) {
                 // Make endtime at end of day
                 $endDateTime->add(new \DateInterval('PT23H59M59S'));
             } elseif ($startDateTime == $endDateTime) {

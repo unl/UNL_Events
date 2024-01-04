@@ -348,6 +348,15 @@ class Occurrence extends Record
 
     public function isAllDay()
     {
+        if (isset($this->timemode) && $this->timemode === self::TIME_MODE_ALLDAY) {
+            return true;
+        }
+
+        // If time mode is set to regular it might be all day still
+        if (isset($this->timemode) && $this->timemode !== self::TIME_MODE_REGULAR) {
+            return false;
+        }
+
         //It must start at midnight to be an all day event
         if (strpos($this->starttime, '00:00:00') === false) {
             return false;
