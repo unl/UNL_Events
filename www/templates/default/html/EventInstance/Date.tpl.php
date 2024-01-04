@@ -1,4 +1,7 @@
 <?php
+
+use UNL\UCBCN\Event\Occurrence;
+
 $classes = array('date-wrapper');
 if ($context->isAllDay()) {
     $classes[] = 'all-day';
@@ -53,7 +56,17 @@ if (empty($timezoneDisplay) || empty($timezoneDisplay->getTimezone())) {
     <span class="dcf-sr-only">Time:</span>
     <div>
         <?php if ($context->isAllDay()): ?>
-        All Day
+            All Day
+        <?php elseif ($context->eventdatetime->timemode === Occurrence::TIME_MODE_TBD):?>
+            <abbr title="To Be Determined">TBD</abbr>
+        <?php elseif ($context->eventdatetime->timemode === Occurrence::TIME_MODE_KICKOFF):?>
+            Starts at
+            <?php echo $timezoneDisplay->format($starttime, $context->eventdatetime->timezone, 'g:i a')?>
+            <?php if ($context->eventdatetime->timezone != $context->calendar->defaulttimezone) { echo $timezoneDisplay->format($starttime, $context->eventdatetime->timezone, ' T'); } ?>
+        <?php elseif ($context->eventdatetime->timemode === Occurrence::TIME_MODE_DEADLINE):?>
+            Ends at
+            <?php echo $timezoneDisplay->format($endtime, $context->eventdatetime->timezone, 'g:i a')?>
+            <?php if ($context->eventdatetime->timezone != $context->calendar->defaulttimezone) { echo $timezoneDisplay->format($endtime, $context->eventdatetime->timezone, ' T'); } ?>
         <?php else: ?>
             <?php echo $timezoneDisplay->format($starttime, $context->eventdatetime->timezone, 'g:i a')?><?php if (!empty($endtime) && $endtime != $starttime): ?>&ndash;<?php echo $timezoneDisplay->format($endtime, $context->eventdatetime->timezone,'g:i a')?><?php endif; ?>
             <?php if ($context->eventdatetime->timezone != $context->calendar->defaulttimezone) { echo $timezoneDisplay->format($starttime, $context->eventdatetime->timezone, ' T'); } ?>

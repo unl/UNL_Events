@@ -1,6 +1,9 @@
 <div class="vcalendar">
     <ol class="dcf-mt-4 dcf-list-bare dcf-d-grid dcf-col-gap-vw dcf-row-gap-5 unl-event-teaser-ol">
     <?php
+
+use UNL\UCBCN\Event\Occurrence;
+
     foreach ($context as $eventinstance) {
         if (empty($eventinstance)) {
             continue;
@@ -40,12 +43,18 @@
             $time = '<div class="unl-event-time dcf-d-flex dcf-ai-center dcf-uppercase">' .
                 $time_icon .
                 'All day</div>';
+        } else if ($eventinstance->eventdatetime->timemode === Occurrence::TIME_MODE_TBD) {
+            $time = '<div class="unl-event-time dcf-d-flex dcf-ai-center dcf-uppercase">' . $time_icon . '<abbr title="To Be Determined">TBD</abbr></div>';
+        } else if ($eventinstance->eventdatetime->timemode === Occurrence::TIME_MODE_KICKOFF) {
+            $time = '<time class="unl-event-time dcf-d-flex dcf-ai-center dcf-uppercase" datetime="' . $timezoneDisplay->format($starttime, $eventinstance->eventdatetime->timezone, 'H:i') . '">' . $time_icon . 'Starts at ' . $timezoneDisplay->format($starttime, $eventinstance->eventdatetime->timezone, 'g:i a') . '</time>';
+        } else if ($eventinstance->eventdatetime->timemode === Occurrence::TIME_MODE_DEADLINE) {
+            $time = '<time class="unl-event-time dcf-d-flex dcf-ai-center dcf-uppercase" datetime="' . $timezoneDisplay->format($endtime, $eventinstance->eventdatetime->timezone, 'H:i') . '">' . $time_icon . 'Ends at ' . $timezoneDisplay->format($endtime, $eventinstance->eventdatetime->timezone, 'g:i a') . '</time>';
         } else {
             $time = '<div class="unl-event-time dcf-d-flex dcf-ai-center dcf-uppercase">' .
                 $time_icon .
                 '<time datetime="' .
                 $timezoneDisplay->format($starttime, $eventinstance->eventdatetime->timezone, 'H:i') .
-                '">' . 
+                '">' .
                 $timezoneDisplay->format($starttime, $eventinstance->eventdatetime->timezone, 'g:i a') .
                 '</time>';
 
