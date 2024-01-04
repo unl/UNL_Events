@@ -7,6 +7,7 @@
         }
         $event = $eventinstance->event;
         $starttime = $eventinstance->getStartTime();
+        $endtime = $eventinstance->getEndTime();
         if (empty($timezoneDisplay) || empty($timezoneDisplay->getTimezone())) {
             // set with default calendar timezone
             $timezoneDisplay = new \UNL\UCBCN\TimezoneDisplay($eventinstance->calendar->defaulttimezone);
@@ -14,7 +15,7 @@
 
         $url = $frontend->getEventURL($eventinstance->getRawObject());
         $subTitle = !empty($event->subtitle) ?
-            '<p class="dcf-subhead dcf-mt-2 dcf-txt-3xs unl-dark-gray">' . $event->subtitle . '</p>' : '';
+            '<p class="dcf-subhead dcf-mt-1 dcf-mb-0 dcf-txt-3xs dcf-bold unl-dark-gray">' . $event->subtitle . '</p>' : '';
         $location = '';
         if (isset($eventinstance->eventdatetime->location_id) && $eventinstance->eventdatetime->location_id) {
             $l = $eventinstance->eventdatetime->getLocation();
@@ -34,10 +35,20 @@
         $month = $timezoneDisplay->format($starttime, $eventinstance->eventdatetime->timezone,'M');
         $day = $timezoneDisplay->format($starttime, $eventinstance->eventdatetime->timezone,'j');
         $time = '';
-        if (!$eventinstance->isAllDay()) {
-            $time = '<time class="unl-event-time dcf-d-flex dcf-ai-center dcf-uppercase" datetime="' . $timezoneDisplay->format($starttime, $eventinstance->eventdatetime->timezone, 'H:i') . '"><svg class="dcf-mr-1 dcf-h-4 dcf-w-4 dcf-flex-shrink-0 dcf-fill-current" aria-hidden="true" focusable="false" height="24" width="24" viewBox="0 0 24 24"><path d="M12 23C5.9 23 1 18.1 1 12S5.9 1 12 1s11 4.9 11 11-4.9 11-11 11zm0-20c-5 0-9 4-9 9s4 9 9 9 9-4 9-9-4-9-9-9z"></path><path d="M16.8 17.8c-.2 0-.5-.1-.7-.3l-5.2-4.8c-.2-.2-.3-.5-.3-.7V7.2c0-.6.4-1 1-1s1 .4 1 1v4.3l4.9 4.5c.4.4.4 1 .1 1.4-.3.3-.5.4-.8.4z"></path><path fill="none" d="M0 0h24v24H0z"></path></svg>' . $timezoneDisplay->format($starttime, $eventinstance->eventdatetime->timezone, 'g:i a') . '</time>';
-        } else {
+        if ($eventinstance->isAllDay()) {
             $time = '<div class="unl-event-time dcf-d-flex dcf-ai-center dcf-uppercase"><svg class="dcf-mr-1 dcf-h-4 dcf-w-4 dcf-flex-shrink-0 dcf-fill-current" aria-hidden="true" focusable="false" height="24" width="24" viewBox="0 0 24 24"><path d="M12 23C5.9 23 1 18.1 1 12S5.9 1 12 1s11 4.9 11 11-4.9 11-11 11zm0-20c-5 0-9 4-9 9s4 9 9 9 9-4 9-9-4-9-9-9z"></path><path d="M16.8 17.8c-.2 0-.5-.1-.7-.3l-5.2-4.8c-.2-.2-.3-.5-.3-.7V7.2c0-.6.4-1 1-1s1 .4 1 1v4.3l4.9 4.5c.4.4.4 1 .1 1.4-.3.3-.5.4-.8.4z"></path><path fill="none" d="M0 0h24v24H0z"></path></svg>All day</div>';
+        } else {
+            $time = '<div class="unl-event-time dcf-d-flex dcf-ai-center dcf-uppercase"><svg class="dcf-mr-1 dcf-h-4 dcf-w-4 dcf-flex-shrink-0 dcf-fill-current" aria-hidden="true" focusable="false" height="24" width="24" viewBox="0 0 24 24"><path d="M12 23C5.9 23 1 18.1 1 12S5.9 1 12 1s11 4.9 11 11-4.9 11-11 11zm0-20c-5 0-9 4-9 9s4 9 9 9 9-4 9-9-4-9-9-9z"></path><path d="M16.8 17.8c-.2 0-.5-.1-.7-.3l-5.2-4.8c-.2-.2-.3-.5-.3-.7V7.2c0-.6.4-1 1-1s1 .4 1 1v4.3l4.9 4.5c.4.4.4 1 .1 1.4-.3.3-.5.4-.8.4z"></path><path fill="none" d="M0 0h24v24H0z"></path></svg>';
+            $time .= '<time datetime="' . $timezoneDisplay->format($starttime, $eventinstance->eventdatetime->timezone, 'H:i') . '">' . $timezoneDisplay->format($starttime, $eventinstance->eventdatetime->timezone, 'g:i a') . '</time>';
+
+            if (
+                isset($endtime) &&
+                $endtime > $starttime
+            ) {
+                $time .= '&nbsp;&ndash;&nbsp;<time datetime="' . $timezoneDisplay->format($endtime, $eventinstance->eventdatetime->timezone, 'H:i') . '">' . $timezoneDisplay->format($endtime, $eventinstance->eventdatetime->timezone, 'g:i a') . '</time>';
+            }
+
+            $time .= '</div>';
         }
         ?>
             <li class="unl-event-teaser-li dcf-mb-0">
@@ -49,7 +60,7 @@
                         <span class="dcf-d-block dcf-txt-3xs dcf-pt-2 dcf-pb-1 dcf-uppercase dcf-bold unl-ls-2 unl-cream unl-bg-scarlet"><?php echo $month; ?></span>
                         <span class="dcf-d-block dcf-txt-h5 dcf-bold dcf-br-1 dcf-bb-1 dcf-bl-1 dcf-br-solid dcf-bb-solid dcf-bl-solid unl-br-light-gray unl-bb-light-gray unl-bl-light-gray unl-darker-gray dcf-bg-white"><?php echo $day; ?></span>
                     </div>
-                    <div class="unl-event-details dcf-txt-xs unl-dark-gray">
+                    <div class="unl-event-details dcf-mt-1 dcf-txt-xs unl-dark-gray">
                         <?php echo $time; ?>
                         <?php echo $location; ?>
                     </div>
