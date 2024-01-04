@@ -54,7 +54,7 @@
             <li class="unl-event-teaser-li dcf-mb-0">
                 <article class="unl-event-teaser dcf-col-gap-4 dcf-card-as-link">
                     <header class="unl-event-title">
-                        <h3 class="dcf-mb-0 dcf-lh-3 dcf-bold dcf-txt-h6 unl-lh-crop"><a class="dcf-txt-decor-hover dcf-card-link unl-darker-gray" href="<?php echo $url; ?>"><?php echo $event->displayTitle($eventinstance); ?></a></h3><?php echo $subTitle; ?>
+                        <h3 class="dcf-mb-0 dcf-txt-h6 unl-lh-crop"><a class="dcf-txt-decor-hover dcf-card-link unl-darker-gray" href="<?php echo $url; ?>"><?php echo $event->displayTitle($eventinstance); ?></a></h3><?php echo $subTitle; ?>
                     </header>
                     <div class="unl-event-date dcf-flex-shrink-0 dcf-w-8 dcf-txt-center" datetime="<?php echo $datetimedate; ?>">
                         <span class="dcf-d-block dcf-txt-3xs dcf-pt-2 dcf-pb-1 dcf-uppercase dcf-bold unl-ls-2 unl-cream unl-bg-scarlet"><?php echo $month; ?></span>
