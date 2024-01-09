@@ -101,18 +101,18 @@
                 Event Time Type
                 <small class="dcf-required">Required</small>
             </legend>
-            <div class="dcf-grid dcf-grid-full dcf-grid-halves@sm dcf-grid-thirds@md dcf-grid-fifths@lg dcf-col-gap-vw">
+            <div class="dcf-grid dcf-grid-full dcf-grid-halves@sm dcf-grid-thirds@md dcf-col-gap-vw">
                 <div class="dcf-input-radio">
                     <input id="<?php echo $time_mode_regular; ?>" name="time_mode" type="radio" value="<?php echo $time_mode_regular; ?>" <?php if ($time_mode === $time_mode_regular) { echo 'checked'; }?>>
                     <label for="<?php echo $time_mode_regular; ?>">Start & End</label>
                 </div>
                 <div class="dcf-input-radio">
                     <input id="<?php echo $time_mode_kickoff; ?>" name="time_mode" type="radio" value="<?php echo $time_mode_kickoff; ?>" <?php if ($time_mode === $time_mode_kickoff) { echo 'checked'; }?>>
-                    <label for="<?php echo $time_mode_kickoff; ?>">Kick Off <br><span class="dcf-txt-xs">(Start Time Only)</span></label>
+                    <label for="<?php echo $time_mode_kickoff; ?>">Start Time Only <br><span class="dcf-txt-xs">(e.g. Sporting Events, Performances)</span></label>
                 </div>
                 <div class="dcf-input-radio">
                     <input id="<?php echo $time_mode_deadline; ?>" name="time_mode" type="radio" value="<?php echo $time_mode_deadline; ?>" <?php if ($time_mode === $time_mode_deadline) { echo 'checked'; }?>>
-                    <label for="<?php echo $time_mode_deadline; ?>">Deadline <br><span class="dcf-txt-xs">(End Time Only)</span></label>
+                    <label for="<?php echo $time_mode_deadline; ?>">End Time Only <br><span class="dcf-txt-xs">(e.g. Deadlines, Applicant Submissions)</span></label>
                 </div>
                 <div class="dcf-input-radio">
                     <input id="<?php echo $time_mode_all_day; ?>" name="time_mode" type="radio" value="<?php echo $time_mode_all_day; ?>" <?php if ($time_mode === $time_mode_all_day) { echo 'checked'; }?>>
