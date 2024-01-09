@@ -1,4 +1,6 @@
 <?php
+
+use UNL\UCBCN\Event\Occurrence;
 use UNL\UCBCN\Permission;
 
     const ARIA_SELECTED = 'aria-selected="true"';
@@ -21,21 +23,6 @@ use UNL\UCBCN\Permission;
             break;
         default:
             $total_pages = 1;
-    }
-
-    function ordinal($number) {
-        $mod = $number % 100;
-        if ($mod >= 11 && $mod <= 13) {
-            return $number . 'th';
-        } else if ($mod % 10 == 1) {
-            return $number . 'st';
-        } else if ($mod % 10 == 2) {
-            return $number . 'nd';
-        } else if ($mod % 10 == 3) {
-            return $number . 'rd';
-        } else {
-            return $number . 'th';
-        }
     }
 ?>
 <?php
@@ -179,83 +166,80 @@ use UNL\UCBCN\Permission;
                                         <?php foreach($datetimes as $datetime): ?>
                                             <li>
                                                 <?php if (++$count <= 3) :
-                                                    //TODO: Update this to take into account the time modes
                                                     $date_format = 'n/d/y';
                                                     $time_format = 'g:ia';
-                                                    $formatted_start_time = date(
+
+                                                    // Set up default values
+                                                    $recurring_details = '';
+                                                    $date_details = date(
+                                                        $date_format,
+                                                        strtotime($datetime->starttime)
+                                                    );
+                                                    $time_details = date(
                                                         $time_format,
                                                         strtotime($datetime->starttime)
                                                     );
-                                                    $formatted_start_date = date(
-                                                        $time_format,
-                                                        strtotime($datetime->starttime)
-                                                    );
+
+                                                    // Define recurring details
+                                                    if ($datetime->recurringtype == 'daily' ||
+                                                        $datetime->recurringtype == 'weekly' ||
+                                                        $datetime->recurringtype == 'biweekly' ||
+                                                        $datetime->recurringtype == 'annually'
+                                                    ) {
+                                                        $recurring_details = ucwords($datetime->recurringtype) . ':';
+                                                    } elseif ($datetime->recurringtype == 'monthly') {
+                                                        if ($datetime->rectypemonth == 'lastday') {
+                                                            $recurring_details = 'Last day of every month:';
+                                                        } elseif ($datetime->rectypemonth == 'date') {
+                                                            $recurring_details = date('jS', strtotime($datetime->starttime)) . ' of every month:';
+                                                        } else {
+                                                            $recurring_details = ucwords($datetime->rectypemonth) . date(' l', strtotime($datetime->starttime)). ' of every month:';
+                                                        }
+                                                    }
+
+                                                    // Define date range if the recurs until is set
+                                                    if (
+                                                        isset($datetime->recurs_until) &&
+                                                        $datetime->recurs_until > $datetime->starttime
+                                                    ) {
+                                                        $date_details .= ' to ' . date(
+                                                            $date_format,
+                                                            strtotime($datetime->recurs_until)
+                                                        );
+                                                    }
+
+                                                    // Defines time details depending on time mode
+                                                    if ($datetime->isAllDay()) {
+                                                        $time_details = 'All day';
+                                                    } elseif ($datetime->timemode === Occurrence::TIME_MODE_TBD) {
+                                                        $time_details = 'Time <abbr title="To Be Determined">TBD</abbr>';
+                                                    } elseif ($datetime->timemode === Occurrence::TIME_MODE_KICKOFF) {
+                                                        $time_details = 'Starting at ' . $time_details;
+                                                    } elseif ($datetime->timemode === Occurrence::TIME_MODE_DEADLINE) {
+                                                        $time_details = 'Ending at ' . date(
+                                                            $time_format,
+                                                            strtotime($datetime->endtime)
+                                                        );
+                                                    } else {
+                                                        // If we get here then check if there is an endtime
+                                                        // and it is after start time
+                                                        if (
+                                                            isset($datetime->endtime) &&
+                                                            $datetime->endtime > $datetime->starttime
+                                                        ) {
+                                                            $time_details .= ' to '. date(
+                                                                ' g:ia',
+                                                                strtotime($datetime->endtime)
+                                                            );
+                                                        }
+                                                    }
                                                 ?>
                                                     <div>
-                                                        <?php
-                                                        {
-                                                            if ($datetime->recurringtype == 'none') {
-                                                                echo date(
-                                                                    $date_format . ' @ ' . $time_format,
-                                                                    strtotime($datetime->starttime)
-                                                                );
-                                                            } elseif ($datetime->recurringtype == 'daily' ||
-                                                                $datetime->recurringtype == 'weekly' ||
-                                                                $datetime->recurringtype == 'biweekly' ||
-                                                                $datetime->recurringtype == 'annually'
-                                                            ) {
-                                                                echo ucwords($datetime->recurringtype) .
-                                                                    ' @ ' .
-                                                                    date(
-                                                                        $time_format,
-                                                                        strtotime($datetime->starttime)
-                                                                    ) .
-                                                                    ':<br>' .
-                                                                    $formatted_start_date .
-                                                                    ' - ' .
-                                                                    date(
-                                                                        $date_format,
-                                                                        strtotime($datetime->recurs_until)
-                                                                    );
-                                                            } elseif ($datetime->recurringtype == 'monthly') {
-                                                                if ($datetime->rectypemonth == 'lastday') {
-                                                                    echo 'Last day of every month @ ' .
-                                                                        $formatted_start_time .
-                                                                        ':<br>' .
-                                                                        $formatted_start_date .
-                                                                        ' - ' .
-                                                                        date(
-                                                                            $date_format,
-                                                                            strtotime($datetime->recurs_until)
-                                                                        );
-                                                                } elseif ($datetime->rectypemonth == 'date') {
-                                                                    echo ordinal(
-                                                                            date('d', strtotime($datetime->starttime))
-                                                                        ) .
-                                                                        ' of every month @ ' .
-                                                                        $formatted_start_time .
-                                                                        ':<br>' .
-                                                                        $formatted_start_date .
-                                                                        ' - ' .
-                                                                        date(
-                                                                            $date_format,
-                                                                            strtotime($datetime->recurs_until)
-                                                                        );
-                                                                } else {
-                                                                    echo ucwords($datetime->rectypemonth) .
-                                                                        date(' l', strtotime($datetime->starttime)) .
-                                                                        ' of every month' .
-                                                                        ':<br>' .
-                                                                        $formatted_start_date .
-                                                                        ' - ' .
-                                                                        date(
-                                                                            $date_format,
-                                                                            strtotime($datetime->recurs_until)
-                                                                        );
-                                                                }
-                                                            }
-                                                        }
-                                                        ?>
+                                                        <?php if (!empty($recurring_details)): ?>
+                                                            <span class="dcf-d-block"><?php echo $recurring_details; ?></span>
+                                                        <?php endif; ?>
+                                                        <span class="dcf-d-block"><?php echo $date_details; ?></span>
+                                                        <span class="dcf-d-block"><?php echo $time_details; ?></span>
                                                     </div>
                                                     <?php
                                                         $location = $datetime->getLocation();
