@@ -39,18 +39,19 @@ BEGIN
     WHERE id = current_event_datetime;
 
     -- Create a new recurring date for as many days as are set in the ongoing event
-    FOR i in 0 .. @date_diff
-    DO
+    SET @i = 0;
+    WHILE @i <= @date_diff DO
       INSERT INTO recurringdate
-      SET
-        recurringdate = DATE(@starttime + INTERVAL i DAY),
-        event_id = @event_id,
-        recurrence_id = i,
-        ongoing = 0,
-        unlinked = 0,
-        event_datetime_id = current_event_datetime,
-        canceled = 0;
-    END FOR;
+        SET
+          recurringdate = DATE(@starttime + INTERVAL @i DAY),
+          event_id = @event_id,
+          recurrence_id = @i,
+          ongoing = 0,
+          unlinked = 0,
+          event_datetime_id = current_event_datetime,
+          canceled = 0;
+      SET @i = @i + 1;
+    END WHILE;
 
     -- Update the current cursor row with new recurring date data
     UPDATE eventdatetime
@@ -61,7 +62,7 @@ BEGIN
     WHERE id = current_event_datetime;
 
   -- Close the cursor and exit the loop/procedure
-  END LOOP;
+  END LOOP read_loop;
   CLOSE event_cursor;
 END; //
 DELIMITER ;
