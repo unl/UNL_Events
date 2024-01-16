@@ -1,21 +1,54 @@
 <?php
+    use UNL\UCBCN\Event\Occurrence;
 
-use UNL\UCBCN\Event\Occurrence;
+    $classes = array('date-wrapper');
+    if ($context->isAllDay()) {
+        $classes[] = 'all-day';
+    }
 
-$classes = array('date-wrapper');
-if ($context->isAllDay()) {
-    $classes[] = 'all-day';
-}
+    $starttime = $context->getStartTime();
+    $endtime = $context->getEndTime();
+    if (empty($timezoneDisplay) || empty($timezoneDisplay->getTimezone())) {
+        // set with default calendar timezone
+        $timezoneDisplay = new \UNL\UCBCN\TimezoneDisplay($context->calendar->defaulttimezone);
+    }
 
-//TODO: Update this to include better info for time modes
-
-$starttime = $context->getStartTime();
-$endtime = $context->getEndTime();
-if (empty($timezoneDisplay) || empty($timezoneDisplay->getTimezone())) {
-  // set with default calendar timezone
-  $timezoneDisplay = new \UNL\UCBCN\TimezoneDisplay($context->calendar->defaulttimezone);
-}
+    // Define recurring details
+    $recurring_details = "";
+    if ($context->eventdatetime->recurringtype == 'daily' ||
+        $context->eventdatetime->recurringtype == 'weekly' ||
+        $context->eventdatetime->recurringtype == 'biweekly' ||
+        $context->eventdatetime->recurringtype == 'annually'
+    ) {
+        $recurring_details = ucwords($context->eventdatetime->recurringtype) . ':';
+    } elseif ($context->eventdatetime->recurringtype == 'monthly') {
+        if ($context->eventdatetime->rectypemonth == 'lastday') {
+            $recurring_details = 'Last day of every month:';
+        } elseif ($context->eventdatetime->rectypemonth == 'date') {
+            $recurring_details = date('jS', strtotime($context->eventdatetime->starttime)) . ' of every month:';
+        } else {
+            $recurring_details = ucwords($context->eventdatetime->rectypemonth) . date(' l', strtotime($context->eventdatetime->starttime)). ' of every month:';
+        }
+    }
 ?>
+<?php if ($context->eventdatetime->recurringtype !== "none"): ?>
+<span class="date-wrapper">
+    <svg class="dcf-mr-1 dcf-h-4 dcf-w-4 dcf-fill-current" aria-hidden="true" focusable="false" height="24" width="24" viewBox="0 0 24 24">
+        <path d="M23.5,2H20V0.5C20,0.224,19.776,0,19.5,0h-3C16.224,0,16,0.224,16,0.5V2H8V0.5C8,0.224,7.776,0,7.5,0h-3 C4.224,0,4,0.224,4,0.5V2H0.5C0.224,2,0,2.224,0,2.5v21C0,23.776,0.224,24,0.5,24h23c0.276,0,0.5-0.224,0.5-0.5v-21 C24,2.224,23.776,2,23.5,2z M17,1h2v3h-2V1z M5,1h2v3H5V1z M4,3v1.5C4,4.776,4.224,5,4.5,5h3C7.776,5,8,4.776,8,4.5V3h8v1.5 C16,4.776,16.224,5,16.5,5h3C19.776,5,20,4.776,20,4.5V3h3v4H1V3H4z M1,23V8h22v15H1z"></path>
+        <path d="M12.5,10c-2.808,0-5.127,2.116-5.456,4.837l-1.19-1.19c-0.195-0.195-0.512-0.195-0.707,0s-0.195,0.512,0,0.707l2,2 c0.196,0.197,0.485,0.185,0.667,0.038l2.5-2c0.215-0.173,0.25-0.487,0.078-0.703c-0.173-0.214-0.487-0.251-0.703-0.078 L8.06,14.912C8.351,12.71,10.22,11,12.5,11c2.481,0,4.5,2.019,4.5,4.5c0,2.482-2.019,4.5-4.5,4.5 c-1.589,0-3.078-0.853-3.883-2.225c-0.14-0.238-0.446-0.319-0.685-0.178c-0.238,0.14-0.317,0.447-0.178,0.684 C8.739,19.958,10.558,21,12.5,21c3.033,0,5.5-2.467,5.5-5.5S15.533,10,12.5,10z"></path>
+        <g>
+            <path fill="none" d="M0 0H24V24H0z"></path>
+        </g>
+    </svg>
+    <span class="dcf-sr-only">Recurring Date Info:</span>
+    <div>
+        <?php echo $recurring_details; ?>
+        <?php echo $timezoneDisplay->format($context->eventdatetime->starttime, $context->eventdatetime->timezone, 'M j, Y'); ?>
+        &ndash;
+        <?php echo $timezoneDisplay->format($context->eventdatetime->recurs_until, $context->eventdatetime->timezone, 'M j, Y'); ?>
+    </div>
+</span>
+<?php endif; ?>
 <span class="date-wrapper">
     <svg class="dcf-mr-1 dcf-h-4 dcf-w-4 dcf-fill-current" aria-hidden="true" focusable="false" height="24" width="24" viewBox="0 0 24 24">
         <path d="M23.5 2H20V.5c0-.3-.2-.5-.5-.5h-3c-.3 0-.5.2-.5.5V2H8V.5c0-.3-.2-.5-.5-.5h-3c-.3 0-.5.2-.5.5V2H.5c-.3 0-.5.2-.5.5v21c0 .3.2.5.5.5h23c.3 0 .5-.2.5-.5v-21c0-.3-.2-.5-.5-.5zM17 1h2v3h-2V1zM5 1h2v3H5V1zM4 3v1.5c0 .3.2.5.5.5h3c.3 0 .5-.2.5-.5V3h8v1.5c0 .3.2.5.5.5h3c.3 0 .5-.2.5-.5V3h3v4H1V3h3zM1 23V8h22v15H1z"></path>
