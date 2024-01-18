@@ -7,7 +7,7 @@
 <?php if (isset($event_target_audience) && count($event_target_audience) > 0): ?>
 <span class="target-audience">
     <svg
-        class="dcf-mr-1 dcf-h-4 dcf-w-4 dcf-fill-current"
+        class="dcf-h-4 dcf-w-4 dcf-fill-current"
         aria-hidden="true"
         focusable="false"
         height="24"

@@ -8,7 +8,7 @@ $room = !empty($context->eventdatetime->room) ? $context->eventdatetime->room : 
     <?php if (isset($l->mapurl) || !empty($l->name)): ?>
         <span class="location">
             <svg
-                class="dcf-mr-1 dcf-h-4 dcf-w-4 dcf-fill-current"
+                class="dcf-h-4 dcf-w-4 dcf-fill-current"
                 aria-hidden="true"
                 focusable="false"
                 height="24"
@@ -43,7 +43,7 @@ $room = !empty($context->eventdatetime->room) ? $context->eventdatetime->room : 
     <div class="location">
         <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="dcf-mr-1 dcf-h-4 dcf-w-4 dcf-fill-current"
+            class="dcf-h-4 dcf-w-4 dcf-fill-current"
             aria-hidden="true"
             focusable="false"
             height="24"

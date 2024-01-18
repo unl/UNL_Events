@@ -37,7 +37,7 @@
 <?php if ($context->eventdatetime->recurringtype !== "none"): ?>
     <span class="date-wrapper">
         <svg
-            class="dcf-mr-1 dcf-h-4 dcf-w-4 dcf-fill-current"
+            class="dcf-h-4 dcf-w-4 dcf-fill-current"
             aria-hidden="true"
             focusable="false"
             height="24"
@@ -90,7 +90,7 @@
 <?php endif; ?>
 <span class="date-wrapper">
     <svg
-        class="dcf-mr-1 dcf-h-4 dcf-w-4 dcf-fill-current"
+        class="dcf-h-4 dcf-w-4 dcf-fill-current"
         aria-hidden="true"
         focusable="false"
         height="24"
@@ -134,7 +134,7 @@
 </span>
 <span class="time-wrapper">
     <svg
-        class="dcf-mr-1 dcf-h-4 dcf-w-4 dcf-fill-current"
+        class="dcf-h-4 dcf-w-4 dcf-fill-current"
         aria-hidden="true"
         focusable="false"
         height="24"
