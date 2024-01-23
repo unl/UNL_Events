@@ -274,7 +274,6 @@ class EventInstance implements RoutableInterface, MetaTagInterface
     // Sets the meta tags for the page
     public function getMetaTags()
     {
-        //TODO: Update this to take into account the time modes
         $datetimeString = date('n/d/y @ g:ia', strtotime($this->eventdatetime->starttime));
         if ($this->isAllDay() || $this->eventdatetime->timemode === Occurrence::TIME_MODE_TBD) {
             $datetimeString = date('n/d/y', strtotime($this->eventdatetime->starttime));
@@ -382,7 +381,6 @@ class EventInstance implements RoutableInterface, MetaTagInterface
         $data['Status']        = $this->event->icalStatus($this);
         $data['EventTitle']    = $this->event->displayTitle($this);
         $data['EventSubtitle'] = $this->event->subtitle;
-        //TODO: Add time mode output
         $data['DateTime'] = array(
             'DateTimeID' => $this->eventdatetime->id,
             'Start' => $timezoneDateTime->format($this->getStartTime(),'c'),
