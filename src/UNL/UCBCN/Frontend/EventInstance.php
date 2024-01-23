@@ -277,9 +277,9 @@ class EventInstance implements RoutableInterface, MetaTagInterface
         $datetimeString = date('n/d/y @ g:ia', strtotime($this->eventdatetime->starttime));
         if ($this->isAllDay() || $this->eventdatetime->timemode === Occurrence::TIME_MODE_TBD) {
             $datetimeString = date('n/d/y', strtotime($this->eventdatetime->starttime));
-        } elseif ($this->eventdatetime->timemode === Occurrence::TIME_MODE_KICKOFF) {
+        } elseif ($this->eventdatetime->timemode === Occurrence::TIME_MODE_START_TIME_ONLY) {
             $datetimeString = date('n/d/y', strtotime($this->eventdatetime->starttime)) . ' starts at ' . date('g:ia', strtotime($this->eventdatetime->starttime));
-        } elseif ($this->eventdatetime->timemode === Occurrence::TIME_MODE_DEADLINE) {
+        } elseif ($this->eventdatetime->timemode === Occurrence::TIME_MODE_END_TIME_ONLY) {
             $datetimeString = date('n/d/y', strtotime($this->eventdatetime->starttime)) . ' ends at ' . date('g:ia', strtotime($this->eventdatetime->starttime));
         }
 

@@ -9,8 +9,8 @@
     }
 
     $time_mode_regular = \UNL\UCBCN\Calendar\Event\Occurrence::TIME_MODE_REGULAR;
-    $time_mode_kickoff = \UNL\UCBCN\Calendar\Event\Occurrence::TIME_MODE_KICKOFF;
-    $time_mode_deadline = \UNL\UCBCN\Calendar\Event\Occurrence::TIME_MODE_DEADLINE;
+    $time_mode_start_time_only = \UNL\UCBCN\Calendar\Event\Occurrence::TIME_MODE_START_TIME_ONLY ;
+    $time_mode_end_time_only = \UNL\UCBCN\Calendar\Event\Occurrence::TIME_MODE_END_TIME_ONLY;
     $time_mode_all_day = \UNL\UCBCN\Calendar\Event\Occurrence::TIME_MODE_ALLDAY;
     $time_mode_tbd = \UNL\UCBCN\Calendar\Event\Occurrence::TIME_MODE_TBD;
 
@@ -107,12 +107,12 @@
                     <label for="<?php echo $time_mode_regular; ?>">Start & End</label>
                 </div>
                 <div class="dcf-input-radio">
-                    <input id="<?php echo $time_mode_kickoff; ?>" name="time_mode" type="radio" value="<?php echo $time_mode_kickoff; ?>" <?php if ($time_mode === $time_mode_kickoff) { echo 'checked'; }?>>
-                    <label for="<?php echo $time_mode_kickoff; ?>">Start Time Only <br><span class="dcf-txt-xs">(e.g. Sporting Events, Performances)</span></label>
+                    <input id="<?php echo $time_mode_start_time_only; ?>" name="time_mode" type="radio" value="<?php echo $time_mode_start_time_only; ?>" <?php if ($time_mode === $time_mode_start_time_only) { echo 'checked'; }?>>
+                    <label for="<?php echo $time_mode_start_time_only; ?>">Start Time Only <br><span class="dcf-txt-xs">(e.g. Sporting Events, Performances)</span></label>
                 </div>
                 <div class="dcf-input-radio">
-                    <input id="<?php echo $time_mode_deadline; ?>" name="time_mode" type="radio" value="<?php echo $time_mode_deadline; ?>" <?php if ($time_mode === $time_mode_deadline) { echo 'checked'; }?>>
-                    <label for="<?php echo $time_mode_deadline; ?>">End Time Only <br><span class="dcf-txt-xs">(e.g. Deadlines, Applicant Submissions)</span></label>
+                    <input id="<?php echo $time_mode_end_time_only; ?>" name="time_mode" type="radio" value="<?php echo $time_mode_end_time_only; ?>" <?php if ($time_mode === $time_mode_end_time_only) { echo 'checked'; }?>>
+                    <label for="<?php echo $time_mode_end_time_only; ?>">End Time Only <br><span class="dcf-txt-xs">(e.g. Deadlines, Applicant Submissions)</span></label>
                 </div>
                 <div class="dcf-input-radio">
                     <input id="<?php echo $time_mode_all_day; ?>" name="time_mode" type="radio" value="<?php echo $time_mode_all_day; ?>" <?php if ($time_mode === $time_mode_all_day) { echo 'checked'; }?>>
@@ -130,8 +130,8 @@
             <?php
                 if (
                     $time_mode !== $time_mode_regular
-                    && $time_mode !== $time_mode_kickoff
-                    && $time_mode !== $time_mode_deadline
+                    && $time_mode !== $time_mode_start_time_only
+                    && $time_mode !== $time_mode_end_time_only
                 ) {
                     echo 'class="dcf-d-none"';
                 }
@@ -141,7 +141,7 @@
                 <fieldset
                     id="start-time-container"
                     <?php
-                        if ($time_mode === $time_mode_deadline) {
+                        if ($time_mode === $time_mode_end_time_only) {
                             echo 'class="dcf-d-none"';
                         }
                     ?>
@@ -231,7 +231,7 @@
                 <fieldset
                     id="end-time-container"
                     <?php
-                        if ($time_mode === $time_mode_kickoff) {
+                        if ($time_mode === $time_mode_start_time_only) {
                             echo 'class="dcf-d-none"';
                         }
                     ?>
@@ -840,8 +840,8 @@ $page->addScriptDeclaration("const recurringType = '" . $js_recurring_type . "';
 $page->addScriptDeclaration("const recurringMonth = '" . $js_recurring_month . "';");
 
 $page->addScriptDeclaration("const time_mode_regular = '" . $time_mode_regular . "';");
-$page->addScriptDeclaration("const time_mode_kickoff = '" . $time_mode_kickoff . "';");
-$page->addScriptDeclaration("const time_mode_deadline = '" . $time_mode_deadline . "';");
+$page->addScriptDeclaration("const time_mode_start_time_only = '" . $time_mode_start_time_only . "';");
+$page->addScriptDeclaration("const time_mode_end_time_only = '" . $time_mode_end_time_only . "';");
 $page->addScriptDeclaration("const time_mode_all_day = '" . $time_mode_all_day . "';");
 $page->addScriptDeclaration("const time_mode_tbd = '" . $time_mode_tbd . "';");
 

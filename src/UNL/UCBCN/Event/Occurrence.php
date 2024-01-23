@@ -41,7 +41,7 @@ class Occurrence extends Record
     public $timezone;                        // string(30)
     public $starttime;                       // datetime(19)  multiple_key binary
     public $endtime;                         // datetime(19)  multiple_key binary
-    public $timemode;                        // enum('REGULAR', 'KICKOFF', 'DEADLINE', 'ALLDAY', 'TBD')
+    public $timemode;                        // enum('REGULAR', 'STARTTIMEONLY', 'ENDTIMEONLY', 'ALLDAY', 'TBD')
     public $recurringtype;                   // string(255)
     public $recurs_until;                    // datetime
     public $rectypemonth;                    // string(255)
@@ -58,11 +58,11 @@ class Occurrence extends Record
     
     const RECURRING_TYPE_NONE = 'none';
 
-    const TIME_MODE_REGULAR  = 'REGULAR';
-    const TIME_MODE_KICKOFF  = 'KICKOFF';
-    const TIME_MODE_DEADLINE = 'DEADLINE';
-    const TIME_MODE_ALLDAY   = 'ALLDAY';
-    const TIME_MODE_TBD      = 'TBD';
+    const TIME_MODE_REGULAR         = 'REGULAR';
+    const TIME_MODE_START_TIME_ONLY = 'STARTTIMEONLY';
+    const TIME_MODE_END_TIME_ONLY   = 'ENDTIMEONLY';
+    const TIME_MODE_ALLDAY          = 'ALLDAY';
+    const TIME_MODE_TBD             = 'TBD';
 
     public static function getTable()
     {

@@ -187,12 +187,12 @@ class AddDatetime extends PostHandler
         // Set the start and end times to match the ideal input
         $this->event_datetime->timemode = $post_data['time_mode'];
         switch ($post_data['time_mode']) {
-            case Occurrence::TIME_MODE_KICKOFF:
+            case Occurrence::TIME_MODE_START_TIME_ONLY:
                 $post_data['end_time_hour'] = $post_data['start_time_hour'];
                 $post_data['end_time_minute'] = $post_data['start_time_minute'];
                 $post_data['end_time_am_pm'] = $post_data['start_time_am_pm'];
                 break;
-            case Occurrence::TIME_MODE_DEADLINE:
+            case Occurrence::TIME_MODE_END_TIME_ONLY:
                 $post_data['start_time_hour'] = $post_data['end_time_hour'];
                 $post_data['start_time_minute'] = $post_data['end_time_minute'];
                 $post_data['start_time_am_pm'] = $post_data['end_time_am_pm'];
@@ -261,8 +261,8 @@ class AddDatetime extends PostHandler
         // Validate time mode
         $time_modes_array = array(
             Occurrence::TIME_MODE_REGULAR ,
-            Occurrence::TIME_MODE_KICKOFF ,
-            Occurrence::TIME_MODE_DEADLINE,
+            Occurrence::TIME_MODE_START_TIME_ONLY ,
+            Occurrence::TIME_MODE_END_TIME_ONLY,
             Occurrence::TIME_MODE_ALLDAY  ,
             Occurrence::TIME_MODE_TBD     ,
         );

@@ -14,9 +14,7 @@ function isUrlValid(string) {
 const time_mode_radios = Array.from(document.querySelectorAll('input[type="radio"][name="time_mode"]'));
 const time_container = document.getElementById('time-container');
 const start_time_container = document.getElementById('start-time-container');
-const start_time_label = document.getElementById('start-time-label');
 const end_time_container = document.getElementById('end-time-container');
-const end_time_label = document.getElementById('end-time-label');
 
 // This will update which of the time field sets are shown when a radio button is clicked
 time_mode_radios.forEach((radio) => {
@@ -25,20 +23,16 @@ time_mode_radios.forEach((radio) => {
         if (checked_radio.id === time_mode_regular) {
             time_container.classList.remove('dcf-d-none');
             start_time_container.classList.remove('dcf-d-none');
-            start_time_label.innerText = 'Start Time';
             end_time_container.classList.remove('dcf-d-none');
-            end_time_label.innerText = 'End Time';
 
-        } else if (checked_radio.id === time_mode_deadline) {
+        } else if (checked_radio.id === time_mode_end_time_only) {
             time_container.classList.remove('dcf-d-none');
             start_time_container.classList.add('dcf-d-none');
             end_time_container.classList.remove('dcf-d-none');
-            end_time_label.innerText = 'Time Of The Deadline';
 
-        } else if (checked_radio.id === time_mode_kickoff) {
+        } else if (checked_radio.id === time_mode_start_time_only) {
             time_container.classList.remove('dcf-d-none');
             start_time_container.classList.remove('dcf-d-none');
-            start_time_label.innerText = 'Kick Off Time';
             end_time_container.classList.add('dcf-d-none');
 
         } else {

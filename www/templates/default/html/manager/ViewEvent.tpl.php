@@ -94,9 +94,9 @@ echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
                                 $time_details = 'All day';
                             } elseif ($datetime->timemode === Occurrence::TIME_MODE_TBD) {
                                 $time_details = 'Time <abbr title="To Be Determined">TBD</abbr>';
-                            } elseif ($datetime->timemode === Occurrence::TIME_MODE_KICKOFF) {
+                            } elseif ($datetime->timemode === Occurrence::TIME_MODE_START_TIME_ONLY ) {
                                 $time_details = 'Starting at ' . $time_details;
-                            } elseif ($datetime->timemode === Occurrence::TIME_MODE_DEADLINE) {
+                            } elseif ($datetime->timemode === Occurrence::TIME_MODE_END_TIME_ONLY) {
                                 $time_details = 'Ending at ' . date(
                                     $time_format,
                                     strtotime($datetime->endtime)

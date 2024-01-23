@@ -45,9 +45,9 @@ use UNL\UCBCN\Event\Occurrence;
                 'All day</div>';
         } else if ($eventinstance->eventdatetime->timemode === Occurrence::TIME_MODE_TBD) {
             $time = '<div class="unl-event-time dcf-d-flex dcf-ai-center dcf-uppercase">' . $time_icon . '<abbr title="To Be Determined">TBD</abbr></div>';
-        } else if ($eventinstance->eventdatetime->timemode === Occurrence::TIME_MODE_KICKOFF) {
+        } else if ($eventinstance->eventdatetime->timemode === Occurrence::TIME_MODE_START_TIME_ONLY) {
             $time = '<time class="unl-event-time dcf-d-flex dcf-ai-center dcf-uppercase" datetime="' . $timezoneDisplay->format($starttime, $eventinstance->eventdatetime->timezone, 'H:i') . '">' . $time_icon . 'Starts at ' . $timezoneDisplay->format($starttime, $eventinstance->eventdatetime->timezone, 'g:i a') . '</time>';
-        } else if ($eventinstance->eventdatetime->timemode === Occurrence::TIME_MODE_DEADLINE) {
+        } else if ($eventinstance->eventdatetime->timemode === Occurrence::TIME_MODE_END_TIME_ONLY) {
             $time = '<time class="unl-event-time dcf-d-flex dcf-ai-center dcf-uppercase" datetime="' . $timezoneDisplay->format($endtime, $eventinstance->eventdatetime->timezone, 'H:i') . '">' . $time_icon . 'Ends at ' . $timezoneDisplay->format($endtime, $eventinstance->eventdatetime->timezone, 'g:i a') . '</time>';
         } else {
             $time = '<div class="unl-event-time dcf-d-flex dcf-ai-center dcf-uppercase">' .

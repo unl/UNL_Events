@@ -156,7 +156,7 @@
             All Day
         <?php elseif ($context->eventdatetime->timemode === Occurrence::TIME_MODE_TBD):?>
             <abbr title="To Be Determined">TBD</abbr>
-        <?php elseif ($context->eventdatetime->timemode === Occurrence::TIME_MODE_KICKOFF):?>
+        <?php elseif ($context->eventdatetime->timemode === Occurrence::TIME_MODE_START_TIME_ONLY):?>
             Starts at
             <?php echo $timezoneDisplay->format($starttime, $timezone, 'g:i a')?>
             <?php
@@ -164,7 +164,7 @@
                     echo $timezoneDisplay->format($starttime, $timezone, ' T');
                 }
             ?>
-        <?php elseif ($context->eventdatetime->timemode === Occurrence::TIME_MODE_DEADLINE):?>
+        <?php elseif ($context->eventdatetime->timemode === Occurrence::TIME_MODE_END_TIME_ONLY):?>
             Ends at
             <?php echo $timezoneDisplay->format($endtime, $timezone, 'g:i a')?>
             <?php
