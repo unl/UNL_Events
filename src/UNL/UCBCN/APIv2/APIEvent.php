@@ -459,6 +459,9 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
         $occurrence_json['is-all-day'] = APIEvent::isAllDay($occurrence);
         $occurrence_json['event-timezone'] = APICalendar::translateTimezone($occurrence->timezone);
         $occurrence_json['is-recurring'] = $occurrence->isRecurring();
+        $occurrence_json['recurs-until'] = $occurrence->recurs_until;
+        $occurrence_json['recurs-type'] = $occurrence->recurringtype;
+        $occurrence_json['recurs-month-type'] = $occurrence->rectypemonth;
         $occurrence_json['canceled'] = $occurrence->canceled === '1';
         $occurrence_json['event-room'] = $occurrence->room;
         $occurrence_json['event-directions'] = $occurrence->directions;
