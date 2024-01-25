@@ -469,6 +469,25 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
         $occurrence_json['event-location-additional-public-info'] = $occurrence->location_additionalpublicinfo;
         $occurrence_json['event-virtual-location-additional-public-info'] = $occurrence->webcast_additionalpublicinfo;
 
+        if (isset(APIEvent::$calendar) && !empty(APIEvent::$calendar)) {
+            $event_instance = new \UNL\UCBCN\Frontend\EventInstance(array(
+                "id" => $occurrence->id,
+                "calendar" => APIEvent::$calendar,
+            ));
+            $occurrence_json['link'] = $event_instance->getURL();
+        } else {
+            $original_calendar = $occurrence->getEvent()->getOriginCalendar();
+            if (isset($original_calendar)) {
+                $event_instance = new \UNL\UCBCN\Frontend\EventInstance(array(
+                    "id" => $occurrence->id,
+                    "calendar" => $original_calendar,
+                ));
+                $occurrence_json['link'] = $event_instance->getURL();
+            } else {
+                $occurrence_json['link'] = null;
+            }
+        }
+
         // Gets the location data
         if (isset($occurrence->location_id) && !empty($occurrence->location_id)) {
             try {
@@ -514,6 +533,32 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
         $recurring_date_json['recurrence-id'] = $recurring_date->recurrence_id;
         $recurring_date_json['ongoing'] = $recurring_date->ongoing === '1';
         $recurring_date_json['canceled'] = $recurring_date->canceled === '1';
+
+        if (isset(APIEvent::$calendar) && !empty(APIEvent::$calendar)) {
+            $event_instance = new \UNL\UCBCN\Frontend\EventInstance(array(
+                "id" => $recurring_date->event_datetime_id,
+                "recurringdate_id" => $recurring_date->id,
+                "calendar" => APIEvent::$calendar,
+            ));
+            $recurring_date_json['link'] = $event_instance->getURL();
+        } else {
+            $original_occurrence = \UNL\UCBCN\Event\Occurrence::getByID($recurring_date->event_datetime_id);
+            if ($original_occurrence) {
+                $original_calendar = $original_occurrence->getEvent()->getOriginCalendar();
+                if (isset($original_calendar)) {
+                    $event_instance = new \UNL\UCBCN\Frontend\EventInstance(array(
+                        "id" => $original_occurrence->id,
+                        "recurringdate_id" => $recurring_date->id,
+                        "calendar" => $original_calendar,
+                    ));
+                    $recurring_date_json['link'] = $event_instance->getURL();
+                } else {
+                    $recurring_date_json['link'] = null;
+                }
+            } else {
+                $recurring_date_json['link'] = null;
+            }
+        }
 
         return $recurring_date_json;
     }

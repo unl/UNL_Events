@@ -88,6 +88,10 @@ class Calendar extends Record
         );
     }
 
+    public function getURL() {
+        return $this->getFrontendURL();
+    }
+
     public function getFrontendURL() {
         return FrontendController::$url . $this->shortname . "/";
     }
