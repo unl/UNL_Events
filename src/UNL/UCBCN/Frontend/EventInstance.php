@@ -376,6 +376,9 @@ class EventInstance implements RoutableInterface, MetaTagInterface
             'EventTimezone' => $this->eventdatetime->timezone,
             'CalendarTimezone' => $this->calendar->defaulttimezone,
             'IsRecurring'=> $this->eventdatetime->isRecurring(),
+            'RecursUntil'=> $this->eventdatetime->recurs_until,
+            'RecursType'=> $this->eventdatetime->recurringtype,
+            'RecursMonthType'=> $this->eventdatetime->rectypemonth,
             'RecurrenceID'=> $this->eventdatetime->isRecurring() ? $this->recurringdate->id : null,
         );
         $data['EventStatus']           = $this->event->isCanceled($this) ? 'Canceled' : 'Happening As Scheduled';

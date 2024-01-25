@@ -21,6 +21,11 @@
                 if ($context->eventdatetime->isRecurring()):
             ?>
             <RecurringID><?php echo $context->recurringdate->id; ?></RecurringID>
+            <RecursUntil><?php echo $timezoneDateTime->format($context->eventdatetime->recurs_until,'c'); ?></RecursUntil>
+            <RecurringType><?php echo $context->eventdatetime->recurringtype; ?></RecurringType>
+                <?php if($context->eventdatetime->recurringtype === "month"): ?>
+                    <RecurringMonthType><?php echo $context->eventdatetime->rectypemonth; ?></RecurringMonthType>
+                <?php endif; ?>
             <?php endif; ?>
         </DateTime>
         <Locations>
