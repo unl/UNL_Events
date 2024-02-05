@@ -38,7 +38,7 @@ use UNL\UCBCN\Event\Occurrence;
         $month = $timezoneDisplay->format($starttime, $eventinstance->eventdatetime->timezone,'M');
         $day = $timezoneDisplay->format($starttime, $eventinstance->eventdatetime->timezone,'j');
         $time = '';
-        $time_icon = '<svg class="dcf-h-4 dcf-w-4 dcf-flex-shrink-0 dcf-fill-current" aria-hidden="true" focusable="false" height="24" width="24" viewBox="0 0 24 24"><path d="M12 23C5.9 23 1 18.1 1 12S5.9 1 12 1s11 4.9 11 11-4.9 11-11 11zm0-20c-5 0-9 4-9 9s4 9 9 9 9-4 9-9-4-9-9-9z"></path><path d="M16.8 17.8c-.2 0-.5-.1-.7-.3l-5.2-4.8c-.2-.2-.3-.5-.3-.7V7.2c0-.6.4-1 1-1s1 .4 1 1v4.3l4.9 4.5c.4.4.4 1 .1 1.4-.3.3-.5.4-.8.4z"></path><path fill="none" d="M0 0h24v24H0z"></path></svg>';
+        $time_icon = '<svg class="dcf-mr-1 dcf-h-4 dcf-w-4 dcf-flex-shrink-0 dcf-fill-current" aria-hidden="true" focusable="false" height="24" width="24" viewBox="0 0 24 24"><path d="M12 23C5.9 23 1 18.1 1 12S5.9 1 12 1s11 4.9 11 11-4.9 11-11 11zm0-20c-5 0-9 4-9 9s4 9 9 9 9-4 9-9-4-9-9-9z"></path><path d="M16.8 17.8c-.2 0-.5-.1-.7-.3l-5.2-4.8c-.2-.2-.3-.5-.3-.7V7.2c0-.6.4-1 1-1s1 .4 1 1v4.3l4.9 4.5c.4.4.4 1 .1 1.4-.3.3-.5.4-.8.4z"></path><path fill="none" d="M0 0h24v24H0z"></path></svg>';
         if ($eventinstance->isAllDay()) {
             $time = '<div class="unl-event-time dcf-d-flex dcf-ai-center dcf-uppercase">' .
                 $time_icon .
