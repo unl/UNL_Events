@@ -456,7 +456,8 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
         $occurrence_json['id'] = $occurrence->id;
         $occurrence_json['start-time'] = $timezoneDateTime->format($occurrence->starttime,'c');
         $occurrence_json['end-time'] = $timezoneDateTime->format($occurrence->endtime,'c');
-        $occurrence_json['is-all-day'] = APIEvent::isAllDay($occurrence);
+        $occurrence_json['is-all-day'] = $occurrence->isAllDay();
+        $occurrence_json['time-mode'] = $occurrence->timemode;
         $occurrence_json['event-timezone'] = APICalendar::translateTimezone($occurrence->timezone);
         $occurrence_json['is-recurring'] = $occurrence->isRecurring();
         $occurrence_json['recurs-until'] = $occurrence->recurs_until;
@@ -561,24 +562,6 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
         }
 
         return $recurring_date_json;
-    }
-
-
-    // Returns a bool on whether the datetime is all day
-    private static function isAllDay($occurrence)
-    {
-        // It must start at midnight to be an all day event
-        if (strpos($occurrence->starttime, '00:00:00') === false) {
-            return false;
-        }
-
-        // It must end at midnight, or not have an end date.
-        if (!empty($occurrence->endtime) &&
-            strpos($occurrence->endtime, '00:00:00') === false) {
-            return false;
-        }
-
-        return true;
     }
 
     // Replaces array key

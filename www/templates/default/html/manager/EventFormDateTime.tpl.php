@@ -8,6 +8,12 @@
         $datetime = $context->getOriginalDatetime();
     }
 
+    $time_mode_regular = \UNL\UCBCN\Calendar\Event\Occurrence::TIME_MODE_REGULAR;
+    $time_mode_start_time_only = \UNL\UCBCN\Calendar\Event\Occurrence::TIME_MODE_START_TIME_ONLY ;
+    $time_mode_end_time_only = \UNL\UCBCN\Calendar\Event\Occurrence::TIME_MODE_END_TIME_ONLY;
+    $time_mode_all_day = \UNL\UCBCN\Calendar\Event\Occurrence::TIME_MODE_ALLDAY;
+    $time_mode_tbd = \UNL\UCBCN\Calendar\Event\Occurrence::TIME_MODE_TBD;
+
     // Sorry that this is messy it is better than a billion if statements
 
     // We are going to use the post data
@@ -19,20 +25,22 @@
     $timezone = $post['timezone'] ?? $datetime->timezone ?? $calendar->defaulttimezone;
 
     $datetime_start_time = (isset($datetime) && isset($datetime->starttime)) ? strtotime($datetime->starttime) : '';
-    $start_date   = $post['start_date']        ?? ( !empty($datetime_start_time) ? date($standard_date_format, $datetime_start_time) : ''   );
-    $start_hour   = $post['start_time_hour']   ?? ( !empty($datetime_start_time) ? date('h'    , $datetime_start_time) : ''   );
-    $start_minute = $post['start_time_minute'] ?? ( !empty($datetime_start_time) ? date('i'    , $datetime_start_time) : -1   );
+    $start_date   = $post['start_date']        ?? ( !empty($datetime_start_time) ? date($standard_date_format, $datetime_start_time) : '' );
+    $start_hour   = $post['start_time_hour']   ?? ( !empty($datetime_start_time) ? date('h'    , $datetime_start_time) : '9'  );
+    $start_minute = $post['start_time_minute'] ?? ( !empty($datetime_start_time) ? date('i'    , $datetime_start_time) : '00' );
     $start_am_pm  = $post['start_time_am_pm']  ?? ( !empty($datetime_start_time) ? date('a'    , $datetime_start_time) : 'am' );
 
     $datetime_end_time = (isset($datetime) && isset($datetime->endtime)) ? strtotime($datetime->endtime) : '';
-    $end_date   = $post['end_date']        ?? ( !empty($datetime_end_time) ? date($standard_date_format, $datetime_end_time) : ''   );
-    $end_hour   = $post['end_time_hour']   ?? ( !empty($datetime_end_time) ? date('h'    , $datetime_end_time) : ''   );
-    $end_minute = $post['end_time_minute'] ?? ( !empty($datetime_end_time) ? date('i'    , $datetime_end_time) : -1   );
+    $end_date   = $post['end_date']        ?? ( !empty($datetime_end_time) ? date($standard_date_format, $datetime_end_time) : '' );
+    $end_hour   = $post['end_time_hour']   ?? ( !empty($datetime_end_time) ? date('h'    , $datetime_end_time) : '9'  );
+    $end_minute = $post['end_time_minute'] ?? ( !empty($datetime_end_time) ? date('i'    , $datetime_end_time) : '30' );
     $end_am_pm  = $post['end_time_am_pm']  ?? ( !empty($datetime_end_time) ? date('a'    , $datetime_end_time) : 'am' );
 
+    $time_mode = $post['time_mode'] ?? (isset($datetime) && isset($datetime->timemode)) ? $datetime->timemode : $time_mode_regular;
+
     $datetime_recurring_check = (isset($context->recurrence_id));
-    $is_recurring             = $post['recurring'] ?? (isset($datetime) && isset($datetime->recurringtype) && strtolower($datetime->recurringtype) !== 'none');
-    $recurring_type       = $post['recurring_type']    ?? ( ($is_recurring) ? $datetime->recurringtype : ''                          );
+    $is_recurring         = $post['recurring'] ?? (isset($datetime) && isset($datetime->recurringtype) && strtolower($datetime->recurringtype) !== 'none');
+    $recurring_type       = $post['recurring_type']    ?? ( ($is_recurring) ? $datetime->recurringtype : '' );
     $recurs_until_date    = $post['recurs_until_date'] ?? ( ($is_recurring) ? date($standard_date_format, strtotime($datetime->recurs_until)) : '' );
     $recurring_month_type = ($is_recurring && $recurring_type == 'monthly') ? $datetime->rectypemonth : '';
 
@@ -57,194 +65,254 @@
 <section class="dcf-mb-8 dcf-ml-5">
     <div id="datetime_container">
 
-        <div class="dcf-form-group">
-            <label class="dcf-mt-2" for="timezone">
-                Time Zone <small class="dcf-required">Required</small>
-            </label>
-            <select id="timezone" name="timezone" aria-label="Time Zone">
-                <?php foreach (UNL\UCBCN::getTimezoneOptions() as $tzName => $tzValue) : ?>
-                    <option
-                        <?php if ($timezone == $tzValue) { echo SELECTED_INPUT; } ?>
-                        value="<?php echo $tzValue; ?>"
-                    >
-                        <?php echo $tzName; ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
+        <div class="dcf-d-grid dcf-grid-full dcf-grid-halves@md dcf-col-gap-vw">
+            <div class="dcf-form-group dcf-datepicker">
+                <label class="dcf-mt-2" for="start-date">
+                    Event Date <small class="dcf-required">Required</small>
+                </label>
+                <input
+                    id="start-date"
+                    name="start_date"
+                    type="text"
+                    value="<?php echo $start_date; ?>"
+                    autocomplete="off"
+                >
+            </div>
+
+            <div class="dcf-form-group">
+                <label class="dcf-mt-2" for="timezone">
+                    Time Zone <small class="dcf-required">Required</small>
+                </label>
+                <select id="timezone" name="timezone" aria-label="Time Zone">
+                    <?php foreach (UNL\UCBCN::getTimezoneOptions() as $tzName => $tzValue) : ?>
+                        <option
+                            <?php if ($timezone == $tzValue) { echo SELECTED_INPUT; } ?>
+                            value="<?php echo $tzValue; ?>"
+                        >
+                            <?php echo $tzName; ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
         </div>
 
-        <fieldset>
+        <fieldset id="time-mode-container">
             <legend>
-                Start Date &amp; Time
+                Event Time Type
                 <small class="dcf-required">Required</small>
             </legend>
-            <div class="dcf-d-flex dcf-flex-wrap dcf-ai-center dcf-col-gap-4">
-                <div class="dcf-form-group dcf-datepicker dcf-flex-grow-1">
-                    <input
-                        id="start-date"
-                        name="start_date"
-                        type="text"
-                        value="<?php echo $start_date; ?>"
-                        aria-label="Start Date in the format of mm/dd/yyyy"
-                        autocomplete="off"
-                    >
+            <div class="dcf-grid dcf-grid-full dcf-grid-halves@sm dcf-grid-thirds@md dcf-col-gap-vw">
+                <div class="dcf-input-radio">
+                    <input id="<?php echo $time_mode_regular; ?>" name="time_mode" type="radio" value="<?php echo $time_mode_regular; ?>" <?php if ($time_mode === $time_mode_regular) { echo 'checked'; }?>>
+                    <label for="<?php echo $time_mode_regular; ?>">Start & End</label>
                 </div>
-                <div class="dcf-form-group dcf-d-flex dcf-ai-center dcf-flex-grow-1">
-                    <span class="dcf-pr-2">@</span>
-                    <select
-                        class="dcf-flex-grow-1"
-                        id="start-time-hour"
-                        name="start_time_hour"
-                        aria-label="Start Time Hour"
-                    >
-                        <option value="">Hour</option>
-                        <?php for ($i = 1; $i <= 12; $i++) { ?>
-                            <option
-                                <?php if ($start_hour == $i) { echo SELECTED_INPUT; } ?>
-                                value="<?php echo $i; ?>"
-                            >
-                                <?php echo $i; ?>
-                            </option>
-                        <?php } ?>
-                    </select>
-                    <span class="dcf-pr-1 dcf-pl-1">:</span>
-                    <select
-                        class="dcf-flex-grow-1"
-                        id="start-time-minute"
-                        name="start_time_minute"
-                        aria-label="Start Time Minute"
-                    >
-                        <option value="">Minute</option>
-                        <?php for ($i = 0; $i < 60; $i+=5): ?>
-                            <option
-                                <?php if ($start_minute == $i) { echo SELECTED_INPUT; } ?>
-                                value="<?php echo $i; ?>"
-                            >
-                                <?php echo str_pad($i, 2, '0', STR_PAD_LEFT); ?>
-                            </option>
-                        <?php endfor; ?>
-                    </select>
-                    <fieldset
-                        class="dcf-d-flex
-                            dcf-flex-col
-                            dcf-row-gap-3
-                            dcf-ai-center
-                            dcf-col-gap-3
-                            dcf-mb-0
-                            dcf-ml-4
-                            dcf-p-0
-                            dcf-b-0
-                            dcf-txt-sm"
-                        id="start-time-am-pm"
-                    >
-                        <legend class="dcf-sr-only">AM/PM</legend>
-                        <div class="dcf-input-radio dcf-mb-0">
-                            <input
-                                id="start-time-am-pm-am"
-                                name="start_time_am_pm"
-                                type="radio"
-                                value="am"
-                                <?php if ($start_am_pm == 'am') { echo CHECKED_INPUT; } ?>
-                            >
-                            <label class="dcf-mb-0" for="start-time-am-pm-am">AM</label>
-                        </div>
-                        <div class="dcf-input-radio dcf-mb-0">
-                            <input
-                                id="start-time-am-pm-pm"
-                                name="start_time_am_pm"
-                                type="radio"
-                                value="pm"
-                                <?php if ($start_am_pm == 'pm') { echo CHECKED_INPUT; } ?>
-                            >
-                            <label class="dcf-mb-0" for="start-time-am-pm-pm">PM</label>
-                        </div>
-                    </fieldset>
+                <div class="dcf-input-radio">
+                    <input id="<?php echo $time_mode_start_time_only; ?>" name="time_mode" type="radio" value="<?php echo $time_mode_start_time_only; ?>" <?php if ($time_mode === $time_mode_start_time_only) { echo 'checked'; }?>>
+                    <label for="<?php echo $time_mode_start_time_only; ?>">Start Time Only <br><span class="dcf-txt-xs">(e.g. Sporting Events, Performances)</span></label>
                 </div>
-
-            </div>
-        </fieldset>
-
-        <fieldset>
-            <legend>End Date &amp; Time <small class="dcf-pl-1 dcf-txt-xs dcf-italic">Optional</small></legend>
-            <div class="dcf-d-flex dcf-flex-wrap dcf-ai-center dcf-col-gap-4">
-                <div class="dcf-form-group dcf-datepicker dcf-flex-grow-1">
-                    <input
-                        id="end-date"
-                        name="end_date"
-                        type="text"
-                        value="<?php echo $end_date; ?>"
-                        aria-label="End Date in the format of mm/dd/yyyy"
-                        autocomplete="off"
-                    >
+                <div class="dcf-input-radio">
+                    <input id="<?php echo $time_mode_end_time_only; ?>" name="time_mode" type="radio" value="<?php echo $time_mode_end_time_only; ?>" <?php if ($time_mode === $time_mode_end_time_only) { echo 'checked'; }?>>
+                    <label for="<?php echo $time_mode_end_time_only; ?>">End Time Only <br><span class="dcf-txt-xs">(e.g. Deadlines, Applicant Submissions)</span></label>
                 </div>
-                <div class="dcf-form-group dcf-d-flex dcf-ai-center dcf-flex-grow-1">
-                    <span class="dcf-pr-2">@</span>
-                    <select class="dcf-flex-grow-1" id="end-time-hour" name="end_time_hour" aria-label="End Time Hour">
-                        <option value="">Hour</option>
-                        <?php for ($i = 1; $i <= 12; $i++) { ?>
-                            <option
-                                <?php if ($end_hour == $i) { echo SELECTED_INPUT; } ?>
-                                value="<?php echo $i; ?>"
-                            >
-                                <?php echo $i; ?>
-                            </option>
-                        <?php } ?>
-                    </select>
-                    <span class="dcf-pr-1 dcf-pl-1">:</span>
-                    <select
-                        class="dcf-flex-grow-1"
-                        id="end-time-minute"
-                        name="end_time_minute"
-                        aria-label="End Time Minute"
-                    >
-                        <option value="">Minute</option>
-                        <?php for ($i = 0; $i < 60; $i+=5): ?>
-                            <option
-                                <?php if ($i == $end_minute) { echo SELECTED_INPUT; } ?>
-                                value="<?php echo $i; ?>"
-                            >
-                                <?php echo str_pad($i, 2, '0', STR_PAD_LEFT); ?>
-                            </option>
-                        <?php endfor; ?>
-                    </select>
-                    <fieldset
-                        class="dcf-d-flex
-                            dcf-flex-col
-                            dcf-row-gap-3
-                            dcf-ai-center
-                            dcf-col-gap-3
-                            dcf-mb-0
-                            dcf-ml-4
-                            dcf-p-0
-                            dcf-b-0
-                            dcf-txt-sm"
-                        id="end-time-am-pm"
-                    >
-                        <legend class="dcf-sr-only">AM/PM</legend>
-                        <div class="dcf-input-radio dcf-mb-0">
-                            <input
-                                id="end-time-am-pm-am"
-                                name="end_time_am_pm"
-                                type="radio"
-                                value="am"
-                                <?php if ($end_am_pm == 'am') { echo CHECKED_INPUT; } ?>
-                            >
-                            <label class="dcf-mb-0" for="end-time-am-pm-am">AM</label>
-                        </div>
-                        <div class="dcf-input-radio dcf-mb-0">
-                            <input
-                                id="end-time-am-pm-pm"
-                                name="end_time_am_pm"
-                                type="radio"
-                                value="pm"
-                                <?php if ($end_am_pm == 'pm') { echo CHECKED_INPUT; } ?>
-                            >
-                            <label class="dcf-mb-0" for="end-time-am-pm-pm">PM</label>
-                        </div>
-                    </fieldset>
+                <div class="dcf-input-radio">
+                    <input id="<?php echo $time_mode_all_day; ?>" name="time_mode" type="radio" value="<?php echo $time_mode_all_day; ?>" <?php if ($time_mode === $time_mode_all_day) { echo 'checked'; }?>>
+                    <label for="<?php echo $time_mode_all_day; ?>">All Day</label>
+                </div>
+                <div class="dcf-input-radio">
+                    <input id="<?php echo $time_mode_tbd; ?>" name="time_mode" type="radio" value="<?php echo $time_mode_tbd; ?>" <?php if ($time_mode === $time_mode_tbd) { echo 'checked'; }?>>
+                    <label for="<?php echo $time_mode_tbd; ?>"><abbr title="To Be Determined">TBD</abbr></label>
                 </div>
             </div>
         </fieldset>
+
+        <div
+            id="time-container"
+            <?php
+                if (
+                    $time_mode !== $time_mode_regular
+                    && $time_mode !== $time_mode_start_time_only
+                    && $time_mode !== $time_mode_end_time_only
+                ) {
+                    echo 'class="dcf-d-none"';
+                }
+            ?>
+        >
+            <div class="dcf-d-grid dcf-grid-full dcf-grid-halves@md dcf-col-gap-vw">
+                <fieldset
+                    id="start-time-container"
+                    <?php
+                        if ($time_mode === $time_mode_end_time_only) {
+                            echo 'class="dcf-d-none"';
+                        }
+                    ?>
+                >
+                    <legend>
+                        <span id="start-time-label">Start Time</span>
+                        <small class="dcf-required">Required</small>
+                    </legend>
+                    <div class="dcf-d-flex dcf-flex-wrap dcf-ai-center dcf-col-gap-4">
+                        <div class="dcf-d-flex dcf-ai-center dcf-flex-grow-1">
+                            <div class="dcf-form-group">
+                                <label for="start-time-hour">Hour</label>
+                                <select
+                                    class="dcf-flex-grow-1"
+                                    id="start-time-hour"
+                                    name="start_time_hour"
+                                >
+                                    <?php for ($i = 1; $i <= 12; $i++) { ?>
+                                        <option
+                                            <?php if ($start_hour == $i) { echo SELECTED_INPUT; } ?>
+                                            value="<?php echo $i; ?>"
+                                        >
+                                            <?php echo $i; ?>
+                                        </option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                            
+                            <span class="dcf-pr-1 dcf-pl-1">:</span>
+                            <div class="dcf-form-group">
+                                <label>Minute</label>
+                                <select
+                                    class="dcf-flex-grow-1"
+                                    id="start-time-minute"
+                                    name="start_time_minute"
+                                >
+                                    <?php for ($i = 0; $i < 60; $i+=5): ?>
+                                        <option
+                                            <?php if ($start_minute == $i) { echo SELECTED_INPUT; } ?>
+                                            value="<?php echo $i; ?>"
+                                        >
+                                            <?php echo str_pad($i, 2, '0', STR_PAD_LEFT); ?>
+                                        </option>
+                                    <?php endfor; ?>
+                                </select>
+                            </div>
+                            <fieldset
+                                class="dcf-d-flex
+                                    dcf-flex-col
+                                    dcf-row-gap-3
+                                    dcf-ai-center
+                                    dcf-col-gap-3
+                                    dcf-mb-0
+                                    dcf-ml-4
+                                    dcf-p-0
+                                    dcf-b-0
+                                    dcf-txt-sm"
+                                id="start-time-am-pm"
+                            >
+                                <legend class="dcf-sr-only">AM/PM</legend>
+                                <div class="dcf-input-radio dcf-mb-0">
+                                    <input
+                                        id="start-time-am-pm-am"
+                                        name="start_time_am_pm"
+                                        type="radio"
+                                        value="am"
+                                        <?php if ($start_am_pm == 'am') { echo CHECKED_INPUT; } ?>
+                                    >
+                                    <label class="dcf-mb-0" for="start-time-am-pm-am">AM</label>
+                                </div>
+                                <div class="dcf-input-radio dcf-mb-0">
+                                    <input
+                                        id="start-time-am-pm-pm"
+                                        name="start_time_am_pm"
+                                        type="radio"
+                                        value="pm"
+                                        <?php if ($start_am_pm == 'pm') { echo CHECKED_INPUT; } ?>
+                                    >
+                                    <label class="dcf-mb-0" for="start-time-am-pm-pm">PM</label>
+                                </div>
+                            </fieldset>
+                        </div>
+
+                    </div>
+                </fieldset>
+
+                <fieldset
+                    id="end-time-container"
+                    <?php
+                        if ($time_mode === $time_mode_start_time_only) {
+                            echo 'class="dcf-d-none"';
+                        }
+                    ?>
+                >
+                    <legend>
+                        <span id="end-time-label">End Time</span>
+                        <small class="dcf-required">Required</small>
+                    </legend>
+                    <div class="dcf-d-flex dcf-flex-wrap dcf-ai-center dcf-col-gap-4">
+                        <div class="dcf-d-flex dcf-ai-center dcf-flex-grow-1">
+                            <div class="dcf-form-group">
+                                <label for="end-time-hour">Hour</label>
+                                <select class="dcf-flex-grow-1" id="end-time-hour" name="end_time_hour">
+                                    <?php for ($i = 1; $i <= 12; $i++) { ?>
+                                        <option
+                                            <?php if ($end_hour == $i) { echo SELECTED_INPUT; } ?>
+                                            value="<?php echo $i; ?>"
+                                        >
+                                            <?php echo $i; ?>
+                                        </option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                            <span class="dcf-pr-1 dcf-pl-1">:</span>
+                            <div class="dcf-form-group">
+                                <label for="end-time-minute">Minute</label>
+                                <select
+                                    class="dcf-flex-grow-1"
+                                    id="end-time-minute"
+                                    name="end_time_minute"
+                                >
+                                    <?php for ($i = 0; $i < 60; $i+=5): ?>
+                                        <option
+                                            <?php if ($i == $end_minute) { echo SELECTED_INPUT; } ?>
+                                            value="<?php echo $i; ?>"
+                                        >
+                                            <?php echo str_pad($i, 2, '0', STR_PAD_LEFT); ?>
+                                        </option>
+                                    <?php endfor; ?>
+                                </select>
+                            </div>
+                            <fieldset
+                                class="dcf-d-flex
+                                    dcf-flex-col
+                                    dcf-row-gap-3
+                                    dcf-ai-center
+                                    dcf-col-gap-3
+                                    dcf-mb-0
+                                    dcf-ml-4
+                                    dcf-p-0
+                                    dcf-b-0
+                                    dcf-txt-sm"
+                                id="end-time-am-pm"
+                            >
+                                <legend class="dcf-sr-only">AM/PM</legend>
+                                <div class="dcf-input-radio dcf-mb-0">
+                                    <input
+                                        id="end-time-am-pm-am"
+                                        name="end_time_am_pm"
+                                        type="radio"
+                                        value="am"
+                                        <?php if ($end_am_pm == 'am') { echo CHECKED_INPUT; } ?>
+                                    >
+                                    <label class="dcf-mb-0" for="end-time-am-pm-am">AM</label>
+                                </div>
+                                <div class="dcf-input-radio dcf-mb-0">
+                                    <input
+                                        id="end-time-am-pm-pm"
+                                        name="end_time_am_pm"
+                                        type="radio"
+                                        value="pm"
+                                        <?php if ($end_am_pm == 'pm') { echo CHECKED_INPUT; } ?>
+                                    >
+                                    <label class="dcf-mb-0" for="end-time-am-pm-pm">PM</label>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
 
         <?php if (!$datetime_recurring_check) : ?>
             <div class="section-container">
@@ -258,7 +326,7 @@
                     <label for="recurring">This is a recurring <?php echo $recurring_type; ?> event</label>
                 </div>
                 <fieldset class="recurring-container date-time-select">
-                    <legend class="dcf-sr-only">Recurring Event Details</legend>
+                    <legend>Recurring Event Details</legend>
                     <div class="dcf-d-flex dcf-flex-wrap dcf-ai-center dcf-col-gap-4">
                     <div class="dcf-form-group">
                         <label for="recurring-type">This event recurs</label>
@@ -770,6 +838,12 @@ $js_recurring_month = $recurring_month_type ?? '';
 
 $page->addScriptDeclaration("const recurringType = '" . $js_recurring_type . "';");
 $page->addScriptDeclaration("const recurringMonth = '" . $js_recurring_month . "';");
+
+$page->addScriptDeclaration("const time_mode_regular = '" . $time_mode_regular . "';");
+$page->addScriptDeclaration("const time_mode_start_time_only = '" . $time_mode_start_time_only . "';");
+$page->addScriptDeclaration("const time_mode_end_time_only = '" . $time_mode_end_time_only . "';");
+$page->addScriptDeclaration("const time_mode_all_day = '" . $time_mode_all_day . "';");
+$page->addScriptDeclaration("const time_mode_tbd = '" . $time_mode_tbd . "';");
 
 $page->addScript(
     $base_frontend_url .

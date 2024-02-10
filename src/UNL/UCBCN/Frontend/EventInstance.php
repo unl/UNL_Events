@@ -180,6 +180,15 @@ class EventInstance implements RoutableInterface, MetaTagInterface
      */
     public function isAllDay()
     {
+        if (isset($this->eventdatetime->timemode) && $this->eventdatetime->timemode === Occurrence::TIME_MODE_ALLDAY) {
+            return true;
+        }
+
+        // If time mode is set to regular it might be all day still
+        if (isset($this->eventdatetime->timemode) && $this->eventdatetime->timemode !== Occurrence::TIME_MODE_REGULAR) {
+            return false;
+        }
+
         //It must start at midnight to be an all day event
         if (strpos($this->eventdatetime->starttime, '00:00:00') === false) {
             return false;
@@ -266,8 +275,12 @@ class EventInstance implements RoutableInterface, MetaTagInterface
     public function getMetaTags()
     {
         $datetimeString = date('n/d/y @ g:ia', strtotime($this->eventdatetime->starttime));
-        if ($this->isAllDay()) {
+        if ($this->isAllDay() || $this->eventdatetime->timemode === Occurrence::TIME_MODE_TBD) {
             $datetimeString = date('n/d/y', strtotime($this->eventdatetime->starttime));
+        } elseif ($this->eventdatetime->timemode === Occurrence::TIME_MODE_START_TIME_ONLY) {
+            $datetimeString = date('n/d/y', strtotime($this->eventdatetime->starttime)) . ' starts at ' . date('g:ia', strtotime($this->eventdatetime->starttime));
+        } elseif ($this->eventdatetime->timemode === Occurrence::TIME_MODE_END_TIME_ONLY) {
+            $datetimeString = date('n/d/y', strtotime($this->eventdatetime->starttime)) . ' ends at ' . date('g:ia', strtotime($this->eventdatetime->starttime));
         }
 
         $title = $this->event->displayTitle($this) . ' - ' . $datetimeString;
@@ -373,6 +386,7 @@ class EventInstance implements RoutableInterface, MetaTagInterface
             'Start' => $timezoneDateTime->format($this->getStartTime(),'c'),
             'End'   => $timezoneDateTime->format($this->getEndTime(),'c'),
             'AllDay' => $this->isAllDay(),
+            'TimeMode' => $this->eventdatetime->timemode,
             'EventTimezone' => $this->eventdatetime->timezone,
             'CalendarTimezone' => $this->calendar->defaulttimezone,
             'IsRecurring'=> $this->eventdatetime->isRecurring(),

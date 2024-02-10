@@ -248,6 +248,7 @@ CREATE TABLE `eventdatetime` (
   `webcast_id` int(10) UNSIGNED DEFAULT NULL,
   `starttime` datetime DEFAULT NULL,
   `endtime` datetime DEFAULT NULL,
+  `timemode` enum('REGULAR', 'STARTTIMEONLY', 'ENDTIMEONLY', 'ALLDAY', 'TBD') DEFAULT 'REGULAR' NOT NULL,
   `timezone` varchar(30) NOT NULL DEFAULT 'America/Chicago',
   `room` varchar(255) DEFAULT NULL,
   `hours` varchar(255) DEFAULT NULL,

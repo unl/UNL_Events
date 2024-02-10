@@ -7,6 +7,7 @@
         $timezoneDateTime = new \UNL\UCBCN\TimezoneDateTime($context->eventdatetime->timezone);
             ?>
         <DateTime>
+            <?php //TODO: add time mode output ?>
             <DateTimeID><?php echo $context->eventdatetime->id; ?></DateTimeID>
             <StartDate><?php echo $timezoneDateTime->format($context->getStartTime(),'c'); ?></StartDate>
             <StartTime><?php echo $timezoneDateTime->formatUTC($context->getStartTime(),'H:i:s'); ?>Z</StartTime>

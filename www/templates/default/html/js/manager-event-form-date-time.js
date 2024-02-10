@@ -216,12 +216,6 @@ require(['jquery', 'wdn'], function ($, WDN) {
     // DCF Date Picker
     WDN.initializePlugin('datepickers');
 
-    $('#recurring').change(function () {
-        if (this.checked) {
-            setRecurringOptions($('#start-date'), $('#monthly-group'), recurringType);
-        }
-    });
-
     if (recurringMonth == '') {
         $('#start-date').change(function () {
             setRecurringOptions($(this), $('#monthly-group'), recurringType);
@@ -233,5 +227,6 @@ require(['jquery', 'wdn'], function ($, WDN) {
             setRecurringOptions($(this), $('#monthly-group'), recurringMonth);
         });
         setRecurringOptions($('#start-date'), $('#monthly-group'), recurringMonth);
+        $('#recurring-type').val(recurringMonth);
     }
 });

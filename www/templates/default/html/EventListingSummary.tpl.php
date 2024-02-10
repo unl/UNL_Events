@@ -1,6 +1,9 @@
 <div class="vcalendar">
     <ol class="dcf-mt-4 dcf-list-bare dcf-d-grid dcf-col-gap-vw dcf-row-gap-5 unl-event-teaser-ol">
     <?php
+
+use UNL\UCBCN\Event\Occurrence;
+
     foreach ($context as $eventinstance) {
         if (empty($eventinstance)) {
             continue;
@@ -20,7 +23,7 @@
         if (isset($eventinstance->eventdatetime->location_id) && $eventinstance->eventdatetime->location_id) {
             $l = $eventinstance->eventdatetime->getLocation();
             if (isset($l->mapurl) || !empty($l->name)) {
-                $location = '<div class="unl-event-location dcf-d-flex dcf-ai-center dcf-lh-3"><svg class="dcf-mr-1 dcf-h-4 dcf-w-4 dcf-flex-shrink-0 dcf-fill-current" aria-hidden="true" focusable="false" height="24" width="24" viewBox="0 0 24 24"><path d="M12 23.5c-.3 0-.6-.2-.8-.4-.7-1.1-7-10.7-7-14.7C4.2 4 7.7.5 12 .5s7.8 3.5 7.8 7.8c0 4-6.3 13.6-7 14.7-.2.3-.5.5-.8.5zm0-21c-3.2 0-5.8 2.6-5.8 5.8 0 2.5 3.7 8.9 5.8 12.3 2.2-3.4 5.8-9.8 5.8-12.3 0-3.2-2.6-5.8-5.8-5.8z"></path><path d="M12 12.1c-2.1 0-3.7-1.7-3.7-3.7 0-2.1 1.7-3.7 3.7-3.7 2.1 0 3.7 1.7 3.7 3.7s-1.6 3.7-3.7 3.7zm0-5.5c-1 0-1.7.8-1.7 1.7S11.1 10 12 10s1.7-.8 1.7-1.7S13 6.6 12 6.6z"></path><path fill="none" d="M0 0h24v24H0z"></path></svg>';
+                $location = '<div class="unl-event-location dcf-d-flex dcf-ai-center dcf-lh-3"><svg class="dcf-h-4 dcf-w-4 dcf-flex-shrink-0 dcf-fill-current" aria-hidden="true" focusable="false" height="24" width="24" viewBox="0 0 24 24"><path d="M12 23.5c-.3 0-.6-.2-.8-.4-.7-1.1-7-10.7-7-14.7C4.2 4 7.7.5 12 .5s7.8 3.5 7.8 7.8c0 4-6.3 13.6-7 14.7-.2.3-.5.5-.8.5zm0-21c-3.2 0-5.8 2.6-5.8 5.8 0 2.5 3.7 8.9 5.8 12.3 2.2-3.4 5.8-9.8 5.8-12.3 0-3.2-2.6-5.8-5.8-5.8z"></path><path d="M12 12.1c-2.1 0-3.7-1.7-3.7-3.7 0-2.1 1.7-3.7 3.7-3.7 2.1 0 3.7 1.7 3.7 3.7s-1.6 3.7-3.7 3.7zm0-5.5c-1 0-1.7.8-1.7 1.7S11.1 10 12 10s1.7-.8 1.7-1.7S13 6.6 12 6.6z"></path><path fill="none" d="M0 0h24v24H0z"></path></svg>';
                 if (isset($l->mapurl) && filter_var($l->mapurl, FILTER_VALIDATE_URL)) {
                     $location .= '<a class="mapurl" href="' . $l->mapurl .'">' . $l->name . '</a>';
                 } elseif (isset($l->webpageurl) && filter_var($l->webpageurl, FILTER_VALIDATE_URL)) {
@@ -40,12 +43,18 @@
             $time = '<div class="unl-event-time dcf-d-flex dcf-ai-center dcf-uppercase">' .
                 $time_icon .
                 'All day</div>';
+        } else if ($eventinstance->eventdatetime->timemode === Occurrence::TIME_MODE_TBD) {
+            $time = '<div class="unl-event-time dcf-d-flex dcf-ai-center dcf-uppercase">' . $time_icon . '<abbr title="To Be Determined">TBD</abbr></div>';
+        } else if ($eventinstance->eventdatetime->timemode === Occurrence::TIME_MODE_START_TIME_ONLY) {
+            $time = '<time class="unl-event-time dcf-d-flex dcf-ai-center dcf-uppercase" datetime="' . $timezoneDisplay->format($starttime, $eventinstance->eventdatetime->timezone, 'H:i') . '">' . $time_icon . 'Starts at ' . $timezoneDisplay->format($starttime, $eventinstance->eventdatetime->timezone, 'g:i a') . '</time>';
+        } else if ($eventinstance->eventdatetime->timemode === Occurrence::TIME_MODE_END_TIME_ONLY) {
+            $time = '<time class="unl-event-time dcf-d-flex dcf-ai-center dcf-uppercase" datetime="' . $timezoneDisplay->format($endtime, $eventinstance->eventdatetime->timezone, 'H:i') . '">' . $time_icon . 'Ends at ' . $timezoneDisplay->format($endtime, $eventinstance->eventdatetime->timezone, 'g:i a') . '</time>';
         } else {
             $time = '<div class="unl-event-time dcf-d-flex dcf-ai-center dcf-uppercase">' .
                 $time_icon .
                 '<time datetime="' .
                 $timezoneDisplay->format($starttime, $eventinstance->eventdatetime->timezone, 'H:i') .
-                '">' . 
+                '">' .
                 $timezoneDisplay->format($starttime, $eventinstance->eventdatetime->timezone, 'g:i a') .
                 '</time>';
 

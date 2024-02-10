@@ -41,6 +41,7 @@ class Occurrence extends Record
     public $timezone;                        // string(30)
     public $starttime;                       // datetime(19)  multiple_key binary
     public $endtime;                         // datetime(19)  multiple_key binary
+    public $timemode;                        // enum('REGULAR', 'STARTTIMEONLY', 'ENDTIMEONLY', 'ALLDAY', 'TBD')
     public $recurringtype;                   // string(255)
     public $recurs_until;                    // datetime
     public $rectypemonth;                    // string(255)
@@ -56,6 +57,12 @@ class Occurrence extends Record
     const ONE_WEEK = 604800;
     
     const RECURRING_TYPE_NONE = 'none';
+
+    const TIME_MODE_REGULAR         = 'REGULAR';
+    const TIME_MODE_START_TIME_ONLY = 'STARTTIMEONLY';
+    const TIME_MODE_END_TIME_ONLY   = 'ENDTIMEONLY';
+    const TIME_MODE_ALLDAY          = 'ALLDAY';
+    const TIME_MODE_TBD             = 'TBD';
 
     public static function getTable()
     {
@@ -334,6 +341,31 @@ class Occurrence extends Record
             if ($webcast !== false && !$webcast->microdataCheck()) {
                 return false;
             }
+        }
+
+        return true;
+    }
+
+    public function isAllDay()
+    {
+        if (isset($this->timemode) && $this->timemode === self::TIME_MODE_ALLDAY) {
+            return true;
+        }
+
+        // If time mode is set to regular it might be all day still
+        if (isset($this->timemode) && $this->timemode !== self::TIME_MODE_REGULAR) {
+            return false;
+        }
+
+        //It must start at midnight to be an all day event
+        if (strpos($this->starttime, '00:00:00') === false) {
+            return false;
+        }
+
+        //It must end at midnight, or not have an end date.
+        if (!empty($this->endtime) &&
+            strpos($this->endtime, '00:00:00') === false) {
+            return false;
         }
 
         return true;

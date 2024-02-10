@@ -1,4 +1,6 @@
 <?php
+    use UNL\UCBCN\Event\Occurrence;
+
     // Polyfill for is_countable
     if (! function_exists('is_countable')) {
         /**
@@ -21,23 +23,6 @@
     $datetimeCount = count($event->getDatetimes());
     $allowCanceledDatetime = $datetimeCount > 1;
     $total_pages = ceil($datetimeCount / 5);
-
-    function ordinal($number)
-    {
-        $mod = $number % 100;
-        if ($mod >= 11 && $mod <= 13) {
-            return $number . 'th';
-        } elseif ($mod % 10 == 1) {
-            return $number . 'st';
-        } elseif ($mod % 10 == 2) {
-            return $number . 'nd';
-        } elseif ($mod % 10 == 3) {
-            return $number . 'rd';
-        } else {
-            return $number . 'th';
-        }
-    }
-
 ?>
 <?php
     $last_crumb = 'Edit "' . $event->title . '"';
@@ -247,39 +232,81 @@
                 >
                     <td class="dcf-txt-middle dates">
                         <?php
-                        {
-                            if ($datetime->recurringtype == 'none') {
-                                echo date('n/d/y @ g:ia', strtotime($datetime->starttime));
-                            } elseif ($datetime->recurringtype == 'daily' ||
-                                        $datetime->recurringtype == 'weekly' ||
-                                        $datetime->recurringtype == 'biweekly' ||
-                                        $datetime->recurringtype == 'annually') {
+                            $date_format = 'n/d/y';
+                            $time_format = 'g:ia';
 
-                                echo ucwords($datetime->recurringtype)
-                                . ' @ ' . date('g:ia', strtotime($datetime->starttime)) .
-                                ' from ' . date('n/d/y', strtotime($datetime->starttime)) .
-                                ' to ' . date('n/d/y', strtotime($datetime->recurs_until));
+                            // Set up default values
+                            $recurring_details = '';
+                            $date_details = date(
+                                $date_format,
+                                strtotime($datetime->starttime)
+                            );
+                            $time_details = date(
+                                $time_format,
+                                strtotime($datetime->starttime)
+                            );
+
+                            // Define recurring details
+                            if ($datetime->recurringtype == 'daily' ||
+                                $datetime->recurringtype == 'weekly' ||
+                                $datetime->recurringtype == 'biweekly' ||
+                                $datetime->recurringtype == 'annually'
+                            ) {
+                                $recurring_details = ucwords($datetime->recurringtype) . ':';
                             } elseif ($datetime->recurringtype == 'monthly') {
                                 if ($datetime->rectypemonth == 'lastday') {
-                                    echo 'Last day of each month @ ' .
-                                    date('g:ia', strtotime($datetime->starttime)) .
-                                    ' from ' . date('n/d/y', strtotime($datetime->starttime)) .
-                                    ' from ' . date('n/d/y', strtotime($datetime->starttime)) .
-                                    ' to ' . date('n/d/y', strtotime($datetime->recurs_until));
+                                    $recurring_details = 'Last day of every month:';
                                 } elseif ($datetime->rectypemonth == 'date') {
-                                    echo ordinal(date('d', strtotime($datetime->starttime))) .
-                                    ' of each month @ ' . date('g:ia', strtotime($datetime->starttime)) .
-                                    ' from ' . date('n/d/y', strtotime($datetime->starttime)) .
-                                    ' to ' . date('n/d/y', strtotime($datetime->recurs_until));
+                                    $recurring_details = date('jS', strtotime($datetime->starttime)) . ' of every month:';
                                 } else {
-                                    echo ucwords($datetime->rectypemonth) .
-                                    date(' l', strtotime($datetime->starttime)) . ' of every month' .
-                                    ' from ' . date('n/d/y', strtotime($datetime->starttime)) .
-                                    ' to ' . date('n/d/y', strtotime($datetime->recurs_until));
+                                    $recurring_details = ucwords($datetime->rectypemonth) . date(' l', strtotime($datetime->starttime)). ' of every month:';
                                 }
                             }
-                        }
+
+                            // Define date range if the recurs until is set
+                            if (
+                                isset($datetime->recurs_until) &&
+                                $datetime->recurs_until > $datetime->starttime
+                            ) {
+                                $date_details .= ' to ' . date(
+                                    $date_format,
+                                    strtotime($datetime->recurs_until)
+                                );
+                            }
+
+                            // Defines time details depending on time mode
+                            if ($datetime->isAllDay()) {
+                                $time_details = 'All day';
+                            } elseif ($datetime->timemode === Occurrence::TIME_MODE_TBD) {
+                                $time_details = 'Time <abbr title="To Be Determined">TBD</abbr>';
+                            } elseif ($datetime->timemode === Occurrence::TIME_MODE_START_TIME_ONLY ) {
+                                $time_details = 'Starting at ' . $time_details;
+                            } elseif ($datetime->timemode === Occurrence::TIME_MODE_END_TIME_ONLY) {
+                                $time_details = 'Ending at ' . date(
+                                    $time_format,
+                                    strtotime($datetime->endtime)
+                                );
+                            } else {
+                                // If we get here then check if there is an endtime
+                                // and it is after start time
+                                if (
+                                    isset($datetime->endtime) &&
+                                    $datetime->endtime > $datetime->starttime
+                                ) {
+                                    $time_details .= ' to '. date(
+                                        ' g:ia',
+                                        strtotime($datetime->endtime)
+                                    );
+                                }
+                            }
                         ?>
+                        <div>
+                            <?php if (!empty($recurring_details)): ?>
+                                <span class="dcf-txt-nowrap"><?php echo $recurring_details; ?></span>
+                            <?php endif; ?>
+                            <span class="dcf-txt-nowrap"><?php echo $date_details; ?></span>
+                            <span class="dcf-txt-nowrap"><?php echo $time_details; ?></span>
+                        </div>
                     </td>
                     <?php $location = $datetime->getLocation(); ?>
                     <?php if (isset($datetime->location_id) && $location !== false): ?>
@@ -288,9 +315,9 @@
                             data-id="<?php echo $location->id; ?>"
                         >
                             <div class="dcf-popup dcf-w-100%" data-hover="true" data-point="true">
-                                <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup dcf-w-100%" type="button">
+                                <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup dcf-w-100% dcf-d-flex dcf-ai-center dcf-jc-center dcf-gap-4" type="button">
                                     <svg
-                                        class="dcf-mr-1 dcf-h-4 dcf-w-4 dcf-fill-current"
+                                        class="dcf-h-4 dcf-w-4 dcf-d-block dcf-fill-current"
                                         aria-hidden="true"
                                         focusable="false"
                                         height="24"
@@ -388,9 +415,9 @@
                         </td>
                     <?php else: ?>
                         <td class="dcf-txt-middle location with-controls no-location" data-id="">
-                            <div class="dcf-d-flex dcf-jc-center dcf-ai-center">
+                            <div class="dcf-d-flex dcf-ai-center dcf-jc-center dcf-gap-4">
                                 <svg
-                                    class="dcf-mr-1 dcf-h-4 dcf-w-4 dcf-fill-current"
+                                    class="dcf-h-4 dcf-w-4 dcf-d-block dcf-fill-current"
                                     aria-hidden="true"
                                     focusable="false"
                                     height="24"
@@ -417,10 +444,10 @@
                             data-id="<?php echo $getWebcast->id; ?>"
                         >
                             <div class="dcf-popup dcf-w-100%" data-hover="true" data-point="true">
-                                <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup dcf-w-100%" type="button">
+                                <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup dcf-w-100% dcf-d-flex dcf-ai-center dcf-jc-center dcf-gap-4" type="button">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
-                                        class="dcf-mr-1 dcf-h-4 dcf-w-4 dcf-fill-current"
+                                        class="dcf-h-4 dcf-w-4 dcf-d-block dcf-fill-current"
                                         aria-hidden="true"
                                         focusable="false"
                                         height="24"
@@ -477,10 +504,10 @@
                         </td>
                     <?php else: ?>
                         <td class="dcf-txt-middle v_location with-controls no-webcast" data-id="">
-                            <div class="dcf-d-flex dcf-jc-center dcf-ai-center">
+                            <div class="dcf-d-flex dcf-ai-center dcf-jc-center dcf-gap-4">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
-                                    class="dcf-mr-1 dcf-h-4 dcf-w-4 dcf-fill-current"
+                                    class="dcf-h-4 dcf-w-4 dcf-d-block dcf-fill-current"
                                     aria-hidden="true"
                                     focusable="false"
                                     height="24"
@@ -582,9 +609,49 @@
                             <tr class="edt-record">
                                 <td class="dcf-pl-7 dcf-txt-middle dates recurring" colspan="3">
                                     <?php
-                                        echo date('n/d/y', strtotime($recurring_date->recurringdate)) .
-                                        ' @ ' . date('g:ia', strtotime($datetime->starttime));
-                                        ?>
+                                        $date_format = 'n/d/y';
+                                        $time_format = 'g:ia';
+
+                                        // Set up default values
+                                        $date_details = date(
+                                            $date_format,
+                                            strtotime($recurring_date->recurringdate)
+                                        );
+                                        $time_details = date(
+                                            $time_format,
+                                            strtotime($datetime->starttime)
+                                        );
+
+                                        // Defines time details depending on time mode
+                                        if ($datetime->isAllDay()) {
+                                            $time_details = 'All day';
+                                        } elseif ($datetime->timemode === Occurrence::TIME_MODE_TBD) {
+                                            $time_details = 'Time <abbr title="To Be Determined">TBD</abbr>';
+                                        } elseif ($datetime->timemode === Occurrence::TIME_MODE_START_TIME_ONLY ) {
+                                            $time_details = 'Starting at ' . $time_details;
+                                        } elseif ($datetime->timemode === Occurrence::TIME_MODE_END_TIME_ONLY) {
+                                            $time_details = 'Ending at ' . date(
+                                                $time_format,
+                                                strtotime($datetime->endtime)
+                                            );
+                                        } else {
+                                            // If we get here then check if there is an endtime
+                                            // and it is after start time
+                                            if (
+                                                isset($datetime->endtime) &&
+                                                $datetime->endtime > $datetime->starttime
+                                            ) {
+                                                $time_details .= ' to '. date(
+                                                    ' g:ia',
+                                                    strtotime($datetime->endtime)
+                                                );
+                                            }
+                                        }
+                                    ?>
+                                    <div>
+                                        <span class="dcf-txt-nowrap"><?php echo $date_details; ?></span>
+                                        <span class="dcf-txt-nowrap"><?php echo $time_details; ?></span>
+                                    </div>
                                 </td>
                                 <td class="dcf-pr-0 dcf-txt-middle controls recurring">
                                     <div class="dcf-d-flex dcf-ai-center dcf-jc-flex-end">
