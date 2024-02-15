@@ -1,4 +1,6 @@
 <?php
+    use UNL\UCBCN\Event\Occurrence;
+
     $crumbs = new stdClass;
     $crumbs->crumbs = array(
         "Events Manager" => "/manager",
