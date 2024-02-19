@@ -285,6 +285,8 @@ class APIEvent extends APICalendar implements ModelInterface, ModelAuthInterface
         $this->replaceJSONKey($event_data, 'end-time-minute', 'end_time_minute');
         $this->replaceJSONKey($event_data, 'end-time-am-pm', 'end_time_am_pm');
 
+        $this->replaceJSONKey($event_data, 'time-mode', 'time_mode');
+
         $this->replaceJSONKey($event_data, 'recurring-type', 'recurring_type');
         $this->replaceJSONKey($event_data, 'recurs-until-date', 'recurs_until_date');
         $this->replaceJSONKey($event_data, 'event-room', 'room');
