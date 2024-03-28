@@ -67,7 +67,9 @@
             <?php echo $context->calendar->id == NULL ? 'Create Calendar' : 'Save Calendar' ?>
         </button>
         <?php if ($context->calendar->id != NULL): ?>
-        <a class="dcf-btn dcf-btn-secondary" href="<?php echo $context->calendar->getDeleteURL() ?>">Delete Calendar</a><br><br>
+            <?php if ($context->calendarDeletePermission() === True): ?>
+                <a class="dcf-btn dcf-btn-secondary" href="<?php echo $context->calendar->getDeleteURL() ?>">Delete Calendar</a><br><br>
+            <?php endif; ?>
         <a class="dcf-btn dcf-btn-secondary" href="<?php echo $context->calendar->getCleanupURL() ?>">Clean Up Calendar Events</a>
         <?php endif; ?>
     </div>

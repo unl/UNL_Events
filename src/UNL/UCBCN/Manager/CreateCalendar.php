@@ -184,4 +184,11 @@ class CreateCalendar extends PostHandler
 
         $this->calendar->update();
     }
+
+    public function calendarDeletePermission() {
+        # check permissions to edit this calendar's details
+
+        $user = $this->options['user'] ?? Auth::getCurrentUser();
+        return ($user->hasPermission(Permission::CALENDAR_DELETE_ID, $this->calendar->id));
+    }
 }
