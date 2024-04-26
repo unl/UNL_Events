@@ -1,6 +1,6 @@
 <?php
     use UNL\UCBCN\Event\Occurrence;
-    use UNL\UCBCN\Event\Occurrences as Occurrences;
+    use UNL\UCBCN\Event\Occurrences;
 
     // Polyfill for is_countable
     if (! function_exists('is_countable')) {
@@ -223,11 +223,11 @@
                 </tr>
             </thead>
 
-            <!-- counting the number of instances present in the event-->
             <?php 
-            $count_occur = new Occurrences(array(
-                'event_id' => $event->id,
-            ));
+                // counting the number of instances present in the event
+                $count_occur = new Occurrences(array(
+                    'event_id' => $event->id,
+                ));
             ?>
                             
             <?php foreach($event->getDatetimes(5, ($context->page - 1)*5) as $datetime) : ?>
@@ -590,24 +590,25 @@
                                 Edit
                             </a>
                             
-                            <!-- logic for disabling the delete button twhen there is only one instance is present for the event-->
-                            <?php if ((count($count_occur)) == 1) : ?> 
-                                <div class="
-                                    dcf-popup dcf-btn-secondary dcf-ml-1
-                                    " 
+                            <?php // logic for disabling the delete button twhen there is only one instance is present for the event ?>
+                            <?php if (count($count_occur) == 1) : ?> 
+                                <div 
+                                    class="dcf-popup dcf-btn-secondary dcf-ml-1" 
                                     data-position="top"
                                     data-alignment="end"
                                     data-hover="true"
                                     data-point="true"
+                                >
+                                    <button 
+                                        class="dcf-btn dcf-btn-secondary dcf-ml-1 dcf-btn-toggle-popup"
+                                        type="button"
                                     >
-                                    <button class="
-                                    dcf-btn dcf-btn-secondary dcf-ml-1 dcf-btn-toggle-popup
-                                    "
-                                    type="button"
-                                    >
-                                    Delete
+                                        Delete
                                     </button>
-                                    <div class="dcf-popup-content unl-bg-cerulean dcf-rounded dcf-p-3" style="width: 27ch;">
+                                    <div 
+                                        class="dcf-popup-content unl-bg-cerulean dcf-rounded dcf-p-3" 
+                                        style="width: 27ch;"
+                                    >
                                         You need to have at least one occurrence in this event.
                                     </div>
                                 </div>
