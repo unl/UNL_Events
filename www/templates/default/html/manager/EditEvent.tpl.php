@@ -1,5 +1,6 @@
 <?php
     use UNL\UCBCN\Event\Occurrence;
+    use UNL\UCBCN\Event\Occurrences;
 
     // Polyfill for is_countable
     if (! function_exists('is_countable')) {
@@ -221,6 +222,14 @@
                     <th class="dcf-txt-right dcf-pr-0" scope="col">Actions</th>
                 </tr>
             </thead>
+
+            <?php 
+                // counting the number of instances present in the event
+                $count_occur = new Occurrences(array(
+                    'event_id' => $event->id,
+                ));
+            ?>
+                            
             <?php foreach($event->getDatetimes(5, ($context->page - 1)*5) as $datetime) : ?>
                 <tr
                     class="
@@ -580,13 +589,39 @@
                             >
                                 Edit
                             </a>
-                            <button
-                                class="dcf-btn dcf-btn-secondary dcf-ml-1"
-                                form="delete-datetime-<?php echo $datetime->id; ?>"
-                                type="submit"
-                            >
-                                Delete
-                            </button>
+                            
+                            <?php // logic for disabling the delete button twhen there is only one instance is present for the event ?>
+                            <?php if (count($count_occur) == 1) : ?> 
+                                <div 
+                                    class="dcf-popup dcf-btn-secondary dcf-ml-1" 
+                                    data-position="top"
+                                    data-alignment="end"
+                                    data-hover="true"
+                                    data-point="true"
+                                >
+                                    <button 
+                                        class="dcf-btn dcf-btn-secondary dcf-ml-1 dcf-btn-toggle-popup"
+                                        type="button"
+                                    >
+                                        Delete
+                                    </button>
+                                    <div 
+                                        class="dcf-popup-content unl-bg-cerulean dcf-rounded dcf-p-3" 
+                                        style="width: 27ch;"
+                                    >
+                                        You need to have at least one occurrence in this event.
+                                    </div>
+                                </div>
+                            <?php else : ?> 
+                                <button
+                                    class="dcf-btn dcf-btn-secondary dcf-ml-1"
+                                    form="delete-datetime-<?php echo $datetime->id; ?>"
+                                    type="submit"
+                                >
+                                    Delete
+                                </button>
+                            <?php endif; ?>
+
                             <?php if ($allowCanceledDatetime === true && $datetime->recurringtype === 'none') : ?>
                                     <div class="dcf-input-checkbox dcf-mr-4 dcf-mb-0 dcf-ml-3 dcf-txt-sm">
                                         <input
@@ -834,7 +869,7 @@
                     class="dcf-pb-2"
                 >
                     Consider for Main
-                        <abbr title="University of Nebraska–Lincoln"">UNL</abbr>
+                        <abbr title="University of Nebraska–Lincoln">UNL</abbr>
                     Calendar
                 </legend>
                 <?php if ($context->on_main_calendar): ?>
