@@ -1,5 +1,6 @@
 /config.inc.php
 /www/.htaccess
+/www/robots.txt
 /.project
 /.settings
 /www/templates/default/html/css
