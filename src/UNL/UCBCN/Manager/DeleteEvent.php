@@ -39,9 +39,11 @@ class DeleteEvent extends PostHandler
                 $backend_tab_name = 'pending';
                 break;
             case 'upcoming':
+            case 'posted':
                 $backend_tab_name = 'posted';
                 break;
             case 'past':
+            case 'archived':
                 $backend_tab_name = 'archived';
                 break;
             default:

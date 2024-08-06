@@ -7,6 +7,7 @@ use UNL\UCBCN\Event\EventType;
 use UNL\UCBCN\Event\Audience;
 use UNL\UCBCN\Calendar as CalendarModel;
 use UNL\UCBCN\Calendar\EventType as ValidateEventType;
+use UNL\UCBCN\Calendar\Event as CalendarEvent;
 
 class EditEvent extends EventForm
 {
@@ -37,6 +38,18 @@ class EditEvent extends EventForm
 
         $main_calendar = CalendarModel::getByID(Controller::$default_calendar_id);
         $this->on_main_calendar = $this->event->getStatusWithCalendar($main_calendar);
+    }
+
+    public function getCalendar()
+    {
+        return $this->calendar;
+    }
+
+    public function getEventCalendarStatus()
+    {
+        $calendarEvent = CalendarEvent::getByIds($this->calendar->id, $this->event->id);
+
+        return $calendarEvent === false ? false : $calendarEvent->status;
     }
 
     public function handlePost(array $get, array $post, array $files)

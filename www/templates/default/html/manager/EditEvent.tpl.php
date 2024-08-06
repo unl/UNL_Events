@@ -974,42 +974,55 @@
 
     <button class="dcf-btn dcf-btn-primary" type="submit">Save Event</button>
     <button
-            id="google-microdata-button"
-            class="dcf-btn-toggle-modal dcf-btn unl-bg-blue events-b-blue unl-cream dcf-mt-3"
-            title="Learn More"
-            type="button"
-            data-toggles-modal="google-microdata-modal"
-            disabled
-        >
-            ! Your event does not reach microdata requirements !
-        </button>
+        class="dcf-btn dcf-btn-secondary"
+        type="submit"
+        form="delete-form"
+        onclick="return confirm('Are you sure you want to delete this event?');"
+    >Delete Event</button>
+    <br>
+    <button
+        id="google-microdata-button"
+        class="dcf-btn-toggle-modal dcf-btn unl-bg-blue events-b-blue unl-cream dcf-mt-3"
+        title="Learn More"
+        type="button"
+        data-toggles-modal="google-microdata-modal"
+        disabled
+    >
+        ! Your event does not reach microdata requirements !
+    </button>
 
-        <div class="dcf-modal" id="google-microdata-modal" hidden>
-            <div class="dcf-modal-wrapper">
-                <div class="dcf-modal-header">
-                    <h2>Info About Microdata</h2>
-                    <button class="dcf-btn-close-modal">Close</button>
-                </div>
-                <div class="dcf-modal-content">
-                <p>
-                        Microdata is a way to provide structured data markup
-                        on web pages. This structured data helps search engines, like Google,
-                        to understand the content and context of the page better.
-                        For events.unl.edu, microdata can provide key information about
-                        each event such as it's name, date, time, location, description, and more.
-                        This helps search engines present our events
-                        more prominently in search results, making it easier for users to find
-                        relevant events.
+    <div class="dcf-modal" id="google-microdata-modal" hidden>
+        <div class="dcf-modal-wrapper">
+            <div class="dcf-modal-header">
+                <h2>Info About Microdata</h2>
+                <button class="dcf-btn-close-modal">Close</button>
+            </div>
+            <div class="dcf-modal-content">
+            <p>
+                    Microdata is a way to provide structured data markup
+                    on web pages. This structured data helps search engines, like Google,
+                    to understand the content and context of the page better.
+                    For events.unl.edu, microdata can provide key information about
+                    each event such as it's name, date, time, location, description, and more.
+                    This helps search engines present our events
+                    more prominently in search results, making it easier for users to find
+                    relevant events.
 
-                        <a href="https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data">
-                            Learn more through Google's documentation.
-                        </a>
-                    </p>
-                    <div class="dcf-mt-5" id="google-microdata-modal-output"></div>
-                    <p class="dcf-txt-xs">*If this information is not relevant to you, feel free to disregard it.</p>
-                </div>
+                    <a href="https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data">
+                        Learn more through Google's documentation.
+                    </a>
+                </p>
+                <div class="dcf-mt-5" id="google-microdata-modal-output"></div>
+                <p class="dcf-txt-xs">*If this information is not relevant to you, feel free to disregard it.</p>
             </div>
         </div>
+    </div>
+</form>
+
+<form id="delete-form" method="POST" action="<?php echo $event->getDeleteURL($context->getCalendar()) ?>" class="dcf-d-none">
+    <input type="text" name="status" value="<?php echo $context->getEventCalendarStatus(); ?>">
+    <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
+    <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
 </form>
 
 <?php
