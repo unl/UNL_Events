@@ -101,7 +101,7 @@
                 Event Time Type
                 <small class="dcf-required">Required</small>
             </legend>
-            <div class="dcf-grid dcf-grid-full dcf-grid-halves@sm dcf-grid-thirds@md dcf-col-gap-vw">
+            <div class="dcf-grid dcf-grid-full dcf-grid-halves dcf-col-gap-vw">
                 <div class="dcf-input-radio">
                     <input id="<?php echo $time_mode_regular; ?>" name="time_mode" type="radio" value="<?php echo $time_mode_regular; ?>" <?php if ($time_mode === $time_mode_regular) { echo 'checked'; }?>>
                     <label for="<?php echo $time_mode_regular; ?>">Start & End</label>
@@ -113,10 +113,6 @@
                 <div class="dcf-input-radio">
                     <input id="<?php echo $time_mode_end_time_only; ?>" name="time_mode" type="radio" value="<?php echo $time_mode_end_time_only; ?>" <?php if ($time_mode === $time_mode_end_time_only) { echo 'checked'; }?>>
                     <label for="<?php echo $time_mode_end_time_only; ?>">End Time Only <br><span class="dcf-txt-xs">(e.g. Deadlines, Applicant Submissions)</span></label>
-                </div>
-                <div class="dcf-input-radio">
-                    <input id="<?php echo $time_mode_all_day; ?>" name="time_mode" type="radio" value="<?php echo $time_mode_all_day; ?>" <?php if ($time_mode === $time_mode_all_day) { echo 'checked'; }?>>
-                    <label for="<?php echo $time_mode_all_day; ?>">All Day</label>
                 </div>
                 <div class="dcf-input-radio">
                     <input id="<?php echo $time_mode_tbd; ?>" name="time_mode" type="radio" value="<?php echo $time_mode_tbd; ?>" <?php if ($time_mode === $time_mode_tbd) { echo 'checked'; }?>>
