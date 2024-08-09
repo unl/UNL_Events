@@ -4,6 +4,7 @@ namespace UNL\UCBCN\Frontend;
 use UNL\UCBCN\ActiveRecord\RecordList;
 use UNL\UCBCN\Calendar\Audiences;
 use UNL\UCBCN\Calendar\EventTypes;
+use UNL\UCBCN\Event\Occurrence;
 
 class EventListing extends RecordList
 {
@@ -16,6 +17,8 @@ class EventListing extends RecordList
 
     public $event_type_filter = '';
     public $audience_filter = '';
+    public $needs_location = false;
+    public $not_TDB = false;
 
     /**
      * Constructor for an individual day.
@@ -32,6 +35,8 @@ class EventListing extends RecordList
 
         $this->event_type_filter = $options['type'] ?? "";
         $this->audience_filter = $options['audience'] ?? "";
+        $this->needs_location = $options['needs_location'] ?? false;
+        $this->not_TDB = $options['not_TDB'] ?? false;
 
         parent::__construct($options);
     }
@@ -164,6 +169,28 @@ class EventListing extends RecordList
     public function getAudienceSQL(string $sqlAudienceTable): string
     {
         return $this->getFilterSQL($sqlAudienceTable, "name", $this->audience_filter);
+    }
+
+    /**
+     * Gets an SQL string to be used in the where clause
+     *
+     * @param string $sqlEventDateTimeTable Name of the eventdatetime table or alias
+     * @return string Needs location filter SQL
+     */
+    public function getNeedsLocationSQL(string $sqlEventDateTimeTable): string
+    {
+        return '(' . $sqlEventDateTimeTable . '.location_id IS NOT NULL OR ' . $sqlEventDateTimeTable . '.webcast_id IS NOT NULL)';
+    }
+
+    /**
+     * Gets an SQL string to be used in the where clause
+     *
+     * @param string $sqlEventDateTimeTable Name of the eventdatetime table or alias
+     * @return string Not TBD filter SQL
+     */
+    public function getNotTDBSQL(string $sqlEventDateTimeTable): string
+    {
+        return '(' . $sqlEventDateTimeTable . '.timemode != "' . Occurrence::TIME_MODE_TBD . '")';
     }
 
     /**

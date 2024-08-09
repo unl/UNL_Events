@@ -139,6 +139,18 @@ class Upcoming extends EventListing implements RoutableInterface, MetaTagInterfa
             $sql .= $this->getAudienceSQL('audience');
         }
 
+        // Adds filters for needs location
+        if ($this->needs_location) {
+            $sql .= 'AND ';
+            $sql .= $this->getNeedsLocationSQL('e');
+        }
+
+        // Adds filters for Not TDB
+        if ($this->not_TDB) {
+            $sql .= 'AND ';
+            $sql .= $this->getNotTDBSQL('e');
+        }
+
         $sql .= '
                 ORDER BY (
                         IF (recurringdate.recurringdate IS NULL,
