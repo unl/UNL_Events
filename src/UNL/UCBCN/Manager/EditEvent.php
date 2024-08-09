@@ -126,6 +126,7 @@ class EditEvent extends EventForm
     {
         $this->setEventData($post_data, $files);
         $this->validateEventData($post_data, $files);
+        $this->event->datelastupdated = date('Y-m-d H:i:s');
         $result = $this->event->update($this->user);
 
         # update the event type record

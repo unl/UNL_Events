@@ -76,9 +76,39 @@ class OutputController extends \Savvy
                 break;
 
             case 'image':
-                if (isset($this->controller->output->event)) {
-                    header('Content-type: '.$this->controller->output->event->imagemime);
+                if (
+                    !isset($this->controller->output->event) ||
+                    !isset($this->controller->output->event->imagedata) ||
+                    empty($this->controller->output->event->imagedata) ||
+                    !isset($this->controller->output->event->imagemime) ||
+                    empty($this->controller->output->event->imagemime) ||
+                    !isset($this->controller->output->event->datelastupdated)
+                ) {
+                    throw new Exception('Not Found', 404);
                 }
+                // Fetch image from database
+                $imageData = $this->controller->output->event->imagedata;
+                $imageMime = $this->controller->output->event->imagemime;
+                $lastModified = $this->controller->output->event->datelastupdated;
+                $imageETag = md5($imageData); // Unique hash
+
+                // Set cache headers
+                header("Cache-Control: public, max-age=31536000");
+                header("Last-Modified: " . gmdate("D, d M Y H:i:s", strtotime($lastModified)) . " GMT");
+                header("ETag: \"$imageETag\"");
+
+                // Handle conditional requests
+                if ((
+                    isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) &&
+                    strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) == strtotime($lastModified)
+                ) && (
+                    isset($_SERVER['HTTP_IF_NONE_MATCH']) &&
+                    trim($_SERVER['HTTP_IF_NONE_MATCH']) == $imageETag
+                )) {
+                    header("HTTP/1.1 304 Not Modified");
+                    exit;
+                }
+                header('Content-type: '.$this->controller->output->event->imagemime);
                 $this->setTemplateFormatPaths($options['format']);
                 break;
 
