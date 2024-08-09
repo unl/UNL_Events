@@ -18,7 +18,7 @@ class EventListing extends RecordList
     public $event_type_filter = '';
     public $audience_filter = '';
     public $needs_location = false;
-    public $not_TDB = false;
+    public $time_mode_filter = '';
 
     /**
      * Constructor for an individual day.
@@ -36,7 +36,7 @@ class EventListing extends RecordList
         $this->event_type_filter = $options['type'] ?? "";
         $this->audience_filter = $options['audience'] ?? "";
         $this->needs_location = $options['needs_location'] ?? false;
-        $this->not_TDB = $options['not_TDB'] ?? false;
+        $this->time_mode_filter = $options['time_mode'] ?? "";
 
         parent::__construct($options);
     }
@@ -186,11 +186,11 @@ class EventListing extends RecordList
      * Gets an SQL string to be used in the where clause
      *
      * @param string $sqlEventDateTimeTable Name of the eventdatetime table or alias
-     * @return string Not TBD filter SQL
+     * @return string Time mode filter SQL
      */
-    public function getNotTDBSQL(string $sqlEventDateTimeTable): string
+    public function getTimeModeSQL(string $sqlEventDateTimeTable): string
     {
-        return '(' . $sqlEventDateTimeTable . '.timemode != "' . Occurrence::TIME_MODE_TBD . '")';
+        return $this->getFilterSQL($sqlEventDateTimeTable, "timemode", $this->time_mode_filter);
     }
 
     /**

@@ -145,10 +145,10 @@ class Upcoming extends EventListing implements RoutableInterface, MetaTagInterfa
             $sql .= $this->getNeedsLocationSQL('e');
         }
 
-        // Adds filters for Not TDB
-        if ($this->not_TDB) {
+        // Adds filters for time mode
+        if ($this->time_mode_filter) {
             $sql .= 'AND ';
-            $sql .= $this->getNotTDBSQL('e');
+            $sql .= $this->getTimeModeSQL('e');
         }
 
         $sql .= '
