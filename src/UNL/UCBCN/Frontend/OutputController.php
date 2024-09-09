@@ -4,6 +4,8 @@ namespace UNL\UCBCN\Frontend;
 use Michelf\SmartyPants;
 use Misd\Linkify\Linkify;
 
+use Exception;
+
 class OutputController extends \Savvy
 {
     protected $theme = 'default';
