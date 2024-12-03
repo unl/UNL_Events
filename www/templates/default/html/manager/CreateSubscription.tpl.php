@@ -27,25 +27,33 @@
     <div class="dcf-form-group">
         <label for="calendars">Events Posted to Calendar(s):</label>
         <p class="dcf-form-help">Please select at least one calendar from list below. Click to view list or click and type to filter list.</p>
-        <select class="use-select2" id="calendars" name="calendars[]" multiple="multiple">
-        <?php foreach($context->getAvailableCalendars() as $calendar): ?>
-            <?php
-                // skip the calendar adding the subscription as option, since can not subscribe to itself
-                if ($context->calendar->id == $calendar->id) {
-                    continue;
-                }
-            ?>
-            <option <?php if (in_array($calendar->id, $subbed_calendar_ids)) echo 'selected="selected"'; ?> value="<?php echo $calendar->id ?>">
-            <?php
-                echo trim($calendar->name) . ' (' . trim($calendar->shortname);
-                if ($calendar->id == UNL\UCBCN::$main_calendar_id) {
-                    echo ' - Main Calendar';
-                }
-                echo ')';
-            ?>
-            </option>
-        <?php endforeach; ?>
+        <select class="dcf-search-select" id="calendars" name="calendars[]" multiple="multiple" hidden>
+            <?php foreach($context->getAvailableCalendars() as $calendar): ?>
+                <?php
+                    // skip the calendar adding the subscription as option, since can not subscribe to itself
+                    if ($context->calendar->id == $calendar->id) {
+                        continue;
+                    }
+                ?>
+                <option
+                    <?php if (in_array($calendar->id, $subbed_calendar_ids)) { echo 'selected="selected"'; } ?>
+                    value="<?php echo $calendar->id; ?>"
+                >
+                    <?php
+                        echo trim($calendar->name) . ' (' . trim($calendar->shortname);
+                        if ($calendar->id == UNL\UCBCN::$main_calendar_id) {
+                            echo ' - Main Calendar';
+                        }
+                        echo ')';
+                    ?>
+                </option>
+            <?php endforeach; ?>
         </select>
+        <script>
+            window.addEventListener('inlineJSReady', function() {
+                WDN.initializePlugin('search-selects');
+            });
+        </script>
     </div>
     <div class="dcf-form-group">
         <fieldset>
