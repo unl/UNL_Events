@@ -83,7 +83,7 @@ class CreateSubscription extends PostHandler
     public function getAvailableCalendars() 
     {
         // Note: only include calendars with event activity in the last 6 months
-        return new Calendars();
+        return new Calendars(array('has_event_activity_since' => date('Y-m-d', strtotime('-6 Months'))));
     }
 
     private function isValidSubscription($postData, &$error) {
