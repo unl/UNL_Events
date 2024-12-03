@@ -36,8 +36,8 @@
                     }
                 ?>
                 <option
-                    <?php if (in_array($calendar->id, $subbed_calendar_ids)) echo 'selected="selected"'; ?>
-                    value="<?php echo $calendar->id ?>"
+                    <?php if (in_array($calendar->id, $subbed_calendar_ids)) { echo 'selected="selected"'; } ?>
+                    value="<?php echo $calendar->id; ?>"
                 >
                     <?php
                         echo trim($calendar->name) . ' (' . trim($calendar->shortname);
