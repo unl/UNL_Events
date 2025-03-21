@@ -25,7 +25,7 @@ $format   = '(\.(?P<format>[\w]+))?';
 // Used for adding optional trailing slash
 $optional_trailing_slash = '(\/)?';
 
-$routes['/^images\/(?P<id>[\d]+)(\.jpeg)?(\.jpg)?$/']                                                                       = 'UNL\UCBCN\Frontend\Image';
+$routes['/^images\/(?P<id>[\d]+)(\.jpeg)?(\.jpg)?(\.png)?(\.gif)?$/']                                      = 'UNL\UCBCN\Frontend\Image';
 $routes['/^'.$calendar_slash_required.'audience'.$optional_trailing_slash.'$/']                            = 'UNL\UCBCN\Frontend\Audience';
 $routes['/^'.$calendar_slash_required.'eventtype'.$optional_trailing_slash.'$/']                           = 'UNL\UCBCN\Frontend\EventType';
 $routes['/^'.$calendar_slash_required.'upcoming'.'(\/)?'.$format.'$/']                                     = 'UNL\UCBCN\Frontend\Upcoming';
