@@ -178,7 +178,7 @@
             <Image>
                 <Title>Image</Title>
                 <Description>image for event <?php echo $context->event->id; ?></Description>
-                <URL><?php echo \UNL\UCBCN\Frontend\Controller::$url; ?>?image&amp;id=<?php echo $context->event->id; ?></URL>
+                <URL><?php echo \UNL\UCBCN\Frontend\Controller::$url; ?>images/<?php echo $context->event->id; ?>.<?php echo explode('image/', $context->event->imagemime)[1]; ?></URL>
             </Image>
         </Images>
         <?php endif; ?>
