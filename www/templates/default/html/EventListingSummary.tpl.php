@@ -1,5 +1,5 @@
 <div class="vcalendar">
-    <ol class="dcf-mt-4 dcf-list-bare dcf-d-grid dcf-col-gap-vw dcf-row-gap-5 unl-event-teaser-ol">
+    <ol class="dcf-mt-4 dcf-list-bare dcf-d-grid dcf-col-gap-vw dcf-row-gap-5 unl-event-teaser-ol" role="list">
     <?php
 
 use UNL\UCBCN\Event\Occurrence;

@@ -15,7 +15,7 @@
             >+ New Event</a>
         <?php endif; ?>
         </div>
-        <ul class="dcf-list-bare dcf-txt-sm">
+        <ul class="dcf-list-bare dcf-txt-sm" role="list">
             <li><a class="dcf-txt-decor-hover" href="<?php echo $calendar->getManageURL() ?>">Manage Calendar</a></li>
             <li><a class="dcf-txt-decor-hover" href="<?php echo $calendar->getFrontendURL() ?>">Live Calendar</a></li>
 
@@ -83,7 +83,7 @@
         <div class="dcf-mb-3 dcf-txt-center">
             <a class="dcf-btn dcf-btn-secondary" href="<?php echo $base_manager_url ?>calendar/new">+ New Calendar</a>
         </div>
-        <ul class="dcf-list-bare dcf-txt-sm">
+        <ul class="dcf-list-bare dcf-txt-sm" role="list">
             <li>
                 <a class="dcf-txt-decor-hover" href="<?php echo $context->getWelcomeURL() ?>">Welcome</a>
             </li>
@@ -117,7 +117,7 @@
 <div class="toolbox">
     <h3>Your Calendars</h3>
     <div class="tools">
-        <ul class="dcf-list-bare dcf-txt-sm">
+        <ul class="dcf-list-bare dcf-txt-sm" role="list">
             <?php foreach ($context->getCalendars() as $calendar): ?>
                 <li>
                     <a

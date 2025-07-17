@@ -758,7 +758,7 @@
             <div style="text-align: center;">
                 <div style="display: inline-block;">
                     <nav class="dcf-pagination">
-                        <ol class="dcf-list-bare dcf-list-inline">
+                        <ol class="dcf-list-bare dcf-list-inline" role="list">
                         <?php if($context->page != 1): ?>
                             <li>
                                 <a

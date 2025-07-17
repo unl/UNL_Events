@@ -500,7 +500,7 @@
             <div class="dcf-mt-2 dcf-txt-center">
                 <div style="display: inline-block;">
                     <nav class="dcf-pagination">
-                        <ol class="dcf-list-bare dcf-list-inline">
+                        <ol class="dcf-list-bare dcf-list-inline" role="list">
                         <?php if($context->page != 1): ?>
                             <li><a class="dcf-pagination-prev" href="?event_type_id=<?php echo $context->event_type_id ?>&search_term=<?php echo $context->search_term?>&amp;page=<?php echo $context->page - 1 ?>">Prev</a></li>
                         <?php endif; ?>
