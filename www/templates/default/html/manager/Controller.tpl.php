@@ -47,10 +47,9 @@ if ($auth->isAuthenticated()) {
 }
 $page->addScriptDeclaration('var frontend_url = "'.$base_frontend_url.'";');
 $page->addScriptDeclaration('var manager_url = "'.$base_manager_url.'";');
-$page->addScriptDeclaration("
-require(['jquery'], function ($) {
-    $('#breadcrumbs > ul > li > a').last().parent().addClass('last-link');
-});");
+$page->addScriptDeclaration("const allBreadcrumbLinks = Array.from(document.querySelectorAll('#breadcrumbs > ul > li > a'));
+const lastBreadcrumbLink = allBreadcrumbLinks[allBreadcrumbLinks.length - 1];
+lastBreadcrumbLink.parentElement.classList.add('last-link');");
 $page->addScript($base_frontend_url .'templates/default/html/js/manager.min.js?v='.UNL\UCBCN\Frontend\Controller::$version);
 
 //other
