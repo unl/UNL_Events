@@ -4,6 +4,8 @@
 
 use UNL\UCBCN\Event\Occurrence;
 
+    $page->addStyleSheet('/wdn/templates_6.0/css/components-js/_events.css?v='.UNL\UCBCN\Frontend\Controller::$version);
+
     foreach ($context as $eventinstance) {
         if (empty($eventinstance)) {
             continue;
@@ -99,11 +101,3 @@ use UNL\UCBCN\Event\Occurrence;
         >View All<span class="dcf-sr-only"> Featured Events</span></a>
     </div>
 </div>
-
-<script>
-  // TODO: Replace this with event css
-  window.addEventListener('inlineJSReady', function() {
-    WDN.initializePlugin('card-as-link');
-    WDN.initializePlugin('events', {limit:0});
-  });
-</script>

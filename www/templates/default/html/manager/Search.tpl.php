@@ -496,7 +496,6 @@
         </div>
 
         <?php if ($total_pages > 1): ?>
-            <?php $page->addScriptDeclaration("WDN.initializePlugin('pagination');"); ?>
             <div class="dcf-mt-2 dcf-txt-center">
                 <div style="display: inline-block;">
                     <nav class="dcf-pagination">

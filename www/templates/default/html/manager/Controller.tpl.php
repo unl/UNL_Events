@@ -47,7 +47,6 @@ if ($auth->isAuthenticated()) {
 }
 $page->addScriptDeclaration('var frontend_url = "'.$base_frontend_url.'";');
 $page->addScriptDeclaration('var manager_url = "'.$base_manager_url.'";');
-$page->addScriptDeclaration("WDN.initializePlugin('notice');");
 $page->addScriptDeclaration("
 require(['jquery'], function ($) {
     $('#breadcrumbs > ul > li > a').last().parent().addClass('last-link');

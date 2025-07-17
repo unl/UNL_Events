@@ -8,7 +8,6 @@ if (false == headers_sent()
 
 $savvy->setReplacementData('pagetitle', 'Sorry, an error occurred.');
 $savvy->setReplacementData('sitetitle', 'Sorry, an error occurred');
-$page->addScriptDeclaration("WDN.initializePlugin('notice');");
 ?>
 
 <div class="dcf-notice dcf-notice-warning" hidden>

@@ -601,11 +601,10 @@ use UNL\UCBCN\Permission;
                 </div>
 
                 <?php if ($total_pages > 1): ?>
-                    <?php $page->addScriptDeclaration("WDN.initializePlugin('pagination');"); ?>
                     <div class="dcf-mt-2" style="text-align: center;">
                         <div style="display: inline-block;">
                             <nav class="dcf-pagination">
-                                <ol class="dcf-list-bare dcf-list-inline">
+                                <ol class="dcf-list-bare dcf-list-inline" role="list">
                                 <?php if($context->page != 1): ?>
                                     <li><a class="dcf-pagination-prev" href="?tab=<?php echo $context->tab?>&amp;page=<?php echo $context->page - 1 ?>">Prev</a></li>
                                 <?php endif; ?>
@@ -637,7 +636,6 @@ use UNL\UCBCN\Permission;
     </div>
 </div>
 <?php
-$page->addScriptDeclaration("WDN.loadCSS('https://wdn.unl.edu/wdn/templates_5.3/js/js-css/tabs.css');");
 $tokenNameKey = $controller->getCSRFHelper()->getTokenNameKey();
 $tokenNameValue = $controller->getCSRFHelper()->getTokenName();
 $tokenValueKey = $controller->getCSRFHelper()->getTokenValueKey();
