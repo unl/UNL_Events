@@ -4,6 +4,7 @@ const DISPLAY_TIMEZONE_NOTICE = 'displayTimeZoneNotice';
 
 use UNL\Templates\Templates;
 use UNL\UCBCN\Util;
+use UNL\UCBCN\Manager\Auth;
 
 $page = Templates::factory('AppLocal', Templates::VERSION_6_0);
 
@@ -36,7 +37,13 @@ $page->addStyleSheet($frontend->getURL().'templates/default/html/css/events.css?
 $page->addStyleDeclaration("#dcf-mobile-toggle-menu {display: none!important}");
 
 //javascript
-$page->addScriptDeclaration('WDN.setPluginParam("idm", "logout", "' . Util::getBaseURL() . '/manager/logout");');
+$page->addScriptDeclaration('window.UNL.idm.pushConfig("logoutRoute", "' . Util::getBaseURL() . '/manager/logout");', '', true);
+$auth = new Auth();
+if ($auth->isAuthenticated()) {
+    $userId = $auth->getCASUserId();
+    $page->addScriptDeclaration('window.UNL.idm.pushConfig("serverUser", "' . $userId . '");', '', true);
+}
+
 $page->addScriptDeclaration('var frontend_url = "'.$frontend->getURL().'";');
 $page->addScript($frontend->getURL().'templates/default/html/js/events.min.js?v='.UNL\UCBCN\Frontend\Controller::$version);
 
@@ -76,7 +83,6 @@ if ($context->getCalendar()) {
     // Display timezone notice when calendar timezone is not app default and DISPLAY_TIMEZONE_NOTICE cookie not set or has changed
     if ($context->getCalendar()->defaulttimezone != UNL\UCBCN::$defaultTimezone && (empty($_COOKIE[DISPLAY_TIMEZONE_NOTICE]) || $_COOKIE[DISPLAY_TIMEZONE_NOTICE] != $context->getCalendar()->defaulttimezone)) {
         setcookie(DISPLAY_TIMEZONE_NOTICE, $context->getCalendar()->defaulttimezone);
-        $page->addScriptDeclaration("WDN.initializePlugin('notice');");
         $page->maincontentarea .= '<div id="timezone-notice" class="dcf-notice dcf-notice-info" hidden><h2>Timezone Display</h2><div>' . $timezoneMessage . '</div></div>';
     }
 

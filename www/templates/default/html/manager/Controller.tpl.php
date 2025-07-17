@@ -1,6 +1,7 @@
 <?php
 use UNL\Templates\Templates;
 use UNL\UCBCN\Util;
+use UNL\UCBCN\Manager\Auth;
 
 $page = Templates::factory('AppLocal', Templates::VERSION_6_0);
 
@@ -37,7 +38,13 @@ $page->addStyleSheet($base_frontend_url.'templates/default/html/css/manager.css?
 $page->addStyleDeclaration("#dcf-mobile-toggle-menu {display: none!important}");
 
 //javascript
-$page->addScriptDeclaration('WDN.setPluginParam("idm", "logout", "' . Util::getBaseURL() . '/manager/logout");');
+$page->addScriptDeclaration('window.UNL.idm.pushConfig("logoutRoute", "' . Util::getBaseURL() . '/manager/logout");', '', true);
+$page->addScriptDeclaration('window.UNL.autoLoader.config.globalOptOutSelector=".events-autoload-ignore";', '', true);
+$auth = new Auth();
+if ($auth->isAuthenticated()) {
+    $userId = $auth->getCASUserId();
+    $page->addScriptDeclaration('window.UNL.idm.pushConfig("serverUser", "' . $userId . '");', '', true);
+}
 $page->addScriptDeclaration('var frontend_url = "'.$base_frontend_url.'";');
 $page->addScriptDeclaration('var manager_url = "'.$base_manager_url.'";');
 $page->addScriptDeclaration("WDN.initializePlugin('notice');");
