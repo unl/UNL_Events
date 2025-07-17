@@ -12,6 +12,7 @@ class Auth
     public static $directory_url = 'https://directory.unl.edu/';
     public static $certPath = '/etc/pki/tls/cert.pem';
     public static $eventsAuthSessionName = NULL;
+    public static $siteURL = "https://events.unl.edu";
 
     public function __construct()
     {
@@ -19,7 +20,7 @@ class Auth
             self::$certPath = GuzzleHttp\default_ca_bundle();
         }
 
-        $this->auth = new AuthCAS('2.0', 'shib.unl.edu', 443, '/idp/profile/cas', self::$certPath, self::$eventsAuthSessionName);
+        $this->auth = new AuthCAS('2.0', 'shib.unl.edu', 443, '/idp/profile/cas', self::$siteURL, self::$certPath, self::$eventsAuthSessionName);
     }
 
     /**
