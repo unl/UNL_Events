@@ -59,11 +59,11 @@
                     <p class="dcf-txt-sm">To crop your image, position and size the blue square to the area to be cropped and press the <strong>Crop</strong> button.</p>
                 </div>
                 <div class="img-container">
-                    <div class="dcf-grid dcf-col-gap-vw dcf-row-gap-4">
-                        <div class="dcf-col-100% dcf-col-75%-start@md">
+                    <div class="dcf-d-grid dcf-grid-cols-12 dcf-col-gap-vw dcf-row-gap-4">
+                        <div class="dcf-col-span-12 dcf-col-span-8@md">
                             <img class="source-image" id="source-image" src="data:image/gif;base64,R0lGODlhAQABAIAAAP7//wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Source image to crop.">
                         </div>
-                        <div class="dcf-col-100% dcf-col-25%-end@md">
+                        <div class="dcf-col-span-12 dcf-col-span-4@md">
                             <div class="preview-image"></div>
                         </div>
                     </div>

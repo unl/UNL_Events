@@ -65,7 +65,7 @@
 <section class="dcf-mb-8 dcf-ml-5">
     <div id="datetime_container">
 
-        <div class="dcf-d-grid dcf-grid-full dcf-grid-halves@md dcf-col-gap-vw">
+        <div class="dcf-d-grid dcf-grid-cols-1 dcf-grid-cols-2@md dcf-col-gap-vw">
             <div class="dcf-form-group dcf-datepicker">
                 <label class="dcf-mt-2" for="start-date">
                     Event Date <small class="dcf-required">Required</small>
@@ -101,7 +101,7 @@
                 Event Time Type
                 <small class="dcf-required">Required</small>
             </legend>
-            <div class="dcf-grid dcf-grid-full dcf-grid-halves dcf-col-gap-vw">
+            <div class="dcf-d-grid dcf-grid-cols-1 dcf-grid-cols-2@md dcf-col-gap-vw">
                 <div class="dcf-input-radio">
                     <input id="<?php echo $time_mode_regular; ?>" name="time_mode" type="radio" value="<?php echo $time_mode_regular; ?>" <?php if ($time_mode === $time_mode_regular) { echo 'checked'; }?>>
                     <label for="<?php echo $time_mode_regular; ?>">Start & End</label>
@@ -133,7 +133,7 @@
                 }
             ?>
         >
-            <div class="dcf-d-grid dcf-grid-full dcf-grid-halves@md dcf-col-gap-vw">
+            <div class="dcf-d-grid dcf-grid-cols-1 dcf-grid-cols-2@md dcf-col-gap-vw">
                 <fieldset
                     id="start-time-container"
                     <?php
@@ -500,7 +500,7 @@
 
             <?php echo $savvy->render($post, 'PhysicalLocationForm.tpl.php'); ?>
 
-            <div class="dcf-d-grid dcf-grid-full dcf-grid-halves@md dcf-col-gap-5">
+            <div class="dcf-d-grid dcf-grid-cols-1 dcf-grid-cols-2@md dcf-col-gap-5">
                 <div class="dcf-form-group dcf-mt-3">
                     <div class="dcf-input-checkbox">
                         <input
@@ -714,7 +714,7 @@
 
             <?php echo $savvy->render($post, 'VirtualLocationForm.tpl.php'); ?>
 
-            <div class="dcf-d-grid dcf-grid-full dcf-grid-halves@md">
+            <div class="dcf-d-grid dcf-grid-cols-1 dcf-grid-cols-2@md">
                 <div class="dcf-form-group dcf-mt-3">
                     <div class="dcf-input-checkbox">
                         <input

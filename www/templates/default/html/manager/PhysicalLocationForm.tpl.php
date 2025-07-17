@@ -1,7 +1,7 @@
 <?php //These names need to match /UNL/UCBCN/Manager/LocationUtility ?>
 
-<div class="dcf-d-grid dcf-grid-full dcf-grid-halves@md dcf-col-gap-5">
-    <div class="dcf-form-group events-col-full-width">
+<div class="dcf-d-grid dcf-grid-cols-1 dcf-grid-cols-2@md dcf-col-gap-5">
+    <div class="dcf-form-group dcf-col-span-1 dcf-col-span-2@md">
         <label for="location-name">Name <small class="dcf-required">Required</small></label>
         <input
             id="location-name"
@@ -140,7 +140,7 @@
         >
     </div>
 
-    <hr class="dcf-mb-5 events-col-full-width">
+    <hr class="dcf-mb-5 dcf-col-span-1 dcf-col-span-2@md">
 
     <div class="dcf-form-group">
         <label for="location-map-url">Map <abbr title="Uniform Resource Locator">URL</abbr></label>
@@ -191,9 +191,9 @@
         >
     </div>
 
-    <hr class="dcf-mb-5 events-col-full-width">
+    <hr class="dcf-mb-5 dcf-col-span-1 dcf-col-span-2@md">
 
-    <div class="dcf-form-group events-col-full-width">
+    <div class="dcf-form-group dcf-col-span-1 dcf-col-span-2@md">
         <label for="location-room">Location Default - Room</label>
         <input
             id="location-room"
@@ -203,7 +203,7 @@
         >
     </div>
 
-    <div class="dcf-form-group events-col-full-width">
+    <div class="dcf-form-group dcf-col-span-1 dcf-col-span-2@md">
         <label for="location-directions">Location Default - Directions</label>
         <textarea
             id="location-directions"
@@ -213,7 +213,7 @@
         ?></textarea>
     </div>
 
-    <div class="dcf-form-group events-col-full-width">
+    <div class="dcf-form-group dcf-col-span-1 dcf-col-span-2@md">
         <label for="location-additional-public-info">Location Default - Additional Public Info</label>
         <textarea
             id="location-additional-public-info"

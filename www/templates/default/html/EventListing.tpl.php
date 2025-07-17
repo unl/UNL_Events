@@ -20,8 +20,8 @@
         <div class="<?php echo implode(' ', $row_classes) ?>">
           <?php echo $savvy->render($eventinstance, 'EventInstance/Summary.tpl.php') ?>
           <?php if ($eventinstance->getImageURL()) { ?>
-            <div class="dcf-grid dcf-col-gap-vw dcf-row-gap-4">
-              <div class="dcf-col-100% dcf-col-75%-start@sm">
+            <div class="dcf-d-grid dcf-grid-cols-12 dcf-row-gap-4">
+              <div class="dcf-col-span-12 dcf-col-span-9@sm">
                   <?php echo $savvy->render($eventinstance, 'EventInstance/Date.tpl.php') ?>
                   <?php echo $savvy->render($eventinstance, 'EventInstance/Location.tpl.php') ?>
                   <?php echo $savvy->render($eventinstance, 'EventInstance/TargetAudience.tpl.php') ?>
@@ -29,7 +29,7 @@
                   <?php echo $savvy->render($eventinstance, 'EventInstance/OriginCalendar.tpl.php') ?>
                   <?php echo $savvy->render($eventinstance, 'EventInstance/EditButton.tpl.php') ?>
               </div>
-              <div class="dcf-col-100% dcf-col-25%-end@sm">
+              <div class="dcf-col-span-12 dcf-col-span-3@sm">
                   <?php echo $savvy->render($eventinstance, 'EventInstance/Thumbnail.tpl.php') ?>
               </div>
             </div>
