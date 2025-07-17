@@ -2,9 +2,9 @@
 use UNL\Templates\Templates;
 use UNL\UCBCN\Util;
 
-$page = Templates::factory('AppLocal', Templates::VERSION_5_3);
+$page = Templates::factory('AppLocal', Templates::VERSION_6_0);
 
-if (file_exists(\UNL\UCBCN\Util::getWWWRoot() . '/wdn/templates_5.3')) {
+if (file_exists(\UNL\UCBCN\Util::getWWWRoot() . '/wdn/templates_6.0')) {
     $page->setLocalIncludePath(\UNL\UCBCN\Util::getWWWRoot());
 }
 
