@@ -49,7 +49,7 @@ use UNL\UCBCN\Permission;
     </div>
 </form>
 <br>
-<div class="dcf-tabs dcf-tabs-responsive dcf-mt-0 dcf-mb-9">
+<div class="dcf-tabs dcf-tabs-responsive dcf-mt-0 dcf-mb-9 events-autoload-ignore">
     <ul class="dcf-tabs-list dcf-list-bare dcf-mb-0" role="tablist">
         <li class="dcf-tabs-list-item dcf-mb-0 <?php if ($context->tab == 'pending') { echo 'selected'; } ?>" role="presentation"><a class="dcf-tab dcf-d-block" role="tab" <?php if ($context->tab == 'pending') { echo ARIA_SELECTED; } ?> href="<?php echo $context->tab == 'pending' ? '#pending' : '?tab=pending'; ?>">Pending (<?php echo count($categorized_events['pending']); ?>)</a></li>
         <li class="dcf-tabs-list-item dcf-mb-0 <?php if ($context->tab == 'upcoming') { echo 'selected'; } ?>" role="presentation"><a class="dcf-tab dcf-d-block" role="tab" <?php if ($context->tab == 'upcoming') { echo ARIA_SELECTED; } ?> href="<?php echo $context->tab == 'upcoming' ? '#upcoming' : '?tab=upcoming'; ?>">Upcoming (<?php echo count($categorized_events['posted']); ?>)</a></li>
