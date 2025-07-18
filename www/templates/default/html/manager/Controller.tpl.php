@@ -96,7 +96,7 @@ if (($notice = $context->getNotice()) != NULL) {
     <div>' . html_entity_decode($notice['messageHTML']) . '</div>
 </div></div>';
 } else {
-    $page->maincontentarea .= '<div id="noticeContainer"><div id="notice" class="dcf-notice" hidden data-no-close-button style="display: none!important">
+    $page->maincontentarea .= '<div id="noticeContainer"><div id="notice" class="dcf-notice dcf-d-none!" hidden data-no-close-button>
     <h2>Message Header</h2>
     <div>Message Content</div>
 </div></div>';

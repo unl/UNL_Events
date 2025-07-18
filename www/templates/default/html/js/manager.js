@@ -1,140 +1,195 @@
-require(['jquery', 'wdn'], function($, WDN) {
-    $(document).ready(function() {
-        $('form').on('change blur', 'input', function() {
-            $(this).removeClass('validation-failed');
-        });
+const select_events = document.querySelectorAll('.select-event');
+const bulk_action = document.getElementById('bulk-action');
+if (bulk_action !== null) {
+    bulk_action.addEventListener('change', () => {
+        const ids = [];
 
-        $('#bulk-action').change(function () {
-            var ids = [];
-
-            // find ids of all events that are checked
-            $('.select-event').each(function() {
-                if ($(this).is(':checked')) {
-                    ids.push(parseInt($(this).attr('data-id')));
-                }
-            });
-
-            if (ids.length > 0) {
-                $('#bulk-action-ids').val(ids.join(','));
-                $('#bulk-action-action').val($(this).val());
-
-                var confirm_string = null;
-                if ($(this).val() == 'delete') {
-                    confirm_string = 'Are you sure you want to delete these ' + ids.length.toString() + ' events?';
-                } else if ($(this).val() == 'move-to-upcoming') {
-                    confirm_string = 'Are you sure to move these ' + ids.length.toString() + ' events to "Upcoming"?';
-                } else if ($(this).val() == 'move-to-pending') {
-                    confirm_string = 'Are you sure to move these ' + ids.length.toString() + ' events to "Pending"?';
-                } else {
-                    // do nothing
-                    return;
-                }
-
-                if (window.confirm(confirm_string)) {
-                    $('#bulk-action-form').submit();
-                }
+        // find ids of all events that are checked
+        select_events.forEach((single_select_event) => {
+            if (single_select_event.checked) {
+                ids.push(single_select_event.dataset.id);
             }
         });
 
-        $('#checkbox-toggle').click(function (click) {
-            $(".select-event").prop("checked", $(this).is(":checked"));
-        });
+        if (ids.length > 0) {
+            const bulk_action_ids = document.getElementById('bulk-action-ids');
+            const bulk_action_action = document.getElementById('bulk-action-action');
 
-        if ($('#recurring').is(":checked")) {
-            $(".recurring-container").show();
-        }
+            bulk_action_ids.value = ids.join(',');
+            bulk_action_action.value = bulk_action.value;
 
-        $('#recurring').click(function (click) {
-            if ($(this).is(":checked")) {
-                $(".recurring-container").show();
+            let confirm_string = null;
+            if (bulk_action.value == 'delete') {
+                confirm_string = 'Are you sure you want to delete these ' + ids.length.toString() + ' events?';
+            } else if (bulk_action.value == 'move-to-upcoming') {
+                confirm_string = 'Are you sure to move these ' + ids.length.toString() + ' events to "Upcoming"?';
+            } else if (bulk_action.value == 'move-to-pending') {
+                confirm_string = 'Are you sure to move these ' + ids.length.toString() + ' events to "Pending"?';
             } else {
-                $(".recurring-container").hide();
+                // do nothing
+                return;
             }
-        });
 
-        $('.pending-event-tools, .upcoming-event-tools, .past-event-tools, .searched-event-tools').change(function () {
-            if ($(this).val() == 'recommend') {
-                // redirect to recommend URL
-                window.location = $(this).attr('data-recommend-url');
-            } else if ($(this).val() == 'delete') {
-                if (window.confirm('Are you sure you want to delete this event?')) {
-                    $('#delete-' + $(this).attr('data-id')).submit();
-                }
-            } else if ($(this).val() == 'move-to-upcoming') {
-                $('#move-target-' + $(this).attr('data-id')).val('upcoming');
-                $('#move-' + $(this).attr('data-id')).submit();
-            } else if ($(this).val() == 'move-to-pending') {
-                $('#move-target-' + $(this).attr('data-id')).val('pending');
-                $('#move-' + $(this).attr('data-id')).submit();
-            } else if ($(this).val() == 'promote') {
-                $('#promote-target-' + $(this).attr('data-id')).val('promote');
-                $('#promote-' + $(this).attr('data-id')).submit();
-            } else if ($(this).val() == 'hide-promo') {
-                $('#promote-target-' + $(this).attr('data-id')).val('hide-promo');
-                $('#promote-' + $(this).attr('data-id')).submit();
+            if (window.confirm(confirm_string)) {
+                const bulk_action_form = document.getElementById('bulk-action-form');
+                bulk_action_form.submit();
             }
-        });
+        }
+    });
+}
 
-        $('#toggle-search').click(function (click) {
-            click.preventDefault();
-            $('#search-form').slideToggle(400, function() {
-                if ($('#search-form').is(':visible')) {
-                    $('#search-form input').focus();
-                }
+const checkbox_toggle = document.getElementById('checkbox-toggle');
+if (checkbox_toggle !== null) {
+    checkbox_toggle.addEventListener('click', () => {
+        if (checkbox_toggle.checked) {
+            select_events.forEach((single_select_element) => {
+                single_select_element.setAttribute('checked', 'checked');
             });
+        } else {
+            select_events.forEach((single_select_element) => {
+                single_select_element.removeAttribute('checked');
+            });
+        }
+    });
+}
+
+const recurring_checkbox = document.getElementById('recurring');
+const recurring_containers = document.querySelectorAll('.recurring-container');
+if (recurring_checkbox !== null) {
+    recurring_checkbox.addEventListener('change', () => {
+        if (recurring_checkbox.checked) {
+            recurring_containers.forEach((single_container) => {
+                single_container.classList.remove('dcf-d-none!');
+            });
+        } else {
+            recurring_containers.forEach((single_container) => {
+                single_container.classList.add('dcf-d-none!');
+            });
+        }
+    });
+    if (recurring_checkbox.checked) {
+        recurring_containers.forEach((single_container) => {
+            single_container.classList.remove('dcf-d-none!');
         });
+    } else {
+        recurring_containers.forEach((single_container) => {
+            single_container.classList.add('dcf-d-none!');
+        });
+    }
+}
 
-        notifier = {
-            mark_input_invalid: function(input) {
-                input.addClass('validation-failed');
-            },
-            failure: function(header, message) {
-                notifier.check(header, message, 'dcf-notice-danger');
-                $('#notice').removeClass('dcf-notice-info').removeClass('dcf-notice-success').removeClass('dcf-notice-warning').addClass('dcf-notice-danger');
-                $('#notice h2').text(header);
-                $('#notice .dcf-notice-message').html(message);
-                $('#notice').fadeIn();
-
-                window.scrollTo(0,0);
-            },
-            info: function(header, message) {
-                notifier.check(header, message, 'dcf-notice-info');
-                $('#notice').addClass('dcf-notice-info').removeClass('dcf-notice-success').removeClass('dcf-notice-warning').removeClass('dcf-notice-danger');
-                $('#notice h2').text(header);
-                $('#notice .dcf-notice-message').html(message);
-                $('#notice').fadeIn();
-
-                window.scrollTo(0,0);
-            },
-            success: function(header, message) {
-                notifier.check(header, message, 'dcf-notice-success');
-                $('#notice').removeClass('dcf-notice-info').addClass('dcf-notice-success').removeClass('dcf-notice-warning').removeClass('dcf-notice-danger');
-                $('#notice h2').text(header);
-                $('#notice .dcf-notice-message').html(message);
-                $('#notice').fadeIn();
-
-                window.scrollTo(0,0);
-            },
-            alert: function(header, message) {
-                notifier.check(header, message, 'dcf-notice-warning');
-                $('#notice').removeClass('dcf-notice-info').removeClass('dcf-notice-success').addClass('dcf-notice-warning').removeClass('dcf-notice-danger');
-                $('#notice h2').text(header);
-                $('#notice .dcf-notice-message').html(message);
-                $('#notice').fadeIn();
-
-                window.scrollTo(0,0);
-            },
-            check: function(header, message, type) {
-                var noticeContainer = document.getElementById('noticeContainer');
-                var notice = document.getElementById('notice');
-                if (noticeContainer && !notice) {
-                    require(['dcf-notice'], function(DCFNoticeModule) {
-                        var dummyNotice = new DCFNoticeModule.DCFNotice();
-                        notice = dummyNotice.appendNotice(noticeContainer, header, message, type);
-                        notice.setAttribute('id', 'notice');
-                    });
-                }
+const helper_tools = document.querySelectorAll('.pending-event-tools, .upcoming-event-tools, .past-event-tools, .searched-event-tools');
+helper_tools.forEach((single_tool) => {
+    single_tool.addEventListener('change', () => {
+        const delete_form = document.getElementById(`delete-${single_tool.dataset.id}`);
+        const move_form = document.getElementById(`move-${single_tool.dataset.id}`);
+        const move_target = document.getElementById(`move-target-${single_tool.dataset.id}`);
+        const promote_target = document.getElementById(`promote-target-${single_tool.dataset.id}`);
+        const promote_form = document.getElementById(`promote-${single_tool.dataset.id}`);
+        if (single_tool.value == 'recommend') {
+            // redirect to recommend URL
+            window.location = single_tool.dataset.recommendUrl;
+        } else if (single_tool.value == 'delete') {
+            if (window.confirm('Are you sure you want to delete this event?')) {
+                delete_form.submit();
             }
-        };
+        } else if (single_tool.value == 'move-to-upcoming') {
+            move_target.value = 'upcoming';
+            move_form.submit();
+        } else if (single_tool.value == 'move-to-pending') {
+            move_target.value = 'pending';
+            move_form.submit();
+        } else if (single_tool.value == 'promote') {
+            promote_target.value = 'promote';
+            promote_form.submit();
+        } else if (single_tool.value == 'hide-promo') {
+            promote_target.value = 'hide-promo';
+            promote_form.submit();
+        }
     });
 });
+
+const toggle_search = document.getElementById('toggle-search');
+if (toggle_search !== null) {
+    toggle_search.addEventListener('click', () => {
+        const search_form = document.getElementById('search-form');
+        if (search_form.classList.contains('dcf-d-none!')) {
+            search_form.classList.remove('dcf-d-none!');
+        } else {
+            search_form.classList.add('dcf-d-none!');
+        }
+    });
+}
+
+const form_inputs = document.querySelectorAll('input, select, textarea');
+form_inputs.forEach((single_input) => {
+    single_input.addEventListener('change', () => {
+        single_input.classList.remove('validation-failed');
+    });
+    single_input.addEventListener('blur', () => {
+        single_input.classList.remove('validation-failed');
+    });
+});
+
+window.UNL_Events = window.UNL_Events || {};
+window.UNL_Events.notifier = {
+    mark_input_invalid: function(input_element) {
+        input_element.classList.add('validation-failed');
+    },
+    failure: function(header, message) {
+        const notice = document.getElementById('notice');
+        const notice_header = notice.querySelector('h2');
+        const notice_message = notice.querySelector('.dcf-notice-message');
+
+        notice.classList.remove('dcf-notice-info', 'dcf-notice-success', 'dcf-notice-warning', 'dcf-notice-danger');
+        notice.classList.add('dcf-notice-danger');
+
+        notice_header.innerText = header;
+        notice_message.innerHTML = message;
+
+        notice.classList.remove('dcf-d-none!');
+        notice.scrollIntoView();
+    },
+    info: function(header, message) {
+        const notice = document.getElementById('notice');
+        const notice_header = notice.querySelector('h2');
+        const notice_message = notice.querySelector('.dcf-notice-message');
+
+        notice.classList.remove('dcf-notice-info', 'dcf-notice-success', 'dcf-notice-warning', 'dcf-notice-danger');
+        notice.classList.add('dcf-notice-info');
+
+        notice_header.innerText = header;
+        notice_message.innerHTML = message;
+
+        notice.classList.remove('dcf-d-none!');
+        notice.scrollIntoView();
+    },
+    success: function(header, message) {
+        const notice = document.getElementById('notice');
+        const notice_header = notice.querySelector('h2');
+        const notice_message = notice.querySelector('.dcf-notice-message');
+
+        notice.classList.remove('dcf-notice-info', 'dcf-notice-success', 'dcf-notice-warning', 'dcf-notice-danger');
+        notice.classList.add('dcf-notice-success');
+
+        notice_header.innerText = header;
+        notice_message.innerHTML = message;
+
+        notice.classList.remove('dcf-d-none!');
+        notice.scrollIntoView();
+    },
+    alert: function(header, message) {
+        const notice = document.getElementById('notice');
+        const notice_header = notice.querySelector('h2');
+        const notice_message = notice.querySelector('.dcf-notice-message');
+
+        notice.classList.remove('dcf-notice-info', 'dcf-notice-success', 'dcf-notice-warning', 'dcf-notice-danger');
+        notice.classList.add('dcf-notice-warning');
+
+        notice_header.innerText = header;
+        notice_message.innerHTML = message;
+
+        notice.classList.remove('dcf-d-none!');
+        notice.scrollIntoView();
+    }
+};

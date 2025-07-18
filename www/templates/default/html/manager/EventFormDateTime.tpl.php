@@ -321,7 +321,7 @@
                     >
                     <label for="recurring">This is a recurring <?php echo $recurring_type; ?> event</label>
                 </div>
-                <fieldset class="recurring-container date-time-select">
+                <fieldset class="recurring-container date-time-select dcf-d-none!">
                     <legend>Recurring Event Details</legend>
                     <div class="dcf-d-flex dcf-flex-wrap dcf-ai-center dcf-col-gap-4">
                     <div class="dcf-form-group">
