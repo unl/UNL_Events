@@ -1031,39 +1031,6 @@ $page->addScript(
     UNL\UCBCN\Frontend\Controller::$version
 );
 
-$page->addScriptDeclaration("
-require(['jquery'], function($) {
-    $('.delete-datetime').submit(function (submit) {
-        if (!window.confirm('Are you sure you want to delete this instance?')) {
-            submit.preventDefault();
-        }
-    });
-
-    $('.delete-datetime-recurrence').submit(function (submit) {
-        if (!window.confirm(
-            'Are you sure you want to delete this occurrence of your recurring instance?' +
-            ' The rest of the recurrences will remain.'
-        )) {
-            submit.preventDefault();
-        }
-    });
-
-    $('.edit-recurring-edt').click(function (click) {
-        if (!window.confirm('You are editing a single occurrence of a recurring instance.')) {
-            click.preventDefault();
-        }
-    });
-
-    $('#edit-event-form').submit(function (submit) {
-        // validate required fields
-        if ($('#title').val() == '') {
-            notifier.mark_input_invalid($('#title'));
-            notifier.alert('Sorry! We couldn\'t edit your event', '<a href=\"#title\">Title</a> is required.');
-            submit.preventDefault();
-        }
-    });
-});");
-
 $tokenNameKey = $controller->getCSRFHelper()->getTokenNameKey();
 $tokenNameValue = $controller->getCSRFHelper()->getTokenName();
 $tokenValueKey = $controller->getCSRFHelper()->getTokenValueKey();

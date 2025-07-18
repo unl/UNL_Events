@@ -832,14 +832,14 @@
 $js_recurring_type = $recurring_type ?? '';
 $js_recurring_month = $recurring_month_type ?? '';
 
-$page->addScriptDeclaration("const recurringType = '" . $js_recurring_type . "';");
-$page->addScriptDeclaration("const recurringMonth = '" . $js_recurring_month . "';");
+$page->addScriptDeclaration("window.UNL_Events.recurringType = '" . $js_recurring_type . "';");
+$page->addScriptDeclaration("window.UNL_Events.recurringMonth = '" . $js_recurring_month . "';");
 
-$page->addScriptDeclaration("const time_mode_regular = '" . $time_mode_regular . "';");
-$page->addScriptDeclaration("const time_mode_start_time_only = '" . $time_mode_start_time_only . "';");
-$page->addScriptDeclaration("const time_mode_end_time_only = '" . $time_mode_end_time_only . "';");
-$page->addScriptDeclaration("const time_mode_all_day = '" . $time_mode_all_day . "';");
-$page->addScriptDeclaration("const time_mode_tbd = '" . $time_mode_tbd . "';");
+$page->addScriptDeclaration("window.UNL_Events.time_mode_regular = '" . $time_mode_regular . "';");
+$page->addScriptDeclaration("window.UNL_Events.time_mode_start_time_only = '" . $time_mode_start_time_only . "';");
+$page->addScriptDeclaration("window.UNL_Events.time_mode_end_time_only = '" . $time_mode_end_time_only . "';");
+$page->addScriptDeclaration("window.UNL_Events.time_mode_all_day = '" . $time_mode_all_day . "';");
+$page->addScriptDeclaration("window.UNL_Events.time_mode_tbd = '" . $time_mode_tbd . "';");
 
 $page->addScript(
     $base_frontend_url .
