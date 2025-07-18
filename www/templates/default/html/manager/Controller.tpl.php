@@ -33,6 +33,7 @@ $page->affiliation = '';
 //css
 $page->addStyleSheet($base_frontend_url.'templates/default/html/css/events.css?v='.UNL\UCBCN\Frontend\Controller::$version);
 $page->addStyleSheet($base_frontend_url.'templates/default/html/css/manager.css?v='.UNL\UCBCN\Frontend\Controller::$version);
+$page->addStyleSheet('/wdn/templates_6.0/css/components-js/_tabs.css');
 
 // no menu items, so hide mobile menu
 $page->addStyleDeclaration("#dcf-mobile-toggle-menu {display: none!important}");
