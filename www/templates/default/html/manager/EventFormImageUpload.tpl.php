@@ -46,36 +46,34 @@
     </div>
     <hr>
 </section>
-<div class="dcf-modal" id="image-modal" hidden>
-    <div class="dcf-modal-wrapper">
-        <div class="dcf-modal-header">
-            <h3>Image Crop</h3>
-            <button class="dcf-btn-close-modal">Close</button>
-        </div>
-        <div class="dcf-modal-content">
-            <ul class="dcf-mb-4" id="cropper-errors" hidden></ul>
-            <div id="cropper-content">
-                <div class="dcf-mb-4">
-                    <p class="dcf-txt-sm">To crop your image, position and size the blue square to the area to be cropped and press the <strong>Crop</strong> button.</p>
-                </div>
-                <div class="img-container">
-                    <div class="dcf-d-grid dcf-grid-cols-12 dcf-col-gap-vw dcf-row-gap-4">
-                        <div class="dcf-col-span-12 dcf-col-span-8@md">
-                            <img class="source-image" id="source-image" src="data:image/gif;base64,R0lGODlhAQABAIAAAP7//wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Source image to crop.">
-                        </div>
-                        <div class="dcf-col-span-12 dcf-col-span-4@md">
-                            <div class="preview-image"></div>
-                        </div>
+<dialog class="dcf-dialog" id="image-modal">
+    <div class="dcf-dialog-header">
+        <h3>Image Crop</h3>
+        <button class="dcf-btn-close-dialog">Close</button>
+    </div>
+    <div class="dcf-dialog-content">
+        <ul class="dcf-mb-4" id="cropper-errors" hidden></ul>
+        <div id="cropper-content">
+            <div class="dcf-mb-4">
+                <p class="dcf-txt-sm">To crop your image, position and size the blue square to the area to be cropped and press the <strong>Crop</strong> button.</p>
+            </div>
+            <div class="img-container">
+                <div class="dcf-d-grid dcf-grid-cols-12 dcf-col-gap-vw dcf-row-gap-4">
+                    <div class="dcf-col-span-12 dcf-col-span-8@md">
+                        <img class="source-image" id="source-image" src="data:image/gif;base64,R0lGODlhAQABAIAAAP7//wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Source image to crop.">
+                    </div>
+                    <div class="dcf-col-span-12 dcf-col-span-4@md">
+                        <div class="preview-image"></div>
                     </div>
                 </div>
-                <div class="dcf-mt-4">
-                    <button class="dcf-btn dcf-btn-secondary" id="cancel-crop-btn" type="button">Cancel</button>
-                    <button class="dcf-btn dcf-btn-primary" id="crop-btn" type="button">Crop</button>
-                </div>
+            </div>
+            <div class="dcf-mt-4">
+                <button class="dcf-btn dcf-btn-secondary" id="cancel-crop-btn" type="button">Cancel</button>
+                <button class="dcf-btn dcf-btn-primary" id="crop-btn" type="button">Crop</button>
             </div>
         </div>
     </div>
-</div>
+</dialog>
 <?php
-$page->addScript($base_frontend_url .'templates/default/html/js/event-image.min.js?v='.UNL\UCBCN\Frontend\Controller::$version);
+$page->addScript($base_frontend_url .'templates/default/html/js/event-image.min.js?v='.UNL\UCBCN\Frontend\Controller::$version, 'module');
 ?>
