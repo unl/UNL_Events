@@ -4,8 +4,6 @@
 
 use UNL\UCBCN\Event\Occurrence;
 
-    $page->addStyleSheet('/wdn/templates_6.0/css/components-js/_events.css?v='.UNL\UCBCN\Frontend\Controller::$version);
-
     foreach ($context as $eventinstance) {
         if (empty($eventinstance)) {
             continue;
