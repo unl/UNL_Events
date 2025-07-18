@@ -810,7 +810,7 @@
     <h2>Sharing</h2>
     <section class="dcf-mb-8 dcf-ml-5">
         <div class="details dcf-d-grid dcf-grid-cols-12 dcf-col-gap-vw">
-            <fieldset class="dcf-col-span-12 dcf-col-span-3@sm dcf-p-0 dcf-b-0">
+            <fieldset class="dcf-col-span-12 dcf-col-span-3@md dcf-p-0 dcf-b-0">
                 <legend class="dcf-pb-2">
                         Privacy
                         <div class="dcf-popup dcf-d-inline" data-point="true">
@@ -863,7 +863,7 @@
                     <label for="sharing-public">Public</label>
                 </div>
             </fieldset>
-            <fieldset class="dcf-col-span-12 dcf-col-span-9@sm dcf-mb-0 dcf-p-0 dcf-b-0" id="send_to_main">
+            <fieldset class="dcf-col-span-12 dcf-col-span-9@md dcf-mb-0 dcf-p-0 dcf-b-0" id="send_to_main">
                 <legend
                     class="dcf-pb-2"
                 >

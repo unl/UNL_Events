@@ -73,7 +73,7 @@ if ($_SERVER['SERVER_NAME'] == 'events-dev.unl.edu') {
 }
 
 $page->maincontentarea .= '
-        <section class="dcf-d-grid dcf-grid-cols-12 dcf-col-gap-vw dcf-pb-8">
+        <section class="dcf-d-grid dcf-grid-cols-12 dcf-row-gap-4 dcf-col-gap-vw dcf-pb-8">
             <div class="dcf-col-span-12 dcf-col-span-9@md">
 ';
 
@@ -105,7 +105,7 @@ if (($notice = $context->getNotice()) != NULL) {
 $page->maincontentarea .= $savvy->render($context->output, $template) . '
             <br>
             </div>
-            <div class="dcf-col-span-12 dcf-col-span-3@sm">
+            <div class="dcf-col-span-12 dcf-col-span-3@md">
                 <nav class="calendars-list">
                     ' . $savvy->render($context, 'navigation.tpl.php') . '
                 </nav>
