@@ -136,6 +136,7 @@
             <div class="dcf-d-grid dcf-grid-cols-1 dcf-grid-cols-2@md dcf-col-gap-vw">
                 <fieldset
                     id="start-time-container"
+                    class="dcf-mb-4"
                     <?php
                         if ($time_mode === $time_mode_end_time_only) {
                             echo 'class="dcf-d-none"';
@@ -226,6 +227,7 @@
 
                 <fieldset
                     id="end-time-container"
+                    class="dcf-mb-4"
                     <?php
                         if ($time_mode === $time_mode_start_time_only) {
                             echo 'class="dcf-d-none"';
