@@ -19,7 +19,7 @@
             </div>
         <?php endif; ?>
         <div class="dcf-form-group">
-            <label for="imagedata">Image Upload <small class="required-for-main-calendar dcf-required" style="display: none">Required</small></label>
+            <label for="imagedata">Image Upload <small class="required-for-main-calendar dcf-required dcf-d-none!">Required</small></label>
             <input id="imagedata" name="imagedata" type="file" accept="image/gif, image/jpeg, image/png, image/avif, image/webp" aria-label="Select an Image">
 
         </div>

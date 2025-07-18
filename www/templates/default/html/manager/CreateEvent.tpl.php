@@ -47,7 +47,7 @@
             <div class="dcf-form-group">
                 <label for="description">
                     Description
-                    <small class="required-for-main-calendar dcf-required" style="display: none">Required</small>
+                    <small class="required-for-main-calendar dcf-required dcf-d-none!">Required</small>
                 </label>
                 <textarea id="description" name="description" rows="4" ><?php echo $event->description; ?></textarea>
             </div>
@@ -244,7 +244,7 @@
                 <div class="dcf-form-group">
                     <label for="contact-name">
                         Name
-                        <small class="required-for-main-calendar dcf-required" style="display: none">Required</small>
+                        <small class="required-for-main-calendar dcf-required dcf-d-none!">Required</small>
                     </label>
                     <input
                         id="contact-name"
