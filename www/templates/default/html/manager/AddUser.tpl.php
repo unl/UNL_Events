@@ -16,7 +16,7 @@
     <?php if ($context->user == NULL) { ?>
         <div class="dcf-form-group">
             <label for="user">User</label>
-            <select id="user" name="user">
+            <select id="user" name="user" class="dcf-search-select" hidden>
                 <?php foreach($context->getAvailableUsers() as $user) { ?>
                   <option value="<?php echo $user->uid ?>"><?php echo $user->uid ?></option>
               <?php } ?>
