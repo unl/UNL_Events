@@ -77,22 +77,27 @@
 
 <?php
 $page->addScriptDeclaration("
-require(['jquery'], function($) {
-    $('#create-calendar-form').submit(function (submit) {
-        if ($('#name').val() == '' || $('#shortname').val() == '') {
-            if ($('#name').val() == '') {
-                notifier.mark_input_invalid($('#name'));
-            }
-            if ($('#shortname').val() == '') {
-                notifier.mark_input_invalid($('#shortname'));
-            }
-            notifier.alert('Sorry! We couldn\'t create your calendar', 'Name and shortname are required.');
-            submit.preventDefault();
-        } else if (!($('#shortname').val().match(/^[a-zA-Z-_0-9]+$/))) {
-            notifier.mark_input_invalid($('#shortname'));
-            notifier.alert('Sorry! We couldn\'t create your calendar', 'Calendar shortnames must contain only letters, numbers, dashes, and underscores.');
-            submit.preventDefault();
+const create_calendar_form = document.getElementById('create-calendar-form');
+const name_input = document.getElementById('name');
+const shortname_input = document.getElementById('shortname');
+create_calendar_form.addEventListener('submit', (submit) => {
+    submit.preventDefault();
+
+    if (name_input.value == '' || shortname_input.value == '') {
+        if (name_input.value == '') {
+            window.UNL_Events.notifier.mark_input_invalid(name_input);
         }
-    });
+        if (shortname_input.value == '') {
+            window.UNL_Events.notifier.mark_input_invalid(shortname_input);
+        }
+        window.UNL_Events.notifier.alert('Sorry! We couldn\'t create your calendar', 'Name and shortname are required.');
+        submit.preventDefault();
+    } else if (!(shortname_input.value).match(/^[a-zA-Z-_0-9]+$/)) {
+        window.UNL_Events.notifier.mark_input_invalid(shortname_input);
+        window.UNL_Events.notifier.alert('Sorry! We couldn\'t create your calendar', 'Calendar shortnames must contain only letters, numbers, dashes, and underscores.');
+        submit.preventDefault();
+    } else {
+        create_calendar_form.submit();
+    }
 });");
 ?>
