@@ -112,7 +112,7 @@ add_datetime_form.addEventListener('submit', (submit) => {
                 window.UNL_Events.notifier.mark_input_invalid(recurring_type_input);
             }
             if (recurs_until_date_input.value == '') {
-                window.UNL_Events.notifier.mark_input_invalid(recurs_until_date_input.value);
+                window.UNL_Events.notifier.mark_input_invalid(recurs_until_date_input);
             }
             errors.push('Recurring events require a <a href="#recurring-type">recurring type</a> and <a href="#recurs-until-date">date</a> that they recur until.');
         }

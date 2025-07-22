@@ -47,6 +47,10 @@ abstract class RecordList extends \LimitIterator implements \Countable
             $this->options['limit'] = -1;
         }
 
+        if ($this->options['limit'] === -1) {
+            $this->options['limit'] = PHP_INT_MAX;
+        }
+
         // Check if the offset is greater than the list itself
         // If so do not use it
         if ($this->options['offset'] >= count($list)) {
@@ -167,12 +171,12 @@ abstract class RecordList extends \LimitIterator implements \Countable
         return $mysqli->escape_string($string);
     }
 
-    public function current()
+    public function current(): mixed
     {
-        return call_user_func_array($this->options['itemClass'] . "::getByID", parent::current());
+        return call_user_func_array($this->options['itemClass'] . "::getByID", [parent::current()['id']]);
     }
 
-    public function count()
+    public function count(): int
     {
         $iterator = $this->getInnerIterator();
         if ($iterator instanceof EmptyIterator) {

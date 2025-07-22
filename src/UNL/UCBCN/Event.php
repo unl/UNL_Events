@@ -238,15 +238,9 @@ class Event extends Record
     #
     # returns an EventType
     public function getFirstType() {
-        $first_type = NULL;
-
         $types = $this->getEventTypes();
-        foreach($types as $type) {
-            $first_type = $type->getType();
-            break;
-        }
-
-        return $first_type;
+        $types->rewind();
+        return $types->current()->getType();
     }
 
     

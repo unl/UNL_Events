@@ -39,6 +39,13 @@ class Controller {
 
     public static $url = '/manager/';
 
+    /**
+     * Main content of the page sent to the client.
+     *
+     * @var mixed
+     */
+    public $output;
+
     public function __construct($options = array()) {
         $this->options = $options + $this->options;
 
