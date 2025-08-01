@@ -20,7 +20,7 @@
         <div class="<?php echo implode(' ', $row_classes) ?>">
           <?php echo $savvy->render($eventinstance, 'EventInstance/Summary.tpl.php') ?>
           <?php if ($eventinstance->getImageURL()) { ?>
-            <div class="dcf-d-grid dcf-grid-cols-12 dcf-row-gap-4">
+            <div class="dcf-d-grid dcf-grid-cols-12 dcf-col-gap-vw dcf-row-gap-4">
               <div class="dcf-col-span-12 dcf-col-span-9@md">
                   <?php echo $savvy->render($eventinstance, 'EventInstance/Date.tpl.php') ?>
                   <?php echo $savvy->render($eventinstance, 'EventInstance/Location.tpl.php') ?>
