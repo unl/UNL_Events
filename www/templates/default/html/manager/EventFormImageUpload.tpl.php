@@ -2,8 +2,8 @@
 <section class="dcf-mb-8 dcf-ml-5">
     <div class="details">
         <?php if ($context->event->imagemime != NULL): ?>
-            <div class="dcf-form-group">
-                <img src="<?php echo $base_frontend_url ?>images/<?php echo $context->event->id; ?>" alt="image for event <?php echo $context->event->id; ?>">
+            <div class="dcf-form-group" style="width: clamp(5em, 100%, 20em);">
+                <img class="dcf-mb-4" src="<?php echo $base_frontend_url ?>images/<?php echo $context->event->id; ?>" alt="image for event <?php echo $context->event->id; ?>">
                 <?php if(!$context->on_main_calendar): ?>
                     <div class="dcf-input-checkbox">
                         <input id="remove-image" name="remove_image" type="checkbox">
