@@ -12,14 +12,14 @@
 <h1><?php echo $context->user == NULL ? 'Add a User' : 'Edit User Permissions' ?></h1>
 
 <?php if ($context->user == NULL) : ?>
-    <form id="user-lookup" class="dcf-form">
+    <form id="user-lookup-form" class="dcf-form">
         <fieldset>
             <legend>User Lookup</legend>
             <div class="dcf-form-group">
-                <label for="user_lookup">Search for a user</label>
+                <label for="user-lookup">Search for a user</label>
                 <div class="dcf-input-group">
-                    <input id="user_lookup" type="text" placeholder="Herbie Husker">
-                    <input id="user_lookup_btn" class="dcf-btn dcf-btn-primary" type="submit" value="Look Up">
+                    <input id="user-lookup" type="text" placeholder="Herbie Husker">
+                    <input class="dcf-btn dcf-btn-primary" type="submit" value="Look Up">
                 </div>
             </div>
             <div class="dcf-form-group">
@@ -119,7 +119,9 @@
         window.UNL_Events.availableUsers = <?php echo json_encode($json_data_available); ?>;
         window.UNL_Events.allUsers = <?php echo json_encode($json_data_all); ?>;
 
-        const user_lookup_form = document.getElementById('user-lookup');
+        const user_input = document.getElementById('user');
+        const user_lookup_form = document.getElementById('user-lookup-form');
+        const user_lookup_input = document.getElementById('user-lookup');
         const user_lookup_table = document.getElementById('user-lookup-table');
         const user_lookup_loading_spinner = document.getElementById('user-lookup-loading');
         const user_lookup_load_message = document.getElementById('user-lookup-load');
@@ -127,7 +129,6 @@
         const user_lookup_none_message = document.getElementById('user-lookup-none');
         const user_lookup_table_body = document.getElementById('user-lookup-table-body');
         const user_lookup_row_template = document.getElementById('user-lookup-row');
-
 
         const directory_lookup_url = new URL('https://directory.unl.edu/service.php?q=&format=json&method=getExactMatches')
         user_lookup_form.addEventListener('submit', async(e) => {
@@ -142,25 +143,37 @@
                 return;
             }
 
+            user_input.value = e.target.dataset.uid;
+            user_input.style.outlineWidth = '3px';
+            user_input.style.outlineStyle = 'solid';
+            user_input.style.outlineColor = 'color-mix(in srgb, var(--bg-brand-zeta), transparent 0%)';
+
             const success_message = e.target.parentElement.querySelector('.user-lookup-btn-success');
             success_message.classList.remove('dcf-invisible');
             success_message.style.opacity = 1;
+
             let current_opacity = 1;
+            let current_transparency = 0;
             clearTimeout(timeout_id);
             clearInterval(interval_id);
             timeout_id = setTimeout(() => {
                 interval_id = setInterval(() => {
                     current_opacity -= 0.01;
+                    current_transparency += 1;
                     success_message.style.opacity = current_opacity;
+                    user_input.style.outlineColor = `color-mix(in srgb, var(--bg-brand-zeta), transparent ${current_transparency}%)`;
                     if (current_opacity <= 0) {
                         success_message.classList.add('dcf-invisible');
                         success_message.style.opacity = 1;
                         clearInterval(interval_id);
                     }
+                    if (current_transparency >= 100) {
+                        user_input.style.outlineWidth = '';
+                        user_input.style.outlineStyle = '';
+                        user_input.style.outlineColor = '';
+                    }
                 }, 10);
             }, 500);
-
-            document.getElementById('user').value = e.target.dataset.uid;
         }, true);
 
         async function fetch_directory_lookup() {
@@ -171,7 +184,7 @@
             user_lookup_none_message.classList.add('dcf-d-none!');
             user_lookup_table_body.innerHTML = '';
 
-            directory_lookup_url.searchParams.set('q', document.getElementById('user_lookup').value);
+            directory_lookup_url.searchParams.set('q', user_lookup_input.value);
             let response = null;
             try {
                 response = await fetch(directory_lookup_url.toString());
