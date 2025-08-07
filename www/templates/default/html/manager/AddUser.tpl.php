@@ -48,14 +48,14 @@
         <template id="user-lookup-row">
             <tr>
                 <td>
-                    <img class="user-lookup-img dcf-h-8 dcf-w-8 dcf-rounded dcf-1x1" src="">
+                    <img class="user-lookup-img dcf-h-8 dcf-w-8 dcf-rounded dcf-1x1" src="" alt="">
                 </td>
                 <td>
                     <a class="user-lookup-name"></a>
                 </td>
                 <td>
                     <div class="user-lookup-btn-container dcf-d-flex dcf-gap-3">
-                        <button class="user-lookup-btn dcf-btn dcf-btn-primary" type="button">Select User</button>
+                        <button class="user-lookup-btn dcf-btn dcf-btn-primary" type="button" aria-controls="user">Select User</button>
                         <div class="user-lookup-btn-success unl-bg-green dcf-rounded unl-cream dcf-d-flex dcf-jc-center dcf-ai-center dcf-pl-3 dcf-pr-3 dcf-invisible">Selected</div>
                     </div>
                     <div class="user-lookup-not-available dcf-txt-xs dcf-d-none!">

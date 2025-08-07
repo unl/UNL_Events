@@ -5,7 +5,7 @@
 
 <?php if ($calendar != NULL): ?>
 <div class="toolbox">
-    <h3><?php echo $calendar->name; ?></h3>
+    <p class="dcf-txt-h3"><?php echo $calendar->name; ?></p>
     <div class="tools">
         <div class="dcf-mb-3 dcf-txt-center">
         <?php if ($user->hasPermission(\UNL\UCBCN\Permission::EVENT_CREATE_ID, $calendar->id)): ?>
@@ -78,7 +78,7 @@
 <?php endif; ?>
 
 <div class="toolbox">
-    <h3>Tools</h3>
+    <p class="dcf-txt-h3">Tools</p>
     <div class="tools">
         <div class="dcf-mb-3 dcf-txt-center">
             <a class="dcf-btn dcf-btn-secondary" href="<?php echo $base_manager_url ?>calendar/new">+ New Calendar</a>
@@ -115,7 +115,7 @@
 </div>
 
 <div class="toolbox">
-    <h3>Your Calendars</h3>
+    <p class="dcf-txt-h3">Your Calendars</p>
     <div class="tools">
         <ul class="dcf-list-bare dcf-txt-sm" role="list">
             <?php foreach ($context->getCalendars() as $calendar): ?>

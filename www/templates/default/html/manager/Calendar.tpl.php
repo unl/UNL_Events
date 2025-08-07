@@ -34,7 +34,7 @@ use UNL\UCBCN\Permission;
     $crumbs->search = TRUE;
     echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
 ?>
-<form class="dcf-form dcf-d-none!" id="search-form" action="<?php echo $context->calendar->getSearchURL(); ?>">
+<form class="dcf-form dcf-mb-4 dcf-d-none!" id="search-form" action="<?php echo $context->calendar->getSearchURL(); ?>">
     <label class="dcf-label" for="events-search">Search</label>
     <div class="dcf-input-group">
         <select class="dcf-txt-sm" id="event_type_id" name="event_type_id" aria-label="Event Bulk Move Options">
@@ -48,7 +48,8 @@ use UNL\UCBCN\Permission;
         <button type="submit" class="dcf-btn dcf-btn-primary">Search</button>
     </div>
 </form>
-<br>
+<h1>Manage Calendar</h1>
+<p class="dcf-subhead dcf-mb-8"><a href="<?php echo $context->calendar->getFrontendURL(); ?>">View Calendar</a></p>
 <div class="dcf-tabs dcf-tabs-responsive dcf-mt-0 dcf-mb-9 events-autoload-ignore">
     <ul class="dcf-tabs-list dcf-list-bare dcf-mb-0" role="tablist">
         <li class="dcf-tabs-list-item dcf-mb-0 <?php if ($context->tab == 'pending') { echo 'selected'; } ?>" role="presentation"><a class="dcf-tab dcf-d-block" role="tab" <?php if ($context->tab == 'pending') { echo ARIA_SELECTED; } ?> href="<?php echo $context->tab == 'pending' ? '#pending' : '?tab=pending'; ?>">Pending (<?php echo count($categorized_events['pending']); ?>)</a></li>

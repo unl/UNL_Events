@@ -21,7 +21,7 @@ if (!$context->getCalendar()) {
     }
     $title .= ' | Manager | Events';
     $site_title = $context->getCalendar()->name . ' Events Manager';
-    $cal_url = $context->getCalendar()->getFrontendURL();
+    $cal_url = $context->getCalendar()->getManageURL();
 }
 $view_class = str_replace('\\', '_', strtolower($context->options['model']));
 
