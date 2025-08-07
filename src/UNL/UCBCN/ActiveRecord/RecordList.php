@@ -173,8 +173,7 @@ abstract class RecordList extends \LimitIterator implements \Countable
 
     public function current(): mixed
     {
-        $first_value = parent::current()[array_key_first(parent::current())];
-        return call_user_func_array($this->options['itemClass'] . "::getByID", [$first_value]);
+        return call_user_func_array($this->options['itemClass'] . "::getByID", array_values(parent::current()));
     }
 
     public function count(): int
