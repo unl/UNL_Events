@@ -34,6 +34,9 @@ class Users extends RecordList
                 INNER JOIN user ON user_has_permission.user_uid = user.uid
                 WHERE calendar.id = "' . (int)($this->options['not_calendar_id']) . '");';
             return $sql;
+        } else {
+            $sql = 'SELECT DISTINCT uid FROM user';
+            return $sql;
         }
 
         return parent::getSQL();
