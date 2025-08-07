@@ -179,7 +179,7 @@
                         user_input.style.outlineColor = '';
                     }
                 }, 10);
-            }, 500);
+            }, 700);
         }, true);
 
         async function fetch_directory_lookup() {
