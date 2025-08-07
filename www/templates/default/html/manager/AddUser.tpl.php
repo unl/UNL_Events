@@ -7,6 +7,7 @@
         $context->user == NULL ? 'Add a User' : 'Edit User Permissions' => NULL
     );
     echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
+    $available_users = $context->getAvailableUsers();
 ?>
 
 <h1><?php echo $context->user == NULL ? 'Add a User' : 'Edit User Permissions' ?></h1>
@@ -76,7 +77,7 @@
         <div class="dcf-form-group">
             <label for="user">User</label>
             <select id="user" name="user">
-                <?php foreach($context->getAvailableUsers() as $user) { ?>
+                <?php foreach($available_users as $user) { ?>
                     <option value="<?php echo $user->uid ?>"><?php echo $user->uid ?></option>
                 <?php } ?>
             </select>
@@ -104,7 +105,7 @@
 <?php if ($context->user == NULL) : ?>
     <?php
         $json_data_available = [];
-        foreach($context->getAvailableUsers() as $user) {
+        foreach($available_users as $user) {
             $json_data_available[] = $user->uid;
         }
 
