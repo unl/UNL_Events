@@ -149,6 +149,11 @@
             user_input.style.outlineStyle = 'solid';
             user_input.style.outlineColor = 'color-mix(in srgb, var(--bg-brand-zeta), transparent 0%)';
 
+            user_input.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center',
+            });
+
             const success_message = e.target.parentElement.querySelector('.user-lookup-btn-success');
             success_message.classList.remove('dcf-invisible');
             success_message.style.opacity = 1;
