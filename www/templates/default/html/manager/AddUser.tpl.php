@@ -59,7 +59,7 @@
                         <div class="user-lookup-btn-success unl-bg-green dcf-rounded unl-cream dcf-d-flex dcf-jc-center dcf-ai-center dcf-pl-3 dcf-pr-3 dcf-invisible">Selected</div>
                     </div>
                     <div class="user-lookup-not-available dcf-txt-xs dcf-d-none!">
-                        This user is already on the calendar
+                        This user is already a member of this calendar
                     </div>
                     <div class="user-lookup-no-login dcf-txt-xs dcf-d-none!">
                         This user needs to login to events before you can select them. <br>
