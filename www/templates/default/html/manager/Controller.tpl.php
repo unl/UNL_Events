@@ -46,6 +46,26 @@ if ($auth->isAuthenticated()) {
     $userId = $auth->getCASUserId();
     $page->addScriptDeclaration('window.UNL.idm.pushConfig("serverUser", "' . $userId . '");', '', true);
 }
+$page->addScriptDeclaration('{
+    "prerender": [
+        {
+            "source": "document",
+            "where": {
+                "selector_matches": "a.unl-prerender"
+            },
+            "eagerness": "moderate"
+        }
+    ],
+    "prefetch": [
+        {
+            "source": "document",
+            "where": {
+                "selector_matches": "a.unl-prefetch"
+            },
+            "eagerness": "moderate"
+        }
+    ]
+}', 'speculationrules', true);
 $page->addScriptDeclaration('var frontend_url = "'.$base_frontend_url.'";');
 $page->addScriptDeclaration('var manager_url = "'.$base_manager_url.'";');
 $page->addScriptDeclaration("const allBreadcrumbLinks = Array.from(document.querySelectorAll('#breadcrumbs > ul > li > a'));
@@ -74,7 +94,7 @@ if ($_SERVER['SERVER_NAME'] == 'events-dev.unl.edu') {
 
 $page->maincontentarea .= '
         <section class="dcf-d-grid dcf-grid-cols-12 dcf-row-gap-4 dcf-col-gap-vw dcf-pb-8">
-            <div class="dcf-col-span-12 dcf-col-span-9@md">
+            <div id="main-manager-section" class="dcf-col-span-12 dcf-col-span-9@md">
 ';
 
 if (($notice = $context->getNotice()) != NULL) {

@@ -49,7 +49,7 @@ use UNL\UCBCN\Permission;
     </div>
 </form>
 <h1>Manage Calendar</h1>
-<p class="dcf-subhead dcf-mb-8"><a href="<?php echo $context->calendar->getFrontendURL(); ?>">View Calendar</a></p>
+<p class="dcf-subhead dcf-mb-8"><a class="unl-prerender" href="<?php echo $context->calendar->getFrontendURL(); ?>">View Calendar</a></p>
 <div class="dcf-tabs dcf-tabs-responsive dcf-mt-0 dcf-mb-9 events-autoload-ignore">
     <ul class="dcf-tabs-list dcf-list-bare dcf-mb-0" role="tablist">
         <li class="dcf-tabs-list-item dcf-mb-0 <?php if ($context->tab == 'pending') { echo 'selected'; } ?>" role="presentation"><a class="dcf-tab dcf-d-block" role="tab" <?php if ($context->tab == 'pending') { echo ARIA_SELECTED; } ?> href="<?php echo $context->tab == 'pending' ? '#pending' : '?tab=pending'; ?>">Pending (<?php echo count($categorized_events['pending']); ?>)</a></li>
@@ -141,11 +141,11 @@ use UNL\UCBCN\Permission;
                                     </td>
                                     <td class="small-hidden">
                                         <?php if ($event->userCanEdit()): ?>
-                                            <a href="<?php echo $event->getEditURL($controller->getCalendar()) ?>">
+                                            <a class="unl-prerender" href="<?php echo $event->getEditURL($controller->getCalendar()) ?>">
                                             <?php echo $event->title; ?>
                                             </a>
                                         <?php else: ?>
-                                            <a href="<?php echo $event->getViewURL($controller->getCalendar()) ?>">
+                                            <a class="unl-prerender" href="<?php echo $event->getViewURL($controller->getCalendar()) ?>">
                                             <?php echo $event->title; ?>
                                             </a> (preview)
                                         <?php endif; ?>
@@ -153,7 +153,7 @@ use UNL\UCBCN\Permission;
                                     <td>
                                         <div class="small-block dcf-d-none calendar-event-title">
                                             <?php if ($event->userCanEdit()): ?>
-                                                <a href="<?php echo $event->getEditURL($controller->getCalendar()) ?>">
+                                                <a class="unl-prerender" href="<?php echo $event->getEditURL($controller->getCalendar()) ?>">
                                                 <?php echo $event->title; ?>
                                                 </a>
                                             <?php else: ?>
@@ -607,7 +607,7 @@ use UNL\UCBCN\Permission;
                             <nav class="dcf-pagination">
                                 <ol class="dcf-list-bare dcf-list-inline" role="list">
                                 <?php if($context->page != 1): ?>
-                                    <li><a class="dcf-pagination-prev" href="?tab=<?php echo $context->tab?>&amp;page=<?php echo $context->page - 1 ?>">Prev</a></li>
+                                    <li><a class="dcf-pagination-prev unl-prerender" href="?tab=<?php echo $context->tab?>&amp;page=<?php echo $context->page - 1 ?>">Prev</a></li>
                                 <?php endif; ?>
                                 <?php $before_ellipsis_shown = FALSE; $after_ellipsis_shown = FALSE; ?>
                                 <?php for ($i = 1; $i <= $total_pages; $i++): ?>
@@ -615,7 +615,7 @@ use UNL\UCBCN\Permission;
                                             <li><span class="dcf-pagination-selected"><?php echo $i; ?></span></li>
                                         <?php elseif ($i <= 3 || $i >= $total_pages - 2 || $i == $context->page - 1 ||
                                                     $i == $context->page - 2 || $i == $context->page + 1 || $i == $context->page + 2): ?>
-                                            <li><a href="?tab=<?php echo $context->tab?>&amp;page=<?php echo $i ?>"><?php echo $i; ?></a></li>
+                                            <li><a class="unl-prerender" href="?tab=<?php echo $context->tab?>&amp;page=<?php echo $i ?>"><?php echo $i; ?></a></li>
                                         <?php elseif ($i < $context->page && !$before_ellipsis_shown): ?>
                                             <li><span class="dcf-pagination-ellipsis">...</span></li>
                                             <?php $before_ellipsis_shown = TRUE; ?>
@@ -625,7 +625,7 @@ use UNL\UCBCN\Permission;
                                         <?php endif; ?>
                                 <?php endfor; ?>
                                 <?php if($context->page != $total_pages): ?>
-                                    <li><a class="dcf-pagination-next" href="?tab=<?php echo $context->tab?>&amp;page=<?php echo $context->page + 1 ?>">Next</a></li>
+                                    <li><a class="dcf-pagination-next unl-prerender" href="?tab=<?php echo $context->tab?>&amp;page=<?php echo $context->page + 1 ?>">Next</a></li>
                                 <?php endif; ?>
                                 </ol>
                             </nav>

@@ -238,3 +238,33 @@ img.user-lookup-img {
   border: 1px solid red;
 }
 /* End: CropperJS Styles */
+
+
+// View Transitions
+@keyframes slide-in-from-left {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(0); }
+}
+
+::view-transition-new(main-manager-section) {
+  animation: 300ms ease-out slide-in-from-left;
+}
+
+#breadcrumbs {
+  view-transition-name: breadcrumb-bar;
+}
+#main-manager-section {
+  view-transition-name: main-manager-section;
+}
+#noticeContainer {
+  view-transition-name: notice-container;
+}
+#current-calendar-nav {
+  view-transition-name: current-calendar-nav;
+}
+#manager-tools {
+  view-transition-name: manager-tools;
+}
+#your-calendars-nav {
+  view-transition-name: your-calendars-nav;
+}

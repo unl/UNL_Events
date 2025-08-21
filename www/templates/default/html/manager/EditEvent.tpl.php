@@ -207,7 +207,7 @@
     <h2>Event Instances</h2>
     <section  class="dcf-mb-8 dcf-ml-5">
         <a
-            class="dcf-btn dcf-btn-primary"
+            class="dcf-btn dcf-btn-primary unl-prerender"
             href="<?php echo $event->getAddDatetimeURL($context->calendar) ?>"
         >
             Add New Instance
@@ -584,7 +584,7 @@
                                 </div>
                             <?php endif; ?>
                             <a
-                                class="dcf-btn dcf-btn-primary"
+                                class="dcf-btn dcf-btn-primary unl-prerender"
                                 href="<?php echo $datetime->getEditURL($context->calendar); ?>"
                             >
                                 Edit
@@ -691,7 +691,7 @@
                                 <td class="dcf-pr-0 dcf-txt-middle controls recurring">
                                     <div class="dcf-d-flex dcf-ai-center dcf-jc-flex-end">
                                         <a
-                                            class="dcf-btn dcf-btn-primary edit-recurring-edt"
+                                            class="dcf-btn dcf-btn-primary edit-recurring-edt unl-prerender"
                                             href="<?php
                                                 echo $datetime->getEditRecurrenceURL(
                                                     $context->calendar,
@@ -761,7 +761,7 @@
                         <?php if($context->page != 1): ?>
                             <li>
                                 <a
-                                    class="dcf-pagination-prev"
+                                    class="dcf-pagination-prev unl-prerender"
                                     href="?page=<?php echo $context->page - 1 ?>"
                                 >
                                     Prev
@@ -778,7 +778,7 @@
                                                 $i == $context->page - 2 ||
                                                 $i == $context->page + 1 ||
                                                 $i == $context->page + 2): ?>
-                                    <li><a href="?page=<?php echo $i ?>"><?php echo $i; ?></a></li>
+                                    <li><a class="unl-prerender" href="?page=<?php echo $i ?>"><?php echo $i; ?></a></li>
                                 <?php elseif ($i < $context->page && !$before_ellipsis_shown): ?>
                                     <li><span class="dcf-pagination-ellipsis">...</span></li>
                                     <?php $before_ellipsis_shown = true; ?>
@@ -790,7 +790,7 @@
                         <?php if($context->page != $total_pages): ?>
                             <li>
                                 <a
-                                    class="dcf-pagination-next"
+                                    class="dcf-pagination-next unl-prerender"
                                     href="?page=<?php echo $context->page + 1 ?>"
                                 >
                                     Next

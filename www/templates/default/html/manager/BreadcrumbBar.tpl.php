@@ -5,9 +5,9 @@
         <?php foreach ($context->crumbs as $text => $url): ?>
         <li>
             <?php if ($url != NULL): ?>
-            <a href="<?php echo $url; ?>"><?php echo $text ?></a>
+            <a class="unl-prerender" href="<?php echo $url; ?>"><?php echo $text ?></a>
             <?php else: ?>
-            <a><?php echo $text ?></a>
+            <a class="unl-prerender"><?php echo $text ?></a>
             <?php endif; ?>
         </li>
         <?php endforeach; ?>

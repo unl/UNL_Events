@@ -84,11 +84,11 @@
                             <?php $locationCalendar = $location->getCalendar();?>
                             Saved to
                             <?php if ($context->userHasAccessToCalendar($location->calendar_id ?? "")): ?>
-                                <a href='<?php echo $locationCalendar->getManageURL(); ?>'>
+                                <a class="unl-prerender" href='<?php echo $locationCalendar->getManageURL(); ?>'>
                                     <?php echo $locationCalendar->name; ?>
                                 </a>
                             <?php else: ?>
-                                <a href='<?php echo $locationCalendar->getFrontendURL(); ?>'>
+                                <a class="unl-prerender" href='<?php echo $locationCalendar->getFrontendURL(); ?>'>
                                     <?php echo $locationCalendar->name; ?>
                                 </a>
                             <?php endif;?>
