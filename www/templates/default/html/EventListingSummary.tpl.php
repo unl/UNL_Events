@@ -94,7 +94,7 @@ use UNL\UCBCN\Event\Occurrence;
 
     <div class="dcf-txt-right">
         <a
-            class="dcf-btn dcf-btn-tertiary"
+            class="dcf-btn dcf-btn-tertiary unl-prerender"
             href="<?php echo $context->calendar->getFeaturedURL(); ?>"
         >View All<span class="dcf-sr-only"> Featured Events</span></a>
     </div>

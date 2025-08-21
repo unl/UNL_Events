@@ -31,7 +31,7 @@
             </button>
         <?php else: ?>
             <a
-                class="dcf-btn dcf-btn-secondary"
+                class="dcf-btn dcf-btn-secondary unl-prerender"
                 href="<?php echo $previous_link; ?>"
             >
                 Previous <?php echo $context->limit; ?>
@@ -50,7 +50,7 @@
             </button>
         <?php else: ?>
             <a
-                class="dcf-btn dcf-btn-secondary"
+                class="dcf-btn dcf-btn-secondary unl-prerender"
                 href="<?php echo $next_link; ?>"
             >
                 Next <?php echo $context->limit; ?>

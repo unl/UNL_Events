@@ -26,7 +26,7 @@
             $output = "";
             foreach ($event_target_audience as $index => $audience) {
                 $current_audience = $audience->getAudience();
-                $output .= '<a class="dcf-d-inline-block" href="' .
+                $output .= '<a class="unl-prerender dcf-d-inline-block" href="' .
                     $frontend->getAudienceURL() .
                     '?audience=' .
                     $current_audience->name .

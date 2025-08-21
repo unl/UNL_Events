@@ -8,5 +8,5 @@ if (!empty($context->calendar->id) && !empty($originCalendar->id) && $context->c
         $name = $savvy->dbStringtoHtml($originCalendar->name);
         $name = $savvy->linkify($name);
     ?>
-    <div><small class="dcf-txt-2xs">This event originated in <a href="<?php echo Controller::$url . urlencode($originCalendar->shortname); ?>"><?php echo $name; ?></a>.</small></div>
+    <div><small class="dcf-txt-2xs">This event originated in <a class="unl-prerender" href="<?php echo Controller::$url . urlencode($originCalendar->shortname); ?>"><?php echo $name; ?></a>.</small></div>
 <?php endif; ?>

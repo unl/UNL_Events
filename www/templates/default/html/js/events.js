@@ -245,13 +245,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const updatecontent = document.getElementById('updatecontent');
-    updatecontent.addEventListener('click', () => {
-        const link = e.target.closest('a.summary');
-        if (link && link.closest('.vevent')) {
-            e.preventDefault();
-            loadEventInstance(this.href);
-        };
-    }, true);
+    if (updatecontent !== null) {
+        updatecontent.addEventListener('click', (e) => {
+            const link = e.target.closest('a.summary');
+            if (link && link.closest('.vevent')) {
+                e.preventDefault();
+                loadEventInstance(link.href);
+            };
+        }, true);
+    }
 
     window.addEventListener('popstate', (e) => {
         const state = e.state;

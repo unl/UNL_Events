@@ -502,3 +502,29 @@
   }
 
 }
+
+// View Transitions
+@keyframes slide-in-from-right {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+
+::view-transition-new(update-content) {
+  animation: 300ms ease-out slide-in-from-right;
+}
+
+#calendar-nav {
+  view-transition-name: calendar-nav;
+}
+
+#monthwidget {
+  view-transition-name: month-widget;
+}
+
+#filter_form {
+  view-transition-name: filter-form;
+}
+
+#updatecontent {
+  view-transition-name: update-content;
+}

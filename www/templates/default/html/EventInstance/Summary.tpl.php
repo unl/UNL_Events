@@ -8,7 +8,7 @@
     <?php if (isset($event_event_type) && !empty($event_event_type)): ?>
         <small class="dcf-badge dcf-badge-roundrect dcf-mb-4">
             <a
-                class="dcf-txt-decor-hover"
+                class="dcf-txt-decor-hover unl-prerender"
                 href="<?php echo $frontend->getEventTypeURL() . '?type=' . $event_event_type->name; ?>"
                 style="color: inherit;"
             >
@@ -18,7 +18,7 @@
     <?php endif; ?>
     <h2>
         <a
-            class="url summary dcf-txt-decor-none"
+            class="url summary dcf-txt-decor-none unl-prerender"
             href="<?php echo $frontend->getEventURL($context->getRawObject()) ?>">
             <?php echo $savvy->dbStringtoHtml($context->event->displayTitle($context)) ?>
         </a>

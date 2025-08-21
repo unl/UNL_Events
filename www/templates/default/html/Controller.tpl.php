@@ -44,6 +44,26 @@ if ($auth->isAuthenticated()) {
     $userId = $auth->getCASUserId();
     $page->addScriptDeclaration('window.UNL.idm.pushConfig("serverUser", "' . $userId . '");', '', true);
 }
+$page->addScriptDeclaration('{
+    "prerender": [
+        {
+            "source": "document",
+            "where": {
+                "selector_matches": "a.unl-prerender"
+            },
+            "eagerness": "moderate"
+        }
+    ],
+    "prefetch": [
+        {
+            "source": "document",
+            "where": {
+                "selector_matches": "a.unl-prefetch"
+            },
+            "eagerness": "moderate"
+        }
+    ]
+}', 'speculationrules', true);
 
 $page->addScriptDeclaration('var frontend_url = "'.$frontend->getURL().'";');
 $page->addScript($frontend->getURL().'templates/default/html/js/events.min.js?v='.UNL\UCBCN\Frontend\Controller::$version);
@@ -88,8 +108,8 @@ if ($context->getCalendar()) {
     }
 
     $page->maincontentarea .= '
-                    <div class="dcf-grid">
-                        <div class="dcf-col-100%">
+                    <div id="calendar-nav" class="dcf-d-grid dcf-grid-cols-12">
+                        <div class="dcf-col-span-12">
                             <div class="events-nav">
                                 <div class="submit-search">
                                     <a id="frontend_login" href="' . UNL\UCBCN\Frontend\Controller::$manager_url . $context->getCalendar()->shortname . '">Manage Events</a>
@@ -120,11 +140,11 @@ if ($context->getCalendar()) {
                                     </form>
                                 </div>
                                 <ul id="frontend_view_selector" class="' . $view_class . '">
-                                    <li id="todayview"><a href="' . $frontend->getCurrentDayURL() . '">Today</a></li>
-                                    <li id="weekview"><a href="' .  $frontend->getCurrentWeekURL() . '">Week</a></li>
-                                    <li id="monthview"><a href="' .  $frontend->getCurrentMonthURL() . '">Month</a></li>
-                                    <li id="yearview"><a href="' .  $frontend->getCurrentYearURL() . '">Year</a></li>
-                                    <li id="upcomingview"><a href="' .  $frontend->getUpcomingURL() . '">Upcoming</a></li>
+                                    <li id="todayview"><a class="unl-prerender" href="' . $frontend->getCurrentDayURL() . '">Today</a></li>
+                                    <li id="weekview"><a class="unl-prerender" href="' .  $frontend->getCurrentWeekURL() . '">Week</a></li>
+                                    <li id="monthview"><a class="unl-prerender" href="' .  $frontend->getCurrentMonthURL() . '">Month</a></li>
+                                    <li id="yearview"><a class="unl-prerender" href="' .  $frontend->getCurrentYearURL() . '">Year</a></li>
+                                    <li id="upcomingview"><a class="unl-prerender" href="' .  $frontend->getUpcomingURL() . '">Upcoming</a></li>
                                 </ul>
                             </div>
                         </div>
