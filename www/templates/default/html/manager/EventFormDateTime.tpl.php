@@ -518,7 +518,7 @@
                         >
                         <label for="location-save">
                             Save this location for your future events
-                            <div class="dcf-popup dcf-d-inline" data-point="true">
+                            <div class="dcf-popup dcf-d-inline" data-point="true" hidden>
                                 <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup dcf-p-0" type="button">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -567,7 +567,7 @@
                         >
                         <label for="location-save-calendar">
                             Save this location for this calendar's future events
-                            <div class="dcf-popup dcf-d-inline" data-point="true">
+                            <div class="dcf-popup dcf-d-inline" data-point="true" hidden>
                                 <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup dcf-p-0" type="button">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -732,7 +732,7 @@
                         >
                         <label for="v-location-save">
                             Save this location for your future events
-                            <div class="dcf-popup dcf-d-inline" data-point="true">
+                            <div class="dcf-popup dcf-d-inline" data-point="true" hidden>
                                 <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup dcf-p-0" type="button">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -780,7 +780,7 @@
                         >
                         <label for="v-location-save-calendar">
                             Save this location for this calendar's future events
-                            <div class="dcf-popup dcf-d-inline" data-point="true">
+                            <div class="dcf-popup dcf-d-inline" data-point="true" hidden>
                                 <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup dcf-p-0" type="button">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"

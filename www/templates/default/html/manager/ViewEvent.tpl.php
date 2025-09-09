@@ -129,7 +129,7 @@ echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
                             class="dcf-txt-middle location with-controls"
                             data-id="<?php echo $location->id; ?>"
                         >
-                            <div class="dcf-popup dcf-w-100%" data-hover="true" data-point="true">
+                            <div class="dcf-popup dcf-w-100%" data-hover="true" data-point="true" hidden>
                                 <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup dcf-w-100%" type="button">
                                     
                                     <?php echo $location->name; ?>
@@ -225,7 +225,7 @@ echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
                             class="dcf-txt-middle v_location with-controls"
                             data-id="<?php echo $getWebcast->id; ?>"
                         >
-                            <div class="dcf-popup dcf-w-100%" data-hover="true" data-point="true">
+                            <div class="dcf-popup dcf-w-100%" data-hover="true" data-point="true" hidden>
                                 <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup dcf-w-100%" type="button">
                                     <?php echo $getWebcast->title; ?>
                                 </button>

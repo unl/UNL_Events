@@ -323,7 +323,7 @@
                             class="dcf-txt-middle location with-controls"
                             data-id="<?php echo $location->id; ?>"
                         >
-                            <div class="dcf-popup dcf-w-100%" data-hover="true" data-point="true">
+                            <div class="dcf-popup dcf-w-100%" data-hover="true" data-point="true" hidden>
                                 <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup dcf-w-100% dcf-d-flex dcf-ai-center dcf-jc-center dcf-gap-4" type="button">
                                     <svg
                                         class="dcf-h-4 dcf-w-4 dcf-d-block dcf-fill-current"
@@ -452,7 +452,7 @@
                             class="dcf-txt-middle v_location with-controls"
                             data-id="<?php echo $getWebcast->id; ?>"
                         >
-                            <div class="dcf-popup dcf-w-100%" data-hover="true" data-point="true">
+                            <div class="dcf-popup dcf-w-100%" data-hover="true" data-point="true" hidden>
                                 <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup dcf-w-100% dcf-d-flex dcf-ai-center dcf-jc-center dcf-gap-4" type="button">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -541,7 +541,7 @@
                     <td class="dcf-pr-0 dcf-txt-middle controls">
                         <div class="dcf-d-flex dcf-ai-center dcf-jc-flex-end">
                             <?php if (!$datetime->microdataCheck()): ?>
-                                <div class="dcf-popup dcf-mr-1" data-point="true">
+                                <div class="dcf-popup dcf-mr-1" data-point="true" hidden>
                                     <button
                                         class="dcf-btn dcf-btn-popup unl-cream unl-bg-blue events-b-blue"
                                         title="Missing Microdata Requirements"
@@ -598,6 +598,7 @@
                                     data-alignment="end"
                                     data-hover="true"
                                     data-point="true"
+                                    hidden
                                 >
                                     <button 
                                         class="dcf-btn dcf-btn-secondary dcf-ml-1 dcf-btn-toggle-popup"
@@ -813,7 +814,7 @@
             <fieldset class="dcf-col-span-12 dcf-col-span-3@md dcf-p-0 dcf-b-0">
                 <legend class="dcf-pb-2">
                         Privacy
-                        <div class="dcf-popup dcf-d-inline" data-point="true">
+                        <div class="dcf-popup dcf-d-inline" data-point="true" hidden>
                             <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup dcf-p-0" type="button">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"

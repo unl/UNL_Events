@@ -266,7 +266,7 @@ use UNL\UCBCN\Permission;
                                                             2.5 2.5-1.122 2.5-2.5 2.5z"></path>
                                                     </svg>
                                                     <span class="dcf-sr-only">Physical Location:</span>
-                                                    <div class="dcf-popup" data-point="true">
+                                                    <div class="dcf-popup" data-point="true" hidden>
                                                         <button
                                                             class="dcf-btn dcf-btn-tertiary dcf-btn-popup"
                                                             type="button"
@@ -425,7 +425,7 @@ use UNL\UCBCN\Permission;
                                                             <g><path fill="none" d="M0 0H24V24H0z"></path></g>
                                                         </svg>
                                                         <span class="dcf-sr-only">Virtual Location:</span>
-                                                        <div class="dcf-popup" data-point="true">
+                                                        <div class="dcf-popup" data-point="true" hidden>
                                                             <button
                                                                 class="dcf-btn dcf-btn-tertiary dcf-btn-popup"
                                                                 type="button"
