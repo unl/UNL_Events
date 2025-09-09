@@ -24,3 +24,4 @@ install
 .viminfo
 composer.phar
 mysql-config.php
+.ssh/
