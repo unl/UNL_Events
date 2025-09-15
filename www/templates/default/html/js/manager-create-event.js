@@ -3,7 +3,7 @@ function isUrlValid(string) {
 
     try {
         url = new URL(string);
-    } catch (_) {
+    } catch {
         return false;
     }
 
@@ -404,7 +404,10 @@ create_form.addEventListener('submit', (submit) => {
     }
 
     // Must select whether to consider for main calendar
-    if (send_to_main_checked_input.value === undefined) {
+    if (
+        send_to_main_checked_input === null ||
+        send_to_main_checked_input.value === undefined
+    ) {
         window.UNL_Events.notifier.mark_input_invalid(send_to_main_on_input);
         errors.push('<a href="#send_to_main">Consider for main calendar</a> is required.');
 
