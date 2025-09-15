@@ -224,20 +224,19 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        let day = null;
         switch (e.code) {
         case 'ArrowRight':
+            day = dayNav.querySelector('.next').href;
             if (e.altKey) {
                 day = getOffsetMonth(nowActive, 1)
-            } else {
-                day = dayNav.querySelector('.next').href;
             }
             changeDay(day);
             break;
         case 'ArrowLeft':
+            day = dayNav.querySelector('.prev').href;
             if (e.altKey) {
                 day = getOffsetMonth(nowActive, -1);
-            } else {
-                day = dayNav.querySelector('.prev').href;
             }
             changeDay(day);
             break;
@@ -248,7 +247,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (updatecontent !== null) {
         updatecontent.addEventListener('click', (e) => {
             const link = e.target.closest('a.summary');
-            if (link && link.closest('.vevent')) {
+            if (link !== null && link.closest('.vevent')) {
                 e.preventDefault();
                 loadEventInstance(link.href);
             };

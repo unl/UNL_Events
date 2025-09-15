@@ -4,26 +4,26 @@ import "/js/cropperjs/cropper.min.js";
 
 loadStyleSheet('/js/cropperjs/cropper.min.css');
 
-var cropperErrorContainer = document.getElementById('cropper-errors');
-var cropperContentContainer = document.getElementById('cropper-content');
-var image = document.getElementById('source-image');
-var croppedImageContainer = document.getElementById('cropped-image-container');
-var croppedImage = document.getElementById('cropped-image');
-var croppedImageData = document.getElementById('cropped-image-data');
-var imageData = document.getElementById('imagedata');
-var modal = document.getElementById('image-modal');
-var cancelBtn = document.getElementById('cancel-crop-btn');
-var cropBtn = document.getElementById('crop-btn');
-var modalClassInstance = null;
-var cropper;
-var outputType;
-var errors = [];
+const cropperErrorContainer = document.getElementById('cropper-errors');
+const cropperContentContainer = document.getElementById('cropper-content');
+const image = document.getElementById('source-image');
+const croppedImageContainer = document.getElementById('cropped-image-container');
+const croppedImage = document.getElementById('cropped-image');
+const croppedImageData = document.getElementById('cropped-image-data');
+const imageData = document.getElementById('imagedata');
+const modal = document.getElementById('image-modal');
+const cancelBtn = document.getElementById('cancel-crop-btn');
+const cropBtn = document.getElementById('crop-btn');
+let modalClassInstance = null;
+let cropper;
+let outputType;
+let errors = [];
 
 modal.addEventListener('dialogReady', (e) => {
   modalClassInstance = e.detail.classInstance;
 });
 
-var isValidFile = function(file) {
+const isValidFile = function(file) {
   errors = [];
   switch(file.type) {
     case 'image/png':
@@ -37,20 +37,20 @@ var isValidFile = function(file) {
   }
 
   if (file.size > 8388608) {
-    var sizeInMB = file.size/1024/1024;
+    const sizeInMB = file.size/1024/1024;
     errors.push('File size (' + sizeInMB.toFixed(2) + ' MB) over limit of 8 MB.');
   }
 
   return errors.length === 0;
 };
 
-var processCrop = function(file) {
+const processCrop = function(file) {
 
-  var done = function (imageUrl) {
+  const done = function (imageUrl) {
     image.src = imageUrl;
     modalClassInstance.open();
   };
-  var reader;
+  let reader;
 
   if (file.type === 'image/jpeg') {
     outputType = file.type;
@@ -68,10 +68,10 @@ var processCrop = function(file) {
 };
 
 imageData.addEventListener('change', function(imageDataChangeEvent) {
-  var files = imageDataChangeEvent.target.files;
+  const files = imageDataChangeEvent.target.files;
 
   if (files && files.length > 0) {
-    var file = files[0];
+    const file = files[0];
 
     if (isValidFile(file)) {
       processCrop(file);
@@ -79,7 +79,7 @@ imageData.addEventListener('change', function(imageDataChangeEvent) {
       // Set and display errors in modal
       cropperErrorContainer.innerHTML = '';
       errors.forEach(function(error){
-        var errorListItem = document.createElement('LI');
+        const errorListItem = document.createElement('LI');
         errorListItem.innerText = error;
         cropperErrorContainer.append(errorListItem);
       });
@@ -95,7 +95,7 @@ cancelBtn.addEventListener('click', function(e) {
 });
 
 cropBtn.addEventListener('click', function(e) {
-  var canvas = cropper.getCroppedCanvas({
+  const canvas = cropper.getCroppedCanvas({
     minWidth: 150,
     minHeight: 150,
     maxWidth: 4096,
@@ -106,10 +106,10 @@ cropBtn.addEventListener('click', function(e) {
   });
 
   canvas.toBlob(function(blob) {
-    var reader = new FileReader();
+    const reader = new FileReader();
     reader.readAsDataURL(blob);
     reader.onloadend = function() {
-      var base64data = reader.result;
+      const base64data = reader.result;
       croppedImage.setAttribute('src', base64data);
       croppedImageContainer.removeAttribute('hidden');
       croppedImageData.value = base64data;

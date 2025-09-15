@@ -170,7 +170,7 @@
                             
                             <span class="dcf-pr-1 dcf-pl-1">:</span>
                             <div class="dcf-form-group">
-                                <label>Minute</label>
+                                <label for="start-time-minute">Minute</label>
                                 <select
                                     class="dcf-flex-grow-1"
                                     id="start-time-minute"

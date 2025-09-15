@@ -590,7 +590,7 @@
                                 Edit
                             </a>
                             
-                            <?php // logic for disabling the delete button twhen there is only one instance is present for the event ?>
+                            <?php // logic for disabling the delete button when there is only one instance is present for the event ?>
                             <?php if (count($count_occur) == 1) : ?> 
                                 <div 
                                     class="dcf-popup dcf-btn-secondary dcf-ml-1" 

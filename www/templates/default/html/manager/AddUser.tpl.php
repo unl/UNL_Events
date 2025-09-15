@@ -4,15 +4,15 @@
         "Events Manager" => "/manager",
         $context->calendar->name => $context->calendar->getManageURL(),
         "Users & Permissions" => $context->calendar->getUsersURL(),
-        $context->user == NULL ? 'Add a User' : 'Edit User Permissions' => NULL
+        $context->user == null ? 'Add a User' : 'Edit User Permissions' => null
     );
     echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
     $available_users = $context->getAvailableUsers();
 ?>
 
-<h1><?php echo $context->user == NULL ? 'Add a User' : 'Edit User Permissions' ?></h1>
+<h1><?php echo $context->user == null ? 'Add a User' : 'Edit User Permissions' ?></h1>
 
-<?php if ($context->user == NULL) : ?>
+<?php if ($context->user == null) : ?>
     <form id="user-lookup-form" class="dcf-form">
         <fieldset>
             <legend>User Lookup</legend>
@@ -51,7 +51,7 @@
                     <img class="user-lookup-img dcf-h-8 dcf-w-8 dcf-rounded dcf-1x1" src="" alt="">
                 </td>
                 <td>
-                    <a class="user-lookup-name"></a>
+                    <a class="user-lookup-name">N/A</a>
                 </td>
                 <td>
                     <div class="user-lookup-btn-container dcf-d-flex dcf-gap-3">
@@ -73,7 +73,7 @@
 <form id="add-user" class="dcf-form" action="" method="POST">
     <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
     <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
-    <?php if ($context->user == NULL) { ?>
+    <?php if ($context->user == null) { ?>
         <div class="dcf-form-group">
             <label for="user">User</label>
             <select id="user" name="user">
@@ -93,16 +93,16 @@
       <?php foreach ($context->getAllPermissions() as $permission) { ?>
           <div class="dcf-input-checkbox">
             <input id="permission-<?php echo $permission->id ?>" name="permission_<?php echo $permission->id ?>" type="checkbox"
-            <?php if (($context->user != NULL && $context->user->hasPermission($permission->id, $context->calendar->id)) ||
-                ($context->user == NULL && $permission->standard)) { echo 'checked="checked"'; } ?>>
+            <?php if (($context->user != null && $context->user->hasPermission($permission->id, $context->calendar->id)) ||
+                ($context->user == null && $permission->standard)) { echo 'checked="checked"'; } ?>>
             <label for="permission-<?php echo $permission->id ?>"><?php echo $permission->description ?></label>
           </div>
       <?php } ?>
     </fieldset>
-    <button class="dcf-btn dcf-btn-primary" type="submit"><?php echo $context->user == NULL ? 'Add User' : 'Update User Permissions' ?></button>
+    <button class="dcf-btn dcf-btn-primary" type="submit"><?php echo $context->user == null ? 'Add User' : 'Update User Permissions' ?></button>
 </form>
 
-<?php if ($context->user == NULL) : ?>
+<?php if ($context->user == null) : ?>
     <?php
         $json_data_available = [];
         foreach($available_users as $user) {

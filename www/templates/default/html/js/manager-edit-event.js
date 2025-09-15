@@ -129,7 +129,7 @@ if (editEventForm !== null) {
         const title_elem = document.getElementById('title');
         if (title_elem.value === '') {
             window.UNL_Events.notifier.mark_input_invalid(title);
-            window.UNL_Events.notifier.alert('Sorry! We couldn\'t edit your event', '<a href=\"#title\">Title</a> is required.');
+            window.UNL_Events.notifier.alert('Sorry! We couldn\'t edit your event', '<a href="#title">Title</a> is required.');
             event.preventDefault();
         }
     });
