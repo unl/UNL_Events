@@ -59,18 +59,6 @@ function setUpLocationListeners(location_id) {
         } else {
             location_fieldset.style.display = "none";
         }
-
-        require(['dcf-popup'], (DCFPopup) => {
-            // Get all the popups on the dom
-            const popups = location_fieldset.querySelectorAll('.dcf-popup');
-            
-            // Initialize the popup theme
-            const popupTheme = new DCFPopup.DCFPopupTheme();
-            
-            // Initialize the popup with the modified theme
-            const popupObj = new DCFPopup.DCFPopup(popups, popupTheme);
-            popupObj.initialize();
-        });
     } else if (location_id == "virtual_location") {
         const location_input = document.getElementById('v-location');
         const location_fieldset = document.getElementById('new-v-location-fields');
@@ -88,20 +76,6 @@ function setUpLocationListeners(location_id) {
         } else {
             location_fieldset.style.display = "none";
         }
-
-        require(['dcf-popup'], (DCFPopup) => {
-            // Get all the popups on the dom
-            const popups = location_fieldset.querySelectorAll('.dcf-popup');
-            
-            // Initialize the popup theme
-            const popupTheme = new DCFPopup.DCFPopupTheme();
-            
-            // Any changes to the theme would go here
-            
-            // Initialize the popup with the modified theme
-            const popupObj = new DCFPopup.DCFPopup(popups, popupTheme);
-            popupObj.initialize();
-        });
     }
 }
 
@@ -137,7 +111,7 @@ Date.prototype.isValid = function () {
 
 // this needs to be global as it gets tapped by the page js
 const setRecurringOptions = function(start_elem, month_group_elem, rectypemonth) {
-    if (!start_elem.val()) { return; }
+    if (start_elem.value === '') { return; }
 
     // get startdate info
     const weekdays = [
@@ -150,7 +124,7 @@ const setRecurringOptions = function(start_elem, month_group_elem, rectypemonth)
         "Saturday"
     ];
 
-    let start_date = new Date(start_elem.val());
+    let start_date = new Date(start_elem.value);
     if (!start_date.isValid()) { return; }
     let start_year = start_date.getFullYear();
     let start_month = start_date.getMonth() + 1;
@@ -187,46 +161,68 @@ const setRecurringOptions = function(start_elem, month_group_elem, rectypemonth)
     }
 
     // remove options, if any
-    month_group_elem.children(".dynamicRecurring").remove();
-    // populate rectypemonth with appropriate options
+    const dynamicRecurring_elements = month_group_elem.querySelectorAll('.dynamicRecurring');
+    dynamicRecurring_elements.forEach((single_dynamicRecurring_element) => {
+        single_dynamicRecurring_element.remove();
+    })
 
-    let dynamicRecurringSelected = '';
+    // populate rectypemonth with appropriate options
     if (nth[week] != undefined) {
-        if (rectypemonth == nth[week].toLowerCase()) { dynamicRecurringSelected = ' selected="selected" '}
-        month_group_elem.prepend("<option class='dynamicRecurring' " + dynamicRecurringSelected + "value='" + nth[week].toLowerCase() + "'>" + nth[week] + " " + start_weekday + " of every month</option>")
+        const new_option = document.createElement('option');
+        new_option.classList.add('dynamicRecurring');
+        if (rectypemonth == nth[week].toLowerCase()) {
+            new_option.setAttribute('selected', 'selected');
+        }
+        new_option.setAttribute('value', nth[week].toLowerCase());
+        new_option.innerText = `${nth[week]} ${start_weekday} of every month`;
+        month_group_elem.prepend(new_option);
     }
 
     if (week == 4 && total_weeks == 4) {
-        if (rectypemonth == 'last') { dynamicRecurringSelected = ' selected="selected" '}
-        month_group_elem.prepend("<option class='dynamicRecurring' " + dynamicRecurringSelected + "value='last'>" + "Last " + start_weekday + " of every month</option>")
+        const new_option = document.createElement('option');
+        new_option.classList.add('dynamicRecurring');
+        if (rectypemonth == 'last') {
+            new_option.setAttribute('selected', 'selected');
+        }
+        new_option.setAttribute('value', 'last');
+        new_option.innerText = `last ${start_weekday} of every month`;
+        month_group_elem.prepend(new_option);
     }
 
     if (days_in_month == start_day) {
-        if (rectypemonth == 'lastday') { dynamicRecurringSelected = ' selected="selected" '}
-        month_group_elem.prepend("<option class='dynamicRecurring' " + dynamicRecurringSelected + "value='lastday'>Last day of every month</option>");
+        const new_option = document.createElement('option');
+        new_option.classList.add('dynamicRecurring');
+        if (rectypemonth == 'lastday') {
+            new_option.setAttribute('selected', 'selected');
+        }
+        new_option.setAttribute('value', 'lastday');
+        new_option.innerText = 'Last day of every month';
+        month_group_elem.prepend(new_option);
     }
 
-    let text = ordinal(start_day) + ' of every month';
-    if (rectypemonth == 'date') { dynamicRecurringSelected = ' selected="selected" '}
-    month_group_elem.prepend("<option class='dynamicRecurring' " + dynamicRecurringSelected + "value='date'>" + text + "</option>");
+    const new_option = document.createElement('option');
+    new_option.classList.add('dynamicRecurring');
+    if (rectypemonth == 'date') {
+        new_option.setAttribute('selected', 'selected');
+    }
+    new_option.setAttribute('value', 'date');
+    new_option.innerText = `${ordinal(start_day)} of every month`;
+    month_group_elem.prepend(new_option);
 };
 
-require(['jquery', 'wdn'], function ($, WDN) {
-
-    // DCF Date Picker
-    WDN.initializePlugin('datepickers');
-
-    if (recurringMonth == '') {
-        $('#start-date').change(function () {
-            setRecurringOptions($(this), $('#monthly-group'), recurringType);
-        });
-        setRecurringOptions($('#start-date'), $('#monthly-group'));
-        $('#recurring-type').val(recurringType);
-    } else {
-        $('#start-date').change(function () {
-            setRecurringOptions($(this), $('#monthly-group'), recurringMonth);
-        });
-        setRecurringOptions($('#start-date'), $('#monthly-group'), recurringMonth);
-        $('#recurring-type').val(recurringMonth);
-    }
-});
+const start_date = document.getElementById('start-date');
+const monthly_group = document.getElementById('monthly-group');
+const recurring_type = document.getElementById('recurring-type');
+if (window.UNL_Events.recurringMonth == '') {
+    start_date.addEventListener('change', () => {
+        setRecurringOptions(start_date, monthly_group, window.UNL_Events.recurringType);
+    });
+    setRecurringOptions(start_date, monthly_group);
+    recurring_type.setAttribute('value', window.UNL_Events.recurringType);
+} else {
+    start_date.addEventListener('change', () => {
+        setRecurringOptions(start_date, monthly_group, window.UNL_Events.recurringMonth);
+    });
+    setRecurringOptions(start_date, monthly_group, window.UNL_Events.recurringMonth);
+    recurring_type.setAttribute('value', window.UNL_Events.recurringMonth);
+}

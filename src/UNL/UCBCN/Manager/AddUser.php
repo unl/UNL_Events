@@ -2,6 +2,7 @@
 namespace UNL\UCBCN\Manager;
 
 use UNL\UCBCN\User;
+use UNL\UCBCN\Users;
 use UNL\UCBCN\Calendar;
 use UNL\UCBCN\Permission;
 use UNL\UCBCN\Permissions;
@@ -60,6 +61,11 @@ class AddUser extends PostHandler
     public function getAvailableUsers()
     {
         return $this->calendar->getUsersNotOnCalendar();
+    }
+
+    public function getAllUsers()
+    {
+        return new Users();
     }
 
     public function getAllPermissions()

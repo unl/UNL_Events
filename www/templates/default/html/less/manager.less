@@ -1,5 +1,5 @@
-#dcf-main a {
-  text-decoration: none;
+.dcf-nav.dcf-nav-primary {
+  display: none;
 }
 
 .event-list select {
@@ -45,6 +45,7 @@
 .toolbox h1,
 .toolbox h2,
 .toolbox h3,
+.toolbox .dcf-txt-h3,
 .toolbox h4,
 .toolbox h5,
 .toolbox h6,
@@ -86,15 +87,6 @@
   border-bottom: none;
 }
 
-.table-actions {
-  line-height: 1;
-}
-
-.table-actions a,
-.table-actions button {
-  vertical-align: middle;
-}
-
 .small-button {
   font-size: 60%;
 }
@@ -112,6 +104,7 @@
   background-color: #424240;
   padding: 0 1rem;
   width: auto;
+  view-transition-name: breadcrumb-bar;
 }
 
 #breadcrumbs ul {
@@ -147,10 +140,6 @@
   margin-bottom: 0 !important;
 }
 
-.recurring-container {
-  display: none;
-}
-
 #recurring-type {
   min-width: 150px;
 }
@@ -159,12 +148,7 @@
   margin-bottom: .75em;
 }
 
-.events-manager form fieldset {
-  margin: 0 0 1em;
-}
-
 .events-manager form.delete-form {
-  display: inline;
   padding: 0;
 }
 
@@ -176,21 +160,19 @@
   resize: vertical;
 }
 
-.events-col-full-width {
-  grid-column: span 2;
-}
-@media only screen and (max-width: 56.12em) {
-  .events-col-full-width {
-    grid-column: span 1;
-  }
-}
-
 .events-b-blue {
   border-color: var(--bg-brand-eta);
 }
 
 .events-b-green {
   border-color: var(--bg-brand-zeta);
+}
+
+img.user-lookup-img {
+  background-image: url(https://directory.unl.edu/images/default-avatar.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
 }
 
 
@@ -231,9 +213,6 @@
     display: block !important;
   }
 
-  .small-center {
-    text-align: center;
-  }
 
   .calendar-event-title {
     font-size: 2em;
@@ -260,3 +239,30 @@
   border: 1px solid red;
 }
 /* End: CropperJS Styles */
+
+
+// View Transitions
+@keyframes slide-in-from-left {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(0); }
+}
+
+::view-transition-new(main-manager-section) {
+  animation: 300ms ease-out slide-in-from-left;
+}
+
+#main-manager-section {
+  view-transition-name: main-manager-section;
+}
+#noticeContainer {
+  view-transition-name: notice-container;
+}
+#current-calendar-nav {
+  view-transition-name: current-calendar-nav;
+}
+#manager-tools {
+  view-transition-name: manager-tools;
+}
+#your-calendars-nav {
+  view-transition-name: your-calendars-nav;
+}

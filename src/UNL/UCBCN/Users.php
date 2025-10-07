@@ -36,6 +36,6 @@ class Users extends RecordList
             return $sql;
         }
 
-        return parent::getSQL();
+        return 'SELECT DISTINCT uid FROM user';
     }
 }

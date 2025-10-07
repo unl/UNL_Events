@@ -246,7 +246,7 @@ class OutputController extends \Savvy
      */
     function dbStringToHtml($text)
     {
-        return nl2br($text);
+        return nl2br($text ?? '');
     }
 
 }

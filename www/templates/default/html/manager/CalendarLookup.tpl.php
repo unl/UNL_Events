@@ -19,7 +19,7 @@
 ?>
 <h1>Calendar Lookup</h1>
 
-<div class="dcf-grid-halves@md">
+<div class="dcf-d-grid dcf-grid-cols-1 dcf-grid-cols-2@md">
     <form class="dcf-form" method="post">
         <?php echo $token_inputs; ?>
         <label for="lookupTerm">Calendar Shortname</label>
@@ -48,7 +48,7 @@
 <?php if (isset($context->calendar) && $context->calendar !== false): ?>
     <div class="dcf-mt-5">
         <h2>Users on the '<?php echo $context->calendar->name; ?>' calendar</h2>
-        <div class="dcf-grid-thirds@lg dcf-grid-halves@sm dcf-row-gap-4 dcf-col-gap-vw">
+        <div class="dcf-d-grid dcf-grid-cols-1 dcf-grid-cols-3@lg dcf-grid-cols-2@sm dcf-row-gap-4 dcf-col-gap-vw">
             <?php foreach($context->getUsers() as $user): ?>
                 <div>
                     <p class="dcf-bold dcf-mb-0">

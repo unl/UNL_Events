@@ -1,7 +1,7 @@
 <?php //These names need to match /UNL/UCBCN/Manager/WebcastUtility ?>
 
-<div class="dcf-d-grid dcf-grid-full dcf-grid-halves@md">
-    <div class="dcf-form-group events-col-full-width">
+<div class="dcf-d-grid dcf-grid-cols-1 dcf-grid-cols-2@md">
+    <div class="dcf-form-group dcf-col-span-1 dcf-col-span-2@md">
         <label for="new-v-location-name">Name <small class="dcf-required">Required</small></label>
         <input
             id="new-v-location-name"
@@ -13,7 +13,7 @@
             ?>"
         >
     </div>
-    <div class="dcf-form-group events-col-full-width">
+    <div class="dcf-form-group dcf-col-span-1 dcf-col-span-2@md">
         <label for="new-v-location-url">URL<small class="dcf-required">Required</small></label>
         <input
             id="new-v-location-url"
@@ -25,7 +25,7 @@
             ?>"
         >
     </div>
-    <div class="dcf-form-group events-col-full-width">
+    <div class="dcf-form-group dcf-col-span-1 dcf-col-span-2@md">
         <label for="new-v-location-additional-public-info">Location Default - Additional Public Info</label>
         <textarea
             id="new-v-location-additional-public-info"

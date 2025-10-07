@@ -32,9 +32,8 @@
                 <td>
                     <?php echo $subscription->name; ?>
                 </td>
-                <td class="small-center table-actions">
-                    <a class="dcf-btn dcf-btn-primary" href="<?php echo $subscription->getEditURL() ?>">Edit</a>
-                    <span class="small-hidden">|</span><br class="dcf-d-none small-block"><br class="dcf-d-none small-block">
+                <td class="dcf-d-flex dcf-ai-center dcf-gap-3">
+                    <a class="dcf-btn dcf-btn-primary unl-prerender" href="<?php echo $subscription->getEditURL() ?>">Edit</a>
                     <button class="dcf-btn dcf-btn-secondary" form="delete-subscription-<?php echo $subscription->id ?>" type="submit">Delete</button>
                 </td>
             </tr>
@@ -46,4 +45,4 @@
 <?php else: ?>
     <p>There are currently no subscriptions on this calendar.</p>
 <?php endif; ?>
-<a class="dcf-btn dcf-btn-primary" href="<?php echo $base_manager_url . $context->calendar->shortname ?>/subscriptions/new/">Add Subscription</a>
+<a class="dcf-btn dcf-btn-primary unl-prerender" href="<?php echo $base_manager_url . $context->calendar->shortname ?>/subscriptions/new/">Add Subscription</a>

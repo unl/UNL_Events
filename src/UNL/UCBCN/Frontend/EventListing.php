@@ -49,7 +49,7 @@ class EventListing extends RecordList
         );
     }
 
-    public function current()
+    public function current(): mixed
     {
         try {
             if (\LimitIterator::valid()) {
@@ -61,6 +61,7 @@ class EventListing extends RecordList
             \LimitIterator::next();
             return $this->current();
         }
+        return $this->current();
     }
 
     /**

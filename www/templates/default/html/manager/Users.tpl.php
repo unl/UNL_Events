@@ -24,9 +24,8 @@
                 <td>
                     <?php echo $user->uid; ?>
                 </td>
-                <td class="small-center table-actions">
-                    <a class="dcf-btn dcf-btn-primary" href="<?php echo $user->getEditPermissionsURL($context->calendar) ?>">Edit Permissions</a>
-                    <br class="dcf-d-none small-block" /><br class="dcf-d-none small-block" />
+                <td class="dcf-d-flex dcf-ai-center dcf-gap-3">
+                    <a class="dcf-btn dcf-btn-primary unl-prerender" href="<?php echo $user->getEditPermissionsURL($context->calendar) ?>">Edit Permissions</a>
                     <form method="post" action="<?php echo $user->getDeletePermissionsURL($context->calendar) ?>" class="dcf-form delete-form">
                         <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenNameKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenName() ?>" />
                         <input type="hidden" name="<?php echo $controller->getCSRFHelper()->getTokenValueKey() ?>" value="<?php echo $controller->getCSRFHelper()->getTokenValue() ?>">
@@ -40,4 +39,4 @@
     </table>
 </div>
 <br>
-<a class="dcf-btn dcf-btn-primary" href="<?php echo $base_manager_url . $context->calendar->shortname ?>/users/new/">Add User</a>
+<a class="dcf-btn dcf-btn-primary unl-prerender" href="<?php echo $base_manager_url . $context->calendar->shortname ?>/users/new/">Add User</a>

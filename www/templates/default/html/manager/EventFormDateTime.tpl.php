@@ -4,6 +4,7 @@
     $post = $context->post;
 
     // We need this since the event_datetime gets edited when post is being handled
+    $datetime = null;
     if (isset($context->event_datetime)) {
         $datetime = $context->getOriginalDatetime();
     }
@@ -36,7 +37,7 @@
     $end_minute = $post['end_time_minute'] ?? ( !empty($datetime_end_time) ? date('i'    , $datetime_end_time) : '30' );
     $end_am_pm  = $post['end_time_am_pm']  ?? ( !empty($datetime_end_time) ? date('a'    , $datetime_end_time) : 'am' );
 
-    $time_mode = $post['time_mode'] ?? (isset($datetime) && isset($datetime->timemode)) ? $datetime->timemode : $time_mode_regular;
+    $time_mode = $post['time_mode'] ?? ((isset($datetime) && isset($datetime->timemode)) ? $datetime->timemode : $time_mode_regular);
 
     $datetime_recurring_check = (isset($context->recurrence_id));
     $is_recurring         = $post['recurring'] ?? (isset($datetime) && isset($datetime->recurringtype) && strtolower($datetime->recurringtype) !== 'none');
@@ -65,7 +66,7 @@
 <section class="dcf-mb-8 dcf-ml-5">
     <div id="datetime_container">
 
-        <div class="dcf-d-grid dcf-grid-full dcf-grid-halves@md dcf-col-gap-vw">
+        <div class="dcf-d-grid dcf-grid-cols-1 dcf-grid-cols-2@md dcf-col-gap-vw">
             <div class="dcf-form-group dcf-datepicker">
                 <label class="dcf-mt-2" for="start-date">
                     Event Date <small class="dcf-required">Required</small>
@@ -101,7 +102,7 @@
                 Event Time Type
                 <small class="dcf-required">Required</small>
             </legend>
-            <div class="dcf-grid dcf-grid-full dcf-grid-halves dcf-col-gap-vw">
+            <div class="dcf-d-grid dcf-grid-cols-1 dcf-grid-cols-2@md dcf-col-gap-vw">
                 <div class="dcf-input-radio">
                     <input id="<?php echo $time_mode_regular; ?>" name="time_mode" type="radio" value="<?php echo $time_mode_regular; ?>" <?php if ($time_mode === $time_mode_regular) { echo 'checked'; }?>>
                     <label for="<?php echo $time_mode_regular; ?>">Start & End</label>
@@ -133,9 +134,10 @@
                 }
             ?>
         >
-            <div class="dcf-d-grid dcf-grid-full dcf-grid-halves@md dcf-col-gap-vw">
+            <div class="dcf-d-grid dcf-grid-cols-1 dcf-grid-cols-2@md dcf-col-gap-vw">
                 <fieldset
                     id="start-time-container"
+                    class="dcf-mb-4"
                     <?php
                         if ($time_mode === $time_mode_end_time_only) {
                             echo 'class="dcf-d-none"';
@@ -168,7 +170,7 @@
                             
                             <span class="dcf-pr-1 dcf-pl-1">:</span>
                             <div class="dcf-form-group">
-                                <label>Minute</label>
+                                <label for="start-time-minute">Minute</label>
                                 <select
                                     class="dcf-flex-grow-1"
                                     id="start-time-minute"
@@ -226,6 +228,7 @@
 
                 <fieldset
                     id="end-time-container"
+                    class="dcf-mb-4"
                     <?php
                         if ($time_mode === $time_mode_start_time_only) {
                             echo 'class="dcf-d-none"';
@@ -321,7 +324,7 @@
                     >
                     <label for="recurring">This is a recurring <?php echo $recurring_type; ?> event</label>
                 </div>
-                <fieldset class="recurring-container date-time-select">
+                <fieldset class="recurring-container date-time-select dcf-d-none!">
                     <legend>Recurring Event Details</legend>
                     <div class="dcf-d-flex dcf-flex-wrap dcf-ai-center dcf-col-gap-4">
                     <div class="dcf-form-group">
@@ -500,7 +503,7 @@
 
             <?php echo $savvy->render($post, 'PhysicalLocationForm.tpl.php'); ?>
 
-            <div class="dcf-d-grid dcf-grid-full dcf-grid-halves@md dcf-col-gap-5">
+            <div class="dcf-d-grid dcf-grid-cols-1 dcf-grid-cols-2@md dcf-col-gap-5">
                 <div class="dcf-form-group dcf-mt-3">
                     <div class="dcf-input-checkbox">
                         <input
@@ -515,7 +518,7 @@
                         >
                         <label for="location-save">
                             Save this location for your future events
-                            <div class="dcf-popup dcf-d-inline" data-point="true">
+                            <div class="dcf-popup dcf-d-inline" data-point="true" hidden>
                                 <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup dcf-p-0" type="button">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -564,7 +567,7 @@
                         >
                         <label for="location-save-calendar">
                             Save this location for this calendar's future events
-                            <div class="dcf-popup dcf-d-inline" data-point="true">
+                            <div class="dcf-popup dcf-d-inline" data-point="true" hidden>
                                 <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup dcf-p-0" type="button">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -714,7 +717,7 @@
 
             <?php echo $savvy->render($post, 'VirtualLocationForm.tpl.php'); ?>
 
-            <div class="dcf-d-grid dcf-grid-full dcf-grid-halves@md">
+            <div class="dcf-d-grid dcf-grid-cols-1 dcf-grid-cols-2@md">
                 <div class="dcf-form-group dcf-mt-3">
                     <div class="dcf-input-checkbox">
                         <input
@@ -729,7 +732,7 @@
                         >
                         <label for="v-location-save">
                             Save this location for your future events
-                            <div class="dcf-popup dcf-d-inline" data-point="true">
+                            <div class="dcf-popup dcf-d-inline" data-point="true" hidden>
                                 <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup dcf-p-0" type="button">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -777,7 +780,7 @@
                         >
                         <label for="v-location-save-calendar">
                             Save this location for this calendar's future events
-                            <div class="dcf-popup dcf-d-inline" data-point="true">
+                            <div class="dcf-popup dcf-d-inline" data-point="true" hidden>
                                 <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup dcf-p-0" type="button">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -832,14 +835,14 @@
 $js_recurring_type = $recurring_type ?? '';
 $js_recurring_month = $recurring_month_type ?? '';
 
-$page->addScriptDeclaration("const recurringType = '" . $js_recurring_type . "';");
-$page->addScriptDeclaration("const recurringMonth = '" . $js_recurring_month . "';");
+$page->addScriptDeclaration("window.UNL_Events.recurringType = '" . $js_recurring_type . "';");
+$page->addScriptDeclaration("window.UNL_Events.recurringMonth = '" . $js_recurring_month . "';");
 
-$page->addScriptDeclaration("const time_mode_regular = '" . $time_mode_regular . "';");
-$page->addScriptDeclaration("const time_mode_start_time_only = '" . $time_mode_start_time_only . "';");
-$page->addScriptDeclaration("const time_mode_end_time_only = '" . $time_mode_end_time_only . "';");
-$page->addScriptDeclaration("const time_mode_all_day = '" . $time_mode_all_day . "';");
-$page->addScriptDeclaration("const time_mode_tbd = '" . $time_mode_tbd . "';");
+$page->addScriptDeclaration("window.UNL_Events.time_mode_regular = '" . $time_mode_regular . "';");
+$page->addScriptDeclaration("window.UNL_Events.time_mode_start_time_only = '" . $time_mode_start_time_only . "';");
+$page->addScriptDeclaration("window.UNL_Events.time_mode_end_time_only = '" . $time_mode_end_time_only . "';");
+$page->addScriptDeclaration("window.UNL_Events.time_mode_all_day = '" . $time_mode_all_day . "';");
+$page->addScriptDeclaration("window.UNL_Events.time_mode_tbd = '" . $time_mode_tbd . "';");
 
 $page->addScript(
     $base_frontend_url .

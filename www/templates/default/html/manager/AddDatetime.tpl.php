@@ -35,7 +35,12 @@
         $end_am_pm = date('a', $end_time);
     }
 
-    $recurs_until_date = date('m/d/Y', strtotime($datetime->recurs_until));
+    if ($datetime->recurs_until === null) {
+        $recurs_until_date = '';
+    } else {
+        $recurs_until_date = date('m/d/Y', strtotime($datetime->recurs_until));
+    }
+
 ?>
 <?php
     $last_crumb = null;

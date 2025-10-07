@@ -52,6 +52,7 @@ UNL\UCBCN::setTimezoneOptions(
 UNL\UCBCN\Manager\Auth::$eventsAuthSessionName = 'DEV_EVENTS_AUTH_SESSION_NAME';
 UNL\UCBCN\Manager\Auth::$certPath = '/etc/pki/tls/cert.pem'; // Set this to false for local development
 UNL\UCBCN\Manager\Auth::$directory_url = 'https://directory.unl.edu/';
+UNL\UCBCN\Manager\Auth::$siteURL = 'https://events.unl.edu';
 
 // API v2 allowed cors domains regex
 $api_v2_cors_allowed_domains_regex = array('/127\.0\.0\.1/', '/https:\/\/[a-zA-Z0-9\-_\.]+\.unl\.edu.*/');

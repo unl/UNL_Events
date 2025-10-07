@@ -7,7 +7,7 @@
     echo $savvy->render($crumbs, 'BreadcrumbBar.tpl.php');
 ?>
 <h1>Edit User Info</h1>
-<div class="dcf-grid-halves@md dcf-col-gap-vw dcf-row-gap-3">
+<div class="dcf-d-grid dcf-grid-cols-1 dcf-grid-cols-2@md dcf-col-gap-vw dcf-row-gap-3">
     <div>
         <p>
             This API Token is to be used in conjunction with the Events API.

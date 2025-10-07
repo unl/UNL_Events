@@ -15,7 +15,7 @@ const filter_hidden_type = document.getElementById('filter_hidden_type');
 let filter_fetch_sleep_time = 500;
 
 // Once the collapsible fieldset loads set up event listeners
-audience_filter.addEventListener('ready', () => {
+audience_filter.addEventListener('collapsibleFieldsetReady', () => {
     // Get checkboxes and if they change/input try to submit the change
     const audience_checkboxes = document.querySelectorAll('.audience_filter_checkbox');
     audience_checkboxes.forEach((single_checkbox) => {
@@ -31,7 +31,7 @@ audience_filter.addEventListener('ready', () => {
 });
 
 // Once the collapsible fieldset loads set up event listeners
-type_filter.addEventListener('ready', () => {
+type_filter.addEventListener('collapsibleFieldsetReady', () => {
     // Get checkboxes and if they change/input try to submit the change
     const type_checkboxes = document.querySelectorAll('.type_filter_checkbox');
     type_checkboxes.forEach((single_checkbox) => {
@@ -203,5 +203,3 @@ function set_error() {
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
-
-WDN.initializePlugin('collapsible-fieldsets');

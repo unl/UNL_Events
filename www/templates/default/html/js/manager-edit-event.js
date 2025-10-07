@@ -3,7 +3,7 @@ function isUrlValid(string) {
 
     try {
         url = new URL(string);
-    } catch (_) {
+    } catch {
         return false;
     }
 
@@ -94,4 +94,43 @@ function testMicrodata(modal_output=true) {
         google_microdata_button.classList.remove('events-b-blue');
         google_microdata_button.classList.add('events-b-green');
     }
+}
+
+const deleteDatetimeElements = document.querySelectorAll('.delete-datetime');
+deleteDatetimeElements.forEach((single_elem) => {
+    single_elem.addEventListener('submit', (event) => {
+        if (!window.confirm('Are you sure you want to delete this instance?')) {
+            event.preventDefault();
+        }
+    });
+});
+
+const deleteDatetimeRecurrenceElements = document.querySelectorAll('.delete-datetime-recurrence');
+deleteDatetimeRecurrenceElements.forEach((single_elem) => {
+    single_elem.addEventListener('submit', (event) => {
+        if (!window.confirm('Are you sure you want to delete this occurrence of your recurring instance? The rest of the recurrences will remain.')) {
+            event.preventDefault();
+        }
+    });
+});
+
+const editRecurringEdtElements = document.querySelectorAll('.edit-recurring-edt');
+editRecurringEdtElements.forEach((single_elem) => {
+    single_elem.addEventListener('click', (event) => {
+        if (!window.confirm('You are editing a single occurrence of a recurring instance.')) {
+            event.preventDefault();
+        }
+    });
+});
+
+const editEventForm = document.getElementById('#edit-event-form');
+if (editEventForm !== null) {
+    editEventForm.addEventListener('submit', (event) => {
+        const title_elem = document.getElementById('title');
+        if (title_elem.value === '') {
+            window.UNL_Events.notifier.mark_input_invalid(title);
+            window.UNL_Events.notifier.alert('Sorry! We couldn\'t edit your event', '<a href="#title">Title</a> is required.');
+            event.preventDefault();
+        }
+    });
 }

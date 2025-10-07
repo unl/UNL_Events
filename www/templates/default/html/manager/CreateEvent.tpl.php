@@ -47,7 +47,7 @@
             <div class="dcf-form-group">
                 <label for="description">
                     Description
-                    <small class="required-for-main-calendar dcf-required" style="display: none">Required</small>
+                    <small class="required-for-main-calendar dcf-required dcf-d-none!">Required</small>
                 </label>
                 <textarea id="description" name="description" rows="4" ><?php echo $event->description; ?></textarea>
             </div>
@@ -131,11 +131,11 @@
 
         <h2>Sharing</h2>
         <section class="dcf-mb-8 dcf-ml-5">
-            <div class="details dcf-grid dcf-col-gap-vw">
-                <fieldset class="dcf-col-100% dcf-col-25%-start@sm dcf-p-0 dcf-b-0">
+            <div class="details dcf-d-grid dcf-grid-cols-12 dcf-col-gap-vw">
+                <fieldset class="dcf-col-span-12 dcf-col-span-3@md dcf-p-0 dcf-b-0">
                     <legend class="dcf-pb-2">
                         Privacy
-                        <div class="dcf-popup dcf-d-inline" data-point="true">
+                        <div class="dcf-popup dcf-d-inline" data-point="true" hidden>
                             <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup dcf-p-0" type="button">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -199,7 +199,7 @@
                         <label for="sharing-public">Public</label>
                     </div>
                 </fieldset>
-                <fieldset class="dcf-col-100% dcf-col-75%-end@sm dcf-mb-0 dcf-p-0 dcf-b-0" id="send_to_main">
+                <fieldset class="dcf-col-span-12 dcf-col-span-9@md dcf-mb-0 dcf-p-0 dcf-b-0" id="send_to_main">
                     <legend class="dcf-pb-2">
                         Consider for Main
                         <abbr title="University of Nebraska–Lincoln">UNL</abbr>
@@ -240,11 +240,11 @@
 
         <h2>Organizer Contact Info</h2>
         <section class="dcf-mb-8 dcf-ml-5">
-            <div class="details dcf-d-grid dcf-grid-full dcf-grid-halves@md dcf-col-gap-vw">
+            <div class="details dcf-d-grid dcf-grid-cols-1 dcf-grid-cols-2@md dcf-col-gap-vw">
                 <div class="dcf-form-group">
                     <label for="contact-name">
                         Name
-                        <small class="required-for-main-calendar dcf-required" style="display: none">Required</small>
+                        <small class="required-for-main-calendar dcf-required dcf-d-none!">Required</small>
                     </label>
                     <input
                         id="contact-name"
@@ -321,42 +321,40 @@
         <button class="dcf-btn dcf-btn-primary" type="submit">Submit Event</button>
         <button
             id="google-microdata-button"
-            class="dcf-btn-toggle-modal dcf-btn unl-bg-blue events-b-blue unl-cream unl-cream@dark dcf-mt-3"
+            class="dcf-btn-toggle-dialog dcf-btn unl-bg-blue events-b-blue unl-cream unl-cream@dark dcf-mt-3"
             title="Learn More"
             type="button"
-            data-toggles-modal="google-microdata-modal"
+            data-controls="google-microdata-modal"
             disabled
         >
             ! Your event does not reach microdata requirements !
         </button>
 
-        <div class="dcf-modal" id="google-microdata-modal" hidden>
-            <div class="dcf-modal-wrapper">
-                <div class="dcf-modal-header">
-                    <h2>Info About Microdata</h2>
+        <dialog class="dcf-dialog" id="google-microdata-modal">
+            <div class="dcf-dialog-header">
+                <h2>Info About Microdata</h2>
 
-                    <button class="dcf-btn-close-modal">Close</button>
-                </div>
-                <div class="dcf-modal-content">
-                    <p>
-                        Microdata is a way to provide structured data markup
-                        on web pages. This structured data helps search engines, like Google,
-                        to understand the content and context of the page better.
-                        For events.unl.edu, microdata can provide key information about
-                        each event such as it's name, date, time, location, description, and more.
-                        This helps search engines present our events
-                        more prominently in search results, making it easier for users to find
-                        relevant events.
-
-                        <a href="https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data">
-                            Learn more through Google's documentation.
-                        </a>
-                    </p>
-                    <div class="dcf-mt-5" id="google-microdata-modal-output"></div>
-                    <p class="dcf-txt-xs">*If this information is not relevant to you, feel free to disregard it.</p>
-                </div>
+                <button class="dcf-btn-close-dialog">Close</button>
             </div>
-        </div>
+            <div class="dcf-dialog-content">
+                <p>
+                    Microdata is a way to provide structured data markup
+                    on web pages. This structured data helps search engines, like Google,
+                    to understand the content and context of the page better.
+                    For events.unl.edu, microdata can provide key information about
+                    each event such as it's name, date, time, location, description, and more.
+                    This helps search engines present our events
+                    more prominently in search results, making it easier for users to find
+                    relevant events.
+
+                    <a href="https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data">
+                        Learn more through Google's documentation.
+                    </a>
+                </p>
+                <div class="dcf-mt-5" id="google-microdata-modal-output"></div>
+                <p class="dcf-txt-xs">*If this information is not relevant to you, feel free to disregard it.</p>
+            </div>
+        </dialog>
 
     </form>
 </div>

@@ -76,11 +76,11 @@
                             <?php $webcastCalendar = $webcast->getCalendar();?>
                             Saved to
                             <?php if ($context->userHasAccessToCalendar($webcast->calendar_id ?? "")): ?>
-                                <a href='<?php echo $webcastCalendar->getManageURL(); ?>'>
+                                <a class="unl-prerender" href='<?php echo $webcastCalendar->getManageURL(); ?>'>
                                     <?php echo $webcastCalendar->name; ?>
                                 </a>
                             <?php else: ?>
-                                <a href='<?php echo $webcastCalendar->getFrontendURL(); ?>'>
+                                <a class="unl-prerender" href='<?php echo $webcastCalendar->getFrontendURL(); ?>'>
                                     <?php echo $webcastCalendar->name; ?>
                                 </a>
                             <?php endif;?>

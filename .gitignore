@@ -13,3 +13,15 @@
 install
 */.DS_Store
 .idea
+.bash_history
+.bash_logout
+.bash_profile
+.bashrc
+.composer/
+.gitconfig
+.my.cnf
+.mysql_history
+.viminfo
+composer.phar
+mysql-config.php
+.ssh/

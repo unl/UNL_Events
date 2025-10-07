@@ -27,11 +27,11 @@
                         </a>
                     </small>
                 <?php endif; ?>
-                <h2 id="heading-date" class='summary' data-datetime="<?php echo (new DateTime($context->getStartTime()))->format('c') ?>">
+                <h1 id="heading-date" class='dcf-txt-h2 summary' data-datetime="<?php echo (new DateTime($context->getStartTime()))->format('c') ?>">
                     <a class="dcf-txt-decor-none" href="<?php echo $url; ?>">
                         <?php echo $savvy->dbStringtoHtml($context->event->displayTitle($context)); ?>
                     </a>
-                </h2>
+                </h1>
                 <?php if (isset($context->event->subtitle)): ?><p class="dcf-subhead"><?php echo $savvy->dbStringtoHtml($context->event->subtitle) ?></p><?php endif; ?>
             <?php if (isset($context->event->subtitle)): ?></header><?php endif; ?>
             <?php echo $savvy->render($context, 'EventInstance/Date.tpl.php') ?>

@@ -207,7 +207,7 @@
     <h2>Event Instances</h2>
     <section  class="dcf-mb-8 dcf-ml-5">
         <a
-            class="dcf-btn dcf-btn-primary"
+            class="dcf-btn dcf-btn-primary unl-prerender"
             href="<?php echo $event->getAddDatetimeURL($context->calendar) ?>"
         >
             Add New Instance
@@ -323,7 +323,7 @@
                             class="dcf-txt-middle location with-controls"
                             data-id="<?php echo $location->id; ?>"
                         >
-                            <div class="dcf-popup dcf-w-100%" data-hover="true" data-point="true">
+                            <div class="dcf-popup dcf-w-100%" data-hover="true" data-point="true" hidden>
                                 <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup dcf-w-100% dcf-d-flex dcf-ai-center dcf-jc-center dcf-gap-4" type="button">
                                     <svg
                                         class="dcf-h-4 dcf-w-4 dcf-d-block dcf-fill-current"
@@ -452,7 +452,7 @@
                             class="dcf-txt-middle v_location with-controls"
                             data-id="<?php echo $getWebcast->id; ?>"
                         >
-                            <div class="dcf-popup dcf-w-100%" data-hover="true" data-point="true">
+                            <div class="dcf-popup dcf-w-100%" data-hover="true" data-point="true" hidden>
                                 <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup dcf-w-100% dcf-d-flex dcf-ai-center dcf-jc-center dcf-gap-4" type="button">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -541,7 +541,7 @@
                     <td class="dcf-pr-0 dcf-txt-middle controls">
                         <div class="dcf-d-flex dcf-ai-center dcf-jc-flex-end">
                             <?php if (!$datetime->microdataCheck()): ?>
-                                <div class="dcf-popup dcf-mr-1" data-point="true">
+                                <div class="dcf-popup dcf-mr-1" data-point="true" hidden>
                                     <button
                                         class="dcf-btn dcf-btn-popup unl-cream unl-bg-blue events-b-blue"
                                         title="Missing Microdata Requirements"
@@ -584,13 +584,13 @@
                                 </div>
                             <?php endif; ?>
                             <a
-                                class="dcf-btn dcf-btn-primary"
+                                class="dcf-btn dcf-btn-primary unl-prerender"
                                 href="<?php echo $datetime->getEditURL($context->calendar); ?>"
                             >
                                 Edit
                             </a>
                             
-                            <?php // logic for disabling the delete button twhen there is only one instance is present for the event ?>
+                            <?php // logic for disabling the delete button when there is only one instance is present for the event ?>
                             <?php if (count($count_occur) == 1) : ?> 
                                 <div 
                                     class="dcf-popup dcf-btn-secondary dcf-ml-1" 
@@ -598,6 +598,7 @@
                                     data-alignment="end"
                                     data-hover="true"
                                     data-point="true"
+                                    hidden
                                 >
                                     <button 
                                         class="dcf-btn dcf-btn-secondary dcf-ml-1 dcf-btn-toggle-popup"
@@ -691,7 +692,7 @@
                                 <td class="dcf-pr-0 dcf-txt-middle controls recurring">
                                     <div class="dcf-d-flex dcf-ai-center dcf-jc-flex-end">
                                         <a
-                                            class="dcf-btn dcf-btn-primary edit-recurring-edt"
+                                            class="dcf-btn dcf-btn-primary edit-recurring-edt unl-prerender"
                                             href="<?php
                                                 echo $datetime->getEditRecurrenceURL(
                                                     $context->calendar,
@@ -754,15 +755,14 @@
         </table>
 
         <?php if ($total_pages > 1): ?>
-            <?php $page->addScriptDeclaration("WDN.initializePlugin('pagination');"); ?>
             <div style="text-align: center;">
                 <div style="display: inline-block;">
                     <nav class="dcf-pagination">
-                        <ol class="dcf-list-bare dcf-list-inline">
+                        <ol class="dcf-list-bare dcf-list-inline" role="list">
                         <?php if($context->page != 1): ?>
                             <li>
                                 <a
-                                    class="dcf-pagination-prev"
+                                    class="dcf-pagination-prev unl-prerender"
                                     href="?page=<?php echo $context->page - 1 ?>"
                                 >
                                     Prev
@@ -779,7 +779,7 @@
                                                 $i == $context->page - 2 ||
                                                 $i == $context->page + 1 ||
                                                 $i == $context->page + 2): ?>
-                                    <li><a href="?page=<?php echo $i ?>"><?php echo $i; ?></a></li>
+                                    <li><a class="unl-prerender" href="?page=<?php echo $i ?>"><?php echo $i; ?></a></li>
                                 <?php elseif ($i < $context->page && !$before_ellipsis_shown): ?>
                                     <li><span class="dcf-pagination-ellipsis">...</span></li>
                                     <?php $before_ellipsis_shown = true; ?>
@@ -791,7 +791,7 @@
                         <?php if($context->page != $total_pages): ?>
                             <li>
                                 <a
-                                    class="dcf-pagination-next"
+                                    class="dcf-pagination-next unl-prerender"
                                     href="?page=<?php echo $context->page + 1 ?>"
                                 >
                                     Next
@@ -810,11 +810,11 @@
 
     <h2>Sharing</h2>
     <section class="dcf-mb-8 dcf-ml-5">
-        <div class="details dcf-grid dcf-col-gap-vw">
-            <fieldset class="dcf-col-100% dcf-col-25%-start@sm dcf-p-0 dcf-b-0">
+        <div class="details dcf-d-grid dcf-grid-cols-12 dcf-col-gap-vw">
+            <fieldset class="dcf-col-span-12 dcf-col-span-3@md dcf-p-0 dcf-b-0">
                 <legend class="dcf-pb-2">
                         Privacy
-                        <div class="dcf-popup dcf-d-inline" data-point="true">
+                        <div class="dcf-popup dcf-d-inline" data-point="true" hidden>
                             <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup dcf-p-0" type="button">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -864,7 +864,7 @@
                     <label for="sharing-public">Public</label>
                 </div>
             </fieldset>
-            <fieldset class="dcf-col-100% dcf-col-75%-end@sm dcf-mb-0 dcf-p-0 dcf-b-0" id="send_to_main">
+            <fieldset class="dcf-col-span-12 dcf-col-span-9@md dcf-mb-0 dcf-p-0 dcf-b-0" id="send_to_main">
                 <legend
                     class="dcf-pb-2"
                 >
@@ -896,7 +896,7 @@
 
     <h2>Organizer Contact Info</h2>
     <section class="dcf-mb-8 dcf-ml-5">
-        <div class="details dcf-d-grid dcf-grid-full dcf-grid-halves@md dcf-col-gap-vw">
+        <div class="details dcf-d-grid dcf-grid-cols-1 dcf-grid-cols-2@md dcf-col-gap-vw">
             <div class="dcf-form-group">
                 <label for="contact-name">Name</label>
                 <input
@@ -982,41 +982,41 @@
     <br>
     <button
         id="google-microdata-button"
-        class="dcf-btn-toggle-modal dcf-btn unl-bg-blue events-b-blue unl-cream dcf-mt-3"
+        class="dcf-btn-toggle-dialog dcf-btn unl-bg-blue events-b-blue unl-cream dcf-mt-3"
         title="Learn More"
         type="button"
-        data-toggles-modal="google-microdata-modal"
+        data-controls="google-microdata-modal"
         disabled
     >
         ! Your event does not reach microdata requirements !
     </button>
 
-    <div class="dcf-modal" id="google-microdata-modal" hidden>
-        <div class="dcf-modal-wrapper">
-            <div class="dcf-modal-header">
-                <h2>Info About Microdata</h2>
-                <button class="dcf-btn-close-modal">Close</button>
-            </div>
-            <div class="dcf-modal-content">
-            <p>
-                    Microdata is a way to provide structured data markup
-                    on web pages. This structured data helps search engines, like Google,
-                    to understand the content and context of the page better.
-                    For events.unl.edu, microdata can provide key information about
-                    each event such as it's name, date, time, location, description, and more.
-                    This helps search engines present our events
-                    more prominently in search results, making it easier for users to find
-                    relevant events.
+    <dialog class="dcf-dialog" id="google-microdata-modal">
+        <div class="dcf-dialog-header">
+            <h2>Info About Microdata</h2>
 
-                    <a href="https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data">
-                        Learn more through Google's documentation.
-                    </a>
-                </p>
-                <div class="dcf-mt-5" id="google-microdata-modal-output"></div>
-                <p class="dcf-txt-xs">*If this information is not relevant to you, feel free to disregard it.</p>
-            </div>
+            <button class="dcf-btn-close-dialog">Close</button>
         </div>
-    </div>
+        <div class="dcf-dialog-content">
+            <p>
+                Microdata is a way to provide structured data markup
+                on web pages. This structured data helps search engines, like Google,
+                to understand the content and context of the page better.
+                For events.unl.edu, microdata can provide key information about
+                each event such as it's name, date, time, location, description, and more.
+                This helps search engines present our events
+                more prominently in search results, making it easier for users to find
+                relevant events.
+
+                <a href="https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data">
+                    Learn more through Google's documentation.
+                </a>
+            </p>
+            <div class="dcf-mt-5" id="google-microdata-modal-output"></div>
+            <p class="dcf-txt-xs">*If this information is not relevant to you, feel free to disregard it.</p>
+        </div>
+    </dialog>
+
 </form>
 
 <form id="delete-form" method="POST" action="<?php echo $event->getDeleteURL($context->getCalendar()) ?>" class="dcf-d-none">
@@ -1031,39 +1031,6 @@ $page->addScript(
     'templates/default/html/js/manager-edit-event.min.js?v='.
     UNL\UCBCN\Frontend\Controller::$version
 );
-
-$page->addScriptDeclaration("
-require(['jquery'], function($) {
-    $('.delete-datetime').submit(function (submit) {
-        if (!window.confirm('Are you sure you want to delete this instance?')) {
-            submit.preventDefault();
-        }
-    });
-
-    $('.delete-datetime-recurrence').submit(function (submit) {
-        if (!window.confirm(
-            'Are you sure you want to delete this occurrence of your recurring instance?' +
-            ' The rest of the recurrences will remain.'
-        )) {
-            submit.preventDefault();
-        }
-    });
-
-    $('.edit-recurring-edt').click(function (click) {
-        if (!window.confirm('You are editing a single occurrence of a recurring instance.')) {
-            click.preventDefault();
-        }
-    });
-
-    $('#edit-event-form').submit(function (submit) {
-        // validate required fields
-        if ($('#title').val() == '') {
-            notifier.mark_input_invalid($('#title'));
-            notifier.alert('Sorry! We couldn\'t edit your event', '<a href=\"#title\">Title</a> is required.');
-            submit.preventDefault();
-        }
-    });
-});");
 
 $tokenNameKey = $controller->getCSRFHelper()->getTokenNameKey();
 $tokenNameValue = $controller->getCSRFHelper()->getTokenName();

@@ -1,132 +1,134 @@
-require.config({
-  paths: {
-    "cropperjs": "/js/cropperjs"
+import { loadStyleSheet } from "/wdn/templates_6.0/js/lib/unl-utility.js";
+
+import "/js/cropperjs/cropper.min.js";
+
+loadStyleSheet('/js/cropperjs/cropper.min.css');
+
+const cropperErrorContainer = document.getElementById('cropper-errors');
+const cropperContentContainer = document.getElementById('cropper-content');
+const image = document.getElementById('source-image');
+const croppedImageContainer = document.getElementById('cropped-image-container');
+const croppedImage = document.getElementById('cropped-image');
+const croppedImageData = document.getElementById('cropped-image-data');
+const imageData = document.getElementById('imagedata');
+const modal = document.getElementById('image-modal');
+const cancelBtn = document.getElementById('cancel-crop-btn');
+const cropBtn = document.getElementById('crop-btn');
+let modalClassInstance = null;
+let cropper;
+let outputType;
+let errors = [];
+
+modal.addEventListener('dialogReady', (e) => {
+  modalClassInstance = e.detail.classInstance;
+});
+
+const isValidFile = function(file) {
+  errors = [];
+  switch(file.type) {
+    case 'image/png':
+    case 'image/jpeg':
+    case 'image/gif':
+    case 'image/avif':
+    case 'image/webp':
+      break;
+    default:
+      errors.push('Invalid file type (' + file.type + ').  Allowed types: avif, gif, jpeg, png and webp.');
+  }
+
+  if (file.size > 8388608) {
+    const sizeInMB = file.size/1024/1024;
+    errors.push('File size (' + sizeInMB.toFixed(2) + ' MB) over limit of 8 MB.');
+  }
+
+  return errors.length === 0;
+};
+
+const processCrop = function(file) {
+
+  const done = function (imageUrl) {
+    image.src = imageUrl;
+    modalClassInstance.open();
+  };
+  let reader;
+
+  if (file.type === 'image/jpeg') {
+    outputType = file.type;
+  } else {
+    outputType = 'image/png';
+  }
+
+  if (FileReader) {
+    reader = new FileReader();
+    reader.onload = function (readerOnloadEvent) {
+      done(reader.result);
+    };
+    reader.readAsDataURL(file);
+  }
+};
+
+imageData.addEventListener('change', function(imageDataChangeEvent) {
+  const files = imageDataChangeEvent.target.files;
+
+  if (files && files.length > 0) {
+    const file = files[0];
+
+    if (isValidFile(file)) {
+      processCrop(file);
+    } else {
+      // Set and display errors in modal
+      cropperErrorContainer.innerHTML = '';
+      errors.forEach(function(error){
+        const errorListItem = document.createElement('LI');
+        errorListItem.innerText = error;
+        cropperErrorContainer.append(errorListItem);
+      });
+      cropperErrorContainer.removeAttribute('hidden');
+      cropperContentContainer.setAttribute('hidden', '');
+      modalClassInstance.open();
+    }
   }
 });
 
-require(['dcf-modal', 'cropperjs/cropper.min', 'css!cropperjs/cropper.min.css'], function(DCFModalModule, Cropper) {
-  var cropperErrorContainer = document.getElementById('cropper-errors');
-  var cropperContentContainer = document.getElementById('cropper-content');
-  var image = document.getElementById('source-image');
-  var croppedImageContainer = document.getElementById('cropped-image-container');
-  var croppedImage = document.getElementById('cropped-image');
-  var croppedImageData = document.getElementById('cropped-image-data');
-  var imageData = document.getElementById('imagedata');
-  var modal = document.getElementById('image-modal');
-  var cancelBtn = document.getElementById('cancel-crop-btn');
-  var cropBtn = document.getElementById('crop-btn');
-  var modals = (DCFModalModule) ? new DCFModalModule.DCFModal([]) : new DCFModal([]);
-  var cropper;
-  var outputType;
-  var errors = [];
+cancelBtn.addEventListener('click', function(e) {
+  modalClassInstance.close();
+});
 
-  var isValidFile = function(file) {
-    errors = [];
-    switch(file.type) {
-      case 'image/png':
-      case 'image/jpeg':
-      case 'image/gif':
-      case 'image/avif':
-      case 'image/webp':
-        break;
-      default:
-        errors.push('Invalid file type (' + file.type + ').  Allowed types: avif, gif, jpeg, png and webp.');
-    }
+cropBtn.addEventListener('click', function(e) {
+  const canvas = cropper.getCroppedCanvas({
+    minWidth: 150,
+    minHeight: 150,
+    maxWidth: 4096,
+    maxHeight: 4096,
+    fillColor: '#fff',
+    imageSmoothingEnabled: true,
+    imageSmoothingQuality: 'high'
+  });
 
-    if (file.size > 8388608) {
-      var sizeInMB = file.size/1024/1024;
-      errors.push('File size (' + sizeInMB.toFixed(2) + ' MB) over limit of 8 MB.');
-    }
-
-    return errors.length === 0;
-  };
-
-  var processCrop = function(file) {
-
-    var done = function (imageUrl) {
-      image.src = imageUrl;
-      modals.openModal('image-modal');
+  canvas.toBlob(function(blob) {
+    const reader = new FileReader();
+    reader.readAsDataURL(blob);
+    reader.onloadend = function() {
+      const base64data = reader.result;
+      croppedImage.setAttribute('src', base64data);
+      croppedImageContainer.removeAttribute('hidden');
+      croppedImageData.value = base64data;
+      modalClassInstance.close();
     };
-    var reader;
+  }, outputType, 0.9);
+});
 
-    if (file.type === 'image/jpeg') {
-      outputType = file.type;
-    } else {
-      outputType = 'image/png';
-    }
-
-    if (FileReader) {
-      reader = new FileReader();
-      reader.onload = function (readerOnloadEvent) {
-        done(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  imageData.addEventListener('change', function(imageDataChangeEvent) {
-    var files = imageDataChangeEvent.target.files;
-
-    if (files && files.length > 0) {
-      var file = files[0];
-
-      if (isValidFile(file)) {
-        processCrop(file);
-      } else {
-        // Set and display errors in modal
-        cropperErrorContainer.innerHTML = '';
-        errors.forEach(function(error){
-          var errorListItem = document.createElement('LI');
-          errorListItem.innerText = error;
-          cropperErrorContainer.append(errorListItem);
-        });
-        cropperErrorContainer.removeAttribute('hidden');
-        cropperContentContainer.setAttribute('hidden', '');
-        modals.openModal('image-modal');
-      }
-    }
+modal.addEventListener('dialogPreOpen', () => {
+  cropper = new window.Cropper(image, {
+    aspectRatio: 1,
+    viewMode: 2,
+    autoCropArea: 1,
+    preview: '.preview-image'
   });
+});
 
-  cancelBtn.addEventListener('click', function(e) {
-    modals.closeModal('image-modal');
-  });
-
-  cropBtn.addEventListener('click', function(e) {
-    var canvas = cropper.getCroppedCanvas({
-      minWidth: 150,
-      minHeight: 150,
-      maxWidth: 4096,
-      maxHeight: 4096,
-      fillColor: '#fff',
-      imageSmoothingEnabled: true,
-      imageSmoothingQuality: 'high'
-    });
-
-    canvas.toBlob(function(blob) {
-      var reader = new FileReader();
-      reader.readAsDataURL(blob);
-      reader.onloadend = function() {
-        var base64data = reader.result;
-        croppedImage.setAttribute('src', base64data);
-        croppedImageContainer.removeAttribute('hidden');
-        croppedImageData.value = base64data;
-        modals.closeModal('image-modal');
-      };
-    }, outputType, 0.9);
-  });
-
-  document.addEventListener('ModalOpenEvent_' + modal.id, function (e) {
-    cropper = new Cropper(image, {
-      aspectRatio: 1,
-      viewMode: 2,
-      autoCropArea: 1,
-      preview: '.preview-image'
-    });
-  });
-
-  document.addEventListener('ModalCloseEvent_' + modal.id, function (e) {
-    imageData.value = '';
-    cropper.destroy();
-    cropper = null;
-  });
+modal.addEventListener('dialogPostClose', () => {
+  imageData.value = '';
+  cropper.destroy();
+  cropper = null;
 });

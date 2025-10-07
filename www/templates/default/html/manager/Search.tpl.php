@@ -83,9 +83,9 @@
                             </td>
                             <td class="small-hidden">
                                 <?php if ($event->userCanEdit()): ?>
-                                    <a href="<?php echo $event->getEditURL() ?>"><?php echo $event->title; ?></a>
+                                    <a class="unl-prerender" href="<?php echo $event->getEditURL() ?>"><?php echo $event->title; ?></a>
                                 <?php else: ?>
-                                    <a href="<?php echo $event->getViewURL($controller->getCalendar()) ?>">
+                                    <a class="unl-prerender" href="<?php echo $event->getViewURL($controller->getCalendar()) ?>">
                                         <?php echo $event->title; ?>
                                     </a> (preview)
                                 <?php endif; ?>
@@ -93,13 +93,13 @@
                             <td class="small-hidden">
                                 <?php $calendar = $event->getOriginCalendar() ?>
                                 <?php if ($calendar): ?>
-                                    <a href="<?php echo $calendar->getFrontendURL() ?>"><?php echo $calendar->name ?></a>
+                                    <a class="unl-prerender" href="<?php echo $calendar->getFrontendURL() ?>"><?php echo $calendar->name ?></a>
                                 <?php endif; ?>
                             </td>
                             <td>
                                 <div class="small-block dcf-d-none calendar-event-title">
                                     <?php if ($event->userCanEdit()): ?>
-                                        <a href="<?php echo $event->getEditURL() ?>">
+                                        <a class="unl-prerender" href="<?php echo $event->getEditURL() ?>">
                                         <?php echo $event->title; ?>
                                         </a>
                                     <?php else: ?>
@@ -211,7 +211,7 @@
                                                     2.5 2.5-1.122 2.5-2.5 2.5z"></path>
                                             </svg>
                                             <span class="dcf-sr-only">Physical Location:</span>
-                                            <div class="dcf-popup" data-point="true">
+                                            <div class="dcf-popup" data-point="true" hidden>
                                                 <button
                                                     class="dcf-btn dcf-btn-tertiary dcf-btn-popup"
                                                     type="button"
@@ -370,7 +370,7 @@
                                                     <g><path fill="none" d="M0 0H24V24H0z"></path></g>
                                                 </svg>
                                                 <span class="dcf-sr-only">Virtual Location:</span>
-                                                <div class="dcf-popup" data-point="true">
+                                                <div class="dcf-popup" data-point="true" hidden>
                                                     <button
                                                         class="dcf-btn dcf-btn-tertiary dcf-btn-popup"
                                                         type="button"
@@ -496,13 +496,12 @@
         </div>
 
         <?php if ($total_pages > 1): ?>
-            <?php $page->addScriptDeclaration("WDN.initializePlugin('pagination');"); ?>
             <div class="dcf-mt-2 dcf-txt-center">
                 <div style="display: inline-block;">
                     <nav class="dcf-pagination">
-                        <ol class="dcf-list-bare dcf-list-inline">
+                        <ol class="dcf-list-bare dcf-list-inline" role="list">
                         <?php if($context->page != 1): ?>
-                            <li><a class="dcf-pagination-prev" href="?event_type_id=<?php echo $context->event_type_id ?>&search_term=<?php echo $context->search_term?>&amp;page=<?php echo $context->page - 1 ?>">Prev</a></li>
+                            <li><a class="dcf-pagination-prev unl-prerender" href="?event_type_id=<?php echo $context->event_type_id ?>&search_term=<?php echo $context->search_term?>&amp;page=<?php echo $context->page - 1 ?>">Prev</a></li>
                         <?php endif; ?>
                         <?php $before_ellipsis_shown = FALSE; $after_ellipsis_shown = FALSE; ?>
                         <?php for ($i = 1; $i <= $total_pages; $i++): ?>
@@ -510,7 +509,7 @@
                                     <li><span class="dcf-pagination-selected"><?php echo $i; ?></span></li>
                                 <?php elseif ($i <= 3 || $i >= $total_pages - 2 || $i == $context->page - 1 ||
                                     $i == $context->page - 2 || $i == $context->page + 1 || $i == $context->page + 2): ?>
-                                    <li><a href="?event_type_id=<?php echo $context->event_type_id ?>&search_term=<?php echo $context->search_term?>&amp;page=<?php echo $i ?>"><?php echo $i; ?></a></li>
+                                    <li><a class="unl-prerender" href="?event_type_id=<?php echo $context->event_type_id ?>&search_term=<?php echo $context->search_term?>&amp;page=<?php echo $i ?>"><?php echo $i; ?></a></li>
                                 <?php elseif ($i < $context->page && !$before_ellipsis_shown): ?>
                                     <li><span class="dcf-pagination-ellipsis">...</span></li>
                                     <?php $before_ellipsis_shown = TRUE; ?>
@@ -520,7 +519,7 @@
                                 <?php endif; ?>
                         <?php endfor; ?>
                         <?php if($context->page != $total_pages): ?>
-                            <li><a class="dcf-pagination-next" href="?event_type_id=<?php echo $context->event_type_id ?>&search_term=<?php echo $context->search_term?>&amp;page=<?php echo $context->page + 1 ?>">Next</a></li>
+                            <li><a class="dcf-pagination-next unl-prerender" href="?event_type_id=<?php echo $context->event_type_id ?>&search_term=<?php echo $context->search_term?>&amp;page=<?php echo $context->page + 1 ?>">Next</a></li>
                         <?php endif; ?>
                         </ol>
                     </nav>

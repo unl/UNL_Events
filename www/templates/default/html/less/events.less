@@ -1,6 +1,10 @@
 @charset "UTF-8";
 @import "lib/4-1carryoverhack.less";
 
+.dcf-nav.dcf-nav-primary {
+  display: none;
+}
+
 .event-datetimes {
 
   div {
@@ -366,7 +370,7 @@
           padding: 1.78em 2.37em;
         }
 
-        h2 {
+        h1, h2 {
           font-size: 1.5em;
         }
 
@@ -374,6 +378,7 @@
           margin-bottom: 1em;
         }
 
+        header h1,
         header h2 {
           margin-bottom: 0;
         }
@@ -496,4 +501,30 @@
     --item-size: 23.68em;
   }
 
+}
+
+// View Transitions
+@keyframes slide-in-from-right {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+
+::view-transition-new(update-content) {
+  animation: 300ms ease-out slide-in-from-right;
+}
+
+#calendar-nav {
+  view-transition-name: calendar-nav;
+}
+
+#monthwidget {
+  view-transition-name: month-widget;
+}
+
+#filter_form {
+  view-transition-name: filter-form;
+}
+
+#updatecontent {
+  view-transition-name: update-content;
 }

@@ -1,5 +1,5 @@
 <div class="vcalendar">
-    <ol class="dcf-mt-4 dcf-list-bare dcf-d-grid dcf-col-gap-vw dcf-row-gap-5 unl-event-teaser-ol">
+    <ol class="dcf-mt-4 dcf-list-bare dcf-d-grid dcf-col-gap-vw dcf-row-gap-5 unl-event-teaser-ol" role="list">
     <?php
 
 use UNL\UCBCN\Event\Occurrence;
@@ -75,7 +75,7 @@ use UNL\UCBCN\Event\Occurrence;
             <li class="unl-event-teaser-li dcf-mb-0">
                 <article class="unl-event-teaser dcf-col-gap-4 dcf-card-as-link">
                     <header class="unl-event-title">
-                        <h3 class="dcf-mb-0 dcf-txt-h6 unl-lh-crop"><a class="dcf-txt-decor-hover dcf-card-link unl-darker-gray" href="<?php echo $url; ?>"><?php echo $event->displayTitle($eventinstance); ?></a></h3><?php echo $subTitle; ?>
+                        <p class="dcf-bold dcf-mb-0 dcf-txt-h6 unl-lh-crop"><a class="dcf-txt-decor-hover dcf-card-link unl-darker-gray" href="<?php echo $url; ?>"><?php echo $event->displayTitle($eventinstance); ?></a></p><?php echo $subTitle; ?>
                     </header>
                     <div class="unl-event-date dcf-flex-shrink-0 dcf-w-8 dcf-txt-center" datetime="<?php echo $datetimedate; ?>">
                         <span class="dcf-d-block dcf-txt-3xs dcf-pt-2 dcf-pb-1 dcf-uppercase dcf-bold unl-ls-2 unl-cream unl-bg-scarlet"><?php echo $month; ?></span>
@@ -94,16 +94,8 @@ use UNL\UCBCN\Event\Occurrence;
 
     <div class="dcf-txt-right">
         <a
-            class="dcf-btn dcf-btn-tertiary"
+            class="dcf-btn dcf-btn-tertiary unl-prerender"
             href="<?php echo $context->calendar->getFeaturedURL(); ?>"
         >View All<span class="dcf-sr-only"> Featured Events</span></a>
     </div>
 </div>
-
-<script>
-  // TODO: Replace this with event css
-  window.addEventListener('inlineJSReady', function() {
-    WDN.initializePlugin('card-as-link');
-    WDN.initializePlugin('events', {limit:0});
-  });
-</script>

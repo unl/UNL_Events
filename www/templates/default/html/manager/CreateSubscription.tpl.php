@@ -49,11 +49,6 @@
                 </option>
             <?php endforeach; ?>
         </select>
-        <script>
-            window.addEventListener('inlineJSReady', function() {
-                WDN.initializePlugin('search-selects');
-            });
-        </script>
     </div>
     <div class="dcf-form-group">
         <fieldset>

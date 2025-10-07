@@ -1,10 +1,11 @@
 <?php
 use UNL\Templates\Templates;
 use UNL\UCBCN\Util;
+use UNL\UCBCN\Manager\Auth;
 
-$page = Templates::factory('AppLocal', Templates::VERSION_5_3);
+$page = Templates::factory('AppLocal', Templates::VERSION_6_0);
 
-if (file_exists(\UNL\UCBCN\Util::getWWWRoot() . '/wdn/templates_5.3')) {
+if (file_exists(\UNL\UCBCN\Util::getWWWRoot() . '/wdn/templates_6.0')) {
     $page->setLocalIncludePath(\UNL\UCBCN\Util::getWWWRoot());
 }
 
@@ -20,7 +21,7 @@ if (!$context->getCalendar()) {
     }
     $title .= ' | Manager | Events';
     $site_title = $context->getCalendar()->name . ' Events Manager';
-    $cal_url = $context->getCalendar()->getFrontendURL();
+    $cal_url = $context->getCalendar()->getManageURL();
 }
 $view_class = str_replace('\\', '_', strtolower($context->options['model']));
 
@@ -32,19 +33,44 @@ $page->affiliation = '';
 //css
 $page->addStyleSheet($base_frontend_url.'templates/default/html/css/events.css?v='.UNL\UCBCN\Frontend\Controller::$version);
 $page->addStyleSheet($base_frontend_url.'templates/default/html/css/manager.css?v='.UNL\UCBCN\Frontend\Controller::$version);
+$page->addStyleSheet('/wdn/templates_6.0/css/components-js/_tabs.css?v='.UNL\UCBCN\Frontend\Controller::$version);
 
 // no menu items, so hide mobile menu
 $page->addStyleDeclaration("#dcf-mobile-toggle-menu {display: none!important}");
 
 //javascript
-$page->addScriptDeclaration('WDN.setPluginParam("idm", "logout", "' . Util::getBaseURL() . '/manager/logout");');
+$page->addScriptDeclaration('window.UNL.idm.pushConfig("logoutRoute", "' . Util::getBaseURL() . '/manager/logout");', '', true);
+$page->addScriptDeclaration('window.UNL.autoLoader.config.globalOptOutSelector=".events-autoload-ignore";', '', true);
+$auth = new Auth();
+if ($auth->isAuthenticated()) {
+    $userId = $auth->getCASUserId();
+    $page->addScriptDeclaration('window.UNL.idm.pushConfig("serverUser", "' . $userId . '");', '', true);
+}
+$page->addScriptDeclaration('{
+    "prerender": [
+        {
+            "source": "document",
+            "where": {
+                "selector_matches": "a.unl-prerender"
+            },
+            "eagerness": "moderate"
+        }
+    ],
+    "prefetch": [
+        {
+            "source": "document",
+            "where": {
+                "selector_matches": "a.unl-prefetch"
+            },
+            "eagerness": "moderate"
+        }
+    ]
+}', 'speculationrules', true);
 $page->addScriptDeclaration('var frontend_url = "'.$base_frontend_url.'";');
 $page->addScriptDeclaration('var manager_url = "'.$base_manager_url.'";');
-$page->addScriptDeclaration("WDN.initializePlugin('notice');");
-$page->addScriptDeclaration("
-require(['jquery'], function ($) {
-    $('#breadcrumbs > ul > li > a').last().parent().addClass('last-link');
-});");
+$page->addScriptDeclaration("const allBreadcrumbLinks = Array.from(document.querySelectorAll('#breadcrumbs > ul > li > a'));
+const lastBreadcrumbLink = allBreadcrumbLinks[allBreadcrumbLinks.length - 1];
+lastBreadcrumbLink.parentElement.classList.add('last-link');");
 $page->addScript($base_frontend_url .'templates/default/html/js/manager.min.js?v='.UNL\UCBCN\Frontend\Controller::$version);
 
 //other
@@ -67,8 +93,8 @@ if ($_SERVER['SERVER_NAME'] == 'events-dev.unl.edu') {
 }
 
 $page->maincontentarea .= '
-        <section class="dcf-grid dcf-col-gap-vw dcf-pb-8">
-            <div class="dcf-col-100% dcf-col-75%-start@md">
+        <section class="dcf-d-grid dcf-grid-cols-12 dcf-row-gap-4 dcf-col-gap-vw dcf-pb-8">
+            <div id="main-manager-section" class="dcf-col-span-12 dcf-col-span-9@md">
 ';
 
 if (($notice = $context->getNotice()) != NULL) {
@@ -91,7 +117,7 @@ if (($notice = $context->getNotice()) != NULL) {
     <div>' . html_entity_decode($notice['messageHTML']) . '</div>
 </div></div>';
 } else {
-    $page->maincontentarea .= '<div id="noticeContainer"><div id="notice" class="dcf-notice" hidden data-no-close-button style="display: none!important">
+    $page->maincontentarea .= '<div id="noticeContainer"><div id="notice" class="dcf-notice dcf-d-none!" hidden data-no-close-button>
     <h2>Message Header</h2>
     <div>Message Content</div>
 </div></div>';
@@ -99,7 +125,7 @@ if (($notice = $context->getNotice()) != NULL) {
 $page->maincontentarea .= $savvy->render($context->output, $template) . '
             <br>
             </div>
-            <div class="dcf-col-100% dcf-col-25%-end@md">
+            <div class="dcf-col-span-12 dcf-col-span-3@md">
                 <nav class="calendars-list">
                     ' . $savvy->render($context, 'navigation.tpl.php') . '
                 </nav>
