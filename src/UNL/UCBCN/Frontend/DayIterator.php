@@ -11,7 +11,7 @@ class DayIterator extends \IteratorIterator
          parent::__construct($iterator);
      }
      
-     public function current()
+     public function current(): mixed
      {
          /* @var $datetime \DateTime */
          $datetime = parent::current();
