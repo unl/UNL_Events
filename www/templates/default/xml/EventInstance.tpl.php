@@ -1,7 +1,7 @@
     <Event>
         <EventID><?php echo $context->event->id; ?></EventID>
-        <EventTitle><?php echo htmlspecialchars($context->event->displayTitle($context)); ?></EventTitle>
-        <EventSubtitle><?php echo htmlspecialchars($context->event->subtitle); ?></EventSubtitle>
+        <EventTitle><?php echo htmlspecialchars($context->event->displayTitle($context) ?? ''); ?></EventTitle>
+        <EventSubtitle><?php echo htmlspecialchars($context->event->subtitle ?? ''); ?></EventSubtitle>
         <Status><?php echo $context->event->icalStatus($context); ?></Status>
         <?php
         $timezoneDateTime = new \UNL\UCBCN\TimezoneDateTime($context->eventdatetime->timezone);
@@ -17,7 +17,7 @@
             <EndDate><?php echo $timezoneDateTime->format($context->getEndTime(),'c'); ?></EndDate>
             <EndTime><?php echo $timezoneDateTime->formatUTC($context->getEndTime(),'H:i:s'); ?>Z</EndTime>
             <?php endif; ?>
-            <AdditionalPublicInfo><?php echo htmlspecialchars($context->eventdatetime->additionalpublicinfo); ?></AdditionalPublicInfo>
+            <AdditionalPublicInfo><?php echo htmlspecialchars($context->eventdatetime->additionalpublicinfo ?? ''); ?></AdditionalPublicInfo>
             <?php
                 if ($context->eventdatetime->isRecurring()):
             ?>
@@ -36,18 +36,18 @@
             ?>
             <Location>
                 <LocationID><?php echo $loc->id; ?></LocationID>
-                <LocationName><?php echo htmlspecialchars($loc->name); ?></LocationName>
+                <LocationName><?php echo htmlspecialchars($loc->name ?? ''); ?></LocationName>
                 <LocationTypes>
                     <LocationType><?php echo $loc->type; ?></LocationType>
                 </LocationTypes>
                 <Address>
                     <?php if(isset($context->eventdatetime->room) && !empty($context->eventdatetime->room)): ?>
-                        <Room><?php echo htmlspecialchars($context->eventdatetime->room); ?></Room>
+                        <Room><?php echo htmlspecialchars($context->eventdatetime->room ?? ''); ?></Room>
                     <?php else: ?>
-                        <Room><?php echo htmlspecialchars($loc->room); ?></Room>
+                        <Room><?php echo htmlspecialchars($loc->room ?? ''); ?></Room>
                     <?php endif; ?>
-                    <BuildingName><?php echo htmlspecialchars($loc->name); ?></BuildingName>
-                    <CityName><?php echo htmlspecialchars($loc->city); ?></CityName>
+                    <BuildingName><?php echo htmlspecialchars($loc->name ?? ''); ?></BuildingName>
+                    <CityName><?php echo htmlspecialchars($loc->city ?? ''); ?></CityName>
                     <PostalZone><?php echo $loc->zip; ?></PostalZone>
                     <CountrySubentityCode><?php echo $loc->state; ?></CountrySubentityCode>
                     <Country>
@@ -74,28 +74,28 @@
                 <WebPages>
                     <WebPage>
                         <Title>Location Web Page</Title>
-                        <URL><?php echo htmlspecialchars($loc->webpageurl); ?></URL>
+                        <URL><?php echo htmlspecialchars($loc->webpageurl ?? ''); ?></URL>
                     </WebPage>
                 </WebPages>
                 <MapLinks>
-                    <MapLink><?php echo htmlspecialchars($loc->mapurl); ?></MapLink>
+                    <MapLink><?php echo htmlspecialchars($loc->mapurl ?? ''); ?></MapLink>
                 </MapLinks>
 
-                <LocationHours><?php echo htmlspecialchars($loc->hours); ?></LocationHours>
+                <LocationHours><?php echo htmlspecialchars($loc->hours ?? ''); ?></LocationHours>
 
                 <?php if(isset($context->eventdatetime->directions) && !empty($context->eventdatetime->directions)): ?>
-                    <Directions><?php echo htmlspecialchars($context->eventdatetime->directions); ?></Directions>
+                    <Directions><?php echo htmlspecialchars($context->eventdatetime->directions ?? ''); ?></Directions>
                 <?php else: ?>
-                    <Directions><?php echo htmlspecialchars($loc->directions); ?></Directions>
+                    <Directions><?php echo htmlspecialchars($loc->directions ?? ''); ?></Directions>
                 <?php endif; ?>
 
                 <?php if(
                     isset($context->eventdatetime->location_additionalpublicinfo) &&
                     !empty($context->eventdatetime->location_additionalpublicinfo)):
                 ?>
-                    <AdditionalPublicInfo><?php echo htmlspecialchars($context->eventdatetime->location_additionalpublicinfo); ?></AdditionalPublicInfo>
+                    <AdditionalPublicInfo><?php echo htmlspecialchars($context->eventdatetime->location_additionalpublicinfo ?? ''); ?></AdditionalPublicInfo>
                 <?php else: ?>
-                    <AdditionalPublicInfo><?php echo htmlspecialchars($loc->additionalpublicinfo); ?></AdditionalPublicInfo>
+                    <AdditionalPublicInfo><?php echo htmlspecialchars($loc->additionalpublicinfo ?? ''); ?></AdditionalPublicInfo>
                 <?php endif; ?>
             </Location>
             <?php } ?>
@@ -109,8 +109,8 @@
                 if ($type) : ?>
                 <EventType>
                     <EventTypeID><?php echo $type->id; ?></EventTypeID>
-                    <EventTypeName><?php echo htmlspecialchars($type->name); ?></EventTypeName>
-                    <EventTypeDescription><?php echo htmlspecialchars($type->description); ?></EventTypeDescription>
+                    <EventTypeName><?php echo htmlspecialchars($type->name ?? ''); ?></EventTypeName>
+                    <EventTypeDescription><?php echo htmlspecialchars($type->description ?? ''); ?></EventTypeDescription>
                 </EventType>
                 <?php
                 endif;
@@ -126,7 +126,7 @@
                 <?php if($current_audience): ?>
                 <Audience>
                     <AudienceID><?php echo $current_audience->id; ?></AudienceID>
-                    <AudienceName><?php echo htmlspecialchars($current_audience->name); ?></AudienceName>
+                    <AudienceName><?php echo htmlspecialchars($current_audience->name ?? ''); ?></AudienceName>
                 </Audience>
                 <?php endif; ?>
             <?php endforeach; ?>
@@ -137,18 +137,18 @@
         </Languages>
         <EventTransparency><?php echo $context->event->transparency; ?></EventTransparency>
 
-        <Description><?php echo htmlspecialchars($context->event->description); ?></Description>
-        <ShortDescription><?php echo htmlspecialchars($context->event->shortdescription); ?></ShortDescription>
-        <Refreshments><?php echo htmlspecialchars($context->event->refreshments); ?></Refreshments>
+        <Description><?php echo htmlspecialchars($context->event->description ?? ''); ?></Description>
+        <ShortDescription><?php echo htmlspecialchars($context->event->shortdescription ?? ''); ?></ShortDescription>
+        <Refreshments><?php echo htmlspecialchars($context->event->refreshments ?? ''); ?></Refreshments>
         <WebPages>
             <WebPage>
                 <Title>Event Instance URL</Title>
-                <URL><?php echo htmlspecialchars($context->getURL()); ?></URL>
+                <URL><?php echo htmlspecialchars($context->getURL() ?? ''); ?></URL>
             </WebPage>
             <?php if (!empty($context->event->webpageurl)): ?>
             <WebPage>
                 <Title>Event webpage</Title>
-                <URL><?php echo htmlspecialchars($context->event->webpageurl); ?></URL>
+                <URL><?php echo htmlspecialchars($context->event->webpageurl ?? ''); ?></URL>
             </WebPage>
             <?php endif; ?>
         </WebPages>
@@ -159,16 +159,16 @@
         ?>
             <Webcast>
                 <WebcastID><?php echo $webcast->id; ?></WebcastID>
-                <WebcastName><?php echo htmlspecialchars($webcast->title); ?></WebcastName>
-                <WebcastURL><?php echo htmlspecialchars($webcast->url); ?></WebcastURL>
+                <WebcastName><?php echo htmlspecialchars($webcast->title ?? ''); ?></WebcastName>
+                <WebcastURL><?php echo htmlspecialchars($webcast->url ?? ''); ?></WebcastURL>
 
                 <?php if(
                     isset($context->eventdatetime->webcast_additionalpublicinfo) &&
                     !empty($context->eventdatetime->webcast_additionalpublicinfo)):
                 ?>
-                    <AdditionalPublicInfo><?php echo htmlspecialchars($context->eventdatetime->webcast_additionalpublicinfo); ?></AdditionalPublicInfo>
+                    <AdditionalPublicInfo><?php echo htmlspecialchars($context->eventdatetime->webcast_additionalpublicinfo ?? ''); ?></AdditionalPublicInfo>
                 <?php else: ?>
-                    <AdditionalPublicInfo><?php echo htmlspecialchars($webcast->additionalinfo); ?></AdditionalPublicInfo>
+                    <AdditionalPublicInfo><?php echo htmlspecialchars($webcast->additionalinfo ?? ''); ?></AdditionalPublicInfo>
                 <?php endif; ?>
             </Webcast>
             <?php endif; ?>
@@ -188,7 +188,7 @@
         <Documents>
             <?php foreach ($documents as $document) : ?>
             <Document>
-                <Title><?php echo htmlspecialchars($document->name); ?></Title>
+                <Title><?php echo htmlspecialchars($document->name ?? ''); ?></Title>
                 <URL><?php echo $document->url; ?></URL>
             </Document>
             <?php endforeach; ?>
@@ -203,19 +203,19 @@
                 <PublicEventContactID><?php echo $contact->id; ?></PublicEventContactID>
 
                 <ContactName>
-                    <FullName><?php echo htmlspecialchars($contact->name); ?></FullName>
+                    <FullName><?php echo htmlspecialchars($contact->name ?? ''); ?></FullName>
                 </ContactName>
                 <ProfessionalAffiliations>
                     <ProfessionalAffiliation>
 
                         <JobTitles>
-                            <JobTitle><?php echo htmlspecialchars($contact->jobtitle); ?></JobTitle>
+                            <JobTitle><?php echo htmlspecialchars($contact->jobtitle?? ''); ?></JobTitle>
                         </JobTitles>
-                        <OrganizationName><?php echo htmlspecialchars($contact->organization); ?></OrganizationName>
+                        <OrganizationName><?php echo htmlspecialchars($contact->organization ?? ''); ?></OrganizationName>
                         <OrganizationWebPages>
                             <WebPage>
 
-                                <Title><?php echo htmlspecialchars($contact->name); ?></Title>
+                                <Title><?php echo htmlspecialchars($contact->name ?? ''); ?></Title>
                                 <URL><?php echo $contact->webpageurl; ?></URL>
                             </WebPage>
 
@@ -224,7 +224,7 @@
                 </ProfessionalAffiliations>
                 <Phones>
                     <Phone>
-                        <PhoneNumber><?php echo htmlspecialchars($contact->phone); ?></PhoneNumber>
+                        <PhoneNumber><?php echo htmlspecialchars($contact->phone ?? ''); ?></PhoneNumber>
                     </Phone>
                 </Phones>
 
@@ -233,12 +233,12 @@
                 </EmailAddresses>
                 <Addresses>
                     <Address>
-                        <StreetName><?php echo htmlspecialchars($contact->addressline1); ?></StreetName>
-                        <AdditionalStreetName><?php echo htmlspecialchars($contact->addressline2); ?></AdditionalStreetName>
-                        <Room><?php echo htmlspecialchars($contact->room); ?></Room>
-                        <CityName><?php echo htmlspecialchars($contact->city); ?></CityName>
+                        <StreetName><?php echo htmlspecialchars($contact->addressline1 ?? ''); ?></StreetName>
+                        <AdditionalStreetName><?php echo htmlspecialchars($contact->addressline2 ?? ''); ?></AdditionalStreetName>
+                        <Room><?php echo htmlspecialchars($contact->room ?? ''); ?></Room>
+                        <CityName><?php echo htmlspecialchars($contact->city ?? ''); ?></CityName>
                         <PostalZone><?php echo $contact->zip; ?></PostalZone>
-                        <CountrySubentityCode><?php echo htmlspecialchars($contact->State); ?></CountrySubentityCode>
+                        <CountrySubentityCode><?php echo htmlspecialchars($contact->State ?? ''); ?></CountrySubentityCode>
                         <Country>
                             <IdentificationCode xmlns="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-1.0" codeListID="ISO3166-1" codeListAgencyID="6" codeListAgencyName="United Nations Economic Commission for Europe" codeListName="Country" codeListVersionID="0.3" languageID="en" codeListURI="http://www.iso.org/iso/en/prods-services/iso3166ma/02iso-3166-code-lists/list-en1-semic.txt" codeListSchemeURI="urn:oasis:names:specification:ubl:schema:xsd:CountryIdentificationCode-1.0">US</IdentificationCode>
 
@@ -248,7 +248,7 @@
                 </Addresses>
                 <WebPages>
                     <WebPage>
-                        <Title><?php echo htmlspecialchars($contact->name); ?></Title>
+                        <Title><?php echo htmlspecialchars($contact->name ?? ''); ?></Title>
                         <URL><?php echo $contact->webpageurl; ?></URL>
                     </WebPage>
                 </WebPages>
@@ -260,11 +260,11 @@
 
             <EventListingContact>
                 <ContactName>
-                    <FullName><?php echo htmlspecialchars($context->event->listingcontactname); ?></FullName>
+                    <FullName><?php echo htmlspecialchars($context->event->listingcontactname ?? ''); ?></FullName>
                 </ContactName>
                 <Phones>
                     <Phone>
-                        <PhoneNumber><?php echo htmlspecialchars($context->event->listingcontactphone); ?></PhoneNumber>
+                        <PhoneNumber><?php echo htmlspecialchars($context->event->listingcontactphone ?? ''); ?></PhoneNumber>
                     </Phone>
                 </Phones>
                 <EmailAddresses>
@@ -276,7 +276,7 @@
         <Classification>Public</Classification>
         <?php if (!empty($context->event->privatecomment)): ?>
         <PrivateComments>
-            <PrivateComment><?php echo htmlspecialchars($context->event->privatecomment); ?></PrivateComment>
+            <PrivateComment><?php echo htmlspecialchars($context->event->privatecomment ?? ''); ?></PrivateComment>
         </PrivateComments>
         <?php endif; ?>
         <?php
@@ -287,9 +287,9 @@
             <OriginCalendar>
                 <CalendarID><?php echo $originCalendar->id; ?></CalendarID>
                 <AccountID><?php echo $originCalendar->account_id; ?></AccountID>
-                <Name><?php echo htmlspecialchars($originCalendar->name); ?></Name>
-                <ShortName><?php echo htmlspecialchars($originCalendar->shortname); ?></ShortName>
-                <URL><?php echo $protocol . $_SERVER['SERVER_NAME'] . '/' . urlencode($originCalendar->shortname);?></URL>
+                <Name><?php echo htmlspecialchars($originCalendar->name ?? ''); ?></Name>
+                <ShortName><?php echo htmlspecialchars($originCalendar->shortname ?? ''); ?></ShortName>
+                <URL><?php echo $protocol . $_SERVER['SERVER_NAME'] . '/' . urlencode($originCalendar->shortname ?? '');?></URL>
             </OriginCalendar>
         <?php endif; ?>
     </Event>
