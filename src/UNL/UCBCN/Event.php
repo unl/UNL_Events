@@ -240,6 +240,9 @@ class Event extends Record
     public function getFirstType() {
         $types = $this->getEventTypes();
         $types->rewind();
+        if (count($types) === 0) {
+            return '';
+        }
         return $types->current()->getType();
     }
 
