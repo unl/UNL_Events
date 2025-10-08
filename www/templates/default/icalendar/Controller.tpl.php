@@ -23,12 +23,12 @@ ob_clean();
 $out = explode("\n", $out);
 foreach ($out as $line) {
     // remove any empty lines
-    if (empty(trim($line))) { continue; }
+    if (empty(trim($line ?? ''))) { continue; }
     echo \UNL\UCBCN\Frontend\Util::ical_split($line) . "\r\n";
 }
 
 function icalFormatString($string) {
-    $formattedString = preg_replace("/\r\n|\n|\r/", '\n', strip_tags(trim($string)));
+    $formattedString = preg_replace("/\r\n|\n|\r/", '\n', strip_tags(trim($string ?? '')));
     $formattedString = preg_replace("/([,;:])/", '\\\$1', $formattedString);
     return $formattedString;
 }
