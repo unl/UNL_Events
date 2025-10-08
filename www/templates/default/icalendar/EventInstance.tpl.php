@@ -20,7 +20,7 @@ if ($context->eventdatetime->recurringtype == 'none') {
     $recurringDateID = isset($context->recurringdate->id) ? $context->recurringdate->id : '';
     $out[] = 'UID:'.$context->eventdatetime->id . '-' . $recurringDateID .'@'.$_SERVER['SERVER_NAME'];
 }
-$out[] = 'DTSTAMP:'.gmdate("Ymd\THis\Z" , strtotime($context->event->datecreated));
+$out[] = 'DTSTAMP:'.gmdate("Ymd\THis\Z" , strtotime($context->event->datecreated ?? ''));
 $contactName = !empty($context->event->listingcontactname) ? $context->event->listingcontactname : 'unknown';
 $contactEmail = !empty($context->event->listingcontactemail) ? 'MAILTO:' . $context->event->listingcontactemail : '';
 $organizer = icalFormatString('CN=' . $contactName) . ":" . $contactEmail;
