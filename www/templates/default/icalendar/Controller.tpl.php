@@ -4,6 +4,16 @@ if (!isset($context->options['calendar']) || !isset($context->options['calendar'
     header("HTTP/1.0 404 Not Found");
     die();
 }
+try {
+    $body = $savvy->render($context->output);
+} catch(Exception $e) {
+    header("HTTP/1.1 400 Bad Request");
+    die();
+}
+
+header('Content-type:text/calendar; charset=UTF-8');
+header('Content-Disposition: attachment; filename="events.ics"');
+
 /**
  * This template file is for the icalendar and ics output formats.
  */
@@ -14,7 +24,7 @@ PRODID:-//UNL_UCBCN//NONSGML UNL Event Publisher//EN
 X-WR-CALNAME:<?php echo $context->options['calendar']->name."\n"; ?>
 CALSCALE:GREGORIAN
 METHOD:PUBLISH
-<?php echo $savvy->render($context->output); ?>
+<?php echo $body; ?>
 END:VCALENDAR
 <?php
 // Convert all line endings: line endings are windows-style, carriage-return, followed by a line feed

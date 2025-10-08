@@ -33,8 +33,6 @@ class OutputController extends \Savvy
             case 'ics':
             case 'ical':
             case 'icalendar':
-                header('Content-type:text/calendar; charset=UTF-8');
-                header('Content-Disposition: attachment; filename="events.ics"');
                 $this->setTemplateFormatPaths('icalendar');
                 break;
 
