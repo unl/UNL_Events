@@ -228,11 +228,15 @@ if (window.UNL_Events.recurringMonth == '') {
         setRecurringOptions(start_date, monthly_group, window.UNL_Events.recurringType);
     });
     setRecurringOptions(start_date, monthly_group);
-    recurring_type.setAttribute('value', window.UNL_Events.recurringType);
+    if (recurring_type !== null) {
+        recurring_type.setAttribute('value', window.UNL_Events.recurringType);
+    }
 } else {
     start_date.addEventListener('change', () => {
         setRecurringOptions(start_date, monthly_group, window.UNL_Events.recurringMonth);
     });
     setRecurringOptions(start_date, monthly_group, window.UNL_Events.recurringMonth);
-    recurring_type.setAttribute('value', window.UNL_Events.recurringMonth);
+    if (recurring_type !== null) {
+        recurring_type.setAttribute('value', window.UNL_Events.recurringMonth);
+    }
 }
