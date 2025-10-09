@@ -106,7 +106,7 @@ add_datetime_form.addEventListener('submit', (submit) => {
 
     // if recurring is checked, there must be a recurring type and the recurs_until date must be on
     // or after the start date
-    if (start_date_input.value != '' && recurring_input.checked) {
+    if (start_date_input.value != '' && (recurring_input !== null && recurring_input.checked)) {
         if (recurring_type_input.value== '' || recurs_until_date_input.value == '') {
             if (recurring_type_input.value == '') {
                 window.UNL_Events.notifier.mark_input_invalid(recurring_type_input);

@@ -161,10 +161,12 @@ const setRecurringOptions = function(start_elem, month_group_elem, rectypemonth)
     }
 
     // remove options, if any
-    const dynamicRecurring_elements = month_group_elem.querySelectorAll('.dynamicRecurring');
-    dynamicRecurring_elements.forEach((single_dynamicRecurring_element) => {
-        single_dynamicRecurring_element.remove();
-    })
+    if (month_group_elem !== null) {
+        const dynamicRecurring_elements = month_group_elem.querySelectorAll('.dynamicRecurring');
+        dynamicRecurring_elements.forEach((single_dynamicRecurring_element) => {
+            single_dynamicRecurring_element.remove();
+        });
+    }
 
     // populate rectypemonth with appropriate options
     if (nth[week] != undefined) {
