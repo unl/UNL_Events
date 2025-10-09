@@ -177,7 +177,9 @@ const setRecurringOptions = function(start_elem, month_group_elem, rectypemonth)
         }
         new_option.setAttribute('value', nth[week].toLowerCase());
         new_option.innerText = `${nth[week]} ${start_weekday} of every month`;
-        month_group_elem.prepend(new_option);
+        if (month_group_elem !== null) {
+            month_group_elem.prepend(new_option);
+        }
     }
 
     if (week == 4 && total_weeks == 4) {
@@ -188,7 +190,9 @@ const setRecurringOptions = function(start_elem, month_group_elem, rectypemonth)
         }
         new_option.setAttribute('value', 'last');
         new_option.innerText = `last ${start_weekday} of every month`;
-        month_group_elem.prepend(new_option);
+        if (month_group_elem !== null) {
+            month_group_elem.prepend(new_option);
+        }
     }
 
     if (days_in_month == start_day) {
@@ -199,7 +203,9 @@ const setRecurringOptions = function(start_elem, month_group_elem, rectypemonth)
         }
         new_option.setAttribute('value', 'lastday');
         new_option.innerText = 'Last day of every month';
-        month_group_elem.prepend(new_option);
+        if (month_group_elem !== null) {
+            month_group_elem.prepend(new_option);
+        }
     }
 
     const new_option = document.createElement('option');
@@ -209,7 +215,9 @@ const setRecurringOptions = function(start_elem, month_group_elem, rectypemonth)
     }
     new_option.setAttribute('value', 'date');
     new_option.innerText = `${ordinal(start_day)} of every month`;
-    month_group_elem.prepend(new_option);
+    if (month_group_elem !== null) {
+        month_group_elem.prepend(new_option);
+    }
 };
 
 const start_date = document.getElementById('start-date');
