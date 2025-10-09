@@ -324,9 +324,9 @@
                             data-id="<?php echo $location->id; ?>"
                         >
                             <div class="dcf-popup dcf-w-100%" data-hover="true" data-point="true" hidden>
-                                <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup dcf-w-100% dcf-d-flex dcf-ai-center dcf-jc-center dcf-gap-4" type="button">
+                                <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup dcf-w-100%" type="button">
                                     <svg
-                                        class="dcf-h-4 dcf-w-4 dcf-d-block dcf-fill-current"
+                                        class="dcf-h-6 dcf-w-6 dcf-d-block dcf-fill-current"
                                         aria-hidden="true"
                                         focusable="false"
                                         height="24"
@@ -426,7 +426,7 @@
                         <td class="dcf-txt-middle location with-controls no-location" data-id="">
                             <div class="dcf-d-flex dcf-ai-center dcf-jc-center dcf-gap-4">
                                 <svg
-                                    class="dcf-h-4 dcf-w-4 dcf-d-block dcf-fill-current"
+                                    class="dcf-h-6 dcf-w-6 dcf-d-block dcf-fill-current"
                                     aria-hidden="true"
                                     focusable="false"
                                     height="24"
@@ -453,10 +453,10 @@
                             data-id="<?php echo $getWebcast->id; ?>"
                         >
                             <div class="dcf-popup dcf-w-100%" data-hover="true" data-point="true" hidden>
-                                <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup dcf-w-100% dcf-d-flex dcf-ai-center dcf-jc-center dcf-gap-4" type="button">
+                                <button class="dcf-btn dcf-btn-tertiary dcf-btn-popup dcf-w-100%" type="button">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
-                                        class="dcf-h-4 dcf-w-4 dcf-d-block dcf-fill-current"
+                                        class="dcf-h-6 dcf-w-6 dcf-d-block dcf-fill-current"
                                         aria-hidden="true"
                                         focusable="false"
                                         height="24"
@@ -516,7 +516,7 @@
                             <div class="dcf-d-flex dcf-ai-center dcf-jc-center dcf-gap-4">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
-                                    class="dcf-h-4 dcf-w-4 dcf-d-block dcf-fill-current"
+                                    class="dcf-h-6 dcf-w-6 dcf-d-block dcf-fill-current"
                                     aria-hidden="true"
                                     focusable="false"
                                     height="24"
