@@ -12,8 +12,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const heading_date_element = document.getElementById('heading-date');
 
-    if (homeUrl.length) {
-        homeUrl = homeUrl[0].href;
+    if (homeUrl) {
+        homeUrl = homeUrl.href;
     } else {
         homeUrl = '/';
     }
