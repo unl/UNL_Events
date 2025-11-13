@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let nowActive = null;
     let progressTimeout = null;
 
-    const heading_date_element = document.getElementById('heading-date');
+    let heading_date_element = document.getElementById('heading-date');
 
     if (homeUrl) {
         homeUrl = homeUrl.href;
