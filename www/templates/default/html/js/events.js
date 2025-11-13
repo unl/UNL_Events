@@ -148,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (nowActive.getFullYear() != now.getFullYear() && nowActive.getMonth() != now.getMonth() && nowActive.getDate() != now.getDate()) {
-                document.getElementById('events-promo-bar').classList.add('dcf-d-none!');
+                document.getElementById('events-promo-bar')?.classList?.add('dcf-d-none!');
             }
         });
     }
