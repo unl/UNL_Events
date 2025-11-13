@@ -78,6 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function determineActiveDay() {
+        heading_date_element = document.getElementById('heading-date');
         if (heading_date_element !== null) {
             const headingDate = heading_date_element.dataset.datetime;
             nowActive = new Date(headingDate);
