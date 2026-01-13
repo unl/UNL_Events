@@ -83,31 +83,71 @@ class EventType extends EventListing implements RoutableInterface, MetaTagInterf
      */
     public function getSQL()
     {
-        $sql = 'SELECT DISTINCT e.id as id, recurringdate.id as recurringdate_id
-                FROM eventdatetime as e
-                INNER JOIN event ON e.event_id = event.id
-                INNER JOIN calendar_has_event ON calendar_has_event.event_id = event.id
-                LEFT JOIN recurringdate ON (recurringdate.event_datetime_id = e.id AND recurringdate.unlinked = 0)
-                LEFT JOIN event_has_eventtype ON (event_has_eventtype.event_id = event.id)
-                LEFT JOIN eventtype ON (eventtype.id = event_has_eventtype.eventtype_id)
-                LEFT JOIN event_targets_audience ON (event_targets_audience.event_id = event.id)
-                LEFT JOIN audience ON (audience.id = event_targets_audience.audience_id)
-                LEFT JOIN location ON (location.id = e.location_id)
-                WHERE calendar_has_event.status IN ("posted", "archived") AND
-                (
-                    IF (recurringdate.recurringdate IS NULL,
+        $sql = 'SELECT
+                    DISTINCT e.id as id,
+                    e.recurringdate_id
+                FROM ((
+                    SELECT
+                        DISTINCT e.id as id,
+                        e.event_id AS event_id,
+                        e.location_id,
+                        recurringdate.recurringdate,
                         e.starttime,
-                        CONCAT(DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.starttime," %H:%i:%s"))
-                    ) >= NOW() OR
-                    IF (recurringdate.recurringdate IS NULL,
                         e.endtime,
-                        CONCAT(DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.endtime," %H:%i:%s"))
-                    ) >= NOW()
-                ) AND ( eventtype.name IS NOT NULL )
-                AND (
-                    calendar_has_event.calendar_id = ' . (int)$this->calendar->id . '
-                    OR event.approvedforcirculation = 1
-                ) ';
+                        recurringdate.id as recurringdate_id
+                    FROM eventdatetime as e
+                    JOIN recurringdate ON (
+                        recurringdate.event_datetime_id = e.id 
+                        AND recurringdate.unlinked = 0
+                    )
+                    WHERE
+                        e.recurringtype != "none"
+                        AND (
+                            CONCAT(
+                                DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),
+                                DATE_FORMAT(e.starttime," %H:%i:%s")
+                            ) >= NOW() 
+                            OR 
+                            CONCAT(
+                                DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),
+                                DATE_FORMAT(e.endtime," %H:%i:%s")
+                            ) >= NOW()
+                        )
+                ) UNION (
+                    SELECT
+                        DISTINCT e.id as id,
+                        e.event_id AS event_id,
+                        e.location_id,
+                        NULL as recurringdate,
+                        e.starttime,
+                        e.endtime,
+                        NULL as recurringdate_id
+                    FROM eventdatetime as e
+                    WHERE
+                        e.recurringtype = "none"
+                        AND (e.starttime >= NOW() OR e.endtime >= NOW())
+                )) AS e
+                JOIN event ON
+                    e.event_id = event.id
+                JOIN calendar_has_event ON 
+                    calendar_has_event.event_id = event.id
+                JOIN event_has_eventtype ON 
+                    event_has_eventtype.event_id = event.id
+                JOIN eventtype ON 
+                    eventtype.id = event_has_eventtype.eventtype_id
+                LEFT JOIN event_targets_audience ON 
+                    event_targets_audience.event_id = event.id
+                LEFT JOIN audience ON 
+                    audience.id = event_targets_audience.audience_id
+                LEFT JOIN location ON 
+                    location.id = e.location_id
+                WHERE 
+                    calendar_has_event.status IN ("posted", "archived")
+                    AND eventtype.name IS NOT NULL
+                    AND (
+                        calendar_has_event.calendar_id = ' . (int)$this->calendar->id . '
+                        OR event.approvedforcirculation = 1
+                    )';
 
         // Adds filters for target audience
         if (!empty($this->event_type_filter)) {
@@ -128,12 +168,9 @@ class EventType extends EventListing implements RoutableInterface, MetaTagInterf
 
         // Adds remaining sql
         $sql .= 'ORDER BY (
-                        IF (recurringdate.recurringdate IS NULL,
-                            e.starttime,
-                            CONCAT(
-                                DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),
-                                DATE_FORMAT(e.starttime," %H:%i:%s")
-                            )
+                    IF (e.recurringdate IS NULL,
+                    e.starttime,
+                        CONCAT(DATE_FORMAT(e.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.starttime," %H:%i:%s"))
                         )
                     ) ASC,
                     event.title ASC';

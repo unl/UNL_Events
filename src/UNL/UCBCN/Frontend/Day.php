@@ -65,31 +65,57 @@ class Day extends EventListing implements RoutableInterface, MetaTagInterface
         $startDateTime = $this->getDateTime(FALSE, '-P2D')->format('Y-m-d H:i:s');
         $endDateTime = $this->getDateTime(TRUE, 'P2D')->format('Y-m-d H:i:s');
 
-        $sql = '
-                SELECT DISTINCT e.id as id,recurringdate.recurringdate,e.starttime,e.endtime,e.timezone,event.title, recurringdate.id as recurringdate_id
-                FROM eventdatetime as e
-                INNER JOIN event ON e.event_id = event.id
-                INNER JOIN calendar_has_event ON calendar_has_event.event_id = event.id
-                LEFT JOIN recurringdate ON (recurringdate.event_datetime_id = e.id AND recurringdate.recurringdate >= "' . $startDateTime . '" AND recurringdate.recurringdate <= "' . $endDateTime . '" AND recurringdate.unlinked = 0)
-                WHERE
-                    calendar_has_event.calendar_id = ' . (int)$this->calendar->id . '
-                    AND calendar_has_event.status IN ("posted", "archived")
-                    AND (
-                        (recurringdate.recurringdate IS NULL AND e.recurringtype = \'none\')
-                        OR
-                        (recurringdate.recurringdate IS NOT NULL AND e.recurringtype != \'none\')
+        $sql = 'SELECT
+                    DISTINCT e.id as id,
+                    e.recurringdate,
+                    e.starttime,
+                    e.endtime,
+                    e.timezone,
+                    event.title,
+                    e.recurringdate_id
+                FROM ((
+                    SELECT
+                        DISTINCT e.id as id,
+                        e.event_id AS event_id,
+                        recurringdate.recurringdate,
+                        e.starttime,
+                        e.endtime,
+                        e.timezone,
+                        recurringdate.id as recurringdate_id
+                    FROM eventdatetime as e
+                    JOIN recurringdate ON (
+                        recurringdate.event_datetime_id = e.id AND recurringdate.unlinked = 0
                     )
-                    AND  (
+                    WHERE
+                        recurringdate.recurringdate BETWEEN "' . $startDateTime . '" AND "' . $endDateTime . '"
+                        AND e.recurringtype != "none"
+                ) UNION (
+                    SELECT
+                        DISTINCT e.id as id,
+                        e.event_id AS event_id,
+                        NULL,
+                        e.starttime,
+                        e.endtime,
+                        e.timezone,
+                        NULL
+                    FROM eventdatetime as e
+                    WHERE
                         (e.endtime >= "' . $startDateTime . '" AND e.starttime <= "' . $endDateTime . '")
-                       OR (recurringdate.recurringdate >= "' . $startDateTime . '" AND recurringdate.recurringdate <= "' . $endDateTime . '")
-                      )
+                        AND e.recurringtype = "none"
+                )) AS e
+                JOIN event ON
+                    e.event_id = event.id
+                JOIN calendar_has_event ON 
+                    calendar_has_event.event_id = event.id
+                WHERE calendar_has_event.calendar_id = ' . (int)$this->calendar->id . '
+                    AND calendar_has_event.status IN ("posted", "archived")
                 ORDER BY (
-                    IF (recurringdate.recurringdate IS NULL,
-                      e.starttime,
-                      CONCAT(DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.starttime," %H:%i:%s"))
-                    )
-                ) ASC,
-                event.title ASC';
+                    IF (e.recurringdate IS NULL,
+                    e.starttime,
+                        CONCAT(DATE_FORMAT(e.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.starttime," %H:%i:%s"))
+                        )
+                    ) ASC,
+                    event.title ASC;';
 
         return trim($sql);
     }
