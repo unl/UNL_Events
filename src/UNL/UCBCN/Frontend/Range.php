@@ -65,43 +65,105 @@ class Range extends EventListing implements RoutableInterface
             $fromTimestamp = $timezoneDateTime->getTimestamp($this->options['from']);
         }
 
+        $fromDate = date('Y-m-d', $fromTimestamp);
+
         if (!empty($this->options['to'])) {
             $toTimestamp = $timezoneDateTime->getTimestamp($this->options['to']);
+            $toDate = date('Y-m-d', $toTimestamp);
 
-            $eventSQL = '(recurringdate.recurringdate IS NULL AND (
-                            (e.starttime >= "'.date('Y-m-d', $fromTimestamp).'" AND e.starttime <= "'.date('Y-m-d', $toTimestamp).'" AND e.endtime >= "'.date('Y-m-d', $fromTimestamp).'" AND e.endtime >= "'.date('Y-m-d', $toTimestamp).'") OR
-                            (e.starttime >= "'.date('Y-m-d', $fromTimestamp).'" AND e.endtime <= "'.date('Y-m-d', $toTimestamp).'") OR
-                            (e.endtime <= "'.date('Y-m-d', $fromTimestamp).'" AND e.endtime <= "'.date('Y-m-d', $toTimestamp).'" AND e.endtime >= "'.date('Y-m-d', $fromTimestamp).'" AND e.endtime <= "'.date('Y-m-d', $toTimestamp).'")
-                        )) OR 
-                        (recurringdate.recurringdate IS NOT NULL AND (
-                            (recurringdate.recurringdate >= "'.date('Y-m-d', $fromTimestamp).'" AND recurringdate.recurringdate <= "'.date('Y-m-d', $toTimestamp).'")
-                        ))';
-        } else {
-
-            $eventSQL = "IF (recurringdate.recurringdate IS NULL, e.starttime, recurringdate.recurringdate) >=  '" .date('Y-m-d', $fromTimestamp) . "'";
-        }
-
-
-        $sql = '
-                SELECT e.id as id, recurringdate.id as recurringdate_id
-                FROM eventdatetime as e
-                INNER JOIN event ON e.event_id = event.id
-                INNER JOIN calendar_has_event ON calendar_has_event.event_id = event.id
-                LEFT JOIN recurringdate ON (recurringdate.event_datetime_id = e.id AND recurringdate.unlinked = 0)
-                WHERE
-                    calendar_has_event.calendar_id = ' . (int)$this->calendar->id . '
-                    AND (
-                         calendar_has_event.status =\'posted\'
-                         OR calendar_has_event.status =\'archived\'
-                    )
-                    AND (' . $eventSQL . ')
-                ORDER BY (
-                        IF (recurringdate.recurringdate IS NULL,
-                          e.starttime,
-                          CONCAT(DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.starttime," %H:%i:%s"))
+            // Build UNION query for date range
+            $sql = 'SELECT e.id as id, e.recurringdate_id
+                    FROM ((
+                        SELECT
+                            e.id as id,
+                            e.event_id AS event_id,
+                            recurringdate.recurringdate,
+                            e.starttime,
+                            e.endtime,
+                            recurringdate.id as recurringdate_id
+                        FROM eventdatetime as e
+                        JOIN recurringdate ON (
+                            recurringdate.event_datetime_id = e.id 
+                            AND recurringdate.unlinked = 0
+                        )
+                        WHERE
+                            e.recurringtype != "none"
+                            AND recurringdate.recurringdate >= "' . $fromDate . '"
+                            AND recurringdate.recurringdate <= "' . $toDate . '"
+                    ) UNION (
+                        SELECT
+                            e.id as id,
+                            e.event_id AS event_id,
+                            NULL as recurringdate,
+                            e.starttime,
+                            e.endtime,
+                            NULL as recurringdate_id
+                        FROM eventdatetime as e
+                        WHERE
+                            e.recurringtype = "none"
+                            AND (
+                                (e.starttime >= "' . $fromDate . '" AND e.starttime <= "' . $toDate . '" AND e.endtime >= "' . $fromDate . '" AND e.endtime >= "' . $toDate . '") OR
+                                (e.starttime >= "' . $fromDate . '" AND e.endtime <= "' . $toDate . '") OR
+                                (e.endtime <= "' . $fromDate . '" AND e.endtime <= "' . $toDate . '" AND e.endtime >= "' . $fromDate . '" AND e.endtime <= "' . $toDate . '")
+                            )
+                    )) AS e
+                    JOIN event ON e.event_id = event.id
+                    JOIN calendar_has_event ON calendar_has_event.event_id = event.id
+                    WHERE
+                        calendar_has_event.calendar_id = ' . (int)$this->calendar->id . '
+                        AND calendar_has_event.status IN ("posted", "archived")
+                    ORDER BY (
+                        IF (e.recurringdate IS NULL,
+                            e.starttime,
+                            CONCAT(DATE_FORMAT(e.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.starttime," %H:%i:%s"))
                         )
                     ) ASC,
                     event.title ASC';
+        } else {
+            // Build UNION query for start date only
+            $sql = 'SELECT e.id as id, e.recurringdate_id
+                    FROM ((
+                        SELECT
+                            e.id as id,
+                            e.event_id AS event_id,
+                            recurringdate.recurringdate,
+                            e.starttime,
+                            e.endtime,
+                            recurringdate.id as recurringdate_id
+                        FROM eventdatetime as e
+                        JOIN recurringdate ON (
+                            recurringdate.event_datetime_id = e.id 
+                            AND recurringdate.unlinked = 0
+                        )
+                        WHERE
+                            e.recurringtype != "none"
+                            AND recurringdate.recurringdate >= "' . $fromDate . '"
+                    ) UNION (
+                        SELECT
+                            e.id as id,
+                            e.event_id AS event_id,
+                            NULL as recurringdate,
+                            e.starttime,
+                            e.endtime,
+                            NULL as recurringdate_id
+                        FROM eventdatetime as e
+                        WHERE
+                            e.recurringtype = "none"
+                            AND e.starttime >= "' . $fromDate . '"
+                    )) AS e
+                    JOIN event ON e.event_id = event.id
+                    JOIN calendar_has_event ON calendar_has_event.event_id = event.id
+                    WHERE
+                        calendar_has_event.calendar_id = ' . (int)$this->calendar->id . '
+                        AND calendar_has_event.status IN ("posted", "archived")
+                    ORDER BY (
+                        IF (e.recurringdate IS NULL,
+                            e.starttime,
+                            CONCAT(DATE_FORMAT(e.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.starttime," %H:%i:%s"))
+                        )
+                    ) ASC,
+                    event.title ASC';
+        }
 
         if (is_numeric($this->options['limit']) && $this->options['limit'] >= 1) {
             $sql .= ' LIMIT ' . (int)$this->options['limit'];

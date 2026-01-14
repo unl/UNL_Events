@@ -99,42 +99,98 @@ class Events extends RecordList
                 && is_array($this->options['audiences'])
             ) ? $this->options['audiences'] : false;
             $current = (array_key_exists('current', $this->options)) ? $this->options['current'] : false;
-            
+
             // Keep this in for legacy purposes
             $eventTypeID = (
                 array_key_exists('event_type_id', $this->options)
             ) ? trim($this->options['event_type_id']) : 0;
 
-            $sql = '
-                SELECT event.id
-                FROM eventdatetime
-                INNER JOIN event ON eventdatetime.event_id = event.id
-                INNER JOIN calendar_has_event ON calendar_has_event.event_id = event.id
-                LEFT JOIN event_has_eventtype ON (event_has_eventtype.event_id = event.id)
-                LEFT JOIN recurringdate
-                    ON (recurringdate.event_datetime_id = eventdatetime.id AND recurringdate.unlinked = 0)
-                LEFT JOIN eventtype ON (eventtype.id = event_has_eventtype.eventtype_id)
-                LEFT JOIN location ON (location.id = eventdatetime.location_id)
-                LEFT JOIN webcast ON (webcast.id = eventdatetime.webcast_id)
-                LEFT JOIN event_targets_audience ON (event_targets_audience.event_id = event.id)
-                WHERE
-                    event.approvedforcirculation = 1
-                    AND  (';
+            $sql = 'SELECT e.event_id as id
+                    FROM ((
+                        SELECT
+                            eventdatetime.id as id,
+                            eventdatetime.event_id AS event_id,
+                            eventdatetime.location_id,
+                            eventdatetime.webcast_id,
+                            recurringdate.recurringdate,
+                            eventdatetime.starttime,
+                            eventdatetime.endtime,
+                            recurringdate.id as recurringdate_id
+                        FROM eventdatetime
+                        JOIN recurringdate ON (
+                            recurringdate.event_datetime_id = eventdatetime.id 
+                            AND recurringdate.unlinked = 0
+                        )
+                        WHERE
+                            eventdatetime.recurringtype != "none"';
 
-            if ($time = strtotime($term)) {
-                // This is a time...
-                $sql .= 'eventdatetime.starttime LIKE \''.date('Y-m-d', $this->escapeString($time)).'%\'';
-            } else {
-                // Do a textual search.
-                $sql .=
-                    '(event.title LIKE \'%'.self::escapeString($term).'%\' OR '.
-                    'eventtype.name LIKE \'%'.self::escapeString($term).'%\' OR '.
-                    'event.description LIKE \'%'.self::escapeString($term).'%\' OR '.
-                    'location.name LIKE \'%'.self::escapeString($term).'%\' OR ' .
-                    'webcast.title LIKE \'%'.self::escapeString($term).'%\') ';
+            // Add current filter for recurring events
+            if ($current) {
+                $sql .= ' AND (
+                            CONCAT(
+                                DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),
+                                DATE_FORMAT(eventdatetime.starttime," %H:%i:%s")
+                            ) >= NOW() 
+                            OR 
+                            CONCAT(
+                                DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),
+                                DATE_FORMAT(eventdatetime.endtime," %H:%i:%s")
+                            ) >= NOW()
+                        )';
             }
 
-            $sql.= ')';
+            // Add time-based search for recurring events
+            if ($time = strtotime($term)) {
+                $sql .= ' AND recurringdate.recurringdate LIKE \''.date('Y-m-d', $this->escapeString($time)).'%\'';
+            }
+
+            $sql .= '
+                    ) UNION (
+                        SELECT
+                            eventdatetime.id as id,
+                            eventdatetime.event_id AS event_id,
+                            eventdatetime.location_id,
+                            eventdatetime.webcast_id,
+                            NULL as recurringdate,
+                            eventdatetime.starttime,
+                            eventdatetime.endtime,
+                            NULL as recurringdate_id
+                        FROM eventdatetime
+                        WHERE
+                            eventdatetime.recurringtype = "none"';
+
+            // Add current filter for non-recurring events
+            if ($current) {
+                $sql .= ' AND (eventdatetime.starttime >= NOW() OR eventdatetime.endtime >= NOW())';
+            }
+
+            // Add time-based search for non-recurring events
+            if ($time = strtotime($term)) {
+                $sql .= ' AND eventdatetime.starttime LIKE \''.date('Y-m-d', $this->escapeString($time)).'%\'';
+            }
+
+            $sql .= '
+                    )) AS e
+                    INNER JOIN event ON e.event_id = event.id
+                    INNER JOIN calendar_has_event ON calendar_has_event.event_id = event.id
+                    LEFT JOIN event_has_eventtype ON (event_has_eventtype.event_id = event.id)
+                    LEFT JOIN eventtype ON (eventtype.id = event_has_eventtype.eventtype_id)
+                    LEFT JOIN location ON (location.id = e.location_id)
+                    LEFT JOIN webcast ON (webcast.id = e.webcast_id)
+                    LEFT JOIN event_targets_audience ON (event_targets_audience.event_id = event.id)
+                    WHERE
+                        event.approvedforcirculation = 1';
+
+            // Add textual search (only if not a time-based search)
+            if (!($time = strtotime($term))) {
+                $sql .= ' AND (
+                            (event.title LIKE \'%'.self::escapeString($term).'%\') OR
+                            (eventtype.name LIKE \'%'.self::escapeString($term).'%\') OR
+                            (event.description LIKE \'%'.self::escapeString($term).'%\') OR
+                            (location.name LIKE \'%'.self::escapeString($term).'%\') OR
+                            (webcast.title LIKE \'%'.self::escapeString($term).'%\')
+                        )';
+            }
 
             // Keep this in for legacy purposes
             if (!empty($eventTypeID)) {
@@ -151,7 +207,7 @@ class Events extends RecordList
                 }
                 $sql .= ') ';
             }
-            
+
             if ($eventTypes !== false) {
                 $sql .= 'AND (';
                 foreach ($eventTypes as $index => $single_filter) {
@@ -163,27 +219,9 @@ class Events extends RecordList
                 $sql .= ') ';
             }
 
-            // Checks to see if the recurring date or start date is >= today
-            if ($current) {
-                $sql .= 'AND (IF (recurringdate.recurringdate IS NULL,
-                        eventdatetime.starttime,
-                        CONCAT(
-                            DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),
-                            DATE_FORMAT(eventdatetime.starttime," %H:%i:%s")
-                        )
-                    ) >= NOW() OR
-                    IF (recurringdate.recurringdate IS NULL,
-                        eventdatetime.endtime,
-                        CONCAT(
-                            DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),
-                            DATE_FORMAT(eventdatetime.endtime," %H:%i:%s")
-                        )
-                    ) >= NOW())';
-            }
-
             $sql.= '
-                GROUP BY event.id, eventdatetime.starttime
-                ORDER BY eventdatetime.starttime DESC, event.title ASC';
+                GROUP BY event.id, e.starttime
+                ORDER BY e.starttime DESC, event.title ASC';
             $sql.=';';
 
             return $sql;
