@@ -46,7 +46,7 @@ class EventForm extends PostHandler
 	{
 		$this->event->title = empty($post_data['title']) ? null : $post_data['title'];
 		$this->event->subtitle = empty($post_data['subtitle']) ? null : $post_data['subtitle'];
-		$this->event->description = empty($post_data['description']) ? null : $post_data['description'];
+		$this->event->description = empty($post_data['description']) ? null : $this->sanitizeWordCharacters($post_data['description']);
 		$this->event->canceled = !empty($post_data['canceled']) ? 1 : 0;
 
 		$this->event->listingcontactname = empty($post_data['contact_name']) ? null : $post_data['contact_name'];
@@ -130,4 +130,58 @@ class EventForm extends PostHandler
 			throw new ValidationException($message);
 		}
 	}
+
+	/**
+     * Sanitizes text by replacing Word's special characters with standard equivalents
+     *
+     * @param string $text The text to sanitize
+     * @return string The sanitized text
+     */
+    private function sanitizeWordCharacters($text) {
+        // Define replacements for common Word special characters
+        $replacements = [
+            // Smart quotes
+            '\u2018' => "'",  // Left single quote
+            '\u2019' => "'",  // Right single quote
+            '\u201A' => "'",  // Single low-9 quote
+            '\u201B' => "'",  // Single high-reversed-9 quote
+            '\u201C' => '"',  // Left double quote
+            '\u201D' => '"',  // Right double quote
+            '\u201E' => '"',  // Double low-9 quote
+            '\u201F' => '"',  // Double high-reversed-9 quote
+
+            // Dashes and hyphens
+            '\u2010' => '-',  // Hyphen
+            '\u2011' => '-',  // Non-breaking hyphen
+            '\u2012' => '-',  // Figure dash
+            '\u2013' => '-',  // En dash
+            '\u2014' => '-',  // Em dash
+            '\u2015' => '-',  // Horizontal bar
+
+            // Spaces
+            '\u00A0' => ' ',  // Non-breaking space
+            '\u2003' => ' ',  // Em space
+            '\u2002' => ' ',  // En space
+            '\u2009' => ' ',  // Thin space
+
+            // Other common characters
+            '\u2026' => '...',  // Ellipsis
+            '\u2022' => '*',    // Bullet
+            '\u00B7' => '*',    // Middle dot
+            '\u00A9' => '(c)',  // Copyright
+            '\u00AE' => '(R)',  // Registered trademark
+            '\u2122' => '(TM)', // Trademark
+        ];
+
+        // Apply all replacements
+        foreach ($replacements as $search => $replace) {
+            $text = str_replace(json_decode('"' . $search . '"'), $replace, $text);
+        }
+
+        // Additional safety: remove any remaining non-ASCII characters
+		// that might cause database issues, but preserve newlines and tabs
+		$text = preg_replace('/[^\x20-\x7E\r\n\t]/', '', $text);
+
+        return $text;
+    }
 }
