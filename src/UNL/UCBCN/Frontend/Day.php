@@ -67,55 +67,37 @@ class Day extends EventListing implements RoutableInterface, MetaTagInterface
 
         $sql = 'SELECT
                     DISTINCT e.id as id,
-                    e.recurringdate,
+                    rd.id as recurringdate_id,
+                    rd.recurringdate,
                     e.starttime,
                     e.endtime,
-                    e.timezone,
-                    event.title,
-                    e.recurringdate_id
-                FROM ((
-                    SELECT
-                        DISTINCT e.id as id,
-                        e.event_id AS event_id,
-                        recurringdate.recurringdate,
-                        e.starttime,
-                        e.endtime,
-                        e.timezone,
-                        recurringdate.id as recurringdate_id
-                    FROM eventdatetime as e
-                    JOIN recurringdate ON (
-                        recurringdate.event_datetime_id = e.id AND recurringdate.unlinked = 0
+                    e.timezone
+                FROM eventdatetime as e
+                LEFT JOIN recurringdate as rd ON (
+                    e.recurringtype != "none" AND
+                    rd.event_datetime_id = e.id AND
+                    rd.unlinked = 0 AND
+                    rd.ongoing = 0
+                )
+                WHERE
+                    (
+                        COALESCE(
+                            TIMESTAMP(rd.recurringdate, TIME(e.starttime)),
+                            e.starttime
+                        ) BETWEEN "' . $startDateTime . '" AND "' . $endDateTime . '"
                     )
-                    WHERE
-                        recurringdate.recurringdate BETWEEN "' . $startDateTime . '" AND "' . $endDateTime . '"
-                        AND e.recurringtype != "none"
-                ) UNION (
-                    SELECT
-                        DISTINCT e.id as id,
-                        e.event_id AS event_id,
-                        NULL,
-                        e.starttime,
-                        e.endtime,
-                        e.timezone,
-                        NULL
-                    FROM eventdatetime as e
-                    WHERE
-                        (e.endtime >= "' . $startDateTime . '" AND e.starttime <= "' . $endDateTime . '")
-                        AND e.recurringtype = "none"
-                )) AS e
-                JOIN event ON
-                    e.event_id = event.id
-                JOIN calendar_has_event ON 
-                    calendar_has_event.event_id = event.id
-                WHERE calendar_has_event.calendar_id = ' . (int)$this->calendar->id . '
-                    AND calendar_has_event.status IN ("posted", "archived")
-                ORDER BY (
-                    IF (e.recurringdate IS NULL,
-                    e.starttime,
-                        CONCAT(DATE_FORMAT(e.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.starttime," %H:%i:%s"))
-                        )
-                    ) ASC,
-                    event.title ASC;';
+                    AND
+                    EXISTS (
+                        SELECT * FROM calendar_has_event
+                        WHERE
+                            calendar_has_event.calendar_id = ' . (int)$this->calendar->id . ' AND
+                            calendar_has_event.event_id = e.event_id AND
+                            calendar_has_event.status IN ("posted", "archived")
+                    )
+                ORDER BY
+                    COALESCE(TIMESTAMP(rd.recurringdate, TIME(e.starttime)), e.starttime) ASC,
+                    (SELECT title FROM event WHERE event.id = e.event_id) ASC
+                ';
 
         return trim($sql);
     }
