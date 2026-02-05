@@ -121,7 +121,7 @@ class Upcoming extends EventListing implements RoutableInterface, MetaTagInterfa
                         FROM event_has_eventtype
                     INNER JOIN eventtype
                         ON (eventtype.id = event_has_eventtype.eventtype_id)
-                        AND (eventtype.name = "' . $this->event_type_filter . '")
+                        AND (eventtype.name in ("' . implode('", "', explode(', ', $this->event_type_filter)) . '"))
                     WHERE
                         event_has_eventtype.event_id = e.event_id
                 )
@@ -136,7 +136,7 @@ class Upcoming extends EventListing implements RoutableInterface, MetaTagInterfa
                         FROM event_targets_audience
                     INNER JOIN audience
                         ON (audience.id = event_targets_audience.audience_id)
-                        AND (audience.name = "' . $this->audience_filter . '")
+                        AND (audience.name in ("' . implode('", "', explode(', ', $this->audience_filter)) . '"))
                     WHERE
                         event_targets_audience.event_id = e.event_id
                 )
