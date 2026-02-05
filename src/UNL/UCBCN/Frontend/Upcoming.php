@@ -89,7 +89,7 @@ class Upcoming extends EventListing implements RoutableInterface, MetaTagInterfa
      */
     function getSQL()
     {
-        $sql = 'SELECT 
+        $sql = 'SELECT
                     DISTINCT e.id as id,
                     rd.id as recurringdate_id
                 FROM eventdatetime as e
@@ -99,7 +99,7 @@ class Upcoming extends EventListing implements RoutableInterface, MetaTagInterfa
                     rd.unlinked = 0 AND
                     rd.ongoing = 0
                 )
-                WHERE 
+                WHERE
                     (
                         COALESCE(TIMESTAMP(rd.recurringdate, TIME(e.starttime)), e.starttime) >= NOW() OR
                         COALESCE(TIMESTAMP(rd.recurringdate, TIME(e.endtime)), e.endtime) >= NOW()
