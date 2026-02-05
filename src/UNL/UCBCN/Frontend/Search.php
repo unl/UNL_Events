@@ -138,58 +138,59 @@ class Search extends EventListing implements RoutableInterface, MetaTagInterface
             }
         } else {
             // Text search
+            if (!empty($this->search_query)) {
+                $sql .= 'AND (
+                    EXISTS (
+                        SELECT *
+                            FROM event
+                        WHERE
+                            event.id = e.event_id AND (
+                                event.title LIKE \'%'.self::escapeString($this->search_query).'%\'
+                                OR
+                                event.description LIKE \'%'.self::escapeString($this->search_query).'%\'
+                            )
+                    )
+                    OR
+                    EXISTS (
+                        SELECT *
+                            FROM event_has_eventtype
+                        INNER JOIN eventtype
+                            ON (eventtype.id = event_has_eventtype.eventtype_id)
+                            AND (eventtype.name LIKE \'%'.self::escapeString($this->search_query).'%\')
+                        WHERE
+                            event_has_eventtype.event_id = e.event_id
+                    )
+                    OR
+                    EXISTS (
+                        SELECT *
+                            FROM event_targets_audience
+                        INNER JOIN audience
+                            ON (audience.id = event_targets_audience.audience_id)
+                            AND (audience.name LIKE \'%'.self::escapeString($this->search_query).'%\')
+                        WHERE
+                            event_targets_audience.event_id = e.event_id
+                    )
+                    OR
+                    EXISTS (
+                        SELECT *
+                            FROM location
+                        WHERE
+                            location.id = e.location_id
+                            AND (location.name LIKE \'%'.self::escapeString($this->search_query).'%\')
+                    )
+                    OR
+                    EXISTS (
+                        SELECT *
+                            FROM webcast
+                        WHERE
+                            webcast.id = e.webcast_id
+                            AND (webcast.title LIKE \'%'.self::escapeString($this->search_query).'%\')
+                    )
+                )';
+            }
 
-            $sql .= 'AND (
-                EXISTS (
-                    SELECT *
-                        FROM event
-                    WHERE
-                        event.id = e.event_id AND (
-                            event.title LIKE \'%'.self::escapeString($this->search_query).'%\'
-                            OR
-                            event.description LIKE \'%'.self::escapeString($this->search_query).'%\'
-                        )
-                )
-                OR
-                EXISTS (
-                    SELECT *
-                        FROM event_has_eventtype
-                    INNER JOIN eventtype
-                        ON (eventtype.id = event_has_eventtype.eventtype_id)
-                        AND (eventtype.name LIKE \'%'.self::escapeString($this->search_query).'%\')
-                    WHERE
-                        event_has_eventtype.event_id = e.event_id
-                )
-                OR
-                EXISTS (
-                    SELECT *
-                        FROM event_targets_audience
-                    INNER JOIN audience
-                        ON (audience.id = event_targets_audience.audience_id)
-                        AND (audience.name LIKE \'%'.self::escapeString($this->search_query).'%\')
-                    WHERE
-                        event_targets_audience.event_id = e.event_id
-                )
-                OR
-                EXISTS (
-                    SELECT *
-                        FROM location
-                    WHERE
-                        location.id = e.location_id
-                        AND (location.name LIKE \'%'.self::escapeString($this->search_query).'%\')
-                )
-                OR
-                EXISTS (
-                    SELECT *
-                        FROM webcast
-                    WHERE
-                        webcast.id = e.webcast_id
-                        AND (webcast.title LIKE \'%'.self::escapeString($this->search_query).'%\')
-                )
-            )';
-
-        // Add NOW() filter after text search
-        $sql .= ' AND (
+            // Add NOW() filter after text search
+            $sql .= ' AND (
                 COALESCE(
                     TIMESTAMP(rd.recurringdate, TIME(e.starttime)),
                     e.starttime
