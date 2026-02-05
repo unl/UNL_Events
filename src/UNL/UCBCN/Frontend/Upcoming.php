@@ -99,8 +99,6 @@ class Upcoming extends EventListing implements RoutableInterface, MetaTagInterfa
                     rd.unlinked = 0 AND
                     rd.ongoing = 0
                 )
-                JOIN event ON
-                    e.event_id = event.id
                 WHERE 
                     (
                         COALESCE(TIMESTAMP(rd.recurringdate, TIME(e.starttime)), e.starttime) >= NOW() OR
@@ -175,7 +173,7 @@ class Upcoming extends EventListing implements RoutableInterface, MetaTagInterfa
         $sql .= '
         ORDER BY
             COALESCE(TIMESTAMP(rd.recurringdate, TIME(e.starttime)), e.starttime) ASC,
-            event.title ASC
+            (SELECT title FROM event WHERE event.id = e.event_id) ASC
         ';
 
         $sql .= $this->setLimitClause($this->options['limit']);
