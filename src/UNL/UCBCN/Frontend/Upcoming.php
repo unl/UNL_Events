@@ -143,21 +143,6 @@ class Upcoming extends EventListing implements RoutableInterface, MetaTagInterfa
             ';
         }
 
-        // Adds filters for target audience
-        if (!empty($this->audience_filter)) {
-            $sql .= 'AND
-                EXISTS (
-                    SELECT *
-                        FROM event_targets_audience
-                    INNER JOIN audience
-                        ON (audience.id = event_targets_audience.audience_id)
-                        AND (audience.name = "' . $this->audience_filter . '")
-                    WHERE
-                        event_targets_audience.event_id = e.event_id
-                )
-            ';
-        }
-
         // Adds filters for needs location
         if ($this->needs_location) {
             $sql .= 'AND ';
