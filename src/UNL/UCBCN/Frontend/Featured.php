@@ -98,7 +98,44 @@ class Featured extends Upcoming
     }
 
     private function getFeaturedEvents($timestamp, $limitAdjustment = 0) {
-        $sql = $this->setFeaturedSelect('calendar_has_event.featured = 1', $timestamp, FALSE);
+        $sql = 'SELECT e.event_id as eventID,
+                    e.id as eventDatetimeID,
+                    rd.id as recurringDateID
+                FROM eventdatetime as e
+                LEFT JOIN recurringdate as rd ON (
+                    e.recurringtype != "none"
+                    AND rd.event_datetime_id = e.id
+                    AND rd.unlinked = 0
+                    AND rd.ongoing = 0
+                )
+                WHERE
+                    EXISTS (
+                        SELECT * FROM calendar_has_event
+                        WHERE
+                            calendar_has_event.calendar_id = ' . (int)$this->calendar->id . ' AND
+                            calendar_has_event.event_id = e.event_id AND
+                            calendar_has_event.featured = 1 AND
+                            calendar_has_event.status IN ("posted", "archived")
+                    )
+                    AND (
+                        (rd.recurringdate IS NULL AND e.recurringtype = \'none\')
+                        OR
+                        (rd.recurringdate IS NOT NULL AND e.recurringtype != \'none\')
+                    )
+                    AND (
+                        COALESCE(
+                            rd.recurringdate,
+                            e.starttime
+                        ) >= "'.date('Y-m-d', $timestamp).'"
+                    )
+                ORDER BY COALESCE(
+                        TIMESTAMP(rd.recurringdate, TIME(e.starttime)),
+                        e.starttime
+                    ) ASC, (
+                    SELECT title
+                        FROM event
+                        WHERE event.id = e.event_id
+                    ) ASC';
         $sql .= $this->setLimitClause($this->options['limit'] + $limitAdjustment);
 
         $options['sql']         = $sql;
@@ -107,7 +144,45 @@ class Featured extends Upcoming
     }
 
     private function getPinnedEvents($timestamp) {
-        $sql = $this->setFeaturedSelect('calendar_has_event.pinned = 1', $timestamp, FALSE);
+        $sql = 'SELECT e.event_id as eventID,
+                    e.id as eventDatetimeID,
+                    rd.id as recurringDateID
+                FROM eventdatetime as e
+                LEFT JOIN recurringdate as rd ON (
+                    e.recurringtype != "none"
+                    AND rd.event_datetime_id = e.id
+                    AND rd.unlinked = 0
+                    AND rd.ongoing = 0
+                )
+                WHERE
+                    EXISTS (
+                        SELECT * FROM calendar_has_event
+                        WHERE
+                            calendar_has_event.calendar_id = ' . (int)$this->calendar->id . ' AND
+                            calendar_has_event.event_id = e.event_id AND
+                            calendar_has_event.pinned = 1 AND
+                            calendar_has_event.status IN ("posted", "archived")
+                    )
+                    AND (
+                        (rd.recurringdate IS NULL AND e.recurringtype = \'none\')
+                        OR
+                        (rd.recurringdate IS NOT NULL AND e.recurringtype != \'none\')
+                    )
+                    AND (
+                        COALESCE(
+                            rd.recurringdate,
+                            e.starttime
+                        ) >= "'.date('Y-m-d', $timestamp).'"
+                    )
+                ORDER BY COALESCE(
+                        TIMESTAMP(rd.recurringdate, TIME(e.starttime)),
+                        e.starttime
+                    ) ASC, (
+                    SELECT title
+                        FROM event
+                        WHERE event.id = e.event_id
+                    ) ASC';
+
         $sql .= $this->setLimitClause($this->options['pinned_limit']);
         $options['sql']         = $sql;
         $options['returnArray'] = true;
