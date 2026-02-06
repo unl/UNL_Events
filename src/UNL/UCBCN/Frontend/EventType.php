@@ -120,7 +120,15 @@ class EventType extends EventListing implements RoutableInterface, MetaTagInterf
                                 event.id = e.event_id AND
                                 event.approvedforcirculation = 1
                         )
-                    )';
+                    )
+                    AND
+                    EXISTS (
+                        SELECT *
+                            FROM event_has_eventtype
+                        WHERE
+                            event_has_eventtype.event_id = e.event_id
+                    )
+                    ';
 
         // Adds filters for target audience
         if (!empty($this->event_type_filter)) {

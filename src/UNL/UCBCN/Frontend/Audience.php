@@ -120,7 +120,15 @@ class Audience extends EventListing implements RoutableInterface, MetaTagInterfa
                                 event.id = e.event_id AND
                                 event.approvedforcirculation = 1
                         )
-                    )';
+                    )
+                    AND
+                    EXISTS (
+                        SELECT *
+                            FROM event_targets_audience
+                        WHERE
+                            event_targets_audience.event_id = e.event_id
+                    )
+                    ';
 
         // Adds filters for target audience
         if (!empty($this->event_type_filter)) {
