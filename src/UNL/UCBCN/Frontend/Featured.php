@@ -50,9 +50,9 @@ class Featured extends Upcoming
         $pinnedEventIDs = array();
         foreach ($pinnedResults as $result) {
             $pinnedEventIDs[] = $result;
-            $filter = '(event.id = ' . $result['eventID'] . ' AND e.id = ' . $result['eventDatetimeID'];
+            $filter = '(e.event_id = ' . $result['eventID'] . ' AND e.id = ' . $result['eventDatetimeID'];
             if (!empty($result['recurringDateID'])) {
-                $filter .= ' AND recurringdate.id = ' . $result['recurringDateID'];
+                $filter .= ' AND rd.id = ' . $result['recurringDateID'];
             }
             $filter .= ')';
             $eventFilters[] = $filter;
@@ -62,9 +62,9 @@ class Featured extends Upcoming
         $featuredResults = $this->getFeaturedEvents($timestamp, count($pinnedResults));
         foreach ($featuredResults as $result) {
             if (!$this->isPinnedEventResult($result, $pinnedResults) && $this->options['limit'] > 0 && count($eventFilters) < $this->options['limit']) {
-                $filter = '(event.id = ' . $result['eventID'] . ' AND e.id = ' . $result['eventDatetimeID'];
+                $filter = '(e.event_id = ' . $result['eventID'] . ' AND e.id = ' . $result['eventDatetimeID'];
                 if (!empty($result['recurringDateID'])) {
-                    $filter .= ' AND recurringdate.id = ' . $result['recurringDateID'];
+                    $filter .= ' AND rd.id = ' . $result['recurringDateID'];
                 }
                 $filter .= ')';
                 $eventFilters[] = $filter;
@@ -98,7 +98,44 @@ class Featured extends Upcoming
     }
 
     private function getFeaturedEvents($timestamp, $limitAdjustment = 0) {
-        $sql = $this->setFeaturedSelect('calendar_has_event.featured = 1', $timestamp, FALSE);
+        $sql = 'SELECT e.event_id as eventID,
+                    e.id as eventDatetimeID,
+                    rd.id as recurringDateID
+                FROM eventdatetime as e
+                LEFT JOIN recurringdate as rd ON (
+                    e.recurringtype != "none"
+                    AND rd.event_datetime_id = e.id
+                    AND rd.unlinked = 0
+                    AND rd.ongoing = 0
+                )
+                WHERE
+                    EXISTS (
+                        SELECT * FROM calendar_has_event
+                        WHERE
+                            calendar_has_event.calendar_id = ' . (int)$this->calendar->id . ' AND
+                            calendar_has_event.event_id = e.event_id AND
+                            calendar_has_event.featured = 1 AND
+                            calendar_has_event.status IN ("posted", "archived")
+                    )
+                    AND (
+                        (rd.recurringdate IS NULL AND e.recurringtype = \'none\')
+                        OR
+                        (rd.recurringdate IS NOT NULL AND e.recurringtype != \'none\')
+                    )
+                    AND (
+                        COALESCE(
+                            rd.recurringdate,
+                            e.starttime
+                        ) >= "'.date('Y-m-d', $timestamp).'"
+                    )
+                ORDER BY COALESCE(
+                        TIMESTAMP(rd.recurringdate, TIME(e.starttime)),
+                        e.starttime
+                    ) ASC, (
+                    SELECT title
+                        FROM event
+                        WHERE event.id = e.event_id
+                    ) ASC';
         $sql .= $this->setLimitClause($this->options['limit'] + $limitAdjustment);
 
         $options['sql']         = $sql;
@@ -107,7 +144,45 @@ class Featured extends Upcoming
     }
 
     private function getPinnedEvents($timestamp) {
-        $sql = $this->setFeaturedSelect('calendar_has_event.pinned = 1', $timestamp, FALSE);
+        $sql = 'SELECT e.event_id as eventID,
+                    e.id as eventDatetimeID,
+                    rd.id as recurringDateID
+                FROM eventdatetime as e
+                LEFT JOIN recurringdate as rd ON (
+                    e.recurringtype != "none"
+                    AND rd.event_datetime_id = e.id
+                    AND rd.unlinked = 0
+                    AND rd.ongoing = 0
+                )
+                WHERE
+                    EXISTS (
+                        SELECT * FROM calendar_has_event
+                        WHERE
+                            calendar_has_event.calendar_id = ' . (int)$this->calendar->id . ' AND
+                            calendar_has_event.event_id = e.event_id AND
+                            calendar_has_event.pinned = 1 AND
+                            calendar_has_event.status IN ("posted", "archived")
+                    )
+                    AND (
+                        (rd.recurringdate IS NULL AND e.recurringtype = \'none\')
+                        OR
+                        (rd.recurringdate IS NOT NULL AND e.recurringtype != \'none\')
+                    )
+                    AND (
+                        COALESCE(
+                            rd.recurringdate,
+                            e.starttime
+                        ) >= "'.date('Y-m-d', $timestamp).'"
+                    )
+                ORDER BY COALESCE(
+                        TIMESTAMP(rd.recurringdate, TIME(e.starttime)),
+                        e.starttime
+                    ) ASC, (
+                    SELECT title
+                        FROM event
+                        WHERE event.id = e.event_id
+                    ) ASC';
+
         $sql .= $this->setLimitClause($this->options['pinned_limit']);
         $options['sql']         = $sql;
         $options['returnArray'] = true;
@@ -115,16 +190,20 @@ class Featured extends Upcoming
     }
 
     private function setFeaturedSelect($specialFilter, $timestamp, $useFinalColumns = TRUE) {
-        $columns = 'event.id as eventID, e.id as eventDatetimeID, recurringdate.id as recurringDateID';
+        $columns = 'e.event_id as eventID, e.id as eventDatetimeID, rd.id as recurringDateID';
         if ($useFinalColumns) {
-            $columns = 'e.id as id, recurringdate.id as recurringdate_id';
+            $columns = 'e.id as id, rd.id as recurringdate_id';
         }
 
         return 'SELECT ' . $columns . '
-                FROM eventdatetime as e
-                INNER JOIN event ON e.event_id = event.id
-                INNER JOIN calendar_has_event ON calendar_has_event.event_id = event.id
-                LEFT JOIN recurringdate ON (recurringdate.event_datetime_id = e.id AND recurringdate.unlinked = 0 AND recurringdate.ongoing = 0)
+                    FROM eventdatetime as e
+                    LEFT JOIN recurringdate as rd ON (
+                    e.recurringtype != "none"
+                    AND rd.event_datetime_id = e.id
+                    AND rd.unlinked = 0
+                    AND rd.ongoing = 0
+                )
+                INNER JOIN calendar_has_event ON calendar_has_event.event_id = e.event_id
                 WHERE calendar_has_event.calendar_id = ' . (int)$this->calendar->id . '
                     AND ' . $specialFilter . '
                     AND (
@@ -132,22 +211,24 @@ class Featured extends Upcoming
                         OR calendar_has_event.status =\'archived\'
                     )
                     AND (
-                        (recurringdate.recurringdate IS NULL AND e.recurringtype = \'none\')
+                        (rd.recurringdate IS NULL AND e.recurringtype = \'none\')
                         OR
-                        (recurringdate.recurringdate IS NOT NULL AND e.recurringtype != \'none\')
+                        (rd.recurringdate IS NOT NULL AND e.recurringtype != \'none\')
                     )
                     AND (
-                        IF (recurringdate.recurringdate IS NULL,
-                            e.starttime,
-                            recurringdate.recurringdate
-                        ) >=  "'.date('Y-m-d', $timestamp).'"
+                        COALESCE(
+                            rd.recurringdate,
+                            e.starttime
+                        ) >= "'.date('Y-m-d', $timestamp).'"
                     )
-                ORDER BY (
-                    IF (recurringdate.recurringdate IS NULL,
-                       e.starttime,
-                       CONCAT(DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.starttime," %H:%i:%s"))
-                    )
-                ) ASC, event.title ASC';
+                ORDER BY COALESCE(
+                        TIMESTAMP(rd.recurringdate, TIME(e.starttime)),
+                        e.starttime
+                    ) ASC, (
+                    SELECT title
+                        FROM event
+                        WHERE event.id = e.event_id
+                    ) ASC';
     }
 
     /**

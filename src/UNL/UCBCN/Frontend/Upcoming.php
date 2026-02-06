@@ -91,69 +91,56 @@ class Upcoming extends EventListing implements RoutableInterface, MetaTagInterfa
     {
         $sql = 'SELECT
                     DISTINCT e.id as id,
-                    e.recurringdate_id
-                FROM ((
-                    SELECT
-                        DISTINCT e.id as id,
-                        e.event_id AS event_id,
-                        recurringdate.recurringdate,
-                        e.starttime,
-                        e.endtime,
-                        recurringdate.id as recurringdate_id
-                    FROM eventdatetime as e
-                    JOIN recurringdate ON (
-                        recurringdate.event_datetime_id = e.id 
-                        AND recurringdate.unlinked = 0
-                        AND recurringdate.ongoing = 0
+                    rd.id as recurringdate_id
+                FROM eventdatetime as e
+                LEFT JOIN recurringdate as rd ON (
+                    e.recurringtype != "none" AND
+                    rd.event_datetime_id = e.id AND
+                    rd.unlinked = 0 AND
+                    rd.ongoing = 0
+                )
+                WHERE
+                    (
+                        COALESCE(TIMESTAMP(rd.recurringdate, TIME(e.starttime)), e.starttime) >= NOW() OR
+                        COALESCE(TIMESTAMP(rd.recurringdate, TIME(e.endtime)), e.endtime) >= NOW()
                     )
-                    WHERE
-                        e.recurringtype != "none"
-                        AND (
-                            CONCAT(
-                                DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),
-                                DATE_FORMAT(e.starttime," %H:%i:%s")
-                            ) >= NOW() 
-                            OR 
-                            CONCAT(
-                                DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),
-                                DATE_FORMAT(e.endtime," %H:%i:%s")
-                            ) >= NOW()
-                        )
-                ) UNION (
-                    SELECT
-                        DISTINCT e.id as id,
-                        e.event_id AS event_id,
-                        NULL as recurringdate,
-                        e.starttime,
-                        e.endtime,
-                        NULL as recurringdate_id
-                    FROM eventdatetime as e
-                    WHERE
-                        e.recurringtype = "none"
-                        AND (e.starttime >= NOW() OR e.endtime >= NOW())
-                )) AS e
-                JOIN event ON
-                    e.event_id = event.id
-                JOIN calendar_has_event ON 
-                    calendar_has_event.event_id = event.id
-                LEFT JOIN event_has_eventtype ON (event_has_eventtype.event_id = event.id)
-                LEFT JOIN eventtype ON (eventtype.id = event_has_eventtype.eventtype_id)
-                LEFT JOIN event_targets_audience ON (event_targets_audience.event_id = event.id)
-                LEFT JOIN audience ON (audience.id = event_targets_audience.audience_id)
-                WHERE 
-                    calendar_has_event.calendar_id = ' . (int)$this->calendar->id . '
-                    AND calendar_has_event.status IN ("posted", "archived")';
+                    AND
+                    EXISTS (
+                        SELECT * FROM calendar_has_event
+                        WHERE
+                            calendar_has_event.calendar_id = ' . (int)$this->calendar->id . ' AND
+                            calendar_has_event.event_id = e.event_id AND
+                            calendar_has_event.status IN ("posted", "archived")
+                    )';
 
         // Adds filters for target audience
         if (!empty($this->event_type_filter)) {
-            $sql .= 'AND ';
-            $sql .= $this->getEventTypeSQL('eventtype');
+            $sql .= 'AND
+                EXISTS (
+                    SELECT *
+                        FROM event_has_eventtype
+                    INNER JOIN eventtype
+                        ON (eventtype.id = event_has_eventtype.eventtype_id)
+                        AND (eventtype.name in ("' . implode('", "', explode(', ', $this->event_type_filter)) . '"))
+                    WHERE
+                        event_has_eventtype.event_id = e.event_id
+                )
+            ';
         }
 
         // Adds filters for target audience
         if (!empty($this->audience_filter)) {
-            $sql .= 'AND ';
-            $sql .= $this->getAudienceSQL('audience');
+            $sql .= 'AND
+                EXISTS (
+                    SELECT *
+                        FROM event_targets_audience
+                    INNER JOIN audience
+                        ON (audience.id = event_targets_audience.audience_id)
+                        AND (audience.name in ("' . implode('", "', explode(', ', $this->audience_filter)) . '"))
+                    WHERE
+                        event_targets_audience.event_id = e.event_id
+                )
+            ';
         }
 
         // Adds filters for needs location
@@ -168,13 +155,11 @@ class Upcoming extends EventListing implements RoutableInterface, MetaTagInterfa
             $sql .= $this->getTimeModeSQL('e');
         }
 
-        $sql .= 'ORDER BY (
-                    IF (e.recurringdate IS NULL,
-                    e.starttime,
-                        CONCAT(DATE_FORMAT(e.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.starttime," %H:%i:%s"))
-                        )
-                    ) ASC,
-                    event.title ASC';
+        $sql .= '
+        ORDER BY
+            COALESCE(TIMESTAMP(rd.recurringdate, TIME(e.starttime)), e.starttime) ASC,
+            (SELECT title FROM event WHERE event.id = e.event_id) ASC
+        ';
 
         $sql .= $this->setLimitClause($this->options['limit']);
         return $sql;

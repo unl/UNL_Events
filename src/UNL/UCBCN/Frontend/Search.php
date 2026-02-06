@@ -94,147 +94,149 @@ class Search extends EventListing implements RoutableInterface, MetaTagInterface
      */
     public function getSQL()
     {
-        $sql = 'SELECT
-                DISTINCT e.id as id,
-                e.recurringdate_id
-            FROM ((
-                SELECT
-                    DISTINCT e.id as id,
-                    e.event_id AS event_id,
-                    e.location_id,
-                    e.webcast_id,
-                    recurringdate.recurringdate,
-                    e.starttime,
-                    e.endtime,
-                    recurringdate.id as recurringdate_id
-                FROM eventdatetime as e
-                JOIN recurringdate ON (
-                    recurringdate.event_datetime_id = e.id 
-                    AND recurringdate.unlinked = 0
-                )
+
+        $sql = 'SELECT DISTINCT e.id as id,
+            rd.id as recurringdate_id
+        FROM eventdatetime as e
+            LEFT JOIN recurringdate as rd ON (
+                e.recurringtype != "none"
+                AND rd.event_datetime_id = e.id
+                AND rd.unlinked = 0
+                AND rd.ongoing = 0
+            )
+        WHERE
+            EXISTS (
+                SELECT * FROM calendar_has_event
                 WHERE
-                    e.recurringtype != "none"';
-
-        // Add date filtering for recurring events
-        if ($this->date_parser->parsed) {
-            if ($this->date_parser->single) {
-                $sql .= ' AND recurringdate.recurringdate = STR_TO_DATE(\'' . date('Y-m-d', $this->date_parser->start_date) . '\', \'%Y-%m-%d\')';
-            } else {
-                $sql .= ' AND recurringdate.recurringdate >= STR_TO_DATE(\'' . date('Y-m-d', $this->date_parser->start_date) . '\', \'%Y-%m-%d\')
-                        AND recurringdate.recurringdate <= STR_TO_DATE(\'' . date('Y-m-d', $this->date_parser->end_date) . '\', \'%Y-%m-%d\')';
-            }
-        } else {
-            if (empty($this->search_query)) {
-                // Only add NOW() filter if not doing a text search
-                $sql .= ' AND (
-                            CONCAT(
-                                DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),
-                                DATE_FORMAT(e.starttime," %H:%i:%s")
-                            ) >= NOW() 
-                            OR 
-                            CONCAT(
-                                DATE_FORMAT(recurringdate.recurringdate,"%Y-%m-%d"),
-                                DATE_FORMAT(e.endtime," %H:%i:%s")
-                            ) >= NOW()
-                        )';
-            }
-        }
-
-        $sql .= '
-                ) UNION (
-                    SELECT
-                        DISTINCT e.id as id,
-                        e.event_id AS event_id,
-                        e.location_id,
-                        e.webcast_id,
-                        NULL as recurringdate,
-                        e.starttime,
-                        e.endtime,
-                        NULL as recurringdate_id
-                    FROM eventdatetime as e
-                    WHERE
-                        e.recurringtype = "none"';
+                    calendar_has_event.calendar_id = ' . (int)$this->calendar->id . ' AND
+                    calendar_has_event.event_id = e.event_id AND
+                    calendar_has_event.status IN ("posted", "archived")
+            )';
 
         // Add date filtering for non-recurring events
         if ($this->date_parser->parsed) {
             if ($this->date_parser->single) {
-                $sql .= ' AND DATE_FORMAT(e.starttime,"%Y-%m-%d") = STR_TO_DATE(\'' . date('Y-m-d', $this->date_parser->start_date) . '\', \'%Y-%m-%d\')';
+                // Single Date
+                $sql .= ' AND
+                    COALESCE(
+                        rd.recurringdate,
+                        e.starttime
+                    ) = STR_TO_DATE(\'' . date('Y-m-d', $this->date_parser->start_date) . '\', \'%Y-%m-%d\')
+                ';
             } else {
-                $sql .= ' AND DATE_FORMAT(e.starttime,"%Y-%m-%d") >= STR_TO_DATE(\'' . date('Y-m-d', $this->date_parser->start_date) . '\', \'%Y-%m-%d\')
-                        AND DATE_FORMAT(e.starttime,"%Y-%m-%d") <= STR_TO_DATE(\'' . date('Y-m-d', $this->date_parser->end_date) . '\', \'%Y-%m-%d\')';
+                // Add NOW() filter after text search
+                $sql .= ' AND
+                    COALESCE(
+                        TIMESTAMP(rd.recurringdate, TIME(e.starttime)),
+                        e.starttime
+                    ) >= STR_TO_DATE(\'' . date('Y-m-d', $this->date_parser->start_date) . '\', \'%Y-%m-%d\')
+                    AND COALESCE(
+                        TIMESTAMP(rd.recurringdate, TIME(e.starttime)),
+                        e.starttime
+                    ) <= STR_TO_DATE(\'' . date('Y-m-d', $this->date_parser->end_date) . '\', \'%Y-%m-%d\')
+                ';
             }
         } else {
-            if (empty($this->search_query)) {
-                // Only add NOW() filter if not doing a text search
-                $sql .= ' AND (e.starttime >= NOW() OR e.endtime >= NOW())';
+            // Text search
+            if (!empty($this->search_query)) {
+                $sql .= 'AND (
+                    EXISTS (
+                        SELECT *
+                            FROM event
+                        WHERE
+                            event.id = e.event_id AND (
+                                event.title LIKE \'%'.self::escapeString($this->search_query).'%\'
+                                OR
+                                event.description LIKE \'%'.self::escapeString($this->search_query).'%\'
+                            )
+                    )
+                    OR
+                    EXISTS (
+                        SELECT *
+                            FROM event_has_eventtype
+                        INNER JOIN eventtype
+                            ON (eventtype.id = event_has_eventtype.eventtype_id)
+                            AND (eventtype.name LIKE \'%'.self::escapeString($this->search_query).'%\')
+                        WHERE
+                            event_has_eventtype.event_id = e.event_id
+                    )
+                    OR
+                    EXISTS (
+                        SELECT *
+                            FROM event_targets_audience
+                        INNER JOIN audience
+                            ON (audience.id = event_targets_audience.audience_id)
+                            AND (audience.name LIKE \'%'.self::escapeString($this->search_query).'%\')
+                        WHERE
+                            event_targets_audience.event_id = e.event_id
+                    )
+                    OR
+                    EXISTS (
+                        SELECT *
+                            FROM location
+                        WHERE
+                            location.id = e.location_id
+                            AND (location.name LIKE \'%'.self::escapeString($this->search_query).'%\')
+                    )
+                    OR
+                    EXISTS (
+                        SELECT *
+                            FROM webcast
+                        WHERE
+                            webcast.id = e.webcast_id
+                            AND (webcast.title LIKE \'%'.self::escapeString($this->search_query).'%\')
+                    )
+                )';
             }
-        }
 
-        $sql .= '
-                )) AS e
-                JOIN event ON
-                    e.event_id = event.id
-                JOIN calendar_has_event ON 
-                    calendar_has_event.event_id = event.id
-                LEFT JOIN event_has_eventtype ON 
-                    event_has_eventtype.event_id = event.id
-                LEFT JOIN eventtype ON 
-                    eventtype.id = event_has_eventtype.eventtype_id
-                LEFT JOIN event_targets_audience ON 
-                    event_targets_audience.event_id = event.id
-                LEFT JOIN audience ON 
-                    audience.id = event_targets_audience.audience_id
-                LEFT JOIN location ON 
-                    location.id = e.location_id
-                LEFT JOIN webcast ON 
-                    webcast.id = e.webcast_id
-                WHERE
-                    calendar_has_event.calendar_id = ' . (int)$this->calendar->id . '
-                    AND calendar_has_event.status IN ("posted", "archived")';
-
-        // Add text search filter
-        if (!$this->date_parser->parsed && !empty($this->search_query)) {
-            $sql .= ' AND (
-                        (event.title LIKE \'%'.self::escapeString($this->search_query).'%\') OR
-                        (eventtype.name LIKE \'%'.self::escapeString($this->search_query).'%\') OR
-                        (audience.name LIKE \'%'.self::escapeString($this->search_query).'%\') OR
-                        (event.description LIKE \'%'.self::escapeString($this->search_query).'%\') OR
-                        (location.name LIKE \'%'.self::escapeString($this->search_query).'%\') OR
-                        (webcast.title LIKE \'%'.self::escapeString($this->search_query).'%\')
-                    )';
-            
             // Add NOW() filter after text search
             $sql .= ' AND (
-                        IF (e.recurringdate IS NULL,
-                            e.starttime,
-                            CONCAT(DATE_FORMAT(e.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.starttime," %H:%i:%s"))
-                        ) >= NOW() OR
-                        IF (e.recurringdate IS NULL,
-                            e.endtime,
-                            CONCAT(DATE_FORMAT(e.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.endtime," %H:%i:%s"))
-                        ) >= NOW()
-                    )';
+                COALESCE(
+                    TIMESTAMP(rd.recurringdate, TIME(e.starttime)),
+                    e.starttime
+                ) >= NOW()
+                OR COALESCE(
+                    TIMESTAMP(rd.recurringdate, TIME(e.endtime)),
+                    e.endtime
+                ) >= NOW()
+            )';
         }
 
-        // Adds filters for event type
+        // Adds filters for target audience
         if (!empty($this->event_type_filter)) {
-            $sql .= ' AND ';
-            $sql .= $this->getEventTypeSQL('eventtype');
+            $sql .= 'AND
+                EXISTS (
+                    SELECT *
+                        FROM event_has_eventtype
+                    INNER JOIN eventtype
+                        ON (eventtype.id = event_has_eventtype.eventtype_id)
+                        AND (eventtype.name in ("' . implode('", "', explode(', ', $this->event_type_filter)) . '"))
+                    WHERE
+                        event_has_eventtype.event_id = e.event_id
+                )
+            ';
         }
 
         // Adds filters for target audience
         if (!empty($this->audience_filter)) {
-            $sql .= ' AND ';
-            $sql .= $this->getAudienceSQL('audience');
+            $sql .= 'AND
+                EXISTS (
+                    SELECT *
+                        FROM event_targets_audience
+                    INNER JOIN audience
+                        ON (audience.id = event_targets_audience.audience_id)
+                        AND (audience.name in ("' . implode('", "', explode(', ', $this->audience_filter)) . '"))
+                    WHERE
+                        event_targets_audience.event_id = e.event_id
+                )
+            ';
         }
 
-        $sql .= ' ORDER BY (
-                    IF (e.recurringdate IS NULL,
-                        e.starttime,
-                        CONCAT(DATE_FORMAT(e.recurringdate,"%Y-%m-%d"),DATE_FORMAT(e.starttime," %H:%i:%s"))
-                    )
-                ) ASC,
-                event.title ASC';
+        $sql .= '
+        ORDER BY
+            COALESCE(TIMESTAMP(rd.recurringdate, TIME(e.starttime)), e.starttime) ASC,
+            (SELECT title FROM event WHERE event.id = e.event_id) ASC
+        ';
 
         return $sql;
     }
