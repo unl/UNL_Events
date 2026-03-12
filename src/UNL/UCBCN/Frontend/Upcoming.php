@@ -115,13 +115,18 @@ class Upcoming extends EventListing implements RoutableInterface, MetaTagInterfa
 
         // Adds filters for target audience
         if (!empty($this->event_type_filter)) {
+            $escaped_event_types = array_map(
+                fn($event_type) => self::escapeString(trim($event_type)),
+                explode(',', $this->event_type_filter)
+            );
+
             $sql .= 'AND
                 EXISTS (
                     SELECT *
                         FROM event_has_eventtype
                     INNER JOIN eventtype
                         ON (eventtype.id = event_has_eventtype.eventtype_id)
-                        AND (eventtype.name in ("' . implode('", "', explode(', ', $this->event_type_filter)) . '"))
+                        AND (eventtype.name in ("' . implode('", "', $escaped_event_types) . '"))
                     WHERE
                         event_has_eventtype.event_id = e.event_id
                 )
@@ -130,13 +135,18 @@ class Upcoming extends EventListing implements RoutableInterface, MetaTagInterfa
 
         // Adds filters for target audience
         if (!empty($this->audience_filter)) {
+            $escaped_audiences = array_map(
+                fn($audience) => self::escapeString(trim($audience)),
+                explode(',', $this->audience_filter)
+            );
+
             $sql .= 'AND
                 EXISTS (
                     SELECT *
                         FROM event_targets_audience
                     INNER JOIN audience
                         ON (audience.id = event_targets_audience.audience_id)
-                        AND (audience.name in ("' . implode('", "', explode(', ', $this->audience_filter)) . '"))
+                        AND (audience.name in ("' . implode('", "', $escaped_audiences) . '"))
                     WHERE
                         event_targets_audience.event_id = e.event_id
                 )
@@ -154,6 +164,9 @@ class Upcoming extends EventListing implements RoutableInterface, MetaTagInterfa
             $sql .= 'AND ';
             $sql .= $this->getTimeModeSQL('e');
         }
+
+        // var_dump($sql);
+        // die();
 
         $sql .= '
         ORDER BY
