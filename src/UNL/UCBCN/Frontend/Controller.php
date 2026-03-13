@@ -117,15 +117,6 @@ class Controller
      */
     public function run()
     {
-        if (
-            $this->options['format'] !== 'hcalendar' &&
-            $this->options['format'] !== 'partial'
-        ) {
-            // See if already logged in via PHP CAS
-            $auth = new Auth();
-            $auth->checkAuthentication();
-        }
-
         $this->determineCalendar();
 
         if (!isset($this->options['model']) || false === $this->options['model']) {
