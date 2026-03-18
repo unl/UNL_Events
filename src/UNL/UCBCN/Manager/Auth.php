@@ -84,13 +84,40 @@ class Auth
      */
     public function logout()
     {
+        // Get the session cookie params so we match path/domain exactly
+        $cookieParams = session_get_cookie_params();
+
+        // Clear the events app session cookie
         if (isset($_COOKIE[self::$eventsAuthSessionName])) {
             unset($_COOKIE[self::$eventsAuthSessionName]);
-            setcookie(self::$eventsAuthSessionName, null, time()-3600);
+            setcookie(
+                self::$eventsAuthSessionName,
+                '',
+                time() - 3600,
+                $cookieParams['path'],
+                $cookieParams['domain'],
+                $cookieParams['secure'],
+                $cookieParams['httponly']
+            );
+        }
+
+        // Clear the PHP session cookie (what phpCAS uses)
+        $phpSessionName = session_name();
+        if (isset($_COOKIE[$phpSessionName])) {
+            unset($_COOKIE[$phpSessionName]);
+            setcookie(
+                $phpSessionName,
+                '',
+                time() - 3600,
+                $cookieParams['path'],
+                $cookieParams['domain'],
+                $cookieParams['secure'],
+                $cookieParams['httponly']
+            );
         }
 
         if ($this->auth->isAuthenticated()) {
-            $this->auth->logout();
+            $this->auth->logout(); // redirects to CAS logout, never returns
         }
     }
 
