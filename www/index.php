@@ -28,7 +28,7 @@ use UNL\UCBCN\Manager\Auth;
 
 $currentUser = null;
 $sessionCookieName = \UNL\UCBCN\Manager\Auth::$eventsAuthSessionName ?? session_name();
-if (!empty($_COOKIE['unl_sso']) || !empty($_COOKIE[$sessionCookieName])) {
+if (!empty($_COOKIE['unl_sso']) && !empty($_COOKIE[$sessionCookieName])) {
     $auth = new Auth();
     if ($auth->isAuthenticated()) {
         $currentUser = Auth::getCurrentUser($auth);
