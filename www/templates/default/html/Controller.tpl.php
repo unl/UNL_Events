@@ -39,10 +39,8 @@ $page->addStyleDeclaration("#dcf-mobile-toggle-menu {display: none!important}");
 
 //javascript
 $page->addScriptDeclaration('window.UNL.idm.pushConfig("logoutRoute", "' . Util::getBaseURL() . '/manager/logout");', '', true);
-$auth = new Auth();
-if ($auth->isAuthenticated()) {
-    $userId = $auth->getCASUserId();
-    $page->addScriptDeclaration('window.UNL.idm.pushConfig("serverUser", "' . $userId . '");', '', true);
+if (isset($currentUser)) {
+    $page->addScriptDeclaration('window.UNL.idm.pushConfig("serverUser", "' . $currentUser->uid . '");', '', true);
 }
 $page->addScriptDeclaration('{
     "prerender": [

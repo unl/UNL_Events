@@ -14,6 +14,9 @@ class Auth
     public static $eventsAuthSessionName = NULL;
     public static $siteURL = "https://events.unl.edu";
 
+    private static $cached_current_user = null;
+    private static $current_user_resolved = false;
+
     public function __construct()
     {
         if (self::$certPath !== false && !file_exists(self::$certPath)) {
@@ -170,7 +173,7 @@ class Auth
      *
      * @return bool|\UNL\UCBCN\User
      */
-    public static function getCurrentUser()
+    public static function getCurrentUser($auth_instance = null)
     {
         global $_API_USER;
 
@@ -178,10 +181,16 @@ class Auth
         if (isset($_API_USER)) {
             return $_API_USER;
         }
-        $auth = new Auth();
-        $userId = $auth->getCASUserId();
-        if (!empty($userId)) {
-            return User::getByUid($userId);
+
+        if (!self::$current_user_resolved) {
+            $auth = $auth_instance ?? new Auth();
+            $userId = $auth->getCASUserId();
+            if (!empty($userId)) {
+                self::$cached_current_user = User::getByUid($userId);
+            }
+            self::$current_user_resolved = true;
         }
+
+        return self::$cached_current_user;
     }
 }

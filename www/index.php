@@ -24,6 +24,17 @@ require_once $config_file;
 require_once __DIR__ . '/../vendor/composer/autoload.php';
 
 use RegExpRouter as RegExpRouter;
+use UNL\UCBCN\Manager\Auth;
+
+$currentUser = null;
+$sessionCookieName = \UNL\UCBCN\Manager\Auth::$eventsAuthSessionName ?? session_name();
+if (!empty($_COOKIE['unl_sso']) || !empty($_COOKIE[$sessionCookieName])) {
+    $auth = new Auth();
+    if ($auth->isAuthenticated()) {
+        $currentUser = Auth::getCurrentUser($auth);
+    }
+    session_write_close();
+}
 
 $routes = include __DIR__ . '/../data/routes.php';
 $router = new RegExpRouter\Router(array('baseURL' => Controller::$url));
@@ -40,6 +51,7 @@ try {
     // Now render what the user has requested
     $savvy = new OutputController($frontend);
     $savvy->addGlobal('frontend', $frontend);
+    $savvy->addGlobal('currentUser', $currentUser);
 
     if (isset($siteNotice)) {
         $savvy->addGlobal('siteNotice', $siteNotice);
