@@ -49,7 +49,12 @@
                     Description
                     <small class="required-for-main-calendar dcf-required dcf-d-none!">Required</small>
                 </label>
-                <textarea id="description" name="description" rows="4" ><?php echo $event->description; ?></textarea>
+                <textarea id="description" name="description" rows="4" aria-describedby="description-help"><?php echo $event->description; ?></textarea>
+                <p class="dcf-form-help" id="description-help">
+                    Any URLs added to the description just be rendered as a hyperlink. <br>
+                    To align with WCAG 2.2 Success Criterion 2.4.4, please include a clear description of a link's
+                    destination in the text immediately before any URL to ensure its purpose is accessible and clearly defined for all users.
+                </p>
             </div>
             <div class="dcf-form-group">
                 <label for="website">Website</label>
