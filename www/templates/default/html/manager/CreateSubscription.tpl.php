@@ -27,7 +27,7 @@
     <div class="dcf-form-group">
         <label for="calendars">Events Posted to Calendar(s):</label>
         <p class="dcf-form-help">Please select at least one calendar from list below. Click to view list or click and type to filter list.</p>
-        <select class="dcf-search-select" id="calendars" name="calendars[]" multiple="multiple" hidden>
+        <select class="dcf-search-select" id="calendars" name="calendars[]" multiple="multiple" aria-describedby="calendars-help" hidden>
             <?php foreach($context->getAvailableCalendars() as $calendar): ?>
                 <?php
                     // skip the calendar adding the subscription as option, since can not subscribe to itself
@@ -49,6 +49,7 @@
                 </option>
             <?php endforeach; ?>
         </select>
+        <p class="dcf-form-help" id="calendars-help">Displays calendars that have had an event posted within the last 6 months.</p>
     </div>
     <div class="dcf-form-group">
         <fieldset>
