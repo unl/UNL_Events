@@ -44,8 +44,8 @@ class EventForm extends PostHandler
 
 	protected function setEventData($post_data)
 	{
-		$this->event->title = empty($post_data['title']) ? null : $post_data['title'];
-		$this->event->subtitle = empty($post_data['subtitle']) ? null : $post_data['subtitle'];
+		$this->event->title = empty($post_data['title']) ? null : $this->sanitizeWordCharacters($post_data['title']);
+		$this->event->subtitle = empty($post_data['subtitle']) ? null : $this->sanitizeWordCharacters($post_data['subtitle']);
 		$this->event->description = empty($post_data['description']) ? null : $this->sanitizeWordCharacters($post_data['description']);
 		$this->event->canceled = !empty($post_data['canceled']) ? 1 : 0;
 
