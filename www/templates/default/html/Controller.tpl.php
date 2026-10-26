@@ -6,9 +6,9 @@ use UNL\Templates\Templates;
 use UNL\UCBCN\Util;
 use UNL\UCBCN\Manager\Auth;
 
-$page = Templates::factory('AppLocal', Templates::VERSION_6_0);
+$page = Templates::factory('AppLocal', Templates::VERSION_6_1);
 
-if (file_exists(\UNL\UCBCN\Util::getWWWRoot() . '/wdn/templates_6.0')) {
+if (file_exists(\UNL\UCBCN\Util::getWWWRoot() . '/wdn/templates_6.1')) {
     $page->setLocalIncludePath(\UNL\UCBCN\Util::getWWWRoot());
 }
 
