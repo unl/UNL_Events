@@ -178,9 +178,9 @@ class EventForm extends PostHandler
             $text = str_replace(json_decode('"' . $search . '"'), $replace, $text);
         }
 
-        // Additional safety: remove any remaining non-ASCII characters
-		// that might cause database issues, but preserve newlines and tabs
-		$text = preg_replace('/[^\x20-\x7E\r\n\t]/', '', $text);
+        // Additional safety: remove any remaining characters that are not ASCII and not Unicode
+        // letters which might cause database issues, but preserve newlines and tabs.
+		$text = preg_replace('/[^\p{L}\x20-\x7E\r\n\t]/u', '', $text);
 
         return $text;
     }
